@@ -126,10 +126,9 @@ class Game(object):
         """Initialize all characters in the game and start round 1
         """
 
-    def step(self, current_agent, current_action):
+    def step(self, current_action):
         """Perform one draw of the game and return next player number, and the state for next player
         """
-
         return next_player, next_state
 
 
