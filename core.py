@@ -11,29 +11,38 @@ class Card(object):
 
     suit = None
     rank = None
+    valid_suit = ['S', 'H', 'D', 'C', 'BJ', 'RJ']
+    valid_rank = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
 
     def __init__(self, suit, rank):
         """ Initialize the suit and rank of a card
-        """
-
-    def get_index(self, suit, rank):
-        """Get index of a card. 
 
         Args:
-            suit: suit of the card
-            rank: rank of the card
+            suit: string, suit of the card, should be one of valid_suit
+            rank: string, rank of the card, should be one of valid_rank
+        """
+        if(suit == 'BJ' or suit == 'RJ'):
+            assert (rank == ''), "Rank should be empty when suit is 'BJ' or 'RJ'"
+        else:
+            assert (suit in self.valid_suit), "Invalid suit input"
+            assert (rank in self.valid_rank), "Invalid rank input"
+        self.suit = suit
+        self.rank = rank
+
+    def get_index(self):
+        """Get index of a card. 
 
         Return:
             string: the combination of suit and rank of a card. Eg: 1S, 2H, AD, BJ, RJ...
         """
-
+        return self.suit+self.rank
 
 
 class Dealer(object):
     """
     Dealer stores a deck of playing cards, remained cards holded by dealer, and can deal cards to players
 
-    Note: deck variable means all the cards in a single game, and should be a list of Card object.
+    Note: deck variable means all the cards in a single game, and should be a list of Card objects.
     """
 
     deck = []
