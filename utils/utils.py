@@ -125,6 +125,13 @@ def get_cards_from_ranks(player, ranks):
     return chosen_cards, remained_cards
 
 def init_players(n):
+    ''' Return a list of Player objects with n players
+    Arg:
+        n: int, number of players to be initialized
+    
+    Return:
+        list of Player objects
+    '''
     players = []
     for idx in range(n):
         players.append(Player(idx))
