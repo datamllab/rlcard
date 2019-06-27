@@ -116,7 +116,7 @@ def get_cards_from_ranks(player, ranks):
         This function will not affect the player's original hand.
     '''
     chosen_cards = []
-    remained_cards = player.hand.copy()
+    remained_cards = player.hand
     for rank in ranks:
         for card in remained_cards:
             if card.rank == rank:
@@ -124,13 +124,55 @@ def get_cards_from_ranks(player, ranks):
                 remained_cards.pop(remained_cards.index(card))
     return chosen_cards, remained_cards
 
+def take_out_cards(cards, remove_cards):
+    ''' Take out specific cards from a list of cards
+    Args:
+        cards: list of Card objects from which to be taken out some cards
+        remove_cards: list of Card objects that need to be taken out
+    
+    Return:
+        list of Card objects: the cards in 'remove_cards' list that doesn't make cards in 'cards' list taken out
+    
+    Note:
+        1. This function will affect the first input Card list, 
+        but will not affect the second input Card list.
+        2. For each card in 'remove_cards' list, it will make only one card in 'cards' list taken out,
+        which means to take out one kind of cards with the same suit and rank in 'cards' list,
+        you need to have the same number of cards with the same suit and rank in 'remove_cards' list.
+    '''
+    remove_cards_cp = remove_cards.copy()
+    for card in cards:
+        for remove_card in remove_cards_cp:
+            if card.rank == remove_card.rank and card.suit == remove_card.suit:
+                cards.pop(cards.index(card))
+                remove_cards_cp.pop(remove_cards_cp.index(remove_card))
+    return remove_cards_cp
+
+def is_in_cards(cards, check_cards):
+    ''' Check if a list of Card objects contains another list of Card objects
+
+    Args:
+        cards: list of Card objects which to be checked if it contains another list of Card objects
+        check_cards: list of Card objects which to be checked if it is in a list of Card objecrts
+
+    Return:
+        boolean
+    '''
+    check_cards_cp = check_cards.copy()
+    for card in cards:
+        for remove_card in check_cards_cp:
+            if card.rank == remove_card.rank and card.suit == remove_card.suit:
+                cards.pop(cards.index(card))
+                check_cards_cp.pop(check_cards_cp.index(remove_card))
+    return len(check_cards_cp) == 0
+
 def init_players(n):
     ''' Return a list of Player objects with n players
     Arg:
         n: int, number of players to be initialized
     
     Return:
-        list of Player objects
+        list of Player objects with player_id(s) start from 0 and are consequent 
     '''
     players = []
     for idx in range(n):
@@ -138,7 +180,17 @@ def init_players(n):
     return players
 
 def get_upstream_player_id(player, players):
+    ''' Return the upsteam player's player_id
+
+    Note:
+        This function assumes player_id(s) in 'players' list starts from 0, and are consequent.
+    '''
     return (player.player_id-1)%len(players)
 
 def get_downstream_player_id(player, players):
+    ''' Return the downsteam player's player_id
+
+    Note:
+        This function assumes player_id(s) in 'players' list start from 0, and are consequent.
+    '''
     return (player.player_id+1)%len(players)
