@@ -1,22 +1,24 @@
 # -*- coding: utf-8 -*-
 """Implement Doudizhu Dealer class"""
-import sys
 import random
 import functools
-from os import path
-sys.path.append(path.dirname(path.dirname(path.dirname(path.abspath(__file__)))))
 from core import Dealer
 from utils.utils import init_54_deck
 
 
 class DoudizhuDealer(Dealer):
+    """Dealer can shuffle, deal cards, and determine players' roles
+    """
 
     rank_list = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K',
                  'A', '2', 'BJ', 'RJ']
 
     def __init__(self):
-        """
-        The dealer should have all the cards at the beginning of a game
+        """Give dealer the deck
+
+        Member Vars:
+            deck: 54 cards
+            landlord: the landlord in this game
         """
         super().__init__()
         self.deck = init_54_deck()
@@ -27,6 +29,8 @@ class DoudizhuDealer(Dealer):
 
     @staticmethod
     def doudizhu_sort(card_A, card_B):
+        """Sort the hand from the greater to the smaller
+        """
         key = []
         for card in [card_A, card_B]:
             if card.rank == '':
@@ -40,8 +44,7 @@ class DoudizhuDealer(Dealer):
         return 0
 
     def deal_cards(self, players):
-        """
-        Deal specific number of cards to a specific player
+        """Deal specific number of cards to a specific player
 
         Args:
             players: a list of Player objects
@@ -52,11 +55,10 @@ class DoudizhuDealer(Dealer):
             player.hand.sort(key=functools.cmp_to_key(self.doudizhu_sort))
 
     def determine_role(self, players):
-        """
-        Determine landlord and farmers
+        """Determine landlord and farmers
 
-        return:
-            the landlord among players
+        Return:
+            the number of the landlord among players
         """
         self.shuffle()
         self.deal_cards(players)
@@ -73,10 +75,10 @@ class DoudizhuDealer(Dealer):
                 self.landlord = player
         if self.landlord is None:
             for player in players:
-                delattr(player, 'role')
-            self.determine_role(players)
+                player.role = None
+            return None
         if players[start].role == 'landlord' and self.landlord is not starter:
-            delattr(starter, 'role')
+            player.role = None
             action = starter.print_hand_and_orders()
             starter.play(action)
             if action == 'draw':
@@ -85,7 +87,3 @@ class DoudizhuDealer(Dealer):
         self.landlord.hand.extend(self.deck[-3:])
         self.landlord.hand.sort(key=functools.cmp_to_key(self.doudizhu_sort))
         return self.landlord.number
-
-
-if __name__ == '__main__':
-    dealer = DoudizhuDealer()
