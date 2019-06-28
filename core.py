@@ -74,9 +74,10 @@ class Player(object):
     player_id = None
     hand = []
 
-    def __init__(self):
+    def __init__(self, player_id):
         """Every player should have a unique player id
         """
+        self.player_id = player_id
 
     def available_order(self):
         """Get the actions can be made based on the rules
