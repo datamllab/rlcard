@@ -30,13 +30,9 @@ class DoudizhuRound(Round):
             landlord_num = self.dealer.determine_role(players)
             if landlord_num is not None:
                 break
-        print('###############')
+        print('\n###############')
         for player in players:
-            print(str(player.number)+player.role)
-            print("the hand: [", end='')
-            for card in player.hand[:-1]:
-                print(get_doudizhu_index(card), end=', ')
-            print(get_doudizhu_index(player.hand[-1])+']')
+            player.print_hand()
         print('###############')
         print('The number of the landlord is '+str(landlord_num))
         self.landlord_num = landlord_num
@@ -51,7 +47,7 @@ class DoudizhuRound(Round):
                    (landlord or winner in last round)
         Return:
             tuple: (1(if game over)/0(if not),
-                   the number of the winner in this round)       
+                   the number of the winner in this round)
         """
         self.round_id += 1
         print('\nRound '+str(self.round_id))

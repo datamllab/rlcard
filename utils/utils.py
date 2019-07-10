@@ -23,6 +23,7 @@ def init_54_deck():
     res.append(Card('RJ', ''))
     return res
 
+
 def get_random_cards(cards, num, seed = None):
     ''' Randomly get a number of chosen cards out of a list of cards
 
@@ -129,10 +130,10 @@ def take_out_cards(cards, remove_cards):
     Args:
         cards: list of Card objects from which to be taken out some cards
         remove_cards: list of Card objects that need to be taken out
-    
+
     Return:
         list of Card objects: the cards in 'remove_cards' list that doesn't make cards in 'cards' list taken out
-    
+
     Note:
         1. This function will affect the first input Card list, 
         but will not affect the second input Card list.
@@ -170,7 +171,7 @@ def init_players(n):
     ''' Return a list of Player objects with n players
     Arg:
         n: int, number of players to be initialized
-    
+
     Return:
         list of Player objects with player_id(s) start from 0 and are consequent 
     '''

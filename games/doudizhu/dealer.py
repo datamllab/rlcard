@@ -75,10 +75,10 @@ class DoudizhuDealer(Dealer):
                 self.landlord = player
         if self.landlord is None:
             for player in players:
-                player.role = None
+                player.role = ''
             return None
         if players[start].role == 'landlord' and self.landlord is not starter:
-            player.role = None
+            players[start].role = ''
             action = starter.print_hand_and_orders()
             starter.play(action)
             if action == 'draw':

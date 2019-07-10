@@ -6,6 +6,7 @@ from methods import check_play_cards
 from methods import get_play_string
 from doudizhu import Card as DoudizhuCard
 from doudizhu import check_card_type, list_greater_cards, cards_greater
+from dealer import DoudizhuDealer as Dealer
 
 
 class DoudizhuPlayer(Player):
@@ -23,7 +24,8 @@ class DoudizhuPlayer(Player):
             played_cards: the cards played in one round
         """
         self.number = num
-        self.role = None
+        # self.role = None
+        self.role = ''
         self.played_cards = None
 
     def available_order(self, greater_player=None):
@@ -37,23 +39,47 @@ class DoudizhuPlayer(Player):
                   (some of ['draw'(叫/抢地主), 'not draw', 'play(出牌)', 'pass'])
         """
         orders = []
-        if self.role is not None:
+        if self.role != '':
             if greater_player is None:
                 orders.append('play')
             else:
                 orders.append('pass')
-                rocket = DoudizhuCard.card_ints_from_string('BJ-CJ')
-                not_rocket, card_type = cards_greater(
-                    rocket, greater_player.played_cards)
-                if not not_rocket:
-                    return orders
                 candidate = get_play_string(self.hand, range(len(self.hand)))
                 candidate = DoudizhuCard.card_ints_from_string(candidate)
-                if len(list_greater_cards(greater_player.played_cards, candidate)) > 0:
+                greater_cards_lists = list_greater_cards(greater_player.played_cards, candidate)
+                if len(greater_cards_lists) > 0:
+                    '''for card_type, cards_list in greater_cards_lists.items():
+                        print('card type: {}'.format(card_type))
+                        for card_int in cards_list:
+                            DoudizhuCard.print_pretty_cards(list(card_int))
+                            print(card_int, len(card_int))'''
+                    gt_dict = self.get_gt_cards_dict(greater_player)
+                    print('playable cards: ')
+                    print(gt_dict)
                     orders.append('play')
         else:
             orders.extend(['draw', 'not draw'])
         return orders
+
+    def get_gt_cards_dict(self, greater_player):
+        candidate = get_play_string(self.hand, range(len(self.hand)))
+        candidate = DoudizhuCard.card_ints_from_string(candidate)
+        greater_cards_lists = list_greater_cards(greater_player.played_cards, candidate)
+        if len(greater_cards_lists) > 0:
+            gt_cards = {}
+            for card_type, cards_list in greater_cards_lists.items():
+                gt_card_list = []
+                for card_ints in cards_list:
+                    cards_list = []
+                    for card_int in card_ints:
+                        rank_int = DoudizhuCard.get_rank_int(card_int)
+                        cards_list.append(Dealer.rank_list[rank_int])
+                    gt_card_list.append(cards_list)
+                gt_cards[card_type] = gt_card_list
+            return gt_cards
+        else:
+            return None
+
 
     def play(self, action, greater_player=None):
         """Perfrom action
@@ -104,6 +130,13 @@ class DoudizhuPlayer(Player):
         if action == 'pass':
             return greater_player
 
+    def print_hand(self):
+        """print the hand
+        """
+        hand = [str(index)+':'+card.get_index() for index, card in enumerate(self.hand)]
+        print('the hand of player '+str(self.number) +
+              '('+self.role+')'+':', hand)
+
     def print_hand_and_orders(self, greater_player=None):
         """Print_hand_and_orders
 
@@ -114,16 +147,10 @@ class DoudizhuPlayer(Player):
             The action choosed by player according to optional operations
         """
         print()
-        print("the hand of player "+str(self.number)+": [", end='')
-        for index, card in enumerate(self.hand[:-1]):
-            print(str(index)+':'+get_doudizhu_index(card), end=', ')
-        print(str(len(self.hand)-1)+':'+get_doudizhu_index(self.hand[-1])+']')
+        self.print_hand()
         orders = self.available_order(greater_player)
         print("optional operations of player " +
-              str(self.number) + ": [", end='')
-        for order in orders[:-1]:
-            print(order, end=', ')
-        print(orders[-1]+']')
+              str(self.number) + ":", orders)
         action = input("Your Choice: ")
         while action not in orders:
             action = input("Please input valid choice: ")
