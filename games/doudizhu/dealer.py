@@ -2,6 +2,7 @@
 """Implement Doudizhu Dealer class"""
 import random
 import functools
+import copy
 from core import Dealer
 from utils.utils import init_54_deck
 
@@ -29,7 +30,7 @@ class DoudizhuDealer(Dealer):
 
     @staticmethod
     def doudizhu_sort(card_A, card_B):
-        """Sort the hand from the greater to the smaller
+        """Sort the cards from the greater to the smaller
         """
         key = []
         for card in [card_A, card_B]:
@@ -38,9 +39,9 @@ class DoudizhuDealer(Dealer):
             else:
                 key.append(DoudizhuDealer.rank_list.index(card.rank))
         if key[0] > key[1]:
-            return -1
-        if key[0] < key[1]:
             return 1
+        if key[0] < key[1]:
+            return -1
         return 0
 
     def deal_cards(self, players):
@@ -53,6 +54,7 @@ class DoudizhuDealer(Dealer):
         for index, player in enumerate(players):
             player.hand = self.deck[index*hand_num:(index+1)*hand_num]
             player.hand.sort(key=functools.cmp_to_key(self.doudizhu_sort))
+            player.remained_cards = copy.deepcopy(player.hand)
 
     def determine_role(self, players):
         """Determine landlord and farmers
@@ -67,7 +69,10 @@ class DoudizhuDealer(Dealer):
         starter = players[start]
         for offset in range(0, players_num):
             player = players[(start+offset) % players_num]
-            action = player.print_hand_and_orders()
+            actions = player.print_remained_and_orders()
+            # random
+            action = actions[random.randint(0, 1)]
+            print('chioce:', action)
             player.play(action)
             if action == 'draw':
                 if self.landlord is not None and self.landlord is not starter:
@@ -79,11 +84,14 @@ class DoudizhuDealer(Dealer):
             return None
         if players[start].role == 'landlord' and self.landlord is not starter:
             players[start].role = ''
-            action = starter.print_hand_and_orders()
+            actions = starter.print_remained_and_orders()
+            action = actions[random.randint(0, 1)]
+            print('chioce:', action)
             starter.play(action)
             if action == 'draw':
                 self.landlord.role = 'farmer'
                 self.landlord = starter
         self.landlord.hand.extend(self.deck[-3:])
         self.landlord.hand.sort(key=functools.cmp_to_key(self.doudizhu_sort))
-        return self.landlord.number
+        self.landlord.remained_cards = copy.deepcopy(self.landlord.hand)
+        return self.landlord.player_id

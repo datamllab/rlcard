@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """Implement Doudizhu Round class"""
 import sys
+import functools
 from os import path
 from core import Round
 from dealer import DoudizhuDealer
-from methods import get_doudizhu_index
+from methods import cards2str
+from utils.utils import get_downstream_player_id, get_upstream_player_id
 
 
 class DoudizhuRound(Round):
@@ -22,9 +24,11 @@ class DoudizhuRound(Round):
             greater_player: the winner in one round
             round_id: the id of the round
             dealer: a instance of DouzizhuDealer
+            seen_cards: cards given to landlord after having determined landlord
         """
         self.greater_player = None
         self.round_id = 0
+        self.round_last = None
         self.dealer = DoudizhuDealer()
         while True:
             landlord_num = self.dealer.determine_role(players)
@@ -32,30 +36,27 @@ class DoudizhuRound(Round):
                 break
         print('\n###############')
         for player in players:
-            player.print_hand()
+            player.print_remained_card()
         print('###############')
-        print('The number of the landlord is '+str(landlord_num))
+        seen_cards = self.dealer.deck[-3:]
+        seen_cards.sort(key=functools.cmp_to_key(DoudizhuDealer.doudizhu_sort))
+        self.seen_cards = cards2str(seen_cards)
+        print('seen cards', self.seen_cards)
+        print()
+        #print('The id of the landlord is '+str(landlord_num))
         self.landlord_num = landlord_num
 
-    def proceed_round(self, players, start):
+    def proceed_round(self, player, action):
         """
         Call other Classes's functions to keep one round running
 
         Args:
             players: a list of players
-            start: The number of the first player to play in one round
+            start: The id of the first player to play in one round
                    (landlord or winner in last round)
         Return:
             tuple: (1(if game over)/0(if not),
-                   the number of the winner in this round)
+                   the id of the winner in this round)
         """
-        self.round_id += 1
-        print('\nRound '+str(self.round_id))
-        players_num = len(players)
-        for offset in range(0, players_num):
-            player = players[(start+offset) % players_num]
-            action = player.print_hand_and_orders(self.greater_player)
-            self.greater_player = player.play(action, self.greater_player)
-            if len(player.hand) == 0:
-                return 1, player.number
-        return 0, self.greater_player.number
+        self.greater_player = player.play(action, self.greater_player)
+        return self.greater_player

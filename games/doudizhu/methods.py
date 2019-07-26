@@ -16,6 +16,13 @@ def get_doudizhu_index(card: Card):
         index = 'BJ'
     return index
 
+def get_doudizhu_rank(card: Card):
+    """
+
+    Return:
+        String: Eg: 2, 3, BJ, CJ
+    """
+
 
 def get_play_string(hand, nums):
     """Get valid string of the cards played by a player in order to check type
@@ -46,3 +53,30 @@ def check_play_cards(nums, total):
         return False
     else:
         return True
+
+
+def cards2str(cards: list):
+    """
+    """
+    response = ''
+    for card in cards:
+        if card.rank == '':
+            response += card.suit[0]
+        else:
+            if card.rank == '10':
+                response += 'T'
+            else:
+                response += card.rank
+    return response
+
+
+def index2str(cards: list):
+    """
+    """
+    trans = {'10': 'T', 'BJ': 'B', 'CJ': 'R'}
+    response = ''
+    for card in cards:
+        if card in trans:
+            card = trans[card]
+        response += card
+    return response
