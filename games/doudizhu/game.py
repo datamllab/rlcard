@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 """Implement Doudizhu Game class"""
 import sys
+import functools
+import random
 from os import path
-sys.path.append(path.dirname(path.dirname(
-    path.dirname(path.abspath(__file__)))))
+FILE = path.abspath(__file__)
+sys.path.append(path.dirname(path.dirname(path.dirname(FILE))))
 from core import Game
 from player import DoudizhuPlayer
 from round import DoudizhuRound
 from methods import cards2str
 from dealer import DoudizhuDealer
-from utils.utils import init_54_deck, get_downstream_player_id, get_upstream_player_id
-import functools
-import random
+from utils.utils import init_54_deck
+from utils.utils import get_downstream_player_id, get_upstream_player_id
 
 
 class DoudizhuGame(Game):
@@ -19,6 +20,23 @@ class DoudizhuGame(Game):
     players_num = 3
 
     def __init__(self):
+        """Initialize players and state
+
+        A example of state:
+            {
+             'deck': '3333444455556666777788889999TTTTJJJJQQQQKKKKAAAA2222BR',
+             'seen_cards': 'QA2',
+             'landlord': 1,
+             'self': 1,
+             'hand': '34455678TTJQKAAA222R',
+             'trace': [(1, '8222'), (2, 'pass'), (0, 'pass'), (1, '55'),
+                       (2, 'pass'), (0, '88'), (1, 'TT'), (2, 'JJ'),
+                       (0, 'pass'), (1, 'pass'), (2, '45678'), (0, 'pass'),
+                       (1, 'pass'), (2, '5'), (0, 'K')],
+            'remained': '34467JQKAAAR',
+            'actions': ['pass', 'A', 'R']
+            }
+        """
         super().__init__()
         self.trace = []
         self.state = {'deck': None, 'seen_cards': None, 'landlord': None,
@@ -38,11 +56,11 @@ class DoudizhuGame(Game):
         self.state['hand'] = cards2str(player.hand)
         self.state['seen_cards'] = self.rounder.seen_cards
         self.state['remained'] = cards2str(player.remained_cards)
-        self.state['actions'] = player.get_playable_cards()
+        self.state['actions'] = player.get_playable_cards_ii()
 
     def start_game(self):
-        """Initialize players and round operator, and let round operator
-        to proceed round
+        """
+        Run a complete game by randomly choosing an action
         """
         player = self.get_player_id()
         state = self.get_state(player)
@@ -61,32 +79,16 @@ class DoudizhuGame(Game):
         """Perform one draw of the game and return next player's id,
         and the state for next player
         """
-        trans = {'10': 'T', 'RJ': 'R', 'BJ': 'B'}
         player = self.players[self.current_player]
-        self.trace.append(str(self.current_player)+','+action)
+        self.trace.append((self.current_player, action))
         greater_player = self.rounder.proceed_round(player, action)
-        self.rounder.round_last = get_upstream_player_id(
-            greater_player, self.players)
         next_player_id = get_downstream_player_id(player, self.players)
         self.state['self'] = next_player_id
         next_player = self.players[next_player_id]
         self.state['hand'] = cards2str(next_player.hand)
         self.state['remained'] = cards2str(next_player.remained_cards)
-        if action == 'pass' and self.current_player == self.rounder.round_last:
-            self.state['actions'] = next_player.get_playable_cards()
-        else:
-            gt_cards = next_player.get_gt_cards_dict(greater_player)
-            actions = ['pass']
-            if gt_cards is not None:
-                for type_cards in gt_cards.values():
-                    for cards in type_cards:
-                        action = ''
-                        for card in cards:
-                            if card in trans:
-                                card = trans[card]
-                            action += card
-                        actions.append(action)
-            self.state['actions'] = actions
+        actions = next_player.available_actions(greater_player)
+        self.state['actions'] = actions
         self.current_player = next_player_id
         return self.state, next_player_id
 
@@ -101,15 +103,19 @@ class DoudizhuGame(Game):
         return DoudizhuGame.players_num
 
     def get_state(self, player):
-        """
+        """Return player's state
         """
         return self.state
 
     def end(self):
-        last_player = get_upstream_player_id(self.players[self.current_player], self.players)
+        """Return whether the game has been over
+        """
+        last_player = get_upstream_player_id(
+            self.players[self.current_player], self.players)
         return len(self.players[last_player].remained_cards) == 0
 
 
 if __name__ == '__main__':
+    # random test
     GAME = DoudizhuGame()
     GAME.start_game()
