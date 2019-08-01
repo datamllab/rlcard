@@ -17,9 +17,8 @@ class DoudizhuDealer(Dealer):
     def __init__(self):
         """Give dealer the deck
 
-        Member Vars:
+        Notes:
             deck: 54 cards
-            landlord: the landlord in this game
         """
         super().__init__()
         self.deck = init_54_deck()
@@ -30,7 +29,7 @@ class DoudizhuDealer(Dealer):
 
     @staticmethod
     def doudizhu_sort(card_A, card_B):
-        """Sort the cards from the greater to the smaller
+        """Sort the cards from the smaller to the greater
         """
         key = []
         for card in [card_A, card_B]:
@@ -69,7 +68,7 @@ class DoudizhuDealer(Dealer):
         starter = players[start]
         for offset in range(0, players_num):
             player = players[(start+offset) % players_num]
-            actions = player.print_remained_and_orders()
+            actions = player.print_remained_and_actions()
             # random
             action = actions[random.randint(0, 1)]
             print('chioce:', action)
@@ -84,7 +83,7 @@ class DoudizhuDealer(Dealer):
             return None
         if players[start].role == 'landlord' and self.landlord is not starter:
             players[start].role = ''
-            actions = starter.print_remained_and_orders()
+            actions = starter.print_remained_and_actions()
             action = actions[random.randint(0, 1)]
             print('chioce:', action)
             starter.play(action)
