@@ -6,13 +6,13 @@ import random
 from os import path
 FILE = path.abspath(__file__)
 sys.path.append(path.dirname(path.dirname(path.dirname(FILE))))
-from core import Game
-from player import DoudizhuPlayer
-from round import DoudizhuRound
-from methods import cards2str
-from dealer import DoudizhuDealer
-from utils.utils import init_54_deck
-from utils.utils import get_downstream_player_id, get_upstream_player_id
+from rlcard.core import Game
+from rlcard.games.doudizhu.player import DoudizhuPlayer
+from rlcard.games.doudizhu.round import DoudizhuRound
+from rlcard.games.doudizhu.methods import cards2str
+from rlcard.games.doudizhu.dealer import DoudizhuDealer
+from rlcard.utils.utils import init_54_deck
+from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 
 
 class DoudizhuGame(Game):
