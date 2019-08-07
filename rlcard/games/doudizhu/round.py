@@ -29,15 +29,14 @@ class DoudizhuRound(Round):
             landlord_num = self.dealer.determine_role(players)
             if landlord_num is not None:
                 break
-        print('\n###############')
+        print('\n############### Doudizhu Initiate ###############')
         for player in players:
             player.print_remained_card()
-        print('###############')
         seen_cards = self.dealer.deck[-3:]
         seen_cards.sort(key=functools.cmp_to_key(DoudizhuDealer.doudizhu_sort))
         self.seen_cards = cards2str(seen_cards)
         print('seen cards:', self.seen_cards)
-        print('以上为初始化Game时，随机进行的一个选地主过程\n')
+        print('#################################################\n')
         self.landlord_num = landlord_num
 
     def proceed_round(self, player, action):
