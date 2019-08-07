@@ -15,7 +15,7 @@ class DoudizhuPlayer(Player):
     and can perfrom responding action
     """
 
-    def __init__(self, num):
+    def __init__(self, player_id):
         """Give the player a number(not id) in one game
 
         Notes:
@@ -24,7 +24,7 @@ class DoudizhuPlayer(Player):
             hand: initial hand; don't change
             remained_cards: The rest of the cards after playing some of them
         """
-        self.player_id = num
+        self.player_id = player_id
         self.hand = []
         self.remained_cards = []
         self.role = ''
