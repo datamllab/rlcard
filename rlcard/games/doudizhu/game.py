@@ -5,7 +5,7 @@ import functools
 import random
 from os import path
 FILE = path.abspath(__file__)
-sys.path.append(path.dirname(path.dirname(path.dirname(FILE))))
+sys.path.append(path.dirname(path.dirname(path.dirname(path.dirname(FILE)))))
 from rlcard.core import Game
 from rlcard.games.doudizhu.player import DoudizhuPlayer
 from rlcard.games.doudizhu.round import DoudizhuRound
@@ -18,8 +18,9 @@ from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 class DoudizhuGame(Game):
     """Start Doudizhu Game"""
     players_num = 3
+    game_result = {0: 0, 1: 0, 2: 0}
 
-    def __init__(self):
+    def __init__(self, seed=None):
         """Initialize players and state
 
         A example of state:
@@ -38,6 +39,7 @@ class DoudizhuGame(Game):
             }
         """
         super().__init__()
+        self.set_seed(seed)
         self.trace = []
         self.state = {'deck': None, 'seen_cards': None, 'landlord': None,
                       'self': None, 'hand': None, 'trace': self.trace,
@@ -58,6 +60,10 @@ class DoudizhuGame(Game):
         self.state['remained'] = cards2str(player.remained_cards)
         self.state['actions'] = player.get_playable_cards_ii()
 
+    def set_seed(self, seed):
+        random.seed(seed)
+        print('############ Doudizhu seeded('+str(seed)+') ############')
+
     def start_game(self):
         """
         Run a complete game by randomly choosing an action
@@ -74,6 +80,10 @@ class DoudizhuGame(Game):
             next_state, next_player = self.step(action)
             self.state = next_state
             player = next_player
+
+        print('#####Final states#####')
+        for player_id in range(DoudizhuGame.players_num):
+            print(self.get_state(player_id), '\n')
 
     def step(self, action):
         """Perform one draw of the game and return next player's id,
@@ -102,17 +112,44 @@ class DoudizhuGame(Game):
         """
         return DoudizhuGame.players_num
 
-    def get_state(self, player):
+    def get_state(self, player_id):
         """Return player's state
         """
-        return self.state
+        player = self.players[player_id]
+        if self.current_player is not None:  # when get first state
+            return self.state
+        else:  # when get final states of all players
+            self.state['self'] = player_id
+            self.state['hand'] = cards2str(player.hand)
+            self.state['remained'] = cards2str(player.remained_cards)
+            self.state['actions'] = None
+            return self.state
+
+    def is_winner(self, player_id):
+        """Return 1(winner), 0(not winner)
+
+        Note:
+            Only can be used after game ending
+        """
+        return DoudizhuGame.game_result[player_id]
 
     def end(self):
         """Return whether the game has been over
         """
+        if self.current_player is None:
+            return 1
         last_player = get_upstream_player_id(
-            self.players[self.current_player], self.players)
-        return len(self.players[last_player].remained_cards) == 0
+            self.players[self.current_player], self.players) 
+        if len(self.players[last_player].remained_cards) == 0:
+            if self.players[last_player].role == 'farmer':
+                for _, player in enumerate(self.players):
+                    if player.role == 'farmer':
+                        DoudizhuGame.game_result[_] = 1
+            else:
+                DoudizhuGame.game_result[last_player] = 1
+            self.current_player = None
+            return 1
+        return 0
 
 
 if __name__ == '__main__':

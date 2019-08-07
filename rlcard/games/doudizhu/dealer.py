@@ -3,8 +3,8 @@
 import random
 import functools
 import copy
-from core import Dealer
-from utils.utils import init_54_deck
+from rlcard.core import Dealer
+from rlcard.utils.utils import init_54_deck
 
 
 class DoudizhuDealer(Dealer):
@@ -68,10 +68,9 @@ class DoudizhuDealer(Dealer):
         starter = players[start]
         for offset in range(0, players_num):
             player = players[(start+offset) % players_num]
-            actions = player.print_remained_and_actions()
+            actions = player.available_actions()
             # random
-            action = actions[random.randint(0, 1)]
-            print('chioce:', action)
+            action = random.choice(actions)
             player.play(action)
             if action == 'draw':
                 if self.landlord is not None and self.landlord is not starter:
@@ -83,8 +82,9 @@ class DoudizhuDealer(Dealer):
             return None
         if players[start].role == 'landlord' and self.landlord is not starter:
             players[start].role = ''
-            actions = starter.print_remained_and_actions()
-            action = actions[random.randint(0, 1)]
+            actions = starter.available_actions()
+            # random
+            action = random.choice(actions)
             print('chioce:', action)
             starter.play(action)
             if action == 'draw':
