@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Implement Doudizhu Round class"""
 import functools
-from core import Round
-from dealer import DoudizhuDealer
-from methods import cards2str
+from rlcard.core import Round
+from rlcard.games.doudizhu.dealer import DoudizhuDealer
+from rlcard.games.doudizhu.methods import cards2str
 
 
 class DoudizhuRound(Round):

@@ -1,3 +1,4 @@
+import importlib
 
 
 class EnvSpec(object):
@@ -6,7 +7,9 @@ class EnvSpec(object):
 
 	def __init__(self, id, entry_point=None):
 		self.id = id
-		self._entry_point = entry_point
+		#self._entry_point = importlib.import_module(entry_point)
+		mod_name, class_name = entry_point.split(':')
+		self._entry_point = getattr(importlib.import_module(mod_name), class_name)
 
 	def make(self):
 		"""Instantiates an instance of the environment
