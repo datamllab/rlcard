@@ -2,8 +2,8 @@
 """Implement Doudizhu Player class"""
 import json
 from os import path
-from core import Player
-from methods import cards2str
+from rlcard.core import Player
+from rlcard.games.doudizhu.methods import cards2str
 FILE = path.abspath(__file__)
 with open(FILE.replace('player.py', 'card_type.json', 1), 'r') as file:
     CARD_TYPE = json.load(file)
