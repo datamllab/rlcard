@@ -2,8 +2,8 @@
 """Implement Doudizhu Round class"""
 import functools
 from rlcard.core import Round
-from rlcard.games.doudizhu.dealer import DoudizhuDealer
-from rlcard.games.doudizhu.methods import cards2str
+from rlcard.games.doudizhu.dealer import DoudizhuDealer as Dealer
+from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
 
 
 class DoudizhuRound(Round):
@@ -24,7 +24,7 @@ class DoudizhuRound(Round):
             landlord_num: the id of landlord
         """
         self.greater_player = None
-        self.dealer = DoudizhuDealer()
+        self.dealer = Dealer()
         while True:
             landlord_num = self.dealer.determine_role(players)
             if landlord_num is not None:
@@ -33,8 +33,8 @@ class DoudizhuRound(Round):
         for player in players:
             player.print_remained_card()
         seen_cards = self.dealer.deck[-3:]
-        seen_cards.sort(key=functools.cmp_to_key(DoudizhuDealer.doudizhu_sort))
-        self.seen_cards = cards2str(seen_cards)
+        seen_cards.sort(key=functools.cmp_to_key(Dealer.doudizhu_sort))
+        self.seen_cards = Judger.cards2str(seen_cards)
         print('seen cards:', self.seen_cards)
         print('#################################################\n')
         self.landlord_num = landlord_num

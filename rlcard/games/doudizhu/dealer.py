@@ -85,7 +85,6 @@ class DoudizhuDealer(Dealer):
             actions = starter.available_actions()
             # random
             action = random.choice(actions)
-            print('chioce:', action)
             starter.play(action)
             if action == 'draw':
                 self.landlord.role = 'farmer'
