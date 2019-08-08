@@ -6,6 +6,8 @@ from rlcard.core import Judger
 FILE = path.abspath(__file__)
 with open(FILE.replace('judger.py', 'card_type.json', 1), 'r') as file:
     CARD_TYPE = json.load(file)
+with open(FILE.replace('judger.py', 'type_card.json', 1), 'r') as file:
+    TYPE_CARD = json.load(file)
 
 
 class DoudizhuJudger(Judger):
@@ -28,6 +30,50 @@ class DoudizhuJudger(Judger):
                 else:
                     response += card.rank
         return response
+
+    @staticmethod
+    def contains_cards(candidate, target):
+        len_can = len(candidate)
+        len_tar = len(target)
+        if len_can < len_tar:
+            return False
+        if len_can == len_tar:
+            if candidate == target:
+                return True
+            return False
+        beg = 0
+        for tar_card in target:
+            beg = candidate.find(tar_card, beg) + 1
+            if beg == 0:
+                return False
+        return True
+
+    def get_gt_cards_ii(self, player, greater_player):
+        """
+        advanced
+        """
+        gt_cards = ['pass']
+        remained = self.cards2str(player.remained_cards)
+        target_cards = greater_player.played_cards
+        target_types = CARD_TYPE[target_cards]
+        type_dict = {}
+        for card_type, weight in target_types:
+            if card_type not in type_dict:
+                type_dict[card_type] = weight
+        if 'rocket' in type_dict:
+            return gt_cards
+        type_dict['rocket'] = -1
+        if 'bomb' not in type_dict:
+            type_dict['bomb'] = -1
+        for card_type, weight in type_dict.items():
+            candidate = TYPE_CARD[card_type]
+            for can_weight, cards_list in candidate.items():
+                if int(can_weight) > weight:
+                    for cards in cards_list:
+                        if self.contains_cards(remained, cards):
+                            gt_cards.append(cards)
+        gt_cards = list(set(gt_cards))
+        return gt_cards
 
     def get_gt_cards(self, player, greater_player):
         """Get player's cards which are greater than the ones played by

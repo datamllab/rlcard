@@ -46,7 +46,7 @@ class DoudizhuPlayer(Player):
             if greater_player is None or greater_player is self:
                 actions = self.judger.get_playable_cards(self)
             else:
-                actions = self.judger.get_gt_cards(self, greater_player)
+                actions = self.judger.get_gt_cards_ii(self, greater_player)
         else:
             actions.extend(['draw', 'not draw'])
         return actions

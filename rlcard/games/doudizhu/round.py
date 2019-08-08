@@ -29,14 +29,14 @@ class DoudizhuRound(Round):
             landlord_num = self.dealer.determine_role(players)
             if landlord_num is not None:
                 break
-        print('\n############### Doudizhu Initiate ###############')
-        for player in players:
-            player.print_remained_card()
+        # print('\n############### Doudizhu Initiate ###############')
+        # for player in players:
+            # player.print_remained_card()
         seen_cards = self.dealer.deck[-3:]
         seen_cards.sort(key=functools.cmp_to_key(Dealer.doudizhu_sort))
         self.seen_cards = Judger.cards2str(seen_cards)
-        print('seen cards:', self.seen_cards)
-        print('#################################################\n')
+        # print('seen cards:', self.seen_cards)
+        # print('#################################################\n')
         self.landlord_num = landlord_num
 
     def proceed_round(self, player, action):
