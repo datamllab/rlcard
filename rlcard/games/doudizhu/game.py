@@ -7,10 +7,10 @@ from os import path
 FILE = path.abspath(__file__)
 sys.path.append(path.dirname(path.dirname(path.dirname(path.dirname(FILE)))))
 from rlcard.core import Game
-from rlcard.games.doudizhu.player import DoudizhuPlayer
-from rlcard.games.doudizhu.round import DoudizhuRound
-from rlcard.games.doudizhu.methods import cards2str
-from rlcard.games.doudizhu.dealer import DoudizhuDealer
+from rlcard.games.doudizhu.player import DoudizhuPlayer as Player
+from rlcard.games.doudizhu.round import DoudizhuRound as Round
+from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
+from rlcard.games.doudizhu.dealer import DoudizhuDealer as Dealer
 from rlcard.utils.utils import init_54_deck
 from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 
@@ -44,21 +44,21 @@ class DoudizhuGame(Game):
         self.state = {'deck': None, 'seen_cards': None, 'landlord': None,
                       'self': None, 'hand': None, 'trace': self.trace,
                       'remained': None, 'actions': []}
-        self.players = [DoudizhuPlayer(num)
+        self.players = [Player(num)
                         for num in range(DoudizhuGame.players_num)]
-        self.rounder = DoudizhuRound(self.players)
+        self.rounder = Round(self.players)
         self.current_player = self.rounder.landlord_num
         player = self.players[self.current_player]
         self.rounder.round_last = get_upstream_player_id(player, self.players)
         deck = init_54_deck()
-        deck.sort(key=functools.cmp_to_key(DoudizhuDealer.doudizhu_sort))
-        self.state['deck'] = cards2str(deck)
+        deck.sort(key=functools.cmp_to_key(Dealer.doudizhu_sort))
+        self.state['deck'] = Judger.cards2str(deck)
         self.state['landlord'] = self.rounder.landlord_num
         self.state['self'] = self.current_player
-        self.state['hand'] = cards2str(player.hand)
+        self.state['hand'] = Judger.cards2str(player.hand)
         self.state['seen_cards'] = self.rounder.seen_cards
-        self.state['remained'] = cards2str(player.remained_cards)
-        self.state['actions'] = player.get_playable_cards_ii()
+        self.state['remained'] = Judger.cards2str(player.remained_cards)
+        self.state['actions'] = Judger().get_playable_cards(player)
 
     def set_seed(self, seed):
         random.seed(seed)
@@ -95,8 +95,8 @@ class DoudizhuGame(Game):
         next_player_id = get_downstream_player_id(player, self.players)
         self.state['self'] = next_player_id
         next_player = self.players[next_player_id]
-        self.state['hand'] = cards2str(next_player.hand)
-        self.state['remained'] = cards2str(next_player.remained_cards)
+        self.state['hand'] = Judger.cards2str(next_player.hand)
+        self.state['remained'] = Judger.cards2str(next_player.remained_cards)
         actions = next_player.available_actions(greater_player)
         self.state['actions'] = actions
         self.current_player = next_player_id
@@ -120,8 +120,8 @@ class DoudizhuGame(Game):
             return self.state
         else:  # when get final states of all players
             self.state['self'] = player_id
-            self.state['hand'] = cards2str(player.hand)
-            self.state['remained'] = cards2str(player.remained_cards)
+            self.state['hand'] = Judger.cards2str(player.hand)
+            self.state['remained'] = Judger.cards2str(player.remained_cards)
             self.state['actions'] = None
             return self.state
 
