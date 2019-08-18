@@ -5,7 +5,6 @@ from rlcard.core import Round
 from rlcard.games.doudizhu.dealer import DoudizhuDealer as Dealer
 from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
 
-
 class DoudizhuRound(Round):
     """
     Round can call other Classes' functions to keep the game running

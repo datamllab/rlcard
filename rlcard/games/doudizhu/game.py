@@ -47,6 +47,7 @@ class DoudizhuGame(Game):
         self.players = [Player(num)
                         for num in range(DoudizhuGame.players_num)]
         self.rounder = Round(self.players)
+        self.judger = Judger(self.players)
         self.current_player = self.rounder.landlord_num
         player = self.players[self.current_player]
         self.rounder.round_last = get_upstream_player_id(player, self.players)
@@ -58,7 +59,7 @@ class DoudizhuGame(Game):
         self.state['hand'] = Judger.cards2str(player.hand)
         self.state['seen_cards'] = self.rounder.seen_cards
         self.state['remained'] = Judger.cards2str(player.remained_cards)
-        self.state['actions'] = Judger().get_playable_cards(player)
+        self.state['actions'] = list(self.judger.playable_cards[self.current_player])
 
     def set_seed(self, seed):
         random.seed(seed)
@@ -97,7 +98,7 @@ class DoudizhuGame(Game):
         next_player = self.players[next_player_id]
         self.state['hand'] = Judger.cards2str(next_player.hand)
         self.state['remained'] = Judger.cards2str(next_player.remained_cards)
-        actions = next_player.available_actions(greater_player)
+        actions = next_player.available_actions(greater_player, self.judger)
         self.state['actions'] = actions
         self.current_player = next_player_id
         return self.state, next_player_id
@@ -139,7 +140,7 @@ class DoudizhuGame(Game):
         if self.current_player is None:
             return 1
         last_player = get_upstream_player_id(
-            self.players[self.current_player], self.players) 
+            self.players[self.current_player], self.players)
         if len(self.players[last_player].remained_cards) == 0:
             if self.players[last_player].role == 'farmer':
                 for _, player in enumerate(self.players):
