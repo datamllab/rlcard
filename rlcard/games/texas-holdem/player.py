@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-"""Implement Texasholdem Player class"""
-from core import Player
-from methods import Methods
-from dealer import TexasDealear
+import json
+from rlcard.core import Player
+from rlcard.games.texasholdem.judger import TexasJudger as Judger
 
 
 class TexasPlayer(Player):
     def __init__(self,player_id = None, chips = 1000 , face_up = False):
         self.ID = player_id
         self._cards = []
-        self._hand = Methods(player_id)
+        self._hand = Judger(player_id)
         self._chips = chips
         self._face_up = face_up
 
@@ -23,15 +22,15 @@ class TexasPlayer(Player):
 
     def reset_player_cards(self):
         self._cards = []
-        self._hand = Methods(self.name)
+        self._hand = Judger(self.ID)
 
     def display_cards(self):
         if self._face_up == True:
-            print (self.name , "has :" , self._cards)
+            print (self.ID , "has :" , self._cards)
         else:
-            print (self.name , "has : [X,X]")
+            print (self.ID , "has : [X,X]")
     def display_all_cards(self):
-        print (self.name , "has :" , self._cards)
+        print (self.ID , "has :" , self._cards)
 
     def get_chips(self):
         return self._chips
@@ -49,5 +48,3 @@ class TexasPlayer(Player):
         return self._hand._category
     def get_hand_five_cards(self):
         return self._hand._five_cards
-    def get_hand_name(self):
-        return self._hand._hand_name
