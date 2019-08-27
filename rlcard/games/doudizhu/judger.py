@@ -17,7 +17,6 @@ class DoudizhuJudger(Judger):
         self.playable_cards = [CARD_TYPE.copy() for i in range(3)]
         for player in players:
             self.get_playable_cards_ii(player)
-            
 
     @staticmethod
     def cards2str(cards: list):
@@ -61,7 +60,7 @@ class DoudizhuJudger(Judger):
         """
         # time_start = time.time()
         gt_cards = ['pass']
-        remained = self.cards2str(player.remained_cards)
+        remaining = self.cards2str(player.remaining_cards)
         target_cards = greater_player.played_cards
         target_types = CARD_TYPE[target_cards]
         type_dict = {}
@@ -73,27 +72,27 @@ class DoudizhuJudger(Judger):
         type_dict['rocket'] = -1
         if 'bomb' not in type_dict:
             type_dict['bomb'] = -1
-        
         # iii
+        '''
         playable = self.playable_cards[player.player_id]
         for cards, type_weights in playable.items():
             for type_weight in type_weights:
                 if type_weight[0] in type_dict and type_weight[1] > type_dict[type_weight[0]]:
                     gt_cards.append(cards)
                     break
+        '''
         # time_end = time.time()
         # print('playable cost', time_end-time_start)
-        '''
+    
         for card_type, weight in type_dict.items():
             candidate = TYPE_CARD[card_type]
             for can_weight, cards_list in candidate.items():
                 if int(can_weight) > weight:
                     for cards in cards_list:
-                        #if self.contains_cards(remained, cards):
-                        if cards in self.playable_cards[player.player_id]:
+                        if self.contains_cards(remaining, cards):
+                        #if cards in self.playable_cards[player.player_id]:
                             gt_cards.append(cards)
         gt_cards = list(set(gt_cards))
-        '''
         return gt_cards
 
     def get_gt_cards(self, player, greater_player):
@@ -102,6 +101,7 @@ class DoudizhuJudger(Judger):
 
         Note: response contains 'pass'
         """
+        
         gt_cards = ['pass']
         target_cards = greater_player.played_cards
         target_types = CARD_TYPE[target_cards]
@@ -125,19 +125,19 @@ class DoudizhuJudger(Judger):
 
     def get_playable_cards(self, player):
         playable = []
-        remained = self.cards2str(player.remained_cards)
+        remaining = self.cards2str(player.remaining_cards)
         for cards in CARD_TYPE:
-            if self.contains_cards(remained, cards):
+            if self.contains_cards(remaining, cards):
                 playable.append(cards)
         return playable
 
     def get_playable_cards_ii(self, player):
         # time_start = time.time()
         player_id = player.player_id
-        remained = self.cards2str(player.remained_cards)
+        remaining = self.cards2str(player.remaining_cards)
         missed = None
         for single in player.singles:
-            if single not in remained:
+            if single not in remaining:
                 missed = single
                 break
         playable_cards = list(self.playable_cards[player_id])
@@ -145,30 +145,30 @@ class DoudizhuJudger(Judger):
             position = player.singles.find(missed)
             player.singles = player.singles[position+1:]
             for cards in playable_cards:
-                if missed in cards or (not self.contains_cards(remained, cards)):
+                if missed in cards or (not self.contains_cards(remaining, cards)):
                     del self.playable_cards[player_id][cards]
         else:
             for cards in playable_cards:
-                if not self.contains_cards(remained, cards):
+                if not self.contains_cards(remaining, cards):
                     del self.playable_cards[player_id][cards]
         '''
         singles = '3456789TJQK'
         miss_card = ''
         for single in singles:
-            if single not in remained:
+            if single not in remaining:
                 miss_card += single
                 if len(miss_card) == 2:
                     break
         print(miss_card)
         if miss_card == '':
             for cards in CARD_TYPE:
-                if self.contains_cards(remained, cards):
+                if self.contains_cards(remaining, cards):
                     playable.append(cards)
         else:
             for cards in CARD_TYPE:
                 if miss_card[0] in cards or miss_card[1] in cards:
                     continue
-                if self.contains_cards(remained, cards):
+                if self.contains_cards(remaining, cards):
                     playable.append(cards)
         '''
         # time_end = time.time()
