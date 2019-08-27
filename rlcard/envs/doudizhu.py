@@ -38,6 +38,11 @@ class DoudizhuEnv(Env):
 		self.rewarder = rewarder
 
 	def set_seed(self, seed):
+		""" Set the seed 
+
+		Args:
+			seed: integer
+		"""
 		random.seed(seed)
 		print('############### seeded ############')
 
@@ -101,15 +106,16 @@ class DoudizhuEnv(Env):
 			i.e. 1 if winning and 0 otherwise
 		"""
 		### the wiiner of the round
-		player_wins = [0 for _ in range(self.player_num)]
-		player_wins[0] = 1 # assume that player_0 wins
+		player_wins = [self.game.is_winner(p) for p in range(self.player_num)]
+		#print('######## ', player_wins)
 		new_trajectories = [[] for _ in range(self.player_num)]
 
 		for player in range(self.player_num):
 			for i in range(0, len(trajectories[player])-2, 2):
 				transition = trajectories[player][i:i+3].copy()\
 
-				# Reward. TODO: use better rewarder later
+				# Reward. Here, I simply reward at the end of the game
+				# TODO: use better rewarder later
 				if i < len(trajectories[player]) - 3:
 					reward = self.rewarder.get_reward(0)
 				else:
