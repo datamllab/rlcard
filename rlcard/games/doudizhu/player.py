@@ -20,11 +20,11 @@ class DoudizhuPlayer(Player):
             role: a player's temporary role in one game(landlord or farmer)
             played_cards: the cards played in one round
             hand: initial hand; don't change
-            remained_cards: The rest of the cards after playing some of them
+            remaining_cards: The rest of the cards after playing some of them
         """
         self.player_id = player_id
         self.hand = []
-        self.remained_cards = []
+        self.remaining_cards = []
         self.role = ''
         self.played_cards = None
         self.singles = '3456789TJQKA2BR'
@@ -77,27 +77,27 @@ class DoudizhuPlayer(Player):
             for play_card in action:
                 if play_card in trans:
                     play_card = trans[play_card]
-                for _, remain_card in enumerate(self.remained_cards):
+                for _, remain_card in enumerate(self.remaining_cards):
                     if remain_card.rank != '':
                         remain_card = remain_card.rank
                     else:
                         remain_card = remain_card.suit
                     if play_card == remain_card:
-                        self.remained_cards.remove(self.remained_cards[_])
+                        self.remaining_cards.remove(self.remaining_cards[_])
                         break
                 # time_end = time.time()
                 # print('play cost', time_end-time_start)
             return self
 
-    def print_remained_card(self):
-        remained_cards = [str(index)+':'+card.get_index()
-                          for index, card in enumerate(self.remained_cards)]
-        print('remained cards of player '+str(self.player_id) +
-              '('+self.role+')'+':', remained_cards)
+    def print_remaining_card(self):
+        remaining_cards = [str(index)+':'+card.get_index()
+                           for index, card in enumerate(self.remaining_cards)]
+        print('remaining cards of player '+str(self.player_id) +
+              '('+self.role+')'+':', remaining_cards)
 
-    def print_remained_and_actions(self, greater_player=None):
+    def print_remaining_and_actions(self, greater_player=None):
         print()
-        self.print_remained_card()
+        self.print_remaining_card()
         actions = self.available_actions(greater_player)
         print("optional actions of player " +
               str(self.player_id) + ":", actions)
