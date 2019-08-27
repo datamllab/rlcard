@@ -19,22 +19,23 @@ class DoudizhuRound(Round):
         Notes:
             greater_player: the winner in one round
             dealer: a instance of DouzizhuDealer
-            seen_cards: cards given to landlord after determining landlord
+            cards_seen: cards given to landlord after determining landlord
             landlord_num: the id of landlord
         """
         self.greater_player = None
         self.dealer = Dealer()
-        while True:
-            landlord_num = self.dealer.determine_role(players)
-            if landlord_num is not None:
-                break
+        landlord_num = self.dealer.determine_role_ii(players)
+        #while True:
+        #    landlord_num = self.dealer.determine_role(players)
+        #    if landlord_num is not None:
+        #        break
         # print('\n############### Doudizhu Initiate ###############')
         # for player in players:
-            # player.print_remained_card()
-        seen_cards = self.dealer.deck[-3:]
-        seen_cards.sort(key=functools.cmp_to_key(Dealer.doudizhu_sort))
-        self.seen_cards = Judger.cards2str(seen_cards)
-        # print('seen cards:', self.seen_cards)
+            # player.print_remaining_card()
+        cards_seen = self.dealer.deck[-3:]
+        cards_seen.sort(key=functools.cmp_to_key(Dealer.doudizhu_sort))
+        self.cards_seen = Judger.cards2str(cards_seen)
+        # print('seen cards:', self.cards_seen)
         # print('#################################################\n')
         self.landlord_num = landlord_num
 
