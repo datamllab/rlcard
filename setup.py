@@ -6,13 +6,15 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="rlcard",
     version="0.0.1",
-    author="DATA lab",
-    author_email="author@example.com",
+    author="Data Analytics at Texas A&M (DATA) Lab",
+    author_email="daochen.zha@tamu.edu",
     description="A platform of Reinforcement learning on card games",
-    long_description='A platform of Reinforcement learning on card games',
-    long_description_content_type="text/markdown",
     #url="https://github.com/pypa/sampleproject",
+    keywords=["Reinforcement", "Game", "RL"],
     packages=setuptools.find_packages(),
+    install_requires=[
+        'numpy',
+    ],
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",

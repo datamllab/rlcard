@@ -22,7 +22,6 @@ class TexasEnv(Env):
 
 		Args:
 			agents: list of Agent classes; [agents]
-		self.agents = agents
 		"""
 
 		self.agents = agents
@@ -32,7 +31,6 @@ class TexasEnv(Env):
 
 		Args:
 			rewarder: Rewarder class
-		self.agents = agents
 		"""
 
 		self.rewarder = rewarder

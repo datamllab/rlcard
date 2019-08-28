@@ -9,9 +9,6 @@ class DoudizhuEnv(Env):
 	Doudizhu Environment
 	"""
 
-	def test(self):
-		print('aaa')
-
 	def __init__(self):
 		self.game = Game()
 		self.player_num = self.game.get_player_num() # get the number of players in the game
@@ -22,20 +19,9 @@ class DoudizhuEnv(Env):
 
 		Args:
 			agents: list of Agent classes; [agents]
-		self.agents = agents
 		"""
 
 		self.agents = agents
-
-	def set_rewarder(self, rewarder):
-		""" Set the agents that will interact with the environment
-
-		Args:
-			rewarder: Rewarder class
-		self.agents = agents
-		"""
-
-		self.rewarder = rewarder
 
 	def set_seed(self, seed):
 		""" Set the seed 
@@ -48,7 +34,6 @@ class DoudizhuEnv(Env):
 
 
 	def run(self):
-		# High level calls
 		trajectories = [[] for _ in range(self.player_num)]
 
 		# Loop to play the game
@@ -58,16 +43,12 @@ class DoudizhuEnv(Env):
 		while not self.game.end():
 		#for i in range(6):
 			# First, agent plays
-			#print("### State:")
-			#print(state)
 			action = self.agents[player].step(state)
-
 
 			# Second, environment steps
 			next_state, next_player = self.game.step(action)
 
 			# Finally, save the data
-			#print(player, action, next_player)
 			trajectories[player].append(action)
 			if not self.game.end():
 				trajectories[next_player].append(state)
@@ -80,32 +61,29 @@ class DoudizhuEnv(Env):
 			state = self.game.get_state(player)
 			trajectories[player].append(state)
 
-		#print('### 0:')
-		#print(trajectories[0])
-		#print('### 1:')
-		#print(trajectories[1])
-		#print('### 2:')
-		#print(trajectories[2])
+		### the wiiner of the game
+		player_wins = [self.game.is_winner(p) for p in range(self.player_num)]
 
-		trajectories = self.reorganize(trajectories)
-
-		# Then the trajectories look like this:
-		# trajectories[0] = [s_0, a_0, s_1, a_1, ...]
-
-		# We reorganize the trajectories with the rewarder
-		# And outout:
-		# trajectories[0] = [[s, a, s', r]]
-
-		return trajectories
+		return trajectories, player_wins
 
 
+#####################################################################
+	# Remove the rewarder for now
+	# For later use
+
+	# Then the trajectories look like this:
+	# trajectories[0] = [s_0, a_0, s_1, a_1, ...]
+
+	# We reorganize the trajectories with the rewarder
+	# And outout:
+	# trajectories[0] = [[s, a, s', r]]
 	def reorganize(self, trajectories):
 		"""
 			A simple function to add reward to the trajectories.
 			The reward is only given in the end of a game,
 			i.e. 1 if winning and 0 otherwise
 		"""
-		### the wiiner of the round
+		### the wiiner of the game
 		player_wins = [self.game.is_winner(p) for p in range(self.player_num)]
 		#print('######## ', player_wins)
 		new_trajectories = [[] for _ in range(self.player_num)]
