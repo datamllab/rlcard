@@ -30,6 +30,7 @@ class DoudizhuEnv(Env):
 			seed: integer
 		"""
 		random.seed(seed)
+		self.game.set_seed(seed)
 		print('############### seeded ############')
 
 
