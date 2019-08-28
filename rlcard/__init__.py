@@ -1,7 +1,3 @@
+name = "rlcard"
+
 from rlcard.envs import make
-
-
-
-
-def test():
-	print ('aaaa')
