@@ -1,12 +1,11 @@
 # Example of using doudizhu environment
-
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
 
 # make environment
 env = rlcard.make('doudizhu')
 
-print ('############## Environment of Doudizhu Initilized ################')
+print('############## Environment of Doudizhu Initilized ################')
 
 # set agents
 agent_0 = RandomAgent()
