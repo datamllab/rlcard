@@ -16,12 +16,9 @@ class RandomAgent(object):
 
 
 	def step(self, state):
-		"""
-			Randomly choose an action from the legal actions
-		"""
-
-		actions = state['actions']
-		#print('Actions:')
-		#print(actions)
-		return random.choice(actions)
+            """
+                    Randomly choose an action from the legal actions
+            """
+            actions = state['actions']
+            return random.choice(actions)
 
