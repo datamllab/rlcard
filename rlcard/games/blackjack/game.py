@@ -17,6 +17,8 @@ class BlackjackGame(Game):
         self.player = Player(0)
         self.judger = Judger()
         self.winner = {'dealer':0, 'player':0}
+        #self.winner = {self.player.get_player_id()+1:0, self.player.get_player_id():0}
+        self.init()
 
     def set_seed(self, seed):
         random.seed(seed)
@@ -28,14 +30,25 @@ class BlackjackGame(Game):
         self.init()
         while not self.end():
             act = random.choice(action)
-            print(self.player.status, self.dealer.status)
-            print(self.player.score, self.dealer.score)
-            print(act)
+            print("Status(Player, Dealer): ",(self.player.status, self.dealer.status))
+            print("Score(Player, Dealer): ",(self.player.score, self.dealer.score))
+            print("Player_action:",act)
             next_state, next_player = self.step(act)
 
-        print(self.player.status, self.dealer.status)
-        print(self.player.score, self.dealer.score)
+        print("Status(Player, Dealer): ",(self.player.status, self.dealer.status))
+        print("Score(Player, Dealer): ",(self.player.score, self.dealer.score))
         print(self.winner)
+
+    def get_player_id(self):
+        return self.player.get_player_id()
+
+    def get_state(self, player):
+        state = {}
+        state['actions'] = ('hit', 'stand')
+        hand = [card.get_index() for card in self.player.hand]
+        dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
+        state['state'] = (hand, dealer_hand)
+        return state
 
     def init(self):
         self.dealer.deal_card(self.player)
@@ -46,19 +59,29 @@ class BlackjackGame(Game):
         self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
             
     def step(self, action):
+        next_state = {}
         if action != "stand":
             self.dealer.deal_card(self.player)
             self.player.status, self.player.score = self.judger.judge_round(self.player)
             if self.player.status == 'bust':
                 self.judger.judge_game(self)
-            next_state = (self.player, self.dealer.hand[1:])
+            hand = [card.get_index() for card in self.player.hand]
+            dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
+            next_state['state'] = (hand, dealer_hand)
+            next_state['actions'] = ('hit', 'stand')
+
         elif action == "stand":
-            while self.judger.judge_score(self.dealer.hand) <= 17:
+            while self.judger.judge_score(self.dealer.hand) < 17:
                 self.dealer.deal_card(self.dealer)
                 self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
             self.judger.judge_game(self)
-            next_state = (self.player, self.dealer.hand[1:])
-        return next_state, self.player
+            hand = [card.get_index() for card in self.player.hand]
+            dealer_hand = [c.get_index() for c in self.dealer.hand[1:]]
+            #dealer_hand2 = [c.get_index() for c in self.dealer.hand]
+            #print("Fucking_dealer_hand", dealer_hand2)
+            next_state['state'] = (hand, dealer_hand) # show all hand of dealer
+            next_state['actions'] = ('hit', 'stand')
+        return next_state, self.player.get_player_id()
 
     def end(self):
         if self.player.status == 'bust'or self.dealer.status == 'bust' or (self.winner['dealer'] != 0 or self.winner['player'] != 0):
@@ -68,6 +91,7 @@ class BlackjackGame(Game):
         
     def reset(self):
         self.winner = {'dealer':0, 'player':0}
+        #self.winner = {self.player.get_player_id()+1:0, self.player.get_player_id():0}
         self.dealer = Dealer()
         self.player = Player(0)
         self.judger = Judger()
