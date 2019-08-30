@@ -44,18 +44,6 @@ class DoudizhuDealer(Dealer):
             return -1
         return 0
 
-    def deal_cards(self, players):
-        """Deal specific number of cards to a specific player
-
-        Args:
-            players: a list of Player objects
-        """
-        hand_num = (len(self.deck) - 3) // len(players)
-        for index, player in enumerate(players):
-            player.hand = self.deck[index*hand_num:(index+1)*hand_num]
-            player.hand.sort(key=functools.cmp_to_key(self.doudizhu_sort))
-            player.remaining_cards = copy.deepcopy(player.hand)
-
     @staticmethod
     def get_landlord_score(remaining):
         score_map = {'A': 1, '2': 2, 'B': 3, 'R': 4}
@@ -78,6 +66,18 @@ class DoudizhuDealer(Dealer):
             i += 1
         return score
 
+    def deal_cards(self, players):
+        """Deal specific number of cards to a specific player
+
+        Args:
+            players: a list of Player objects
+        """
+        hand_num = (len(self.deck) - 3) // len(players)
+        for index, player in enumerate(players):
+            player.hand = self.deck[index*hand_num:(index+1)*hand_num]
+            player.hand.sort(key=functools.cmp_to_key(self.doudizhu_sort))
+            player.remaining_cards = copy.deepcopy(player.hand)
+
     def determine_role_ii(self, players):
         self.shuffle()
         self.deal_cards(players)
@@ -85,23 +85,21 @@ class DoudizhuDealer(Dealer):
         self.landlord = players[0]
         max_score = self.get_landlord_score(
             Judger.cards2str(self.landlord.remaining_cards))
-        print(max_score)
+        # print(max_score)
         for player in players[1:]:
             player.role = 'peasant'
             score = self.get_landlord_score(
                 Judger.cards2str(player.remaining_cards))
-            print(score)
             if score > max_score:
                 max_score = score
                 self.landlord = player
         self.landlord.role = 'landlord'
-        for player in players:
-            print(Judger.cards2str(player.remaining_cards))
         self.landlord.hand.extend(self.deck[-3:])
         self.landlord.hand.sort(key=functools.cmp_to_key(self.doudizhu_sort))
         self.landlord.remaining_cards = copy.deepcopy(self.landlord.hand)
-        for player in players:
-            print(Judger.cards2str(player.remaining_cards))
+        #for player in players:
+        #    print(Judger.cards2str(player.remaining_cards))
+        #input()
         return self.landlord.player_id
 
     def determine_role(self, players):
