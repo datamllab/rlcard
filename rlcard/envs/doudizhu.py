@@ -35,6 +35,7 @@ class DoudizhuEnv(Env):
 
 
 	def run(self):
+		self.game.initiate()
 		trajectories = [[] for _ in range(self.player_num)]
 
 		# Loop to play the game
@@ -52,8 +53,7 @@ class DoudizhuEnv(Env):
 			# Finally, save the data
 			trajectories[player].append(action)
 			if not self.game.end():
-				trajectories[next_player].append(state)
-
+				trajectories[next_player].append(next_state)
 			state = next_state
 			player = next_player
 
@@ -62,7 +62,10 @@ class DoudizhuEnv(Env):
 			state = self.game.get_state(player)
 			trajectories[player].append(state)
 
-		### the wiiner of the game
+		# Reorganize the trajectories
+		trajectories = self.reorganize(trajectories)
+
+		### the winer of the game
 		player_wins = [self.game.is_winner(p) for p in range(self.player_num)]
 
 		return trajectories, player_wins
@@ -95,22 +98,11 @@ class DoudizhuEnv(Env):
 
 				# Reward. Here, I simply reward at the end of the game
 				# TODO: use better rewarder later
-				if i < len(trajectories[player]) - 3:
-					reward = self.rewarder.get_reward(0)
-				else:
-					reward = self.rewarder.get_reward(player_wins[player])
+				#if i < len(trajectories[player]) - 3:
+				#	reward = self.rewarder.get_reward(0)
+				#else:
+				#	reward = self.rewarder.get_reward(player_wins[player])
 
-				transition.append(reward)
+				#transition.append(reward)
 				new_trajectories[player].append(transition)
 		return new_trajectories
-
-
-
-
-
-
-
-
-
-
-
