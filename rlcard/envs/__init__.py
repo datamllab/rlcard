@@ -11,10 +11,7 @@ register(
     entry_point='rlcard.envs.doudizhu:DoudizhuEnv',
 )
 
-<<<<<<< HEAD
-=======
 register(
     id='simpletexasholdem',
     entry_point='rlcard.envs.simpletexasholdem:SimpleTexasEnv',
 )
->>>>>>> 94702c8651ab41508d76cd5b62e2ea6d5dc83deb

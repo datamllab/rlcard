@@ -18,7 +18,6 @@ class BlackjackGame(Game):
         self.judger = Judger()
         self.winner = {'dealer':0, 'player':0}
 
-
     def set_seed(self, seed):
         random.seed(seed)
 
