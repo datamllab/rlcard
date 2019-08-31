@@ -5,6 +5,7 @@ from rlcard.games.texasholdem.dealer import TexasDealer as Dealer
 from itertools import product
 import random
 from rlcard.games.texasholdem.player import TexasPlayer as Player
+from rlcard.games.texasholdem.judger import TexasJudger as Judger
 from rlcard.games.texasholdem.round import TexasRound as Round
 
 RANKS = '23456789TJQKA'
@@ -12,7 +13,7 @@ RANKS = '23456789TJQKA'
 
 class TexasGame(Game):
 
-    players_num = 4
+    players_num = 2
 
     def __init__(self, player_id = None, chips = 1000, big_blind = 10):
         self._deck = Dealer()
@@ -47,8 +48,6 @@ class TexasGame(Game):
             self.state['remained'] = Judger.cards2str(player.remained_cards)
             self.state['actions'] = None
             return self.state
-    
-
 
     def transfer_chips(self, player1, player2, amount = "all"):
         if amount == "all":
