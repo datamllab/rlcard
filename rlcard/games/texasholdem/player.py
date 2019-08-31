@@ -5,7 +5,7 @@ from rlcard.games.texasholdem.judger import TexasJudger as Judger
 
 
 class TexasPlayer(Player):
-    def __init__(self,player_id = None, chips = 1000 , face_up = False):
+    def __init__(self, player_id = None, chips = 1000 , face_up = False):
         self.ID = player_id
         self._cards = []
         self._hand = Judger(player_id)

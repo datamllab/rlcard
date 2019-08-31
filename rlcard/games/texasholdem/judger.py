@@ -4,7 +4,7 @@ RANK_TO_STRING = {2: "2", 3: "3", 4: "4", 5: "5", 6: "6",7: "7",8: "8",9: "9",10
 RANK_LOOKUP = "0023456789TJQKA2345"
 SUIT_LOOKUP = "SCDH"
 
-class Methods:
+class TexasJudger:
 	def __init__(self, name):
 		self._all_cards = []
 		self.name = name            #   Player1_hand , Player2_hand
@@ -113,8 +113,8 @@ class Methods:
 		different_rank_list = []
 		different_rank_list.append(all_cards[0])
 		for card in all_cards:
-		    if(card[0] != different_rank_list[-1][0]):
-        	     different_rank_list.append(card)
+			if(card[0] != different_rank_list[-1][0]):
+				different_rank_list.append(card)
 		return different_rank_list
 
 	def _get_straight_cards(self, Cards):

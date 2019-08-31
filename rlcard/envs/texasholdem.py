@@ -16,14 +16,12 @@ class TexasEnv(Env):
 		self.game = Game()
 		self.player_num = self.game.get_player_num() # get the number of players in the game
 
-
 	def set_agents(self, agents):
 		""" Set the agents that will interact with the environment
 
 		Args:
 			agents: list of Agent classes; [agents]
 		"""
-
 		self.agents = agents
 
 	def set_rewarder(self, rewarder):
@@ -32,13 +30,12 @@ class TexasEnv(Env):
 		Args:
 			rewarder: Rewarder class
 		"""
-
 		self.rewarder = rewarder
 
 	def set_seed(self, seed):
 		random.seed(seed)
+		# self.game.set_seed(seed)
 		print('############### seeded ############')
-
 
 	def run(self):
 		# High level calls
@@ -49,40 +46,19 @@ class TexasEnv(Env):
 		state = self.game.get_state(player) # get the state of the first player
 		trajectories[player].append(state)
 		while not self.game.end():
-		#for i in range(6):
 			# First, agent plays
-			#print("### State:")
-			#print(state)
 			action = self.agents[player].step(state)
-
 
 			# Second, environment steps
 			next_state, next_player = self.game.step(action)
 
 			# Finally, save the data
-			#print(player, action, next_player)
 			trajectories[player].append(action)
-			if not self.game.end():
-				trajectories[next_player].append(state)
-
+			trajectories[next_player].append(state)
 			state = next_state
 			player = next_player
 
-		## add a final state to all the players
+		# add a final state to all the players
 		for player in range(self.player_num):
 			state = self.game.get_state(player)
 			trajectories[player].append(state)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
