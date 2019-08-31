@@ -16,3 +16,8 @@ register(
     id='simpletexasholdem',
     entry_point='rlcard.envs.simpletexasholdem:SimpleTexasEnv',
 )
+
+register(
+    id='texasholdem',
+    entry_point='rlcard.envs.texasholdem:TexasEnv',
+)
