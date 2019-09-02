@@ -48,7 +48,7 @@ We provide a complexity estimation for each game on the following aspects:
 
 
 # Documents
-Please refer to the [Documents](docs/index.md).
+Please refer to the [Documents](docs/README.md).
 
 # Disclaimer
 Please note that this is a **pre-release** version of the RLCard. The toolkit is provided **"as is"**, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement.
