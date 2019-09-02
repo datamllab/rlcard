@@ -26,7 +26,7 @@ while True:
     
     # Update the agent here
 ```
-More examples can be found in `examples/`
+More examples can be found in [Running examples](docs/running-examples.md).
 
 # Available Environments
 We provide a complexity estimation for each game on the following aspects: 
