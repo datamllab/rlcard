@@ -10,9 +10,9 @@ The toolkit wraps each game by `Env` with easy-to-use interfaces. Users can focu
 * [RLCard high-level design](docs/high-level-design.md)
 * [Developping algorithms](docs/developping-algorithms.md)
 * [Evaluation](docs/evaluation.md)
-* [Blackjack API](docs/blackjack-api.md)
-* [Dou Dizhu API](docs/dou-dizhu-api.md)
-* [Texas Hold'em API](docs/texas-holdem-api.md)
+* [Blackjack](docs/blackjack.md)
+* [Dou Dizhu](docs/dou-dizhu.md)
+* [Texas Hold'em](docs/texas-holdem.md)
 
 # Developer Guide
 * [Code structure](docs/code-structure.md)

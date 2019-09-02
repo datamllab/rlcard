@@ -1,4 +1,4 @@
-# Dou Dizhu API
+# Dou Dizhu
 This document describes Dou Dizhu API.
 
 ## State Space
