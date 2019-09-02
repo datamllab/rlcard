@@ -1,5 +1,5 @@
 # Overview
-The tool kit wraps each game by `Env` with easy-to-use interfaces. Users can focus on algorithm design instead of game development. The following design principles are applied:
+The toolkit wraps each game by `Env` with easy-to-use interfaces. Users can focus on algorithm design instead of game development. The following design principles are applied:
 * **Simple.** We make the interfaces straightforward and simple. Users can easily run one game and obtain the statistics of the game.
 * **Consistent.** All the games are implemented following the same logical pattern. The main classes/functions of each game share the same class/function name. Users can easily understand each game and modify the rules for research purpose.
 * **Reproducible.** Each environment can be seeded for reproducibility purpose.
