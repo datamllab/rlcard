@@ -26,6 +26,7 @@ while True:
     
     # Update the agent here
 ```
+More examples can be found in `examples/`
 
 # Available Environments
 We provide a complexity estimation for each game on the following aspects: 
@@ -45,7 +46,6 @@ We provide a complexity estimation for each game on the following aspects:
 | Dou Dizhu ([wiki](https://en.wikipedia.org/wiki/Dou_dizhu))      | unknown      |   unknown | 10^4| Available|
 | Sheng Ji ([wiki](https://en.wikipedia.org/wiki/Sheng_ji))      | unknown      |   unknown | unknown | Come soon|
 
-More examples can be found in `examples/`
 
 # Documents
 Please refer to the [Documents Index](docs/index.md).
