@@ -40,11 +40,13 @@ class BlackjackEnv(Env):
         player = self.game.get_player_id() # get the current player id
         state = self.game.get_state(player) # get the state of the first player
         trajectories[player].append(state)
+        cnt = 0
         while not self.game.end():
             #for i in range(6):
             # First, agent plays
             action = self.agents[player].step(state)
 
+            action = 'hit'
             # Second, environment steps
             next_state, next_player = self.game.step(action)
             #print(action, next_state, next_player)
@@ -52,10 +54,10 @@ class BlackjackEnv(Env):
             # Finally, save the data
             trajectories[player].append(action)
             if not self.game.end():
-                trajectories[next_player].append(state)
+                trajectories[next_player].append(next_state)
             state = next_state
             player = next_player
-
+            cnt += 1
 
         ## add a final state to all the players
         for player in range(self.player_num):

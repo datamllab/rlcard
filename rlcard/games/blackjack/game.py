@@ -1,6 +1,7 @@
 import random
 from os import path
 import sys
+from copy import deepcopy
 FILE = path.abspath(__file__)
 sys.path.append(path.dirname(path.dirname(path.dirname(path.dirname(FILE)))))
 from rlcard.core import Game
@@ -19,6 +20,7 @@ class BlackjackGame(Game):
         self.winner = {'dealer':0, 'player':0}
         #self.winner = {self.player.get_player_id()+1:0, self.player.get_player_id():0}
         self.init()
+        self.history = []
 
     def set_seed(self, seed):
         random.seed(seed)
@@ -57,9 +59,15 @@ class BlackjackGame(Game):
         self.dealer.deal_card(self.dealer)
         self.player.status, self.player.score = self.judger.judge_round(self.player)
         self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
+        #p = deepcopy(self.player)
+        #d = deepcopy(self.dealer)
+        #self.history = [(d,p)]
             
     def step(self, action):
         next_state = {}
+        p = deepcopy(self.player)
+        d = deepcopy(self.dealer)
+        self.history.append((d,p))
         if action != "stand":
             self.dealer.deal_card(self.player)
             self.player.status, self.player.score = self.judger.judge_round(self.player)
@@ -77,11 +85,12 @@ class BlackjackGame(Game):
             self.judger.judge_game(self)
             hand = [card.get_index() for card in self.player.hand]
             dealer_hand = [c.get_index() for c in self.dealer.hand[1:]]
-            #dealer_hand2 = [c.get_index() for c in self.dealer.hand]
-            #print("Fucking_dealer_hand", dealer_hand2)
             next_state['state'] = (hand, dealer_hand) # show all hand of dealer
             next_state['actions'] = ('hit', 'stand')
         return next_state, self.player.get_player_id()
+
+    def step_back(self):
+        self.dealer, self.player = self.history.pop()
 
     def end(self):
         if self.player.status == 'bust'or self.dealer.status == 'bust' or (self.winner['dealer'] != 0 or self.winner['player'] != 0):
