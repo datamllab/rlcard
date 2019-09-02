@@ -28,12 +28,12 @@ while True:
 ```
 
 # Available Environments
-We alos provide a complexity estimation for each game on the following aspects: 
+We provide a complexity estimation for each game on the following aspects: 
 * **InfoSet Number:** the number of information set
 * **Avg. InfoSet Size:** the average number of states in a single information set
 * **Action Size:** the size of the action space (without abstraction)
 
-**Note:** For some of the large card games, obtaining the some of the above statistics is computationally challenging, and thus they are 'unknown' to us. 
+**Note:** For some of the large card games, obtaining the some of the statistics is computationally challenging, and thus they are 'unknown' to us. 
 
 | Game                     | InfoSet Number  |Avg. InfoSet Size | Action Size |Status  |
 | ------------------------ |:--------------:| :-------:|:------:| :-------:|
@@ -48,7 +48,7 @@ We alos provide a complexity estimation for each game on the following aspects:
 More examples can be found in `examples/`
 
 # Documents
-Please refer to the [Document Index](docs/index.md).
+Please refer to the [Documents Index](docs/index.md).
 
 # DISCLAIMER
 Please note that this is a **pre-release** version of the RLCard. The toolkit is provided **"as is"**, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular perpose and noninfringement.
