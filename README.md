@@ -34,7 +34,7 @@ We provide a complexity estimation for each game on the following aspects:
 * **Avg. InfoSet Size:** the average number of states in a single information set
 * **Action Size:** the size of the action space (without abstraction)
 
-**Note:** For some of the large card games, obtaining the some of the statistics is computationally challenging, and thus they are 'unknown' to us. 
+**Note:** For some of the large card games, obtaining some of the statistics is computationally challenging, and thus they are 'unknown' to us. 
 
 | Game                     | InfoSet Number  |Avg. InfoSet Size | Action Size |Status  |
 | ------------------------ |:--------------:| :-------:|:------:| :-------:|
@@ -51,7 +51,7 @@ We provide a complexity estimation for each game on the following aspects:
 Please refer to the [Documents Index](docs/index.md).
 
 # DISCLAIMER
-Please note that this is a **pre-release** version of the RLCard. The toolkit is provided **"as is"**, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular perpose and noninfringement.
+Please note that this is a **pre-release** version of the RLCard. The toolkit is provided **"as is"**, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement.
 
 # Acknowledgements
 We would like to thank JJ World Network Technology Co.,LTD for the technical support.
