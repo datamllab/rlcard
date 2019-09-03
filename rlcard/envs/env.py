@@ -33,6 +33,7 @@ class Env(object):
             trajectories
             payoffs
         """
+        self.game.initiate()
         trajectories = [[] for _ in range(self.player_num)]
 
         # Loop to play the game

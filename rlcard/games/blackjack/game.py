@@ -14,13 +14,9 @@ class BlackjackGame(Game):
     def __init__(self, seed=None):
         super().__init__()
         self.set_seed(seed)
-        self.dealer = Dealer()
-        self.player = Player(0)
-        self.judger = Judger()
         self.winner = {'dealer':0, 'player':0}
         #self.winner = {self.player.get_player_id()+1:0, self.player.get_player_id():0}
-        self.init()
-        self.history = []
+        #self.initiate()
 
     def get_player_num(self):
         return 1
@@ -55,13 +51,19 @@ class BlackjackGame(Game):
         state['state'] = (hand, dealer_hand)
         return state
 
-    def init(self):
+    def initiate(self):
+        self.dealer = Dealer()
+        self.player = Player(0)
+        self.judger = Judger()
         self.dealer.deal_card(self.player)
         self.dealer.deal_card(self.dealer)
         self.dealer.deal_card(self.player)
         self.dealer.deal_card(self.dealer)
         self.player.status, self.player.score = self.judger.judge_round(self.player)
         self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
+        self.winner = {'dealer':0, 'player':0}
+        self.history = []
+        
         #p = deepcopy(self.player)
         #d = deepcopy(self.dealer)
         #self.history = [(d,p)]
