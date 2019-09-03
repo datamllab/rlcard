@@ -22,6 +22,9 @@ class BlackjackGame(Game):
         self.init()
         self.history = []
 
+    def get_player_num(self):
+        return 1
+
     def set_seed(self, seed):
         random.seed(seed)
 

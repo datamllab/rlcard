@@ -195,3 +195,21 @@ def get_downstream_player_id(player, players):
         This function assumes player_id(s) in 'players' list start from 0, and are consequent.
     '''
     return (player.player_id+1)%len(players)
+
+def reorganize(trajectories):
+    """ Reorganize the trajectory to make it RL friendly
+    Arg:
+        trajectory: original one
+    Return:
+        A new one
+        
+    """
+    player_num = len(trajectories)
+    new_trajectories = [[] for _ in range(player_num)]
+
+    for player in range(player_num):
+        for i in range(0, len(trajectories[player])-2, 2):
+            transition = trajectories[player][i:i+3].copy()
+            new_trajectories[player].append(transition)
+    return new_trajectories
+
