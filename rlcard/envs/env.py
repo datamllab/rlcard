@@ -13,6 +13,7 @@ class Env(object):
         self.step_back = self.game.step_back
         self.get_state = self.game.get_state
         self.get_player_id = self.game.get_player_id
+        self.end = self.game.end
 
     def set_agents(self, agents):
         """ Set the agents that will interact with the environment
