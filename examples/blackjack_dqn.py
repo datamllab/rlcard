@@ -16,12 +16,18 @@ env.set_agents([agent_0])
 #env.set_seed(0)
 #agent_0.set_seed(0)
 
-for _ in range(1):
+#wins = 0
+
+for _ in range(1000):
 	# TODO: add multi-process
 
-	# generate data from the environment
-	trajectories, player_wins = env.run()
-	print(trajectories)
-	print(player_wins)
+        
+        # generate data from the environment
+        trajectories, payoffs = env.run()
+        print(trajectories)
+        print(payoffs)
+        #wins += payoffs[0]
 
-	# Update agents here
+        # Update agents here
+
+print(wins)
