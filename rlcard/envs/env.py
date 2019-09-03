@@ -4,9 +4,15 @@ import numpy as np
 class Env(object):
     """ The main Env class
     """
-    def __init__(self):
-        self.game = None
-        self.player_num = -1
+    def __init__(self, game):
+        self.game = game
+        self.player_num = game.get_player_num()
+        
+        self.init_game = self.game.init_game
+        self.step = self.game.step
+        self.step_back = self.game.step_back
+        self.get_state = self.game.get_state
+        self.get_player_id = self.game.get_player_id
 
     def set_agents(self, agents):
         """ Set the agents that will interact with the environment
@@ -33,7 +39,7 @@ class Env(object):
             trajectories
             payoffs
         """
-        self.game.initiate()
+        self.game.init_game()
         trajectories = [[] for _ in range(self.player_num)]
 
         # Loop to play the game

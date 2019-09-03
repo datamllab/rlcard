@@ -12,8 +12,7 @@ class BlackjackEnv(Env):
     """
 
     def __init__(self):
-        self.game = Game()
-        self.player_num = self.game.get_player_num() # get the number of players in the game
+        super().__init__(Game())
         self.rank2score = {"A":10, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}
 
 
