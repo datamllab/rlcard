@@ -184,9 +184,12 @@ class Estimator():
           The calculated loss on the batch.
         """
         feed_dict = { self.X_pl: s, self.y_pl: y, self.actions_pl: a }
-        summaries, global_step, _, loss, test = sess.run(
-            [self.summaries, tf.contrib.framework.get_global_step(), self.train_op, self.loss, self.losses],
+        summaries, global_step, _, loss, test1, test2 = sess.run(
+                [self.summaries, tf.contrib.framework.get_global_step(), self.train_op, self.loss, self.y_pl, self.action_predictions
+                    ],
             feed_dict)
+        print('Test1: ', test1)
+        print('Test2: ', test2)
         if self.summary_writer:
             self.summary_writer.add_summary(summaries, global_step)
         return loss
@@ -345,26 +348,27 @@ def deep_q_learning(sess,
         #return random.choice(VALID_ACTIONS)
 
     def evaluate():
-        episodes_num = 200
+        episodes_num = 2000
         rewards = 0
-        for i_episode in range(episodes_num):
-            print(i_episode)
+        for eval_episode in range(episodes_num):
+            #print(eval_episode)
             state, player = env.init_game()
             state = env.extract_state(state)
             while True:
-                action_probs = policy(sess, state, 0.)
+                action_probs = policy(sess, state, 0.1)
                 action = np.random.choice(np.arange(len(action_probs)), p=action_probs)
                 action = VALID_ACTIONS[action]  
-                #print(action)
+                #print(action_probs)
                 
-                state, player = env.step(action)
+                state, player = env.step('stand')
                 state = env.extract_state(next_state)
 
                 if env.end():
                     payoffs = env.get_payoffs()
                     rewards += payoffs[0]
+                    break
         print('###############################')
-        print('Reward: ', float(rewards)/episode_num)
+        print('Reward: ', float(rewards)/episodes_num)
         print('###############################')
                 
     for i in range(replay_memory_init_size+10):
@@ -418,6 +422,7 @@ def deep_q_learning(sess,
         #else:
         #    state = next_state
 
+    #print(replay_memory)
         
 
     for i_episode in range(num_episodes):
@@ -434,7 +439,7 @@ def deep_q_learning(sess,
         trajectories[player].append(state)
 
         loss = None
-        if i_episode/evaluate_every == 0:
+        if i_episode % evaluate_every == 0:
             evaluate()
 
         # One step in the environment
@@ -571,7 +576,7 @@ with tf.Session() as sess:
                                     num_episodes=1000,
                                     replay_memory_size=1000,
                                     replay_memory_init_size=1000,
-                                    update_target_estimator_every=10000,
+                                    update_target_estimator_every=200,
                                     epsilon_start=1.0,
                                     epsilon_end=0.1,
                                     epsilon_decay_steps=5000,
