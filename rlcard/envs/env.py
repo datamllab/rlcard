@@ -7,13 +7,40 @@ class Env(object):
     def __init__(self, game):
         self.game = game
         self.player_num = game.get_player_num()
+        self.action_num = game.get_action_num()
         
-        self.init_game = self.game.init_game
-        self.step = self.game.step
         self.step_back = self.game.step_back
-        self.get_state = self.game.get_state
         self.get_player_id = self.game.get_player_id
-        self.end = self.game.end
+        self.is_over = self.game.is_over
+    
+    def init_game(self):
+        """ Initilize a new game
+        Returns:
+            state: the begining state of the game
+            player_id: the begining player
+        """
+        state, player_id = self.game.init_game()
+        return self.extract_state(state), player_id
+
+    def step(self, action):
+        """ Step froward
+        Args:
+            action: the action taken by the current player
+        Returns:
+            next_state: the next state
+            player_id: the ID of the next player
+        """
+        next_state, player_id = self.game.step(self.decode_action(action))
+        return self.extract_state(next_state), player_id
+
+    def get_state(self, player_id):
+        """ Get the state given player id
+        Args:
+            player_id: the player id
+        Returns:
+            state
+        """
+        return self.extract_state(self.game.get_state(player_id))
 
     def set_agents(self, agents):
         """ Set the agents that will interact with the environment
@@ -33,47 +60,51 @@ class Env(object):
         np.random.seed(seed)
         self.game.set_seed(seed)
 
-    def run(self):
-        """ Run a complete game
-
+    def run(self, is_testing):
+        """ Run a complete game for training reinforcement learning.
+        Args:
+            is_testing: True if for testing purpose
         Returns:
-            trajectories
-            payoffs
+            trajectories: 1d -> player; 2d -> transition;
+            3d -> state, action, reward, next_state, done
         """
-        self.game.init_game()
+
         trajectories = [[] for _ in range(self.player_num)]
-
+        state, player_id = self.init_game()
+        
         # Loop to play the game
-        player = self.game.get_player_id() # get the current player id
-        state = self.game.get_state(player) # get the state of the first player
-        trajectories[player].append(self.extract_state(state))
-        while not self.game.end():
-            # First, agent plays
-            action = self.agents[player].step(state)
+        trajectories[player_id].append(state)
+        while not self.is_over():
+            # Agent plays
+            if is_testing:
+                action = self.agents[player_id].eval_step(state)
+            else:
+                action = self.agents[player_id].step(state)
 
-            # Second, environment steps
-            next_state, next_player = self.game.step(action)
+            # Environment steps
+            next_state, next_player_id = self.step(action)
 
-            # Third, save action
-            trajectories[player].append(action)
+            # Save action
+            trajectories[player_id].append(action)
 
             # Set the state and player
             state = next_state
-            player = next_player
+            player_id = next_player_id
             
             # Save state.
-            if not self.game.end():
-                trajectories[player].append(self.extract_state(state))
+            if not self.game.is_over():
+                trajectories[player_id].append(state)
 
-        ## add a final state to all the players
-        for player in range(self.player_num):
-            state = self.game.get_state(player)
-            trajectories[player].append(self.extract_state(state))
+        # Add a final state to all the players
+        for player_id in range(self.player_num):
+            state = self.get_state(player_id)
+            trajectories[player_id].append(state)
 
-        # Reorganize the trajectories
-        trajectories = reorganize(trajectories)
+        # Payoffs
         payoffs = self.get_payoffs()
 
+        # Reorganize the trajectories
+        trajectories = reorganize(trajectories, payoffs)
 
         return trajectories, payoffs
 
@@ -93,5 +124,15 @@ class Env(object):
             payoffs: a list of payoffs for each player
         """
         pass
+
+    def decode_action(self, action_id):
+        """ Action id -> the action in the game
+        Args:
+            action_id: the id of the action
+        Returns:
+            action
+        """
+        pass
+            
 
 

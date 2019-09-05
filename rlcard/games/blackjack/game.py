@@ -12,19 +12,6 @@ class BlackjackGame(Game):
         super().__init__()
         self.set_seed(seed)
 
-    def get_player_num(self):
-        return 1
-
-    def get_player_id(self):
-        return self.player.get_player_id()
-
-    def get_state(self, player):
-        state = {}
-        state['actions'] = ('hit', 'stand')
-        hand = [card.get_index() for card in self.player.hand]
-        dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
-        state['state'] = (hand, dealer_hand)
-        return state
 
     def init_game(self):
         self.dealer = Dealer()
@@ -75,7 +62,24 @@ class BlackjackGame(Game):
     def set_seed(self, seed):
         random.seed(seed)
 
-    def end(self):
+    def get_player_num(self):
+        return 1
+
+    def get_action_num(self):
+        return 2
+
+    def get_player_id(self):
+        return self.player.get_player_id()
+
+    def get_state(self, player):
+        state = {}
+        state['actions'] = ('hit', 'stand')
+        hand = [card.get_index() for card in self.player.hand]
+        dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
+        state['state'] = (hand, dealer_hand)
+        return state
+
+    def is_over(self):
         if self.player.status == 'bust'or self.dealer.status == 'bust' or (self.winner['dealer'] != 0 or self.winner['player'] != 0):
             return True
         else:
