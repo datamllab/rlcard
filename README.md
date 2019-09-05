@@ -1,32 +1,21 @@
 # RLCard: A Toolkit for Reinforcement Learning in Card Games
-RLCard is an opensource toolkit for devopling Reinforcement Learning (RL) algorithms in card games. It supports multiple challenging card game environments with common and easy-to-use interfaces. The  goal  of  the  toolkit  is  to  enable  more  researchers  to  study  game  AI  and  push  forward  the  research of imperfect information games.
+RLCard is an opensource toolkit for devopling Reinforcement Learning (RL) algorithms in card games. It supports multiple challenging card game environments with common and easy-to-use interfaces. The  goal  of  the  toolkit  is  to  enable  more  people  to  study  game  AI  and  push  forward  the  research of imperfect information games. RLCard is developped by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
 
 # Installation
-Make sure that you have **Python 3.6+** and **pip** installed. You can install `rlcard` with `pip` as follow:
+Make sure that you have **Python 3.5+** and **pip** installed. You can install `rlcard` with `pip` as follow:
 ```
+git clone https://github.com/datamllab/rlcard.git
+cd rlcard
 pip install -e .
 ```
 
-# A Running Example
-An example of running Dou Dizhu with three random agents is as follow:
-```python
-import rlcard
-from rlcard.agents.random_agent import RandomAgent
+# Getting Started
+The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) style. We provide several **toy examples** for getting started.
+* Play with random agents
+* Deep-Q learning on Blackjack
+* DeepCFR on Blackjack
 
-# STEP 1: Initialize the environment
-env = rlcard.make('doudizhu')
-
-# STEP 2: Initialize the 3 random agents
-env.set_agents([RandomAgent(), RandomAgent(), RandomAgent()])
-
-# STEP 3: Run the game and collect data
-while True:
-    # Generate data from the environment
-    trajectories, payoffs = env.run()
-    
-    # Update the agent here
-```
-More examples can be found in [Running examples](docs/running-examples.md).
+More examples can be found in [examples](examples).
 
 # Available Environments
 We provide a complexity estimation for each game on the following aspects: 
