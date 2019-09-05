@@ -221,3 +221,4 @@ def reorganize(trajectories, payoffs):
             new_trajectories[player].append(transition)
     return new_trajectories
 
+
