@@ -151,16 +151,15 @@ class DeepCFRSolver():
     self._num_players = env.player_num
 
     # get initial state and players
-    init_state, init_player = self._env.game.init_game()
-    #self._root_node = self._env.extract_state(init_state)
-    self._root_node = self._env.cfr_state(init_state, init_player)
+    init_state, player = self._env.init_game()
+    self._root_node = init_state 
 
     # TODO Allow embedding size (and network) to be specified.
-    self._embedding_size = len(self._root_node['obs'])
+    self._embedding_size = len(self._root_node)
 
     self._num_iterations = num_iterations
     self._num_traversals = num_traversals
-    self._num_actions = len(init_state['actions'])
+    self._num_actions = len(init_state)
     self._iteration = 1
 
     # Create required TensorFlow placeholders to perform the Q-network updates.
@@ -255,7 +254,7 @@ class DeepCFRSolver():
         self.reinitialize_advantage_networks()
         # Re-initialize advantage networks and train from scratch.
         advantage_losses[p].append(self._learn_advantage_network(p))
-      self._env.game.init_game()  
+      self._env.init_game()  
       self._iteration += 1
     # Train policy network.
     policy_loss = self._learn_strategy_network()
@@ -275,13 +274,14 @@ class DeepCFRSolver():
       Recursively returns expected payoffs for each action.
     """
     expected_payoff = collections.defaultdict(float)
-    #print("------------------------------")
-    #print(state)
-    #if state.is_terminal():
-    if self._env.end():
+    current_player = self._env.get_player_id()
+    actions = self._env.get_actions()
+    if self._env.is_over():
       # Terminal state get returns.
       payoff = self._env.get_payoffs()
-      self._env.game.step_back()
+      self._env.step_back()
+      #print("Before_back:", state)
+      #print("After_back:", self._env.get_state(current_player))
       return payoff 
 
     #elif state.is_chance_node():
@@ -289,27 +289,25 @@ class DeepCFRSolver():
     #  action = np.random.choice([i[0] for i in state.chance_outcomes()])
     #  return self._traverse_game_tree(state.child(action), player)
 
-    elif state['player'] == player:
+    #elif state['player'] == player:
+    elif current_player == player:
       sampled_regret = collections.defaultdict(float)
       # Update the policy over the info set & actions via regret matching.
       advantages, strategy = self._sample_action_from_advantage(state, player)
-      for action in state['action']:
+      for action in actions:
         expected_payoff[action] = self._traverse_game_tree(
             self._env.get_child_state(action), player)
-      for action in state['action']:
+        #print(state, action, expected_payoff[action], self._env.game.dealer.score, self._env.game.player.score)
+      for action in actions:
         sampled_regret[action] = expected_payoff[action]
-        #print(sampled_regret)
-        for a_ in state['action']:
-          #print(a_, expected_payoff[a_] * strategy[a_])
-          sampled_regret[action] -= strategy[a_] * expected_payoff[a_]
-          #print(sampled_regret)
+        for a_ in actions:
+          sampled_regret[action] -= strategy[a_] * expected_payoff[a_][0]
         self._advantage_memories[player].add(
-            AdvantageMemory(state['obs'],
+            AdvantageMemory(state,
                             self._iteration, advantages, action))
-      #print(state['obs'], sampled_regret) 
       return max(expected_payoff.values())
     else:
-      other_player = state['player']
+      other_player = current_player
       _, strategy = self._sample_action_from_advantage(state, other_player)
       # Recompute distribution dor numerical errors.
       probs = np.array(strategy)
@@ -317,7 +315,7 @@ class DeepCFRSolver():
       sampled_action = np.random.choice(range(self._num_actions), p=probs)
       self._strategy_memories.add(
           StrategyMemory(
-              state['obs'],
+              state,
               self._iteration, strategy))
       return self._traverse_game_tree(self._env.get_child_state(action), player)
               #state.child(sampled_action), player)
@@ -333,8 +331,8 @@ class DeepCFRSolver():
       1. (list) Advantage values for info state actions indexed by action.
       2. (list) Matched regrets, prob for actions indexed by action.
     """
-    info_state = state['obs'] 
-    legal_actions = state['action']
+    info_state = state 
+    legal_actions = self._env.get_actions() 
     advantages = self._session.run(
         self._advantage_outputs[player],
         feed_dict={self._info_state_ph: np.expand_dims(info_state, axis=0)})[0]
@@ -350,13 +348,13 @@ class DeepCFRSolver():
 
   def action_probabilities(self, state):
     """Returns action probabilites dict for a single batch."""
-    info_state_vector = np.array(state['obs'])
+    info_state_vector = np.array(state)
 
     if len(info_state_vector.shape) == 1:
       info_state_vector = np.expand_dims(info_state_vector, axis=0)
     probs = self._session.run(
         self._action_probs, feed_dict={self._info_state_ph: info_state_vector})
-    return {i: probs[0][i] for i in range(self._num_actions)}
+    return np.array([round(probs[0][i], 4) for i in range(self._num_actions)])
 
   def _learn_advantage_network(self, player):
     """Compute the loss on sampled transitions and perform a Q-network update.
@@ -424,17 +422,16 @@ class DeepCFRSolver():
 
 if __name__ == '__main__':
     VALID_ACTIONS = ['hit', 'stand']
-    episodes_num = 1
+    episodes_num = 1000
     rewards = 0
     env = rlcard.make('blackjack') 
-    s = {'obs':[20, 10, 0]}
     with tf.Session() as sess:
         deep_cfr = DeepCFRSolver(sess, 
                                 env, 
                                 policy_network_layers=(10,10),
-                                advantage_network_layers=(10,10),
-                                num_iterations=100,
-                                num_traversals=100,
+                                advantage_network_layers=(20,20),
+                                num_iterations=500,
+                                num_traversals=10,
                                 learning_rate=1e-4,
                                 batch_size_advantage=None,
                                 batch_size_strategy=None,
@@ -443,18 +440,12 @@ if __name__ == '__main__':
         deep_cfr.solve()
         for i in range(episodes_num):
             state, player = env.init_game()
-            state = env.cfr_state(state, player)
             while True:
                 action_prob = deep_cfr.action_probabilities(state)
-                print(np.random.choice(np.arange(len(action_prob)), p=action_prob), action_prob)
-                #, p=action_prob)
-                exit()
-                #action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
-                #action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
-                action = VALID_ACTIONS[action]
+                action_prob /= action_prob.sum()
+                action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
                 state, player = env.step(action)
-                state = env.cfr_state(state, player)
-                if env.end():
+                if env.is_over():
                     payoffs = env.get_payoffs()
                     rewards += payoffs[0]
                     break
