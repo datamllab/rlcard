@@ -35,6 +35,15 @@ class Env(object):
         next_state, player_id = self.game.step(self.decode_action(action))
         return self.extract_state(next_state), player_id
 
+    def step_back():
+        """ Step back
+        Returns:
+            next_state: the previous state
+            player_id: the ID of the previous player
+        """
+        state, player_id = self.game.step_back()
+        return state, player_id
+
     def get_state(self, player_id):
         """ Get the state given player id
         Args:
