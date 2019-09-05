@@ -13,7 +13,7 @@ env = rlcard.make('blackjack')
 evaluate_every = 100
 evaluate_num = 1000
 episode_num = 1000000
-set_global_seed(0)
+set_global_seed(None)
 
 with tf.Session() as sess:
     # set agents
@@ -29,9 +29,8 @@ with tf.Session() as sess:
         for ts in trajectories[0]:
             is_training = agent_0.feed(ts)
 
-        if is_training and (episode+1) % evaluate_every == 0:
+        if is_training and (episode) % evaluate_every == 0:
             reward = 0
-            print('\n')
             for eval_episode in range(evaluate_num):
                 _, payoffs = env.run(is_testing=True)
                 reward += payoffs[0]
