@@ -1,15 +1,9 @@
-import itertools
 import numpy as np
-import os
 import random
-import sys
 import tensorflow as tf
-
-from collections import deque, namedtuple
-
+from collections import namedtuple
 import rlcard
 from rlcard.utils.utils import *
-from sklearn import preprocessing
 
 Transition = namedtuple("Transition", ["state", "action", "reward", "next_state", "done"])
 
