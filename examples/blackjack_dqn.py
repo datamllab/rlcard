@@ -23,7 +23,7 @@ with tf.Session() as sess:
     for episode in range(episode_num):
 
         # generate data from the environment
-        trajectories, _ = env.run(is_testing=False)
+        trajectories, _ = env.run(is_training=True)
 
         # Feed transitions into agent and update the agent
         for ts in trajectories[0]:
@@ -32,7 +32,7 @@ with tf.Session() as sess:
         if is_training and (episode) % evaluate_every == 0:
             reward = 0
             for eval_episode in range(evaluate_num):
-                _, payoffs = env.run(is_testing=True)
+                _, payoffs = env.run()
                 reward += payoffs[0]
 
             print('INFO - Average reward is {}'.format(float(reward)/evaluate_num))
