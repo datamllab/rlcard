@@ -23,7 +23,7 @@ class DQNAgent(object):
                  epsilon_decay_steps=20000,
                  batch_size=32,
                  action_size=2,
-                 state_size=2,
+                 state_shape=[2],
                  norm_step=1000):
         """
         Q-Learning algorithm for off-policy TD control using Function Approximation.
@@ -44,7 +44,7 @@ class DQNAgent(object):
             batch_size: Size of batches to sample from the replay memory
             evaluate_every: Evaluate every N steps
             action_size: the number of the actions
-            state_size: the size of the state vector
+            state_space: the space of the state vector
             norm_step: the number of the step used form noramlize state
         """
 
@@ -68,8 +68,8 @@ class DQNAgent(object):
         self.epsilons = np.linspace(epsilon_start, epsilon_end, epsilon_decay_steps)
 
         # Create estimators
-        self.q_estimator = Estimator(scope="q", action_size=action_size, state_size=state_size)
-        self.target_estimator = Estimator(scope="target_q", action_size=action_size, state_size=state_size)
+        self.q_estimator = Estimator(scope="q", action_size=action_size, state_shape=state_shape)
+        self.target_estimator = Estimator(scope="target_q", action_size=action_size, state_shape=state_shape)
 
         self.sess.run(tf.global_variables_initializer())
 
@@ -81,6 +81,9 @@ class DQNAgent(object):
 
     def feed(self, ts):
         """ Store data and train
+            Stage 1: populate the Normalizer that does normalization
+            Stage 2: popolate memory
+            Stage 3: training
         Returns:
             is_training: whether the models start training
         """
@@ -210,14 +213,13 @@ class Estimator():
     This network is used for both the Q-Network and the Target Network.
     """
 
-    def __init__(self, scope="estimator", action_size=2, state_size=2):
+    def __init__(self, scope="estimator", action_size=2, state_shape=[2]):
         self.scope = scope
         self.action_size = action_size
-        self.state_size = state_size
+        self.state_shape = state_shape
 
         # Create a glboal step variable
         self.global_step = tf.Variable(0, name='global_step', trainable=False)
-
 
         with tf.variable_scope(scope):
             # Build the graph
@@ -230,7 +232,9 @@ class Estimator():
 
         # Placeholders for our input
         # Our input are 4 RGB frames of shape 160, 160 each
-        self.X_pl = tf.placeholder(shape=[None, self.state_size], dtype=tf.float32, name="X")
+        input_shape = [None]
+        input_shape.extend(self.state_shape)
+        self.X_pl = tf.placeholder(shape=input_shape, dtype=tf.float32, name="X")
         # The TD target value
         self.y_pl = tf.placeholder(shape=[None], dtype=tf.float32, name="y")
         # Integer id of which action was selected
@@ -252,7 +256,7 @@ class Estimator():
         self.loss = tf.reduce_mean(self.losses)
 
         # Optimizer Parameters from original paper
-        self.optimizer = tf.train.AdamOptimizer(learning_rate=0.0001)
+        self.optimizer = tf.train.AdamOptimizer(learning_rate=0.00005)
 
         self.train_op = self.optimizer.minimize(self.loss, global_step=tf.contrib.framework.get_global_step())
 
