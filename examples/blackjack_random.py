@@ -1,10 +1,6 @@
-"""
-A toy example of learning a Deep-Q Agent on Blackjack
-"""
-
+# Example of using doudizhu environment
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
-from rlcard.utils.utils import *
 import tensorflow as tf
 
 # make environment
@@ -13,12 +9,15 @@ env = rlcard.make('blackjack')
 evaluate_every = 100
 evaluate_num = 1000
 episode_num = 1000000
-set_global_seed(0)
 
 with tf.Session() as sess:
     # set agents
     agent_0 = DQNAgent(sess)
     env.set_agents([agent_0])
+
+    # seed everything
+    #env.set_seed(0)
+    #agent_0.set_seed(0)
 
     for episode in range(episode_num):
 
@@ -36,7 +35,7 @@ with tf.Session() as sess:
                 _, payoffs = env.run(is_testing=True)
                 reward += payoffs[0]
 
-            print('INFO - Average reward is {}'.format(float(reward)/evaluate_num))
+            print('INFO - Average rewards is {}'.format(float(reward)/evaluate_num))
 
             
 
