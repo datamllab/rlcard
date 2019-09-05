@@ -222,3 +222,11 @@ def reorganize(trajectories, payoffs):
     return new_trajectories
 
 
+def set_global_seed(seed):
+    if seed is not None:
+        import numpy as np
+        import random
+        import tensorflow as tf
+        tf.set_random_seed(seed)
+        np.random.seed(seed)
+        random.seed(seed)
