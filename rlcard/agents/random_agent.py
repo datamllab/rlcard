@@ -5,8 +5,8 @@ class RandomAgent(object):
 	A random agent
 	"""
 
-	def __init__(self):
-		pass
+	def __init__(self, action_size):
+		self.action_size = action_size
 
 	def set_seed(self, seed):
 		"""
@@ -19,6 +19,5 @@ class RandomAgent(object):
             """
                     Randomly choose an action from the legal actions
             """
-            actions = state['actions']
-            return random.choice(actions)
+            return random.randint(0, self.action_size-1)
 
