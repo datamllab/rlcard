@@ -38,17 +38,35 @@ class BlackjackEnv(Env):
         obs = [my_score, dealer_score, has_a]
         return obs
 
+    def encode_action(self, actions):
+        a = []
+        for i, act in enumerate(actions):
+            a.append(i)
+        return a
 
-        
+    def cfr_state(self, s, player):
+        state = {}
+        obs = self.extract_state(s)
+        state['obs'] = obs
+        state['player'] = player
+        state['action'] = self.encode_action(s['actions'])
+        return state
+    
+    def get_child_state(self, action):
+        #print("Get Child")
+        next_state, next_player = self.game.step(action)
+        #self.game.step_back()
+        #print(self.cfr_state(next_state, next_player))
+        return self.cfr_state(next_state, next_player)
 
     def get_payoffs(self):
-        return [self.game.winner['player']]
+        payoff = 0
+        if self.game.winner['player'] == 1 and self.game.winner['dealer'] == 0:
+            payoff = 1
+        elif self.game.winner['player'] == 0 and self.game.winner['dealer'] == 1:
+            payoff = -1
+        else:
+            payoff = 0
+        return payoff 
  
-
-
-
-
-
-
-
 

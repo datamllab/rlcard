@@ -6,6 +6,8 @@ class Env(object):
     """
     def __init__(self, game):
         self.game = game
+
+        # get number of players in this game
         self.player_num = game.get_player_num()
         
         self.init_game = self.game.init_game
