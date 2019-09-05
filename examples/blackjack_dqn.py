@@ -1,44 +1,50 @@
 # Example of using doudizhu environment
 import rlcard
-from rlcard.agents.agent import DQNAgent
+from rlcard.agents.dqn_agent import DQNAgent
 import tensorflow as tf
-
 
 # make environment
 env = rlcard.make('blackjack')
 
-print('############## Environment of Blackjack Initilized ################')
+evaluate_every = 100
+evaluate_num = 1000
+episode_num = 1000000
 
 with tf.Session() as sess:
-    config = 'test'
     # set agents
-    agent_0 = DQNAgent(config, sess)
-#env.set_agents([agent_0])
+    agent_0 = DQNAgent(sess)
+    env.set_agents([agent_0])
 
-# seed everything
-#env.set_seed(0)
-#agent_0.set_seed(0)
+    # seed everything
+    #env.set_seed(0)
+    #agent_0.set_seed(0)
 
-#wins = 0
+    for episode in range(episode_num):
 
-#env.init_game()
-#state, player = env.init_game()
-#print(state, player)
-#action = agent_0.step(state)
-#state, player = env.step(action)
-#print(state, player)
-#print(env.step_back())
-#print(env.step_back())
-#for _ in range(10):
-#	# TODO: add multi-process
-#
-#        
-#        # generate data from the environment
-#        trajectories, payoffs = env.run()
-#        print(trajectories)
-#        print(payoffs)
-#        wins += payoffs[0]
-#
-#        # Update agents here
+        # generate data from the environment
+        trajectories, _ = env.run(is_testing=False)
 
-#print(wins)
+        # Feed transitions into agent and update the agent
+        for ts in trajectories[0]:
+            is_training = agent_0.feed(ts)
+
+        if is_training and (episode+1) % evaluate_every == 0:
+            reward = 0
+            print('\n')
+            for eval_episode in range(evaluate_num):
+                _, payoffs = env.run(is_testing=True)
+                reward += payoffs[0]
+
+            print('INFO - Average rewards is {}'.format(float(reward)/evaluate_num))
+
+            
+
+
+
+
+
+
+
+
+
+

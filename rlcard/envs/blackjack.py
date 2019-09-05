@@ -14,7 +14,7 @@ class BlackjackEnv(Env):
     def __init__(self):
         super().__init__(Game())
         self.rank2score = {"A":10, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}
-
+        self.actions = ['hit', 'stand']
 
     def extract_state(self, state):
         cards = state['state']
@@ -35,7 +35,7 @@ class BlackjackEnv(Env):
 
         my_score, has_a = get_scores_and_A(my_cards)
         dealer_score, _ = get_scores_and_A(dealer_cards)
-        obs = [my_score, dealer_score, has_a]
+        obs = [my_score, dealer_score]
         return obs
 
     def encode_action(self, actions):
@@ -60,13 +60,13 @@ class BlackjackEnv(Env):
         return self.cfr_state(next_state, next_player)
 
     def get_payoffs(self):
-        payoff = 0
-        if self.game.winner['player'] == 1 and self.game.winner['dealer'] == 0:
-            payoff = 1
-        elif self.game.winner['player'] == 0 and self.game.winner['dealer'] == 1:
-            payoff = -1
+        if self.game.winner['player'] == 0:
+            return [-1]
+        elif self.game.winner['dealer'] == 0:
+            return [1]
         else:
-            payoff = 0
-        return payoff 
+            return [0]
  
-
+    def decode_action(self, action_id):
+        return self.actions[action_id]
+ 

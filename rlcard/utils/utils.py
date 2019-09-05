@@ -196,7 +196,7 @@ def get_downstream_player_id(player, players):
     '''
     return (player.player_id+1)%len(players)
 
-def reorganize(trajectories):
+def reorganize(trajectories, payoffs):
     """ Reorganize the trajectory to make it RL friendly
     Arg:
         trajectory: original one
@@ -209,7 +209,16 @@ def reorganize(trajectories):
 
     for player in range(player_num):
         for i in range(0, len(trajectories[player])-2, 2):
+            if i ==len(trajectories[player])-3:
+                reward = payoffs[player]
+                done =True
+            else:
+                reward, done = 0, False
             transition = trajectories[player][i:i+3].copy()
+            transition.insert(2, reward)
+            transition.append(done)
+            
             new_trajectories[player].append(transition)
     return new_trajectories
+
 
