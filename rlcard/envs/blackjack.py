@@ -16,6 +16,9 @@ class BlackjackEnv(Env):
         self.rank2score = {"A":10, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}
         self.actions = ['hit', 'stand']
 
+    def get_actions(self):
+        return self.encode_action(self.actions)
+
     def extract_state(self, state):
         cards = state['state']
         my_cards = cards[0]
@@ -53,16 +56,16 @@ class BlackjackEnv(Env):
         return state
     
     def get_child_state(self, action):
-        #print("Get Child")
-        next_state, next_player = self.game.step(action)
-        #self.game.step_back()
-        #print(self.cfr_state(next_state, next_player))
-        return self.cfr_state(next_state, next_player)
+
+        next_state, next_player = self.step(action)
+        return next_state
 
     def get_payoffs(self):
-        if self.game.winner['player'] == 0:
+        #print(self.game.dealer.score, self.game.player.score)
+        #print(self.game.winner)
+        if self.game.winner['player'] == 0 and self.game.winner['dealer'] == 1:
             return [-1]
-        elif self.game.winner['dealer'] == 0:
+        elif self.game.winner['dealer'] == 0 and self.game.winner['player'] == 1:
             return [1]
         else:
             return [0]

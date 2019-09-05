@@ -31,7 +31,8 @@ class BlackjackGame(Game):
         next_state = {}
         p = deepcopy(self.player)
         d = deepcopy(self.dealer)
-        self.history.append((d,p))
+        w = deepcopy(self.winner)
+        self.history.append((d,p,w))
         if action != "stand":
             self.dealer.deal_card(self.player)
             self.player.status, self.player.score = self.judger.judge_round(self.player)
@@ -55,7 +56,7 @@ class BlackjackGame(Game):
 
     def step_back(self):
         if len(self.history) > 0:
-            self.dealer, self.player = self.history.pop()
+            self.dealer, self.player, self.winner = self.history.pop()
             return True
         return False
 
