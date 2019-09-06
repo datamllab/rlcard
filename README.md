@@ -10,10 +10,10 @@ pip install -e .
 ```
 
 # Getting Started
-The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) style. We recommende to start with the following **toy examples**.
-* Play with random agents
-* Deep-Q learning on Blackjack
-* DeepCFR on Blackjack
+The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) style. We recommend to start with the following **toy examples**.
+* [Playing with random agents](docs/toy-examples#playing-with-random-agents)
+* [Deep-Q learning on Blackjack](docs/toy-examples#deep-q-Learning-on-Blackjack)
+* [DeepCFR on Blackjack](docs/toy-examples#deepcfr-on-Blackjack)
 
 For more examples, please refer to [examples/](examples).
 
@@ -39,5 +39,5 @@ The table below shows the environments that are (or will be soon) available in R
 Please note that this is a **pre-release** version of the RLCard. The toolkit is provided **"as is"**, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement.
 
 # Acknowledgements
-We would like to thank JJ World Network Technology Co.,LTD for the technical support.
+We would like to thank JJ World Network Technology Co.,LTD for the support.
 
