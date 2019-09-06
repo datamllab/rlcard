@@ -10,34 +10,30 @@ pip install -e .
 ```
 
 # Getting Started
-The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) style. We provide several **toy examples** for getting started.
+The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) style. You are recommended to start with the following **toy examples**.
 * Play with random agents
 * Deep-Q learning on Blackjack
 * DeepCFR on Blackjack
 
-More examples can be found in [examples](examples).
-
-# Available Environments
-We provide a complexity estimation for each game on the following aspects: 
-* **InfoSet Number:** the number of information set
-* **Avg. InfoSet Size:** the average number of states in a single information set
-* **Action Size:** the size of the action space (without abstraction)
-
-**Note:** For some of the large card games, obtaining some of the statistics is computationally challenging, and thus they are 'unknown' to us. 
-
-| Game                     | InfoSet Number  |Avg. InfoSet Size | Action Size |Status  |
-| ------------------------ |:--------------:| :-------:|:------:| :-------:|
-| Blackjack ([wiki](https://en.wikipedia.org/wiki/Blackjack)) | 10^3      |  10^1 | 10^0| Available |
-| Two-player limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em))      |10^14 | 10^3| 10^0 |Available |
-| No-limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em))      |10^162 | 10^3| 10^4 |Available |
-| Two-player UNO ([wiki](https://en.wikipedia.org/wiki/Uno_(card_game)))      |  unknown      |   unknown | 10^1| Come soon|
-| Mahjong ([wiki](https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules))      | 10^121      |   10^48 |10^2 | Come soon| 
-| Dou Dizhu ([wiki](https://en.wikipedia.org/wiki/Dou_dizhu))      | unknown      |   unknown | 10^4| Available|
-| Sheng Ji ([wiki](https://en.wikipedia.org/wiki/Sheng_ji))      | unknown      |   unknown | unknown | Come soon|
-
+For more examples, please refer to [examples/](examples).
 
 # Documents
-Please refer to the [Documents](docs/README.md).
+Please refer to the [Documents](docs/README.md) for general concepts desription. API documents are available at our [github page](https://rlcard.github.io/index.html).
+
+# Available Environments
+The table below shows the environments that are (or will be soon) available in RLCard. We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information set; **Avg. InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space (without abstraction). For some of the large card games, obtaining the statistics is computationally challenging, and thus they are 'unknown' to us. **Name** is the name you should pass to `env.make` to create the game environment.
+
+| Game                     | InfoSet Number  |Avg. InfoSet Size | Action Size | Name | Status  |
+| ------------------------ |:--------------:| :-------:|:------:| :-------:| :-------:|
+| Blackjack ([wiki](https://en.wikipedia.org/wiki/Blackjack), [baike](https://baike.baidu.com/item/21%E7%82%B9/5481683?fr=aladdin)) | 10^3      |  10^1 | 10^0 | blackjack |Available |
+| Limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em))      |10^14 | 10^3| 10^0 | limit-holdem |Available |
+| No-limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em))      |10^162 | 10^3| 10^4 | no-limit-holdem|Available |
+| Two-player UNO ([wiki](https://en.wikipedia.org/wiki/Uno_(card_game)))      |  unknown      |   unknown | 10^1| - | Come soon|
+| Mahjong ([wiki](https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules))      | 10^121      |   10^48 |10^2 | - | Come soon| 
+| Dou Dizhu ([wiki](https://en.wikipedia.org/wiki/Dou_dizhu))      | unknown      |   unknown | 10^4| doudizhu | Available|
+| Sheng Ji ([wiki](https://en.wikipedia.org/wiki/Sheng_ji))      | unknown      |   unknown | unknown | - | Come soon|
+
+
 
 # Disclaimer
 Please note that this is a **pre-release** version of the RLCard. The toolkit is provided **"as is"**, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement.
