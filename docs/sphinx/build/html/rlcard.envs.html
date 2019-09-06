@@ -1,0 +1,576 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>rlcard.envs package &#8212; rlcard 0.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">rlcard 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rlcard-envs-package">
+<h1>rlcard.envs package<a class="headerlink" href="#rlcard-envs-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-rlcard.envs.blackjack">
+<span id="rlcard-envs-blackjack-module"></span><h2>rlcard.envs.blackjack module<a class="headerlink" href="#module-rlcard.envs.blackjack" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rlcard.envs.blackjack.BlackjackEnv">
+<em class="property">class </em><code class="descclassname">rlcard.envs.blackjack.</code><code class="descname">BlackjackEnv</code><a class="headerlink" href="#rlcard.envs.blackjack.BlackjackEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rlcard.envs.env.Env" title="rlcard.envs.env.Env"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.envs.env.Env</span></code></a></p>
+<p>Blackjack Environment</p>
+<dl class="method">
+<dt id="rlcard.envs.blackjack.BlackjackEnv.cfr_state">
+<code class="descname">cfr_state</code><span class="sig-paren">(</span><em>s</em>, <em>player</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.blackjack.BlackjackEnv.cfr_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.blackjack.BlackjackEnv.decode_action">
+<code class="descname">decode_action</code><span class="sig-paren">(</span><em>action_id</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.blackjack.BlackjackEnv.decode_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Action id -&gt; the action in the game
+:param action_id: the id of the action</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">action</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.blackjack.BlackjackEnv.encode_action">
+<code class="descname">encode_action</code><span class="sig-paren">(</span><em>actions</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.blackjack.BlackjackEnv.encode_action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.blackjack.BlackjackEnv.extract_state">
+<code class="descname">extract_state</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.blackjack.BlackjackEnv.extract_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract useful information from state for RL
+:param state:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">extracted state</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.blackjack.BlackjackEnv.get_actions">
+<code class="descname">get_actions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.blackjack.BlackjackEnv.get_actions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.blackjack.BlackjackEnv.get_child_state">
+<code class="descname">get_child_state</code><span class="sig-paren">(</span><em>action</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.blackjack.BlackjackEnv.get_child_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.blackjack.BlackjackEnv.get_payoffs">
+<code class="descname">get_payoffs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.blackjack.BlackjackEnv.get_payoffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the payoffs of players
+:returns: a list of payoffs for each player
+:rtype: payoffs</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rlcard.envs.doudizhu">
+<span id="rlcard-envs-doudizhu-module"></span><h2>rlcard.envs.doudizhu module<a class="headerlink" href="#module-rlcard.envs.doudizhu" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rlcard.envs.doudizhu.DoudizhuEnv">
+<em class="property">class </em><code class="descclassname">rlcard.envs.doudizhu.</code><code class="descname">DoudizhuEnv</code><a class="headerlink" href="#rlcard.envs.doudizhu.DoudizhuEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rlcard.envs.env.Env" title="rlcard.envs.env.Env"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.envs.env.Env</span></code></a></p>
+<p>Doudizhu Environment</p>
+<dl class="method">
+<dt id="rlcard.envs.doudizhu.DoudizhuEnv.reorganize">
+<code class="descname">reorganize</code><span class="sig-paren">(</span><em>trajectories</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.doudizhu.DoudizhuEnv.reorganize" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple function to add reward to the trajectories.
+The reward is only given in the end of a game,
+i.e. 1 if winning and 0 otherwise</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.doudizhu.DoudizhuEnv.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.doudizhu.DoudizhuEnv.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a complete game for training reinforcement learning.
+:param is_training: True if for training purpose</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">1d -&gt; player; 2d -&gt; transition;
+3d -&gt; state, action, reward, next_state, done</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">trajectories</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.doudizhu.DoudizhuEnv.set_agents">
+<code class="descname">set_agents</code><span class="sig-paren">(</span><em>agents</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.doudizhu.DoudizhuEnv.set_agents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the agents that will interact with the environment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>agents</strong> – list of Agent classes; [agents]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.doudizhu.DoudizhuEnv.set_seed">
+<code class="descname">set_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.doudizhu.DoudizhuEnv.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the seed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seed</strong> – integer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rlcard.envs.env">
+<span id="rlcard-envs-env-module"></span><h2>rlcard.envs.env module<a class="headerlink" href="#module-rlcard.envs.env" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rlcard.envs.env.Env">
+<em class="property">class </em><code class="descclassname">rlcard.envs.env.</code><code class="descname">Env</code><span class="sig-paren">(</span><em>game</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.env.Env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>The main Env class</p>
+<dl class="method">
+<dt id="rlcard.envs.env.Env.decode_action">
+<code class="descname">decode_action</code><span class="sig-paren">(</span><em>action_id</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.env.Env.decode_action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Action id -&gt; the action in the game
+:param action_id: the id of the action</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">action</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.env.Env.extract_state">
+<code class="descname">extract_state</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.env.Env.extract_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract useful information from state for RL
+:param state:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">extracted state</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.env.Env.get_payoffs">
+<code class="descname">get_payoffs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.env.Env.get_payoffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the payoffs of players
+:returns: a list of payoffs for each player
+:rtype: payoffs</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.env.Env.get_state">
+<code class="descname">get_state</code><span class="sig-paren">(</span><em>player_id</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.env.Env.get_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the state given player id
+:param player_id: the player id</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">state</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.env.Env.init_game">
+<code class="descname">init_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.env.Env.init_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initilize a new game
+:returns: the begining state of the game</p>
+<blockquote>
+<div>player_id: the begining player</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">state</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.env.Env.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>is_training=False</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.env.Env.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a complete game for training reinforcement learning.
+:param is_training: True if for training purpose</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">1d -&gt; player; 2d -&gt; transition;
+3d -&gt; state, action, reward, next_state, done</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">trajectories</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.env.Env.set_agents">
+<code class="descname">set_agents</code><span class="sig-paren">(</span><em>agents</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.env.Env.set_agents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the agents that will interact with the environment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>agents</strong> – list of Agent classes; [agents]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.env.Env.set_seed">
+<code class="descname">set_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.env.Env.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the seed
+:param seed: integer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.env.Env.step">
+<code class="descname">step</code><span class="sig-paren">(</span><em>action</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.env.Env.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step froward
+:param action: the action taken by the current player</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the next state
+player_id: the ID of the next player</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">next_state</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.env.Env.step_back">
+<code class="descname">step_back</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.env.Env.step_back" title="Permalink to this definition">¶</a></dt>
+<dd><p>Step back
+:returns: the previous state</p>
+<blockquote>
+<div>player_id: the ID of the previous player</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">next_state</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rlcard.envs.regiteration">
+<span id="rlcard-envs-regiteration-module"></span><h2>rlcard.envs.regiteration module<a class="headerlink" href="#module-rlcard.envs.regiteration" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rlcard.envs.regiteration.EnvRegistry">
+<em class="property">class </em><code class="descclassname">rlcard.envs.regiteration.</code><code class="descname">EnvRegistry</code><a class="headerlink" href="#rlcard.envs.regiteration.EnvRegistry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Register an environment (game) by ID</p>
+<dl class="method">
+<dt id="rlcard.envs.regiteration.EnvRegistry.make">
+<code class="descname">make</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.regiteration.EnvRegistry.make" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.regiteration.EnvRegistry.register">
+<code class="descname">register</code><span class="sig-paren">(</span><em>id</em>, <em>entry_point</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.regiteration.EnvRegistry.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcard.envs.regiteration.EnvSpec">
+<em class="property">class </em><code class="descclassname">rlcard.envs.regiteration.</code><code class="descname">EnvSpec</code><span class="sig-paren">(</span><em>id</em>, <em>entry_point=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.regiteration.EnvSpec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A specification for a particular instance of the environment.</p>
+<dl class="method">
+<dt id="rlcard.envs.regiteration.EnvSpec.make">
+<code class="descname">make</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.regiteration.EnvSpec.make" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiates an instance of the environment</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="rlcard.envs.regiteration.make">
+<code class="descclassname">rlcard.envs.regiteration.</code><code class="descname">make</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.regiteration.make" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="rlcard.envs.regiteration.register">
+<code class="descclassname">rlcard.envs.regiteration.</code><code class="descname">register</code><span class="sig-paren">(</span><em>id</em>, <em>entry_point</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.regiteration.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-rlcard.envs.simpletexasholdem">
+<span id="rlcard-envs-simpletexasholdem-module"></span><h2>rlcard.envs.simpletexasholdem module<a class="headerlink" href="#module-rlcard.envs.simpletexasholdem" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rlcard.envs.simpletexasholdem.SimpleTexasEnv">
+<em class="property">class </em><code class="descclassname">rlcard.envs.simpletexasholdem.</code><code class="descname">SimpleTexasEnv</code><a class="headerlink" href="#rlcard.envs.simpletexasholdem.SimpleTexasEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rlcard.envs.env.Env" title="rlcard.envs.env.Env"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.envs.env.Env</span></code></a></p>
+<p>Texasholdem Environment</p>
+<dl class="method">
+<dt id="rlcard.envs.simpletexasholdem.SimpleTexasEnv.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.simpletexasholdem.SimpleTexasEnv.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a complete game for training reinforcement learning.
+:param is_training: True if for training purpose</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">1d -&gt; player; 2d -&gt; transition;
+3d -&gt; state, action, reward, next_state, done</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">trajectories</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.simpletexasholdem.SimpleTexasEnv.set_agents">
+<code class="descname">set_agents</code><span class="sig-paren">(</span><em>agents</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.simpletexasholdem.SimpleTexasEnv.set_agents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the agents that will interact with the environment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>agents</strong> – list of Agent classes; [agents]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.simpletexasholdem.SimpleTexasEnv.set_rewarder">
+<code class="descname">set_rewarder</code><span class="sig-paren">(</span><em>rewarder</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.simpletexasholdem.SimpleTexasEnv.set_rewarder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the agents that will interact with the environment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rewarder</strong> – Rewarder class</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.simpletexasholdem.SimpleTexasEnv.set_seed">
+<code class="descname">set_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.simpletexasholdem.SimpleTexasEnv.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the seed
+:param seed: integer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.simpletexasholdem.SimpleTexasEnv.test">
+<code class="descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.simpletexasholdem.SimpleTexasEnv.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rlcard.envs.texasholdem">
+<span id="rlcard-envs-texasholdem-module"></span><h2>rlcard.envs.texasholdem module<a class="headerlink" href="#module-rlcard.envs.texasholdem" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rlcard.envs.texasholdem.TexasEnv">
+<em class="property">class </em><code class="descclassname">rlcard.envs.texasholdem.</code><code class="descname">TexasEnv</code><a class="headerlink" href="#rlcard.envs.texasholdem.TexasEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rlcard.envs.env.Env" title="rlcard.envs.env.Env"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.envs.env.Env</span></code></a></p>
+<p>Texasholdem Environment</p>
+<dl class="method">
+<dt id="rlcard.envs.texasholdem.TexasEnv.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.texasholdem.TexasEnv.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a complete game for training reinforcement learning.
+:param is_training: True if for training purpose</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">1d -&gt; player; 2d -&gt; transition;
+3d -&gt; state, action, reward, next_state, done</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">trajectories</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.texasholdem.TexasEnv.set_agents">
+<code class="descname">set_agents</code><span class="sig-paren">(</span><em>agents</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.texasholdem.TexasEnv.set_agents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the agents that will interact with the environment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>agents</strong> – list of Agent classes; [agents]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.texasholdem.TexasEnv.set_rewarder">
+<code class="descname">set_rewarder</code><span class="sig-paren">(</span><em>rewarder</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.texasholdem.TexasEnv.set_rewarder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the agents that will interact with the environment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rewarder</strong> – Rewarder class</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.texasholdem.TexasEnv.set_seed">
+<code class="descname">set_seed</code><span class="sig-paren">(</span><em>seed</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.texasholdem.TexasEnv.set_seed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the seed
+:param seed: integer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.envs.texasholdem.TexasEnv.test">
+<code class="descname">test</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.envs.texasholdem.TexasEnv.test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rlcard.envs">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-rlcard.envs" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">rlcard.envs package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-rlcard.envs.blackjack">rlcard.envs.blackjack module</a></li>
+<li><a class="reference internal" href="#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu module</a></li>
+<li><a class="reference internal" href="#module-rlcard.envs.env">rlcard.envs.env module</a></li>
+<li><a class="reference internal" href="#module-rlcard.envs.regiteration">rlcard.envs.regiteration module</a></li>
+<li><a class="reference internal" href="#module-rlcard.envs.simpletexasholdem">rlcard.envs.simpletexasholdem module</a></li>
+<li><a class="reference internal" href="#module-rlcard.envs.texasholdem">rlcard.envs.texasholdem module</a></li>
+<li><a class="reference internal" href="#module-rlcard.envs">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/rlcard.envs.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">rlcard 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Daochen Zha.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>
