@@ -26,12 +26,12 @@ The table below shows the environments that are (or will be soon) available in R
 | Game                     | InfoSet Number  |Avg. InfoSet Size | Action Size | Name | Status  |
 | ------------------------ |:--------------:| :-------:|:------:| :-------:| :-------:|
 | Blackjack ([wiki](https://en.wikipedia.org/wiki/Blackjack), [baike](https://baike.baidu.com/item/21%E7%82%B9/5481683?fr=aladdin)) | 10^3      |  10^1 | 10^0 | blackjack |Available |
-| Limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em))      |10^14 | 10^3| 10^0 | limit-holdem |Available |
-| No-limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em))      |10^162 | 10^3| 10^4 | no-limit-holdem|Available |
-| Two-player UNO ([wiki](https://en.wikipedia.org/wiki/Uno_(card_game)))      |  unknown      |   unknown | 10^1| - | Come soon|
-| Mahjong ([wiki](https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules))      | 10^121      |   10^48 |10^2 | - | Come soon| 
-| Dou Dizhu ([wiki](https://en.wikipedia.org/wiki/Dou_dizhu))      | unknown      |   unknown | 10^4| doudizhu | Available|
-| Sheng Ji ([wiki](https://en.wikipedia.org/wiki/Sheng_ji))      | unknown      |   unknown | unknown | - | Come soon|
+| Limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [baike](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin))    |10^14 | 10^3| 10^0 | limit-holdem |Available |
+| No-limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [baike](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin))      |10^162 | 10^3| 10^4 | no-limit-holdem|Available |
+| Two-player UNO ([wiki](https://en.wikipedia.org/wiki/Uno_\(card_game), [baike](https://baike.baidu.com/item/UNO%E7%89%8C/2249587))      |  unknown      |   unknown | 10^1| - | Come soon|
+| Mahjong ([wiki](https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules), [baike](https://baike.baidu.com/item/%E9%BA%BB%E5%B0%86/215))      | 10^121      |   10^48 |10^2 | - | Come soon| 
+| Dou Dizhu ([wiki](https://en.wikipedia.org/wiki/Dou_dizhu), [baike](https://baike.baidu.com/item/%E6%96%97%E5%9C%B0%E4%B8%BB/177997?fr=aladdin))      | unknown      |   unknown | 10^4| doudizhu | Available|
+| Sheng Ji ([wiki](https://en.wikipedia.org/wiki/Sheng_ji), [baike](https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150))      | unknown      |   unknown | unknown | - | Come soon|
 
 
 
