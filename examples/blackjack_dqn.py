@@ -7,22 +7,25 @@ from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import *
 import tensorflow as tf
 
-# make environment
+# Make environment
 env = rlcard.make('blackjack')
 
+# Set the iterations numbers and how frequently we evaluate
 evaluate_every = 100
 evaluate_num = 1000
 episode_num = 1000000
-set_global_seed(None)
+
+# Set a gloabel seed
+set_global_seed(0)
 
 with tf.Session() as sess:
-    # set agents
-    agent_0 = DQNAgent(sess)
+    # Set agents
+    agent_0 = DQNAgent(sess, action_size=env.action_num)
     env.set_agents([agent_0])
 
     for episode in range(episode_num):
 
-        # generate data from the environment
+        # Generate data from the environment
         trajectories, _ = env.run(is_training=True)
 
         # Feed transitions into agent and update the agent
