@@ -11,9 +11,9 @@ pip install -e .
 
 # Getting Started
 The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) style. We recommend to start with the following **toy examples**.
-* [Playing with random agents](docs/toy-examples#playing-with-random-agents)
-* [Deep-Q learning on Blackjack](docs/toy-examples#deep-q-Learning-on-Blackjack)
-* [DeepCFR on Blackjack](docs/toy-examples#deepcfr-on-Blackjack)
+* [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
+* [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
+* [DeepCFR on Blackjack](docs/toy-examples.md#deepcfr-on-blackjack)
 
 For more examples, please refer to [examples/](examples).
 
