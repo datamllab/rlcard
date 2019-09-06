@@ -87,7 +87,7 @@ class Env(object):
         trajectories[player_id].append(state)
         while not self.is_over():
             # Agent plays
-            if is_testing:
+            if not is_training:
                 action = self.agents[player_id].eval_step(state)
             else:
                 action = self.agents[player_id].step(state)

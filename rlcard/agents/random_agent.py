@@ -1,23 +1,34 @@
 import random
 
 class RandomAgent(object):
-	""" 
-	A random agent
-	"""
+    """ 
+        A random agent. Random agents is for running toy examples on the card games
+    """
 
-	def __init__(self, action_size):
-		self.action_size = action_size
+    def __init__(self, action_size):
+        """ Initilize the random agent
 
-	def set_seed(self, seed):
-		"""
-			set seed
-		"""
-		random.seed(seed)
+        Args:
+            action_size (int): the size of the ouput action space
+        """
+        
+        self.action_size = action_size
+        
+    def step(self, state):
+        """ Predict the action given the curent state in gerenerating training data.
 
+        Args:
+            state (numpy array): an numpy array that represents the current state
 
-	def step(self, state):
-            """
-                    Randomly choose an action from the legal actions
-            """
-            return random.randint(0, self.action_size-1)
+        Returns:
+            action: the action predicted (randomly chosen) by the random agent
+        """
+        return random.randint(0, self.action_size-1)
+
+    def eval_step(self, state):
+        """ Predict the action given the curent state for evaluation.
+            Since the random agents are not trained. This function is equivalent to step function
+        """
+        return self.step(state)
+
 
