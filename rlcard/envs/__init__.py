@@ -1,4 +1,4 @@
-from rlcard.envs.regiteration import register, make
+from rlcard.envs.registration import register, make
 
 ### Example... This one does work for now 
 
