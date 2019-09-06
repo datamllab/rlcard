@@ -16,7 +16,7 @@ evaluate_num = 1000
 episode_num = 1000000
 
 # Set a gloabel seed
-set_global_seed(0)
+set_global_seed(1)
 
 with tf.Session() as sess:
     # Set agents
