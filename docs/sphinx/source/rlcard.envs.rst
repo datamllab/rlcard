@@ -28,10 +28,10 @@ rlcard.envs.env module
     :undoc-members:
     :show-inheritance:
 
-rlcard.envs.regiteration module
+rlcard.envs.registration module
 -------------------------------
 
-.. automodule:: rlcard.envs.regiteration
+.. automodule:: rlcard.envs.registration
     :members:
     :undoc-members:
     :show-inheritance:
