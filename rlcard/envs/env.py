@@ -71,10 +71,10 @@ class Env(object):
         np.random.seed(seed)
         self.game.set_seed(seed)
 
-    def run(self, is_testing):
+    def run(self, is_training=False):
         """ Run a complete game for training reinforcement learning.
         Args:
-            is_testing: True if for testing purpose
+            is_training: True if for training purpose
         Returns:
             trajectories: 1d -> player; 2d -> transition;
             3d -> state, action, reward, next_state, done
@@ -87,7 +87,7 @@ class Env(object):
         trajectories[player_id].append(state)
         while not self.is_over():
             # Agent plays
-            if is_testing:
+            if not is_training:
                 action = self.agents[player_id].eval_step(state)
             else:
                 action = self.agents[player_id].step(state)
