@@ -61,14 +61,14 @@ class BlackjackEnv(Env):
         return next_state
 
     def get_payoffs(self):
-        #print(self.game.dealer.score, self.game.player.score)
-        #print(self.game.winner)
         if self.game.winner['player'] == 0 and self.game.winner['dealer'] == 1:
             return [-1]
         elif self.game.winner['dealer'] == 0 and self.game.winner['player'] == 1:
             return [1]
-        else:
+        elif self.game.winner['player'] == 1 and self.game.winner['dealer'] == 1:
             return [0]
+        else:
+            raise "There are some bugs!"
  
     def decode_action(self, action_id):
         return self.actions[action_id]
