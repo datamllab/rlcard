@@ -21,7 +21,7 @@ For more examples, please refer to [examples/](examples).
 Please refer to the [Documents](docs/README.md) for general concepts desription. API documents are available at our [github page](https://rlcard.github.io/index.html).
 
 # Available Environments
-The table below shows the environments that are (or will be soon) available in RLCard. We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information set; **Avg. InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action spac. For some of the complext card games, we can only provide a range of the estimation. **Name** is the name that should be passed to `env.make` to create the game environment.
+The table below shows the environments that are (or will be soon) available in RLCard. We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information set; **Avg. InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space. For some of the complex card games, we can only provide a range of the estimation. **Name** is the name that should be passed to `env.make` to create the game environment.
 
 | Game                     | InfoSet Number  |Avg. InfoSet Size | Action Size | Name | Status  |
 | ------------------------ |:--------------:| :-------:|:------:| :-------:| :-------:|

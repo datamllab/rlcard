@@ -41,7 +41,7 @@ State: [17, 10], Action: 1, Reward: 0, Next State: [17, 12], Done: True
 Note that the states and actions are wrapped by `env` in Blackjack. In this example, the `[20,3]` suggests the current player obtains score 20 while the card that faces up in dealer's hand has score 5. Reward 1 suggests the player wins this game.
 
 # Deep-Q Learning on Blackjack
-The second example is to use Deep-Q learning to train an agent on Blackjack. We aim to use this example to show how reinforcement learning algorithms can be developped and applied in our toolkit. The example is shown below:
+The second example is to use Deep-Q learning to train an agent on Blackjack. We aim to use this example to show how reinforcement learning algorithms can be developped and applied in our toolkit. We design a `run` function which plays one complete game and provides the data for training RL agents. The example is shown below:
 ```python
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
