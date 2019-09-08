@@ -57,6 +57,8 @@ class Dealer(object):
         """Shuffle the cards holded by dealer(remained_cards)
         """
 
+        pass
+
     def deal_cards(self, player_id, num):
         """Deal specific number of cards to a specific player
 
@@ -65,6 +67,7 @@ class Dealer(object):
             num: number of cards to be dealt
         """
 
+        pass
 
 
 class Player(object):
@@ -87,9 +90,13 @@ class Player(object):
             list: a list of available orders
         """
 
+        pass
+
     def play(self):
         """player's actual action in the round
         """
+
+        pass
 
 
 class Judger(object):
@@ -104,12 +111,16 @@ class Judger(object):
             int: return the player's id who wins the round or -1 meaning the round has not ended
         """
 
+        pass
+
     def judge_game(self):
         """decide whether the game ends, and return the winner of the game
 
         Returns:
             int: return the player's id who wins the game or -1 meaning the game has not ended
         """
+
+        pass
 
 
 class Round(object):
@@ -126,6 +137,8 @@ class Round(object):
     def proceed_round(self):
         """ Call other Classes's functions to keep the game running
         """
+
+        pass
 
 
 class Game(object):
