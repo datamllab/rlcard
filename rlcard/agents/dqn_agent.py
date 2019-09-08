@@ -1,10 +1,8 @@
 """ DQN agent
 
-The code is adapted from https://github.com/dennybritz/reinforcement-learning/blob/master/DQN/dqn.py
-under the following license
+The code is derived from https://github.com/dennybritz/reinforcement-learning/blob/master/DQN/dqn.py
 
-MIT License
-
+Copyright (c) 2019 DATA Lab at Texas A&M University
 Copyright (c) 2016 Denny Britz
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -170,7 +168,7 @@ class DQNAgent(object):
     def train(self):
         """ Train the network
         """
-        
+
         state_batch, action_batch, reward_batch, next_state_batch, done_batch = self.memory.sample()
         # Calculate q values and targets (Double DQN)
         q_values_next = self.q_estimator.predict(self.sess, next_state_batch)
