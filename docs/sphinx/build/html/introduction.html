@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="rlcard.envs" href="rlcard.envs.html" />
+    <link rel="next" title="Overview" href="overview.html" />
     <link rel="prev" title="Welcome to rlcard’s documentation!" href="index.html" /> 
 </head>
 
@@ -81,15 +81,27 @@
               
             
             
-              <p class="caption"><span class="caption-text">Introduction:</span></p>
+              <p class="caption"><span class="caption-text">Documentation:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">RLCard: A Toolkit for Reinforcement Learning in Card Games</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#installation">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#getting-started">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#documents">Documents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#available-environments">Available Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html#rlcard-high-level-design">RLCard High-level Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#environments">Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#games">Games</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#agents">Agents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#playing-with-random-agents">Playing with Random Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#deep-q-learning-on-blackjack">Deep-Q Learning on Blackjack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#deepcfr-on-blackjack">DeepCFR on Blackjack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="games.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developping Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html#adding-new-environments">Adding New Environments</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul>
@@ -104,6 +116,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rlcard.agents.html">rlcard.agents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#rlcard-agents-deep-cfr">rlcard.agents.deep_cfr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#rlcard-agents-dqn-agent">rlcard.agents.dqn_agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#module-rlcard.agents.random_agent">rlcard.agents.random_agent</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.core.html">rlcard.core</a></li>
@@ -159,7 +177,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -191,23 +209,6 @@ install <code class="docutils literal notranslate"><span class="pre">rlcard</spa
 <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<p>The interfaces generally follow <a class="reference external" href="https://github.com/openai/gym">OpenAI
-gym</a> style. We recommend to start with
-the following <strong>toy examples</strong>. * <a class="reference external" href="docs/toy-examples.md#playing-with-random-agents">Playing with random
-agents</a> * <a class="reference external" href="docs/toy-examples.md#deep-q-learning-on-blackjack">Deep-Q
-learning on
-Blackjack</a> *
-<a class="reference external" href="docs/toy-examples.md#deepcfr-on-blackjack">DeepCFR on Blackjack</a></p>
-<p>For more examples, please refer to <a class="reference external" href="examples">examples/</a>.</p>
-</div>
-<div class="section" id="documents">
-<h1>Documents<a class="headerlink" href="#documents" title="Permalink to this headline">¶</a></h1>
-<p>Please refer to the <a class="reference external" href="docs/README.md">Documents</a> for general concepts
-desription. API documents are available at our <a class="reference external" href="https://rlcard.github.io/index.html">github
-page</a>.</p>
 </div>
 <div class="section" id="available-environments">
 <h1>Available Environments<a class="headerlink" href="#available-environments" title="Permalink to this headline">¶</a></h1>
@@ -299,18 +300,6 @@ to create the game environment.</p>
 </tbody>
 </table>
 </div>
-<div class="section" id="disclaimer">
-<h1>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h1>
-<p>Please note that this is a <strong>pre-release</strong> version of the RLCard. The
-toolkit is provided <strong>“as is”</strong>, without warranty of any kind, express
-or implied, including but not limited to the warranties of
-merchantability, fitness for a particular purpose and noninfringement.</p>
-</div>
-<div class="section" id="acknowledgements">
-<h1>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h1>
-<p>We would like to thank JJ World Network Technology Co.,LTD for the
-support.</p>
-</div>
 
 
            </div>
@@ -320,7 +309,7 @@ support.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="rlcard.envs.html" class="btn btn-neutral float-right" title="rlcard.envs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="overview.html" class="btn btn-neutral float-right" title="Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral float-left" title="Welcome to rlcard’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

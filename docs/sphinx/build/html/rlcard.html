@@ -79,15 +79,27 @@
               
             
             
-              <p class="caption"><span class="caption-text">Introduction:</span></p>
+              <p class="caption"><span class="caption-text">Documentation:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">RLCard: A Toolkit for Reinforcement Learning in Card Games</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#installation">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#getting-started">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#documents">Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#available-environments">Available Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#disclaimer">Disclaimer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#acknowledgements">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">RLCard: A Toolkit for Reinforcement Learning in Card Games</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#available-environments">Available Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html#rlcard-high-level-design">RLCard High-level Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#environments">Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#games">Games</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#agents">Agents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#playing-with-random-agents">Playing with Random Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#deep-q-learning-on-blackjack">Deep-Q Learning on Blackjack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#deepcfr-on-blackjack">DeepCFR on Blackjack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="games.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developping Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html#adding-new-environments">Adding New Environments</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul>
@@ -102,6 +114,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rlcard.agents.html">rlcard.agents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#rlcard-agents-deep-cfr">rlcard.agents.deep_cfr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#rlcard-agents-dqn-agent">rlcard.agents.dqn_agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#module-rlcard.agents.random_agent">rlcard.agents.random_agent</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.core.html">rlcard.core</a></li>
@@ -191,6 +209,7 @@
 </div>
 <div class="section" id="module-rlcard.core">
 <span id="rlcard-core"></span><h2>rlcard.core<a class="headerlink" href="#module-rlcard.core" title="Permalink to this headline">¶</a></h2>
+<p>Game-related and Env-related base classes</p>
 <dl class="class">
 <dt id="rlcard.core.Card">
 <em class="property">class </em><code class="descclassname">rlcard.core.</code><code class="descname">Card</code><span class="sig-paren">(</span><em>suit</em>, <em>rank</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Card" title="Permalink to this definition">¶</a></dt>
@@ -285,17 +304,47 @@ Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, 
 <dt id="rlcard.core.Game">
 <em class="property">class </em><code class="descclassname">rlcard.core.</code><code class="descname">Game</code><a class="headerlink" href="#rlcard.core.Game" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>Start the card game</p>
+<p>Game class. This class will interact with outer environment.</p>
 <dl class="method">
-<dt id="rlcard.core.Game.start_game">
-<code class="descname">start_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Game.start_game" title="Permalink to this definition">¶</a></dt>
+<dt id="rlcard.core.Game.get_action_num">
+<code class="descname">get_action_num</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Game.get_action_num" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of possible actions in the game</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.core.Game.get_player_id">
+<code class="descname">get_player_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Game.get_player_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current player that will take actions soon</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.core.Game.get_player_num">
+<code class="descname">get_player_num</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Game.get_player_num" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrun the number of players in the game</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.core.Game.init_game">
+<code class="descname">init_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Game.init_game" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize all characters in the game and start round 1</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.core.Game.is_over">
+<code class="descname">is_over</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Game.is_over" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return whether the current game is over</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="rlcard.core.Game.step">
 <code class="descname">step</code><span class="sig-paren">(</span><em>current_action</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Game.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform one draw of the game and return next player number, and the state for next player</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.core.Game.step_back">
+<code class="descname">step_back</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Game.step_back" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes one step backward and restore to the last state</p>
 </dd></dl>
 
 </dd></dl>

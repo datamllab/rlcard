@@ -80,15 +80,27 @@
               
             
             
-              <p class="caption"><span class="caption-text">Introduction:</span></p>
+              <p class="caption"><span class="caption-text">Documentation:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">RLCard: A Toolkit for Reinforcement Learning in Card Games</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#installation">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#getting-started">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#documents">Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#available-environments">Available Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#disclaimer">Disclaimer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#acknowledgements">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">RLCard: A Toolkit for Reinforcement Learning in Card Games</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#available-environments">Available Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html#rlcard-high-level-design">RLCard High-level Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#environments">Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#games">Games</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#agents">Agents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#playing-with-random-agents">Playing with Random Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#deep-q-learning-on-blackjack">Deep-Q Learning on Blackjack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#deepcfr-on-blackjack">DeepCFR on Blackjack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="games.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developping Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html#adding-new-environments">Adding New Environments</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul>
@@ -103,6 +115,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rlcard.agents.html">rlcard.agents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#rlcard-agents-deep-cfr">rlcard.agents.deep_cfr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#rlcard-agents-dqn-agent">rlcard.agents.dqn_agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#module-rlcard.agents.random_agent">rlcard.agents.random_agent</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.core.html">rlcard.core</a></li>
@@ -258,6 +276,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="rlcard.envs.html#rlcard.envs.registration.EnvSpec">EnvSpec (class in rlcard.envs.registration)</a>
 </li>
+      <li><a href="rlcard.agents.html#rlcard.agents.random_agent.RandomAgent.eval_step">eval_step() (rlcard.agents.random_agent.RandomAgent method)</a>
+</li>
       <li><a href="rlcard.envs.html#rlcard.envs.blackjack.BlackjackEnv.extract_state">extract_state() (rlcard.envs.blackjack.BlackjackEnv method)</a>
 
       <ul>
@@ -272,6 +292,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="rlcard.core.html#rlcard.core.Game">Game (class in rlcard.core)</a>, <a href="rlcard.html#rlcard.core.Game">[1]</a>
 </li>
+      <li><a href="rlcard.core.html#rlcard.core.Game.get_action_num">get_action_num() (rlcard.core.Game method)</a>, <a href="rlcard.html#rlcard.core.Game.get_action_num">[1]</a>
+</li>
       <li><a href="rlcard.envs.html#rlcard.envs.blackjack.BlackjackEnv.get_actions">get_actions() (rlcard.envs.blackjack.BlackjackEnv method)</a>
 </li>
       <li><a href="rlcard.utils.html#rlcard.utils.utils.get_cards_from_ranks">get_cards_from_ranks() (in module rlcard.utils.utils)</a>
@@ -280,16 +302,20 @@
 </li>
       <li><a href="rlcard.utils.html#rlcard.utils.utils.get_downstream_player_id">get_downstream_player_id() (in module rlcard.utils.utils)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="rlcard.core.html#rlcard.core.Card.get_index">get_index() (rlcard.core.Card method)</a>, <a href="rlcard.html#rlcard.core.Card.get_index">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="rlcard.envs.html#rlcard.envs.blackjack.BlackjackEnv.get_payoffs">get_payoffs() (rlcard.envs.blackjack.BlackjackEnv method)</a>
 
       <ul>
         <li><a href="rlcard.envs.html#rlcard.envs.env.Env.get_payoffs">(rlcard.envs.env.Env method)</a>
 </li>
       </ul></li>
+      <li><a href="rlcard.core.html#rlcard.core.Game.get_player_id">get_player_id() (rlcard.core.Game method)</a>, <a href="rlcard.html#rlcard.core.Game.get_player_id">[1]</a>
+</li>
+      <li><a href="rlcard.core.html#rlcard.core.Game.get_player_num">get_player_num() (rlcard.core.Game method)</a>, <a href="rlcard.html#rlcard.core.Game.get_player_num">[1]</a>
+</li>
       <li><a href="rlcard.utils.html#rlcard.utils.utils.get_random_cards">get_random_cards() (in module rlcard.utils.utils)</a>
 </li>
       <li><a href="rlcard.envs.html#rlcard.envs.env.Env.get_state">get_state() (rlcard.envs.env.Env method)</a>
@@ -312,8 +338,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="rlcard.utils.html#rlcard.utils.utils.init_54_deck">init_54_deck() (in module rlcard.utils.utils)</a>
 </li>
-      <li><a href="rlcard.envs.html#rlcard.envs.env.Env.init_game">init_game() (rlcard.envs.env.Env method)</a>
+      <li><a href="rlcard.core.html#rlcard.core.Game.init_game">init_game() (rlcard.core.Game method)</a>, <a href="rlcard.html#rlcard.core.Game.init_game">[1]</a>
+
+      <ul>
+        <li><a href="rlcard.envs.html#rlcard.envs.env.Env.init_game">(rlcard.envs.env.Env method)</a>
 </li>
+      </ul></li>
       <li><a href="rlcard.utils.html#rlcard.utils.utils.init_players">init_players() (in module rlcard.utils.utils)</a>
 </li>
   </ul></td>
@@ -321,6 +351,8 @@
       <li><a href="rlcard.utils.html#rlcard.utils.utils.init_standard_deck">init_standard_deck() (in module rlcard.utils.utils)</a>
 </li>
       <li><a href="rlcard.utils.html#rlcard.utils.utils.is_in_cards">is_in_cards() (in module rlcard.utils.utils)</a>
+</li>
+      <li><a href="rlcard.core.html#rlcard.core.Game.is_over">is_over() (rlcard.core.Game method)</a>, <a href="rlcard.html#rlcard.core.Game.is_over">[1]</a>
 </li>
       <li><a href="rlcard.utils.html#rlcard.utils.utils.is_pair">is_pair() (in module rlcard.utils.utils)</a>
 </li>
@@ -388,6 +420,8 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="rlcard.agents.html#rlcard.agents.random_agent.RandomAgent">RandomAgent (class in rlcard.agents.random_agent)</a>
+</li>
       <li><a href="rlcard.core.html#rlcard.core.Card.rank">rank (rlcard.core.Card attribute)</a>, <a href="rlcard.html#rlcard.core.Card.rank">[1]</a>
 </li>
       <li><a href="rlcard.utils.html#rlcard.utils.utils.rank2int">rank2int() (in module rlcard.utils.utils)</a>
@@ -406,14 +440,16 @@
         <li><a href="rlcard.envs.html#rlcard.envs.doudizhu.DoudizhuEnv.reorganize">(rlcard.envs.doudizhu.DoudizhuEnv method)</a>
 </li>
       </ul></li>
+      <li><a href="rlcard.agents.html#module-rlcard.agents.random_agent">rlcard.agents.random_agent (module)</a>
+</li>
       <li><a href="rlcard.core.html#module-rlcard.core">rlcard.core (module)</a>, <a href="rlcard.html#module-rlcard.core">[1]</a>
 </li>
       <li><a href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack (module)</a>
 </li>
-      <li><a href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu (module)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu (module)</a>
+</li>
       <li><a href="rlcard.envs.html#module-rlcard.envs.env">rlcard.envs.env (module)</a>
 </li>
       <li><a href="rlcard.envs.html#module-rlcard.envs.registration">rlcard.envs.registration (module)</a>
@@ -465,8 +501,6 @@
       <li><a href="rlcard.envs.html#rlcard.envs.doudizhu.DoudizhuEnv.set_seed">set_seed() (rlcard.envs.doudizhu.DoudizhuEnv method)</a>
 
       <ul>
-        <li><a href="rlcard.envs.html#rlcard.envs.env.Env.set_seed">(rlcard.envs.env.Env method)</a>
-</li>
         <li><a href="rlcard.envs.html#rlcard.envs.simpletexasholdem.SimpleTexasEnv.set_seed">(rlcard.envs.simpletexasholdem.SimpleTexasEnv method)</a>
 </li>
         <li><a href="rlcard.envs.html#rlcard.envs.texasholdem.TexasEnv.set_seed">(rlcard.envs.texasholdem.TexasEnv method)</a>
@@ -478,16 +512,20 @@
 </li>
       <li><a href="rlcard.envs.html#rlcard.envs.simpletexasholdem.SimpleTexasEnv">SimpleTexasEnv (class in rlcard.envs.simpletexasholdem)</a>
 </li>
-      <li><a href="rlcard.core.html#rlcard.core.Game.start_game">start_game() (rlcard.core.Game method)</a>, <a href="rlcard.html#rlcard.core.Game.start_game">[1]</a>
-</li>
-      <li><a href="rlcard.core.html#rlcard.core.Game.step">step() (rlcard.core.Game method)</a>, <a href="rlcard.html#rlcard.core.Game.step">[1]</a>
+      <li><a href="rlcard.agents.html#rlcard.agents.random_agent.RandomAgent.step">step() (rlcard.agents.random_agent.RandomAgent method)</a>
 
       <ul>
+        <li><a href="rlcard.core.html#rlcard.core.Game.step">(rlcard.core.Game method)</a>, <a href="rlcard.html#rlcard.core.Game.step">[1]</a>
+</li>
         <li><a href="rlcard.envs.html#rlcard.envs.env.Env.step">(rlcard.envs.env.Env method)</a>
 </li>
       </ul></li>
-      <li><a href="rlcard.envs.html#rlcard.envs.env.Env.step_back">step_back() (rlcard.envs.env.Env method)</a>
+      <li><a href="rlcard.core.html#rlcard.core.Game.step_back">step_back() (rlcard.core.Game method)</a>, <a href="rlcard.html#rlcard.core.Game.step_back">[1]</a>
+
+      <ul>
+        <li><a href="rlcard.envs.html#rlcard.envs.env.Env.step_back">(rlcard.envs.env.Env method)</a>
 </li>
+      </ul></li>
       <li><a href="rlcard.core.html#rlcard.core.Card.suit">suit (rlcard.core.Card attribute)</a>, <a href="rlcard.html#rlcard.core.Card.suit">[1]</a>
 </li>
   </ul></td>

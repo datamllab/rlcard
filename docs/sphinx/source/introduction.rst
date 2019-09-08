@@ -21,26 +21,6 @@ install ``rlcard`` with ``pip`` as follow:
     cd rlcard
     pip install -e .
 
-Getting Started
-===============
-
-The interfaces generally follow `OpenAI
-gym <https://github.com/openai/gym>`__ style. We recommend to start with
-the following **toy examples**. \* `Playing with random
-agents <docs/toy-examples.md#playing-with-random-agents>`__ \* `Deep-Q
-learning on
-Blackjack <docs/toy-examples.md#deep-q-learning-on-blackjack>`__ \*
-`DeepCFR on Blackjack <docs/toy-examples.md#deepcfr-on-blackjack>`__
-
-For more examples, please refer to `examples/ <examples>`__.
-
-Documents
-=========
-
-Please refer to the `Documents <docs/README.md>`__ for general concepts
-desription. API documents are available at our `github
-page <https://rlcard.github.io/index.html>`__.
-
 Available Environments
 ======================
 
@@ -70,17 +50,3 @@ to create the game environment.
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+---------------------+---------------+-------------------+-------------+
 | Sheng Ji (`wiki <https://en.wikipedia.org/wiki/Sheng_ji>`__, `baike <https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150>`__)                                                                      | 10^173 ~ 10^180   | 10^61               | 10^13         | -                 | Come soon   |
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+---------------------+---------------+-------------------+-------------+
-
-Disclaimer
-==========
-
-Please note that this is a **pre-release** version of the RLCard. The
-toolkit is provided **"as is"**, without warranty of any kind, express
-or implied, including but not limited to the warranties of
-merchantability, fitness for a particular purpose and noninfringement.
-
-Acknowledgements
-================
-
-We would like to thank JJ World Network Technology Co.,LTD for the
-support.

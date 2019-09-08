@@ -35,7 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="RLCard: A Toolkit for Reinforcement Learning in Card Games" href="readme.html" /> 
+    <link rel="next" title="RLCard: A Toolkit for Reinforcement Learning in Card Games" href="introduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -80,15 +80,27 @@
               
             
             
-              <p class="caption"><span class="caption-text">Introduction:</span></p>
+              <p class="caption"><span class="caption-text">Documentation:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">RLCard: A Toolkit for Reinforcement Learning in Card Games</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#installation">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#getting-started">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#documents">Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#available-environments">Available Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#disclaimer">Disclaimer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#acknowledgements">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">RLCard: A Toolkit for Reinforcement Learning in Card Games</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#available-environments">Available Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html#rlcard-high-level-design">RLCard High-level Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#environments">Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#games">Games</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#agents">Agents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#playing-with-random-agents">Playing with Random Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#deep-q-learning-on-blackjack">Deep-Q Learning on Blackjack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#deepcfr-on-blackjack">DeepCFR on Blackjack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="games.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developping Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html#adding-new-environments">Adding New Environments</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul>
@@ -103,6 +115,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rlcard.agents.html">rlcard.agents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#rlcard-agents-deep-cfr">rlcard.agents.deep_cfr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#rlcard-agents-dqn-agent">rlcard.agents.dqn_agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#module-rlcard.agents.random_agent">rlcard.agents.random_agent</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.core.html">rlcard.core</a></li>
@@ -174,15 +192,27 @@
   <div class="section" id="welcome-to-rlcard-s-documentation">
 <h1>Welcome to rlcard’s documentation!<a class="headerlink" href="#welcome-to-rlcard-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Introduction:</span></p>
+<p class="caption"><span class="caption-text">Documentation:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">RLCard: A Toolkit for Reinforcement Learning in Card Games</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#installation">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#getting-started">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#documents">Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#available-environments">Available Environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#disclaimer">Disclaimer</a></li>
-<li class="toctree-l1"><a class="reference internal" href="readme.html#acknowledgements">Acknowledgements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">RLCard: A Toolkit for Reinforcement Learning in Card Games</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html#available-environments">Available Environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html#rlcard-high-level-design">RLCard High-level Design</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#environments">Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#games">Games</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#agents">Agents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#playing-with-random-agents">Playing with Random Agents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#deep-q-learning-on-blackjack">Deep-Q Learning on Blackjack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html#deepcfr-on-blackjack">DeepCFR on Blackjack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="games.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algorithms.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developping Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html#adding-new-environments">Adding New Environments</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
@@ -199,6 +229,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rlcard.agents.html">rlcard.agents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#rlcard-agents-deep-cfr">rlcard.agents.deep_cfr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#rlcard-agents-dqn-agent">rlcard.agents.dqn_agent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.agents.html#module-rlcard.agents.random_agent">rlcard.agents.random_agent</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.core.html">rlcard.core</a></li>
@@ -222,7 +258,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="readme.html" class="btn btn-neutral float-right" title="RLCard: A Toolkit for Reinforcement Learning in Card Games" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="introduction.html" class="btn btn-neutral float-right" title="RLCard: A Toolkit for Reinforcement Learning in Card Games" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>

@@ -9,9 +9,14 @@ Welcome to rlcard's documentation!
 .. toctree::
    :maxdepth: 2
    :glob:
-   :caption: Introduction:
+   :caption: Documentation:
 
-   readme
+   introduction
+   overview
+   getting_started
+   games
+   algorithms
+   development
 
 
 .. toctree::
@@ -21,6 +26,7 @@ Welcome to rlcard's documentation!
    
    rlcard.envs
    rlcard.utils
+   rlcard.agents
    rlcard.core
    
 

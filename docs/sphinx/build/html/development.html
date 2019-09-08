@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>rlcard &mdash; rlcard 0.0.1 documentation</title>
+  <title>Developping Algorithms &mdash; rlcard 0.0.1 documentation</title>
   
 
   
@@ -34,7 +34,9 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="rlcard.envs" href="rlcard.envs.html" />
+    <link rel="prev" title="Index" href="algorithms.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -80,7 +82,7 @@
             
             
               <p class="caption"><span class="caption-text">Documentation:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">RLCard: A Toolkit for Reinforcement Learning in Card Games</a></li>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html#installation">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html#available-environments">Available Environments</a></li>
@@ -98,8 +100,8 @@
 <li class="toctree-l1"><a class="reference internal" href="games.html">Index</a></li>
 <li class="toctree-l1"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Index</a></li>
-<li class="toctree-l1"><a class="reference internal" href="development.html">Developping Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="development.html#adding-new-environments">Adding New Environments</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developping Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#adding-new-environments">Adding New Environments</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul>
@@ -169,13 +171,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>rlcard</li>
+      <li>Developping Algorithms</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/development.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -188,28 +190,37 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="rlcard">
-<h1>rlcard<a class="headerlink" href="#rlcard" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="rlcard.html">rlcard package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html">rlcard.envs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.env">rlcard.envs.env</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.registration">rlcard.envs.registration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.simpletexasholdem">rlcard.envs.simpletexasholdem</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.texasholdem">rlcard.envs.texasholdem</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.html#module-rlcard.core">rlcard.core</a></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="developping-algorithms">
+<h1>Developping Algorithms<a class="headerlink" href="#developping-algorithms" title="Permalink to this headline">¶</a></h1>
+<p>Although users may do whatever they like to design and try their
+algorithms. We recommend wrapping a new algorithm as an <code class="docutils literal notranslate"><span class="pre">Agent</span></code> class
+as the <a class="reference external" href="rlcard/agents">example agents</a>. To be compatible with the
+toolkit, the agent should have the following functions: * <code class="docutils literal notranslate"><span class="pre">step</span></code>:
+Given the current state, predict the next action. * <code class="docutils literal notranslate"><span class="pre">eval_step</span></code>:
+Similar to <code class="docutils literal notranslate"><span class="pre">step</span></code>, but for evaluation purpose. Reinforcement learning
+algorithms will usually add some noise for better exploration in
+training. In evaluation, no noise will be added to make predictions.</p>
+</div>
+<div class="section" id="adding-new-environments">
+<h1>Adding New Environments<a class="headerlink" href="#adding-new-environments" title="Permalink to this headline">¶</a></h1>
+<p>To add a new environment to the toolkit, generally you should take the
+following steps: * <strong>Implement a game.</strong> Card games usually have
+similar structures so that they can be implemented with <code class="docutils literal notranslate"><span class="pre">Game</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Round</span></code>, <code class="docutils literal notranslate"><span class="pre">Dealer</span></code>, <code class="docutils literal notranslate"><span class="pre">Judger</span></code>, <code class="docutils literal notranslate"><span class="pre">Player</span></code> as in existing games. The
+easiest way is to inherit the classed in
+<a class="reference external" href="rlcard/core.py">rlcard/core.py</a> and implement the functions. *
+<strong>Wrap the game with an environment.</strong> The easiest way is to inherit
+<code class="docutils literal notranslate"><span class="pre">Env</span></code> in <a class="reference external" href="rlcard/env/env.py">rlcard/envs/env.py</a>. You need to
+implement <code class="docutils literal notranslate"><span class="pre">extract_state</span></code> which encodes the state, <code class="docutils literal notranslate"><span class="pre">decode_action</span></code>
+which decode actions from the id to the text string, and <code class="docutils literal notranslate"><span class="pre">get_payoffs</span></code>
+which calculate payoffs of the players. * <strong>Register the game.</strong> Now it
+is time to tell the toolkit where to locate the new environment. Go to
+<a class="reference external" href="rlcard/envs/__init__.py">rlcard/envs/**init**.py</a>, and indicate
+the name of the game and its entry point.</p>
+<p>To test whether the new environment is set up successfully:</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rlcard</span>
+<span class="n">env</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="c1">#the new evironment#)</span>
+</pre></div>
 </div>
 </div>
 
@@ -218,6 +229,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rlcard.envs.html" class="btn btn-neutral float-right" title="rlcard.envs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="algorithms.html" class="btn btn-neutral float-left" title="Index" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
