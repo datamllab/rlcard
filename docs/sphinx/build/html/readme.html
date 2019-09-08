@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>RLCard: A Toolkit for Reinforcement Learning in Card Games &mdash; rlcard 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="rlcard package" href="rlcard.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> rlcard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search" id="test-search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="introduction.html">Introduction</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">RLCard: A Toolkit for Reinforcement Learning in Card Games</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documents">Documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#available-environments">Available Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rlcard.html">rlcard package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.envs.html">rlcard.envs package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.env">rlcard.envs.env module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.registration">rlcard.envs.registration module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.simpletexasholdem">rlcard.envs.simpletexasholdem module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.texasholdem">rlcard.envs.texasholdem module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.utils.html">rlcard.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.html#module-rlcard.core">rlcard.core module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">rlcard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="introduction.html">Introduction</a> &raquo;</li>
+        
+      <li>RLCard: A Toolkit for Reinforcement Learning in Card Games</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/readme.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="rlcard-a-toolkit-for-reinforcement-learning-in-card-games">
+<h1>RLCard: A Toolkit for Reinforcement Learning in Card Games<a class="headerlink" href="#rlcard-a-toolkit-for-reinforcement-learning-in-card-games" title="Permalink to this headline">¶</a></h1>
+<p>RLCard is an opensource toolkit for devopling Reinforcement Learning
+(RL) algorithms in card games. It supports multiple challenging card
+game environments with common and easy-to-use interfaces. The goal of
+the toolkit is to enable more people to study game AI and push forward
+the research of imperfect information games. RLCard is developped by
+<a class="reference external" href="http://faculty.cs.tamu.edu/xiahu/">DATA Lab</a> at Texas A&amp;M
+University.</p>
+</div>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>Make sure that you have <strong>Python 3.5+</strong> and <strong>pip</strong> installed. You can
+install <code class="docutils literal notranslate"><span class="pre">rlcard</span></code> with <code class="docutils literal notranslate"><span class="pre">pip</span></code> as follow:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">datamllab</span><span class="o">/</span><span class="n">rlcard</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">rlcard</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>The interfaces generally follow <a class="reference external" href="https://github.com/openai/gym">OpenAI
+gym</a> style. We recommend to start with
+the following <strong>toy examples</strong>. * <a class="reference external" href="docs/toy-examples.md#playing-with-random-agents">Playing with random
+agents</a> * <a class="reference external" href="docs/toy-examples.md#deep-q-learning-on-blackjack">Deep-Q
+learning on
+Blackjack</a> *
+<a class="reference external" href="docs/toy-examples.md#deepcfr-on-blackjack">DeepCFR on Blackjack</a></p>
+<p>For more examples, please refer to <a class="reference external" href="examples">examples/</a>.</p>
+</div>
+<div class="section" id="documents">
+<h1>Documents<a class="headerlink" href="#documents" title="Permalink to this headline">¶</a></h1>
+<p>Please refer to the <a class="reference external" href="docs/README.md">Documents</a> for general concepts
+desription. API documents are available at our <a class="reference external" href="https://rlcard.github.io/index.html">github
+page</a>.</p>
+</div>
+<div class="section" id="available-environments">
+<h1>Available Environments<a class="headerlink" href="#available-environments" title="Permalink to this headline">¶</a></h1>
+<p>The table below shows the environments that are (or will be soon)
+available in RLCard. We provide a complexity estimation for the games on
+several aspects. <strong>InfoSet Number:</strong> the number of information set;
+<strong>Avg. InfoSet Size:</strong> the average number of states in a single
+information set; <strong>Action Size:</strong> the size of the action space. For some
+of the complex card games, we can only provide a range of the
+estimation. <strong>Name</strong> is the name that should be passed to <code class="docutils literal notranslate"><span class="pre">env.make</span></code>
+to create the game environment.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="70%" />
+<col width="7%" />
+<col width="7%" />
+<col width="5%" />
+<col width="7%" />
+<col width="5%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Game</th>
+<th class="head">InfoSet Number</th>
+<th class="head">Avg. InfoSet Size</th>
+<th class="head">Action Size</th>
+<th class="head">Name</th>
+<th class="head">Status</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Blackjack (<a class="reference external" href="https://en.wikipedia.org/wiki/Blackjack">wiki</a>, <a class="reference external" href="https://baike.baidu.com/item/21%E7%82%B9/5481683?fr=aladdin">baike</a>)</td>
+<td>10^3</td>
+<td>10^1</td>
+<td>10^0</td>
+<td>blackjack</td>
+<td>Available</td>
+</tr>
+<tr class="row-odd"><td>Limit Texas Hold’em (<a class="reference external" href="https://en.wikipedia.org/wiki/Texas_hold_%27em">wiki</a>, <a class="reference external" href="https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin">baike</a>)</td>
+<td>10^14</td>
+<td>10^3</td>
+<td>10^0</td>
+<td>limit-holdem</td>
+<td>Available</td>
+</tr>
+<tr class="row-even"><td>Dou Dizhu (<a class="reference external" href="https://en.wikipedia.org/wiki/Dou_dizhu">wiki</a>, <a class="reference external" href="https://baike.baidu.com/item/%E6%96%97%E5%9C%B0%E4%B8%BB/177997?fr=aladdin">baike</a>)</td>
+<td>10^53 ~ 10^83</td>
+<td>10^23</td>
+<td>10^4</td>
+<td>doudizhu</td>
+<td>Available</td>
+</tr>
+<tr class="row-odd"><td>Mahjong (<a class="reference external" href="https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules">wiki</a>, <a class="reference external" href="https://baike.baidu.com/item/%E9%BA%BB%E5%B0%86/215">baike</a>)</td>
+<td>10^121</td>
+<td>10^48</td>
+<td>10^2</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Come soon</td>
+</tr>
+<tr class="row-even"><td>No-limit Texas Hold’em (<a class="reference external" href="https://en.wikipedia.org/wiki/Texas_hold_%27em">wiki</a>, <a class="reference external" href="https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin">baike</a>)</td>
+<td>10^162</td>
+<td>10^3</td>
+<td>10^4</td>
+<td>no-limit-holdem</td>
+<td>Available</td>
+</tr>
+<tr class="row-odd"><td>UNO (<a class="reference external" href="https://en.wikipedia.org/wiki/Uno_(card_game">wiki</a>, <a class="reference external" href="https://baike.baidu.com/item/UNO%E7%89%8C/2249587">baike</a>)</td>
+<td>10^163</td>
+<td>10^10</td>
+<td>10^1</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Come soon</td>
+</tr>
+<tr class="row-even"><td>Sheng Ji (<a class="reference external" href="https://en.wikipedia.org/wiki/Sheng_ji">wiki</a>, <a class="reference external" href="https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150">baike</a>)</td>
+<td>10^173 ~ 10^180</td>
+<td>10^61</td>
+<td>10^13</td>
+<td><ul class="first last simple">
+<li></li>
+</ul>
+</td>
+<td>Come soon</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="disclaimer">
+<h1>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h1>
+<p>Please note that this is a <strong>pre-release</strong> version of the RLCard. The
+toolkit is provided <strong>“as is”</strong>, without warranty of any kind, express
+or implied, including but not limited to the warranties of
+merchantability, fitness for a particular purpose and noninfringement.</p>
+</div>
+<div class="section" id="acknowledgements">
+<h1>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h1>
+<p>We would like to thank JJ World Network Technology Co.,LTD for the
+support.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="rlcard.html" class="btn btn-neutral float-right" title="rlcard package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2019, Daochen Zha
+
+    </p>
+  </div>
+    
+    
+      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

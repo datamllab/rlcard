@@ -1,9 +1,6 @@
 rlcard.envs package
 ===================
 
-Submodules
-----------
-
 rlcard.envs.blackjack module
 ----------------------------
 
@@ -48,15 +45,6 @@ rlcard.envs.texasholdem module
 ------------------------------
 
 .. automodule:: rlcard.envs.texasholdem
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: rlcard.envs
     :members:
     :undoc-members:
     :show-inheritance:

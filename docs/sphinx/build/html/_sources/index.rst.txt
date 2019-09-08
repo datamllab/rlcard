@@ -7,10 +7,13 @@ Welcome to rlcard's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
+   :glob:
    :caption: Contents:
-
-
+   
+   introduction
+   rlcard
+   
 
 Indices and tables
 ==================

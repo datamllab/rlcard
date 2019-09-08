@@ -32,7 +32,7 @@ class Card(object):
     def get_index(self):
         """Get index of a card. 
 
-        Return:
+        Returns:
             string: the combination of suit and rank of a card. Eg: 1S, 2H, AD, BJ, RJ...
         """
         return self.suit+self.rank
@@ -82,7 +82,7 @@ class Player(object):
     def available_order(self):
         """Get the actions can be made based on the rules
 
-        Return:
+        Returns:
             list: a list of available orders
         """
 
@@ -99,14 +99,14 @@ class Judger(object):
     def judge_round(self):
         """decide whether the round ends, and return the winner of the round
 
-        Return:
+        Returns:
             int: return the player's id who wins the round or -1 meaning the round has not ended
         """
 
     def judge_game(self):
         """decide whether the game ends, and return the winner of the game
 
-        Return:
+        Returns:
             int: return the player's id who wins the game or -1 meaning the game has not ended
         """
 

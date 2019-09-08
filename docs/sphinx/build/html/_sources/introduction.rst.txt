@@ -3,21 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to rlcard's documentation!
+Introduction
 ==================================
 
 .. toctree::
-   :maxdepth: 4
-   :glob:
-   :caption: Contents:
-   
-   introduction
-   rlcard
-   
+   :maxdepth: 2
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   readme
