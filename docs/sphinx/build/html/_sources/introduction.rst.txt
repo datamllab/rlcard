@@ -1,5 +1,8 @@
+Introduction
+============
+
 RLCard: A Toolkit for Reinforcement Learning in Card Games
-==========================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 RLCard is an opensource toolkit for devopling Reinforcement Learning
 (RL) algorithms in card games. It supports multiple challenging card
@@ -10,7 +13,7 @@ the research of imperfect information games. RLCard is developped by
 University.
 
 Installation
-============
+~~~~~~~~~~~~
 
 Make sure that you have **Python 3.5+** and **pip** installed. You can
 install ``rlcard`` with ``pip`` as follow:
@@ -22,7 +25,7 @@ install ``rlcard`` with ``pip`` as follow:
     pip install -e .
 
 Available Environments
-======================
+~~~~~~~~~~~~~~~~~~~~~~
 
 The table below shows the environments that are (or will be soon)
 available in RLCard. We provide a complexity estimation for the games on

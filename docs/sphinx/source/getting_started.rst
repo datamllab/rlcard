@@ -5,7 +5,7 @@ In this document, we provide some toy examples for getting started. For
 more examples, please refer to `examples/ <examples>`__.
 
 Playing with Random Agents
-==========================
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We have set up a random agent that can play randomly on each
 environment. An example of applying a random agent on Blackjack is as
@@ -55,7 +55,7 @@ this example, the ``[20,3]`` suggests the current player obtains score
 1 suggests the player wins this game.
 
 Deep-Q Learning on Blackjack
-============================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The second example is to use Deep-Q learning to train an agent on
 Blackjack. We aim to use this example to show how reinforcement learning
@@ -129,6 +129,6 @@ playing 1000 episodes. The above example shows that the agent achieves
 better and better performance during training.
 
 DeepCFR on Blackjack
-====================
+~~~~~~~~~~~~~~~~~~~~
 
 test

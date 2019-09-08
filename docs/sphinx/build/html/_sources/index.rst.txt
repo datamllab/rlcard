@@ -26,6 +26,7 @@ Welcome to rlcard's documentation!
    
    rlcard.envs
    rlcard.utils
+   rlcard.games
    rlcard.agents
    rlcard.core
    
