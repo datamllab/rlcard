@@ -15,7 +15,7 @@ evaluate_every = 100
 evaluate_num = 1000
 episode_num = 1000000
 
-# Set a gloabel seed
+# Set a global seed
 set_global_seed(1)
 
 with tf.Session() as sess:
