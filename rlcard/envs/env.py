@@ -83,11 +83,12 @@ class Env(object):
 
         Args:
             is_training (boolean): True if for training purpose.
+
         Returns:
             trajectories (list): A list of trajectories generated from the environment.
             payoffs (list): A list payoffs. Each entry corresponds to one player.
             
-        Notes:
+        Note:
             1. The trajectories are 3-dimension list. The first dimension is for different players.
             The second dimension is for different transitions. The third dimension is for the contents of each transiton
         """
@@ -158,6 +159,7 @@ class Env(object):
 
         Args:
             action_id (int): the id of the action
+
         Returns:
             action (string): the action that will be passed to the game engine.
         """
