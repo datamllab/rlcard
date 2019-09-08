@@ -283,7 +283,7 @@ class Estimator():
             self._build_model()
 
     def _build_model(self):
-        """ Build and MLP model.
+        """ Build an MLP model.
         """
 
         # Placeholders for our input
