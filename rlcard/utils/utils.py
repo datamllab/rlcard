@@ -32,7 +32,7 @@ def get_random_cards(cards, num, seed = None):
         num: int, number of cards to be chosen
         seed: int, optional, random seed
 
-    Return:
+    Returns:
         list: list of chosen cards
         list: list of remained cards
     '''
@@ -48,10 +48,10 @@ def get_random_cards(cards, num, seed = None):
 
 def is_pair(cards):
     '''
-    Arg:
+    Args:
         cards: list of Card object
 
-    Return:
+    Returns:
         boolean: whether the input list is a pair or not
     '''
     if len(cards) == 2 and cards[0].rank == cards[1].rank:
@@ -61,10 +61,10 @@ def is_pair(cards):
 
 def is_single(cards):
     '''
-    Arg:
+    Args:
         cards: list of Card object
     
-    Return:
+    Returns:
         boolean: whether the input list is a single card or not
     '''
     if len(cards) == 1:
@@ -74,10 +74,11 @@ def is_single(cards):
 
 def rank2int(rank):
     ''' Get the coresponding number of a rank.
-    Arg:
+
+    Args:
         rank: rank stored in Card object
     
-    Return:
+    Returns:
         int: the number corresponding to the rank
 
     Note:
@@ -105,11 +106,12 @@ def rank2int(rank):
 
 def get_cards_from_ranks(player, ranks):
     ''' get chosen cards and remained cards from a player's hand according to input rank list
+    
     Args:
         player: Player object
         ranks: list of rank(string)
 
-    Return:
+    Returns:
         list of Card objects: chosen cards
         list of Card objects: remained cards
 
@@ -127,11 +129,12 @@ def get_cards_from_ranks(player, ranks):
 
 def take_out_cards(cards, remove_cards):
     ''' Take out specific cards from a list of cards
+    
     Args:
-        cards: list of Card objects from which to be taken out some cards
-        remove_cards: list of Card objects that need to be taken out
+        cards (list): list of Card objects from which to be taken out some cards
+        remove_cards (list): list of Card objects that need to be taken out
 
-    Return:
+    Returns:
         list of Card objects: the cards in 'remove_cards' list that doesn't make cards in 'cards' list taken out
 
     Note:
@@ -156,7 +159,7 @@ def is_in_cards(cards, check_cards):
         cards: list of Card objects which to be checked if it contains another list of Card objects
         check_cards: list of Card objects which to be checked if it is in a list of Card objecrts
 
-    Return:
+    Returns:
         boolean
     '''
     check_cards_cp = check_cards.copy()
@@ -169,10 +172,11 @@ def is_in_cards(cards, check_cards):
 
 def init_players(n):
     ''' Return a list of Player objects with n players
-    Arg:
+
+    Args:
         n: int, number of players to be initialized
 
-    Return:
+    Returns:
         list of Player objects with player_id(s) start from 0 and are consequent 
     '''
     players = []
@@ -198,9 +202,11 @@ def get_downstream_player_id(player, players):
 
 def reorganize(trajectories, payoffs):
     """ Reorganize the trajectory to make it RL friendly
-    Arg:
+    
+    Args:
         trajectory: original one
-    Return:
+    
+    Returns:
         A new one
         
     """
@@ -220,7 +226,6 @@ def reorganize(trajectories, payoffs):
             
             new_trajectories[player].append(transition)
     return new_trajectories
-
 
 def set_global_seed(seed):
     if seed is not None:
