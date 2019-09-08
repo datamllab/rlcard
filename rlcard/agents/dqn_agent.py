@@ -170,6 +170,7 @@ class DQNAgent(object):
     def train(self):
         """ Train the network
         """
+        
         state_batch, action_batch, reward_batch, next_state_batch, done_batch = self.memory.sample()
         # Calculate q values and targets (Double DQN)
         q_values_next = self.q_estimator.predict(self.sess, next_state_batch)
