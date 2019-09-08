@@ -1,16 +1,13 @@
 rlcard package
 ==============
 
-Subpackages
------------
-
 .. toctree::
     :maxdepth: 4
-    
+
     rlcard.envs
     rlcard.utils
 
-rlcard.core module
+rlcard.core
 ------------------
 
 .. automodule:: rlcard.core

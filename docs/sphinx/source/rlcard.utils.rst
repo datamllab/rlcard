@@ -1,7 +1,7 @@
-rlcard.utils package
+rlcard.utils
 ====================
 
-rlcard.utils.utils module
+rlcard.utils.utils
 -------------------------
 
 .. automodule:: rlcard.utils.utils
