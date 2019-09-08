@@ -9,6 +9,7 @@ Blackjack is a globally popular banking game known as Twenty-One. The objective 
 In this toy environment, we encode the state as an array `[player_score, dealer_score]` where `player_score` is the score currently obtained by the player, and the `dealer_score` is derived from the card that faces up from the dealer.
 ## Action Encoding
 There are two actions in the simple Blackjack. They are encoded as follows:
+
 | Action ID                     | Action  |
 | ------------------------ |:--------------|
 | 0 | hit |
