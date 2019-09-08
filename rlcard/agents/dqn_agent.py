@@ -1,17 +1,42 @@
+""" DQN agent
+
+The code is adapted from https://github.com/dennybritz/reinforcement-learning/blob/master/DQN/dqn.py
+under the following license
+
+MIT License
+
+Copyright (c) 2016 Denny Britz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
 import numpy as np
 import random
 import tensorflow as tf
 from collections import namedtuple
+
 import rlcard
 from rlcard.utils.utils import *
 
 Transition = namedtuple("Transition", ["state", "action", "reward", "next_state", "done"])
 
 class DQNAgent(object):
-    """
-        DQN agent
-        The code modied based on https://github.com/dennybritz/reinforcement-learning/blob/master/DQN/dqn.py
-    """
 
     def __init__(self,
                  sess,
@@ -31,7 +56,7 @@ class DQNAgent(object):
         Finds the optimal greedy policy while following an epsilon-greedy policy.
 
         Args:
-            sess: Tensorflow Session object
+            sess (tf.Session): Tensorflow Session object
             replay_memory_size (int): Size of the replay memory
             replay_memory_init_size (int): Number of random experiences to sampel when initializing 
               the reply memory.
@@ -81,15 +106,18 @@ class DQNAgent(object):
         self.memory = Memory(replay_memory_size, batch_size)
 
     def feed(self, ts):
-        """ Store data in to replay buffer and train the agent.
-            There are several stages.
-            Stage 1: populate the Normalizer that does normalization.
-            Stage 2: popolate memory.
-            Stage 3: trainthe netowoks.
+        """ Store data in to replay buffer and train the agent. There are several stages.
+            In stage 1, populate the Normalizer to calculate mean and std.
+            In stage 2, popolate the memory without training.
+            In stage 3: add transitions to the memory and train the netowrk.
+
+        Args:
+            ts (list): a list of 5 elements that represent the transition
 
         Returns:
             is_training (boolean): whether the models start training
         """
+
         (state, action, reward, next_state, done) = tuple(ts)
         if self.total_t < self.norm_step:
             self.feed_norm(state)
@@ -111,11 +139,12 @@ class DQNAgent(object):
         """ Predict the action for genrating training data
 
         Args:
-            state (numpy array): current state
+            state (numpy.array): current state
 
         Returns:
             action (int): an action id
         """
+
         epsilon = self.epsilons[min(self.total_t, self.epsilon_decay_steps-1)]     
         A = np.ones(self.action_size, dtype=float) * epsilon / self.action_size
         q_values = self.q_estimator.predict(self.sess, np.expand_dims(self.normalizer.normalize(state), 0))[0]
@@ -128,11 +157,12 @@ class DQNAgent(object):
         """ Predict the action for evaluation purpose.
 
         Args:
-            state (numpy array): current state
+            state (numpy.array): current state
 
         Returns:
             action (state): an action id
         """
+
         q_values = self.q_estimator.predict(self.sess, np.expand_dims(self.normalizer.normalize(state), 0))[0]
         best_action = np.argmax(q_values)
         return best_action
@@ -166,20 +196,33 @@ class DQNAgent(object):
         """ Feed state to normalizer to collect statistics
 
         Args:
-            state (numpy array): the state that will be feed into normalizer
+            state (numpy.array): the state that will be feed into normalizer
         """
+
         self.normalizer.append(state)
 
     def feed_memory(self, state, action, reward, next_state, done):
         """ Feed transition to memory
+
+        Args:
+            state (numpy.array): the current state
+            action (int): the performed action ID
+            reward (float): the reward received
+            next_state (numpy.array): the next state after performing the action
+            done (boolean): whether the episode is finished
         """
+
         self.memory.save(self.normalizer.normalize(state), action, reward, self.normalizer.normalize(next_state), done)
 
 
 class Normalizer(object):
-    """ Track the running statistics for normlization
+    """ Normalizer class that tracks the running statistics for normlization
     """
+
     def __init__(self):
+        """ Initialize a Normalizer instance.
+        """
+
         self.mean = None
         self.std = None
         self.state_memory = []
@@ -188,14 +231,15 @@ class Normalizer(object):
 
 
     def normalize(self, s):
-        """ Normalize the state with the running mean and std
+        """ Normalize the state with the running mean and std.
 
         Args:
-            s (numpy array): the input state
+            s (numpy.array): the input state
 
-        Return:
+        Returns:
             a (int):  normalized state
         """
+
         self.append(s)
         return (s - self.mean) / (self.std)
 
@@ -203,8 +247,9 @@ class Normalizer(object):
         """ Append a new state and update the running statistics
 
         Args:
-            s (numpy array): the input state
+            s (numpy.array): the input state
         """
+
         if len(self.state_memory) > 1000:
             self.state_memory.pop(0)
         self.state_memory.append(s)
@@ -219,6 +264,13 @@ class Estimator():
     """
 
     def __init__(self, scope="estimator", action_size=2, state_shape=[2]):
+        """ Initilalize an Estimator object.
+
+        Args:
+            action_size (int): the number output actions
+            state_shap (list): the shape of the state space
+        """
+
         self.scope = scope
         self.action_size = action_size
         self.state_shape = state_shape
@@ -231,8 +283,7 @@ class Estimator():
             self._build_model()
 
     def _build_model(self):
-        """
-        MLP model
+        """ Build and MLP model.
         """
 
         # Placeholders for our input
@@ -266,12 +317,11 @@ class Estimator():
         self.train_op = self.optimizer.minimize(self.loss, global_step=tf.contrib.framework.get_global_step())
 
     def predict(self, sess, s):
-        """
-        Predicts action values.
+        """ Predicts action values.
 
         Args:
-          sess (tf session object): Tensorflow session
-          s (numpy array): State input of shape [batch_size, 4, 160, 160, 3]
+          sess (tf.Session): Tensorflow Session object
+          s (numpy.array): State input of shape [batch_size, 4, 160, 160, 3]
 
         Returns:
           Tensor of shape [batch_size, NUM_VALID_ACTIONS] containing the estimated 
@@ -281,11 +331,10 @@ class Estimator():
         return sess.run(self.predictions, { self.X_pl: s })
 
     def update(self, sess, s, a, y):
-        """
-        Updates the estimator towards the given targets.
+        """ Updates the estimator towards the given targets.
 
         Args:
-          sess (tf session object): Tensorflow session object
+          sess (tf.Session): Tensorflow Session object
           s (list): State input of shape [batch_size, 4, 160, 160, 3]
           a (list): Chosen actions of shape [batch_size]
           y (list): Targets of shape [batch_size]
@@ -293,6 +342,7 @@ class Estimator():
         Returns:
           The calculated loss on the batch.
         """
+
         feed_dict = { self.X_pl: s, self.y_pl: y, self.actions_pl: a }
         global_step, _, loss = sess.run(
                 [tf.contrib.framework.get_global_step(), self.train_op, self.loss],
@@ -302,24 +352,27 @@ class Estimator():
 class Memory(object):
     """ Memory for saving transitions
     """
+
     def __init__(self, memory_size, batch_size):
-        """
+        """ Initialize
         Args:
             memory_size (int): the size of the memroy buffer
         """
+
         self.memory_size = memory_size
         self.batch_size = batch_size
         self.memory = []
 
     def save(self, state, action, reward, next_state, done):
-        """
+        """ 
         Args:
-            state (numpy array): current state
-            action (int): action taken
-            reward (float): reward received
-            next_state (numpy array): the next state observed
-            done (boolean): whether it is finished
+            state (numpy.array): the current state
+            action (int): the performed action ID
+            reward (float): the reward received
+            next_state (numpy.array): the next state after performing the action
+            done (boolean): whether the episode is finished
         """
+
         if len(self.memory) == self.memory_size:
             self.memory.pop(0)
         transition = Transition(state, action, reward, next_state, done)
@@ -327,6 +380,7 @@ class Memory(object):
 
     def sample(self):
         """ Sample a minibatch from the replay memory
+
         Returns:
             state_batch (list): a batch of states
             action_batch (list): a batch of actions
@@ -334,6 +388,7 @@ class Memory(object):
             next_state_batch (list): a batch of states
             done_batch (list): a batch of dones
         """
+
         samples = random.sample(self.memory, self.batch_size)
         return map(np.array, zip(*samples))
 
@@ -342,10 +397,11 @@ def copy_model_parameters(sess, estimator1, estimator2):
     """ Copies the model parameters of one estimator to another.
 
     Args:
-        sess (tf session object): Tensorflow session instance
-        estimator1 (estimator object): Estimator to copy the paramters from
-        estimator2 (estimator object): Estimator to copy the parameters to
+        sess (tf.Session): Tensorflow Session object
+        estimator1 (Estimator): Estimator to copy the paramters from
+        estimator2 (Estimator): Estimator to copy the parameters to
     """
+
     e1_params = [t for t in tf.trainable_variables() if t.name.startswith(estimator1.scope)]
     e1_params = sorted(e1_params, key=lambda v: v.name)
     e2_params = [t for t in tf.trainable_variables() if t.name.startswith(estimator2.scope)]
