@@ -6,3 +6,6 @@ __pycache__/
 *.swp
 *.wsn
 *.swo
+.scannerwork/
+.vscode/
+sonar-project.properties
