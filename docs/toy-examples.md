@@ -56,7 +56,7 @@ evaluate_every = 100
 evaluate_num = 1000
 episode_num = 1000000
 
-# Set a gloabel seed
+# Set a gloabal seed
 set_global_seed(1)
 
 with tf.Session() as sess:
@@ -83,18 +83,20 @@ with tf.Session() as sess:
 ```
 The expected output is something like below:
 ```python
-INFO - Populating replay memory...
-
-INFO - Step 0 loss: 0.9071584939956665
+INFO - Step 0 loss: 0.737238883972168
 INFO - Copied model parameters to target network.
-INFO - Step 98 loss: 0.6962372660636902INFO - Average reward is -0.468
-INFO - Step 242 loss: 0.5883776545524597INFO - Average reward is -0.446
-INFO - Step 389 loss: 0.6218322515487671INFO - Average reward is -0.133
-INFO - Step 517 loss: 0.4988301992416382INFO - Average reward is -0.146
-INFO - Step 631 loss: 0.6635352373123169INFO - Average reward is -0.192
-INFO - Step 748 loss: 0.5455094575881958INFO - Average reward is -0.15
-INFO - Step 860 loss: 0.6445329785346985INFO - Average reward is -0.204
-INFO - Step 973 loss: 0.5738863348960876INFO - Average reward is -0.113
+INFO - Step 57 loss: 0.7144393920898438
+########## Evaluation ##########
+Average reward is -0.376
+INFO - Step 203 loss: 0.67016243934631353
+########## Evaluation ##########
+Average reward is -0.166
+INFO - Step 347 loss: 0.63311457633972174
+########## Evaluation ##########
+Average reward is -0.133
+INFO - Step 477 loss: 0.54678362607955937
+########## Evaluation ##########
+Average reward is -0.095
 ```
 In Blackjack, the player will get a payoff in the end of the game: 1 if the player wins, -1 if the player loses, and 0 if it is a tie. The performance is measured by the average payoff the player obtains by playing 1000 episodes. The above example shows that the agent achieves better and better performance during training.
 
