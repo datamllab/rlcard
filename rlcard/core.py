@@ -1,4 +1,5 @@
-# Game-related and Env-related abstractions
+""" Game-related and Env-related base classes 
+"""
 
 class Card(object):
     """
@@ -119,27 +120,59 @@ class Round(object):
     round_id = None
 
     def __init__(self):
-        """When the game starts, round id should be 1
+        """ When the game starts, round id should be 1
         """
 
     def proceed_round(self):
-        """Call other Classes's functions to keep the game running
+        """ Call other Classes's functions to keep the game running
         """
 
 
 class Game(object):
-    """
-    Start the card game
+    """ Game class. This class will interact with outer environment.
     """
     
-    def start_game(self):
-        """Initialize all characters in the game and start round 1
+    def init_game(self):
+        """ Initialize all characters in the game and start round 1
         """
 
+        pass
+
     def step(self, current_action):
-        """Perform one draw of the game and return next player number, and the state for next player
+        """ Perform one draw of the game and return next player number, and the state for next player
         """
-        return next_player, next_state
+
+        pass
+
+    def step_back(self):
+        """ Takes one step backward and restore to the last state
+        """
+
+        pass
+
+    def get_player_num(self):
+        """ Retrun the number of players in the game
+        """
+
+        pass
+
+    def get_action_num(self):
+        """ Return the number of possible actions in the game
+        """
+
+        pass
+
+    def get_player_id(self):
+        """ Return the current player that will take actions soon
+        """
+
+        pass
+
+    def is_over(self):
+        """ Return whether the current game is over
+        """
+
+        pass
 
 
 class Monitor(object):
