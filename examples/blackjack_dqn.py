@@ -15,13 +15,24 @@ evaluate_every = 100
 evaluate_num = 1000
 episode_num = 1000000
 
+# Set the the number of steps for collecting normalization statistics
+# and intial memory size
+memory_init_size = 100
+norm_step = 100
+
 # Set a global seed
 set_global_seed(1)
 
 with tf.Session() as sess:
     # Set agents
-    agent_0 = DQNAgent(sess, action_size=env.action_num)
-    env.set_agents([agent_0])
+    agent = DQNAgent(sess,
+                       action_size=env.action_num,
+                       replay_memory_init_size=memory_init_size,
+                       norm_step=norm_step)
+    env.set_agents([agent])
+
+    # Count the number of steps
+    step_counter = 0
 
     for episode in range(episode_num):
 
@@ -30,12 +41,18 @@ with tf.Session() as sess:
 
         # Feed transitions into agent and update the agent
         for ts in trajectories[0]:
-            is_training = agent_0.feed(ts)
+            agent.feed(ts)
+            step_counter += 1
 
-        if is_training and (episode) % evaluate_every == 0:
+        # Train the agent
+        if step_counter > memory_init_size + norm_step:
+            agent.train()
+
+        # Evaluate the performance
+        if episode % evaluate_every == 0:
             reward = 0
             for eval_episode in range(evaluate_num):
-                _, payoffs = env.run()
+                _, payoffs = env.run(is_training=False)
                 reward += payoffs[0]
 
             print('\n########## Evaluation ##########')
