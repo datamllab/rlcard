@@ -33,7 +33,6 @@ class BlackjackEnv(Env):
                     has_a = 1
             if score > 21 and has_a == 1:
                 score -= 9
-
             return score, has_a
 
         my_score, has_a = get_scores_and_A(my_cards)

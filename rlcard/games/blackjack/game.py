@@ -76,7 +76,10 @@ class BlackjackGame(Game):
         state = {}
         state['actions'] = ('hit', 'stand')
         hand = [card.get_index() for card in self.player.hand]
-        dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
+        if self.winner['player'] == 0 and self.winner['dealer'] == 0:
+            dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
+        else:
+            dealer_hand = [card.get_index() for card in self.dealer.hand]
         state['state'] = (hand, dealer_hand)
         return state
 
