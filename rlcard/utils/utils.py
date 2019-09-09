@@ -152,7 +152,7 @@ def take_out_cards(cards, remove_cards):
                 remove_cards_cp.pop(remove_cards_cp.index(remove_card))
     return remove_cards_cp
 
-def is_in_cards(cards, check_cards):
+def is_in_cards(origin_cards, check_cards):
     """ Check if a list of Card objects contains another list of Card objects
 
     Args:
