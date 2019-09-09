@@ -119,7 +119,7 @@ def get_cards_from_ranks(player, ranks):
         This function will not affect the player's original hand.
     '''
     chosen_cards = []
-    remained_cards = player.hand
+    remained_cards = player.hand.copy()
     for rank in ranks:
         for card in remained_cards:
             if card.rank == rank:
@@ -144,7 +144,7 @@ def take_out_cards(cards, remove_cards):
         which means to take out one kind of cards with the same suit and rank in 'cards' list,
         you need to have the same number of cards with the same suit and rank in 'remove_cards' list.
     '''
-    remove_cards_cp = remove_cards.copy()
+    remove_cards_cp = remove_cards
     for card in cards:
         for remove_card in remove_cards_cp:
             if card.rank == remove_card.rank and card.suit == remove_card.suit:
@@ -152,7 +152,7 @@ def take_out_cards(cards, remove_cards):
                 remove_cards_cp.pop(remove_cards_cp.index(remove_card))
     return remove_cards_cp
 
-def is_in_cards(cards, check_cards):
+def is_in_cards(origin_cards, check_cards):
     ''' Check if a list of Card objects contains another list of Card objects
 
     Args:
@@ -163,11 +163,21 @@ def is_in_cards(cards, check_cards):
         boolean
     '''
     check_cards_cp = check_cards.copy()
-    for card in cards:
-        for remove_card in check_cards_cp:
-            if card.rank == remove_card.rank and card.suit == remove_card.suit:
-                cards.pop(cards.index(card))
-                check_cards_cp.pop(check_cards_cp.index(remove_card))
+    cards = origin_cards.copy()
+    i = 0
+    while i < len(check_cards_cp):
+        j = 0
+        while j < len(cards):
+            if cards[j].rank == check_cards_cp[i].rank and cards[j].suit == check_cards_cp[i].suit:
+                cards.pop(j)
+                check_cards_cp.pop(i)
+                if(len(cards) == 0 or len(check_cards_cp) == 0):
+                    break
+                j -= 1
+            j += 1
+        if(len(cards) == 0 or len(check_cards_cp) == 0):
+            break
+        i += 1
     return len(check_cards_cp) == 0
 
 def init_players(n):
