@@ -1,0 +1,84 @@
+import unittest
+import random
+from rlcard.utils.utils import *
+from rlcard.core import Card, Player
+
+class TestUtilsMethos(unittest.TestCase):
+
+    def test_init_standard_deck(self):
+        self.assertEqual(len(init_standard_deck()), 52)
+
+    def test_init_54_deck(self):
+        self.assertEqual(len(init_54_deck()), 54)
+
+    def test_get_random_cards(self):
+        hand = init_54_deck()
+        num = random.randint(1, len(hand))
+        chosen_cards, remained_cards = get_random_cards(hand, num)
+        self.assertEqual(len(chosen_cards), num)
+        self.assertEqual(len(remained_cards), len(hand) - num)
+
+    def test_is_pair(self):
+        self.assertTrue(is_pair([Card('S', 'A'), Card('D', 'A')]))
+        self.assertFalse(is_pair([Card('BJ', ''), Card('S', 'A'), Card('D', 'A')]))
+
+    def test_is_single(self):
+        self.assertTrue(is_single([Card('S', 'A')]))
+        self.assertFalse(is_single([Card('S', 'A'), Card('BJ', '')]))
+
+    def test_rank2int(self):
+        self.assertEqual(rank2int('A'), 14)
+        self.assertEqual(rank2int(''), -1)
+        self.assertEqual(rank2int('3'), 3)
+
+    def test_get_cards_from_ranks(self):
+        deck = init_54_deck()
+        player = Player(0)
+        player.hand = deck
+        test_ranks = ['A', '2', '3']
+        chosen_cards, remained_cards = get_cards_from_ranks(player, test_ranks)
+        self.assertEqual(len(chosen_cards), 12)
+        for card in chosen_cards:
+            flag = True
+            if card.rank in test_ranks:
+                flag = False
+            self.assertFalse(flag)
+        self.assertEqual(len(remained_cards), len(deck) - 12)
+        self.assertEqual(len(chosen_cards), 12)
+  
+    def test_take_out_cards(self):
+        cards = init_54_deck()
+        remove_cards = [Card('S', 'A'), Card('BJ', '')]
+        res = take_out_cards(cards, remove_cards)
+        flag = False
+        for card in res:
+            if card.get_index() == 'SA' or card.get_index == 'BJ':
+                flag = True
+        self.assertFalse(flag)
+        self.assertEqual(len(cards), len(init_54_deck()) - 2)
+
+    def test_is_in_cards(self):
+        deck54 = init_54_deck()
+        deck_standard = init_standard_deck()  
+        self.assertTrue(is_in_cards(deck54, deck_standard))
+        self.assertTrue(is_in_cards(deck54, [Card('BJ', ''), Card('RJ', '')]))
+        self.assertFalse(is_in_cards(deck54, [Card('BJ', ''), Card('BJ', '')]))
+
+    def test_init_players(self):
+        self.assertTrue(len(init_players(5)), 5)
+
+    def test_get_upstream_player_id(self):
+        players = init_players(5)
+        self.assertEqual(get_upstream_player_id(players[0], players), 4)
+    
+    def test_get_downstream_player_id(self):
+        players = init_players(5)
+        self.assertEqual(get_downstream_player_id(players[4], players), 0)
+    
+    def test_set_global_seed(self):
+        # set_global_seed(0)
+        # set_global_seed(None)
+        pass
+
+if __name__ == '__main__':
+    unittest.main()
