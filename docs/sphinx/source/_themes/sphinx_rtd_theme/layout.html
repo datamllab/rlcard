@@ -90,10 +90,10 @@
     {%- if hasdoc('search') %}
     <link rel="search" title="{{ _('Search') }}" href="{{ pathto('search') }}" />
     {%- endif %}
-    <!-- {%- if hasdoc('copyright') %}
+    {%- if hasdoc('copyright') %}
     <link rel="copyright" title="{{ _('Copyright') }}" href="{{ pathto('copyright') }}" />
-    {%- endif %} -->
-    <link rel="copyright" title="DATA Lab at Texas A&M University">
+    {%- endif %}
+    <!-- <link rel="copyright" title="DATA Lab at Texas A&M University"> -->
     {%- if next %}
     <link rel="next" title="{{ next.title|striptags|e }}" href="{{ next.link|e }}" />
     {%- endif %}

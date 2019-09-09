@@ -49,7 +49,7 @@ class BlackjackGame(Game):
                 self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
             self.judger.judge_game(self)
             hand = [card.get_index() for card in self.player.hand]
-            dealer_hand = [c.get_index() for c in self.dealer.hand[1:]]
+            dealer_hand = [c.get_index() for c in self.dealer.hand]
             next_state['state'] = (hand, dealer_hand) # show all hand of dealer
             next_state['actions'] = ('hit', 'stand')
         return next_state, self.player.get_player_id()
@@ -76,7 +76,10 @@ class BlackjackGame(Game):
         state = {}
         state['actions'] = ('hit', 'stand')
         hand = [card.get_index() for card in self.player.hand]
-        dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
+        if self.winner['player'] == 0 and self.winner['dealer'] == 0:
+            dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
+        else:
+            dealer_hand = [card.get_index() for card in self.dealer.hand]
         state['state'] = (hand, dealer_hand)
         return state
 
@@ -90,20 +93,24 @@ class BlackjackGame(Game):
 ######################################################### 
     # For testing
     def _start_game(self):
-        player = self.player.get_player_id()
-        #state = self.get_state(player)
-        action = ['hit', 'stand']
-        self.init()
-        while not self.end():
-            act = random.choice(action)
+        while True:
+            self.init_game()
+            player = self.player.get_player_id()
+            #state = self.get_state(player)
+            action = ['hit', 'stand']
+            while not self.is_over():
+                act = random.choice(action)
+                print("Status(Player, Dealer): ",(self.player.status, self.dealer.status))
+                print("Score(Player, Dealer): ",(self.player.score, self.dealer.score))
+                print("Player_action:",act)
+                next_state, next_player = self.step(act)
+
             print("Status(Player, Dealer): ",(self.player.status, self.dealer.status))
             print("Score(Player, Dealer): ",(self.player.score, self.dealer.score))
-            print("Player_action:",act)
-            next_state, next_player = self.step(act)
-
-        print("Status(Player, Dealer): ",(self.player.status, self.dealer.status))
-        print("Score(Player, Dealer): ",(self.player.score, self.dealer.score))
-        print(self.winner)
+            print(self.winner)
+            if self.dealer.score < 17 and self.winner['dealer'] == 1 and self.winner['player'] == 0:
+                print(next_state)
+                break
 
 if __name__ == "__main__":
     game = BlackjackGame()

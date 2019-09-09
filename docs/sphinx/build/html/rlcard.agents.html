@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>rlcard.agents &mdash; rlcard 0.0.1 documentation</title>
+  <title>rlcard.agents &mdash; RLcard 0.0.1 documentation</title>
   
 
   
@@ -35,6 +35,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <!-- <link rel="copyright" title="DATA Lab at Texas A&M University"> -->
     <link rel="next" title="rlcard.core" href="rlcard.core.html" />
     <link rel="prev" title="rlcard.games.texasholdem" href="rlcard.games.texasholdem.html" /> 
 </head>
@@ -50,7 +51,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home" alt="Documentation Home"> rlcard
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> RLcard
           
 
           
@@ -199,7 +200,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">rlcard</a>
+          <a href="index.html">RLcard</a>
         
       </nav>
 
@@ -727,8 +728,21 @@ done_batch (list): a batch of dones</p>
 <dl class="method">
 <dt id="rlcard.agents.random_agent.RandomAgent.eval_step">
 <code class="sig-name descname">eval_step</code><span class="sig-paren">(</span><em class="sig-param">state</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.random_agent.RandomAgent.eval_step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the action given the curent state for evaluation.
-Since the random agents are not trained. This function is equivalent to step function</p>
+<dd><dl class="simple">
+<dt>Predict the action given the curent state for evaluation.</dt><dd><p>Since the random agents are not trained. This function is equivalent to step function</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> (<em>numpy.array</em>) – an numpy array that represents the current state</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the action predicted (randomly chosen) by the random agent</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>action (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -737,13 +751,13 @@ Since the random agents are not trained. This function is equivalent to step fun
 <dd><p>Predict the action given the curent state in gerenerating training data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>state</strong> (<em>numpy array</em>) – an numpy array that represents the current state</p>
+<dd class="field-odd"><p><strong>state</strong> (<em>numpy.array</em>) – an numpy array that represents the current state</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the action predicted (randomly chosen) by the random agent</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>action</p>
+<dd class="field-odd"><p>action (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -774,7 +788,7 @@ Since the random agents are not trained. This function is equivalent to step fun
   <div role="contentinfo">
     <p>
         
-        &copy; Copyright 2019, Daochen Zha
+        &copy; Copyright DATA Lab at Texas A&amp;M University
 
     </p>
   </div>
