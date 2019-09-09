@@ -5,10 +5,10 @@ import json
 import functools
 import copy
 import random
+import os
 from os import path
 import numpy as np
-FILE = path.abspath(__file__)
-sys.path.append(path.dirname(path.dirname(path.dirname(path.dirname(FILE)))))
+import rlcard
 from rlcard.core import Game
 from rlcard.games.doudizhu.player import DoudizhuPlayer as Player
 from rlcard.games.doudizhu.round import DoudizhuRound as Round
@@ -18,9 +18,10 @@ from rlcard.games.doudizhu.dealer import DoudizhuDealer as Dealer
 from rlcard.games.doudizhu.dealer import doudizhu_sort_card
 from rlcard.utils.utils import init_54_deck
 from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
-with open('rlcard/games/doudizhu/specific_map.json', 'r') as file:
+root_path = rlcard.__path__[0]
+with open(os.path.join(root_path,'games/doudizhu/specific_map.json'), 'r') as file:
     SPECIFIC_MAP = json.load(file)
-with open('rlcard/games/doudizhu/action_space.json', 'r') as file:
+with open(os.path.join(root_path, 'games/doudizhu/action_space.json'), 'r') as file:
     ACTION_SPACE = json.load(file)
 
 
