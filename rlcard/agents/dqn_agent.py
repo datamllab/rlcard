@@ -37,9 +37,9 @@ Transition = namedtuple("Transition", ["state", "action", "reward", "next_state"
 class DQNAgent(object):
 
     def __init__(self,
-                 sess,
+                 sess=None,
                  replay_memory_size=20000,
-                 replay_memory_init_size=20000,
+                 replay_memory_init_size=100,
                  update_target_estimator_every=1000,
                  discount_factor=0.99,
                  epsilon_start=1.0,
@@ -48,7 +48,7 @@ class DQNAgent(object):
                  batch_size=32,
                  action_size=2,
                  state_shape=[2],
-                 norm_step=1000):
+                 norm_step=100):
         """
         Q-Learning algorithm for off-policy TD control using Function Approximation.
         Finds the optimal greedy policy while following an epsilon-greedy policy.
@@ -104,34 +104,21 @@ class DQNAgent(object):
         self.memory = Memory(replay_memory_size, batch_size)
 
     def feed(self, ts):
-        """ Store data in to replay buffer and train the agent. There are several stages.
+        """ Store data in to replay buffer and train the agent. There are two stages.
             In stage 1, populate the Normalizer to calculate mean and std.
-            In stage 2, popolate the memory without training.
-            In stage 3: add transitions to the memory and train the netowrk.
+            The transition is NOT stored in the memory
+            In stage 2, the transition is stored to the memory.
 
         Args:
             ts (list): a list of 5 elements that represent the transition
-
-        Returns:
-            is_training (boolean): whether the models start training
         """
 
         (state, action, reward, next_state, done) = tuple(ts)
         if self.total_t < self.norm_step:
             self.feed_norm(state)
-            is_training = False
         else:
             self.feed_memory(state, action, reward, next_state, done)
-            if self.total_t >= self.norm_step + self.replay_memory_init_size:
-                if self.total_t == self.norm_step + self.replay_memory_init_size:
-                    print('\n')
-                self.train()
-                is_training = True
-            else:
-                print("\rINFO - Populating replay memory...", end = '')
-                is_training = False
         self.total_t += 1
-        return is_training
 
     def step(self, state):
         """ Predict the action for genrating training data
