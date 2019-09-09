@@ -143,7 +143,7 @@ def take_out_cards(cards, remove_cards):
         2. For each card in 'remove_cards' list, it will make only one card in 'cards' list taken out,
         which means to take out one kind of cards with the same suit and rank in 'cards' list,
         you need to have the same number of cards with the same suit and rank in 'remove_cards' list.
-    '''
+    """
     remove_cards_cp = remove_cards
     for card in cards:
         for remove_card in remove_cards_cp:
