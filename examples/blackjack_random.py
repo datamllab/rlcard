@@ -7,10 +7,10 @@ from rlcard.utils.utils import *
 
 # Make environment
 env = rlcard.make('blackjack')
-episode_num = 2
+episode_num = 10
 
 # Set global seed to 0
-set_global_seed(1)
+set_global_seed(2)
 
 # Set up agents
 agent_0 = RandomAgent(action_size=env.action_num)
@@ -26,13 +26,3 @@ for episode in range(episode_num):
     for ts in trajectories[0]:
         print('State: {}, Action: {}, Reward: {}, Next State: {}, Done: {}'.format(ts[0], ts[1], ts[2], ts[3], ts[4])) 
             
-
-
-
-
-
-
-
-
-
-
