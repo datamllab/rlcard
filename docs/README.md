@@ -3,8 +3,8 @@ The toolkit wraps each game by `Env` with easy-to-use interfaces. The goal of th
 * **Simple.** We make the interfaces straightforward and simple. Users can easily run one game and obtain the statistics of the game.
 * **Consistent.** All the games are implemented following the same logical pattern. The main classes/functions of each game share the same class/function name. Users can easily understand each game and modify the rules for research purpose.
 * **Reproducible.** The results can be seeded for reproducibility purpose.
-* **Scalable.** New card environments can be added conveniently into RLCard with the above design principles.
 * **Minimum Dependency.** We minimize the dependencies used in the toolkit so that the codes are easy to modify or migrate.
+* **Scalable.** New card environments can be added conveniently into RLCard with the above design principles.
 
 # User Guide
 * [Toy examples](docs/toy-examples.md)
@@ -17,4 +17,4 @@ The toolkit wraps each game by `Env` with easy-to-use interfaces. The goal of th
 * [Adding new environments](docs/adding-new-environments.md)
 
 # Application Programming Interface (API)
-The API documents are automatically generated and available in [github page](https://rlcard.github.io/index.html).
+The API documents are and available in [github page](https://rlcard.github.io/index.html).
