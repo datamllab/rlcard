@@ -33,12 +33,13 @@ The expected output should look like something as follows:
 ** TODO: debug blackjack **
 ```
 Episode 0
-State: [20, 3], Action: 1, Reward: 1, Next State: [20, 7], Done: True
+State: [19, 5], Action: 0, Reward: -1, Next State: [23, 15], Done: True
 
 Episode 1
-State: [17, 10], Action: 1, Reward: 0, Next State: [17, 12], Done: True
+State: [8, 8], Action: 0, Reward: 0, Next State: [17, 8], Done: False
+State: [17, 8], Action: 1, Reward: 1, Next State: [17, 25], Done: True
 ```
-Note that the states and actions are wrapped by `env` in Blackjack. In this example, the `[20,3]` suggests the current player obtains score 20 while the card that faces up in the dealer's hand has score 5. Reward 1 suggests the player wins this game.
+Note that the states and actions are wrapped by `env` in Blackjack. In this example, the `[19, 5]` suggests the current player obtains score 19 while the card that faces up in the dealer's hand has score 5. Reward 1 suggests the player wins this game.
 
 # Deep-Q Learning on Blackjack
 The second example is to use Deep-Q learning to train an agent on Blackjack. We aim to use this example to show how reinforcement learning algorithms can be developed and applied in our toolkit. We design a `run` function which plays one complete game and provides the data for training RL agents. The example is shown below:
