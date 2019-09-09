@@ -47,7 +47,7 @@ with tf.Session() as sess:
                     action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
                     #action_prob = list(action_prob)
                     #action = action_prob.index(max(action_prob))
-                    #print("Play:", state, action)
+                    print("Play:", state, action)
                     state, player = test_env.step(action)
                     if test_env.is_over():
                         payoffs = test_env.get_payoffs()
