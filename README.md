@@ -1,5 +1,5 @@
 # RLCard: A Toolkit for Reinforcement Learning in Card Games
-RLCard is an opensource toolkit for devopling Reinforcement Learning (RL) algorithms in card games. It supports multiple challenging card game environments with common and easy-to-use interfaces. The  goal  of  the  toolkit  is  to  enable  more  people  to  study  game  AI  and  push  forward  the  research of imperfect information games. RLCard is developped by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
+RLCard is an opensource toolkit for developing Reinforcement Learning (RL) algorithms in card games. It supports multiple challenging card game environments with common and easy-to-use interfaces. The  goal  of  the  toolkit  is  to  enable  more  people  to  study  game  AI  and  push  forward  the  research of imperfect information games. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
 
 # Installation
 Make sure that you have **Python 3.5+** and **pip** installed. You can install `rlcard` with `pip` as follow:
@@ -10,7 +10,7 @@ pip install -e .
 ```
 
 # Getting Started
-The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) style. We recommend to start with the following **toy examples**.
+The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) style. We recommend starting with the following **toy examples**.
 * [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
 * [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
 * [DeepCFR on Blackjack](docs/toy-examples.md#deepcfr-on-blackjack)
@@ -18,10 +18,10 @@ The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) styl
 For more examples, please refer to [examples/](examples).
 
 # Documents
-Please refer to the [Documents](docs/README.md) for general concepts desription. API documents are available at our [github page](https://rlcard.github.io/index.html).
+Please refer to the [Documents](docs/README.md) for general concepts introduction. API documents are available at our [github page](https://rlcard.github.io/index.html).
 
 # Available Environments
-The table below shows the environments that are (or will be soon) available in RLCard. We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information set; **Avg. InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space. For some of the complex card games, we can only provide a range of the estimation. **Name** is the name that should be passed to `env.make` to create the game environment.
+The table below shows the environments that are (or will be soon) available in RLCard. We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information set; **Avg. InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space. For some of the complex card games, we can only provide a range of estimation. **Name** is the name that should be passed to `env.make` to create the game environment.
 
 | Game                     | InfoSet Number  |Avg. InfoSet Size | Action Size | Name | Status  |
 | ------------------------ |:--------------:| :-------:|:------:| :-------:| :-------:|
@@ -36,7 +36,7 @@ The table below shows the environments that are (or will be soon) available in R
 
 
 # Disclaimer
-Please note that this is a **pre-release** version of the RLCard. The toolkit is provided **"as is"**, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement.
+Please note that this is a **pre-release** version of the RLCard. The toolkit is provided "**as is**," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement.
 
 # Acknowledgements
 We would like to thank JJ World Network Technology Co.,LTD for the support.

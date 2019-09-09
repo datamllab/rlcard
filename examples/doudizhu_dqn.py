@@ -1,26 +1,26 @@
-""" A toy example of learning a Deep-Q Agent on Blackjack
 """
-
-import tensorflow as tf
+A toy example of learning a Deep-Q Agent on Blackjack
+"""
 
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import *
+import tensorflow as tf
 
 # Make environment
-env = rlcard.make('blackjack')
+env = rlcard.make('doudizhu')
 
 # Set the iterations numbers and how frequently we evaluate
 evaluate_every = 100
 evaluate_num = 1000
 episode_num = 1000000
 
-# Set a global seed
+# Set a gloabel seed
 set_global_seed(1)
 
 with tf.Session() as sess:
     # Set agents
-    agent_0 = DQNAgent(sess, action_size=env.action_num)
+    agent_0 = DQNAgent(sess, action_size=env.action_num, state_shape=[6, 60])
     env.set_agents([agent_0])
 
     for episode in range(episode_num):
@@ -38,17 +38,4 @@ with tf.Session() as sess:
                 _, payoffs = env.run()
                 reward += payoffs[0]
 
-            print('\n########## Evaluation ##########')
-            print('Average reward is {}'.format(float(reward)/evaluate_num))
-
-            
-
-
-
-
-
-
-
-
-
-
+            print('INFO - Average reward is {}'.format(float(reward)/evaluate_num))
