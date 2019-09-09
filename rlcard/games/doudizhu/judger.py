@@ -11,57 +11,29 @@ with open(FILE.replace('judger.py', 'type_card.json', 1), 'r') as file:
 
 
 class DoudizhuJudger(Judger):
+    '''Determine what cards a player can play'''
 
     def __init__(self, players):
         self.playable_cards = [CARD_TYPE.copy() for i in range(3)]
         for player in players:
-            self.get_playable_cards_ii(player)
+            self.get_playable_cards(player)
 
-    @staticmethod
-    def cards2str(cards: list):
-        """
+    def get_gt_cards(self, player, greater_player):
+        '''Provide player's cards which are greater than the ones played by
+        previous player in one round
+
         Args:
-            cards: list of Card class
-        Eg:
-            deck -> 3333444455556666777788889999TTTTJJJJQQQQKKKKAAAA2222BR
-        """
-        response = ''
-        for card in cards:
-            if card.rank == '':
-                response += card.suit[0]
-            else:
-                if card.rank == '10':
-                    response += 'T'
-                else:
-                    response += card.rank
-        return response
+            player (DoudizhuPlayer object): the player waiting to play cards
+            greater_player (DoudizhuPlayer object): the player who played current biggest cards.
 
-    @staticmethod
-    def contains_cards(candidate, target):
-        len_can = len(candidate)
-        len_tar = len(target)
-        if len_can < len_tar:
-            return False
-        if len_can == len_tar:
-            if candidate == target:
-                return True
-            return False
-        beg = 0
-        for tar_card in target:
-            beg = candidate.find(tar_card, beg) + 1
-            if beg == 0:
-                return False
-        return True
+        Returns:
+            list: list of string of greater cards
 
-    def get_gt_cards_ii(self, player, greater_player):
-        """
-        Get player's cards which are greater than the ones played by
-        previous player(current greater_player)
-
-        Note: response contains 'pass'
-        """
+        Note:
+            1. return value contains 'pass'
+        '''
         gt_cards = ['pass']
-        remaining = self.cards2str(player.remaining_cards)
+        remaining = cards2str(player.remaining_cards)
         target_cards = greater_player.played_cards
         target_types = CARD_TYPE[target_cards]
         type_dict = {}
@@ -79,14 +51,23 @@ class DoudizhuJudger(Judger):
                 if int(can_weight) > weight:
                     for cards in cards_list:
                         # TODO: improve efficiency
-                        if cards not in gt_cards and self.contains_cards(remaining, cards):
+                        if cards not in gt_cards and contains_cards(remaining, cards):
                         # if self.contains_cards(remaining, cards):
                             gt_cards.append(cards)
         return gt_cards
 
-    def get_playable_cards_ii(self, player):
+    def get_playable_cards(self, player):
+        '''Provide all legal cards the player can play according to his
+        remaining cards.
+
+        Args:
+            player (DoudizhuPlayer object): object of DoudizhuPlayer
+
+        Returns:
+            list: list of string of playable cards
+        '''
         player_id = player.player_id
-        remaining = self.cards2str(player.remaining_cards)
+        remaining = cards2str(player.remaining_cards)
         missed = None
         for single in player.singles:
             if single not in remaining:
@@ -97,10 +78,57 @@ class DoudizhuJudger(Judger):
             position = player.singles.find(missed)
             player.singles = player.singles[position+1:]
             for cards in playable_cards:
-                if missed in cards or (not self.contains_cards(remaining, cards)):
+                if missed in cards or (not contains_cards(remaining, cards)):
                     del self.playable_cards[player_id][cards]
         else:
             for cards in playable_cards:
-                if not self.contains_cards(remaining, cards):
+                if not contains_cards(remaining, cards):
                     del self.playable_cards[player_id][cards]
         return list(self.playable_cards[player_id])
+
+
+def cards2str(cards: list):
+    '''Get the corresponding string representation of cards
+
+    Args:
+        cards (list): list of Card objects
+
+    Returns:
+        string: string representation of cards
+    '''
+    response = ''
+    for card in cards:
+        if card.rank == '':
+            response += card.suit[0]
+        else:
+            if card.rank == '10':
+                response += 'T'
+            else:
+                response += card.rank
+    return response
+
+
+def contains_cards(candidate, target):
+    '''Check if cards of candidate contains cards of target.
+
+    Args:
+        candidate (string): string represent of cards of candidate
+        target (string): string represent of cards of target
+
+    Returns:
+        boolean
+    '''
+    len_can = len(candidate)
+    len_tar = len(target)
+    if len_can < len_tar:
+        return False
+    if len_can == len_tar:
+        if candidate == target:
+            return True
+        return False
+    beg = 0
+    for tar_card in target:
+        beg = candidate.find(tar_card, beg) + 1
+        if beg == 0:
+            return False
+    return True
