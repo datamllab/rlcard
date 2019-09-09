@@ -1,13 +1,16 @@
 import random
 import numpy as np
 import json
+import rlcard
 from rlcard.games.doudizhu import *
 from rlcard.envs.env import Env
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
 from rlcard.utils.utils import *
-with open('rlcard/games/doudizhu/specific_map.json', 'r') as file:
+import os
+root_path = rlcard.__path__[0]
+with open(os.path.join(root_path, 'games/doudizhu/specific_map.json'), 'r') as file:
     SPECIFIC_MAP = json.load(file)
-with open('rlcard/games/doudizhu/action_space.json', 'r') as file:
+with open(os.path.join(root_path, 'games/doudizhu/action_space.json'), 'r') as file:
     ACTION_SPACE = list(json.load(file).keys())
 
 
