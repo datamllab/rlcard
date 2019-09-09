@@ -1,10 +1,11 @@
-# Game-related and Env-related abstractions
+""" Game-related and Env-related base classes
+"""
 
 class Card(object):
     """
     Card stores the suit and rank of a single card
 
-    Note: 
+    Note:
         The suit variable in a standard card game should be one of [S, H, D, C, BJ, RJ] meaning [Spades, Hearts, Diamonds, Clubs, Black Joker, Red Joker]
         Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K]
     """
@@ -21,18 +22,13 @@ class Card(object):
             suit: string, suit of the card, should be one of valid_suit
             rank: string, rank of the card, should be one of valid_rank
         """
-        if(suit == 'BJ' or suit == 'RJ'):
-            assert (rank == ''), "Rank should be empty when suit is 'BJ' or 'RJ'"
-        else:
-            assert (suit in self.valid_suit), "Invalid suit input"
-            assert (rank in self.valid_rank), "Invalid rank input"
         self.suit = suit
         self.rank = rank
 
     def get_index(self):
-        """Get index of a card. 
+        """Get index of a card.
 
-        Return:
+        Returns:
             string: the combination of suit and rank of a card. Eg: 1S, 2H, AD, BJ, RJ...
         """
         return self.suit+self.rank
@@ -82,7 +78,7 @@ class Player(object):
     def available_order(self):
         """Get the actions can be made based on the rules
 
-        Return:
+        Returns:
             list: a list of available orders
         """
 
@@ -99,14 +95,14 @@ class Judger(object):
     def judge_round(self):
         """decide whether the round ends, and return the winner of the round
 
-        Return:
+        Returns:
             int: return the player's id who wins the round or -1 meaning the round has not ended
         """
 
     def judge_game(self):
         """decide whether the game ends, and return the winner of the game
 
-        Return:
+        Returns:
             int: return the player's id who wins the game or -1 meaning the game has not ended
         """
 
@@ -119,27 +115,59 @@ class Round(object):
     round_id = None
 
     def __init__(self):
-        """When the game starts, round id should be 1
+        """ When the game starts, round id should be 1
         """
 
     def proceed_round(self):
-        """Call other Classes's functions to keep the game running
+        """ Call other Classes's functions to keep the game running
         """
 
 
 class Game(object):
-    """
-    Start the card game
+    """ Game class. This class will interact with outer environment.
     """
     
-    def start_game(self):
-        """Initialize all characters in the game and start round 1
+    def init_game(self):
+        """ Initialize all characters in the game and start round 1
         """
 
+        pass
+
     def step(self, current_action):
-        """Perform one draw of the game and return next player number, and the state for next player
+        """ Perform one draw of the game and return next player number, and the state for next player
         """
-        return next_player, next_state
+
+        pass
+
+    def step_back(self):
+        """ Takes one step backward and restore to the last state
+        """
+
+        pass
+
+    def get_player_num(self):
+        """ Retrun the number of players in the game
+        """
+
+        pass
+
+    def get_action_num(self):
+        """ Return the number of possible actions in the game
+        """
+
+        pass
+
+    def get_player_id(self):
+        """ Return the current player that will take actions soon
+        """
+
+        pass
+
+    def is_over(self):
+        """ Return whether the current game is over
+        """
+
+        pass
 
 
 class Monitor(object):
