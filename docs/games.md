@@ -44,6 +44,7 @@ At each decision point of the game, the corresponding player will be able to obs
 
 ## State Encoding
 In Dou Dizhu environment, we encode the state into 30 feature planes. The size of each plane is 1*15. Each entry of a plane can be either 1 or 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/doudizhu.py](rlcard/envs/doudizhu.py). The example encoded planes are as below:
+
 | Plane          |                            Feature                            |          
 | ------------ | :----------------------------------------------------------- |
 |0-4         | cards in hand |
