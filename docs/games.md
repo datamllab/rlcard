@@ -25,14 +25,13 @@ Doudizhu is one of the most popular card game in China.  The standard version of
 
 ## State Information Set
 
-------
 
 Each step of the game will produces a state information set, a readable dictionary of Python, whose entries can be freely selected and encoded. The following table is an example of state information set.
 
 
 
-| KEY          |                            VALUE                             |                       illustration                       |
-| ------------ | :----------------------------------------------------------: | :------------------------------------------------------: |
+| KEY          |                            VALUE                             |                       ILLUSTRATION                       |
+| ------------ | :----------------------------------------------------------- | -------------------------------------------------------- |
 | deck         | 3333444455556666<br>777788889999TTTTJJJJ<br>QQQQKKKKAAAA2222BR | One pack of 54 cards<br>with two different jokers(T: 10) |
 | cards_seen   |                             TQA                              |  Three cards distributed to the landlord after bidding   |
 | landlord     |                              0                               |                The player_id of landlord                 |
@@ -47,17 +46,15 @@ Each step of the game will produces a state information set, a readable dictiona
 
 ## State Encoding
 
-------
 
 In this doudizhu environment,  we choose six features from state information set for encoding: current player's remaining cards, the union of other players' cards, recent three actions from trace, union of played cards. We encode these features as an 6×60 array of 0 and 1.  The cards have 15 ranks from 3 to red joker and 4 suits, so we use 1×60 vector to represent the cards of one feature to make sure that every digit is 0 or 1. 
 
 ## Action Encoding
 
-------
 
 The original action space of doudizhu is very large. It has 33676 specific actions in all. In order to compress the training time and improve training effect, we simplify the actions to 309 abstract actions. The principle is to make the kicker fuzzy and focus on major. For example, '33345' -> '333**' . The abstractions are as follows:
 
-| TYPE             | SPECIFIC Quantity | ABSTRACT QUANTITY |
+| TYPE             | SPECIFIC QUANTITY | ABSTRACT QUANTITY |
 | ---------------- | :---------------: | :---------------: |
 | Solo             |        15         |        15         |
 | pair             |        13         |        13         |
