@@ -1,11 +1,11 @@
-""" Game-related and Env-related base classes 
+""" Game-related and Env-related base classes
 """
 
 class Card(object):
     """
     Card stores the suit and rank of a single card
 
-    Note: 
+    Note:
         The suit variable in a standard card game should be one of [S, H, D, C, BJ, RJ] meaning [Spades, Hearts, Diamonds, Clubs, Black Joker, Red Joker]
         Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K]
     """
@@ -22,16 +22,11 @@ class Card(object):
             suit: string, suit of the card, should be one of valid_suit
             rank: string, rank of the card, should be one of valid_rank
         """
-        if(suit == 'BJ' or suit == 'RJ'):
-            assert (rank == ''), "Rank should be empty when suit is 'BJ' or 'RJ'"
-        else:
-            assert (suit in self.valid_suit), "Invalid suit input"
-            assert (rank in self.valid_rank), "Invalid rank input"
         self.suit = suit
         self.rank = rank
 
     def get_index(self):
-        """Get index of a card. 
+        """Get index of a card.
 
         Returns:
             string: the combination of suit and rank of a card. Eg: 1S, 2H, AD, BJ, RJ...
