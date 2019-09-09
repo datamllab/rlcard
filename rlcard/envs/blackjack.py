@@ -47,16 +47,7 @@ class BlackjackEnv(Env):
             a.append(i)
         return a
 
-    def cfr_state(self, s, player):
-        state = {}
-        obs = self.extract_state(s)
-        state['obs'] = obs
-        state['player'] = player
-        state['action'] = self.encode_action(s['actions'])
-        return state
-    
     def get_child_state(self, action):
-
         next_state, next_player = self.step(action)
         return next_state
 
