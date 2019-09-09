@@ -33,7 +33,6 @@ class BlackjackEnv(Env):
                     has_a = 1
             if score > 21 and has_a == 1:
                 score -= 9
-
             return score, has_a
 
         my_score, has_a = get_scores_and_A(my_cards)
@@ -47,16 +46,7 @@ class BlackjackEnv(Env):
             a.append(i)
         return a
 
-    def cfr_state(self, s, player):
-        state = {}
-        obs = self.extract_state(s)
-        state['obs'] = obs
-        state['player'] = player
-        state['action'] = self.encode_action(s['actions'])
-        return state
-    
     def get_child_state(self, action):
-
         next_state, next_player = self.step(action)
         return next_state
 
