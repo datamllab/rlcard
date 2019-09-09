@@ -1,10 +1,7 @@
-rlcard.envs package
+rlcard.envs
 ===================
 
-Submodules
-----------
-
-rlcard.envs.blackjack module
+rlcard.envs.blackjack
 ----------------------------
 
 .. automodule:: rlcard.envs.blackjack
@@ -12,7 +9,7 @@ rlcard.envs.blackjack module
     :undoc-members:
     :show-inheritance:
 
-rlcard.envs.doudizhu module
+rlcard.envs.doudizhu
 ---------------------------
 
 .. automodule:: rlcard.envs.doudizhu
@@ -20,7 +17,7 @@ rlcard.envs.doudizhu module
     :undoc-members:
     :show-inheritance:
 
-rlcard.envs.env module
+rlcard.envs.env
 ----------------------
 
 .. automodule:: rlcard.envs.env
@@ -28,7 +25,7 @@ rlcard.envs.env module
     :undoc-members:
     :show-inheritance:
 
-rlcard.envs.registration module
+rlcard.envs.registration
 -------------------------------
 
 .. automodule:: rlcard.envs.registration
@@ -36,7 +33,7 @@ rlcard.envs.registration module
     :undoc-members:
     :show-inheritance:
 
-rlcard.envs.simpletexasholdem module
+rlcard.envs.simpletexasholdem
 ------------------------------------
 
 .. automodule:: rlcard.envs.simpletexasholdem
@@ -44,19 +41,10 @@ rlcard.envs.simpletexasholdem module
     :undoc-members:
     :show-inheritance:
 
-rlcard.envs.texasholdem module
+rlcard.envs.texasholdem
 ------------------------------
 
 .. automodule:: rlcard.envs.texasholdem
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: rlcard.envs
     :members:
     :undoc-members:
     :show-inheritance:

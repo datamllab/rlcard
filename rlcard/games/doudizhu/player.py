@@ -7,20 +7,23 @@ from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
 
 
 class DoudizhuPlayer(Player):
-    """Player can store cards in the player's hand and the role,
+    '''Player can store cards in the player's hand and the role,
     determine the actions can be made according to the rules,
-    and can perfrom responding action
-    """
+    and can perfrom corresponding action
+    '''
 
     def __init__(self, player_id):
-        """Give the player a number(not id) in one game
+        '''Give the player an id in one game
+
+        Args:
+            player_id (int): the player_id of a player
 
         Notes:
-            role: a player's temporary role in one game(landlord or peasant)
-            played_cards: the cards played in one round
-            hand: initial hand; don't change
-            remaining_cards: The rest of the cards after playing some of them
-        """
+            1. role: A player's temporary role in one game(landlord or peasant)
+            2. played_cards: The cards played in one round
+            3. hand: Initial cards
+            4. remaining_cards: The rest of the cards after playing some of them
+        '''
         self.player_id = player_id
         self.hand = []
         self.remaining_cards = []
@@ -29,40 +32,34 @@ class DoudizhuPlayer(Player):
         self.singles = '3456789TJQKA2BR'
 
     def available_actions(self, greater_player=None, judger=None):
-        """Get the actions can be made based on the rules
+        '''Get the actions can be made based on the rules
 
         Args:
-            greater_player: the current winner in this round
+            greater_player (DoudizhuPlayer object): player who played
+        current biggest cards.
+            judger (DoudizhuJudger object): object of DoudizhuJudger
 
-        Return:
-            list: a list of available orders
-                  Eg: ['pass', '8', '9', 'T', 'J']
-        """
+        Returns:
+            list: list of string of actions. Eg: ['pass', '8', '9', 'T', 'J']
+        '''
         actions = []
-        if self.role != '':
-            if greater_player is None or greater_player is self:
-                # actions_ii = self.judger.get_playable_cards(self)
-                actions = judger.get_playable_cards_ii(self)
-            else:
-                actions = judger.get_gt_cards_ii(self, greater_player)
+        if greater_player is None or greater_player is self:
+            actions = judger.get_playable_cards(self)
         else:
-            actions.extend(['draw', 'not draw'])
+            actions = judger.get_gt_cards(self, greater_player)
         return actions
 
     def play(self, action, greater_player=None):
-        """Perfrom action
+        '''Perfrom action
 
-        Return:
-            if current winner changed, return current winner
-            else return None
-        """
+        Args:
+            action (string): specific action
+            greater_player (DoudizhuPlayer object): The player who played current biggest cards.
+
+        Returns:
+            object of DoudizhuPlayer: If there is a new greater_player, return it, if not, return None
+        '''
         trans = {'T': '10', 'B': 'BJ', 'R': 'RJ'}
-        if action == 'not draw':
-            self.role = 'peasant'
-            return None
-        if action == 'draw':
-            self.role = 'landlord'
-            return None
         if action == 'pass':
             return greater_player
         else:
@@ -79,17 +76,3 @@ class DoudizhuPlayer(Player):
                         self.remaining_cards.remove(self.remaining_cards[_])
                         break
             return self
-
-    def print_remaining_card(self):
-        remaining_cards = [str(index)+':'+card.get_index()
-                           for index, card in enumerate(self.remaining_cards)]
-        print('remaining cards of player '+str(self.player_id) +
-              '('+self.role+')'+':', remaining_cards)
-
-    def print_remaining_and_actions(self, greater_player=None):
-        print()
-        self.print_remaining_card()
-        actions = self.available_actions(greater_player)
-        print("optional actions of player " +
-              str(self.player_id) + ":", actions)
-        return actions

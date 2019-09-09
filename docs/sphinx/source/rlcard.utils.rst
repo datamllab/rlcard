@@ -1,22 +1,10 @@
-rlcard.utils package
+rlcard.utils
 ====================
 
-Submodules
-----------
-
-rlcard.utils.utils module
+rlcard.utils.utils
 -------------------------
 
 .. automodule:: rlcard.utils.utils
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: rlcard.utils
     :members:
     :undoc-members:
     :show-inheritance:

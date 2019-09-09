@@ -85,8 +85,7 @@ pygments_style = None
 # a list of builtin themes.
 #
 # html_theme = 'classic'
-html_theme = "sphinx_rtd_theme"
-html_theme_path = ["_themes", ]
+
 # html_theme = 'pytorch_sphinx_theme'
 # html_theme_path = ["../../../pytorch_sphinx_theme"]
 
@@ -110,7 +109,12 @@ html_static_path = ['_static']
 # 'searchbox.html']``.
 #
 # html_sidebars = {}
-html_sidebars = { '**': ['localtoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
+# html_sidebars = { '**': ['localtoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
+html_theme = "sphinx_rtd_theme"
+html_theme_path = ["_themes", ]
+html_sidebars = {
+   '**': ['fulltoc.html', 'sourcelink.html', 'searchbox.html']
+}
 
 
 # -- Options for HTMLHelp output ---------------------------------------------

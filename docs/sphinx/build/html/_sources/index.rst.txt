@@ -7,10 +7,29 @@ Welcome to rlcard's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 3
-   :caption: Contents:
+   :maxdepth: 2
+   :glob:
+   :caption: Documentation:
+
+   introduction
+   overview
+   getting_started
+   games
+   algorithms
+   development
 
 
+.. toctree::
+   :maxdepth: 4
+   :glob:
+   :caption: Package Reference:
+   
+   rlcard.envs
+   rlcard.utils
+   rlcard.games
+   rlcard.agents
+   rlcard.core
+   
 
 Indices and tables
 ==================

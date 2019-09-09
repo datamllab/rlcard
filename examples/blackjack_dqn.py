@@ -1,11 +1,11 @@
+""" A toy example of learning a Deep-Q Agent on Blackjack
 """
-A toy example of learning a Deep-Q Agent on Blackjack
-"""
+
+import tensorflow as tf
 
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import *
-import tensorflow as tf
 
 # Make environment
 env = rlcard.make('blackjack')
@@ -15,7 +15,7 @@ evaluate_every = 100
 evaluate_num = 1000
 episode_num = 1000000
 
-# Set a gloabel seed
+# Set a global seed
 set_global_seed(1)
 
 with tf.Session() as sess:
@@ -38,7 +38,8 @@ with tf.Session() as sess:
                 _, payoffs = env.run()
                 reward += payoffs[0]
 
-            print('INFO - Average reward is {}'.format(float(reward)/evaluate_num))
+            print('\n########## Evaluation ##########')
+            print('Average reward is {}'.format(float(reward)/evaluate_num))
 
             
 
