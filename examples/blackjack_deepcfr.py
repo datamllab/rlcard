@@ -17,7 +17,6 @@ i = 0
 rewards = 0
 train_env = rlcard.make('blackjack') 
 test_env = rlcard.make('blackjack') 
-
 with tf.Session() as sess:
     deep_cfr = DeepCFR(sess, #
                 train_env, 
@@ -44,13 +43,13 @@ with tf.Session() as sess:
                     action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
                     #action_prob = list(action_prob)
                     #action = action_prob.index(max(action_prob))
-                    print("Play:", state, action)
+                    #print("Play:", state, action)
                     state, player = test_env.step(action)
                     if test_env.is_over():
                         payoffs = test_env.get_payoffs()
                         rewards += payoffs[0]
                         break
-            print('##############Iteration '+str(i)+'#################')
+            print('############## Iteration '+str(i)+' #################')
             print('Reward: ', float(rewards)/evaluate_num)
             print('Advantage Loss: ', adv_loss)
             print('Policy Loss: ', policy_loss)
