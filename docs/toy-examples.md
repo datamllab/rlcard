@@ -38,7 +38,7 @@ Episode 1
 State: [8, 8], Action: 0, Reward: 0, Next State: [17, 8], Done: False
 State: [17, 8], Action: 1, Reward: 1, Next State: [17, 25], Done: True
 ```
-Note that the states and actions are wrapped by `env` in Blackjack. In this example, the `[19, 5]` suggests the current player obtains score 19 while the card that faces up in the dealer's hand has score 5. Action 0 means "hit" while action 1 means "stand". Reward 1 suggests the player wins while reward -1 suggests the dealer wins. Reward 0 suggests a tie. The data can directly fed into a RL algorithm for training.
+Note that the states and actions are wrapped by `env` in Blackjack. In this example, the `[19, 5]` suggests the current player obtains score 19 while the card that faces up in the dealer's hand has score 5. Action 0 means "hit" while action 1 means "stand". Reward 1 suggests the player wins while reward -1 suggests the dealer wins. Reward 0 suggests a tie. The above data can be directly fed into a RL algorithm for training.
 
 # Deep-Q Learning on Blackjack
 The second example is to use Deep-Q learning to train an agent on Blackjack. We aim to use this example to show how reinforcement learning algorithms can be developed and applied in our toolkit. We design a `run` function which plays one complete game and provides the data for training RL agents. The example is shown below:
