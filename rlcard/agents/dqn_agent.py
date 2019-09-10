@@ -218,7 +218,6 @@ class Normalizer(object):
         self.max_size = 1000
         self.length = 0
 
-
     def normalize(self, s):
         """ Normalize the state with the running mean and std.
 
@@ -230,7 +229,7 @@ class Normalizer(object):
         """
 
         self.append(s)
-        return (s - self.mean) / (self.std)
+        return (s - self.mean) / (self.std + 1e-8)
 
     def append(self, s):
         """ Append a new state and update the running statistics
@@ -239,7 +238,7 @@ class Normalizer(object):
             s (numpy.array): the input state
         """
 
-        if len(self.state_memory) > 1000:
+        if len(self.state_memory) > self.max_size:
             self.state_memory.pop(0)
         self.state_memory.append(s)
         self.mean = np.mean(self.state_memory, axis=0)
