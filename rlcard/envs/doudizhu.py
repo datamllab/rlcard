@@ -4,12 +4,6 @@ from rlcard.envs.env import Env
 from rlcard.games.doudizhu import *
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
 from rlcard.utils.utils import *
-import os
-root_path = rlcard.__path__[0]
-with open(os.path.join(root_path, 'games/doudizhu/jsondata/specific_map.json'), 'r') as file:
-    SPECIFIC_MAP = json.load(file)
-with open(os.path.join(root_path, 'games/doudizhu/jsondata/action_space.json'), 'r') as file:
-    ACTION_SPACE = list(json.load(file).keys())
 from rlcard.games.doudizhu.utils import CARD_RANK_STR, SPECIFIC_MAP, ACTION_LIST
 
 
