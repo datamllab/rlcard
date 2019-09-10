@@ -13,7 +13,7 @@ env = rlcard.make('doudizhu')
 eval_env = rlcard.make('doudizhu')
 
 # Set the iterations numbers and how frequently we evaluate
-evaluate_every = 10
+evaluate_every = 100
 evaluate_num = 30
 episode_num = 1000000
 
@@ -29,11 +29,11 @@ with tf.Session() as sess:
     # Set agents
     agent = DQNAgent(sess,
                        action_size=env.action_num,
-                       replay_memory_size=20000
+                       replay_memory_size=20000,
                        replay_memory_init_size=memory_init_size,
                        norm_step=norm_step,
                        state_shape=[6, 60],
-                       mlp_layers=[1000, 1000])
+                       mlp_layers=[256, 256])
     env.set_agents([agent, agent, agent])
 
     random_agent = RandomAgent(action_size=eval_env.action_num)
