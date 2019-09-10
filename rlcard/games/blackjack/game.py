@@ -3,17 +3,23 @@ from copy import deepcopy
 from rlcard.core import Game
 from rlcard.games.blackjack.dealer import BlackjackDealer as Dealer
 from rlcard.games.blackjack.player import BlackjackPlayer as Player
-from rlcard.games.blackjack.round import BlackjackRound as Round
 from rlcard.games.blackjack.judger import BlackjackJudger as Judger
 
 class BlackjackGame(Game):
 
-    def __init__(self, seed=None):
+    def __init__(self):
+        ''' Initialize the class Blackjack Game
+        '''
         super().__init__()
-        self.set_seed(seed)
 
 
     def init_game(self):
+        ''' Initialilze the game
+
+        Returns:
+            state (dict): the first state of the game
+            player_id (int): current player's id
+        '''
         self.dealer = Dealer()
         self.player = Player(0)
         self.judger = Judger()
@@ -28,22 +34,39 @@ class BlackjackGame(Game):
         return self.get_state(self.get_player_id()), self.get_player_id()
         
     def step(self, action):
+        ''' Get the next state
+
+        Args:
+            action (str): a specific action of blackjack. (Hit or Stand)
+
+        Returns:
+            dict: next player's state
+            int: next plater's id
+        '''
         next_state = {}
         p = deepcopy(self.player)
         d = deepcopy(self.dealer)
         w = deepcopy(self.winner)
         self.history.append((d,p,w))
+        # Play hit
         if action != "stand":
             self.dealer.deal_card(self.player)
             self.player.status, self.player.score = self.judger.judge_round(self.player)
+
             if self.player.status == 'bust':
+                # game over, set up the winner, print out dealer's hand
                 self.judger.judge_game(self)
+                dealer_hand = [card.get_index() for card in self.dealer.hand]
+            else:
+                # game continue, hide the first card of dealer's hand
+                dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
+
             hand = [card.get_index() for card in self.player.hand]
-            dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
             next_state['state'] = (hand, dealer_hand)
             next_state['actions'] = ('hit', 'stand')
 
         elif action == "stand":
+
             while self.judger.judge_score(self.dealer.hand) < 17:
                 self.dealer.deal_card(self.dealer)
                 self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
@@ -55,24 +78,49 @@ class BlackjackGame(Game):
         return next_state, self.player.get_player_id()
 
     def step_back(self):
+        ''' Return to the previous state of the game
+
+        Returns:
+            Status (bool): check if the step back is success or not
+        '''
         if len(self.history) > 0:
             self.dealer, self.player, self.winner = self.history.pop()
             return True
         return False
 
-    def set_seed(self, seed):
-        random.seed(seed)
-
     def get_player_num(self):
+        ''' Return the number of players in blackjack
+
+        Returns:
+            number_of_player (int): blackjack only have 1 player
+        '''
         return 1
 
     def get_action_num(self):
+        ''' Return the number of applicable actions
+
+        Returns:
+            number_of_actions (int): there are only two actions (hit and stand)
+        '''
         return 2
 
     def get_player_id(self):
+        ''' Return the current player's id
+
+        Returns:
+            player_id (int): current player's id
+        '''
         return self.player.get_player_id()
 
     def get_state(self, player):
+        ''' Return player's state
+
+        Args:
+            player_id (int): player id
+
+        Returns:
+            state (dict): corresponding player's state
+        '''
         state = {}
         state['actions'] = ('hit', 'stand')
         hand = [card.get_index() for card in self.player.hand]
@@ -84,6 +132,11 @@ class BlackjackGame(Game):
         return state
 
     def is_over(self):
+        ''' Check if the game is over
+
+        Returns:
+            status (bool): True/False
+        '''
         if self.player.status == 'bust'or self.dealer.status == 'bust' or (self.winner['dealer'] != 0 or self.winner['player'] != 0):
             return True
         else:
