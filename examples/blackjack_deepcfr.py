@@ -22,10 +22,11 @@ with tf.Session() as sess:
                 train_env, 
                 policy_network_layers=(32,32),
                 advantage_network_layers=(32,32),
-                num_traversals=20,
+                num_traversals=40,
+                num_step=40,
                 learning_rate=1e-4,
-                batch_size_advantage=None,
-                batch_size_strategy=16,
+                batch_size_advantage=32,
+                batch_size_strategy=32,
                 memory_capacity=1e7)
 
     for i in range(num_iteration):
