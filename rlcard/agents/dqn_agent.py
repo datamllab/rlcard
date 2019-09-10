@@ -264,7 +264,6 @@ class Estimator():
         self.action_size = action_size
         self.state_shape = state_shape
         self.mlp_layers = mlp_layers
-        print('aaaaaaa: ', mlp_layers)
 
         # Create a glboal step variable
         self.global_step = tf.Variable(0, name='global_step', trainable=False)
