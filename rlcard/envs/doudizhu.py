@@ -4,7 +4,8 @@ from rlcard.utils.utils import *
 from rlcard.envs.env import Env
 from rlcard.games.doudizhu import *
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
-from rlcard.games.doudizhu.utils import CARD_RANK_STR, SPECIFIC_MAP, ACTION_LIST
+from rlcard.games.doudizhu.utils import CARD_RANK_STR, SPECIFIC_MAP
+from rlcard.games.doudizhu.utils import ACTION_LIST, ACTION_SPACE
 from rlcard.games.doudizhu.utils import encode_cards
 
 
@@ -68,3 +69,18 @@ class DoudizhuEnv(Env):
         if specific_actions:
             return random.choice(specific_actions)
         return random.choice(legal_actions)
+
+    def get_legal_actions(self):
+        '''Get all legal actions for current state
+
+        Returns:
+            legal_actions (list): a list of legal actions' id
+        '''
+        legal_action_id = []
+        legal_actions = self.game.state['actions']
+        for action in legal_actions:
+            for abstract in SPECIFIC_MAP[action]:
+                action_id = ACTION_SPACE[abstract]
+                if action_id not in legal_action_id:
+                    legal_action_id.append(action_id)
+        return legal_action_id
