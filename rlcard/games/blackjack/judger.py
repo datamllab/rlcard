@@ -2,9 +2,20 @@ from rlcard.core import Judger
 
 class BlackjackJudger(Judger):
     def __init__(self):
+        ''' Initialize a BlackJack judger class
+        '''
         self.rank2score = {"A":10, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}
     
     def judge_round(self, player):
+        ''' Judge the target player's status
+
+        Args:
+            player (int): target player's id
+            
+        Returns:
+            status (str): the status of the target player
+            score (int): the current score of the player
+        '''
         score = self.judge_score(player.hand)
         if score <= 21:
             return "alive", score
@@ -12,6 +23,12 @@ class BlackjackJudger(Judger):
             return "bust", score
 
     def judge_game(self, game):
+        ''' Judge the winner of the game
+
+        Args:
+            game (class): target game class
+        '''
+
         if game.player.status == 'bust':
             game.winner['dealer'] = 1
         elif game.dealer.status == 'bust':
@@ -26,6 +43,14 @@ class BlackjackJudger(Judger):
                 game.winner['player'] = 1
 
     def judge_score(self, cards):
+        ''' Judge the score of a given cards set 
+
+        Args:
+            cards (list): a list of cards 
+            
+        Returns:
+            score (int): the score of the given cards set
+        '''
         score = 0
         has_A = 0
         c = [card.get_index() for card in cards]
@@ -39,7 +64,6 @@ class BlackjackJudger(Judger):
                 score -= 9
                 if score < 21:
                     break
-        #print(c, score)
         return score
 
 
