@@ -195,10 +195,10 @@ class DoudizhuGame(Game):
         '''Judge whether a game is over
 
         Returns:
-            int: 1(over) / 0(not over)
+            Bool: True(over) / False(not over)
         '''
         if self.current_player is None:
-            return 1
+            return True
         last_player = get_upstream_player_id(
             self.players[self.current_player], self.players)
         if len(self.players[last_player].remaining_cards) == 0:
@@ -209,8 +209,8 @@ class DoudizhuGame(Game):
             else:
                 self.game_result[last_player] = 1
             self.current_player = None
-            return 1
-        return 0
+            return True
+        return False
 
     def _record_history(self):
         '''Record game histories
