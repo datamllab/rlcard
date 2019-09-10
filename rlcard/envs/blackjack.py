@@ -18,14 +18,14 @@ class BlackjackEnv(Env):
         self.rank2score = {"A":10, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}
         self.actions = ['hit', 'stand']
 
-    def get_actions(self):
-        ''' Get all of available actions
+    def get_legal_actions(self):
+        ''' Get all leagal actions
 
         Returns:
-            encoded_action_list (list): return encoded action list (from str to int)
+            encoded_action_list (list): return encoded legal action list (from str to int)
         '''
         encoded_action_list = []
-        for i, act in enumerate(actions):
+        for i, act in enumerate(self.actions):
             encoded_action_list.append(i)
         return encoded_action_list
 
