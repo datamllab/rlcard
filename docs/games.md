@@ -30,8 +30,7 @@ At each decision point of the game, the corresponding player will be able to obs
 
 | KEY          | DESCRIPTION                                                  | VALUE OF AN EXAMPLE                                         |
 | ------------ | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| deck         | A string of one pack of 54 cards with Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'. | 3333444455556666<br/>777788889999TTTTJJJJ
-QQQQKKKKAAAA2222BR  |
+| deck         | A string of one pack of 54 cards with Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'. | 3333444455556666<br/>777788889999TTTTJJJJ<br/>QQQQKKKKAAAA2222BR  |
 | cards_seen   | Three face-down cards distributed to the landlord after bidding. Then these cards will be made public to all players. | TQA                                                          |
 | landlord     | An integer of landlord's id                                  | 0                                                            |
 | self         | An integer of current player's id                            | 2                                                            |
@@ -58,20 +57,19 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 
 | Type             | Number of Actions | Number of Actions after Abstraction | Action ID
 | ---------------- | :---------------: | :---------------: | :---------------: | 
-| Solo             |        15         |        15         | 
-| pair             |        13         |        13         |
-| Trio             |        13         |        13         |
-| Trio with single |        182        |        13         |
-| Trio with pair   |        156        |        13         |
-| Plane with solo  |       24721       |        38         |
-| Plane with pair  |       6552        |        30         |
-| Chain of solo    |        36         |        36         |
-| Chain of pair    |        52         |        52         |
-| Chain of trio    |        45         |        45         |
-| Quad with solo   |       1339        |        13         |
-| Quad with pair   |       1014        |        13         |
-| Bomb             |        13         |        13         |
-| Rocket           |         1         |         1         |
-| Pass             |         1         |         1         |
+| Solo             |        15         |        15         | 0-14
+| pair             |        13         |        13         | 15-27
+| Trio             |        13         |        13         | 28-40
+| Trio with single |        182        |        13         | 41-53
+| Trio with pair   |        156        |        13         | 54-66 
+| Chain of solo  |       36       |        36         | 67-102
+| Chain of pair  |       52        |        52         | 103-154
+| Chain of trio    |        45         |        45         | 155-199
+| Plane with solo    |        24721         |        38         | 200-237
+| Plane with pair    |        6552         |        30         | 238-267
+| Quad with solo   |       1339        |        13         | 268-280
+| Quad with pair   |       1014        |        13         | 281-293
+| Bomb             |        13         |        13         | 294-306
+| Rocket           |         1         |         1         | 307
+| Pass             |         1         |         1         | 308
 | Total            |       33676       |        309        |
-
