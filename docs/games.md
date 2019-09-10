@@ -28,7 +28,7 @@ In the toolkit, we implement a standard version of Doudizhu. In the bidding phas
 ## State
 At each decision point of the game, the corresponding player will be able to observe the current state (or information set in imperfect information game). The state consists of all the information that the player can observe from his view. We encode the information into a readable Python dictionary. The following table shows the structure of the state:
 
-| KEY          | DESCRIPTION                                                  | VALUE of an example                                          |
+| KEY          | DESCRIPTION                                                  | VALUE OF AN EXAMPLE                                         |
 | ------------ | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | deck         | A string of one pack of 54 cards with Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'. | 3333444455556666<br/>777788889999TTTTJJJJ
 QQQQKKKKAAAA2222BR  |
