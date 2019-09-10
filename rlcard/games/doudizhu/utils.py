@@ -179,12 +179,19 @@ def contains_cards(candidate, target):
 
 
 def encode_cards(plane, cards):
-    exist = np.ones(15, dtype=int)
+    '''Encode cards and represerve it into plane.
+
+    Args:
+        cards (list or str): list or str of cards, every entry is a
+    character of solo representation of card
+    '''
+    if not cards:
+        return None
     layer = 1
     if len(cards) == 1:
         rank = CARD_RANK_STR.index(cards[0])
         plane[layer][rank] = 1
-        exist[rank] = 0
+        plane[0][rank] = 0
     else:
         for index, card in enumerate(cards):
             if index == 0:
@@ -195,17 +202,7 @@ def encode_cards(plane, cards):
                 rank = CARD_RANK_STR.index(cards[index-1])
                 plane[layer][rank] = 1
                 layer = 1
-                exist[rank] = 0
+                plane[0][rank] = 0
         rank = CARD_RANK_STR.index(cards[-1])
         plane[layer][rank] = 1
-        exist[rank] = 0
-    plane[0] = exist
-
-if __name__ == '__main__':
-    array = np.zeros((6, 5, 15), dtype=int)
-    encode_cards(array[0], '3333444455556666777788889999TTTTJJJJQQQQKKKKAAAA2222BR')
-    encode_cards(array[1], '33345')
-    encode_cards(array[2], ['4', '4', '7', '8', '8', '8','R'])
-    print(array[0])
-    print(array[1])
-    print(array[2])
+        plane[0][rank] = 0
