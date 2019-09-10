@@ -20,8 +20,8 @@ sys.path.insert(0, os.path.abspath('../../../rlcard'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'rlcard'
-copyright = '2019, Daochen Zha'
+project = 'RLcard'
+copyright = 'DATA Lab at Texas A&M University'
 author = 'Daochen Zha'
 
 # The short X.Y version

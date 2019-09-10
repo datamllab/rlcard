@@ -6,16 +6,16 @@ import random
 from core import Card, Player
 
 def init_standard_deck():
-    ''' Return a list of Card objects which form a standard 52 cards deck
-    '''
+    """ Return a list of Card objects which form a standard 52 cards deck
+    """
     suit_list = ['S', 'H', 'D', 'C']
     rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
     return res
 
 def init_54_deck():
-    ''' Return a list of Card objects which include a standard 52 cards deck, BJ and RJ
-    '''
+    """ Return a list of Card objects which include a standard 52 cards deck, BJ and RJ
+    """
     suit_list = ['S', 'H', 'D', 'C']
     rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
@@ -25,7 +25,7 @@ def init_54_deck():
 
 
 def get_random_cards(cards, num, seed = None):
-    ''' Randomly get a number of chosen cards out of a list of cards
+    """ Randomly get a number of chosen cards out of a list of cards
 
     Args:
         cards: list of Card object
@@ -35,7 +35,7 @@ def get_random_cards(cards, num, seed = None):
     Returns:
         list: list of chosen cards
         list: list of remained cards
-    '''
+    """
     assert num > 0, "Invalid input number"
     assert num <= len(cards), "Input number larger than length of cards"
     remained_cards = []
@@ -47,33 +47,33 @@ def get_random_cards(cards, num, seed = None):
     return chosen_cards, remained_cards
 
 def is_pair(cards):
-    '''
+    """
     Args:
         cards: list of Card object
 
     Returns:
         boolean: whether the input list is a pair or not
-    '''
+    """
     if len(cards) == 2 and cards[0].rank == cards[1].rank:
         return True
     else:
         return False
 
 def is_single(cards):
-    '''
+    """
     Args:
         cards: list of Card object
     
     Returns:
         boolean: whether the input list is a single card or not
-    '''
+    """
     if len(cards) == 1:
         return True
     else:
         return False
 
 def rank2int(rank):
-    ''' Get the coresponding number of a rank.
+    """ Get the coresponding number of a rank.
 
     Args:
         rank: rank stored in Card object
@@ -84,7 +84,7 @@ def rank2int(rank):
     Note:
         If the input rank is an empty string, the function will return -1.
         If the input rank is not valid, the function will return None.
-    '''
+    """
     if rank == '':
         return -1
     elif rank.isdigit():
@@ -105,7 +105,7 @@ def rank2int(rank):
     return None
 
 def get_cards_from_ranks(player, ranks):
-    ''' get chosen cards and remained cards from a player's hand according to input rank list
+    """ get chosen cards and remained cards from a player's hand according to input rank list
     
     Args:
         player: Player object
@@ -117,7 +117,7 @@ def get_cards_from_ranks(player, ranks):
 
     Note:
         This function will not affect the player's original hand.
-    '''
+    """
     chosen_cards = []
     remained_cards = player.hand.copy()
     for rank in ranks:
@@ -128,7 +128,7 @@ def get_cards_from_ranks(player, ranks):
     return chosen_cards, remained_cards
 
 def take_out_cards(cards, remove_cards):
-    ''' Take out specific cards from a list of cards
+    """ Take out specific cards from a list of cards
     
     Args:
         cards (list): list of Card objects from which to be taken out some cards
@@ -143,7 +143,7 @@ def take_out_cards(cards, remove_cards):
         2. For each card in 'remove_cards' list, it will make only one card in 'cards' list taken out,
         which means to take out one kind of cards with the same suit and rank in 'cards' list,
         you need to have the same number of cards with the same suit and rank in 'remove_cards' list.
-    '''
+    """
     remove_cards_cp = remove_cards
     for card in cards:
         for remove_card in remove_cards_cp:
@@ -153,7 +153,7 @@ def take_out_cards(cards, remove_cards):
     return remove_cards_cp
 
 def is_in_cards(origin_cards, check_cards):
-    ''' Check if a list of Card objects contains another list of Card objects
+    """ Check if a list of Card objects contains another list of Card objects
 
     Args:
         cards: list of Card objects which to be checked if it contains another list of Card objects
@@ -161,7 +161,7 @@ def is_in_cards(origin_cards, check_cards):
 
     Returns:
         boolean
-    '''
+    """
     check_cards_cp = check_cards.copy()
     cards = origin_cards.copy()
     i = 0
@@ -181,33 +181,33 @@ def is_in_cards(origin_cards, check_cards):
     return len(check_cards_cp) == 0
 
 def init_players(n):
-    ''' Return a list of Player objects with n players
+    """ Return a list of Player objects with n players
 
     Args:
         n: int, number of players to be initialized
 
     Returns:
         list of Player objects with player_id(s) start from 0 and are consequent 
-    '''
+    """
     players = []
     for idx in range(n):
         players.append(Player(idx))
     return players
 
 def get_upstream_player_id(player, players):
-    ''' Return the upsteam player's player_id
+    """ Return the upsteam player's player_id
 
     Note:
         This function assumes player_id(s) in 'players' list starts from 0, and are consequent.
-    '''
+    """
     return (player.player_id-1)%len(players)
 
 def get_downstream_player_id(player, players):
-    ''' Return the downsteam player's player_id
+    """ Return the downsteam player's player_id
 
     Note:
         This function assumes player_id(s) in 'players' list start from 0, and are consequent.
-    '''
+    """
     return (player.player_id+1)%len(players)
 
 def reorganize(trajectories, payoffs):
