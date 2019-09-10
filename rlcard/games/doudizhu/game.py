@@ -1,28 +1,15 @@
 # -*- coding: utf-8 -*-
 """Implement Doudizhu Game class"""
-import sys
-import json
 import functools
 import copy
-import random
-import os
-from os import path
-import numpy as np
-import rlcard
 from rlcard.core import Game
+from rlcard.games.doudizhu.judger import cards2str
 from rlcard.games.doudizhu.player import DoudizhuPlayer as Player
 from rlcard.games.doudizhu.round import DoudizhuRound as Round
 from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
-from rlcard.games.doudizhu.judger import cards2str
-from rlcard.games.doudizhu.dealer import DoudizhuDealer as Dealer
-from rlcard.games.doudizhu.dealer import doudizhu_sort_card
+from rlcard.games.doudizhu.utils import doudizhu_sort_str, doudizhu_sort_card
 from rlcard.utils.utils import init_54_deck
 from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
-root_path = rlcard.__path__[0]
-with open(os.path.join(root_path,'games/doudizhu/specific_map.json'), 'r') as file:
-    SPECIFIC_MAP = json.load(file)
-with open(os.path.join(root_path, 'games/doudizhu/action_space.json'), 'r') as file:
-    ACTION_SPACE = json.load(file)
 
 
 class DoudizhuGame(Game):
@@ -45,8 +32,6 @@ class DoudizhuGame(Game):
             }
     '''
     players_num = 3
-    card_rank = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K',
-                 'A', '2', 'B', 'R']
 
     def __init__(self):
         self.current_game = -1
@@ -60,6 +45,7 @@ class DoudizhuGame(Game):
             dict: first state in one game
             int: current player's id
         '''
+        # initialize public variables
         self.current_game += 1
         self.game_result = {0: 0, 1: 0, 2: 0}
         self.histories = []
@@ -69,12 +55,20 @@ class DoudizhuGame(Game):
                       'self': None, 'hand': None, 'trace': self.trace,
                       'cards_played': None, 'cards_others': None,
                       'remaining': None, 'actions': []}
+
+        # initialize players
         self.players = [Player(num)
                         for num in range(DoudizhuGame.players_num)]
+
+        # initialize round to deal cards and determine landlord
         self.rounder = Round()
         self.rounder.initiate(self.players)
-        self.judger = Judger(self.players)
         self.current_player = self.rounder.landlord_num
+
+        # initialize Judger
+        self.judger = Judger(self.players)
+
+        # initialize state of landlord to be ready for proceeding round
         player = self.players[self.current_player]
         self.rounder.round_last = get_upstream_player_id(player, self.players)
         deck = init_54_deck()
@@ -100,14 +94,20 @@ class DoudizhuGame(Game):
             dict: next player's state
             int: next player's id
         '''
+        # record game history
         player = self.players[self.current_player]
         self._record_history()
         self.trace.append((self.current_player, action))
+
+        # update cards played
         if action != 'pass':
             self._add_cards_played(action)
             self.state['cards_played'] = self.cards_played
+        # perform action
         greater_player = self.rounder.proceed_round(player, action)
         next_player_id = get_downstream_player_id(player, self.players)
+
+        # update next_state
         self.state['self'] = next_player_id
         next_player = self.players[next_player_id]
         self.state['hand'] = cards2str(next_player.hand)
@@ -238,53 +238,3 @@ class DoudizhuGame(Game):
     def _add_cards_played(self, action):
         self.cards_played.extend(list(action))
         self.cards_played.sort(key=functools.cmp_to_key(doudizhu_sort_str))
-
-
-def doudizhu_sort_str(card_1, card_2):
-    key_1 = DoudizhuGame.card_rank.index(card_1)
-    key_2 = DoudizhuGame.card_rank.index(card_2)
-    if key_1 > key_2:
-        return 1
-    if key_1 < key_2:
-        return -1
-    return 0
-
-
-def get_optimal_action(probs, legal_actions):
-    '''Determine the optimal action from legal actions
-    according to the probabilities of abstract actions.
-
-    Args:
-        probs (list): list of probabilities of abstract actions
-        legal_actions (list): list of legal actions
-
-    Returns:
-        str: optimal legal action
-    '''
-    abstract_actions = [SPECIFIC_MAP[action] for action in legal_actions]
-    action_probs = []
-    for actions in abstract_actions:
-        max_prob = -1
-        for action in actions:
-            prob = probs[ACTION_SPACE[action]]
-            if prob > max_prob:
-                max_prob = prob
-        action_probs.append(max_prob)
-    optimal_prob = max(action_probs)
-    optimal_actions = [legal_actions[index] for index,
-                       prob in enumerate(action_probs) if prob == optimal_prob]
-    if len(optimal_actions) > 1:
-        return random.choice(optimal_actions)
-    return optimal_actions[0]
-
-
-def test_state(state_encoded):
-    if state_encoded[0][-1]+state_encoded[1][-1]+state_encoded[-1][-1] != 1:
-        input('RJ error')
-    if state_encoded[0][-2]+state_encoded[1][-2]+state_encoded[-1][-2] != 1:
-        input('BJ error')
-    state = zip(state_encoded[0][:-2],
-                state_encoded[1][:-2], state_encoded[-1][:-2])
-    for remaining, others, played in state:
-        if (remaining+others+played) != 4:
-            input('error')
