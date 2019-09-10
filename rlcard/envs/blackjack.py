@@ -24,7 +24,10 @@ class BlackjackEnv(Env):
         Returns:
             encoded_action_list (list): return encoded action list (from str to int)
         '''
-        return self.encode_action(self.actions)
+        encoded_action_list = []
+        for i, act in enumerate(actions):
+            encoded_action_list.append(i)
+        return encoded_action_list
 
     def extract_state(self, state):
         ''' Extract the state representation from state dictionary for agent
@@ -54,20 +57,6 @@ class BlackjackEnv(Env):
         dealer_score, _ = get_scores_and_A(dealer_cards)
         obs = [my_score, dealer_score]
         return obs
-
-    def encode_action(self, actions):
-        ''' Encode the action into action ids
-            
-        Args:
-            actions (list[str]): list of actions
-
-        Returns:
-            encoded_actions (list[int]): list of action ids
-        '''
-        a = []
-        for i, act in enumerate(actions):
-            a.append(i)
-        return a
 
     def get_payoffs(self):
         '''Get the payoff of a game 
