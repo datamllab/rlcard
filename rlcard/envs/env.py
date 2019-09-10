@@ -166,3 +166,9 @@ class Env(object):
 
         pass
             
+    def get_legal_actions(self):
+        """ Get all legal actions for current state
+
+        Returns:
+            legal_actions (list): a list of legal actions' id
+        """
