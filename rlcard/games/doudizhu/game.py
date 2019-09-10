@@ -121,6 +121,8 @@ class DoudizhuGame(Game):
     def step_back(self):
         '''Return to the previous state of the game.
         '''
+        if not self.histories:
+            return False
         records = self.histories.pop()
         action = self.trace.pop()
         self.current_player = action[0]
@@ -132,6 +134,7 @@ class DoudizhuGame(Game):
         else:
             self.rounder.greater_player = self.players[records['greater_id']]
         self.judger.playable_cards[self.current_player] = records['plable_cards']
+        return True
 
     def get_state(self, player_id):
         '''Return player's state
