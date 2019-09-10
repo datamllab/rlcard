@@ -20,7 +20,7 @@ test_env = rlcard.make('blackjack')
 with tf.Session() as sess:
     deep_cfr = DeepCFR(sess, #
                 train_env, 
-                policy_network_layers=(32,32),
+                policy_network_layers=(32, 32),
                 advantage_network_layers=(32,32),
                 num_traversals=40,
                 num_step=40,
