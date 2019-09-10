@@ -104,7 +104,6 @@ class FixedSizeRingBuffer(object):
     def __iter__(self):
         return iter(self._data)
 
-
 class DeepCFR():
     '''Implements a solver for the Deep CFR Algorithm.
 
@@ -157,20 +156,20 @@ class DeepCFR():
         # get initial state and players
         init_state, player = self._env.init_game()
 
-        self._embedding_size = len(init_state)
+        self._embedding_size = init_state.shape
         self._num_traversals = num_traversals
-        self._num_actions = len(init_state)
+        self._num_actions = self._env.action_num
         self._iteration = 1
 
+        info_state_shape = [None]
+        info_state_shape.extend(self._embedding_size)
         # Create required TensorFlow placeholders to perform the Q-network updates.
         self._info_state_ph = tf.placeholder(
-            shape=[None, self._embedding_size],
+            #shape=[None, self._embedding_size],
+            shape=info_state_shape,
             dtype=tf.float32,
             name="info_state_ph")
-        self._info_state_action_ph = tf.placeholder(
-            shape=[None, self._embedding_size + 1],
-            dtype=tf.float32,
-            name="info_state_action_ph")
+        self._info_state_ph = self._flatten_state(self._info_state_ph)
         self._action_probs_ph = tf.placeholder(
             shape=[None, self._num_actions],
             dtype=tf.float32,
@@ -187,9 +186,12 @@ class DeepCFR():
 
         # Define strategy network, loss & memory.
         self._strategy_memories = FixedSizeRingBuffer(memory_capacity)
+
         self._policy_network = snt.nets.MLP(
             list(policy_network_layers) + [self._num_actions])
+
         action_logits = self._policy_network(self._info_state_ph)
+
         # Illegal actions are handled in the traversal code where expected payoff
         # and sampled regret is computed from the advantage networks.
         self._action_probs = tf.nn.softmax(action_logits)
@@ -258,7 +260,7 @@ class DeepCFR():
             policy loss (float): policy loss
         '''
         init_state, player = self._env.init_game()
-        self._root_node = init_state 
+        self._root_node = init_state.flatten()
         for p in range(self._num_players):
             for _ in range(self._num_traversals):
                 self._traverse_game_tree(self._root_node, p)
@@ -303,6 +305,7 @@ class DeepCFR():
             advantages, strategy = self._sample_action_from_advantage(state, player)
             for action in actions:
                 child_state, _ = self._env.step(action)
+                child_state = child_state.flatten()
                 expected_payoff[action] = self._traverse_game_tree(child_state, player)
             self._env.step_back()
             for action in actions:
@@ -338,7 +341,7 @@ class DeepCFR():
             1. (list) Advantage values for info state actions indexed by action.
             2. (list) Matched regrets, prob for actions indexed by action.
         '''
-        info_state = state 
+        info_state = state.flatten() 
         legal_actions = self._env.get_legal_actions() 
         advantages = self._session.run(
             self._advantage_outputs[player],
@@ -353,18 +356,24 @@ class DeepCFR():
                 matched_regrets[action] = 1 / self._num_actions
         return advantages, matched_regrets
 
-        def action_advantage(self, state, player):
-            advantages = self._session.run(
-                self._advantage_outputs[player],
-                feed_dict={self._info_state_ph: np.expand_dims(state, axis=0)})[0]
-            advantages = np.array([max(0., advantage) for advantage in advantages])
-            return advantages
+    def action_advantage(self, state, player):
+        state = state.flatten()
+        advantages = self._session.run(
+            self._advantage_outputs[player],
+            feed_dict={self._info_state_ph: np.expand_dims(state, axis=0)})[0]
+        advantages = np.array([max(0., advantage) for advantage in advantages])
+        return advantages
 
+    def _flatten_state(self, state):
+        shape = state.get_shape().as_list()     
+        dim = np.prod(shape[1:])            
+        flattened = tf.reshape(state, [-1, dim])
+        return flattened
 
     def action_probabilities(self, state):
         '''Returns action probabilites dict for a single batch.
         '''
-        info_state_vector = np.array(state)
+        info_state_vector = state.flatten()
 
         if len(info_state_vector.shape) == 1:
             info_state_vector = np.expand_dims(info_state_vector, axis=0)

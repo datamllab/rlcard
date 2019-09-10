@@ -55,7 +55,7 @@ class BlackjackEnv(Env):
 
         my_score, has_a = get_scores_and_A(my_cards)
         dealer_score, _ = get_scores_and_A(dealer_cards)
-        obs = [my_score, dealer_score]
+        obs = np.array([my_score, dealer_score])
         return obs
 
     def get_payoffs(self):

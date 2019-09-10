@@ -4,7 +4,7 @@ from rlcard.envs.env import Env
 from rlcard.games.doudizhu import *
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
 from rlcard.utils.utils import *
-from rlcard.games.doudizhu.utils import CARD_RANK_STR, SPECIFIC_MAP, ACTION_LIST
+from rlcard.games.doudizhu.utils import CARD_RANK_STR, SPECIFIC_MAP, ACTION_LIST, ACTION_SPACE
 
 
 class DoudizhuEnv(Env):
@@ -64,3 +64,8 @@ class DoudizhuEnv(Env):
         if len(specific_actions) > 0:
             return random.choice(specific_actions)
         return random.choice(legal_actions)
+
+    def get_legal_actions(self):
+        legal_actions = self.game.state['actions']
+        legal_actions_id = [ACTION_SPACE[SPECIFIC_MAP[a][0]] for a in legal_actions]
+        return legal_actions_id
