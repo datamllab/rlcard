@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """Implement Doudizhu Player class"""
-import json
-from os import path
 from rlcard.core import Player
-from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
 
 
 class DoudizhuPlayer(Player):
