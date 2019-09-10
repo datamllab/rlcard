@@ -11,3 +11,5 @@ __pycache__/
 htmlcov/
 sonar-project.properties
 .coverage
+docs/rst
+docs/sphinx
