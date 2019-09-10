@@ -28,29 +28,29 @@ In the toolkit, we implement a standard version of Doudizhu. In the bidding phas
 ## State
 At each decision point of the game, the corresponding player will be able to observe the current state (or information set in imperfect information game). The state consists of all the information that the player can observe from his view. We encode the information into a readable Python dictionary. The following table shows the structure of the state:
 
-| KEY          |                            VALUE                             |                       ILLUSTRATION                       |
-| ------------ | :----------------------------------------------------------- | -------------------------------------------------------- |
-| deck         | 3333444455556666<br>777788889999TTTTJJJJ<br>QQQQKKKKAAAA2222BR | One pack of 54 cards<br>with two different jokers(T: 10) |
-| cards_seen   |                             TQA                              |  Three cards distributed to the landlord after bidding   |
-| landlord     |                              0                               |                The player_id of landlord                 |
-| self         |                              2                               |                   Current player's id                    |
-| hand         |                      3456677799TJQKAAB                       |     All cards current player owned when a game start     |
-| trace        | [(0, '8222'), (1, 'pass'), (2, 'pass'), (0 '6KKK'), (1, 'pass'), (2, 'pass'), (0, '8'), (1, 'Q')] |             A record of  actions in one game             |
-| cards_played |      ['6', '8', '8', 'Q', 'K', 'K', 'K', '2', '2', '2']      |          The cards have been played in one game          |
-| cards_others |                 333444555678899TTTJJJQQAA2R                  |            The union of other player's cards             |
-| remaining    |                      3456677799TJQKAAB                       |          The remaining cards of current player           |
-| actions      |                   ['pass', 'K', 'A', 'B']                    |     The legal actions the current player could play      |
-|              |                                                              |                                                          |
+| KEY          | DESCRIPTION                                                  | VALUE of an example                                          |
+| ------------ | :----------------------------------------------------------- | ------------------------------------------------------------ |
+| deck         | A string of one pack of 54 cards with Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'. | 3333444455556666<br/>777788889999TTTTJJJJ
+QQQQKKKKAAAA2222BR  |
+| cards_seen   | Three face-down cards distributed to the landlord after bidding. Then these cards will be made public to all players. | TQA                                                          |
+| landlord     | An integer of landlord's id                                  | 0                                                            |
+| self         | An integer of current player's id                            | 2                                                            |
+| hand         | All cards current player initially owned when a game starts. It will not change with playing cards. | 3456677799TJQKAAB                                            |
+| trace        | A list of tuples which records every actions in one game. The first entry of  the tuple is player's id, the second is corresponding player's action. | [(0, '8222'), (1, 'pass'), (2, 'pass'), (0 '6KKK'), (1, 'pass'), (2, 'pass'), (0, '8'), (1, 'Q')] |
+| cards_played | The cards which have been played and sorted from low to high in one game | ['6', '8', '8', 'Q', 'K', 'K', 'K', '2', '2', '2']           |
+| cards_others | The union of other player's cards                            | 333444555678899TTTJJJQQAA2R                                  |
+| remaining    | The remaining cards of current player                        | 3456677799TJQKAAB                                            |
+| actions      | The legal actions the current player could do                | ['pass', 'K', 'A', 'B']                                      |
 
 ## State Encoding
-In Dou Dizhu environment, we encode the state into 30 feature planes. The size of each plane is 1*15. Each entry of a plane can be either 1 or 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/doudizhu.py](rlcard/envs/doudizhu.py). The example encoded planes are as below:
+In Dou Dizhu environment, we encode the state into 6 feature planes. The size of each plane is 5*15. Each entry of a plane can be either 1 or 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/doudizhu.py](rlcard/envs/doudizhu.py). The example encoded planes are as below:
 
-| Plane          |                            Feature                            |          
+| Plane          |                            Feature                            |
 | ------------ | :----------------------------------------------------------- |
-|0-4         | cards in hand |
-|5-9         | the remaining cards |
-|10-14         | the played cards |
-|15-29         | the recent three actions |
+|0         | the remaining cards |
+|1         | the union of other players' cards |
+|2-4         | the recent three actions |
+|5         | the union of played cards |
 
 ## Action Abstraction
 
@@ -74,3 +74,4 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 | Rocket           |         1         |         1         |
 | Pass             |         1         |         1         |
 | Total            |       33676       |        309        |
+
