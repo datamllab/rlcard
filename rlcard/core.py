@@ -48,6 +48,8 @@ class Dealer(object):
         """The dealer should have all the cards at the beginning of a game
         """
 
+        pass
+
     def shuffle(self):
         """Shuffle the cards holded by dealer(remained_cards)
         """
@@ -128,6 +130,8 @@ class Round(object):
     def __init__(self):
         """ When the game starts, round id should be 1
         """
+
+        pass
 
     def proceed_round(self):
         """ Call other Classes's functions to keep the game running
