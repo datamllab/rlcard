@@ -3,6 +3,7 @@ import os
 import json
 import random
 import rlcard
+import numpy as np
 
 # Read required docs
 ROOT_PATH = rlcard.__path__[0]
@@ -175,3 +176,36 @@ def contains_cards(candidate, target):
         if beg == 0:
             return False
     return True
+
+
+def encode_cards(plane, cards):
+    exist = np.ones(15, dtype=int)
+    layer = 1
+    if len(cards) == 1:
+        rank = CARD_RANK_STR.index(cards[0])
+        plane[layer][rank] = 1
+        exist[rank] = 0
+    else:
+        for index, card in enumerate(cards):
+            if index == 0:
+                continue
+            if card == cards[index-1]:
+                layer += 1
+            else:
+                rank = CARD_RANK_STR.index(cards[index-1])
+                plane[layer][rank] = 1
+                layer = 1
+                exist[rank] = 0
+        rank = CARD_RANK_STR.index(cards[-1])
+        plane[layer][rank] = 1
+        exist[rank] = 0
+    plane[0] = exist
+
+if __name__ == '__main__':
+    array = np.zeros((6, 5, 15), dtype=int)
+    encode_cards(array[0], '3333444455556666777788889999TTTTJJJJQQQQKKKKAAAA2222BR')
+    encode_cards(array[1], '33345')
+    encode_cards(array[2], ['4', '4', '7', '8', '8', '8','R'])
+    print(array[0])
+    print(array[1])
+    print(array[2])
