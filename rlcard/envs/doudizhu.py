@@ -1,59 +1,64 @@
 import random
 import numpy as np
+from rlcard.utils.utils import *
 from rlcard.envs.env import Env
 from rlcard.games.doudizhu import *
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
-from rlcard.utils.utils import *
-from rlcard.games.doudizhu.utils import CARD_RANK_STR, SPECIFIC_MAP, ACTION_LIST, ACTION_SPACE
+from rlcard.games.doudizhu.utils import CARD_RANK_STR, SPECIFIC_MAP
+from rlcard.games.doudizhu.utils import ACTION_LIST, ACTION_SPACE
+from rlcard.games.doudizhu.utils import encode_cards
 
 
 class DoudizhuEnv(Env):
-    """
+    '''
     Doudizhu Environment
-    """
+    '''
 
     def __init__(self):
         super().__init__(Game())
 
     def extract_state(self, state):
-        """Encode state
+        '''Encode state
 
         Args:
             state (dict): dict of original state
 
         Returns:
-            numpy array: 6×60 array
-                         60: 4 suits cards of 15 ranks from 3 to red joker
+            numpy array: 6*5*15 array
                          6 : current player's cards
                              union other players' cards
                              recent three actions
                              union of played cards
-        """
-
-        def add_cards(array, cards):
-            suit = 0
-            for index, card in enumerate(cards):
-                if index != 0 and card == cards[index-1]:
-                    suit += 1
-                else:
-                    suit = 0
-                rank = CARD_RANK_STR.index(card)
-                array[rank+suit*15] += 1
-
-        encoded_state = np.zeros((6, 60), dtype=int)
-        add_cards(encoded_state[0], state['remaining'])
-        add_cards(encoded_state[1], state['cards_others'])
+        '''
+        encoded_state = np.zeros((6, 5, 15), dtype=int)
+        for index in range(6):
+            encoded_state[index][0] = np.ones(15, dtype=int)
+        encode_cards(encoded_state[0], state['remaining'])
+        encode_cards(encoded_state[1], state['cards_others'])
         for i, action in enumerate(state['trace'][-3:]):
             if action[1] != 'pass':
-                add_cards(encoded_state[4-i], action[1])
+                encode_cards(encoded_state[4-i], action[1])
         if state['cards_played'] is not None:
-            add_cards(encoded_state[5], state['cards_played'])
+            encode_cards(encoded_state[5], state['cards_played'])
         return encoded_state
 
     def get_payoffs(self):
+        '''Get the payoffs of players. Must be implemented in the child class.
+
+        Returns:
+            payoffs (list): a list of payoffs for each player
+        '''
         return self.game.game_result
 
     def decode_action(self, action_id):
+        '''Action id -> the action in the game. Must be implemented in the child class.
+
+        Args:
+            action_id (int): the id of the action
+
+        Returns:
+            action (string): the action that will be passed to the game engine.
+        '''
         abstract_action = ACTION_LIST[action_id]
         legal_actions = self.game.state['actions']
         specific_actions = []
@@ -61,11 +66,21 @@ class DoudizhuEnv(Env):
             for abstract in SPECIFIC_MAP[legal_action]:
                 if abstract == abstract_action:
                     specific_actions.append(legal_action)
-        if len(specific_actions) > 0:
+        if specific_actions:
             return random.choice(specific_actions)
         return random.choice(legal_actions)
 
     def get_legal_actions(self):
+        '''Get all legal actions for current state
+
+        Returns:
+            legal_actions (list): a list of legal actions' id
+        '''
+        legal_action_id = []
         legal_actions = self.game.state['actions']
-        legal_actions_id = [ACTION_SPACE[SPECIFIC_MAP[a][0]] for a in legal_actions]
-        return legal_actions_id
+        for action in legal_actions:
+            for abstract in SPECIFIC_MAP[action]:
+                action_id = ACTION_SPACE[abstract]
+                if action_id not in legal_action_id:
+                    legal_action_id.append(action_id)
+        return legal_action_id
