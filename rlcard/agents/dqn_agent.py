@@ -48,7 +48,9 @@ class DQNAgent(object):
                  batch_size=32,
                  action_size=2,
                  state_shape=[2],
-                 norm_step=100):
+                 norm_step=100,
+                 mlp_layers=[10,10]):
+
         """
         Q-Learning algorithm for off-policy TD control using Function Approximation.
         Finds the optimal greedy policy while following an epsilon-greedy policy.
@@ -70,6 +72,7 @@ class DQNAgent(object):
             action_size (int): the number of the actions
             state_space (list): the space of the state vector
             norm_step (int): the number of the step used form noramlize state
+            mlp_layers (list): the layer number and the dimension of each layer in MLP
         """
 
         self.sess = sess
@@ -92,8 +95,8 @@ class DQNAgent(object):
         self.epsilons = np.linspace(epsilon_start, epsilon_end, epsilon_decay_steps)
 
         # Create estimators
-        self.q_estimator = Estimator(scope="q", action_size=action_size, state_shape=state_shape)
-        self.target_estimator = Estimator(scope="target_q", action_size=action_size, state_shape=state_shape)
+        self.q_estimator = Estimator(scope="q", action_size=action_size, state_shape=state_shape, mlp_layers=mlp_layers)
+        self.target_estimator = Estimator(scope="target_q", action_size=action_size, state_shape=state_shape, mlp_layers=mlp_layers)
 
         self.sess.run(tf.global_variables_initializer())
 
@@ -249,7 +252,7 @@ class Estimator():
         This network is used for both the Q-Network and the Target Network.
     """
 
-    def __init__(self, scope="estimator", action_size=2, state_shape=[2]):
+    def __init__(self, scope="estimator", action_size=2, state_shape=[2], mlp_layers=None):
         """ Initilalize an Estimator object.
 
         Args:
@@ -260,6 +263,8 @@ class Estimator():
         self.scope = scope
         self.action_size = action_size
         self.state_shape = state_shape
+        self.mlp_layers = mlp_layers
+        print('aaaaaaa: ', mlp_layers)
 
         # Create a glboal step variable
         self.global_step = tf.Variable(0, name='global_step', trainable=False)
@@ -285,9 +290,10 @@ class Estimator():
         batch_size = tf.shape(self.X_pl)[0]
 
         # Fully connected layers
-        fc1 = tf.contrib.layers.fully_connected(tf.contrib.layers.flatten(self.X_pl), 10, activation_fn=tf.tanh)
-        fc2 = tf.contrib.layers.fully_connected(fc1, 10, activation_fn=tf.tanh)
-        self.predictions = tf.contrib.layers.fully_connected(fc2, self.action_size, activation_fn=None)
+        fc = tf.contrib.layers.flatten(self.X_pl)
+        for dim in self.mlp_layers:
+            fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)
+        self.predictions = tf.contrib.layers.fully_connected(fc, self.action_size, activation_fn=None)
 
         # Get the predictions for the chosen actions only
         gather_indices = tf.range(batch_size) * tf.shape(self.predictions)[1] + self.actions_pl
