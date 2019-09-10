@@ -290,7 +290,7 @@ class DeepCFR():
 
         expected_payoff = collections.defaultdict(float)
         current_player = self._env.get_player_id()
-        actions = self._env.get_actions()
+        actions = self._env.get_legal_actions()
         if self._env.is_over():
             # Terminal state get returns.
             payoff = self._env.get_payoffs()
@@ -339,7 +339,7 @@ class DeepCFR():
             2. (list) Matched regrets, prob for actions indexed by action.
         '''
         info_state = state 
-        legal_actions = self._env.get_actions() 
+        legal_actions = self._env.get_legal_actions() 
         advantages = self._session.run(
             self._advantage_outputs[player],
             feed_dict={self._info_state_ph: np.expand_dims(info_state, axis=0)})[0]
