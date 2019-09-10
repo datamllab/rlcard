@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
 """Implement Doudizhu Judger class"""
-import json
-from os import path
 from rlcard.core import Judger
-FILE = path.abspath(__file__)
-with open(FILE.replace('judger.py', 'card_type.json', 1), 'r') as file:
-    CARD_TYPE = json.load(file)
-with open(FILE.replace('judger.py', 'type_card.json', 1), 'r') as file:
-    TYPE_CARD = json.load(file)
+from rlcard.games.doudizhu.utils import CARD_TYPE, TYPE_CARD
+from rlcard.games.doudizhu.utils import cards2str, contains_cards
 
 
 class DoudizhuJudger(Judger):
@@ -32,6 +27,7 @@ class DoudizhuJudger(Judger):
         Note:
             1. return value contains 'pass'
         '''
+        # add 'pass' to legal actions
         gt_cards = ['pass']
         remaining = cards2str(player.remaining_cards)
         target_cards = greater_player.played_cards
@@ -85,50 +81,3 @@ class DoudizhuJudger(Judger):
                 if not contains_cards(remaining, cards):
                     del self.playable_cards[player_id][cards]
         return list(self.playable_cards[player_id])
-
-
-def cards2str(cards: list):
-    '''Get the corresponding string representation of cards
-
-    Args:
-        cards (list): list of Card objects
-
-    Returns:
-        string: string representation of cards
-    '''
-    response = ''
-    for card in cards:
-        if card.rank == '':
-            response += card.suit[0]
-        else:
-            if card.rank == '10':
-                response += 'T'
-            else:
-                response += card.rank
-    return response
-
-
-def contains_cards(candidate, target):
-    '''Check if cards of candidate contains cards of target.
-
-    Args:
-        candidate (string): string represent of cards of candidate
-        target (string): string represent of cards of target
-
-    Returns:
-        boolean
-    '''
-    len_can = len(candidate)
-    len_tar = len(target)
-    if len_can < len_tar:
-        return False
-    if len_can == len_tar:
-        if candidate == target:
-            return True
-        return False
-    beg = 0
-    for tar_card in target:
-        beg = candidate.find(tar_card, beg) + 1
-        if beg == 0:
-            return False
-    return True

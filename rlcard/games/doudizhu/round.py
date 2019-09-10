@@ -2,10 +2,9 @@
 """Implement Doudizhu Round class"""
 import functools
 from rlcard.core import Round
-from rlcard.games.doudizhu.dealer import doudizhu_sort_card
 from rlcard.games.doudizhu.dealer import DoudizhuDealer as Dealer
-from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
 from rlcard.games.doudizhu.judger import cards2str
+from rlcard.games.doudizhu.utils import doudizhu_sort_card
 
 
 class DoudizhuRound(Round):
