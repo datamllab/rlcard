@@ -8,9 +8,9 @@ from rlcard.games.doudizhu.game import DoudizhuGame as Game
 from rlcard.utils.utils import *
 import os
 root_path = rlcard.__path__[0]
-with open(os.path.join(root_path, 'games/doudizhu/specific_map.json'), 'r') as file:
+with open(os.path.join(root_path, 'games/doudizhu/jsondata/specific_map.json'), 'r') as file:
     SPECIFIC_MAP = json.load(file)
-with open(os.path.join(root_path, 'games/doudizhu/action_space.json'), 'r') as file:
+with open(os.path.join(root_path, 'games/doudizhu/jsondata/action_space.json'), 'r') as file:
     ACTION_SPACE = list(json.load(file).keys())
 
 
