@@ -92,7 +92,7 @@ class FixedSizeRingBuffer(object):
         if len(self._data) < num_samples:
             raise ValueError("{} elements could not be sampled from size {}".format(
                 num_samples, len(self._data)))
-            return random.sample(self._data, num_samples)
+        return random.sample(self._data, num_samples)
 
     def clear(self):
         self._data = []
@@ -125,8 +125,9 @@ class DeepCFR():
              policy_network_layers=(32, 32),
              advantage_network_layers=(32, 32),
              num_traversals=10,
+             num_step=40,
              learning_rate=1e-4,
-             batch_size_advantage=None,
+             batch_size_advantage=16,
              batch_size_strategy=16,
              memory_capacity=int(1e7)):
         ''' Initialize the Deep CFR
@@ -150,6 +151,7 @@ class DeepCFR():
         self._batch_size_advantage = batch_size_advantage
         self._batch_size_strategy = batch_size_strategy
         self._num_players = env.player_num
+        self._num_step = num_step
         self.advantage_losses = collections.defaultdict(list)
 
         # get initial state and players
@@ -234,13 +236,13 @@ class DeepCFR():
                 self._advantage_networks[p].initializers[key]()
 
     def step(self, state):
-        """ Predict the action for generating training data
+        ''' Predict the action for generating training data
 
         Args:
             state (dict): current state
         Returns:
             action (int): an action id
-        """
+        '''
         action_prob = self.action_probabilities(state)
         action_prob /= action_prob.sum()
         action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
@@ -248,6 +250,13 @@ class DeepCFR():
 
     
     def train(self):
+        ''' Perform tree traversal and train the network
+
+        Returns:
+            policy_network (tf.placeholder): the trained policy network
+            average advantage loss (float): players average advantage loss
+            policy loss (float): policy loss
+        '''
         init_state, player = self._env.init_game()
         self._root_node = init_state 
         for p in range(self._num_players):
@@ -255,11 +264,13 @@ class DeepCFR():
                 self._traverse_game_tree(self._root_node, p)
             self.reinitialize_advantage_networks()
             # Re-initialize advantage networks and train from scratch.
-            self.advantage_losses[p].append(self._learn_advantage_network(p))
+            for i in range(self._num_step):
+                self.advantage_losses[p].append(self._learn_advantage_network(p))
             self._iteration += 1
 
         # Train policy network.
-        policy_loss = self._learn_strategy_network()
+        for i in range(self._num_step):
+            policy_loss = self._learn_strategy_network()
         avg_adv_loss = sum([self.advantage_losses[p][-1] for p in self.advantage_losses.keys()]) / self._num_players
         return self._policy_network, avg_adv_loss, policy_loss
 
@@ -386,9 +397,11 @@ class DeepCFR():
             info_states.append(s.info_state)
             advantages.append(s.advantage)
             iterations.append([s.iteration])
-        # Ensure some samples have been gathered.
-        if not info_states:
+
+        if info_states == []:
             return None
+
+        # Ensure some samples have been gathered.
         loss_advantages, _ = self._session.run(
             [self._loss_advantages[player], self._learn_step_advantages[player]],
             feed_dict={
@@ -404,7 +417,7 @@ class DeepCFR():
         Returns:
             The average loss obtained on this batch of transitions or `None`.
         """
-        if self._batch_size_advantage:
+        if self._batch_size_strategy:
             samples = self._strategy_memories.sample(self._batch_size_strategy)
         else:
             samples = self._strategy_memories
@@ -415,53 +428,13 @@ class DeepCFR():
             info_states.append(s.info_state)
             action_probs.append(s.strategy_action_probs)
             iterations.append([s.iteration])
-            if len(info_states) % self._batch_size_strategy == 0: 
-                loss_strategy, _ = self._session.run(
-                    [self._loss_policy, self._learn_step_policy],
-                    feed_dict={
-                        self._info_state_ph: np.array(info_states),
-                        self._action_probs_ph: np.array(np.squeeze(action_probs)),
-                        self._iter_ph: np.array(iterations),
-                    })
-                info_states = []
-                action_probs = []
-                iterations = []
+        if info_states == []:
+            return None
+        loss_strategy, _ = self._session.run(
+            [self._loss_policy, self._learn_step_policy],
+            feed_dict={
+                self._info_state_ph: np.array(info_states),
+                self._action_probs_ph: np.array(np.squeeze(action_probs)),
+                self._iter_ph: np.array(iterations),
+            })
         return loss_strategy
-
-if __name__ == '__main__':
-    episodes_num = 1000
-    i = 0
-    rewards = 0
-    env1 = rlcard.make('blackjack') 
-    env2 = rlcard.make('blackjack') 
-
-    with tf.Session() as sess:
-        deep_cfr = DeepCFR(sess, #
-                    env1, 
-                    policy_network_layers=(32,32),
-                    advantage_network_layers=(32,32),
-                    num_traversals=20,
-                    learning_rate=1e-4,
-                    batch_size_advantage=None,
-                    batch_size_strategy=16,
-                    memory_capacity=1e7)
-
-        for i in range(episodes_num):
-            _, adv_loss, policy_loss = deep_cfr.train()
-            print("Episode:", i ,"; Loss:", adv_loss, policy_loss)
-            # Evaluate
-            state, player = env2.init_game()
-            while True:
-                action_prob = deep_cfr.action_probabilities(state)
-                action_prob /= action_prob.sum()
-                action_prob = list(action_prob)
-                #action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
-                action = action_prob.index(max(action_prob))
-                print("Play:", state, action)
-                state, player = env2.step(action)
-                if env2.is_over():
-                    payoffs = env2.get_payoffs()
-                    rewards += payoffs[0]
-                    break
-        print('###############################')
-        print('Reward: ', float(rewards)/episodes_num)
