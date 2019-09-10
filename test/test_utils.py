@@ -1,5 +1,6 @@
 import unittest
 import random
+import numpy as np
 from rlcard.utils.utils import *
 from rlcard.core import Card, Player
 
@@ -30,6 +31,13 @@ class TestUtilsMethos(unittest.TestCase):
         self.assertEqual(rank2int('A'), 14)
         self.assertEqual(rank2int(''), -1)
         self.assertEqual(rank2int('3'), 3)
+        self.assertEqual(rank2int('T'), 10)
+        self.assertEqual(rank2int('J'), 11)
+        self.assertEqual(rank2int('Q'), 12)
+        self.assertEqual(rank2int('1000'), None)
+        self.assertEqual(rank2int('K'), 13)
+
+
 
     def test_get_cards_from_ranks(self):
         deck = init_54_deck()
@@ -74,11 +82,16 @@ class TestUtilsMethos(unittest.TestCase):
     def test_get_downstream_player_id(self):
         players = init_players(5)
         self.assertEqual(get_downstream_player_id(players[4], players), 0)
+
+    def test_reorganize(self):
+        trajectories = reorganize([[[1,2],1,[4,5]]], [1])
+        self.assertEqual(np.array(trajectories).shape, (1, 1, 5))
+
     
     def test_set_global_seed(self):
-        # set_global_seed(0)
-        # set_global_seed(None)
-        pass
+        set_global_seed(0)
+        self.assertEqual(np.random.get_state()[1][0], 0)
+
 
 if __name__ == '__main__':
     unittest.main()
