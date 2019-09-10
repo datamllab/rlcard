@@ -30,7 +30,6 @@ for episode in range(episode_num):
         print('State: {}, Action: {}, Reward: {}, Next State, {}, Done: {}'.format(ts[0], ts[1], ts[2], ts[3], ts[4])) 
 ```
 The expected output should look like something as follows:
-** TODO: debug blackjack **
 ```
 Episode 0
 State: [19, 5], Action: 0, Reward: -1, Next State: [23, 15], Done: True
