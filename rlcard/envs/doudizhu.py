@@ -9,15 +9,15 @@ from rlcard.games.doudizhu.utils import encode_cards
 
 
 class DoudizhuEnv(Env):
-    """
+    '''
     Doudizhu Environment
-    """
+    '''
 
     def __init__(self):
         super().__init__(Game())
 
     def extract_state(self, state):
-        """Encode state
+        '''Encode state
 
         Args:
             state (dict): dict of original state
@@ -28,8 +28,10 @@ class DoudizhuEnv(Env):
                              union other players' cards
                              recent three actions
                              union of played cards
-        """
+        '''
         encoded_state = np.zeros((6, 5, 15), dtype=int)
+        for index in range(6):
+            encoded_state[index][0] = np.ones(15, dtype=int)
         encode_cards(encoded_state[0], state['remaining'])
         encode_cards(encoded_state[1], state['cards_others'])
         for i, action in enumerate(state['trace'][-3:]):
@@ -40,9 +42,22 @@ class DoudizhuEnv(Env):
         return encoded_state
 
     def get_payoffs(self):
+        '''Get the payoffs of players. Must be implemented in the child class.
+
+        Returns:
+            payoffs (list): a list of payoffs for each player
+        '''
         return self.game.game_result
 
     def decode_action(self, action_id):
+        '''Action id -> the action in the game. Must be implemented in the child class.
+
+        Args:
+            action_id (int): the id of the action
+
+        Returns:
+            action (string): the action that will be passed to the game engine.
+        '''
         abstract_action = ACTION_LIST[action_id]
         legal_actions = self.game.state['actions']
         specific_actions = []
