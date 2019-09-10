@@ -8,4 +8,6 @@ __pycache__/
 *.swo
 .scannerwork/
 .vscode/
+htmlcov/
 sonar-project.properties
+.coverage
