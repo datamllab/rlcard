@@ -7,10 +7,10 @@ from rlcard.utils.utils import *
 
 # Make environment
 env = rlcard.make('blackjack')
-episode_num = 10
+episode_num = 2
 
 # Set global seed to 0
-set_global_seed(2)
+set_global_seed(1)
 
 # Set up agents
 agent_0 = RandomAgent(action_size=env.action_num)
