@@ -9,11 +9,11 @@ from rlcard.utils.utils import *
 env = rlcard.make('blackjack')
 episode_num = 2
 
-# Set global seed to 0
+# Set a global seed
 set_global_seed(1)
 
 # Set up agents
-agent_0 = RandomAgent(action_size=env.action_num)
+agent_0 = RandomAgent(action_num=env.action_num)
 env.set_agents([agent_0])
 
 for episode in range(episode_num):
