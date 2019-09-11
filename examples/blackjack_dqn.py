@@ -11,9 +11,9 @@ from rlcard.plotter import Plotter
 # Make environment
 env = rlcard.make('blackjack')
 
-# Set the iterations numbers and how frequently we evaluate
+# Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
-save_plot_every = 10000
+save_plot_every = 1000
 evaluate_num = 1000
 episode_num = 1000000
 
@@ -28,7 +28,7 @@ set_global_seed(1)
 with tf.Session() as sess:
     # Set agents
     agent = DQNAgent(sess,
-                       action_size=env.action_num,
+                       action_num=env.action_num,
                        replay_memory_init_size=memory_init_size,
                        norm_step=norm_step,
                        mlp_layers=[10,10])
@@ -37,7 +37,7 @@ with tf.Session() as sess:
     # Count the number of steps
     step_counter = 0
 
-    # Init Plotter
+    # Init a Plotter to plot the learning curve
     plotter = Plotter(xlabel='eposide', ylabel='reward', legend='DQN on Blackjack')
 
     for episode in range(episode_num):
@@ -45,7 +45,7 @@ with tf.Session() as sess:
         # Generate data from the environment
         trajectories, _ = env.run(is_training=True)
 
-        # Feed transitions into agent and update the agent
+        # Feed transitions into agent memory, and train
         for ts in trajectories[0]:
             agent.feed(ts)
             step_counter += 1
@@ -62,14 +62,14 @@ with tf.Session() as sess:
                 reward += payoffs[0]
 
             print('\n########## Evaluation ##########')
-            print('Average reward is {}'.format(float(reward)/evaluate_num))
+            print('Episode: {} Average reward is {}'.format(episode, float(reward)/evaluate_num))
 
-            # Add point
+            # Add point to plotter
             plotter.add_point(x=episode, y=float(reward)/evaluate_num)
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            plotter.make_plot(save_path='./blackjack_dqn_result/'+str(episode)+'.png')
+            plotter.make_plot(save_path='./experiments/blackjack_dqn_result/'+str(episode)+'.png')
     
     # Make the final plot
-    plotter.make_plot(save_path='./blackjack_dqn_result/'+'final_'+str(episode)+'.png')
+    plotter.make_plot(save_path='./experiments/blackjack_dqn_result/'+'final_'+str(episode)+'.png')
