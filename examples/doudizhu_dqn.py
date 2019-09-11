@@ -7,6 +7,7 @@ import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import *
+from rlcard.plotter import Plotter
 
 # Make environment
 env = rlcard.make('doudizhu')
@@ -14,6 +15,7 @@ eval_env = rlcard.make('doudizhu')
 
 # Set the iterations numbers and how frequently we evaluate
 evaluate_every = 200
+save_plot_every = 5000
 evaluate_num = 200
 episode_num = 1000000
 
@@ -43,6 +45,9 @@ with tf.Session() as sess:
     # Count the number of steps
     step_counter = 0
 
+    # Init Plotter
+    plotter = Plotter(xlabel='eposide', ylabel='reward', legend='DQN on Dou Dizhu')
+
     for episode in range(episode_num):
 
         # Generate data from the environment
@@ -66,3 +71,13 @@ with tf.Session() as sess:
 
             print('\n########## Evaluation ##########')
             print('Average reward is {}'.format(float(reward)/evaluate_num))
+
+            # Add point
+            plotter.add_point(x=episode, y=reward)
+
+        # Make plot
+        if episode % save_plot_every == 0 and episode > 0:
+            plotter.make_plot(save_path='./doudizhu_dqn_result/'+str(episode)+'.png')
+   
+    # Make the final plot
+    plotter.make_plot(save_path='./doudizhu_dqn_result/'+'final_'+str(episode)+'.png')
