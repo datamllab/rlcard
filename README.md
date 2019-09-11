@@ -35,7 +35,7 @@ The table below shows the environments that are (or will be soon) available in R
 
 # Evaluation
 We wrap a `Logger` that conveniently save/plot the results. Example outputs are as follows:
-![Learning Curves](docs/imgs/curves.pdf "Learning Curves")
+![Learning Curves](docs/imgs/curves.png "Learning Curves")
 
 
 # Disclaimer
