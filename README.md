@@ -33,6 +33,9 @@ The table below shows the environments that are (or will be soon) available in R
 | UNO ([wiki](https://en.wikipedia.org/wiki/Uno_\(card_game), [baike](https://baike.baidu.com/item/UNO%E7%89%8C/2249587))      |  10^163      |   10^10 | 10^1| - | Come soon|
 | Sheng Ji ([wiki](https://en.wikipedia.org/wiki/Sheng_ji), [baike](https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150))      | 10^173 ~ 10^180      |  10^61  | 10^13 | - | Come soon|
 
+# Evaluation
+We wrap a `Logger` that conveniently save/plot the results. Example outputs are as follows:
+![DQN on Blackjack](docs/imgs/dqn-on-blackjack.png "DQN on Blackjack") ![DQN on Dou Dizhu](docs/imgs/dqn-on-doudizhu.png "DQN on Dou Dizhu") ![DeepCFR on Limit Texas Hold'em](docs/imgs/deepcfr-on-limit-texas-holdem.png "DeepCFR on Limit Texas Hold'em")
 
 
 # Disclaimer
