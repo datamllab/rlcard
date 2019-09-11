@@ -72,12 +72,12 @@ def doudizhu_sort_card(card_1, card_2):
     return 0
 
 
-def get_landlord_score(remaining):
+def get_landlord_score(current_hand):
     '''Roughly judge the quality of the hand, and provide a score as basis to
     bid landlord.
 
     Args:
-        remaining (str): string of cards. Eg: '56888TTQKKKAA222R'
+        current_hand (str): string of cards. Eg: '56888TTQKKKAA222R'
 
     Returns:
         int: score
@@ -85,20 +85,20 @@ def get_landlord_score(remaining):
     score_map = {'A': 1, '2': 2, 'B': 3, 'R': 4}
     score = 0
     # rocket
-    if remaining[-2:] == 'BR':
+    if current_hand[-2:] == 'BR':
         score += 8
-        remaining = remaining[:-2]
-    length = len(remaining)
+        current_hand = current_hand[:-2]
+    length = len(current_hand)
     i = 0
     while i < length:
         # bomb
-        if i <= (length - 4) and remaining[i] == remaining[i+3]:
+        if i <= (length - 4) and current_hand[i] == current_hand[i+3]:
             score += 6
             i += 4
             continue
         # 2, Black Joker, Red Joker
-        if remaining[i] in score_map:
-            score += score_map[remaining[i]]
+        if current_hand[i] in score_map:
+            score += score_map[current_hand[i]]
         i += 1
     return score
 

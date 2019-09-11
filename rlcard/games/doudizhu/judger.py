@@ -29,7 +29,7 @@ class DoudizhuJudger(Judger):
         '''
         # add 'pass' to legal actions
         gt_cards = ['pass']
-        remaining = cards2str(player.remaining_cards)
+        current_hand = cards2str(player.current_hand)
         target_cards = greater_player.played_cards
         target_types = CARD_TYPE[target_cards]
         type_dict = {}
@@ -47,14 +47,14 @@ class DoudizhuJudger(Judger):
                 if int(can_weight) > weight:
                     for cards in cards_list:
                         # TODO: improve efficiency
-                        if cards not in gt_cards and contains_cards(remaining, cards):
-                        # if self.contains_cards(remaining, cards):
+                        if cards not in gt_cards and contains_cards(current_hand, cards):
+                        # if self.contains_cards(current_hand, cards):
                             gt_cards.append(cards)
         return gt_cards
 
     def get_playable_cards(self, player):
         '''Provide all legal cards the player can play according to his
-        remaining cards.
+        current hand.
 
         Args:
             player (DoudizhuPlayer object): object of DoudizhuPlayer
@@ -63,10 +63,10 @@ class DoudizhuJudger(Judger):
             list: list of string of playable cards
         '''
         player_id = player.player_id
-        remaining = cards2str(player.remaining_cards)
+        current_hand = cards2str(player.current_hand)
         missed = None
         for single in player.singles:
-            if single not in remaining:
+            if single not in current_hand:
                 missed = single
                 break
         playable_cards = list(self.playable_cards[player_id])
@@ -74,10 +74,10 @@ class DoudizhuJudger(Judger):
             position = player.singles.find(missed)
             player.singles = player.singles[position+1:]
             for cards in playable_cards:
-                if missed in cards or (not contains_cards(remaining, cards)):
+                if missed in cards or (not contains_cards(current_hand, cards)):
                     del self.playable_cards[player_id][cards]
         else:
             for cards in playable_cards:
-                if not contains_cards(remaining, cards):
+                if not contains_cards(current_hand, cards):
                     del self.playable_cards[player_id][cards]
         return list(self.playable_cards[player_id])

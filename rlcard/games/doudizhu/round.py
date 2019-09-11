@@ -24,9 +24,9 @@ class DoudizhuRound(Round):
 
         '''
         landlord_num = self.dealer.determine_role(players)
-        cards_seen = self.dealer.deck[-3:]
-        cards_seen.sort(key=functools.cmp_to_key(doudizhu_sort_card))
-        self.cards_seen = cards2str(cards_seen)
+        seen_cards = self.dealer.deck[-3:]
+        seen_cards.sort(key=functools.cmp_to_key(doudizhu_sort_card))
+        self.seen_cards = cards2str(seen_cards)
         self.landlord_num = landlord_num
 
     def proceed_round(self, player, action):
