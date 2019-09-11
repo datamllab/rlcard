@@ -35,7 +35,7 @@ The table below shows the environments that are (or will be soon) available in R
 
 # Evaluation
 We wrap a `Logger` that conveniently save/plot the results. Example outputs are as follows:
-![DQN on Blackjack](docs/imgs/dqn-on-blackjack.png "DQN on Blackjack") ![DQN on Dou Dizhu](docs/imgs/dqn-on-doudizhu.png "DQN on Dou Dizhu") ![DeepCFR on Limit Texas Hold'em](docs/imgs/deepcfr-on-limit-texas-holdem.png "DeepCFR on Limit Texas Hold'em")
+![Learning Curves](docs/imgs/curves.pdf "Learning Curves")
 
 
 # Disclaimer
