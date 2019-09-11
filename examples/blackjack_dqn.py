@@ -6,12 +6,14 @@ import tensorflow as tf
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import *
+from rlcard.plotter import Plotter
 
 # Make environment
 env = rlcard.make('blackjack')
 
 # Set the iterations numbers and how frequently we evaluate
 evaluate_every = 100
+save_plot_every = 10000
 evaluate_num = 1000
 episode_num = 1000000
 
@@ -34,6 +36,9 @@ with tf.Session() as sess:
 
     # Count the number of steps
     step_counter = 0
+
+    # Init Plotter
+    plotter = Plotter(xlabel='eposide', ylabel='reward', legend='DQN on Blackjack')
 
     for episode in range(episode_num):
 
@@ -59,14 +64,12 @@ with tf.Session() as sess:
             print('\n########## Evaluation ##########')
             print('Average reward is {}'.format(float(reward)/evaluate_num))
 
-            
+            # Add point
+            plotter.add_point(x=episode, y=reward)
 
-
-
-
-
-
-
-
-
-
+        # Make plot
+        if episode % save_plot_every == 0 and episode > 0:
+            plotter.make_plot(save_path='./blackjack_dqn_result/'+str(episode)+'.png')
+    
+    # Make the final plot
+    plotter.make_plot(save_path='./blackjack_dqn_result/'+'final_'+str(episode)+'.png')
