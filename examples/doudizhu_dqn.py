@@ -73,7 +73,7 @@ with tf.Session() as sess:
             print('Average reward is {}'.format(float(reward)/evaluate_num))
 
             # Add point
-            plotter.add_point(x=episode, y=reward)
+            plotter.add_point(x=episode, y=float(reward)/evaluate_num)
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
