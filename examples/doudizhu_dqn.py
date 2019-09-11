@@ -13,7 +13,7 @@ from rlcard.plotter import Plotter
 env = rlcard.make('doudizhu')
 eval_env = rlcard.make('doudizhu')
 
-# Set the iterations numbers and how frequently we evaluate
+# Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 200
 save_plot_every = 5000
 evaluate_num = 200
@@ -30,14 +30,14 @@ set_global_seed(0)
 with tf.Session() as sess:
     # Set agents
     agent = DQNAgent(sess,
-                       action_size=env.action_num,
+                       action_num=env.action_num,
                        replay_memory_size=20000,
                        replay_memory_init_size=memory_init_size,
                        norm_step=norm_step,
                        state_shape=[6, 5, 15],
                        mlp_layers=[512, 512])
 
-    random_agent = RandomAgent(action_size=eval_env.action_num)
+    random_agent = RandomAgent(action_num=eval_env.action_num)
 
     env.set_agents([agent, random_agent, random_agent])
     eval_env.set_agents([agent, random_agent, random_agent])
@@ -53,7 +53,7 @@ with tf.Session() as sess:
         # Generate data from the environment
         trajectories, _ = env.run(is_training=True)
 
-        # Feed transitions into agent and update the agent
+        # Feed transitions into agent memory, and train the agent
         for ts in trajectories[0]:
             agent.feed(ts)
             step_counter += 1
@@ -72,12 +72,12 @@ with tf.Session() as sess:
             print('\n########## Evaluation ##########')
             print('Average reward is {}'.format(float(reward)/evaluate_num))
 
-            # Add point
+            # Add point to plotter
             plotter.add_point(x=episode, y=float(reward)/evaluate_num)
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            plotter.make_plot(save_path='./doudizhu_dqn_result/'+str(episode)+'.png')
+            plotter.make_plot(save_path='./experiments/doudizhu_dqn_result/'+str(episode)+'.png')
    
     # Make the final plot
-    plotter.make_plot(save_path='./doudizhu_dqn_result/'+'final_'+str(episode)+'.png')
+    plotter.make_plot(save_path='./experiments/doudizhu_dqn_result/'+'final_'+str(episode)+'.png')
