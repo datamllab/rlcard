@@ -19,15 +19,15 @@ class DoudizhuGame(Game):
     An example of state during runtime:
             {
              'deck': '3333444455556666777788889999TTTTJJJJQQQQKKKKAAAA2222BR',
-             'cards_seen': 'TQA',
+             'seen_cards': 'TQA',
              'landlord': 0,
              'self': 2,
-             'hand': '3456677799TJQKAAB',
+             'initial_hand': '3456677799TJQKAAB',
              'trace': [(0, '8222'), (1, 'pass'), (2, 'pass'), (0, '6KKK'),
                        (1, 'pass'), (2, 'pass'), (0, '8'), (1, 'Q')],
-             'cards_played': ['6', '8', '8', 'Q', 'K', 'K', 'K', '2', '2', '2'],
-             'cards_others': '333444555678899TTTJJJQQAA2R',
-             'remaining': '3456677799TJQKAAB',
+             'played_cards': ['6', '8', '8', 'Q', 'K', 'K', 'K', '2', '2', '2'],
+             'others_hand': '333444555678899TTTJJJQQAA2R',
+             'current_hand': '3456677799TJQKAAB',
              'actions': ['pass', 'K', 'A', 'B']
             }
     '''
@@ -50,11 +50,11 @@ class DoudizhuGame(Game):
         self.game_result = {0: 0, 1: 0, 2: 0}
         self.histories = []
         self.trace = []
-        self.cards_played = []
-        self.state = {'deck': None, 'cards_seen': None, 'landlord': None,
-                      'self': None, 'hand': None, 'trace': self.trace,
-                      'cards_played': None, 'cards_others': None,
-                      'remaining': None, 'actions': []}
+        self.played_cards = []
+        self.state = {'deck': None, 'seen_cards': None, 'landlord': None,
+                      'self': None, 'initial_hand': None, 'trace': self.trace,
+                      'played_cards': None, 'others_hand': None,
+                      'current_hand': None, 'actions': []}
 
         # initialize players
         self.players = [Player(num)
@@ -77,9 +77,9 @@ class DoudizhuGame(Game):
         self.state['landlord'] = self.rounder.landlord_num
         self.state['self'] = self.current_player
         self.state['hand'] = cards2str(player.hand)
-        self.state['cards_seen'] = self.rounder.cards_seen
-        self.state['remaining'] = cards2str(player.remaining_cards)
-        self.state['cards_others'] = self._get_others_remaining(player)
+        self.state['seen_cards'] = self.rounder.seen_cards
+        self.state['current_hand'] = cards2str(player.current_hand)
+        self.state['others_hand'] = self._get_others_current_hand(player)
         self.state['actions'] = list(
             self.judger.playable_cards[self.current_player])
         return copy.deepcopy(self.state), self.current_player
@@ -101,8 +101,8 @@ class DoudizhuGame(Game):
 
         # update cards played
         if action != 'pass':
-            self._add_cards_played(action)
-            self.state['cards_played'] = self.cards_played
+            self._add_played_cards(action)
+            self.state['played_cards'] = self.played_cards
         # perform action
         greater_player = self.rounder.proceed_round(player, action)
         next_player_id = get_downstream_player_id(player, self.players)
@@ -111,10 +111,10 @@ class DoudizhuGame(Game):
         self.state['self'] = next_player_id
         next_player = self.players[next_player_id]
         self.state['hand'] = cards2str(next_player.hand)
-        self.state['remaining'] = cards2str(next_player.remaining_cards)
+        self.state['current_hand'] = cards2str(next_player.current_hand)
         actions = next_player.available_actions(greater_player, self.judger)
         self.state['actions'] = actions
-        self.state['cards_others'] = self._get_others_remaining(next_player)
+        self.state['others_hand'] = self._get_others_current_hand(next_player)
         self.current_player = next_player_id
         return copy.deepcopy(self.state), next_player_id
 
@@ -127,7 +127,7 @@ class DoudizhuGame(Game):
         action = self.trace.pop()
         self.current_player = action[0]
         self.rounder.round_last = records['round_last']
-        self.cards_played = records['cards_played']
+        self.played_cards = records['played_cards']
         self.players[self.current_player] = records['player']
         if records['greater_id'] is None:
             self.rounder.greater_player = None
@@ -151,9 +151,9 @@ class DoudizhuGame(Game):
         else:  # when get final states of all players
             self.state['self'] = player_id
             self.state['hand'] = cards2str(player.hand)
-            self.state['remaining'] = cards2str(player.remaining_cards)
+            self.state['current_hand'] = cards2str(player.current_hand)
             self.state['actions'] = None
-            self.state['cards_others'] = self._get_others_remaining(player)
+            self.state['others_hand'] = self._get_others_current_hand(player)
             return copy.deepcopy(self.state)
 
     def get_action_num(self):
@@ -204,7 +204,7 @@ class DoudizhuGame(Game):
             return True
         last_player = get_upstream_player_id(
             self.players[self.current_player], self.players)
-        if len(self.players[last_player].remaining_cards) == 0:
+        if len(self.players[last_player].current_hand) == 0:
             if self.players[last_player].role == 'peasant':
                 for _, player in enumerate(self.players):
                     if player.role == 'peasant':
@@ -220,7 +220,7 @@ class DoudizhuGame(Game):
         '''
         player = self.players[self.current_player]
         records = {'round_last': self.rounder.round_last,
-                   'cards_played': self.cards_played.copy(),
+                   'played_cards': self.played_cards.copy(),
                    'plable_cards': self.judger.playable_cards[self.current_player].copy(),
                    'player': copy.deepcopy(player)}
         if self.rounder.greater_player is None:
@@ -229,15 +229,15 @@ class DoudizhuGame(Game):
             records['greater_id'] = self.rounder.greater_player.player_id
         self.histories.append(records)
 
-    def _get_others_remaining(self, player):
+    def _get_others_current_hand(self, player):
         player_up = self.players[get_upstream_player_id(player, self.players)]
         player_down = self.players[get_downstream_player_id(
             player, self.players)]
-        cards_others = (player_up.remaining_cards +
-                        player_down.remaining_cards)
-        cards_others.sort(key=functools.cmp_to_key(doudizhu_sort_card))
-        return cards2str(cards_others)
+        others_hand = (player_up.current_hand +
+                        player_down.current_hand)
+        others_hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
+        return cards2str(others_hand)
 
-    def _add_cards_played(self, action):
-        self.cards_played.extend(list(action))
-        self.cards_played.sort(key=functools.cmp_to_key(doudizhu_sort_str))
+    def _add_played_cards(self, action):
+        self.played_cards.extend(list(action))
+        self.played_cards.sort(key=functools.cmp_to_key(doudizhu_sort_str))

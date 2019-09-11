@@ -36,7 +36,7 @@ class DoudizhuDealer(Dealer):
         for index, player in enumerate(players):
             player.hand = self.deck[index*hand_num:(index+1)*hand_num]
             player.hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
-            player.remaining_cards = copy.deepcopy(player.hand)
+            player.current_hand = copy.deepcopy(player.hand)
 
     def determine_role(self, players):
         '''Determine landlord and peasants according to players' hand
@@ -55,11 +55,11 @@ class DoudizhuDealer(Dealer):
 
         # determine 'landlord'
         max_score = get_landlord_score(
-            cards2str(self.landlord.remaining_cards))
+            cards2str(self.landlord.current_hand))
         for player in players[1:]:
             player.role = 'peasant'
             score = get_landlord_score(
-                cards2str(player.remaining_cards))
+                cards2str(player.current_hand))
             if score > max_score:
                 max_score = score
                 self.landlord = player
@@ -68,5 +68,5 @@ class DoudizhuDealer(Dealer):
         # give the 'landlord' the  three cards
         self.landlord.hand.extend(self.deck[-3:])
         self.landlord.hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
-        self.landlord.remaining_cards = copy.deepcopy(self.landlord.hand)
+        self.landlord.current_hand = copy.deepcopy(self.landlord.hand)
         return self.landlord.player_id
