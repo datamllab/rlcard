@@ -14,6 +14,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'tensorflow',
+        'dm-sonnet',
     ],
     classifiers=[
         "Programming Language :: Python :: 3.6",

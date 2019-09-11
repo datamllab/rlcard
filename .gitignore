@@ -10,6 +10,6 @@ __pycache__/
 .vscode/
 htmlcov/
 sonar-project.properties
-.coverage
+.coverage*
 docs/rst
 docs/sphinx

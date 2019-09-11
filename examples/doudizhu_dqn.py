@@ -13,7 +13,7 @@ env = rlcard.make('doudizhu')
 eval_env = rlcard.make('doudizhu')
 
 # Set the iterations numbers and how frequently we evaluate
-evaluate_every = 1000
+evaluate_every = 200
 evaluate_num = 200
 episode_num = 1000000
 
@@ -23,7 +23,7 @@ memory_init_size = 1000
 norm_step = 100
 
 # Set a global seed
-set_global_seed(1)
+set_global_seed(0)
 
 with tf.Session() as sess:
     # Set agents
