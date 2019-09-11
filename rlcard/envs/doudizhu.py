@@ -25,21 +25,21 @@ class DoudizhuEnv(Env):
 
         Returns:
             numpy array: 6*5*15 array
-                         6 : current player's cards
-                             union other players' cards
-                             recent three actions
-                             union of played cards
+                         6 : current hand
+                             the union of the other two players' hand
+                             the recent three actions
+                             the union of all played cards
         '''
         encoded_state = np.zeros((6, 5, 15), dtype=int)
         for index in range(6):
             encoded_state[index][0] = np.ones(15, dtype=int)
-        encode_cards(encoded_state[0], state['remaining'])
-        encode_cards(encoded_state[1], state['cards_others'])
+        encode_cards(encoded_state[0], state['current_hand'])
+        encode_cards(encoded_state[1], state['others_hand'])
         for i, action in enumerate(state['trace'][-3:]):
             if action[1] != 'pass':
                 encode_cards(encoded_state[4-i], action[1])
-        if state['cards_played'] is not None:
-            encode_cards(encoded_state[5], state['cards_played'])
+        if state['played_cards'] is not None:
+            encode_cards(encoded_state[5], state['played_cards'])
         return encoded_state
 
     def get_payoffs(self):

@@ -19,11 +19,11 @@ class DoudizhuPlayer(Player):
             1. role: A player's temporary role in one game(landlord or peasant)
             2. played_cards: The cards played in one round
             3. hand: Initial cards
-            4. remaining_cards: The rest of the cards after playing some of them
+            4. current_hand: The rest of the cards after playing some of them
         '''
         self.player_id = player_id
         self.hand = []
-        self.remaining_cards = []
+        self.current_hand = []
         self.role = ''
         self.played_cards = None
         self.singles = '3456789TJQKA2BR'
@@ -64,12 +64,12 @@ class DoudizhuPlayer(Player):
             for play_card in action:
                 if play_card in trans:
                     play_card = trans[play_card]
-                for _, remain_card in enumerate(self.remaining_cards):
+                for _, remain_card in enumerate(self.current_hand):
                     if remain_card.rank != '':
                         remain_card = remain_card.rank
                     else:
                         remain_card = remain_card.suit
                     if play_card == remain_card:
-                        self.remaining_cards.remove(self.remaining_cards[_])
+                        self.current_hand.remove(self.current_hand[_])
                         break
             return self
