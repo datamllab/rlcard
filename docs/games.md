@@ -28,17 +28,17 @@ In the toolkit, we implement a standard version of Doudizhu. In the bidding phas
 ## State
 At each decision point of the game, the corresponding player will be able to observe the current state (or information set in imperfect information game). The state consists of all the information that the player can observe from his view. We encode the information into a readable Python dictionary. The following table shows the structure of the state:
 
-| KEY          | DESCRIPTION                                                  | VALUE OF AN EXAMPLE                                         |
+| Key          | Description                                                  | Example value                                                |
 | ------------ | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| deck         | A string of one pack of 54 cards with Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'. | 3333444455556666<br/>777788889999TTTTJJJJ<br/>QQQQKKKKAAAA2222BR  |
+| deck         | A string of one pack of 54 cards with Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'. | 3333444455556666<br/>777788889999TTTTJJJJ<br/>QQQQKKKKAAAA2222BR |
 | cards_seen   | Three face-down cards distributed to the landlord after bidding. Then these cards will be made public to all players. | TQA                                                          |
 | landlord     | An integer of landlord's id                                  | 0                                                            |
 | self         | An integer of current player's id                            | 2                                                            |
-| hand         | All cards current player initially owned when a game starts. It will not change with playing cards. | 3456677799TJQKAAB                                            |
+| initial_hand | All cards current player initially owned when a game starts. It will not change with playing cards. | 3456677799TJQKAAB                                            |
 | trace        | A list of tuples which records every actions in one game. The first entry of  the tuple is player's id, the second is corresponding player's action. | [(0, '8222'), (1, 'pass'), (2, 'pass'), (0 '6KKK'), (1, 'pass'), (2, 'pass'), (0, '8'), (1, 'Q')] |
 | cards_played | The cards which have been played and sorted from low to high in one game | ['6', '8', '8', 'Q', 'K', 'K', 'K', '2', '2', '2']           |
 | cards_others | The union of other player's cards                            | 333444555678899TTTJJJQQAA2R                                  |
-| remaining    | The remaining cards of current player                        | 3456677799TJQKAAB                                            |
+| current_hand | The current hand of current player                           | 3456677799TJQKAAB                                            |
 | actions      | The legal actions the current player could do                | ['pass', 'K', 'A', 'B']                                      |
 
 ## State Encoding
