@@ -31,13 +31,13 @@ At each decision point of the game, the corresponding player will be able to obs
 | Key          | Description                                                  | Example value                                                |
 | ------------ | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | deck         | A string of one pack of 54 cards with Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'. | 3333444455556666<br/>777788889999TTTTJJJJ<br/>QQQQKKKKAAAA2222BR |
-| cards_seen   | Three face-down cards distributed to the landlord after bidding. Then these cards will be made public to all players. | TQA                                                          |
+| seen_cards   | Three face-down cards distributed to the landlord after bidding. Then these cards will be made public to all players. | TQA                                                          |
 | landlord     | An integer of landlord's id                                  | 0                                                            |
 | self         | An integer of current player's id                            | 2                                                            |
 | initial_hand | All cards current player initially owned when a game starts. It will not change with playing cards. | 3456677799TJQKAAB                                            |
 | trace        | A list of tuples which records every actions in one game. The first entry of  the tuple is player's id, the second is corresponding player's action. | [(0, '8222'), (1, 'pass'), (2, 'pass'), (0 '6KKK'), (1, 'pass'), (2, 'pass'), (0, '8'), (1, 'Q')] |
-| cards_played | The cards which have been played and sorted from low to high in one game | ['6', '8', '8', 'Q', 'K', 'K', 'K', '2', '2', '2']           |
-| cards_others | The union of other player's cards                            | 333444555678899TTTJJJQQAA2R                                  |
+| played_cards | As the game progresses, the cards which have been played by the three players and sorted from low to high. | ['6', '8', '8', 'Q', 'K', 'K', 'K', '2', '2', '2']           |
+| others_hand  | The union of the other two player's current hand             | 333444555678899TTTJJJQQAA2R                                  |
 | current_hand | The current hand of current player                           | 3456677799TJQKAAB                                            |
 | actions      | The legal actions the current player could do                | ['pass', 'K', 'A', 'B']                                      |
 
@@ -46,14 +46,14 @@ In Dou Dizhu environment, we encode the state into 6 feature planes. The size of
 
 | Plane          |                            Feature                            |
 | ------------ | :----------------------------------------------------------- |
-|0         | the remaining cards |
-|1         | the union of other players' cards |
+|0         | the current hand |
+|1         | the union of the other two players' hand |
 |2-4         | the recent three actions |
-|5         | the union of played cards |
+|5         | the union of all played cards |
 
 ## Action Abstraction
 
-The size of the action space of Dou Dizhu is 33676. This number is too large for learning algorithms. Thus, we make abstractions to the original action space and obtain 309 actions. We note that some recent studies also use similar abstraction techniques. The main idea of the abstraction is to make the kicker fuzzy and only focus on the major part of the combination. For example, "33345" is abstracted as '333**'. Users can also encode the actions for their own purposes by modifying `decode_action` function in [rlcard/envs/doudizhu.py](rlcard/envs/doudizhu.py). The detailed abstractions in the environment are as below:
+The size of the action space of Dou Dizhu is 33676. This number is too large for learning algorithms. Thus, we make abstractions to the original action space and obtain 309 actions. We note that some recent studies also use similar abstraction techniques. The main idea of the abstraction is to make the kicker fuzzy and only focus on the major part of the combination. For example, "33345" is abstracted as '333**'. Users can also encode the actions for their own purposes by modifying `decode_action` function in [rlcard/envs/doudizhu.py](rlcard/envs/doudizhu.py). In our `decode_action` function, when predicted action is not a legal action and the legal actions include 'pass', we heuristically chose 'pass' as the action.  The abstractions in the environment are as below. The detailed  mapping of action and its ID is in [rlcard/games/doudizhu/jsondata/action_space.json](rlcard/games/doudizhu/jsondata/action_space.json):
 
 | Type             | Number of Actions | Number of Actions after Abstraction | Action ID
 | ---------------- | :---------------: | :---------------: | :---------------: | 
@@ -73,3 +73,4 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 | Rocket           |         1         |         1         | 307
 | Pass             |         1         |         1         | 308
 | Total            |       33676       |        309        |
+
