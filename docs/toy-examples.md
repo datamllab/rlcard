@@ -87,9 +87,9 @@ with tf.Session() as sess:
             agent.feed(ts)
             step_counter += 1
 
-        # Train the agent
-        if step_counter > memory_init_size + norm_step:
-            agent.train()
+			# Train the agent
+			if step_counter > memory_init_size + norm_step:
+				agent.train()
 
         # Evaluate the performance
         if episode % evaluate_every == 0:
@@ -110,21 +110,19 @@ Average reward is -0.377
 Average reward is -0.401
 INFO - Step 0 loss: 0.8321959972381592
 INFO - Copied model parameters to target network.
-INFO - Step 48 loss: 0.7280950546264648
+INFO - Step 60 loss: 0.7190936803817749
 ########## Evaluation ##########
-Average reward is -0.357
-INFO - Step 148 loss: 0.7298157811164856
+Average reward is -0.346
+INFO - Step 195 loss: 0.8851202726364136
 ########## Evaluation ##########
-Average reward is -0.271
-INFO - Step 248 loss: 0.6217592954635624
+Average reward is -0.211
+INFO - Step 335 loss: 0.7604773640632629
 ########## Evaluation ##########
-Average reward is -0.123
-INFO - Step 348 loss: 0.73691260814666755
+Average reward is -0.078
+INFO - Step 479 loss: 0.57902514934539855
 ########## Evaluation ##########
-Average reward is -0.09
-INFO - Step 448 loss: 0.77759009599685675
-########## Evaluation ##########
-Average reward is -0.091
+Average reward is -0.056
+INFO - Step 616 loss: 0.77693158388137823
 ```
 In Blackjack, the player will get a payoff at the end of the game: 1 if the player wins, -1 if the player loses, and 0 if it is a tie. The performance is measured by the average payoff the player obtains by playing 1000 episodes. The above example shows that the agent achieves better and better performance during training.
 

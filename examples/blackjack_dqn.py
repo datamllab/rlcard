@@ -45,9 +45,9 @@ with tf.Session() as sess:
             agent.feed(ts)
             step_counter += 1
 
-        # Train the agent
-        if step_counter > memory_init_size + norm_step:
-            agent.train()
+            # Train the agent
+            if step_counter > memory_init_size + norm_step:
+                agent.train()
 
         # Evaluate the performance
         if episode % evaluate_every == 0:
