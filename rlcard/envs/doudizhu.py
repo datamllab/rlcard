@@ -67,8 +67,13 @@ class DoudizhuEnv(Env):
                 if abstract == abstract_action:
                     specific_actions.append(legal_action)
         if specific_actions:
-            return random.choice(specific_actions)
-        return random.choice(legal_actions)
+            action = random.choice(specific_actions)
+        else:
+            if "pass" in legal_actions:
+                action = "pass"
+            else:
+                action = random.choice(legal_actions)
+        return action
 
     def get_legal_actions(self):
         '''Get all legal actions for current state
