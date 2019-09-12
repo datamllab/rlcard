@@ -12,11 +12,11 @@ from rlcard.utils.utils import *
 env = rlcard.make('blackjack')
 episode_num = 2
 
-# Set global seed to 0
+# Set a global seed
 set_global_seed(1)
 
 # Set up agents
-agent_0 = RandomAgent(action_size=env.action_num)
+agent_0 = RandomAgent(action_num=env.action_num)
 env.set_agents([agent_0])
 
 for episode in range(episode_num):
@@ -27,7 +27,7 @@ for episode in range(episode_num):
     # Print out the trajectories
     print('\nEpisode {}'.format(episode))
     for ts in trajectories[0]:
-        print('State: {}, Action: {}, Reward: {}, Next State, {}, Done: {}'.format(ts[0], ts[1], ts[2], ts[3], ts[4])) 
+        print('State: {}, Action: {}, Reward: {}, Next State: {}, Done: {}'.format(ts[0], ts[1], ts[2], ts[3], ts[4])) 
 ```
 The expected output should look like something as follows:
 ```
@@ -48,12 +48,14 @@ import tensorflow as tf
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import *
+from rlcard.utils.logger import Logger
 
 # Make environment
 env = rlcard.make('blackjack')
 
-# Set the iterations numbers and how frequently we evaluate
+# Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
+save_plot_every = 1000
 evaluate_num = 1000
 episode_num = 1000000
 
@@ -68,28 +70,31 @@ set_global_seed(1)
 with tf.Session() as sess:
     # Set agents
     agent = DQNAgent(sess,
-                       action_size=env.action_num,
+                       action_num=env.action_num,
                        replay_memory_init_size=memory_init_size,
                        norm_step=norm_step,
-					   mlp_layers=[10,10])
+                       mlp_layers=[10,10])
     env.set_agents([agent])
 
     # Count the number of steps
     step_counter = 0
+
+    # Init a Logger to plot the learning curve
+    logger = Logger(xlabel='eposide', ylabel='reward', legend='DQN on Blackjack', log_path='./experiments/blackjack_dqn_result/log.txt', csv_path='./experiments/blackjack_dqn_result/performance.csv')
 
     for episode in range(episode_num):
 
         # Generate data from the environment
         trajectories, _ = env.run(is_training=True)
 
-        # Feed transitions into agent and update the agent
+        # Feed transitions into agent memory, and train
         for ts in trajectories[0]:
             agent.feed(ts)
             step_counter += 1
 
-			# Train the agent
-			if step_counter > memory_init_size + norm_step:
-				agent.train()
+            # Train the agent
+            if step_counter > memory_init_size + norm_step:
+                agent.train()
 
         # Evaluate the performance
         if episode % evaluate_every == 0:
@@ -98,8 +103,18 @@ with tf.Session() as sess:
                 _, payoffs = env.run(is_training=False)
                 reward += payoffs[0]
 
-            print('\n########## Evaluation ##########')
-            print('Average reward is {}'.format(float(reward)/evaluate_num))
+            logger.log('\n########## Evaluation ##########')
+            logger.log('Episode: {} Average reward is {}'.format(episode, float(reward)/evaluate_num))
+
+            # Add point to logger
+            logger.add_point(x=episode, y=float(reward)/evaluate_num)
+
+        # Make plot
+        if episode % save_plot_every == 0 and episode > 0:
+            logger.make_plot(save_path='./experiments/blackjack_dqn_result/'+str(episode)+'.png')
+    
+    # Make the final plot
+    logger.make_plot(save_path='./experiments/blackjack_dqn_result/'+'final_'+str(episode)+'.png')
 ```
 The expected output is something like below:
 ```python
@@ -124,7 +139,7 @@ INFO - Step 479 loss: 0.57902514934539855
 Average reward is -0.056
 INFO - Step 616 loss: 0.77693158388137823
 ```
-In Blackjack, the player will get a payoff at the end of the game: 1 if the player wins, -1 if the player loses, and 0 if it is a tie. The performance is measured by the average payoff the player obtains by playing 1000 episodes. The above example shows that the agent achieves better and better performance during training.
+In Blackjack, the player will get a payoff at the end of the game: 1 if the player wins, -1 if the player loses, and 0 if it is a tie. The performance is measured by the average payoff the player obtains by playing 1000 episodes. The above example shows that the agent achieves better and better performance during training. The logs and learning curves are saved in `./experiments/blackjack_dqn_result/`.
 
 # DeepCFR on Blackjack
 The third example is to use Deep Counterfactual Regret Minimization to train an agent on Blackjack. We aim to use this example to show how CFR algorithms can be developed and applied in our toolkit. We design `step` and `step_back` function which allows CFR based algorithms easily perform the game tree traversal for further optimization. The example is shown below:
@@ -151,7 +166,7 @@ with tf.Session() as sess:
                 policy_network_layers=(32,32),
                 advantage_network_layers=(32,32),
                 num_traversals=40,
-				num_step=40
+                num_step=40
                 learning_rate=1e-4,
                 batch_size_advantage=16,
                 batch_size_strategy=16,
