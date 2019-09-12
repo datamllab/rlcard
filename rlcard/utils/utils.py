@@ -8,6 +8,7 @@ from core import Card, Player
 def init_standard_deck():
     """ Return a list of Card objects which form a standard 52 cards deck
     """
+
     suit_list = ['S', 'H', 'D', 'C']
     rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
@@ -16,6 +17,7 @@ def init_standard_deck():
 def init_54_deck():
     """ Return a list of Card objects which include a standard 52 cards deck, BJ and RJ
     """
+
     suit_list = ['S', 'H', 'D', 'C']
     rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
@@ -54,6 +56,7 @@ def is_pair(cards):
     Returns:
         boolean: whether the input list is a pair or not
     """
+
     if len(cards) == 2 and cards[0].rank == cards[1].rank:
         return True
     else:
@@ -85,6 +88,7 @@ def rank2int(rank):
         If the input rank is an empty string, the function will return -1.
         If the input rank is not valid, the function will return None.
     """
+
     if rank == '':
         return -1
     elif rank.isdigit():
@@ -118,6 +122,7 @@ def get_cards_from_ranks(player, ranks):
     Note:
         This function will not affect the player's original hand.
     """
+
     chosen_cards = []
     remained_cards = player.hand.copy()
     for rank in ranks:
@@ -144,6 +149,7 @@ def take_out_cards(cards, remove_cards):
         which means to take out one kind of cards with the same suit and rank in 'cards' list,
         you need to have the same number of cards with the same suit and rank in 'remove_cards' list.
     """
+
     remove_cards_cp = remove_cards
     for card in cards:
         for remove_card in remove_cards_cp:
@@ -162,6 +168,7 @@ def is_in_cards(origin_cards, check_cards):
     Returns:
         boolean
     """
+
     check_cards_cp = check_cards.copy()
     cards = origin_cards.copy()
     i = 0
@@ -189,6 +196,7 @@ def init_players(n):
     Returns:
         list of Player objects with player_id(s) start from 0 and are consequent 
     """
+
     players = []
     for idx in range(n):
         players.append(Player(idx))
@@ -208,6 +216,7 @@ def get_downstream_player_id(player, players):
     Note:
         This function assumes player_id(s) in 'players' list start from 0, and are consequent.
     """
+
     return (player.player_id+1)%len(players)
 
 def reorganize(trajectories, payoffs):
@@ -220,6 +229,7 @@ def reorganize(trajectories, payoffs):
         A new one
         
     """
+
     player_num = len(trajectories)
     new_trajectories = [[] for _ in range(player_num)]
 
@@ -238,6 +248,14 @@ def reorganize(trajectories, payoffs):
     return new_trajectories
 
 def set_global_seed(seed):
+    """ Set the global see for reproducing results
+
+    Args:
+        seed (int): The seed
+
+    Note: If using other modules with randomness, they also need to be seeded
+    """
+
     if seed is not None:
         import numpy as np
         import random

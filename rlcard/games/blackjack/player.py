@@ -1,4 +1,3 @@
-
 from rlcard.core import Player
 
 class BlackjackPlayer(Player):

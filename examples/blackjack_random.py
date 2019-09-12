@@ -1,5 +1,5 @@
-""" A toy example of playing Blackjack with random agents
-"""
+''' A toy example of playing Blackjack with random agents
+'''
 
 import rlcard
 from rlcard.agents.random_agent import RandomAgent

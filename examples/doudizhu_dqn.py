@@ -1,5 +1,5 @@
-""" A toy example of learning a Deep-Q Agent on Dou Dizhu
-"""
+''' A toy example of learning a Deep-Q Agent on Dou Dizhu
+'''
 
 import tensorflow as tf
 
@@ -7,7 +7,7 @@ import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import *
-from rlcard.logger import Logger
+from rlcard.utils.logger import Logger
 
 # Make environment
 env = rlcard.make('doudizhu')

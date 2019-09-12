@@ -1,5 +1,6 @@
 import random
 import numpy as np
+
 from rlcard.utils.utils import *
 from rlcard.envs.env import Env
 from rlcard.games.doudizhu import *
@@ -10,15 +11,14 @@ from rlcard.games.doudizhu.utils import encode_cards
 
 
 class DoudizhuEnv(Env):
-    '''
-    Doudizhu Environment
+    ''' Doudizhu Environment
     '''
 
     def __init__(self):
         super().__init__(Game())
 
     def extract_state(self, state):
-        '''Encode state
+        ''' Encode state
 
         Args:
             state (dict): dict of original state
@@ -30,6 +30,7 @@ class DoudizhuEnv(Env):
                              the recent three actions
                              the union of all played cards
         '''
+
         encoded_state = np.zeros((6, 5, 15), dtype=int)
         for index in range(6):
             encoded_state[index][0] = np.ones(15, dtype=int)
@@ -43,15 +44,16 @@ class DoudizhuEnv(Env):
         return encoded_state
 
     def get_payoffs(self):
-        '''Get the payoffs of players. Must be implemented in the child class.
+        ''' Get the payoffs of players. Must be implemented in the child class.
 
         Returns:
             payoffs (list): a list of payoffs for each player
         '''
+
         return self.game.game_result
 
     def decode_action(self, action_id):
-        '''Action id -> the action in the game. Must be implemented in the child class.
+        ''' Action id -> the action in the game. Must be implemented in the child class.
 
         Args:
             action_id (int): the id of the action
@@ -59,6 +61,7 @@ class DoudizhuEnv(Env):
         Returns:
             action (string): the action that will be passed to the game engine.
         '''
+
         abstract_action = ACTION_LIST[action_id]
         legal_actions = self.game.state['actions']
         specific_actions = []
@@ -76,11 +79,12 @@ class DoudizhuEnv(Env):
         return action
 
     def get_legal_actions(self):
-        '''Get all legal actions for current state
+        ''' Get all legal actions for current state
 
         Returns:
             legal_actions (list): a list of legal actions' id
         '''
+
         legal_action_id = []
         legal_actions = self.game.state['actions']
         for action in legal_actions:
