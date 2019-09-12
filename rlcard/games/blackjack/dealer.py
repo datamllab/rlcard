@@ -1,5 +1,5 @@
-
 import random
+
 from rlcard.core import Dealer
 from rlcard.utils.utils import init_standard_deck
 
@@ -19,12 +19,15 @@ class BlackjackDealer(Dealer):
     def shuffle(self):
         ''' Shuffle the deck
         '''
+
         random.shuffle(self.deck)
 
     def deal_card(self, player):
         ''' Distribute one card to the player
+
         Args:
             player_id (int): the target player's id
         '''
+
         card = self.deck.pop()
         player.hand.append(card)

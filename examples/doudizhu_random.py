@@ -1,5 +1,5 @@
-""" A toy example of playing Doudizhu with random agents
-"""
+''' A toy example of playing Doudizhu with random agents
+'''
 
 import rlcard
 from rlcard.utils.utils import set_global_seed

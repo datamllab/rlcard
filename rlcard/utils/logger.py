@@ -3,12 +3,11 @@ import matplotlib.pyplot as plt
 import os
 
 class Logger(object):
-    """
-    Logger saves the running results and helps make plots from the results
-    """
+    ''' Logger saves the running results and helps make plots from the results
+    '''
 
     def __init__(self, xlabel = '', ylabel = '', legend = '', log_path = None, csv_path = None):
-        """ Initialize the labels, legend and paths of the plot and log file.
+        ''' Initialize the labels, legend and paths of the plot and log file.
 
         Args:
             xlabel (string): label of x axis of the plot
@@ -20,7 +19,8 @@ class Logger(object):
         Note:
             1. log_path must be provided to use the log() method. If the log file already exists, it will be deleted when Logger is initialized.
             2. If csv_path is provided, then one record will be write to the file everytime add_point() method is called.
-        """
+        '''
+
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.legend = legend
@@ -44,22 +44,24 @@ class Logger(object):
             self.csv_file.flush()
 
     def log(self, text):
-        """ Write the text to log file then print it.
+        ''' Write the text to log file then print it.
 
         Args:
             text(string): text to log
-        """
+        '''
+
         self.log_file.write(text+'\n')
         self.log_file.flush()
         print(text)
 
     def add_point(self, x = None, y = None):
-        """ Add a point to the plot
+        ''' Add a point to the plot
         
         Args:
             x (Number): x coordinate value
             y (Number): y coordinate value
-        """
+        '''
+
         if x != None and y != None:
             self.xs.append(x)
             self.ys.append(y)
@@ -72,11 +74,12 @@ class Logger(object):
             self.csv_file.flush()
 
     def make_plot(self, save_path = ''):
-        """ Make plot using all stored points
+        ''' Make plot using all stored points
 
         Args:
             save_path (string): where to store the plot
-        """
+        '''
+
         fig, ax = plt.subplots()
         ax.plot(self.xs, self.ys, label=self.legend)
         ax.set(xlabel=self.xlabel, ylabel=self.ylabel)

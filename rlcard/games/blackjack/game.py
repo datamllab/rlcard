@@ -1,5 +1,6 @@
 import random
 from copy import deepcopy
+
 from rlcard.core import Game
 from rlcard.games.blackjack.dealer import BlackjackDealer as Dealer
 from rlcard.games.blackjack.player import BlackjackPlayer as Player
@@ -10,6 +11,7 @@ class BlackjackGame(Game):
     def __init__(self):
         ''' Initialize the class Blackjack Game
         '''
+
         super().__init__()
 
 
@@ -20,6 +22,7 @@ class BlackjackGame(Game):
             state (dict): the first state of the game
             player_id (int): current player's id
         '''
+
         self.dealer = Dealer()
         self.player = Player(0)
         self.judger = Judger()
@@ -43,6 +46,7 @@ class BlackjackGame(Game):
             dict: next player's state
             int: next plater's id
         '''
+
         next_state = {}
         p = deepcopy(self.player)
         d = deepcopy(self.dealer)
@@ -83,6 +87,7 @@ class BlackjackGame(Game):
         Returns:
             Status (bool): check if the step back is success or not
         '''
+
         if len(self.history) > 0:
             self.dealer, self.player, self.winner = self.history.pop()
             return True
@@ -94,6 +99,7 @@ class BlackjackGame(Game):
         Returns:
             number_of_player (int): blackjack only have 1 player
         '''
+
         return 1
 
     def get_action_num(self):
@@ -110,6 +116,7 @@ class BlackjackGame(Game):
         Returns:
             player_id (int): current player's id
         '''
+
         return self.player.get_player_id()
 
     def get_state(self, player):
@@ -121,6 +128,7 @@ class BlackjackGame(Game):
         Returns:
             state (dict): corresponding player's state
         '''
+
         state = {}
         state['actions'] = ('hit', 'stand')
         hand = [card.get_index() for card in self.player.hand]
@@ -137,36 +145,37 @@ class BlackjackGame(Game):
         Returns:
             status (bool): True/False
         '''
+
         if self.player.status == 'bust'or self.dealer.status == 'bust' or (self.winner['dealer'] != 0 or self.winner['player'] != 0):
             return True
         else:
             return False
     
 
-######################################################### 
-    # For testing
-    def _start_game(self):
-        while True:
-            self.init_game()
-            player = self.player.get_player_id()
-            #state = self.get_state(player)
-            action = ['hit', 'stand']
-            while not self.is_over():
-                act = random.choice(action)
-                print("Status(Player, Dealer): ",(self.player.status, self.dealer.status))
-                print("Score(Player, Dealer): ",(self.player.score, self.dealer.score))
-                print("Player_action:",act)
-                next_state, next_player = self.step(act)
-
-            print("Status(Player, Dealer): ",(self.player.status, self.dealer.status))
-            print("Score(Player, Dealer): ",(self.player.score, self.dealer.score))
-            print(self.winner)
-            if self.dealer.score < 17 and self.winner['dealer'] == 1 and self.winner['player'] == 0:
-                print(next_state)
-                break
-
-if __name__ == "__main__":
-    game = BlackjackGame()
-    game._start_game()
+########################################################## 
+#    # For testing
+#    def _start_game(self):
+#        while True:
+#            self.init_game()
+#            player = self.player.get_player_id()
+#            #state = self.get_state(player)
+#            action = ['hit', 'stand']
+#            while not self.is_over():
+#                act = random.choice(action)
+#                print("Status(Player, Dealer): ",(self.player.status, self.dealer.status))
+#                print("Score(Player, Dealer): ",(self.player.score, self.dealer.score))
+#                print("Player_action:",act)
+#                next_state, next_player = self.step(act)
+#
+#            print("Status(Player, Dealer): ",(self.player.status, self.dealer.status))
+#            print("Score(Player, Dealer): ",(self.player.score, self.dealer.score))
+#            print(self.winner)
+#            if self.dealer.score < 17 and self.winner['dealer'] == 1 and self.winner['player'] == 0:
+#                print(next_state)
+#                break
+#
+#if __name__ == "__main__":
+#    game = BlackjackGame()
+#    game._start_game()
 
 
