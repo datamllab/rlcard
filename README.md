@@ -8,6 +8,10 @@ git clone https://github.com/datamllab/rlcard.git
 cd rlcard
 pip install -e .
 ```
+To check whether it is intalled correctly, try the example with random agents:
+```
+python examples/blackjack_random.py
+```
 
 # Getting Started
 The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) style. We recommend starting with the following **toy examples**.
@@ -34,7 +38,7 @@ The table below shows the environments that are (or will be soon) available in R
 | Sheng Ji ([wiki](https://en.wikipedia.org/wiki/Sheng_ji), [baike](https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150))      | 10^157 ~ 10^165      |  10^61  | 10^13 | - | Come soon|
 
 # Evaluation
-We wrap a `Logger` that conveniently save/plot the results. Example outputs are as follows:
+We wrap a `Logger` that conveniently saves/plots the results. Example outputs are as follows:
 ![Learning Curves](docs/imgs/curves.png "Learning Curves")
 
 
