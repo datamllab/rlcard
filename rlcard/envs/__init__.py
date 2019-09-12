@@ -14,10 +14,11 @@ register(
     entry_point='rlcard.envs.blackjack:BlackjackEnv',
 )
 
-#register(
-#    id='simpletexasholdem',
-#    entry_point='rlcard.envs.simpletexasholdem:SimpleTexasEnv',
-#)
+register(
+    id='limitholdem',
+    entry_point='rlcard.envs.limitholdem:LimitholdemEnv',
+)
+
 
 #register(
 #    id='texasholdem',
