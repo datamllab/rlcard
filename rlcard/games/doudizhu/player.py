@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
-"""Implement Doudizhu Player class"""
+''' Implement Doudizhu Player class
+'''
+
 from rlcard.core import Player
 
 
 class DoudizhuPlayer(Player):
-    '''Player can store cards in the player's hand and the role,
+    ''' Player can store cards in the player's hand and the role,
     determine the actions can be made according to the rules,
     and can perfrom corresponding action
     '''
 
     def __init__(self, player_id):
-        '''Give the player an id in one game
+        ''' Give the player an id in one game
 
         Args:
             player_id (int): the player_id of a player
@@ -21,6 +23,7 @@ class DoudizhuPlayer(Player):
             3. hand: Initial cards
             4. current_hand: The rest of the cards after playing some of them
         '''
+
         self.player_id = player_id
         self.hand = []
         self.current_hand = []
@@ -29,7 +32,7 @@ class DoudizhuPlayer(Player):
         self.singles = '3456789TJQKA2BR'
 
     def available_actions(self, greater_player=None, judger=None):
-        '''Get the actions can be made based on the rules
+        ''' Get the actions can be made based on the rules
 
         Args:
             greater_player (DoudizhuPlayer object): player who played
@@ -39,6 +42,7 @@ class DoudizhuPlayer(Player):
         Returns:
             list: list of string of actions. Eg: ['pass', '8', '9', 'T', 'J']
         '''
+
         actions = []
         if greater_player is None or greater_player is self:
             actions = judger.get_playable_cards(self)
@@ -47,7 +51,7 @@ class DoudizhuPlayer(Player):
         return actions
 
     def play(self, action, greater_player=None):
-        '''Perfrom action
+        ''' Perfrom action
 
         Args:
             action (string): specific action
@@ -56,6 +60,7 @@ class DoudizhuPlayer(Player):
         Returns:
             object of DoudizhuPlayer: If there is a new greater_player, return it, if not, return None
         '''
+
         trans = {'T': '10', 'B': 'BJ', 'R': 'RJ'}
         if action == 'pass':
             return greater_player

@@ -1,12 +1,12 @@
-""" A toy example of learning a Deep-Q Agent on Blackjack
-"""
+''' A toy example of learning a Deep-Q Agent on Blackjack
+'''
 
 import tensorflow as tf
 
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import *
-from rlcard.logger import Logger
+from rlcard.utils.logger import Logger
 
 # Make environment
 env = rlcard.make('blackjack')

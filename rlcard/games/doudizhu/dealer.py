@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Implement Doudizhu Dealer class"""
+''' Implement Doudizhu Dealer class
+'''
+
 import random
 import functools
 import copy
+
 from rlcard.core import Dealer
 from rlcard.utils.utils import init_54_deck
 from rlcard.games.doudizhu.utils import doudizhu_sort_card, get_landlord_score
@@ -10,7 +13,7 @@ from rlcard.games.doudizhu.judger import cards2str
 
 
 class DoudizhuDealer(Dealer):
-    '''Dealer will shuffle, deal cards, and determine players' roles
+    ''' Dealer will shuffle, deal cards, and determine players' roles
     '''
 
     def __init__(self):
@@ -24,14 +27,18 @@ class DoudizhuDealer(Dealer):
         self.landlord = None
 
     def shuffle(self):
+        ''' Randomly shuffle the deck
+        '''
+
         random.shuffle(self.deck)
 
     def deal_cards(self, players):
-        '''Deal cards to players
+        ''' Deal cards to players
 
         Args:
             players (list): list of DoudizhuPlayer objects
         '''
+
         hand_num = (len(self.deck) - 3) // len(players)
         for index, player in enumerate(players):
             player.hand = self.deck[index*hand_num:(index+1)*hand_num]
@@ -39,7 +46,7 @@ class DoudizhuDealer(Dealer):
             player.current_hand = copy.deepcopy(player.hand)
 
     def determine_role(self, players):
-        '''Determine landlord and peasants according to players' hand
+        ''' Determine landlord and peasants according to players' hand
 
         Args:
             players (list): list of DoudizhuPlayer objects
@@ -47,6 +54,7 @@ class DoudizhuDealer(Dealer):
         Returns:
             int: landlord's player_id
         '''
+
         # deal cards
         self.shuffle()
         self.deal_cards(players)

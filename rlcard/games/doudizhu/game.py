@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Implement Doudizhu Game class"""
+''' Implement Doudizhu Game class
+'''
+
 import functools
 import copy
+
 from rlcard.core import Game
 from rlcard.games.doudizhu.judger import cards2str
 from rlcard.games.doudizhu.player import DoudizhuPlayer as Player
@@ -13,7 +16,7 @@ from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 
 
 class DoudizhuGame(Game):
-    '''Provide game APIs for env to run doudizhu and get corresponding state 
+    ''' Provide game APIs for env to run doudizhu and get corresponding state 
     information.
 
     An example of state during runtime:
@@ -31,6 +34,7 @@ class DoudizhuGame(Game):
              'actions': ['pass', 'K', 'A', 'B']
             }
     '''
+
     players_num = 3
 
     def __init__(self):
@@ -39,12 +43,13 @@ class DoudizhuGame(Game):
         self.histories = []
 
     def init_game(self):
-        '''Initialize players and state.
+        ''' Initialize players and state.
 
         Returns:
             dict: first state in one game
             int: current player's id
         '''
+
         # initialize public variables
         self.current_game += 1
         self.game_result = {0: 0, 1: 0, 2: 0}
@@ -85,7 +90,7 @@ class DoudizhuGame(Game):
         return copy.deepcopy(self.state), self.current_player
 
     def step(self, action):
-        '''Perform one draw of the game
+        ''' Perform one draw of the game
 
         Args:
             action (str): specific action of doudizhu. Eg: '33344'
@@ -94,6 +99,7 @@ class DoudizhuGame(Game):
             dict: next player's state
             int: next player's id
         '''
+
         # record game history
         player = self.players[self.current_player]
         self._record_history()
@@ -119,8 +125,9 @@ class DoudizhuGame(Game):
         return copy.deepcopy(self.state), next_player_id
 
     def step_back(self):
-        '''Return to the previous state of the game.
+        ''' Return to the previous state of the game.
         '''
+
         if not self.histories:
             return False
         records = self.histories.pop()
@@ -137,7 +144,7 @@ class DoudizhuGame(Game):
         return True
 
     def get_state(self, player_id):
-        '''Return player's state
+        ''' Return player's state
 
         Args:
             player_id (int): the player_id of a player
@@ -145,6 +152,7 @@ class DoudizhuGame(Game):
         Returns:
             dict: corresponding player's state
         '''
+
         player = self.players[player_id]
         if self.current_player is not None:  # when get first state
             return copy.deepcopy(self.state)
@@ -157,31 +165,34 @@ class DoudizhuGame(Game):
             return copy.deepcopy(self.state)
 
     def get_action_num(self):
-        '''Return the total number of abstract acitons
+        ''' Return the total number of abstract acitons
 
         Returns:
             int: the total number of abstract actions of doudizhu
         '''
+
         return 309
 
     def get_player_id(self):
-        '''Return current player's id
+        ''' Return current player's id
 
         Returns:
             int: current player's id
         '''
+
         return self.current_player
 
     def get_player_num(self):
-        '''Return the number of players in doudizhu
+        ''' Return the number of players in doudizhu
 
         Returns:
             int: the number of players in doudizhu
         '''
+
         return DoudizhuGame.players_num
 
     def is_winner(self, player_id):
-        '''Judge whether a player is winner in one game
+        ''' Judge whether a player is winner in one game
 
         Args:
             player_id (int): the player_id of a player
@@ -192,14 +203,16 @@ class DoudizhuGame(Game):
         Note:
             1. This function only can be called after game over
         '''
+
         return self.game_result[player_id]
 
     def is_over(self):
-        '''Judge whether a game is over
+        ''' Judge whether a game is over
 
         Returns:
             Bool: True(over) / False(not over)
         '''
+
         if self.current_player is None:
             return True
         last_player = get_upstream_player_id(
@@ -216,8 +229,9 @@ class DoudizhuGame(Game):
         return False
 
     def _record_history(self):
-        '''Record game histories
+        ''' Record game histories
         '''
+
         player = self.players[self.current_player]
         records = {'round_last': self.rounder.round_last,
                    'played_cards': self.played_cards.copy(),

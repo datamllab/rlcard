@@ -1,9 +1,12 @@
-'''doudizhu utils'''
+''' Doudizhu utils
+'''
+
 import os
 import json
 import random
-import rlcard
 import numpy as np
+
+import rlcard
 
 # Read required docs
 ROOT_PATH = rlcard.__path__[0]
@@ -34,7 +37,7 @@ CARD_RANK = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K',
 
 
 def doudizhu_sort_str(card_1, card_2):
-    '''Compare the rank of two cards of str representation
+    ''' Compare the rank of two cards of str representation
 
     Args:
         card_1 (str): str representation of solo card
@@ -43,6 +46,7 @@ def doudizhu_sort_str(card_1, card_2):
     Returns:
         int: 1(card_1 > card_2) / 0(card_1 = card2) / -1(card_1 < card_2)
     '''
+
     key_1 = CARD_RANK_STR.index(card_1)
     key_2 = CARD_RANK_STR.index(card_2)
     if key_1 > key_2:
@@ -53,12 +57,13 @@ def doudizhu_sort_str(card_1, card_2):
 
 
 def doudizhu_sort_card(card_1, card_2):
-    '''Compare the rank of two cards of Card object
+    ''' Compare the rank of two cards of Card object
 
     Args:
         card_1 (object): object of Card
         card_2 (object): object of card
     '''
+
     key = []
     for card in [card_1, card_2]:
         if card.rank == '':
@@ -73,7 +78,7 @@ def doudizhu_sort_card(card_1, card_2):
 
 
 def get_landlord_score(current_hand):
-    '''Roughly judge the quality of the hand, and provide a score as basis to
+    ''' Roughly judge the quality of the hand, and provide a score as basis to
     bid landlord.
 
     Args:
@@ -82,6 +87,7 @@ def get_landlord_score(current_hand):
     Returns:
         int: score
     '''
+
     score_map = {'A': 1, '2': 2, 'B': 3, 'R': 4}
     score = 0
     # rocket
@@ -104,7 +110,7 @@ def get_landlord_score(current_hand):
 
 
 def get_optimal_action(probs, legal_actions):
-    '''Determine the optimal action from legal actions
+    ''' Determine the optimal action from legal actions
     according to the probabilities of abstract actions.
 
     Args:
@@ -114,6 +120,7 @@ def get_optimal_action(probs, legal_actions):
     Returns:
         str: optimal legal action
     '''
+
     abstract_actions = [SPECIFIC_MAP[action] for action in legal_actions]
     action_probs = []
     for actions in abstract_actions:
@@ -132,7 +139,7 @@ def get_optimal_action(probs, legal_actions):
 
 
 def cards2str(cards: list):
-    '''Get the corresponding string representation of cards
+    ''' Get the corresponding string representation of cards
 
     Args:
         cards (list): list of Card objects
@@ -140,6 +147,7 @@ def cards2str(cards: list):
     Returns:
         string: string representation of cards
     '''
+
     response = ''
     for card in cards:
         if card.rank == '':
@@ -153,7 +161,7 @@ def cards2str(cards: list):
 
 
 def contains_cards(candidate, target):
-    '''Check if cards of candidate contains cards of target.
+    ''' Check if cards of candidate contains cards of target.
 
     Args:
         candidate (string): string represent of cards of candidate
@@ -162,6 +170,7 @@ def contains_cards(candidate, target):
     Returns:
         boolean
     '''
+
     len_can = len(candidate)
     len_tar = len(target)
     if len_can < len_tar:
@@ -179,12 +188,13 @@ def contains_cards(candidate, target):
 
 
 def encode_cards(plane, cards):
-    '''Encode cards and represerve it into plane.
+    ''' Encode cards and represerve it into plane.
 
     Args:
         cards (list or str): list or str of cards, every entry is a
     character of solo representation of card
     '''
+
     if not cards:
         return None
     layer = 1
