@@ -125,21 +125,21 @@ class Round(object):
     round_id = None
 
     def __init__(self):
-        """ When the game starts, round id should be 1
-        """
+        ''' When the game starts, round id should be 1
+        '''
 
         pass
 
     def proceed_round(self):
-        """ Call other Classes's functions to keep the game running
-        """
+        ''' Call other Classes's functions to keep the game running
+        '''
 
         pass
 
 
 class Game(object):
-    """ Game class. This class will interact with outer environment.
-    """
+    ''' Game class. This class will interact with outer environment.
+    '''
     
     def init_game(self):
         ''' Initialize all characters in the game and start round 1
@@ -166,14 +166,14 @@ class Game(object):
         pass
 
     def get_action_num(self):
-        """ Return the number of possible actions in the game
-        """
+        ''' Return the number of possible actions in the game
+        '''
 
         pass
 
     def get_player_id(self):
-        """ Return the current player that will take actions soon
-        """
+        ''' Return the current player that will take actions soon
+        '''
 
         pass
 
