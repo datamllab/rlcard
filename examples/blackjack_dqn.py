@@ -6,7 +6,7 @@ import tensorflow as tf
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import *
-from rlcard.plotter import Plotter
+from rlcard.logger import Logger
 
 # Make environment
 env = rlcard.make('blackjack')
@@ -37,8 +37,8 @@ with tf.Session() as sess:
     # Count the number of steps
     step_counter = 0
 
-    # Init a Plotter to plot the learning curve
-    plotter = Plotter(xlabel='eposide', ylabel='reward', legend='DQN on Blackjack')
+    # Init a Logger to plot the learning curve
+    logger = Logger(xlabel='eposide', ylabel='reward', legend='DQN on Blackjack', log_path='./experiments/blackjack_dqn_result/log.txt', csv_path='./experiments/blackjack_dqn_result/performance.csv')
 
     for episode in range(episode_num):
 
@@ -61,15 +61,15 @@ with tf.Session() as sess:
                 _, payoffs = env.run(is_training=False)
                 reward += payoffs[0]
 
-            print('\n########## Evaluation ##########')
-            print('Episode: {} Average reward is {}'.format(episode, float(reward)/evaluate_num))
+            logger.log('\n########## Evaluation ##########')
+            logger.log('Episode: {} Average reward is {}'.format(episode, float(reward)/evaluate_num))
 
-            # Add point to plotter
-            plotter.add_point(x=episode, y=float(reward)/evaluate_num)
+            # Add point to logger
+            logger.add_point(x=episode, y=float(reward)/evaluate_num)
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            plotter.make_plot(save_path='./experiments/blackjack_dqn_result/'+str(episode)+'.png')
+            logger.make_plot(save_path='./experiments/blackjack_dqn_result/'+str(episode)+'.png')
     
     # Make the final plot
-    plotter.make_plot(save_path='./experiments/blackjack_dqn_result/'+'final_'+str(episode)+'.png')
+    logger.make_plot(save_path='./experiments/blackjack_dqn_result/'+'final_'+str(episode)+'.png')
