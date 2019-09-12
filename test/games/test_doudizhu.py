@@ -1,6 +1,9 @@
 import unittest
+import numpy as np
 from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
+from rlcard.games.doudizhu.utils import get_landlord_score, encode_cards
+from rlcard.games.doudizhu.utils import get_optimal_action
 
 
 class TestDoudizhuMethods(unittest.TestCase):
@@ -51,6 +54,35 @@ class TestDoudizhuMethods(unittest.TestCase):
         for player_id in range(3):
             state = game.get_state(player_id)
             self.assertIsNone(state['actions'])
+
+    def test_step_back(self):
+        game = Game()
+        state, player_id = game.init_game()
+        action = state['actions'][0]
+        game.step(action)
+        game.step_back()
+        self.assertEqual(game.current_player, player_id)
+        self.assertEqual(len(game.histories), 0)
+
+    def test_get_landlord_score(self):
+        score_1 = get_landlord_score('56888TTQKKKAA222R')
+        self.assertEqual(score_1, 12)
+
+    def test_get_optimal_action(self):
+        probs = np.zeros(309)
+        probs[-1] = 0.5
+        legal_actions = ['pass', '33344', 'BR']
+        action = get_optimal_action(probs, legal_actions)
+        self.assertEqual(action, 'pass')
+
+    def test_encode_cards(self):
+        plane = np.zeros((5, 15), dtype=int)
+        plane[0] = np.ones(15, dtype=int)
+        cards = '333BR'
+        encode_cards(plane, cards)
+        self.assertEqual(plane[3][0], 1)
+        self.assertEqual(plane[1][13], 1)
+        self.assertEqual(plane[1][14], 1)
 
 
 if __name__ == '__main__':
