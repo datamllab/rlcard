@@ -2,14 +2,15 @@ from rlcard.utils.utils import *
 import numpy as np
 
 class Env(object):
-    """ The base Env class
-    """
+    ''' The base Env class
+    '''
+
     def __init__(self, game):
-        """ Initialize
+        ''' Initialize
 
         Args:
             game (Game): The Game class
-        """
+        '''
 
         self.game = game
 
@@ -22,18 +23,18 @@ class Env(object):
         self.is_over = self.game.is_over
     
     def init_game(self):
-        """ Start a new game
+        ''' Start a new game
 
         Returns:
             state (numpy.array): The begining state of the game
             player_id (int): The begining player
-        """
+        '''
 
         state, player_id = self.game.init_game()
         return self.extract_state(state), player_id
 
     def step(self, action):
-        """ Step forward
+        ''' Step forward
 
         Args:
             action (int): the action taken by the current player
@@ -41,45 +42,45 @@ class Env(object):
         Returns:
             next_state (numpy.array): The next state
             player_id (int): The ID of the next player
-        """
+        '''
 
         next_state, player_id = self.game.step(self.decode_action(action))
         return self.extract_state(next_state), player_id
 
     def step_back(self):
-        """ Take one step backward
+        ''' Take one step backward
 
         Returns:
             next_state (numpy.array): The previous state
             player_id (int): The ID of the previous player
-        """
+        '''
 
         state, player_id = self.game.step_back()
         return state, player_id
 
     def get_state(self, player_id):
-        """ Get the state given player id
+        ''' Get the state given player id
 
         Args:
             player_id (int): The player id
 
         Returns:
             state (numpy.array): The observed state of the player
-        """
+        '''
 
         return self.extract_state(self.game.get_state(player_id))
 
     def set_agents(self, agents):
-        """ Set the agents that will interact with the environment
+        ''' Set the agents that will interact with the environment
 
         Args:
             agents (list): List of Agent classes
-        """
+        '''
 
         self.agents = agents
 
     def run(self, is_training=False):
-        """ Run a complete game, either for evaluation or training RL agent.
+        ''' Run a complete game, either for evaluation or training RL agent.
 
         Args:
             is_training (boolean): True if for training purpose.
@@ -91,7 +92,7 @@ class Env(object):
         Note:
             1. The trajectories are 3-dimension list. The first dimension is for different players.
             The second dimension is for different transitions. The third dimension is for the contents of each transiton
-        """
+        '''
 
         trajectories = [[] for _ in range(self.player_num)]
         state, player_id = self.init_game()
@@ -134,14 +135,14 @@ class Env(object):
 
 
     def extract_state(self, state):
-        """ Extract useful information from state for RL. Must be implemented in the child class.
+        ''' Extract useful information from state for RL. Must be implemented in the child class.
 
         Args:
             state (dict): the raw state
 
         Returns:
             extracted_state (numpy.array): the extracted state
-        """
+        '''
 
         pass
 
@@ -155,20 +156,21 @@ class Env(object):
         pass
 
     def decode_action(self, action_id):
-        """ Action id -> the action in the game. Must be implemented in the child class.
+        ''' Action id -> the action in the game. Must be implemented in the child class.
 
         Args:
             action_id (int): the id of the action
 
         Returns:
             action (string): the action that will be passed to the game engine.
-        """
+        '''
 
         pass
             
     def get_legal_actions(self):
-        """ Get all legal actions for current state
+        ''' Get all legal actions for current state
 
         Returns:
             legal_actions (list): a list of legal actions' id
-        """
+        '''
+        pass

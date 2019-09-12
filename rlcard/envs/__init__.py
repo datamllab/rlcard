@@ -1,6 +1,8 @@
+''' Register new environments
+'''
+
 from rlcard.envs.registration import register, make
 
-### Example... This one does work for now 
 
 register(
     id='doudizhu',
@@ -12,12 +14,12 @@ register(
     entry_point='rlcard.envs.blackjack:BlackjackEnv',
 )
 
-register(
-    id='simpletexasholdem',
-    entry_point='rlcard.envs.simpletexasholdem:SimpleTexasEnv',
-)
+#register(
+#    id='simpletexasholdem',
+#    entry_point='rlcard.envs.simpletexasholdem:SimpleTexasEnv',
+#)
 
-register(
-    id='texasholdem',
-    entry_point='rlcard.envs.texasholdem:TexasEnv',
-)
+#register(
+#    id='texasholdem',
+#    entry_point='rlcard.envs.texasholdem:TexasEnv',
+#)

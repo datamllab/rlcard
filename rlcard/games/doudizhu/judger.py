@@ -1,20 +1,26 @@
 # -*- coding: utf-8 -*-
-"""Implement Doudizhu Judger class"""
+''' Implement Doudizhu Judger class
+'''
+
 from rlcard.core import Judger
 from rlcard.games.doudizhu.utils import CARD_TYPE, TYPE_CARD
 from rlcard.games.doudizhu.utils import cards2str, contains_cards
 
 
 class DoudizhuJudger(Judger):
-    '''Determine what cards a player can play'''
+    ''' Determine what cards a player can play
+    '''
 
     def __init__(self, players):
+        ''' Initilize the Judger class for Dou Dizhu
+        '''
+
         self.playable_cards = [CARD_TYPE.copy() for i in range(3)]
         for player in players:
             self.get_playable_cards(player)
 
     def get_gt_cards(self, player, greater_player):
-        '''Provide player's cards which are greater than the ones played by
+        ''' Provide player's cards which are greater than the ones played by
         previous player in one round
 
         Args:
@@ -27,6 +33,7 @@ class DoudizhuJudger(Judger):
         Note:
             1. return value contains 'pass'
         '''
+
         # add 'pass' to legal actions
         gt_cards = ['pass']
         current_hand = cards2str(player.current_hand)
@@ -53,7 +60,7 @@ class DoudizhuJudger(Judger):
         return gt_cards
 
     def get_playable_cards(self, player):
-        '''Provide all legal cards the player can play according to his
+        ''' Provide all legal cards the player can play according to his
         current hand.
 
         Args:
@@ -62,6 +69,7 @@ class DoudizhuJudger(Judger):
         Returns:
             list: list of string of playable cards
         '''
+
         player_id = player.player_id
         current_hand = cards2str(player.current_hand)
         missed = None

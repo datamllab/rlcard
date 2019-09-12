@@ -1,19 +1,19 @@
+import numpy as np
+
 from rlcard.games.blackjack import *
 from rlcard.envs.env import Env
 from rlcard.games.blackjack.game import BlackjackGame as Game
 from rlcard.utils.utils import * 
-import numpy as np
 
-import random
 
 class BlackjackEnv(Env):
-    """
-    Blackjack Environment
-    """
+    ''' Blackjack Environment
+    '''
 
     def __init__(self):
         ''' Initialize the Blackjack environment
         '''
+
         super().__init__(Game())
         self.rank2score = {"A":10, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}
         self.actions = ['hit', 'stand']
@@ -24,6 +24,7 @@ class BlackjackEnv(Env):
         Returns:
             encoded_action_list (list): return encoded legal action list (from str to int)
         '''
+
         encoded_action_list = []
         for i, act in enumerate(self.actions):
             encoded_action_list.append(i)
@@ -38,6 +39,7 @@ class BlackjackEnv(Env):
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
         '''
+
         cards = state['state']
         my_cards = cards[0]
         dealer_cards = cards[1]
@@ -59,11 +61,12 @@ class BlackjackEnv(Env):
         return obs
 
     def get_payoffs(self):
-        '''Get the payoff of a game 
+        ''' Get the payoff of a game 
 
         Returns:
            payoffs (list): list of payoffs 
         '''
+
         if self.game.winner['player'] == 0 and self.game.winner['dealer'] == 1:
             return [-1]
         elif self.game.winner['dealer'] == 0 and self.game.winner['player'] == 1:
@@ -74,7 +77,7 @@ class BlackjackEnv(Env):
             raise "There are some bugs!"
  
     def decode_action(self, action_id):
-        '''Decode the action for applying to the game
+        ''' Decode the action for applying to the game
 
         Args:
             action id (int): action id
@@ -82,5 +85,6 @@ class BlackjackEnv(Env):
         Returns:
             action (str): action for the game 
         '''
+
         return self.actions[action_id]
  
