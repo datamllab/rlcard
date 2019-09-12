@@ -31,7 +31,7 @@ The table below shows the environments that are (or will be soon) available in R
 | Mahjong ([wiki](https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules), [baike](https://baike.baidu.com/item/%E9%BA%BB%E5%B0%86/215))      | 10^121      |   10^48 |10^2 | - | Come soon| 
 | No-limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [baike](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin))      |10^162 | 10^3| 10^4 | no-limit-holdem|Available |
 | UNO ([wiki](https://en.wikipedia.org/wiki/Uno_\(card_game), [baike](https://baike.baidu.com/item/UNO%E7%89%8C/2249587))      |  10^163      |   10^10 | 10^1| - | Come soon|
-| Sheng Ji ([wiki](https://en.wikipedia.org/wiki/Sheng_ji), [baike](https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150))      | 10^173 ~ 10^180      |  10^61  | 10^13 | - | Come soon|
+| Sheng Ji ([wiki](https://en.wikipedia.org/wiki/Sheng_ji), [baike](https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150))      | 10^157 ~ 10^165      |  10^61  | 10^13 | - | Come soon|
 
 # Evaluation
 We wrap a `Logger` that conveniently save/plot the results. Example outputs are as follows:
