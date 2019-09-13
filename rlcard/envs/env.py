@@ -39,9 +39,10 @@ class Env(object):
             action (int): the action taken by the current player
 
         Returns:
-            (tuple_: Tuple containing:
+            (tuple): Tuple containing:
+
                 (numpy.array): The next state
-            int: The ID of the next player
+                (int): The ID of the next player
         '''
 
         next_state, player_id = self.game.step(self.decode_action(action))
@@ -51,8 +52,10 @@ class Env(object):
         ''' Take one step backward.
 
         Returns:
-            numpy.array: The previous state
-            int: The ID of the previous player
+            (tuple): Tuple containing:
+
+                (numpy.array): The previous state
+                (int): The ID of the previous player
 
         Note: Error will be raised if step back from the root node.
         '''
@@ -70,7 +73,7 @@ class Env(object):
         ''' Get the current player id
 
         Returns:
-            int: the id of the current player
+            (int): the id of the current player
         '''
 
         return self.game.get_player_id()
@@ -79,7 +82,7 @@ class Env(object):
         ''' Check whether the curent game is over
 
         Returns:
-            boolean: True is current game is over
+            (boolean): True is current game is over
         '''
 
         return self.game.is_over()
@@ -91,7 +94,7 @@ class Env(object):
             player_id (int): The player id
 
         Returns:
-            numpy.array: The observed state of the player
+            (numpy.array): The observed state of the player
         '''
 
         return self.extract_state(self.game.get_state(player_id))
@@ -112,12 +115,13 @@ class Env(object):
             is_training (boolean): True if for training purpose.
 
         Returns:
-            trajectories (list): A list of trajectories generated from the environment.
-            payoffs (list): A list payoffs. Each entry corresponds to one player.
+            (tuple) Tuple containing:
+
+                (list): A list of trajectories generated from the environment.
+                (list): A list payoffs. Each entry corresponds to one player.
             
-        Note:
-            1. The trajectories are 3-dimension list. The first dimension is for different players.
-            The second dimension is for different transitions. The third dimension is for the contents of each transiton
+        Note: The trajectories are 3-dimension list. The first dimension is for different players.
+              The second dimension is for different transitions. The third dimension is for the contents of each transiton
         '''
 
         trajectories = [[] for _ in range(self.player_num)]
@@ -167,7 +171,7 @@ class Env(object):
             state (dict): the raw state
 
         Returns:
-            extracted_state (numpy.array): the extracted state
+            (numpy.array): the extracted state
         '''
 
         pass
@@ -176,7 +180,7 @@ class Env(object):
         ''' Get the payoffs of players. Must be implemented in the child class.
 
         Returns:
-            payoffs (list): A list of payoffs for each player.
+            (list): A list of payoffs for each player.
 
         Note: Must be implemented in the child class.
         '''
@@ -190,7 +194,7 @@ class Env(object):
             action_id (int): The id of the action
 
         Returns:
-            action (string): The action that will be passed to the game engine.
+            (string): The action that will be passed to the game engine.
 
         Note: Must be implemented in the child class.
         '''
@@ -201,7 +205,7 @@ class Env(object):
         ''' Get all legal actions for current state.
 
         Returns:
-            legal_actions (list): A list of legal actions' id.
+            (list): A list of legal actions' id.
         
         Note: Must be implemented in the child class.
         '''
