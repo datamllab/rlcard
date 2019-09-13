@@ -8,8 +8,9 @@ class TestUtilsMethos(unittest.TestCase):
 
     def test_init(self):
 
+        sess = tf.InteractiveSession()
         env = rlcard.make('blackjack')
-        agent = DeepCFR(session=tf.Session(),
+        agent = DeepCFR(session=sess,
                         env=env,                         
                         policy_network_layers=(4,4),
                         advantage_network_layers=(4,4),
@@ -24,6 +25,10 @@ class TestUtilsMethos(unittest.TestCase):
         self.assertEqual(agent._num_step, 1)
         self.assertEqual(agent._batch_size_advantage, 10)
         self.assertEqual(agent._batch_size_strategy, 10)
+
+        sess.close()
+        tf.reset_default_graph()
+
 
 if __name__ == '__main__':
     unittest.main()
