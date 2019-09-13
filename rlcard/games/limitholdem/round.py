@@ -134,7 +134,7 @@ if __name__ == '__main__':
     players = [Player(0), Player(1)]
     button = 0
     r = LimitholdemRound(button, 2, 4)
-    r.start_new_round(raised=[1, 2])
+    r.start_new_round(button=button, raised=[1, 2])
     print(r.raised, r.have_raised, r.not_raise_num)
 
     while not r.is_over():
