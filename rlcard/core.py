@@ -140,7 +140,7 @@ class Round(object):
 class Game(object):
     ''' Game class. This class will interact with outer environment.
     '''
-    
+
     def init_game(self):
         ''' Initialize all characters in the game and start round 1
         '''

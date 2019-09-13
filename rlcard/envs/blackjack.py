@@ -1,9 +1,7 @@
 import numpy as np
 
-from rlcard.games.blackjack import *
 from rlcard.envs.env import Env
 from rlcard.games.blackjack.game import BlackjackGame as Game
-from rlcard.utils.utils import * 
 
 
 class BlackjackEnv(Env):
@@ -32,7 +30,7 @@ class BlackjackEnv(Env):
 
     def extract_state(self, state):
         ''' Extract the state representation from state dictionary for agent
-        
+
         Args:
             state (dict): Original state from the game
 
@@ -75,7 +73,7 @@ class BlackjackEnv(Env):
             return [0]
         else:
             raise "There are some bugs!"
- 
+
     def decode_action(self, action_id):
         ''' Decode the action for applying to the game
 
@@ -87,4 +85,3 @@ class BlackjackEnv(Env):
         '''
 
         return self.actions[action_id]
- 
