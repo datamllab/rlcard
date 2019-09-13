@@ -5,7 +5,7 @@ import tensorflow as tf
 
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
-from rlcard.utils.utils import *
+from rlcard.utils.utils import set_global_seed
 from rlcard.utils.logger import Logger
 
 # Make environment
@@ -70,6 +70,6 @@ with tf.Session() as sess:
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
             logger.make_plot(save_path='./experiments/blackjack_dqn_result/'+str(episode)+'.png')
-    
+
     # Make the final plot
     logger.make_plot(save_path='./experiments/blackjack_dqn_result/'+'final_'+str(episode)+'.png')
