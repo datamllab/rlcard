@@ -7,13 +7,13 @@ class Card(object):
 
     Note:
         The suit variable in a standard card game should be one of [S, H, D, C, BJ, RJ] meaning [Spades, Hearts, Diamonds, Clubs, Black Joker, Red Joker]
-        Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K]
+        Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K]
     '''
 
     suit = None
     rank = None
     valid_suit = ['S', 'H', 'D', 'C', 'BJ', 'RJ']
-    valid_rank = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    valid_rank = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
 
     def __init__(self, suit, rank):
         ''' Initialize the suit and rank of a card
