@@ -6,6 +6,6 @@ before_script:
   - pip install python-coveralls
   - pip install pytest-cover
 script: 
-  - py.test test/test_utils.py --cov=rlcard/utils/
+  - py.test test/ --cov=rlcard
 after_success:
   - coveralls
