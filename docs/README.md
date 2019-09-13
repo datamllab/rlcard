@@ -7,14 +7,14 @@ The toolkit wraps each game by `Env` with easy-to-use interfaces. The goal of th
 * **Scalable.** New card environments can be added conveniently into RLCard with the above design principles.
 
 # User Guide
-* [Toy examples](docs/toy-examples.md)
-* [RLCard high-level design](docs/high-level-design.md)
-* [Games in RLCard](docs/games.md)
-* [Algorithms in RLCard](docs/algorithms.md)
-* [Developping new algorithms](docs/developping-algorithms.md)
+* [Toy examples](toy-examples.md)
+* [RLCard high-level design](high-level-design.md)
+* [Games in RLCard](games.md)
+* [Algorithms in RLCard](algorithms.md)
+* [Developping new algorithms](developping-algorithms.md)
 
 # Developer Guide
-* [Adding new environments](docs/adding-new-environments.md)
+* [Adding new environments](adding-new-environments.md)
 
 # Application Programming Interface (API)
 The API documents are and available in [github page](https://rlcard.github.io/index.html).
