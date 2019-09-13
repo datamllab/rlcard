@@ -2,6 +2,7 @@ language: python
 install: 
   - pip install -e .
 before_script:
+  - pip install matplotlib
   - pip install python-coveralls
   - pip install pytest-cover
 script: 
