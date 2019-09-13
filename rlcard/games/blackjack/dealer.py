@@ -3,6 +3,7 @@ import random
 from rlcard.core import Dealer
 from rlcard.utils.utils import init_standard_deck
 
+
 class BlackjackDealer(Dealer):
 
     def __init__(self):

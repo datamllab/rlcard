@@ -2,6 +2,9 @@ from rlcard.core import Judger
 from rlcard.games.limitholdem.utils import *
 
 class LimitholdemJudger(Judger):
+    ''' The Judger class for Texas Hold'em
+    '''
+
     def __init__(self):
         ''' Initialize a judger class
         '''
@@ -9,22 +12,27 @@ class LimitholdemJudger(Judger):
         super().__init__()
     
     def judge_game(self, players, hands):
-        ''' Judge the winner of the game TTTTODO: the payoffs are not corect, we need to calculate the chips
+        ''' Judge the winner of the game. 
 
         Args:
-            game (class): target game class
+            players (list): The list of players who play the game
+            hands (list): The list of hands that from the players
 
-        Note: Current it only judges two players. Need to be modified to adapt to more players
+        Returns:
+            (list): Each entry of the list corresponds to one entry of the 
         '''
 
-        # Transfer them to index
+        # Convert the hands into card indexes
         for i in range(len(hands)):
             if hands[i] != None:
                 h = [card.get_index() for card in hands[i]]
                 hands[i] = h
 
-        #print('Hands: ', hands)
+        #winners = compare_hands(hands)
+        #winners = [1, 0, 0]
         winners = compare_hands(hands[0], hands[1])
+
+        # Compute the total chips
         total = 0
         for p in players:
             total += p.in_chips
@@ -34,7 +42,7 @@ class LimitholdemJudger(Judger):
         payoffs = []
         for i in range(len(players)):
             if winners[i] == 1:
-                payoffs.append(each_win-players[i].in_chips)
+                payoffs.append(each_win - players[i].in_chips)
             else:
                 payoffs.append(float(-players[i].in_chips))
 
