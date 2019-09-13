@@ -147,7 +147,7 @@ class Game(object):
 
         pass
 
-    def step(self, current_action):
+    def step(self, action):
         ''' Perform one draw of the game and return next player number, and the state for next player
         '''
 
