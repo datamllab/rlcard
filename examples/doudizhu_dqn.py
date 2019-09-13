@@ -6,7 +6,7 @@ import tensorflow as tf
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.utils import *
+from rlcard.utils.utils import set_global_seed
 from rlcard.utils.logger import Logger
 
 # Make environment

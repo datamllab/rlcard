@@ -1,7 +1,4 @@
 import unittest
-import random
-import numpy as np
-import os
 from rlcard.utils.logger import Logger
 
 class TestLoggerMethos(unittest.TestCase):
@@ -13,7 +10,7 @@ class TestLoggerMethos(unittest.TestCase):
         contents = f.read()
         self.assertEqual(contents, "test text\n")
         logger.close_file()
-    
+
     def test_add_point(self):
         logger = Logger(xlabel="x", ylabel="y", legend="test", csv_path="./newtest/test_csv.csv")
         logger.add_point(x=1, y=1)
