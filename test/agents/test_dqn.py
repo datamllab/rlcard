@@ -27,7 +27,7 @@ class TestUtilsMethos(unittest.TestCase):
         self.assertEqual(agent.discount_factor, 0)
         self.assertEqual(agent.epsilon_decay_steps, 0)
         self.assertEqual(agent.batch_size, 0)
-        self.assertEqual(agent.action_num, 0)
+        self.assertEqual(agent.action_num, 2)
         self.assertEqual(agent.norm_step, 0)
 
         sess.close()
