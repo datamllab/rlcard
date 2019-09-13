@@ -11,11 +11,14 @@ class Hand:
         self.product = 1
         self.RANK_TO_STRING = {2: "2", 3: "3", 4: "4", 5: "5", 6: "6",
                                7: "7", 8: "8", 9: "9", 10: "T", 11: "J", 12: "Q", 13: "K", 14: "A"}
-        self.RANK_LOOKUP = "0023456789TJQKA2345"
+        self.RANK_LOOKUP = "00234567891JQKA2345"
         self.SUIT_LOOKUP = "SCDH"
 
     def setCards(self, seven_cards=[]):
         self.all_cards = seven_cards
+
+    def get_hand_five_cards(self):
+        return self.best_five
 
     def _sort_cards(self):
         self.all_cards = sorted(
@@ -286,11 +289,15 @@ class Hand:
 def compare_hands(hand0, hand1):
         # evaluate player's hand
 
+    if hand0 == None:
+        return [0, 1]
+    elif hand1 == None:
+        return [1, 0]
         # put this in judger
     cards0, cards1 = hand0, hand1
     hand0 = Hand()
     hand1 = Hand()
-    RANKS = '23456789TJQKA'
+    RANKS = '234567891JQKA'
 
     for card in cards0:
 
@@ -315,8 +322,8 @@ def compare_hands(hand0, hand1):
         hand0_5_cards = hand0.get_hand_five_cards()
         hand1_5_cards = hand1.get_hand_five_cards()
     for i in reversed(range(5)):
-        hand0_card_rank = hand0_5_cards[i][0]
-        hand1_card_rank = hand1_5_cards[i][0]
+        hand0_card_rank = hand0_5_cards[i][1]
+        hand1_card_rank = hand1_5_cards[i][1]
         if RANKS.index(hand0_card_rank) > RANKS.index(hand1_card_rank):
             return [1, 0]
         elif RANKS.index(hand0_card_rank) < RANKS.index(hand1_card_rank):
