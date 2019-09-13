@@ -91,3 +91,11 @@ class Logger(object):
             os.makedirs(save_dir)
 
         fig.savefig(save_path)
+
+    def close_file(self):
+        ''' Close the created file objects
+        '''
+        if self.log_path != None:
+            self.log_file.close()
+        if self.csv_path != None:
+            self.csv_file.close()
