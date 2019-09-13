@@ -18,7 +18,7 @@ class TestUtilsMethos(unittest.TestCase):
                          epsilon_end=0,
                          epsilon_decay_steps=0,
                          batch_size=0,
-                         action_size=0,
+                         action_num=2,
                          state_shape=[1],
                          norm_step=0)
 
@@ -27,7 +27,7 @@ class TestUtilsMethos(unittest.TestCase):
         self.assertEqual(agent.discount_factor, 0)
         self.assertEqual(agent.epsilon_decay_steps, 0)
         self.assertEqual(agent.batch_size, 0)
-        self.assertEqual(agent.action_size, 0)
+        self.assertEqual(agent.action_num, 0)
         self.assertEqual(agent.norm_step, 0)
 
         sess.close()
@@ -41,7 +41,6 @@ class TestUtilsMethos(unittest.TestCase):
 
         sess = tf.InteractiveSession()
         agent = DQNAgent(sess=sess,
-                         action_size=2,
                          replay_memory_init_size=memory_init_size,
                          update_target_estimator_every=10,
                          norm_step=norm_step,
