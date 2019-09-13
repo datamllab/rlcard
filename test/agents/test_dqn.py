@@ -6,7 +6,7 @@ from rlcard.agents.dqn_agent import *
 class TestUtilsMethos(unittest.TestCase):
 
     def test_init(self):
-        
+
         sess = tf.InteractiveSession()
 
         agent = DQNAgent(sess=sess,
@@ -34,7 +34,7 @@ class TestUtilsMethos(unittest.TestCase):
         tf.reset_default_graph()
 
     def test_train(self):
-        
+
         norm_step = 100
         memory_init_size = 100
         step_num = 300
@@ -62,8 +62,3 @@ class TestUtilsMethos(unittest.TestCase):
 
         sess.close()
         tf.reset_default_graph()
-
-
-
-
-
