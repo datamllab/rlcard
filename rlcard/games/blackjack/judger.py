@@ -64,7 +64,7 @@ class BlackjackJudger(Judger):
             if card.rank == 'A':
                 has_A += 1
         if score > 21 and has_A > 0:
-            for i in range(has_A):
+            for _ in range(has_A):
                 score -= 9
                 if score < 21:
                     break
