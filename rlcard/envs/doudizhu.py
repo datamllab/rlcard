@@ -3,9 +3,8 @@ import numpy as np
 
 from rlcard.utils.utils import *
 from rlcard.envs.env import Env
-from rlcard.games.doudizhu import *
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
-from rlcard.games.doudizhu.utils import CARD_RANK_STR, SPECIFIC_MAP
+from rlcard.games.doudizhu.utils import SPECIFIC_MAP
 from rlcard.games.doudizhu.utils import ACTION_LIST, ACTION_SPACE
 from rlcard.games.doudizhu.utils import encode_cards
 

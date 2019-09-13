@@ -24,13 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 
-import numpy as np
 import random
+import numpy as np
 import tensorflow as tf
 from collections import namedtuple
-
-import rlcard
-from rlcard.utils.utils import *
 
 
 Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state', 'done'])
@@ -51,7 +48,7 @@ class DQNAgent(object):
                  action_num=2,
                  state_shape=[2],
                  norm_step=100,
-                 mlp_layers=[10,10]):
+                 mlp_layers=[10, 10]):
 
         '''
         Q-Learning algorithm for off-policy TD control using Function Approximation.
@@ -336,7 +333,7 @@ class Estimator():
         '''
 
         feed_dict = { self.X_pl: s, self.y_pl: y, self.actions_pl: a }
-        global_step, _, loss = sess.run(
+        _, _, loss = sess.run(
                 [tf.contrib.framework.get_global_step(), self.train_op, self.loss],
                     feed_dict)
         return loss
@@ -406,4 +403,3 @@ def copy_model_parameters(sess, estimator1, estimator2):
         update_ops.append(op)
 
     sess.run(update_ops)
-

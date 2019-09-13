@@ -37,8 +37,6 @@ class TestUtilsMethos(unittest.TestCase):
         self.assertEqual(rank2int('1000'), None)
         self.assertEqual(rank2int('K'), 13)
 
-
-
     def test_get_cards_from_ranks(self):
         deck = init_54_deck()
         player = Player(0)
@@ -53,7 +51,7 @@ class TestUtilsMethos(unittest.TestCase):
             self.assertFalse(flag)
         self.assertEqual(len(remained_cards), len(deck) - 12)
         self.assertEqual(len(chosen_cards), 12)
-  
+
     def test_take_out_cards(self):
         cards = init_54_deck()
         remove_cards = [Card('S', 'A'), Card('BJ', '')]
@@ -78,7 +76,7 @@ class TestUtilsMethos(unittest.TestCase):
     def test_get_upstream_player_id(self):
         players = init_players(5)
         self.assertEqual(get_upstream_player_id(players[0], players), 4)
-    
+
     def test_get_downstream_player_id(self):
         players = init_players(5)
         self.assertEqual(get_downstream_player_id(players[4], players), 0)
@@ -87,7 +85,6 @@ class TestUtilsMethos(unittest.TestCase):
         trajectories = reorganize([[[1,2],1,[4,5]]], [1])
         self.assertEqual(np.array(trajectories).shape, (1, 1, 5))
 
-    
     def test_set_global_seed(self):
         set_global_seed(0)
         self.assertEqual(np.random.get_state()[1][0], 0)
