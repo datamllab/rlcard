@@ -6,7 +6,10 @@ import random
 from core import Card, Player
 
 def init_standard_deck():
-    ''' Return a list of Card objects which form a standard 52 cards deck
+    ''' Initialize a standard deck of 52 cards
+
+    Returns:
+        (list): A list of Card object
     '''
 
     suit_list = ['S', 'H', 'D', 'C']
@@ -15,7 +18,10 @@ def init_standard_deck():
     return res
 
 def init_54_deck():
-    ''' Return a list of Card objects which include a standard 52 cards deck, BJ and RJ
+    ''' Initialize a standard deck of 52 cards, BJ and RJ
+
+    Returns:
+        (list): Alist of Card object
     '''
 
     suit_list = ['S', 'H', 'D', 'C']
@@ -26,20 +32,23 @@ def init_54_deck():
     return res
 
 
-def get_random_cards(cards, num, seed = None):
+def get_random_cards(cards, num, seed=None):
     ''' Randomly get a number of chosen cards out of a list of cards
 
     Args:
-        cards: list of Card object
-        num: int, number of cards to be chosen
-        seed: int, optional, random seed
+        cards (list): List of Card object
+        num (int): The  number of cards to be chosen
+        seed (int): Optional, random seed
 
     Returns:
-        list: list of chosen cards
-        list: list of remained cards
+        (list): A list of chosen cards
+        (list): A list of remained cards
     '''
-    assert num > 0, "Invalid input number"
-    assert num <= len(cards), "Input number larger than length of cards"
+
+    if not num> 0:
+        raise AssertionError('Invalid input number')
+    if not num <= len(cards):
+        raise AssertionError('Input number larger than length of cards')
     remained_cards = []
     chosen_cards = []
     remained_cards = cards.copy()
@@ -49,12 +58,13 @@ def get_random_cards(cards, num, seed = None):
     return chosen_cards, remained_cards
 
 def is_pair(cards):
-    '''
+    ''' Check whether the card is a pair
+
     Args:
-        cards: list of Card object
+        cards (list): A list of Card object
 
     Returns:
-        boolean: whether the input list is a pair or not
+        (boolean): True if the list is a pair
     '''
 
     if len(cards) == 2 and cards[0].rank == cards[1].rank:
@@ -63,12 +73,13 @@ def is_pair(cards):
         return False
 
 def is_single(cards):
-    '''
+    ''' Check whether the card is singel
+
     Args:
-        cards: list of Card object
+        cards (list): A list of Card object
     
     Returns:
-        boolean: whether the input list is a single card or not
+        (boolean): True if the list is single
     '''
     if len(cards) == 1:
         return True
@@ -79,14 +90,14 @@ def rank2int(rank):
     ''' Get the coresponding number of a rank.
 
     Args:
-        rank: rank stored in Card object
+        rank(str): rank stored in Card object
     
     Returns:
-        int: the number corresponding to the rank
+        (int): the number corresponding to the rank
 
     Note:
-        If the input rank is an empty string, the function will return -1.
-        If the input rank is not valid, the function will return None.
+        1. If the input rank is an empty string, the function will return -1.
+        2. If the input rank is not valid, the function will return None.
     '''
 
     if rank == '':
@@ -109,18 +120,18 @@ def rank2int(rank):
     return None
 
 def get_cards_from_ranks(player, ranks):
-    ''' get chosen cards and remained cards from a player's hand according to input rank list
+    ''' Get chosen cards and remained cards from a player's hand according to input rank list
     
     Args:
-        player: Player object
-        ranks: list of rank(string)
+        player (Player): Player object
+        ranks (list): A list of rank (string)
 
     Returns:
-        list of Card objects: chosen cards
-        list of Card objects: remained cards
+        (tupel): Tuple containing:
+            (list): A list of Card objects, chosen cards
+            (list): A list of Card objects, remained cards
 
-    Note:
-        This function will not affect the player's original hand.
+    Note: This function will not affect the player's original hand.
     '''
 
     chosen_cards = []
@@ -136,11 +147,11 @@ def take_out_cards(cards, remove_cards):
     ''' Take out specific cards from a list of cards
     
     Args:
-        cards (list): list of Card objects from which to be taken out some cards
-        remove_cards (list): list of Card objects that need to be taken out
+        cards (list): A list of Card objects from which to be taken out some cards
+        remove_cards (list): A list of Card objects that need to be taken out
 
     Returns:
-        list of Card objects: the cards in 'remove_cards' list that doesn't make cards in 'cards' list taken out
+        (list): A list of Card objects. The cards in 'remove_cards' list that doesn't make cards in 'cards' list taken out
 
     Note:
         1. This function will affect the first input Card list, 
@@ -162,11 +173,11 @@ def is_in_cards(origin_cards, check_cards):
     ''' Check if a list of Card objects contains another list of Card objects
 
     Args:
-        cards: list of Card objects which to be checked if it contains another list of Card objects
-        check_cards: list of Card objects which to be checked if it is in a list of Card objecrts
+        cards (list): A list of Card objects which to be checked if it contains another list of Card objects
+        check_cards (list): A list of Card objects which to be checked if it is in a list of Card objecrts
 
     Returns:
-        boolean
+        (boolean): True if the cards are in the original cards.
     '''
 
     check_cards_cp = check_cards.copy()
@@ -188,13 +199,13 @@ def is_in_cards(origin_cards, check_cards):
     return len(check_cards_cp) == 0
 
 def init_players(n):
-    ''' Return a list of Player objects with n players
+    ''' Initilize a list of Player objects with n players
 
     Args:
-        n: int, number of players to be initialized
+        n (int): The number of players to be initialized
 
     Returns:
-        list of Player objects with player_id(s) start from 0 and are consequent 
+        (list): A list of Player objects with player_id(s) start from 0 and are consequent 
     '''
 
     players = []
@@ -203,18 +214,24 @@ def init_players(n):
     return players
 
 def get_upstream_player_id(player, players):
-    ''' Return the upsteam player's player_id
+    ''' Obtain the upsteam player's player_id
 
-    Note:
-        This function assumes player_id(s) in 'players' list starts from 0, and are consequent.
+    Args:
+        player (Player): The current player
+        players (list): A list of players
+
+    Note: This function assumes player_id(s) in 'players' list starts from 0, and are consequent.
     '''
     return (player.player_id-1)%len(players)
 
 def get_downstream_player_id(player, players):
-    ''' Return the downsteam player's player_id
+    ''' Obtain the downsteam player's player_id
 
-    Note:
-        This function assumes player_id(s) in 'players' list start from 0, and are consequent.
+    Args:
+        player (Player): The current player
+        players (list): A list of players
+
+    Note: This function assumes player_id(s) in 'players' list start from 0, and are consequent.
     '''
 
     return (player.player_id+1)%len(players)
@@ -223,10 +240,11 @@ def reorganize(trajectories, payoffs):
     ''' Reorganize the trajectory to make it RL friendly
     
     Args:
-        trajectory: original one
+        trajectory (list): A list of trajectories
+        payoffs (list): A list of payoffs for the players. Each entry corresponds to one player
     
     Returns:
-        A new one
+        (list): A new trajectories that can be fed into RL algorithms.
         
     '''
 
