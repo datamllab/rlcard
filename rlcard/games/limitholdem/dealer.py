@@ -19,23 +19,11 @@ class LimitholdemDealer(Dealer):
         '''
         random.shuffle(self.deck)
 
-    def deal_card(self, player):
+    def deal_card(self):
         ''' Distribute one card to the player
         Args:
             player_id (int): the target player's id
         '''
-        card = self.deck.pop()
-        player.hand.append(card)
 
-    def deal_chips(self, player, chips_num):
-        ''' For call & raise action
-        Args:
-            player: the player who take the action
-            chips_num: the value of chips in the action
-        '''
-        chips_num = chips_num
-        self.pot = self.pot + chips_num
-        player.chips_remaining = player.chips_remaining - chips_num
-
-
+        return self.deck.pop()
 
