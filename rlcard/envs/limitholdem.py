@@ -1,87 +1,70 @@
-from rlcard.games.simpletexasholdem import *
+import numpy as np
+
 from rlcard.envs.env import Env
-from rlcard.games.simpletexasholdem.game import SimpleTexasGame as Game
-
-import random
-
-
-class SimpleTexasEnv(Env):
-	"""
-	Texasholdem Environment
-	"""
-
-	def test(self):
-		print('aaa')
-
-	def __init__(self):
-		self.game = Game()
-		self.player_num = self.game.get_player_num() # get the number of players in the game
-
-	def set_agents(self, agents):
-		""" Set the agents that will interact with the environment
-
-		Args:
-			agents: list of Agent classes; [agents]
-		"""
-
-		self.agents = agents
-
-	def set_rewarder(self, rewarder):
-		""" Set the agents that will interact with the environment
-
-		Args:
-			rewarder: Rewarder class
-		"""
-
-		self.rewarder = rewarder
-
-	def set_seed(self, seed):
-		random.seed(seed)
-		print('############### seeded ############')
-
-	def run(self):
-		# High level calls
-		trajectories = [[] for _ in range(self.player_num)]
-
-		# Loop to play the game
-		player = self.game.get_player_id() # get the current player id
-		state = self.game.get_state(player) # get the state of the first player
-		trajectories[player].append(state)
-		while not self.game.end():
-		#for i in range(6):
-			# First, agent plays
-			#print("### State:")
-			#print(state)
-			action = self.agents[player].step(state)
+from rlcard.games.limitholdem.game import LimitholdemGame as Game
+from rlcard.utils.utils import * 
 
 
-			# Second, environment steps
-			next_state, next_player = self.game.step(action)
+class LimitholdemEnv(Env):
+    ''' Limitholdem Environment
+    '''
 
-			# Finally, save the data
-			#print(player, action, next_player)
-			trajectories[player].append(action)
-			if not self.game.end():
-				trajectories[next_player].append(state)
+    def __init__(self):
+        ''' Initialize the Limitholdem environment
+        '''
 
-			state = next_state
-			player = next_player
+        super().__init__(Game())
+        self.actions = ['call', 'raise', 'fold', 'check']
 
-		## add a final state to all the players
-		for player in range(self.player_num):
-			state = self.game.get_state(player)
-			trajectories[player].append(state)
+    def get_legal_actions(self):
+        ''' Get all leagal actions
 
+        Returns:
+            encoded_action_list (list): return encoded legal action list (from str to int)
+        '''
 
+        return self.game.get_legal_actions()
 
+    def extract_state(self, state):
+        ''' Extract the state representation from state dictionary for agent
 
+        Note: Currently the use the hand cards and the public cards. TODO: encode the states
+        
+        Args:
+            state (dict): Original state from the game
 
+        Returns:
+            observation (list): combine the player's score and dealer's observable score for observation
+        '''
 
+        obs = state
+        return state
+        
 
+    def get_payoffs(self):
+        ''' Get the payoff of a game 
 
+        Returns:
+           payoffs (list): list of payoffs 
+        '''
 
+        return self.game.get_payoffs()
 
+    def decode_action(self, action_id):
+        ''' Decode the action for applying to the game
 
+        Args:
+            action id (int): action id
 
+        Returns:
+            action (str): action for the game 
+        '''
+        legal_actions = self.game.get_legal_actions()
+        if self.actions[action_id] not in legal_actions:
+            if 'check' in legal_actions:
+                return 'check'
+            else:
+                return 'fold'
 
-
+        return self.actions[action_id]
+ 
