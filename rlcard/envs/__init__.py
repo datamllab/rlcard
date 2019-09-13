@@ -3,6 +3,10 @@
 
 from rlcard.envs.registration import register, make
 
+register(
+    id='blackjack',
+    entry_point='rlcard.envs.blackjack:BlackjackEnv',
+)
 
 register(
     id='doudizhu',
@@ -10,17 +14,6 @@ register(
 )
 
 register(
-    id='blackjack',
-    entry_point='rlcard.envs.blackjack:BlackjackEnv',
-)
-
-register(
-    id='limitholdem',
+    id='limit-holdem',
     entry_point='rlcard.envs.limitholdem:LimitholdemEnv',
 )
-
-
-#register(
-#    id='texasholdem',
-#    entry_point='rlcard.envs.texasholdem:TexasEnv',
-#)
