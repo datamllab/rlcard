@@ -1,5 +1,4 @@
 from rlcard.utils.utils import *
-import numpy as np
 
 class Env(object):
     ''' The base Env class
@@ -17,8 +16,8 @@ class Env(object):
         # get number of players in this game
         self.player_num = game.get_player_num()
         self.action_num = game.get_action_num()
-        
-    
+
+
     def init_game(self):
         ''' Start a new game
 
@@ -62,13 +61,13 @@ class Env(object):
 
         if not self.game.step_back():
             raise Exception('Step_back error. May caused by step back from root node.')
-        
+
         player_id = self.get_player_id()
         state = self.extract_state(self.get_state(player_id))
 
         return state, player_id
 
-        
+
     def get_player_id(self):
         ''' Get the current player id
 
@@ -86,7 +85,7 @@ class Env(object):
         '''
 
         return self.game.is_over()
-    
+
     def get_state(self, player_id):
         ''' Get the state given player id
 
@@ -119,14 +118,14 @@ class Env(object):
 
                 (list): A list of trajectories generated from the environment.
                 (list): A list payoffs. Each entry corresponds to one player.
-            
+
         Note: The trajectories are 3-dimension list. The first dimension is for different players.
               The second dimension is for different transitions. The third dimension is for the contents of each transiton
         '''
 
         trajectories = [[] for _ in range(self.player_num)]
         state, player_id = self.init_game()
-        
+
         # Loop to play the game
         trajectories[player_id].append(state)
         while not self.is_over():
@@ -145,7 +144,7 @@ class Env(object):
             # Set the state and player
             state = next_state
             player_id = next_player_id
-            
+
             # Save state.
             if not self.game.is_over():
                 trajectories[player_id].append(state)
@@ -200,13 +199,13 @@ class Env(object):
         '''
 
         pass
-            
+
     def get_legal_actions(self):
         ''' Get all legal actions for current state.
 
         Returns:
             (list): A list of legal actions' id.
-        
+
         Note: Must be implemented in the child class.
         '''
         pass

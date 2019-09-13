@@ -1,5 +1,6 @@
 import random
 
+
 class RandomAgent(object):
     ''' A random agent. Random agents is for running toy examples on the card games
     '''
@@ -10,9 +11,9 @@ class RandomAgent(object):
         Args:
             action_num (int): the size of the ouput action space
         '''
-        
+
         self.action_num = action_num
-        
+
     def step(self, state):
         ''' Predict the action given the curent state in gerenerating training data.
 
@@ -37,5 +38,3 @@ class RandomAgent(object):
         '''
 
         return self.step(state)
-
-
