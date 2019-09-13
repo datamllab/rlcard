@@ -14,3 +14,4 @@ sonar-project.properties
 docs/rst
 docs/sphinx
 experiments/
+newtest/
