@@ -36,7 +36,7 @@ from __future__ import print_function
 import collections
 import random
 import numpy as np
-import sonnet as snt
+#import sonnet as snt
 import tensorflow as tf
 
 import rlcard
@@ -103,6 +103,37 @@ class FixedSizeRingBuffer(object):
 
     def __iter__(self):
         return iter(self._data)
+
+class MLP(object):
+    def __init__(self,
+                output_sizes,
+                w_init = None,
+                b_init = None,
+                activation=tf.nn.relu,
+                name=None):
+        self.output_sizes = output_sizes
+        self._activation = activation
+        self.w_init = w_init
+        self.b_init = b_init
+        self.variables = []
+
+    def __call__(self, inputs, is_training=None):
+        fc = tf.contrib.layers.flatten(inputs)
+        for index, output_size in enumerate(self.output_sizes):
+            if index == 0:
+                w = tf.Variable(tf.truncated_normal([int(fc.shape[1]), output_size], stddev=0.1), name='w'+str(index))
+            else:
+                w = tf.Variable(tf.truncated_normal([self.output_sizes[index-1], output_size], stddev=0.1), name='w'+str(index))
+            b = tf.Variable(tf.constant(0.1, shape=[output_size]), name='b'+str(index) )
+            self.variables.append(w)
+            self.variables.append(b)
+            fc = tf.nn.xw_plus_b(fc, w, b, name='fc'+str(index))
+            fc = tf.nn.relu(fc, name='activation'+str(index))
+        return fc
+
+    def reinitialize(self, sess):
+        reinit = tf.initialize_variables(self.variables)
+        sess.run(reinit)
 
 class DeepCFR():
     '''Implements a solver for the Deep CFR Algorithm.
@@ -187,8 +218,9 @@ class DeepCFR():
         # Define strategy network, loss & memory.
         self._strategy_memories = FixedSizeRingBuffer(memory_capacity)
 
-        self._policy_network = snt.nets.MLP(
-            list(policy_network_layers) + [self._num_actions])
+        #self._policy_network = snt.nets.MLP(
+        #    list(policy_network_layers) + [self._num_actions])
+        self._policy_network = MLP(list(policy_network_layers) + [self._num_actions])
 
         action_logits = self._policy_network(self._info_state_ph)
 
@@ -207,7 +239,8 @@ class DeepCFR():
             FixedSizeRingBuffer(memory_capacity) for _ in range(self._num_players)
         ]
         self._advantage_networks = [
-            snt.nets.MLP(list(advantage_network_layers) + [self._num_actions])
+            #snt.nets.MLP(list(advantage_network_layers) + [self._num_actions])
+            MLP(list(advantage_network_layers) + [self._num_actions])
             for _ in range(self._num_players)
         ]
         self._advantage_outputs = [
@@ -234,8 +267,10 @@ class DeepCFR():
         ''' Reinitialize the advantage networks
         '''
         for p in range(self._num_players):
-            for key in self._advantage_networks[p].initializers:
-                self._advantage_networks[p].initializers[key]()
+            self._advantage_networks[p].reinitialize(self._session)
+        #for p in range(self._num_players):
+        #    for key in self._advantage_networks[p].initializers:
+        #        self._advantage_networks[p].initializers[key]()
 
     def step(self, state):
         ''' Predict the action for generating training data
