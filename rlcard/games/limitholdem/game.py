@@ -1,5 +1,6 @@
 import random
 from copy import deepcopy
+
 from rlcard.core import Game
 from rlcard.games.limitholdem.dealer import LimitholdemDealer as Dealer
 from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
@@ -15,7 +16,7 @@ class LimitholdemGame(Game):
         super().__init__()
         
         # Some configarations of the game
-        # You may specify them for your own purpose
+        # These arguments can be specified for creating new games
         
         # Small blind and big blind
         self.small_blind = 1
@@ -33,42 +34,49 @@ class LimitholdemGame(Game):
         This version supports two-player limit texas hold'em
 
         Returns:
-            state (dict): the first state of the game
-            player_id (int): current player's id
+            (tuple): Tuple containing:
+
+                (dict): The first state of the game
+                (int): Current player's id
         '''
 
         # Initilize a dealer that can deal cards
         self.dealer = Dealer()
 
-        # Initilize two players who play the game
-        self.players = [Player(0), Player(1)]
+        # Initilize two players to play the game
+        self.players = [Player(i) for i in range(self.num_players)]
 
         # Initialize a judger class which will decide who wins in the end
         self.judger = Judger()
 
-        # Deal cards to the two player to prepare for the first round
-        self.players[0].hand.append(self.dealer.deal_card())
-        self.players[1].hand.append(self.dealer.deal_card())
-        self.players[0].hand.append(self.dealer.deal_card())
-        self.players[1].hand.append(self.dealer.deal_card())
+        # Deal cards to each  player to prepare for the first round
+        for i in range(2 * self.num_players):
+            self.players[i % self.num_players].hand.append(self.dealer.deal_card())
 
         # Initilize public cards
         self.public_cards = []
 
         # Randomly choose a big blind and a small blind
-        b = random.randint(0, 1)
+        b = random.randint(0, self.num_players-1)
         s = (b + 1) % self.num_players
         self.players[b].in_chips = self.big_blind
         self.players[s].in_chips = self.small_blind
 
-        # The small blind plays the first in two-palyer game
-        self.button = s
+        # The player next to the samll blind plays the first
+        self.button = (s + 1) % self.num_players
 
-        # Initilize a bidding round
-        self.round = Round(self.raise_amount, self.allowed_raise_num)
+        # Initilize a bidding round, in the first round, the big blind and the small blind needs to 
+        # be passed to the round for processing.
+        self.round = Round(raise_amount=self.raise_amount,
+                           allowed_raise_num=self.allowed_raise_num,
+                           num_players=self.num_players)
+
         self.round.start_new_round(button=self.button, raised=[p.in_chips for p in self.players])
  
+        # Count the round. There are 4 rounds in each game.
         self.round_counter = 0
+
+        # Save the hisory for stepping back to the last state.
         self.history = []
 
         state = self.get_state(self.button)
@@ -82,10 +90,13 @@ class LimitholdemGame(Game):
             action (str): a specific action. (call, raise, fold, or check)
 
         Returns:
-            dict: next player's state
-            int: next plater's id
+            (tuple): Tuple containing:
+
+                (dict): next player's state
+                (int): next plater's id
         '''
 
+        # First snapshot the current state
         r = deepcopy(self.round)
         b = self.button
         r_c = self.round_counter
@@ -94,15 +105,18 @@ class LimitholdemGame(Game):
         ps = deepcopy(self.players)
         self.history.append((r, b, r_c, d, p, ps))
 
-        self.button = self.round.proceed_round(self.players[self.button], action)
+        # Then we proceed to the next round
+        self.button = self.round.proceed_round(self.players, action)
         
         # If a round is over, we deal more public cards
         if self.round.is_over():
+            # For the first round, we deal 3 cards
             if self.round_counter == 0:
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
-            else:
+            # For the following rounds, we deal only 1 card
+            elif self.round_counter <= 3:
                 self.public_cards.append(self.dealer.deal_card())
 
             self.round_counter += 1
@@ -116,7 +130,7 @@ class LimitholdemGame(Game):
         ''' Return to the previous state of the game
 
         Returns:
-            Status (bool): check if the step back is success or not
+            (bool): True if the game steps back successfully
         '''
 
         if len(self.history) > 0:
@@ -128,23 +142,25 @@ class LimitholdemGame(Game):
         ''' Return the number of players in Limit Texas Hold'em
 
         Returns:
-            number_of_player (int): Curent version has 2 players
+            (int): The number of players in the game
         '''
-        return 2
+
+        return self.num_players
 
     def get_action_num(self):
         ''' Return the number of applicable actions
 
         Returns:
-            number_of_actions (int): there are only two actions (call and raise)
+            (int): The number of cations. There are 4 actions (call, raise, check and fold)
         '''
+
         return 4
 
     def get_player_id(self):
         ''' Return the current player's id
 
         Returns:
-            player_id (int): current player's id
+            (int): current player's id
         '''
 
         return self.button
@@ -156,9 +172,12 @@ class LimitholdemGame(Game):
             player_id (int): player id
 
         Returns:
-            state (dict): corresponding player's state
+            (dict): The state of the player
         '''
-        state = self.players[player].get_state(self.public_cards, self.players[1-player].in_chips)
+
+        chips = [self.players[i].in_chips for i in range(self.num_players)]
+        state = self.players[player].get_state(self.public_cards, chips)
+
         return state
 
 
@@ -166,14 +185,16 @@ class LimitholdemGame(Game):
         ''' Check if the game is over
 
         Returns:
-            status (bool): True/False
+            (boolean): True if the game is over
         '''
 
         alive_players = [1 if p.status=='alive' else 0 for p in self.players]
+        # If only one player is alive, the game is over.
         if sum(alive_players) == 1:
             return True
 
-        if self.round_counter >= 3:
+        # If all rounds are finshed
+        if self.round_counter >= 4:
             return True
         return False
 
@@ -181,7 +202,7 @@ class LimitholdemGame(Game):
         ''' Return the payoffs of the game
 
         Returns:
-            A list of the payoffs
+            (list): Each entry corresponds to the payoff of one player
         '''
 
         alive_players = [1 if p.status=='alive' else 0 for p in self.players]
@@ -193,7 +214,7 @@ class LimitholdemGame(Game):
         ''' Return the legal actions for current player
 
         Returns:
-            A list of legal actions
+            (list): A list of legal actions
         '''
 
         return self.round.get_legal_actions()
@@ -204,9 +225,10 @@ class LimitholdemGame(Game):
 if __name__ == "__main__":
     game = LimitholdemGame()
     while True:
+        print('New Game')
         state, button = game.init_game()
         print(button, state)
-        i = 1
+        i = 4
         while not game.is_over():
             i += 1
             legal_actions = game.get_legal_actions()
