@@ -1,0 +1,10 @@
+language: python
+install: 
+  - pip install -e .
+before_script:
+  - pip install python-coveralls
+  - pip install pytest-cover
+script: 
+  - py.test test/test_utils.py --cov=rlcard/utils/
+after_success:
+  - coveralls
