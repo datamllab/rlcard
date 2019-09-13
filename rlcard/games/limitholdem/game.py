@@ -205,7 +205,6 @@ class LimitholdemGame(Game):
             (list): Each entry corresponds to the payoff of one player
         '''
 
-        alive_players = [1 if p.status=='alive' else 0 for p in self.players]
         hands = [p.hand + self.public_cards if p.status=='alive' else None for p in self.players]
         payoffs = self.judger.judge_game(self.players, hands)
         return payoffs
