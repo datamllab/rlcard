@@ -116,7 +116,7 @@ class LimitholdemGame(Game):
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
             # For the following rounds, we deal only 1 card
-            elif self.round_counter <= 3:
+            elif self.round_counter <= 2:
                 self.public_cards.append(self.dealer.deal_card())
 
             self.round_counter += 1
@@ -228,7 +228,7 @@ if __name__ == "__main__":
         print('New Game')
         state, button = game.init_game()
         print(button, state)
-        i = 4
+        i = 1
         while not game.is_over():
             i += 1
             legal_actions = game.get_legal_actions()
