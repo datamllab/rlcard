@@ -63,7 +63,7 @@ class Env(object):
             raise Exception('Step_back error. May caused by step back from root node.')
 
         player_id = self.get_player_id()
-        state = self.extract_state(self.get_state(player_id))
+        state = self.get_state(player_id)
 
         return state, player_id
 
