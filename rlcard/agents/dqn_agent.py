@@ -32,7 +32,9 @@ from collections import namedtuple
 import rlcard
 from rlcard.utils.utils import *
 
-Transition = namedtuple("Transition", ["state", "action", "reward", "next_state", "done"])
+
+Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state', 'done'])
+
 
 class DQNAgent(object):
 
