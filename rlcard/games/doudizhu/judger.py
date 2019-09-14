@@ -2,12 +2,11 @@
 ''' Implement Doudizhu Judger class
 '''
 
-from rlcard.core import Judger
 from rlcard.games.doudizhu.utils import CARD_TYPE, TYPE_CARD
 from rlcard.games.doudizhu.utils import cards2str, contains_cards, get_gt_cards
 
 
-class DoudizhuJudger(Judger):
+class DoudizhuJudger(object):
     ''' Determine what cards a player can play
     '''
 

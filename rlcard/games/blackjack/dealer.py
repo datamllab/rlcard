@@ -1,10 +1,9 @@
 import random
 
-from rlcard.core import Dealer
 from rlcard.utils.utils import init_standard_deck
 
 
-class BlackjackDealer(Dealer):
+class BlackjackDealer(object):
 
     def __init__(self):
         ''' Initialize a Blackjack dealer class

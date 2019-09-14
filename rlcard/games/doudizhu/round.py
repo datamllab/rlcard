@@ -4,13 +4,12 @@
 
 import functools
 
-from rlcard.core import Round
 from rlcard.games.doudizhu.dealer import DoudizhuDealer as Dealer
 from rlcard.games.doudizhu.judger import cards2str
 from rlcard.games.doudizhu.utils import doudizhu_sort_card
 
 
-class DoudizhuRound(Round):
+class DoudizhuRound(object):
     ''' Round can call other Classes' functions to keep the game running
     '''
 

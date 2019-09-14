@@ -1,13 +1,12 @@
 import random
 from copy import deepcopy
 
-from rlcard.core import Game
 from rlcard.games.limitholdem.dealer import LimitholdemDealer as Dealer
 from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
 from rlcard.games.limitholdem.judger import LimitholdemJudger as Judger
 from rlcard.games.limitholdem.round import LimitholdemRound as Round
 
-class LimitholdemGame(Game):
+class LimitholdemGame(object):
 
     def __init__(self):
         ''' Initialize the class limitholdem Game

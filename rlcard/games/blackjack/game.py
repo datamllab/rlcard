@@ -1,12 +1,10 @@
 from copy import deepcopy
 
-from rlcard.core import Game
 from rlcard.games.blackjack.dealer import BlackjackDealer as Dealer
 from rlcard.games.blackjack.player import BlackjackPlayer as Player
 from rlcard.games.blackjack.judger import BlackjackJudger as Judger
 
-
-class BlackjackGame(Game):
+class BlackjackGame(object):
 
     def __init__(self):
         ''' Initialize the class Blackjack Game
