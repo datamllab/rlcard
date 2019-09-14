@@ -14,7 +14,7 @@ class TestUtilsMethos(unittest.TestCase):
 
     def test_get_random_cards(self):
         hand = init_54_deck()
-        num = random.randint(1, len(hand))
+        num = 10
         chosen_cards, remained_cards = get_random_cards(hand, num)
         self.assertEqual(len(chosen_cards), num)
         self.assertEqual(len(remained_cards), len(hand) - num)
@@ -65,7 +65,7 @@ class TestUtilsMethos(unittest.TestCase):
 
     def test_is_in_cards(self):
         deck54 = init_54_deck()
-        deck_standard = init_standard_deck()  
+        deck_standard = init_standard_deck()
         self.assertTrue(is_in_cards(deck54, deck_standard))
         self.assertTrue(is_in_cards(deck54, [Card('BJ', ''), Card('RJ', '')]))
         self.assertFalse(is_in_cards(deck54, [Card('BJ', ''), Card('BJ', '')]))
