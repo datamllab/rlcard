@@ -1,9 +1,8 @@
 import random
-from rlcard.core import Dealer
 
 from rlcard.utils.utils import init_standard_deck
 
-class LimitholdemDealer(Dealer):
+class LimitholdemDealer(object):
 
     def __init__(self):
         ''' Initialize a limitholdem dealer class

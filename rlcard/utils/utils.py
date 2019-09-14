@@ -118,7 +118,7 @@ def rank2int(rank):
 
 def get_cards_from_ranks(player, ranks):
     ''' Get chosen cards and remained cards from a player's hand according to input rank list
-    
+
     Args:
         player (Player): Player object
         ranks (list): A list of rank (string)
@@ -142,7 +142,7 @@ def get_cards_from_ranks(player, ranks):
 
 def take_out_cards(cards, remove_cards):
     ''' Take out specific cards from a list of cards
-    
+
     Args:
         cards (list): A list of Card objects from which to be taken out some cards
         remove_cards (list): A list of Card objects that need to be taken out
@@ -235,7 +235,7 @@ def get_downstream_player_id(player, players):
 
 def reorganize(trajectories, payoffs):
     ''' Reorganize the trajectory to make it RL friendly
-    
+
     Args:
         trajectory (list): A list of trajectories
         payoffs (list): A list of payoffs for the players. Each entry corresponds to one player

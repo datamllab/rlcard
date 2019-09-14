@@ -1,7 +1,6 @@
-from rlcard.core import Judger
 from rlcard.games.limitholdem.utils import *
 
-class LimitholdemJudger(Judger):
+class LimitholdemJudger(object):
     ''' The Judger class for Texas Hold'em
     '''
 
@@ -11,7 +10,8 @@ class LimitholdemJudger(Judger):
 
         super().__init__()
 
-    def judge_game(self, players, hands):
+    @staticmethod
+    def judge_game(players, hands):
         ''' Judge the winner of the game.
 
         Args:
