@@ -163,7 +163,8 @@ class DoudizhuGame(object):
             self.state['others_hand'] = self._get_others_current_hand(player)
             return copy.deepcopy(self.state)
 
-    def get_action_num(self):
+    @staticmethod
+    def get_action_num():
         ''' Return the total number of abstract acitons
 
         Returns:
@@ -181,7 +182,8 @@ class DoudizhuGame(object):
 
         return self.current_player
 
-    def get_player_num(self):
+    @staticmethod
+    def get_player_num():
         ''' Return the number of players in doudizhu
 
         Returns:

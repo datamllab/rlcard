@@ -2,7 +2,7 @@
 ''' Implement Doudizhu Judger class
 '''
 
-from rlcard.games.doudizhu.utils import CARD_TYPE, TYPE_CARD
+from rlcard.games.doudizhu.utils import CARD_TYPE
 from rlcard.games.doudizhu.utils import cards2str, contains_cards, get_gt_cards
 
 

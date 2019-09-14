@@ -10,7 +10,8 @@ class LimitholdemJudger(object):
 
         super().__init__()
 
-    def judge_game(self, players, hands):
+    @staticmethod
+    def judge_game(players, hands):
         ''' Judge the winner of the game.
 
         Args:

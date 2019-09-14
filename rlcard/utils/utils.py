@@ -142,7 +142,7 @@ def get_cards_from_ranks(player, ranks):
 
 def take_out_cards(cards, remove_cards):
     ''' Take out specific cards from a list of cards
-    
+
     Args:
         cards (list): A list of Card objects from which to be taken out some cards
         remove_cards (list): A list of Card objects that need to be taken out
