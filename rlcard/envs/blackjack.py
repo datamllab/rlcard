@@ -24,7 +24,7 @@ class BlackjackEnv(Env):
         '''
 
         encoded_action_list = []
-        for i in range(self.actions):
+        for i, ele in enumerate(self.actions):
             encoded_action_list.append(i)
         return encoded_action_list
 
