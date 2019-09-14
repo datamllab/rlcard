@@ -2,7 +2,7 @@ import sys
 from os import path
 import random
 
-from core import Card, Player
+from rlcard.core import Card, Player
 
 def init_standard_deck():
     ''' Initialize a standard deck of 52 cards
