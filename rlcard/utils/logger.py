@@ -55,7 +55,7 @@ class Logger(object):
 
     def add_point(self, x = None, y = None):
         ''' Add a point to the plot
-        
+
         Args:
             x (Number): x coordinate value
             y (Number): y coordinate value
