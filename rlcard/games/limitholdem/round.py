@@ -43,7 +43,7 @@ class LimitholdemRound(object):
 
         Note: For the first round of the game, we need to setup the big/small blind
         '''
-        
+
         self.button = button
         self.have_raised = 0
         self.not_raise_num = 0
