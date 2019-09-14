@@ -235,7 +235,7 @@ def get_downstream_player_id(player, players):
 
 def reorganize(trajectories, payoffs):
     ''' Reorganize the trajectory to make it RL friendly
-    
+
     Args:
         trajectory (list): A list of trajectories
         payoffs (list): A list of payoffs for the players. Each entry corresponds to one player

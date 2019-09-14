@@ -4,7 +4,7 @@
 
 from rlcard.core import Judger
 from rlcard.games.doudizhu.utils import CARD_TYPE, TYPE_CARD
-from rlcard.games.doudizhu.utils import cards2str, contains_cards
+from rlcard.games.doudizhu.utils import cards2str, contains_cards, get_gt_cards
 
 
 class DoudizhuJudger(Judger):
@@ -18,46 +18,6 @@ class DoudizhuJudger(Judger):
         self.playable_cards = [CARD_TYPE.copy() for i in range(3)]
         for player in players:
             self.get_playable_cards(player)
-
-    def get_gt_cards(self, player, greater_player):
-        ''' Provide player's cards which are greater than the ones played by
-        previous player in one round
-
-        Args:
-            player (DoudizhuPlayer object): the player waiting to play cards
-            greater_player (DoudizhuPlayer object): the player who played current biggest cards.
-
-        Returns:
-            list: list of string of greater cards
-
-        Note:
-            1. return value contains 'pass'
-        '''
-
-        # add 'pass' to legal actions
-        gt_cards = ['pass']
-        current_hand = cards2str(player.current_hand)
-        target_cards = greater_player.played_cards
-        target_types = CARD_TYPE[target_cards]
-        type_dict = {}
-        for card_type, weight in target_types:
-            if card_type not in type_dict:
-                type_dict[card_type] = weight
-        if 'rocket' in type_dict:
-            return gt_cards
-        type_dict['rocket'] = -1
-        if 'bomb' not in type_dict:
-            type_dict['bomb'] = -1
-        for card_type, weight in type_dict.items():
-            candidate = TYPE_CARD[card_type]
-            for can_weight, cards_list in candidate.items():
-                if int(can_weight) > weight:
-                    for cards in cards_list:
-                        # TODO: improve efficiency
-                        if cards not in gt_cards and contains_cards(current_hand, cards):
-                        # if self.contains_cards(current_hand, cards):
-                            gt_cards.append(cards)
-        return gt_cards
 
     def get_playable_cards(self, player):
         ''' Provide all legal cards the player can play according to his
