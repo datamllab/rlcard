@@ -1,5 +1,3 @@
-import numpy as np
-
 from rlcard.envs.env import Env
 from rlcard.games.limitholdem.game import LimitholdemGame as Game
 from rlcard.utils.utils import *
@@ -36,7 +34,6 @@ class LimitholdemEnv(Env):
             observation (list): combine the player's score and dealer's observable score for observation
         '''
 
-        obs = state
         return state
         
 
@@ -44,7 +41,7 @@ class LimitholdemEnv(Env):
         ''' Get the payoff of a game 
 
         Returns:
-           payoffs (list): list of payoffs 
+           payoffs (list): list of payoffs
         '''
 
         return self.game.get_payoffs()
@@ -56,7 +53,7 @@ class LimitholdemEnv(Env):
             action id (int): action id
 
         Returns:
-            action (str): action for the game 
+            action (str): action for the game
         '''
         legal_actions = self.game.get_legal_actions()
         if self.actions[action_id] not in legal_actions:
@@ -65,4 +62,4 @@ class LimitholdemEnv(Env):
             else:
                 return 'fold'
 
-        return self.actions[action_id] 
+        return self.actions[action_id]

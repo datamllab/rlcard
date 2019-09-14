@@ -59,10 +59,10 @@ class BlackjackEnv(Env):
         return obs
 
     def get_payoffs(self):
-        ''' Get the payoff of a game 
+        ''' Get the payoff of a game
 
         Returns:
-           payoffs (list): list of payoffs 
+           payoffs (list): list of payoffs
         '''
 
         if self.game.winner['player'] == 0 and self.game.winner['dealer'] == 1:
@@ -81,7 +81,7 @@ class BlackjackEnv(Env):
             action id (int): action id
 
         Returns:
-            action (str): action for the game 
+            action (str): action for the game
         '''
 
         return self.actions[action_id]
