@@ -13,7 +13,7 @@ class LimitholdemGame(object):
         '''
 
         super().__init__()
-        
+
         # Some configarations of the game
         # These arguments can be specified for creating new games
 
