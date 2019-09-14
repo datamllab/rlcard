@@ -1,6 +1,5 @@
 import importlib
 
-
 class EnvSpec(object):
     ''' A specification for a particular instance of the environment.
     '''
@@ -83,4 +82,3 @@ def make(env_id):
     '''
     
     return registry.make(env_id)
-
