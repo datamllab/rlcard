@@ -22,8 +22,8 @@ with tf.Session() as sess:
                 train_env, 
                 policy_network_layers=(32, 32),
                 advantage_network_layers=(32,32),
-                num_traversals=32,
-                num_step=100,
+                num_traversals=40,
+                num_step=50,
                 learning_rate=1e-4,
                 batch_size_advantage=32,
                 batch_size_strategy=32,
@@ -42,9 +42,7 @@ with tf.Session() as sess:
                     action_prob = deep_cfr.action_probabilities(state)
                     action_prob /= action_prob.sum()
                     action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
-                    #action_prob = list(action_prob)
-                    #action = action_prob.index(max(action_prob))
-                    #print("Play:", state, action)
+                    #action = deep_cfr.step(state)
                     state, player = test_env.step(action)
                     if test_env.is_over():
                         payoffs = test_env.get_payoffs()
