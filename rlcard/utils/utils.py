@@ -88,7 +88,7 @@ def rank2int(rank):
 
     Args:
         rank(str): rank stored in Card object
-    
+
     Returns:
         (int): the number corresponding to the rank
 
