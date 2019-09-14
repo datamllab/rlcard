@@ -239,7 +239,7 @@ def reorganize(trajectories, payoffs):
     Args:
         trajectory (list): A list of trajectories
         payoffs (list): A list of payoffs for the players. Each entry corresponds to one player
-    
+
     Returns:
         (list): A new trajectories that can be fed into RL algorithms.
 
