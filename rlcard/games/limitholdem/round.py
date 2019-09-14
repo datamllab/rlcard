@@ -62,7 +62,7 @@ class LimitholdemRound(object):
         Returns:
             (int): The button that indicates the next player
         '''
- 
+
         if action not in self.get_legal_actions():
             raise Exception('{} is not legal acyion. Legal actions: {}', action, self.get_legal_actions())
 

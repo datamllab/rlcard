@@ -81,7 +81,7 @@ class LimitholdemGame(object):
         state = self.get_state(self.button)
 
         return state, self.button
-        
+
     def step(self, action):
         ''' Get the next state
 
@@ -146,7 +146,8 @@ class LimitholdemGame(object):
 
         return self.num_players
 
-    def get_action_num(self):
+    @staticmethod
+    def get_action_num():
         ''' Return the number of applicable actions
 
         Returns:
