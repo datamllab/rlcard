@@ -36,8 +36,8 @@ from __future__ import print_function
 import collections
 import random
 import numpy as np
-#import sonnet as snt
 import tensorflow as tf
+import sonnet as snt
 
 import rlcard
 from rlcard.utils.utils import *
@@ -109,7 +109,7 @@ class MLP(object):
                 output_sizes,
                 w_init = None,
                 b_init = None,
-                activation=tf.nn.relu,
+                activation=tf.nn.softmax,
                 name=None):
         self.output_sizes = output_sizes
         self._activation = activation
@@ -121,14 +121,14 @@ class MLP(object):
         fc = tf.contrib.layers.flatten(inputs)
         for index, output_size in enumerate(self.output_sizes):
             if index == 0:
-                w = tf.Variable(tf.truncated_normal([int(fc.shape[1]), output_size], stddev=0.1), name='w'+str(index))
+                w = tf.Variable(tf.truncated_normal([int(fc.shape[1]), output_size], stddev=0.2), name='w'+str(index))
             else:
-                w = tf.Variable(tf.truncated_normal([self.output_sizes[index-1], output_size], stddev=0.1), name='w'+str(index))
+                w = tf.Variable(tf.truncated_normal([self.output_sizes[index-1], output_size], stddev=0.2), name='w'+str(index))
             b = tf.Variable(tf.constant(0.1, shape=[output_size]), name='b'+str(index) )
             self.variables.append(w)
             self.variables.append(b)
             fc = tf.nn.xw_plus_b(fc, w, b, name='fc'+str(index))
-            fc = tf.nn.relu(fc, name='activation'+str(index))
+        fc = self._activation(fc, name='activation'+str(index))
         return fc
 
     def reinitialize(self, sess):
@@ -191,6 +191,7 @@ class DeepCFR():
         self._num_traversals = num_traversals
         self._num_actions = self._env.action_num
         self._iteration = 1
+        self._traverse_count = 0
 
         info_state_shape = [None]
         info_state_shape.extend(self._embedding_size)
@@ -285,7 +286,6 @@ class DeepCFR():
         action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
         return action
 
-    
     def train(self):
         ''' Perform tree traversal and train the network
 
@@ -311,30 +311,25 @@ class DeepCFR():
         avg_adv_loss = sum([self.advantage_losses[p][-1] for p in self.advantage_losses.keys()]) / self._num_players
         return self._policy_network, avg_adv_loss, policy_loss
 
-    def _traverse_game_tree(self, state, player):
+    def _traverse_game_tree(self, state, player, count = 0):
         '''Performs a traversal of the game tree.
 
         Over a traversal the advantage and strategy memories are populated with
         computed advantage values and matched regrets respectively.
 
         Args:
-            state (dict): Current OpenSpiel game state.
+            state (dict): Current rlcard game state.
             player (int): Player index for this traversal.
 
         Returns:
             payoff (list): Recursively returns expected payoffs for each action.
         '''
-
         expected_payoff = collections.defaultdict(float)
         current_player = self._env.get_player_id()
         actions = self._env.get_legal_actions()
-        if self._env.is_over():
-            # Terminal state get returns.
-            payoff = self._env.get_payoffs()
-            self._env.step_back()
-            return payoff 
 
-        elif current_player == player:
+        if current_player == player:
+
             sampled_regret = collections.defaultdict(float)
             # Update the policy over the info set & actions via regret matching.
             advantages, strategy = self._sample_action_from_advantage(state, player)
@@ -342,7 +337,13 @@ class DeepCFR():
                 child_state, _ = self._env.step(action)
                 child_state = child_state.flatten()
                 expected_payoff[action] = self._traverse_game_tree(child_state, player)
-            self._env.step_back()
+
+            if self._env.is_over():
+                # Terminal state get returns.
+                payoff = self._env.get_payoffs()
+                prev_state, _ = self._env.step_back()
+                return payoff 
+
             for action in actions:
                 sampled_regret[action] = expected_payoff[action][0]
                 for a_ in actions:
@@ -351,6 +352,7 @@ class DeepCFR():
                 self._advantage_memories[player].add(AdvantageMemory(state, self._iteration, regret, action))
             if self._num_players == 1:
                 self._strategy_memories.add(StrategyMemory(state, self._iteration, strategy))
+
             return max(expected_payoff.values())
         else:
             other_player = current_player
@@ -438,13 +440,14 @@ class DeepCFR():
         advantages = []
         iterations = []
         for s in samples:
+            #print(s.info_state, s.action, s.advantage)
             info_states.append(s.info_state)
             advantages.append(s.advantage)
             iterations.append([s.iteration])
 
         if info_states == []:
             return None
-
+        
         # Ensure some samples have been gathered.
         loss_advantages, _ = self._session.run(
             [self._loss_advantages[player], self._learn_step_advantages[player]],
