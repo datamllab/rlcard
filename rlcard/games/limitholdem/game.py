@@ -1,13 +1,12 @@
 import random
 from copy import deepcopy
 
-from rlcard.core import Game
 from rlcard.games.limitholdem.dealer import LimitholdemDealer as Dealer
 from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
 from rlcard.games.limitholdem.judger import LimitholdemJudger as Judger
 from rlcard.games.limitholdem.round import LimitholdemRound as Round
 
-class LimitholdemGame(Game):
+class LimitholdemGame(object):
 
     def __init__(self):
         ''' Initialize the class limitholdem Game
@@ -72,7 +71,7 @@ class LimitholdemGame(Game):
                            num_players=self.num_players)
 
         self.round.start_new_round(button=self.button, raised=[p.in_chips for p in self.players])
- 
+
         # Count the round. There are 4 rounds in each game.
         self.round_counter = 0
 
@@ -82,7 +81,7 @@ class LimitholdemGame(Game):
         state = self.get_state(self.button)
 
         return state, self.button
-        
+
     def step(self, action):
         ''' Get the next state
 
@@ -107,7 +106,7 @@ class LimitholdemGame(Game):
 
         # Then we proceed to the next round
         self.button = self.round.proceed_round(self.players, action)
-        
+
         # If a round is over, we deal more public cards
         if self.round.is_over():
             # For the first round, we deal 3 cards
@@ -147,7 +146,8 @@ class LimitholdemGame(Game):
 
         return self.num_players
 
-    def get_action_num(self):
+    @staticmethod
+    def get_action_num():
         ''' Return the number of applicable actions
 
         Returns:

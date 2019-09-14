@@ -1,7 +1,5 @@
-from rlcard.core import Player
 
-
-class LimitholdemPlayer(Player):
+class LimitholdemPlayer(object):
 
     def __init__(self, player_id):
         ''' Initilize a player.
