@@ -16,7 +16,7 @@ class LimitholdemGame(object):
         
         # Some configarations of the game
         # These arguments can be specified for creating new games
-        
+
         # Small blind and big blind
         self.small_blind = 1
         self.big_blind = 2 * self.small_blind
