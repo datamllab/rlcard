@@ -1,7 +1,7 @@
 import sys
 from os import path
-sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
 import random
+
 from core import Card, Player
 
 def init_standard_deck():
@@ -275,7 +275,6 @@ def set_global_seed(seed):
 
     if seed is not None:
         import numpy as np
-        import random
         import tensorflow as tf
         tf.set_random_seed(seed)
         np.random.seed(seed)

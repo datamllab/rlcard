@@ -2,8 +2,7 @@ import numpy as np
 
 from rlcard.envs.env import Env
 from rlcard.games.limitholdem.game import LimitholdemGame as Game
-from rlcard.utils.utils import * 
-
+from rlcard.utils.utils import *
 
 class LimitholdemEnv(Env):
     ''' Limitholdem Environment
@@ -66,5 +65,4 @@ class LimitholdemEnv(Env):
             else:
                 return 'fold'
 
-        return self.actions[action_id]
- 
+        return self.actions[action_id] 

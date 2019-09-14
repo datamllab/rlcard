@@ -129,7 +129,7 @@ class LimitholdemRound(Round):
         if self.not_raise_num >= self.num_players:
             return True
         return False
-            
+
 if __name__ == '__main__':
     players = [Player(0), Player(1)]
     button = 0
