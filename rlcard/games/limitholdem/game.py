@@ -123,7 +123,7 @@ class LimitholdemGame(Game):
             self.round.start_new_round(self.button)
 
         state = self.get_state(self.button)
-            
+
         return state, self.button
 
     def step_back(self):
