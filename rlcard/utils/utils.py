@@ -74,7 +74,7 @@ def is_single(cards):
 
     Args:
         cards (list): A list of Card object
-    
+
     Returns:
         (boolean): True if the list is single
     '''
