@@ -72,7 +72,7 @@ class LimitholdemRound(Round):
             self.raised[self.button] = max(self.raised)
             players[self.button].in_chips += diff
             self.not_raise_num += 1
-            
+ 
         elif action == 'raise':
             diff = max(self.raised) - self.raised[self.button] + self.raise_amount
             self.raised[self.button] = max(self.raised) + self.raise_amount

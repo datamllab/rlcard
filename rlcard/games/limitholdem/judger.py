@@ -8,7 +8,7 @@ class LimitholdemJudger(Judger):
     def __init__(self):
         ''' Initialize a judger class
         '''
-        
+
         super().__init__()
 
     def judge_game(self, players, hands):

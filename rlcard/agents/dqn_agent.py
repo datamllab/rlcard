@@ -316,7 +316,7 @@ class Estimator():
           Tensor of shape [batch_size, NUM_VALID_ACTIONS] containing the estimated
           action values.
         '''
- 
+
         return sess.run(self.predictions, { self.X_pl: s })
 
     def update(self, sess, s, a, y):

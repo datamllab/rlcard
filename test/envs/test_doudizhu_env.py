@@ -8,7 +8,7 @@ class TestDoudizhuEnv(unittest.TestCase):
 
     def test_init_game_and_extract_state(self):
         env = Env()
-        state, player_id = env.init_game()
+        state, _ = env.init_game()
         self.assertEqual(state.size, 450)
 
     def test_step(self):

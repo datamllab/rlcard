@@ -242,7 +242,7 @@ def reorganize(trajectories, payoffs):
     
     Returns:
         (list): A new trajectories that can be fed into RL algorithms.
-        
+
     '''
 
     player_num = len(trajectories)

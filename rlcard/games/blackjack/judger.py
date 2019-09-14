@@ -46,7 +46,7 @@ class BlackjackJudger(Judger):
                 game.winner['player'] = 1
 
     def judge_score(self, cards):
-        ''' Judge the score of a given cards set 
+        ''' Judge the score of a given cards set
 
         Args:
             cards (list): a list of cards
@@ -57,7 +57,6 @@ class BlackjackJudger(Judger):
 
         score = 0
         has_A = 0
-        c = [card.get_index() for card in cards]
         for card in cards:
             card_score = self.rank2score[card.rank]
             score += card_score
