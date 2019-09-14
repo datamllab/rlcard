@@ -4,10 +4,9 @@
 
 import random
 
-from rlcard.core import Round
 from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
 
-class LimitholdemRound(Round):
+class LimitholdemRound(object):
     ''' Round can call other Classes' functions to keep the game running
     '''
 

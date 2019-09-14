@@ -1,7 +1,5 @@
-from rlcard.core import Judger
 
-
-class BlackjackJudger(Judger):
+class BlackjackJudger(object):
     def __init__(self):
         ''' Initialize a BlackJack judger class
         '''
