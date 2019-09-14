@@ -2,11 +2,10 @@
 ''' Implement Doudizhu Player class
 '''
 
-from rlcard.core import Player
 from rlcard.games.doudizhu.utils import get_gt_cards
 
 
-class DoudizhuPlayer(Player):
+class DoudizhuPlayer(object):
     ''' Player can store cards in the player's hand and the role,
     determine the actions can be made according to the rules,
     and can perfrom corresponding action

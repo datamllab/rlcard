@@ -1,7 +1,5 @@
-from rlcard.core import Player
 
-
-class BlackjackPlayer(Player):
+class BlackjackPlayer(object):
 
     def __init__(self, player_id):
         ''' Initialize a Blackjack player class

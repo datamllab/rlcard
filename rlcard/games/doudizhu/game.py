@@ -5,7 +5,6 @@
 import functools
 import copy
 
-from rlcard.core import Game
 from rlcard.games.doudizhu.judger import cards2str
 from rlcard.games.doudizhu.player import DoudizhuPlayer as Player
 from rlcard.games.doudizhu.round import DoudizhuRound as Round
@@ -15,7 +14,7 @@ from rlcard.utils.utils import init_54_deck
 from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 
 
-class DoudizhuGame(Game):
+class DoudizhuGame(object):
     ''' Provide game APIs for env to run doudizhu and get corresponding state
     information.
 
