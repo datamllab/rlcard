@@ -1,7 +1,6 @@
-from rlcard.core import Judger
 from rlcard.games.limitholdem.utils import *
 
-class LimitholdemJudger(Judger):
+class LimitholdemJudger(object):
     ''' The Judger class for Texas Hold'em
     '''
 
