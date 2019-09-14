@@ -1,5 +1,6 @@
 # RLCard: A Toolkit for Reinforcement Learning in Card Games
 [![Build Status](https://travis-ci.org/datamllab/RLCard.svg?branch=master)](https://travis-ci.org/datamllab/RLCard)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/248eb15c086748a4bcc830755f1bd798)](https://www.codacy.com/manual/daochenzha/rlcard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=datamllab/rlcard&amp;utm_campaign=Badge_Grade)
 
 RLCard is a opensource toolkit for developing Reinforcement Learning (RL) algorithms in card games. It supports multiple challenging card game environments with common and easy-to-use interfaces. The  goal  of  the  toolkit  is  to  enable  more  people  to  study  game  AI  and  push  forward  the  research of imperfect information games. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University. **NOTE: The project is still in final testing!**
 
