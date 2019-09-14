@@ -65,7 +65,7 @@ class LimitholdemGame(Game):
         # The player next to the samll blind plays the first
         self.button = (s + 1) % self.num_players
 
-        # Initilize a bidding round, in the first round, the big blind and the small blind needs to 
+        # Initilize a bidding round, in the first round, the big blind and the small blind needs to
         # be passed to the round for processing.
         self.round = Round(raise_amount=self.raise_amount,
                            allowed_raise_num=self.allowed_raise_num,
@@ -237,7 +237,7 @@ if __name__ == "__main__":
                 button = game.get_player_id()
                 print(button)
                 legal_actions = game.get_legal_actions()
- 
+
             action = random.choice(legal_actions)
             print(button, action, legal_actions)
             state, button = game.step(action)
