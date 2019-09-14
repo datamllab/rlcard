@@ -107,7 +107,7 @@ class LimitholdemGame(Game):
 
         # Then we proceed to the next round
         self.button = self.round.proceed_round(self.players, action)
-        
+
         # If a round is over, we deal more public cards
         if self.round.is_over():
             # For the first round, we deal 3 cards
