@@ -237,7 +237,7 @@ if __name__ == "__main__":
                 button = game.get_player_id()
                 print(button)
                 legal_actions = game.get_legal_actions()
-                
+ 
             action = random.choice(legal_actions)
             print(button, action, legal_actions)
             state, button = game.step(action)

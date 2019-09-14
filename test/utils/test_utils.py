@@ -1,7 +1,7 @@
 import unittest
-import random
 import numpy as np
 from rlcard.utils.utils import *
+
 from rlcard.core import Card, Player
 
 class TestUtilsMethos(unittest.TestCase):

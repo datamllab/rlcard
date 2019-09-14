@@ -381,8 +381,7 @@ class Memory(object):
 
         samples = random.sample(self.memory, self.batch_size)
         return map(np.array, zip(*samples))
-
-        
+ 
 def copy_model_parameters(sess, estimator1, estimator2):
     ''' Copys the model parameters of one estimator to another.
 
