@@ -1,10 +1,10 @@
-import random
 from copy import deepcopy
 
 from rlcard.core import Game
 from rlcard.games.blackjack.dealer import BlackjackDealer as Dealer
 from rlcard.games.blackjack.player import BlackjackPlayer as Player
 from rlcard.games.blackjack.judger import BlackjackJudger as Judger
+
 
 class BlackjackGame(Game):
 
@@ -13,7 +13,6 @@ class BlackjackGame(Game):
         '''
 
         super().__init__()
-
 
     def init_game(self):
         ''' Initialilze the game
@@ -35,7 +34,7 @@ class BlackjackGame(Game):
         self.winner = {'dealer':0, 'player':0}
         self.history = []
         return self.get_state(self.get_player_id()), self.get_player_id()
-        
+
     def step(self, action):
         ''' Get the next state
 
@@ -150,9 +149,9 @@ class BlackjackGame(Game):
             return True
         else:
             return False
-    
 
-########################################################## 
+
+##########################################################
 #    # For testing
 #    def _start_game(self):
 #        while True:
@@ -177,5 +176,3 @@ class BlackjackGame(Game):
 #if __name__ == "__main__":
 #    game = BlackjackGame()
 #    game._start_game()
-
-
