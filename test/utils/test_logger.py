@@ -1,5 +1,6 @@
 import unittest
 from rlcard.utils.logger import Logger
+import os
 
 class TestLoggerMethos(unittest.TestCase):
 
@@ -21,11 +22,13 @@ class TestLoggerMethos(unittest.TestCase):
         logger = Logger(xlabel="x", ylabel="y", legend="test")
         for x in range(10):
             logger.add_point(x=x, y=x*x)
+        self.assertEqual(9*9, logger.ys[9])
         logger.make_plot(save_path='./newtest/test.png')
 
     def test_close_file(self):
         logger = Logger(xlabel="x", ylabel="y", legend="test", log_path="./newtest/test_log.txt",csv_path="./newtest/test_csv.csv")
         logger.close_file()
+        self.assertTrue(os.path.exists('./newtest/'))
 
 if __name__ == '__main__':
     unittest.main()

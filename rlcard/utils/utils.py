@@ -1,7 +1,6 @@
 import sys
 from os import path
 sys.path.append( path.dirname( path.dirname( path.abspath(__file__) ) ) )
-from functools import reduce
 import random
 from core import Card, Player
 
@@ -154,7 +153,7 @@ def take_out_cards(cards, remove_cards):
         (list): A list of Card objects. The cards in 'remove_cards' list that doesn't make cards in 'cards' list taken out
 
     Note:
-        1. This function will affect the first input Card list, 
+        1. This function will affect the first input Card list,
         but will not affect the second input Card list.
         2. For each card in 'remove_cards' list, it will make only one card in 'cards' list taken out,
         which means to take out one kind of cards with the same suit and rank in 'cards' list,
@@ -205,7 +204,7 @@ def init_players(n):
         n (int): The number of players to be initialized
 
     Returns:
-        (list): A list of Player objects with player_id(s) start from 0 and are consequent 
+        (list): A list of Player objects with player_id(s) start from 0 and are consequent
     '''
 
     players = []
@@ -261,7 +260,7 @@ def reorganize(trajectories, payoffs):
             transition = trajectories[player][i:i+3].copy()
             transition.insert(2, reward)
             transition.append(done)
-            
+
             new_trajectories[player].append(transition)
     return new_trajectories
 

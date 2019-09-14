@@ -56,7 +56,6 @@ class TestUtilsMethos(unittest.TestCase):
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)
 
-        step_action = agent.step(np.random.random_sample((2,))) 
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)
 
