@@ -1,12 +1,10 @@
 from copy import deepcopy
 
-from rlcard.core import Game
 from rlcard.games.blackjack.dealer import BlackjackDealer as Dealer
 from rlcard.games.blackjack.player import BlackjackPlayer as Player
 from rlcard.games.blackjack.judger import BlackjackJudger as Judger
 
-
-class BlackjackGame(Game):
+class BlackjackGame(object):
 
     def __init__(self):
         ''' Initialize the class Blackjack Game
@@ -93,7 +91,8 @@ class BlackjackGame(Game):
             return True
         return False
 
-    def get_player_num(self):
+    @staticmethod
+    def get_player_num():
         ''' Return the number of players in blackjack
 
         Returns:
@@ -102,7 +101,8 @@ class BlackjackGame(Game):
 
         return 1
 
-    def get_action_num(self):
+    @staticmethod
+    def get_action_num():
         ''' Return the number of applicable actions
 
         Returns:
@@ -152,7 +152,7 @@ class BlackjackGame(Game):
             return False
 
 
-########################################################## 
+##########################################################
 #    # For testing
 #    def _start_game(self):
 #        while True:

@@ -46,9 +46,9 @@ class DQNAgent(object):
                  epsilon_decay_steps=20000,
                  batch_size=32,
                  action_num=2,
-                 state_shape=[2],
+                 state_shape=None,
                  norm_step=100,
-                 mlp_layers=[10, 10]):
+                 mlp_layers=None):
 
         '''
         Q-Learning algorithm for off-policy TD control using Function Approximation.
@@ -57,9 +57,9 @@ class DQNAgent(object):
         Args:
             sess (tf.Session): Tensorflow Session object
             replay_memory_size (int): Size of the replay memory
-            replay_memory_init_size (int): Number of random experiences to sampel when initializing 
+            replay_memory_init_size (int): Number of random experiences to sampel when initializing
               the reply memory.
-            update_target_estimator_every (int): Copy parameters from the Q estimator to the 
+            update_target_estimator_every (int): Copy parameters from the Q estimator to the
               target estimator every N steps
             discount_factor (float): Gamma discount factor
             epsilon_start (int): Chance to sample a random action when taking an action.
@@ -132,7 +132,7 @@ class DQNAgent(object):
             action (int): an action id
         '''
 
-        epsilon = self.epsilons[min(self.total_t, self.epsilon_decay_steps-1)]     
+        epsilon = self.epsilons[min(self.total_t, self.epsilon_decay_steps-1)]
         A = np.ones(self.action_num, dtype=float) * epsilon / self.action_num
         q_values = self.q_estimator.predict(self.sess, np.expand_dims(self.normalizer.normalize(state), 0))[0]
         best_action = np.argmax(q_values)
@@ -250,7 +250,7 @@ class Estimator():
         This network is used for both the Q-Network and the Target Network.
     '''
 
-    def __init__(self, scope="estimator", action_num=2, state_shape=[2], mlp_layers=None):
+    def __init__(self, scope="estimator", action_num=2, state_shape=None, mlp_layers=None):
         ''' Initilalize an Estimator object.
 
         Args:
@@ -313,10 +313,10 @@ class Estimator():
           s (numpy.array): State input of shape [batch_size, 4, 160, 160, 3]
 
         Returns:
-          Tensor of shape [batch_size, NUM_VALID_ACTIONS] containing the estimated 
+          Tensor of shape [batch_size, NUM_VALID_ACTIONS] containing the estimated
           action values.
         '''
- 
+
         return sess.run(self.predictions, { self.X_pl: s })
 
     def update(self, sess, s, a, y):
@@ -382,7 +382,6 @@ class Memory(object):
         samples = random.sample(self.memory, self.batch_size)
         return map(np.array, zip(*samples))
 
-        
 def copy_model_parameters(sess, estimator1, estimator2):
     ''' Copys the model parameters of one estimator to another.
 

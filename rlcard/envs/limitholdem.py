@@ -1,9 +1,6 @@
-import numpy as np
-
 from rlcard.envs.env import Env
 from rlcard.games.limitholdem.game import LimitholdemGame as Game
-from rlcard.utils.utils import * 
-
+from rlcard.utils.utils import *
 
 class LimitholdemEnv(Env):
     ''' Limitholdem Environment
@@ -29,7 +26,7 @@ class LimitholdemEnv(Env):
         ''' Extract the state representation from state dictionary for agent
 
         Note: Currently the use the hand cards and the public cards. TODO: encode the states
-        
+
         Args:
             state (dict): Original state from the game
 
@@ -37,15 +34,14 @@ class LimitholdemEnv(Env):
             observation (list): combine the player's score and dealer's observable score for observation
         '''
 
-        obs = state
         return state
-        
+
 
     def get_payoffs(self):
-        ''' Get the payoff of a game 
+        ''' Get the payoff of a game
 
         Returns:
-           payoffs (list): list of payoffs 
+           payoffs (list): list of payoffs
         '''
 
         return self.game.get_payoffs()
@@ -57,7 +53,7 @@ class LimitholdemEnv(Env):
             action id (int): action id
 
         Returns:
-            action (str): action for the game 
+            action (str): action for the game
         '''
         legal_actions = self.game.get_legal_actions()
         if self.actions[action_id] not in legal_actions:
@@ -67,4 +63,3 @@ class LimitholdemEnv(Env):
                 return 'fold'
 
         return self.actions[action_id]
- 

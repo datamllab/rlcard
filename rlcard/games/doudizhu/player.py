@@ -2,10 +2,10 @@
 ''' Implement Doudizhu Player class
 '''
 
-from rlcard.core import Player
+from rlcard.games.doudizhu.utils import get_gt_cards
 
 
-class DoudizhuPlayer(Player):
+class DoudizhuPlayer(object):
     ''' Player can store cards in the player's hand and the role,
     determine the actions can be made according to the rules,
     and can perfrom corresponding action
@@ -47,7 +47,7 @@ class DoudizhuPlayer(Player):
         if greater_player is None or greater_player is self:
             actions = judger.get_playable_cards(self)
         else:
-            actions = judger.get_gt_cards(self, greater_player)
+            actions = get_gt_cards(self, greater_player)
         return actions
 
     def play(self, action, greater_player=None):

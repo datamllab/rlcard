@@ -4,16 +4,16 @@
 from rlcard.envs.registration import register, make
 
 register(
-    id='blackjack',
+    env_id='blackjack',
     entry_point='rlcard.envs.blackjack:BlackjackEnv',
 )
 
 register(
-    id='doudizhu',
+    env_id='doudizhu',
     entry_point='rlcard.envs.doudizhu:DoudizhuEnv',
 )
 
 register(
-    id='limit-holdem',
+    env_id='limit-holdem',
     entry_point='rlcard.envs.limitholdem:LimitholdemEnv',
 )

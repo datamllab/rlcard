@@ -1,7 +1,5 @@
-from rlcard.core import Player
 
-
-class LimitholdemPlayer(Player):
+class LimitholdemPlayer(object):
 
     def __init__(self, player_id):
         ''' Initilize a player.
@@ -15,7 +13,7 @@ class LimitholdemPlayer(Player):
         self.status = 'alive'
 
         # The chips that this player has put in until now
-        self.in_chips = 0 
+        self.in_chips = 0
 
     def get_state(self, public_cards, all_chips):
         ''' Encode the state for the player
