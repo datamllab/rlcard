@@ -71,7 +71,7 @@ class LimitholdemGame(object):
                            num_players=self.num_players)
 
         self.round.start_new_round(button=self.button, raised=[p.in_chips for p in self.players])
- 
+
         # Count the round. There are 4 rounds in each game.
         self.round_counter = 0
 

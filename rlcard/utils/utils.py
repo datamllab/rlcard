@@ -118,7 +118,7 @@ def rank2int(rank):
 
 def get_cards_from_ranks(player, ranks):
     ''' Get chosen cards and remained cards from a player's hand according to input rank list
-    
+
     Args:
         player (Player): Player object
         ranks (list): A list of rank (string)
