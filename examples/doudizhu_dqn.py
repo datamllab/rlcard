@@ -78,6 +78,6 @@ with tf.Session() as sess:
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
             logger.make_plot(save_path='./experiments/doudizhu_dqn_result/'+str(episode)+'.png')
-   
+ 
     # Make the final plot
     logger.make_plot(save_path='./experiments/doudizhu_dqn_result/'+'final_'+str(episode)+'.png')

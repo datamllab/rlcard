@@ -10,7 +10,7 @@ class LimitholdemJudger(Judger):
         '''
         
         super().__init__()
-    
+
     def judge_game(self, players, hands):
         ''' Judge the winner of the game.
 
@@ -19,7 +19,7 @@ class LimitholdemJudger(Judger):
             hands (list): The list of hands that from the players
 
         Returns:
-            (list): Each entry of the list corresponds to one entry of the 
+            (list): Each entry of the list corresponds to one entry of the
         '''
 
         # Convert the hands into card indexes
@@ -40,10 +40,10 @@ class LimitholdemJudger(Judger):
         each_win = float(total) / sum(winners)
 
         payoffs = []
-        for i in range(len(players)):
+        for i, _ in enumerate(players):
             if winners[i] == 1:
                 payoffs.append(each_win - players[i].in_chips)
             else:
                 payoffs.append(float(-players[i].in_chips))
 
-        return payoffs 
+        return payoffs

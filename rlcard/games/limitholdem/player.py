@@ -15,7 +15,7 @@ class LimitholdemPlayer(Player):
         self.status = 'alive'
 
         # The chips that this player has put in until now
-        self.in_chips = 0 
+        self.in_chips = 0
 
     def get_state(self, public_cards, all_chips):
         ''' Encode the state for the player

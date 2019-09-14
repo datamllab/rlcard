@@ -51,7 +51,7 @@ class LimitholdemRound(Round):
         if raised:
             self.raised = raised
         else:
-            self.raised = [0 for _ in range(self.num_players)] 
+            self.raised = [0 for _ in range(self.num_players)]
 
     def proceed_round(self, players, action):
         ''' Call other Classes's functions to keep one round running
@@ -103,7 +103,7 @@ class LimitholdemRound(Round):
         '''
 
         full_actions = ['call', 'raise', 'fold', 'check']
-        
+
         # If the the number of raises already reaches the maximum number raises, we can not raise any more
         if self.have_raised >= self.allowed_raise_num:
             full_actions.remove('raise')
