@@ -16,7 +16,7 @@ from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 
 
 class DoudizhuGame(Game):
-    ''' Provide game APIs for env to run doudizhu and get corresponding state 
+    ''' Provide game APIs for env to run doudizhu and get corresponding state
     information.
 
     An example of state during runtime:

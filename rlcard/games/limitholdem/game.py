@@ -218,7 +218,6 @@ class LimitholdemGame(Game):
 
         return self.round.get_legal_actions()
 
-    
 # Test the game
 
 if __name__ == "__main__":

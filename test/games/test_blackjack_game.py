@@ -38,7 +38,7 @@ class TestBlackjackMethods(unittest.TestCase):
 
     def test_proceed_game(self):
         game = Game()
-        state, _ = game.init_game()
+        game.init_game()
         while not game.is_over():
             action = random.choice(['hit', 'action'])
             state, _ = game.step(action)
