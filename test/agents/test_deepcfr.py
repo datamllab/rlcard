@@ -11,7 +11,7 @@ class TestUtilsMethos(unittest.TestCase):
         sess = tf.InteractiveSession()
         env = rlcard.make('blackjack')
         agent = DeepCFR(session=sess,
-                        env=env,                         
+                        env=env,
                         policy_network_layers=(4,4),
                         advantage_network_layers=(4,4),
                         num_traversals=1,
