@@ -58,10 +58,9 @@ class Env(object):
 
         Note: Error will be raised if step back from the root node.
         '''
-        success = self.game.step_back()
 
-        if success == False:
-            raise Exception('Step_back error. May caused by step back from root node.')
+        if not self.game.step_back():
+            return False
 
         player_id = self.get_player_id()
         state = self.get_state(player_id)

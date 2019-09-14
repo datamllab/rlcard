@@ -4,10 +4,9 @@
 
 import random
 
-from rlcard.core import Round
 from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
 
-class LimitholdemRound(Round):
+class LimitholdemRound(object):
     ''' Round can call other Classes' functions to keep the game running
     '''
 
@@ -44,14 +43,14 @@ class LimitholdemRound(Round):
 
         Note: For the first round of the game, we need to setup the big/small blind
         '''
-        
+
         self.button = button
         self.have_raised = 0
         self.not_raise_num = 0
         if raised:
             self.raised = raised
         else:
-            self.raised = [0 for _ in range(self.num_players)] 
+            self.raised = [0 for _ in range(self.num_players)]
 
     def proceed_round(self, players, action):
         ''' Call other Classes's functions to keep one round running
@@ -63,7 +62,7 @@ class LimitholdemRound(Round):
         Returns:
             (int): The button that indicates the next player
         '''
-        
+
         if action not in self.get_legal_actions():
             raise Exception('{} is not legal acyion. Legal actions: {}', action, self.get_legal_actions())
 
@@ -72,7 +71,7 @@ class LimitholdemRound(Round):
             self.raised[self.button] = max(self.raised)
             players[self.button].in_chips += diff
             self.not_raise_num += 1
-            
+
         elif action == 'raise':
             diff = max(self.raised) - self.raised[self.button] + self.raise_amount
             self.raised[self.button] = max(self.raised) + self.raise_amount
@@ -103,7 +102,7 @@ class LimitholdemRound(Round):
         '''
 
         full_actions = ['call', 'raise', 'fold', 'check']
-        
+
         # If the the number of raises already reaches the maximum number raises, we can not raise any more
         if self.have_raised >= self.allowed_raise_num:
             full_actions.remove('raise')
@@ -129,7 +128,7 @@ class LimitholdemRound(Round):
         if self.not_raise_num >= self.num_players:
             return True
         return False
-            
+
 if __name__ == '__main__':
     players = [Player(0), Player(1)]
     button = 0

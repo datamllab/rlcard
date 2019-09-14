@@ -1,7 +1,5 @@
-from rlcard.core import Judger
 
-
-class BlackjackJudger(Judger):
+class BlackjackJudger(object):
     def __init__(self):
         ''' Initialize a BlackJack judger class
         '''
@@ -25,7 +23,8 @@ class BlackjackJudger(Judger):
         else:
             return "bust", score
 
-    def judge_game(self, game):
+    @staticmethod
+    def judge_game(game):
         ''' Judge the winner of the game
 
         Args:
@@ -46,10 +45,10 @@ class BlackjackJudger(Judger):
                 game.winner['player'] = 1
 
     def judge_score(self, cards):
-        ''' Judge the score of a given cards set 
+        ''' Judge the score of a given cards set
 
         Args:
-            cards (list): a list of cards 
+            cards (list): a list of cards
 
         Returns:
             score (int): the score of the given cards set
@@ -57,14 +56,13 @@ class BlackjackJudger(Judger):
 
         score = 0
         has_A = 0
-        c = [card.get_index() for card in cards]
         for card in cards:
             card_score = self.rank2score[card.rank]
             score += card_score
             if card.rank == 'A':
                 has_A += 1
         if score > 21 and has_A > 0:
-            for i in range(has_A):
+            for _ in range(has_A):
                 score -= 9
                 if score < 21:
                     break
