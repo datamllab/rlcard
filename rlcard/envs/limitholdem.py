@@ -26,7 +26,7 @@ class LimitholdemEnv(Env):
         ''' Extract the state representation from state dictionary for agent
 
         Note: Currently the use the hand cards and the public cards. TODO: encode the states
-        
+
         Args:
             state (dict): Original state from the game
 
