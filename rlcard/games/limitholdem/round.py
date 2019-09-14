@@ -4,10 +4,9 @@
 
 import random
 
-from rlcard.core import Round
 from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
 
-class LimitholdemRound(Round):
+class LimitholdemRound(object):
     ''' Round can call other Classes' functions to keep the game running
     '''
 
@@ -44,7 +43,7 @@ class LimitholdemRound(Round):
 
         Note: For the first round of the game, we need to setup the big/small blind
         '''
-        
+
         self.button = button
         self.have_raised = 0
         self.not_raise_num = 0
@@ -63,7 +62,7 @@ class LimitholdemRound(Round):
         Returns:
             (int): The button that indicates the next player
         '''
-        
+
         if action not in self.get_legal_actions():
             raise Exception('{} is not legal acyion. Legal actions: {}', action, self.get_legal_actions())
 
