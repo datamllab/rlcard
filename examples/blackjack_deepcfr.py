@@ -15,8 +15,8 @@ evaluate_num = 1000
 num_iteration = 1000
 i = 0
 rewards = 0
-train_env = rlcard.make('blackjack') 
-test_env = rlcard.make('blackjack') 
+train_env = rlcard.make('blackjack')
+test_env = rlcard.make('blackjack')
 with tf.Session() as sess:
     deep_cfr = DeepCFR(sess, #
                 train_env, 

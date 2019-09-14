@@ -5,7 +5,6 @@
 import functools
 import copy
 
-from rlcard.core import Game
 from rlcard.games.doudizhu.judger import cards2str
 from rlcard.games.doudizhu.player import DoudizhuPlayer as Player
 from rlcard.games.doudizhu.round import DoudizhuRound as Round
@@ -15,8 +14,8 @@ from rlcard.utils.utils import init_54_deck
 from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 
 
-class DoudizhuGame(Game):
-    ''' Provide game APIs for env to run doudizhu and get corresponding state 
+class DoudizhuGame(object):
+    ''' Provide game APIs for env to run doudizhu and get corresponding state
     information.
 
     An example of state during runtime:
@@ -164,7 +163,8 @@ class DoudizhuGame(Game):
             self.state['others_hand'] = self._get_others_current_hand(player)
             return copy.deepcopy(self.state)
 
-    def get_action_num(self):
+    @staticmethod
+    def get_action_num():
         ''' Return the total number of abstract acitons
 
         Returns:
@@ -182,7 +182,8 @@ class DoudizhuGame(Game):
 
         return self.current_player
 
-    def get_player_num(self):
+    @staticmethod
+    def get_player_num():
         ''' Return the number of players in doudizhu
 
         Returns:

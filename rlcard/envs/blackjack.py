@@ -24,7 +24,7 @@ class BlackjackEnv(Env):
         '''
 
         encoded_action_list = []
-        for i, ele in enumerate(self.actions):
+        for i in range(len(self.actions)):
             encoded_action_list.append(i)
         return encoded_action_list
 
@@ -53,16 +53,16 @@ class BlackjackEnv(Env):
                 score -= 9
             return score, has_a
 
-        my_score, has_a = get_scores_and_A(my_cards)
+        my_score, _ = get_scores_and_A(my_cards)
         dealer_score, _ = get_scores_and_A(dealer_cards)
         obs = np.array([my_score, dealer_score])
         return obs
 
     def get_payoffs(self):
-        ''' Get the payoff of a game 
+        ''' Get the payoff of a game
 
         Returns:
-           payoffs (list): list of payoffs 
+           payoffs (list): list of payoffs
         '''
 
         if self.game.winner['player'] == 0 and self.game.winner['dealer'] == 1:
@@ -81,7 +81,7 @@ class BlackjackEnv(Env):
             action id (int): action id
 
         Returns:
-            action (str): action for the game 
+            action (str): action for the game
         '''
 
         return self.actions[action_id]
