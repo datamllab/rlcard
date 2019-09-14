@@ -1,5 +1,3 @@
-import sys
-from os import path
 import random
 
 from rlcard.core import Card, Player

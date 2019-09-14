@@ -52,7 +52,7 @@ class TestUtilsMethos(unittest.TestCase):
             if step > norm_step + memory_init_size:
                 agent.train()
 
-        predicted_action = agent.eval_step(np.random.random_sample((2,))) 
+        predicted_action = agent.eval_step(np.random.random_sample((2,)))
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)
 

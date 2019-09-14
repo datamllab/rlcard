@@ -80,5 +80,5 @@ def make(env_id):
     Args:
         env_id (string): the name of the environment
     '''
-    
+ 
     return registry.make(env_id)

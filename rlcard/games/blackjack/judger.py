@@ -49,7 +49,7 @@ class BlackjackJudger(Judger):
         ''' Judge the score of a given cards set 
 
         Args:
-            cards (list): a list of cards 
+            cards (list): a list of cards
 
         Returns:
             score (int): the score of the given cards set
