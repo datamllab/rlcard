@@ -61,7 +61,7 @@ class DoudizhuPlayer(object):
             object of DoudizhuPlayer: If there is a new greater_player, return it, if not, return None
         '''
 
-        trans = {'T': '10', 'B': 'BJ', 'R': 'RJ'}
+        trans = {'B': 'BJ', 'R': 'RJ'}
         if action == 'pass':
             return greater_player
         else:
