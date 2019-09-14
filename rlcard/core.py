@@ -56,7 +56,7 @@ class Dealer(object):
 
         pass
 
-    def deal_cards(self, player_id, num):
+    def deal_cards(self, **kwargs):
         ''' Deal specific number of cards to a specific player
 
         Args:
@@ -99,7 +99,7 @@ class Judger(object):
     ''' Judger decides whether the round/game ends and return the winner of the round/game
     '''
 
-    def judge_round(self):
+    def judge_round(self, **kwargs):
         ''' Decide whether the round ends, and return the winner of the round
 
         Returns:
@@ -108,7 +108,7 @@ class Judger(object):
 
         pass
 
-    def judge_game(self):
+    def judge_game(self, **kwargs):
         ''' Decide whether the game ends, and return the winner of the game
 
         Returns:
@@ -130,7 +130,7 @@ class Round(object):
 
         pass
 
-    def proceed_round(self):
+    def proceed_round(self, **kwargs):
         ''' Call other Classes's functions to keep the game running
         '''
 

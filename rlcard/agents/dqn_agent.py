@@ -46,9 +46,9 @@ class DQNAgent(object):
                  epsilon_decay_steps=20000,
                  batch_size=32,
                  action_num=2,
-                 state_shape=[2],
+                 state_shape=None,
                  norm_step=100,
-                 mlp_layers=[10, 10]):
+                 mlp_layers=None):
 
         '''
         Q-Learning algorithm for off-policy TD control using Function Approximation.
