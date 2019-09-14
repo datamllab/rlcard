@@ -90,7 +90,8 @@ class BlackjackGame(object):
             return True
         return False
 
-    def get_player_num(self):
+    @staticmethod
+    def get_player_num():
         ''' Return the number of players in blackjack
 
         Returns:
@@ -99,7 +100,8 @@ class BlackjackGame(object):
 
         return 1
 
-    def get_action_num(self):
+    @staticmethod
+    def get_action_num():
         ''' Return the number of applicable actions
 
         Returns:
