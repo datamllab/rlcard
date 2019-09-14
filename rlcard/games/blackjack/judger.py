@@ -23,7 +23,8 @@ class BlackjackJudger(object):
         else:
             return "bust", score
 
-    def judge_game(self, game):
+    @staticmethod
+    def judge_game(game):
         ''' Judge the winner of the game
 
         Args:
