@@ -1,5 +1,4 @@
-hand0 = ['HJ', 'DK', 'D5', 'C2', 'CQ', 'C3', 'C4']
-hand1 = ['HJ', 'DK', 'D5', 'C2', 'CQ', 'C3', 'C5']
+
 
 class Hand:
     def __init__(self):
@@ -11,7 +10,7 @@ class Hand:
         self.product = 1
         self.RANK_TO_STRING = {2: "2", 3: "3", 4: "4", 5: "5", 6: "6",
                                7: "7", 8: "8", 9: "9", 10: "T", 11: "J", 12: "Q", 13: "K", 14: "A"}
-        self.RANK_LOOKUP = "00234567891JQKA2345"
+        self.RANK_LOOKUP = "23456789TJQKA"
         self.SUIT_LOOKUP = "SCDH"
 
     def setCards(self, seven_cards=[]):
@@ -297,7 +296,7 @@ def compare_hands(hand0, hand1):
     cards0, cards1 = hand0, hand1
     hand0 = Hand()
     hand1 = Hand()
-    RANKS = '234567891JQKA'
+    RANKS = '23456789TJQKA'
 
     for card in cards0:
 
@@ -309,10 +308,12 @@ def compare_hands(hand0, hand1):
 
     hand0.evaluateHand()
     hand1.evaluateHand()
-
+    var = hand1.get_hand_five_cards()
+    print(var)
     # compare hands
     hand0_category = hand0.category
     hand1_category = hand1.category
+
     if hand0_category > hand1_category:
         return [1, 0]
     elif hand0_category < hand1_category:
@@ -321,18 +322,254 @@ def compare_hands(hand0, hand1):
         # compare equal category
         hand0_5_cards = hand0.get_hand_five_cards()
         hand1_5_cards = hand1.get_hand_five_cards()
-    for i in reversed(range(5)):
-        hand0_card_rank = hand0_5_cards[i][1]
-        hand1_card_rank = hand1_5_cards[i][1]
-        if RANKS.index(hand0_card_rank) > RANKS.index(hand1_card_rank):
-            return [1, 0]
-        elif RANKS.index(hand0_card_rank) < RANKS.index(hand1_card_rank):
-            return [0, 1]
+        
+
+        if hand0_category == 9 or hand0_category == 5:
+            for i in reversed(range(5)):
+                hand0_card_rank = hand0_5_cards[i][1]
+                hand1_card_rank = hand1_5_cards[i][1]
+                if RANKS.index(hand0_card_rank) > RANKS.index(hand1_card_rank):
+                    return [1, 0]
+                elif RANKS.index(hand0_card_rank) < RANKS.index(hand1_card_rank):
+                    return [0, 1]
+        if hand0_category == 8:
+            seen = []
+            duplicated0 = []
+            five_cards_0 = []
+            five_cards_1 = []
+            handcard0 = hand0.get_hand_five_cards()
+            handcard1 = hand1.get_hand_five_cards()
+            for i in range(5):              
+                five_cards_0.append(handcard0[i][1])
+            for _ in five_cards_0:  
+                if _ not in seen:  
+                    seen.append(_)
+                else:
+                    duplicated0.append(_)            
+            seen = []
+            duplicated1 = []
+            for i in range(5):              
+                five_cards_1.append(handcard1[i][1])
+            for _ in five_cards_1:  
+                if _ not in seen:  
+                    seen.append(_)
+                else:
+                    duplicated1.append(_) 
+            if RANKS.index(duplicated0[0][1]) > RANKS.index(duplicated1[0][1]):
+                return [1, 0]
+            elif RANKS.index(duplicated0[0][1]) < RANKS.index(duplicated1[0][1]):
+                return [0, 1]
+
+        if hand0_category == 7:
+            five_cards_0 = []
+            five_cards_1 = []
+            handcard0 = hand0.get_hand_five_cards()
+            handcard1 = hand1.get_hand_five_cards()
+            for i in range(5):              
+                five_cards_0.append(RANKS.index(handcard0[i][1]))
+            for i in range(5):              
+                five_cards_1.append(RANKS.index(handcard1[i][1]))
+            five_cards_0.sort()
+            five_cards_1.sort()
+            if five_cards_0[2] > five_cards_1[2]:
+                return [1,0]
+            if five_cards_0[2] < five_cards_1[2]:
+                return [0,1]
+            if five_cards_0[2] == five_cards_1[2]:
+                if five_cards_0[4] > five_cards_1[4]:
+                    return [1,0]
+                if five_cards_0[4] < five_cards_1[4]:
+                    return [0,1]
+                if five_cards_0[4] == five_cards_1[4]:
+                    return [1,1]
+ 
+        if hand0_category == 4:
+            five_cards_0 = []
+            five_cards_1 = []
+            handcard0 = hand0.get_hand_five_cards()
+            handcard1 = hand1.get_hand_five_cards()
+            for i in range(5):              
+                five_cards_0.append(RANKS.index(handcard0[i][1]))
+            for i in range(5):              
+                five_cards_1.append(RANKS.index(handcard1[i][1]))
+            five_cards_0.sort()
+            five_cards_1.sort()
+            if five_cards_0[2] > five_cards_1[2]:
+                return [1,0]
+            if five_cards_0[2] < five_cards_1[2]:
+                return [0,1]
+            if five_cards_0[2] == five_cards_1[2]:
+                for _ in range(3):
+                    five_cards_0.remove(five_cards_0[2])
+                    five_cards_1.remove(five_cards_1[2])
+                if five_cards_0[1] > five_cards_1[1]:
+                    return [1,0]
+                if five_cards_0[1] < five_cards_1[1]:
+                    return [0,1]
+                if five_cards_0[1] == five_cards_1[1]:
+                    if five_cards_0[0] > five_cards_1[0]:
+                        return [1,0]
+                    if five_cards_0[0] < five_cards_1[0]:
+                        return [0,1] 
+                    if five_cards_0[0] == five_cards_1[0]:
+                        return [1,1]
+        
+        if hand0_category == 3:
+            seen = []
+            duplicated0 = []
+            five_cards_0 = []
+            five_cards_1 = []
+            handcard0 = hand0.get_hand_five_cards()
+            handcard1 = hand1.get_hand_five_cards()
+            for i in range(5):              
+                five_cards_0.append(handcard0[i][1])
+            for _ in five_cards_0:  
+                if _ not in seen:  
+                    seen.append(_)
+                else:
+                    duplicated0.append(_)            
+            seen = []
+            duplicated1 = []
+            for i in range(5):              
+                five_cards_1.append(handcard1[i][1])
+            for _ in five_cards_1:  
+                if _ not in seen:  
+                    seen.append(_)
+                else:
+                    duplicated1.append(_) 
+            
+            if RANKS.index(duplicated0[0][1]) > RANKS.index(duplicated0[1][1]):
+                large_pair0 = RANKS.index(duplicated0[0][1])
+                small_pair0 = RANKS.index(duplicated0[1][1])
+            else:
+                large_pair0 = RANKS.index(duplicated0[1][1])
+                small_pair0 = RANKS.index(duplicated0[0][1])
+            
+            if RANKS.index(duplicated1[0][1]) > RANKS.index(duplicated1[1][1]):
+                large_pair1 = RANKS.index(duplicated1[0][1])
+                small_pair1 = RANKS.index(duplicated1[1][1])
+            else:
+                large_pair1 = RANKS.index(duplicated1[1][1])
+                small_pair1 = RANKS.index(duplicated1[0][1])
+            
+            if large_pair0 > large_pair1:
+                return [1,0]
+            if large_pair0 < large_pair1:
+                return [0,1]
+            if large_pair0 == large_pair1:
+                if small_pair0 > small_pair1:
+                    return [1,0]
+                if small_pair0 < small_pair1:
+                    return [0,1]
+                if small_pair0 == small_pair1:
+                    for _ in range (2):
+                        five_cards_0.remove(large_pair0)
+                        five_cards_0.remove(small_pair0)
+                        five_cards_1.remove(large_pair0)
+                        five_cards_1.remove(small_pair0)
+                    if RANKS.index(five_cards_0[0][1]) > RANKS.index(five_cards_1[0][1]):
+                        return [1, 0]
+                    if RANKS.index(five_cards_0[0][1]) < RANKS.index(five_cards_1[0][1]):
+                        return [0, 1]
+                    if RANKS.index(five_cards_0[0][1]) == RANKS.index(five_cards_1[0][1]):
+                        return [1, 1]
+
+        if hand0_category == 2:
+            seen = []
+            duplicated0 = []
+            five_cards_0 = []
+            five_cards_1 = []
+            handcard0 = hand0.get_hand_five_cards()
+            handcard1 = hand1.get_hand_five_cards()
+            for i in range(5):              
+                five_cards_0.append(handcard0[i][1])
+            for _ in five_cards_0:  
+                if _ not in seen:  
+                    seen.append(_)
+                else:
+                    duplicated0.append(_)            
+            seen = []
+            duplicated1 = []
+            for i in range(5):              
+                five_cards_1.append(handcard1[i][1])
+            for _ in five_cards_1:  
+                if _ not in seen:  
+                    seen.append(_)
+                else:
+                    duplicated1.append(_) 
+            
+            if RANKS.index(duplicated0[0][1]) > RANKS.index(duplicated1[0][1]):
+                return [1, 0]
+            
+            if RANKS.index(duplicated0[0][1]) > RANKS.index(duplicated1[0][1]):
+                return [0, 1]
+            if RANKS.index(duplicated0[0][1]) == RANKS.index(duplicated1[0][1]):
+                    for _ in range (2):
+                        handcard0.remove(duplicated0[0][1])
+                        handcard1.remove(duplicated1[0][1])
+                    for i in range(3):              
+                        five_cards_0.append(RANKS.index(handcard0[i][1]))
+                    for i in range(3):              
+                        five_cards_1.append(RANKS.index(handcard1[i][1]))
+                    five_cards_0.sort()
+                    five_cards_1.sort()
+
+                    if RANKS.index(five_cards_0[2]) > RANKS.index(five_cards_1[2]):
+                        return [1, 0]
+                    if RANKS.index(five_cards_0[2]) < RANKS.index(five_cards_1[2]):
+                        return [0, 1]
+                    if RANKS.index(five_cards_0[2]) == RANKS.index(five_cards_1[2]):
+                        if RANKS.index(five_cards_0[1]) > RANKS.index(five_cards_1[1]):
+                            return [1, 0]
+                        if RANKS.index(five_cards_0[1]) < RANKS.index(five_cards_1[1]):
+                            return [0, 1]
+                        if RANKS.index(five_cards_0[1]) == RANKS.index(five_cards_1[1]):
+                            if RANKS.index(five_cards_0[0]) > RANKS.index(five_cards_1[0]):
+                                return [1, 0]
+                            if RANKS.index(five_cards_0[0]) < RANKS.index(five_cards_1[0]):
+                                return [0, 1]
+                            if RANKS.index(five_cards_0[0]) == RANKS.index(five_cards_1[0]):
+                                return [1, 1]
+
+            if hand0_category == 1:
+
+                for i in range(5):              
+                    five_cards_0.append(RANKS.index(handcard0[i][1]))
+                for i in range(5):              
+                    five_cards_1.append(RANKS.index(handcard1[i][1]))
+                five_cards_0.sort()
+                five_cards_1.sort()
+                if five_cards_0[4] > five_cards_1[4]:
+                    return [1, 0]              
+                if five_cards_0[4] < five_cards_1[4]:
+                    return [0, 1]
+                if five_cards_0[4] == five_cards_1[4]:
+                    if five_cards_0[3] > five_cards_1[3]:
+                        return [1, 0]              
+                    if five_cards_0[3] < five_cards_1[3]:
+                        return [0, 1]
+                    if five_cards_0[3] == five_cards_1[3]:
+                        if five_cards_0[2] > five_cards_1[2]:
+                            return [1, 0]              
+                        if five_cards_0[2] < five_cards_1[2]:
+                            return [0, 1]
+                        if five_cards_0[2] == five_cards_1[2]:
+                            if five_cards_0[1] > five_cards_1[1]:
+                                return [1, 0]              
+                            if five_cards_0[1] < five_cards_1[1]:
+                                return [0, 1]
+                            if five_cards_0[1] == five_cards_1[1]:
+                                if five_cards_0[1] > five_cards_1[1]:
+                                    return [1, 0]              
+                                if five_cards_0[1] < five_cards_1[1]:
+                                    return [0, 1]
+                                if five_cards_0[1] == five_cards_1[1]:
+                                    return [1, 1]
+
         else:
             pass
         # return 0 means both hands are equal
     else:
         return [1, 1]
 
-var = compare_hands(hand0, hand1)
-print(var)
+
