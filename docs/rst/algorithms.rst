@@ -13,6 +13,15 @@ Index
    feeding the state into the model.
 -  ``Memory``: A memory buffer that manages the storing and sampling of
    transitions.
--  ``Estimator``: The neural network that is used to make predictions. #
-   DeepCFR test
+-  ``Estimator``: The neural network that is used to make predictions.
 
+DeepCFR
+=======
+
+Deep Counterfactual Regret Minimization (DeepCFR) is a state-of-the-art
+framework for solving imperfect-information games. We wrap DeepCFR as an
+example to show how state-of-the-art framework can be connected to the
+environments. In the DeepCFR, the following classes are implemented: \*
+``DeepCFR``: The DeepCFR class that interacts with the environment. \*
+``Fixed Size Ring Buffer``: A memory buffer that manages the storing and
+sampling of transitions.

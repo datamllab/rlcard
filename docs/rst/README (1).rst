@@ -19,16 +19,16 @@ conveniently into RLCard with the above design principles.
 User Guide
 ==========
 
--  `Toy examples <docs/toy-examples.md>`__
--  `RLCard high-level design <docs/high-level-design.md>`__
--  `Games in RLCard <docs/games.md>`__
--  `Algorithms in RLCard <docs/algorithms.md>`__
--  `Developping new algorithms <docs/developping-algorithms.md>`__
+-  `Toy examples <toy-examples.md>`__
+-  `RLCard high-level design <high-level-design.md>`__
+-  `Games in RLCard <games.md>`__
+-  `Algorithms in RLCard <algorithms.md>`__
+-  `Developping new algorithms <developping-algorithms.md>`__
 
 Developer Guide
 ===============
 
--  `Adding new environments <docs/adding-new-environments.md>`__
+-  `Adding new environments <adding-new-environments.md>`__
 
 Application Programming Interface (API)
 =======================================

@@ -1,28 +1,37 @@
 RLCard: A Toolkit for Reinforcement Learning in Card Games
 ==========================================================
 
-RLCard is an opensource toolkit for developing Reinforcement Learning
+|Build Status| |Codacy Badge| |Coverage Status|
+
+RLCard is a opensource toolkit for developing Reinforcement Learning
 (RL) algorithms in card games. It supports multiple challenging card
 game environments with common and easy-to-use interfaces. The goal of
 the toolkit is to enable more people to study game AI and push forward
 the research of imperfect information games. RLCard is developed by
 `DATA Lab <http://faculty.cs.tamu.edu/xiahu/>`__ at Texas A&M
-University.
+University. **NOTE: The project is still in final testing!**
 
 Installation
-============
+------------
 
 Make sure that you have **Python 3.5+** and **pip** installed. You can
 install ``rlcard`` with ``pip`` as follow:
 
-::
+.. code:: console
 
     git clone https://github.com/datamllab/rlcard.git
     cd rlcard
     pip install -e .
 
+To check whether it is intalled correctly, try the example with random
+agents:
+
+.. code:: console
+
+    python examples/blackjack_random.py
+
 Getting Started
-===============
+---------------
 
 The interfaces generally follow `OpenAI
 gym <https://github.com/openai/gym>`__ style. We recommend starting with
@@ -35,14 +44,14 @@ Blackjack <docs/toy-examples.md#deep-q-learning-on-blackjack>`__ \*
 For more examples, please refer to `examples/ <examples>`__.
 
 Documents
-=========
+---------
 
 Please refer to the `Documents <docs/README.md>`__ for general concepts
 introduction. API documents are available at our `github
 page <https://rlcard.github.io/index.html>`__.
 
 Available Environments
-======================
+----------------------
 
 The table below shows the environments that are (or will be soon)
 available in RLCard. We provide a complexity estimation for the games on
@@ -68,11 +77,17 @@ game environment.
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+---------------------+---------------+-------------------+-------------+
 | UNO (`wiki <https://en.wikipedia.org/wiki/Uno_(card_game>`__, `baike <https://baike.baidu.com/item/UNO%E7%89%8C/2249587>`__)                                                                           | 10^163            | 10^10               | 10^1          | -                 | Come soon   |
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+---------------------+---------------+-------------------+-------------+
-| Sheng Ji (`wiki <https://en.wikipedia.org/wiki/Sheng_ji>`__, `baike <https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150>`__)                                                                      | 10^173 ~ 10^180   | 10^61               | 10^13         | -                 | Come soon   |
+| Sheng Ji (`wiki <https://en.wikipedia.org/wiki/Sheng_ji>`__, `baike <https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150>`__)                                                                      | 10^157 ~ 10^165   | 10^61               | 10^13         | -                 | Come soon   |
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+---------------------+---------------+-------------------+-------------+
 
+Evaluation
+----------
+
+We wrap a ``Logger`` that conveniently saves/plots the results. Example
+outputs are as follows: |Learning Curves|
+
 Disclaimer
-==========
+----------
 
 Please note that this is a **pre-release** version of the RLCard. The
 toolkit is provided "**as is**," without warranty of any kind, express
@@ -80,7 +95,15 @@ or implied, including but not limited to the warranties of
 merchantability, fitness for a particular purpose and noninfringement.
 
 Acknowledgements
-================
+----------------
 
-We would like to thank JJ World Network Technology Co.,LTD for the
-support.
+We would like to thank JJ World Network Technology Co.,LTD for technical
+the support.
+
+.. |Build Status| image:: https://travis-ci.org/datamllab/RLCard.svg?branch=master
+   :target: https://travis-ci.org/datamllab/RLCard
+.. |Codacy Badge| image:: https://api.codacy.com/project/badge/Grade/248eb15c086748a4bcc830755f1bd798
+   :target: https://www.codacy.com/manual/daochenzha/rlcard?utm_source=github.com&utm_medium=referral&utm_content=datamllab/rlcard&utm_campaign=Badge_Grade
+.. |Coverage Status| image:: https://coveralls.io/repos/github/datamllab/rlcard/badge.svg?branch=master
+   :target: https://coveralls.io/github/datamllab/rlcard?branch=master
+.. |Learning Curves| image:: docs/imgs/curves.png
