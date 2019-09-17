@@ -15,8 +15,7 @@
 
 """Implements Deep CFR Algorithm.
 
-The implementation is derived from:
-    https://github.com/deepmind/open_spiel/blob/master/open_spiel/python/algorithms/deep_cfr.py
+The implementation is derived from: https://github.com/deepmind/open_spiel/blob/master/open_spiel/python/algorithms/deep_cfr.py
 
 We modify the structure for single player game and rlcard package, and fix some bugs for loss calculation.
 
