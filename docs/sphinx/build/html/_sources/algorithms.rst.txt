@@ -19,5 +19,9 @@ implemented:
 DeepCFR
 ~~~~~~~
 
-test
-
+Deep Counterfactual Regret Minimization (DeepCFR) is a state-of-the-art
+framework for solving imperfect-information games. We wrap DeepCFR as an
+example to show how state-of-the-art framework can be connected to the
+environments. In the DeepCFR, the following classes are implemented: 
+ * ``DeepCFR``: The DeepCFR class that interacts with the environment. 
+ * ``Fixed Size Ring Buffer``: A memory buffer that manages the storing and sampling of transitions.

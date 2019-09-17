@@ -1,22 +1,6 @@
 rlcard.envs
 ===================
 
-rlcard.envs.blackjack
-----------------------------
-
-.. automodule:: rlcard.envs.blackjack
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-rlcard.envs.doudizhu
----------------------------
-
-.. automodule:: rlcard.envs.doudizhu
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 rlcard.envs.env
 ----------------------
 
@@ -33,18 +17,26 @@ rlcard.envs.registration
     :undoc-members:
     :show-inheritance:
 
-rlcard.envs.simpletexasholdem
-------------------------------------
+rlcard.envs.blackjack
+----------------------------
 
-.. automodule:: rlcard.envs.simpletexasholdem
+.. automodule:: rlcard.envs.blackjack
     :members:
     :undoc-members:
     :show-inheritance:
 
-rlcard.envs.texasholdem
-------------------------------
+rlcard.envs.doudizhu
+---------------------------
 
-.. automodule:: rlcard.envs.texasholdem
+.. automodule:: rlcard.envs.doudizhu
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+rlcard.envs.limitholdem
+------------------------------------
+
+.. automodule:: rlcard.envs.limitholdem
     :members:
     :undoc-members:
     :show-inheritance:

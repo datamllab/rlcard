@@ -37,7 +37,7 @@
     <link rel="search" title="Search" href="search.html" />
     <!-- <link rel="copyright" title="DATA Lab at Texas A&M University"> -->
     <link rel="next" title="rlcard.core" href="rlcard.core.html" />
-    <link rel="prev" title="rlcard.games.texasholdem" href="rlcard.games.texasholdem.html" /> 
+    <link rel="prev" title="rlcard.games.limitholdem" href="rlcard.games.limitholdem.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -108,13 +108,20 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="games.html">Games in RLCard</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="games.html#blackjack">Blackjack</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding-in-this">State Encoding In this</a></li>
-<li class="toctree-l3"><a class="reference internal" href="games.html#action-encoding">Action Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-decoding">Action Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#payoff">Payoff</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#no-limit-texas-hold-em">No-limit Texas Hold’em</a></li>
-<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id1">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-abstraction">Action Abstraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id2">Payoff</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
@@ -131,16 +138,16 @@
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="rlcard.envs.html">rlcard.envs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.env">rlcard.envs.env</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.registration">rlcard.envs.registration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.simpletexasholdem">rlcard.envs.simpletexasholdem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.texasholdem">rlcard.envs.texasholdem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.limitholdem">rlcard.envs.limitholdem</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.logger">rlcard.utils.logger</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.games.html">rlcard.games</a><ul>
@@ -149,7 +156,6 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.game">rlcard.games.blackjack.game</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.judger">rlcard.games.blackjack.judger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.player">rlcard.games.blackjack.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.round">rlcard.games.blackjack.round</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.games.doudizhu.html">rlcard.games.doudizhu</a><ul>
@@ -160,20 +166,12 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.doudizhu.html#module-rlcard.games.doudizhu.round">rlcard.games.doudizhu.round</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.simpletexasholdem.html">rlcard.games.simpletexasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.dealer">rlcard.games.simpletexasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.game">rlcard.games.simpletexasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.judger">rlcard.games.simpletexasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.player">rlcard.games.simpletexasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.round">rlcard.games.simpletexasholdem.round</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.texasholdem.html">rlcard.games.texasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.dealer">rlcard.games.texasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.game">rlcard.games.texasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.judger">rlcard.games.texasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.player">rlcard.games.texasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.round">rlcard.games.texasholdem.round</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.games.limitholdem.html">rlcard.games.limitholdem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.dealer">rlcard.games.limitholdem.dealer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.game">rlcard.games.limitholdem.game</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.judger">rlcard.games.limitholdem.judger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.player">rlcard.games.limitholdem.player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.round">rlcard.games.limitholdem.round</a></li>
 </ul>
 </li>
 </ul>
@@ -255,6 +253,8 @@
 <div class="section" id="module-rlcard.agents.deep_cfr">
 <span id="rlcard-agents-deep-cfr"></span><h2>rlcard.agents.deep_cfr<a class="headerlink" href="#module-rlcard.agents.deep_cfr" title="Permalink to this headline">¶</a></h2>
 <p>Implements Deep CFR Algorithm.</p>
+<p>The implementation is derived from: <a class="reference external" href="https://github.com/deepmind/open_spiel/blob/master/open_spiel/python/algorithms/deep_cfr.py">https://github.com/deepmind/open_spiel/blob/master/open_spiel/python/algorithms/deep_cfr.py</a></p>
+<p>We modify the structure for single player game and rlcard package, and fix some bugs for loss calculation.</p>
 <p>See <a class="reference external" href="https://arxiv.org/abs/1811.00164">https://arxiv.org/abs/1811.00164</a>.</p>
 <p>The algorithm defines an <cite>advantage</cite> and <cite>strategy</cite> networks that compute
 advantages used to do regret matching across information sets and to approximate
@@ -293,7 +293,7 @@ train the networks.</p>
 
 <dl class="class">
 <dt id="rlcard.agents.deep_cfr.DeepCFR">
-<em class="property">class </em><code class="sig-prename descclassname">rlcard.agents.deep_cfr.</code><code class="sig-name descname">DeepCFR</code><span class="sig-paren">(</span><em class="sig-param">session</em>, <em class="sig-param">env</em>, <em class="sig-param">policy_network_layers=(32</em>, <em class="sig-param">32)</em>, <em class="sig-param">advantage_network_layers=(32</em>, <em class="sig-param">32)</em>, <em class="sig-param">num_iterations=100</em>, <em class="sig-param">num_traversals=10</em>, <em class="sig-param">learning_rate=0.0001</em>, <em class="sig-param">batch_size_advantage=None</em>, <em class="sig-param">batch_size_strategy=16</em>, <em class="sig-param">memory_capacity=10000000</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.deep_cfr.DeepCFR" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rlcard.agents.deep_cfr.</code><code class="sig-name descname">DeepCFR</code><span class="sig-paren">(</span><em class="sig-param">session</em>, <em class="sig-param">env</em>, <em class="sig-param">policy_network_layers=(32</em>, <em class="sig-param">32)</em>, <em class="sig-param">advantage_network_layers=(32</em>, <em class="sig-param">32)</em>, <em class="sig-param">num_traversals=10</em>, <em class="sig-param">num_step=40</em>, <em class="sig-param">learning_rate=0.0001</em>, <em class="sig-param">batch_size_advantage=16</em>, <em class="sig-param">batch_size_strategy=16</em>, <em class="sig-param">memory_capacity=10000000</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.deep_cfr.DeepCFR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Implements a solver for the Deep CFR Algorithm.</p>
 <p>See <a class="reference external" href="https://arxiv.org/abs/1811.00164">https://arxiv.org/abs/1811.00164</a>.</p>
@@ -306,56 +306,54 @@ memory.</p>
 </dd>
 </dl>
 <dl class="method">
+<dt id="rlcard.agents.deep_cfr.DeepCFR.action_advantage">
+<code class="sig-name descname">action_advantage</code><span class="sig-paren">(</span><em class="sig-param">state</em>, <em class="sig-param">player</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.deep_cfr.DeepCFR.action_advantage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="rlcard.agents.deep_cfr.DeepCFR.action_probabilities">
 <code class="sig-name descname">action_probabilities</code><span class="sig-paren">(</span><em class="sig-param">state</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.deep_cfr.DeepCFR.action_probabilities" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns action probabilites dict for a single batch.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="rlcard.agents.deep_cfr.DeepCFR.advantage_buffers">
-<em class="property">property </em><code class="sig-name descname">advantage_buffers</code><a class="headerlink" href="#rlcard.agents.deep_cfr.DeepCFR.advantage_buffers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="rlcard.agents.deep_cfr.DeepCFR.clear_advantage_buffers">
-<code class="sig-name descname">clear_advantage_buffers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.deep_cfr.DeepCFR.clear_advantage_buffers" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="rlcard.agents.deep_cfr.DeepCFR.reinitialize_advantage_networks">
 <code class="sig-name descname">reinitialize_advantage_networks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.deep_cfr.DeepCFR.reinitialize_advantage_networks" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="rlcard.agents.deep_cfr.DeepCFR.solve">
-<code class="sig-name descname">solve</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.deep_cfr.DeepCFR.solve" title="Permalink to this definition">¶</a></dt>
-<dd><p>Solution logic for Deep CFR.</p>
+<dd><p>Reinitialize the advantage networks</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="rlcard.agents.deep_cfr.DeepCFR.step">
 <code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">state</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.deep_cfr.DeepCFR.step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the action for generating training data
-:param state: current state</p>
+<dd><p>Predict the action for generating training data</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>an action id</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a>) – current state</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>action</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>an action id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>action (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a>)</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="rlcard.agents.deep_cfr.DeepCFR.strategy_buffer">
-<em class="property">property </em><code class="sig-name descname">strategy_buffer</code><a class="headerlink" href="#rlcard.agents.deep_cfr.DeepCFR.strategy_buffer" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="rlcard.agents.deep_cfr.DeepCFR.train">
 <code class="sig-name descname">train</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.deep_cfr.DeepCFR.train" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Perform tree traversal and train the network</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the trained policy network
+average advantage loss (float): players average advantage loss
+policy loss (float): policy loss</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>policy_network (tf.placeholder)</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -390,16 +388,30 @@ sampling.</p>
 <dd><p>Returns <cite>num_samples</cite> uniformly sampled from the buffer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>num_samples</strong> – <cite>int</cite>, number of samples to draw.</p>
+<dd class="field-odd"><p><strong>num_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – number of samples to draw.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>An iterable over <cite>num_samples</cite> random elements of the buffer.</p>
+<dd class="field-even"><p>a list of random sampled elements of the buffer</p>
 </dd>
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – If there are less than <cite>num_samples</cite> elements in the buffer</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>sample data (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a>)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><strong>ValueError</strong></a> – If there are less than <cite>num_samples</cite> elements in the buffer</p>
 </dd>
 </dl>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rlcard.agents.deep_cfr.MLP">
+<em class="property">class </em><code class="sig-prename descclassname">rlcard.agents.deep_cfr.</code><code class="sig-name descname">MLP</code><span class="sig-paren">(</span><em class="sig-param">output_sizes</em>, <em class="sig-param">w_init=None</em>, <em class="sig-param">b_init=None</em>, <em class="sig-param">activation=&lt;function relu&gt;</em>, <em class="sig-param">name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.deep_cfr.MLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="rlcard.agents.deep_cfr.MLP.reinitialize">
+<code class="sig-name descname">reinitialize</code><span class="sig-paren">(</span><em class="sig-param">sess</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.deep_cfr.MLP.reinitialize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -451,7 +463,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
 <dl class="class">
 <dt id="rlcard.agents.dqn_agent.DQNAgent">
-<em class="property">class </em><code class="sig-prename descclassname">rlcard.agents.dqn_agent.</code><code class="sig-name descname">DQNAgent</code><span class="sig-paren">(</span><em class="sig-param">sess, replay_memory_size=20000, replay_memory_init_size=20000, update_target_estimator_every=1000, discount_factor=0.99, epsilon_start=1.0, epsilon_end=0.1, epsilon_decay_steps=20000, batch_size=32, action_size=2, state_shape=[2], norm_step=1000</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.dqn_agent.DQNAgent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rlcard.agents.dqn_agent.</code><code class="sig-name descname">DQNAgent</code><span class="sig-paren">(</span><em class="sig-param">sess=None</em>, <em class="sig-param">replay_memory_size=20000</em>, <em class="sig-param">replay_memory_init_size=100</em>, <em class="sig-param">update_target_estimator_every=1000</em>, <em class="sig-param">discount_factor=0.99</em>, <em class="sig-param">epsilon_start=1.0</em>, <em class="sig-param">epsilon_end=0.1</em>, <em class="sig-param">epsilon_decay_steps=20000</em>, <em class="sig-param">batch_size=32</em>, <em class="sig-param">action_num=2</em>, <em class="sig-param">state_shape=None</em>, <em class="sig-param">norm_step=100</em>, <em class="sig-param">mlp_layers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.dqn_agent.DQNAgent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="method">
 <dt id="rlcard.agents.dqn_agent.DQNAgent.eval_step">
@@ -474,20 +486,14 @@ SOFTWARE.</p>
 <dt id="rlcard.agents.dqn_agent.DQNAgent.feed">
 <code class="sig-name descname">feed</code><span class="sig-paren">(</span><em class="sig-param">ts</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.dqn_agent.DQNAgent.feed" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
-<dt>Store data in to replay buffer and train the agent. There are several stages.</dt><dd><p>In stage 1, populate the Normalizer to calculate mean and std.
-In stage 2, popolate the memory without training.
-In stage 3: add transitions to the memory and train the netowrk.</p>
+<dt>Store data in to replay buffer and train the agent. There are two stages.</dt><dd><p>In stage 1, populate the Normalizer to calculate mean and std.
+The transition is NOT stored in the memory
+In stage 2, the transition is stored to the memory.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>ts</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – a list of 5 elements that represent the transition</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>whether the models start training</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>is_training (boolean)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -547,7 +553,7 @@ In stage 3: add transitions to the memory and train the netowrk.</p>
 
 <dl class="class">
 <dt id="rlcard.agents.dqn_agent.Estimator">
-<em class="property">class </em><code class="sig-prename descclassname">rlcard.agents.dqn_agent.</code><code class="sig-name descname">Estimator</code><span class="sig-paren">(</span><em class="sig-param">scope='estimator', action_size=2, state_shape=[2]</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.dqn_agent.Estimator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rlcard.agents.dqn_agent.</code><code class="sig-name descname">Estimator</code><span class="sig-paren">(</span><em class="sig-param">scope='estimator'</em>, <em class="sig-param">action_num=2</em>, <em class="sig-param">state_shape=None</em>, <em class="sig-param">mlp_layers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.dqn_agent.Estimator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Q-Value Estimator neural network.
 This network is used for both the Q-Network and the Target Network.</p>
@@ -616,7 +622,8 @@ done_batch (list): a batch of dones</p>
 <dl class="method">
 <dt id="rlcard.agents.dqn_agent.Memory.save">
 <code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param">state</em>, <em class="sig-param">action</em>, <em class="sig-param">reward</em>, <em class="sig-param">next_state</em>, <em class="sig-param">done</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.dqn_agent.Memory.save" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Save transition into memory</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>state</strong> (<em>numpy.array</em>) – the current state</p></li>
@@ -705,7 +712,7 @@ done_batch (list): a batch of dones</p>
 <dl class="function">
 <dt id="rlcard.agents.dqn_agent.copy_model_parameters">
 <code class="sig-prename descclassname">rlcard.agents.dqn_agent.</code><code class="sig-name descname">copy_model_parameters</code><span class="sig-paren">(</span><em class="sig-param">sess</em>, <em class="sig-param">estimator1</em>, <em class="sig-param">estimator2</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.dqn_agent.copy_model_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copies the model parameters of one estimator to another.</p>
+<dd><p>Copys the model parameters of one estimator to another.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -722,7 +729,7 @@ done_batch (list): a batch of dones</p>
 <span id="rlcard-agents-random-agent"></span><h2>rlcard.agents.random_agent<a class="headerlink" href="#module-rlcard.agents.random_agent" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="rlcard.agents.random_agent.RandomAgent">
-<em class="property">class </em><code class="sig-prename descclassname">rlcard.agents.random_agent.</code><code class="sig-name descname">RandomAgent</code><span class="sig-paren">(</span><em class="sig-param">action_size</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.random_agent.RandomAgent" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">rlcard.agents.random_agent.</code><code class="sig-name descname">RandomAgent</code><span class="sig-paren">(</span><em class="sig-param">action_num</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.agents.random_agent.RandomAgent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A random agent. Random agents is for running toy examples on the card games</p>
 <dl class="method">
@@ -778,7 +785,7 @@ done_batch (list): a batch of dones</p>
         <a href="rlcard.core.html" class="btn btn-neutral float-right" title="rlcard.core" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="rlcard.games.texasholdem.html" class="btn btn-neutral float-left" title="rlcard.games.texasholdem" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="rlcard.games.limitholdem.html" class="btn btn-neutral float-left" title="rlcard.games.limitholdem" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

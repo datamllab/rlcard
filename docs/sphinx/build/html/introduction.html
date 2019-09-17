@@ -108,13 +108,20 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="games.html">Games in RLCard</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="games.html#blackjack">Blackjack</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding-in-this">State Encoding In this</a></li>
-<li class="toctree-l3"><a class="reference internal" href="games.html#action-encoding">Action Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-decoding">Action Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#payoff">Payoff</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#no-limit-texas-hold-em">No-limit Texas Hold’em</a></li>
-<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id1">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-abstraction">Action Abstraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id2">Payoff</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
@@ -131,16 +138,16 @@
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.envs.html">rlcard.envs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.env">rlcard.envs.env</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.registration">rlcard.envs.registration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.simpletexasholdem">rlcard.envs.simpletexasholdem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.texasholdem">rlcard.envs.texasholdem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.limitholdem">rlcard.envs.limitholdem</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.logger">rlcard.utils.logger</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.games.html">rlcard.games</a><ul>
@@ -149,7 +156,6 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.game">rlcard.games.blackjack.game</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.judger">rlcard.games.blackjack.judger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.player">rlcard.games.blackjack.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.round">rlcard.games.blackjack.round</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.games.doudizhu.html">rlcard.games.doudizhu</a><ul>
@@ -160,20 +166,12 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.doudizhu.html#module-rlcard.games.doudizhu.round">rlcard.games.doudizhu.round</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.simpletexasholdem.html">rlcard.games.simpletexasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.dealer">rlcard.games.simpletexasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.game">rlcard.games.simpletexasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.judger">rlcard.games.simpletexasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.player">rlcard.games.simpletexasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.round">rlcard.games.simpletexasholdem.round</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.texasholdem.html">rlcard.games.texasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.dealer">rlcard.games.texasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.game">rlcard.games.texasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.judger">rlcard.games.texasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.player">rlcard.games.texasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.round">rlcard.games.texasholdem.round</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.games.limitholdem.html">rlcard.games.limitholdem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.dealer">rlcard.games.limitholdem.dealer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.game">rlcard.games.limitholdem.game</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.judger">rlcard.games.limitholdem.judger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.player">rlcard.games.limitholdem.player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.round">rlcard.games.limitholdem.round</a></li>
 </ul>
 </li>
 </ul>
@@ -254,11 +252,11 @@
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="rlcard-a-toolkit-for-reinforcement-learning-in-card-games">
 <h2>RLCard: A Toolkit for Reinforcement Learning in Card Games<a class="headerlink" href="#rlcard-a-toolkit-for-reinforcement-learning-in-card-games" title="Permalink to this headline">¶</a></h2>
-<p>RLCard is an opensource toolkit for devopling Reinforcement Learning
+<p>RLCard is a opensource toolkit for developing Reinforcement Learning
 (RL) algorithms in card games. It supports multiple challenging card
 game environments with common and easy-to-use interfaces. The goal of
 the toolkit is to enable more people to study game AI and push forward
-the research of imperfect information games. RLCard is developped by
+the research of imperfect information games. RLCard is developed by
 <a class="reference external" href="http://faculty.cs.tamu.edu/xiahu/">DATA Lab</a> at Texas A&amp;M
 University.</p>
 </div>
@@ -266,9 +264,14 @@ University.</p>
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <p>Make sure that you have <strong>Python 3.5+</strong> and <strong>pip</strong> installed. You can
 install <code class="docutils literal notranslate"><span class="pre">rlcard</span></code> with <code class="docutils literal notranslate"><span class="pre">pip</span></code> as follow:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">datamllab</span><span class="o">/</span><span class="n">rlcard</span><span class="o">.</span><span class="n">git</span>
-<span class="n">cd</span> <span class="n">rlcard</span>
-<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">git clone https://github.com/datamllab/rlcard.git</span>
+<span class="go">cd rlcard</span>
+<span class="go">pip install -e .</span>
+</pre></div>
+</div>
+<p>To check whether it is intalled correctly, try the example with random
+agents:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python examples/blackjack_random.py</span>
 </pre></div>
 </div>
 </div>
@@ -279,9 +282,9 @@ available in RLCard. We provide a complexity estimation for the games on
 several aspects. <strong>InfoSet Number:</strong> the number of information set;
 <strong>Avg. InfoSet Size:</strong> the average number of states in a single
 information set; <strong>Action Size:</strong> the size of the action space. For some
-of the complex card games, we can only provide a range of the
-estimation. <strong>Name</strong> is the name that should be passed to <code class="docutils literal notranslate"><span class="pre">env.make</span></code>
-to create the game environment.</p>
+of the complex card games, we can only provide a range of estimation.
+<strong>Name</strong> is the name that should be passed to <code class="docutils literal notranslate"><span class="pre">env.make</span></code> to create the
+game environment.</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 70%" />
@@ -350,7 +353,7 @@ to create the game environment.</p>
 <td><p>Come soon</p></td>
 </tr>
 <tr class="row-even"><td><p>Sheng Ji (<a class="reference external" href="https://en.wikipedia.org/wiki/Sheng_ji">wiki</a>, <a class="reference external" href="https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150">baike</a>)</p></td>
-<td><p>10^173 ~ 10^180</p></td>
+<td><p>10^157 ~ 10^165</p></td>
 <td><p>10^61</p></td>
 <td><p>10^13</p></td>
 <td><ul class="simple">

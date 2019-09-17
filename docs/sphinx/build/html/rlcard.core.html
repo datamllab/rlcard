@@ -107,13 +107,20 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="games.html">Games in RLCard</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="games.html#blackjack">Blackjack</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding-in-this">State Encoding In this</a></li>
-<li class="toctree-l3"><a class="reference internal" href="games.html#action-encoding">Action Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-decoding">Action Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#payoff">Payoff</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#no-limit-texas-hold-em">No-limit Texas Hold’em</a></li>
-<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id1">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-abstraction">Action Abstraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id2">Payoff</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
@@ -130,16 +137,16 @@
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="rlcard.envs.html">rlcard.envs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.env">rlcard.envs.env</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.registration">rlcard.envs.registration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.simpletexasholdem">rlcard.envs.simpletexasholdem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.texasholdem">rlcard.envs.texasholdem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.limitholdem">rlcard.envs.limitholdem</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.logger">rlcard.utils.logger</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.games.html">rlcard.games</a><ul>
@@ -148,7 +155,6 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.game">rlcard.games.blackjack.game</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.judger">rlcard.games.blackjack.judger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.player">rlcard.games.blackjack.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.round">rlcard.games.blackjack.round</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.games.doudizhu.html">rlcard.games.doudizhu</a><ul>
@@ -159,20 +165,12 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.doudizhu.html#module-rlcard.games.doudizhu.round">rlcard.games.doudizhu.round</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.simpletexasholdem.html">rlcard.games.simpletexasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.dealer">rlcard.games.simpletexasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.game">rlcard.games.simpletexasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.judger">rlcard.games.simpletexasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.player">rlcard.games.simpletexasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.round">rlcard.games.simpletexasholdem.round</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.texasholdem.html">rlcard.games.texasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.dealer">rlcard.games.texasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.game">rlcard.games.texasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.judger">rlcard.games.texasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.player">rlcard.games.texasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.round">rlcard.games.texasholdem.round</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.games.limitholdem.html">rlcard.games.limitholdem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.dealer">rlcard.games.limitholdem.dealer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.game">rlcard.games.limitholdem.game</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.judger">rlcard.games.limitholdem.judger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.player">rlcard.games.limitholdem.player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.round">rlcard.games.limitholdem.round</a></li>
 </ul>
 </li>
 </ul>
@@ -260,7 +258,7 @@
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The suit variable in a standard card game should be one of [S, H, D, C, BJ, RJ] meaning [Spades, Hearts, Diamonds, Clubs, Black Joker, Red Joker]
-Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K]</p>
+Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K]</p>
 </div>
 <dl class="method">
 <dt id="rlcard.core.Card.get_index">
@@ -288,7 +286,7 @@ Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, 
 
 <dl class="attribute">
 <dt id="rlcard.core.Card.valid_rank">
-<code class="sig-name descname">valid_rank</code><em class="property"> = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']</em><a class="headerlink" href="#rlcard.core.Card.valid_rank" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">valid_rank</code><em class="property"> = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']</em><a class="headerlink" href="#rlcard.core.Card.valid_rank" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -306,7 +304,7 @@ Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, 
 <p>Note: deck variable means all the cards in a single game, and should be a list of Card objects.</p>
 <dl class="method">
 <dt id="rlcard.core.Dealer.deal_cards">
-<code class="sig-name descname">deal_cards</code><span class="sig-paren">(</span><em class="sig-param">player_id</em>, <em class="sig-param">num</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Dealer.deal_cards" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">deal_cards</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Dealer.deal_cards" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deal specific number of cards to a specific player</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -373,7 +371,7 @@ Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, 
 
 <dl class="method">
 <dt id="rlcard.core.Game.step">
-<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">current_action</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Game.step" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">action</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Game.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform one draw of the game and return next player number, and the state for next player</p>
 </dd></dl>
 
@@ -392,8 +390,8 @@ Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, 
 <p>Judger decides whether the round/game ends and return the winner of the round/game</p>
 <dl class="method">
 <dt id="rlcard.core.Judger.judge_game">
-<code class="sig-name descname">judge_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Judger.judge_game" title="Permalink to this definition">¶</a></dt>
-<dd><p>decide whether the game ends, and return the winner of the game</p>
+<code class="sig-name descname">judge_game</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Judger.judge_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide whether the game ends, and return the winner of the game</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>return the player’s id who wins the game or -1 meaning the game has not ended</p>
@@ -406,8 +404,8 @@ Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, 
 
 <dl class="method">
 <dt id="rlcard.core.Judger.judge_round">
-<code class="sig-name descname">judge_round</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Judger.judge_round" title="Permalink to this definition">¶</a></dt>
-<dd><p>decide whether the round ends, and return the winner of the round</p>
+<code class="sig-name descname">judge_round</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Judger.judge_round" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide whether the round ends, and return the winner of the round</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>return the player’s id who wins the round or -1 meaning the round has not ended</p>
@@ -464,7 +462,7 @@ Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, 
 <dl class="method">
 <dt id="rlcard.core.Player.play">
 <code class="sig-name descname">play</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Player.play" title="Permalink to this definition">¶</a></dt>
-<dd><p>player’s actual action in the round</p>
+<dd><p>Player’s actual action in the round</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -481,7 +479,7 @@ Similarly the rank variable should be one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, 
 <p>Round stores the id the ongoing round and can call other Classes’ functions to keep the game running</p>
 <dl class="method">
 <dt id="rlcard.core.Round.proceed_round">
-<code class="sig-name descname">proceed_round</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Round.proceed_round" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">proceed_round</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.core.Round.proceed_round" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call other Classes’s functions to keep the game running</p>
 </dd></dl>
 

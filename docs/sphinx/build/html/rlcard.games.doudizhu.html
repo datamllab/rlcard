@@ -36,7 +36,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <!-- <link rel="copyright" title="DATA Lab at Texas A&M University"> -->
-    <link rel="next" title="rlcard.games.simpletexasholdem" href="rlcard.games.simpletexasholdem.html" />
+    <link rel="next" title="rlcard.games.limitholdem" href="rlcard.games.limitholdem.html" />
     <link rel="prev" title="rlcard.games.blackjack" href="rlcard.games.blackjack.html" /> 
 </head>
 
@@ -108,13 +108,20 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="games.html">Games in RLCard</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="games.html#blackjack">Blackjack</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding-in-this">State Encoding In this</a></li>
-<li class="toctree-l3"><a class="reference internal" href="games.html#action-encoding">Action Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-decoding">Action Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#payoff">Payoff</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#no-limit-texas-hold-em">No-limit Texas Hold’em</a></li>
-<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id1">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-abstraction">Action Abstraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id2">Payoff</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
@@ -131,16 +138,16 @@
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="rlcard.envs.html">rlcard.envs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.env">rlcard.envs.env</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.registration">rlcard.envs.registration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.simpletexasholdem">rlcard.envs.simpletexasholdem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.texasholdem">rlcard.envs.texasholdem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.limitholdem">rlcard.envs.limitholdem</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.logger">rlcard.utils.logger</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="rlcard.games.html">rlcard.games</a><ul class="current">
@@ -149,7 +156,6 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.game">rlcard.games.blackjack.game</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.judger">rlcard.games.blackjack.judger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.player">rlcard.games.blackjack.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.round">rlcard.games.blackjack.round</a></li>
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">rlcard.games.doudizhu</a><ul>
@@ -160,20 +166,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-rlcard.games.doudizhu.round">rlcard.games.doudizhu.round</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.simpletexasholdem.html">rlcard.games.simpletexasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.dealer">rlcard.games.simpletexasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.game">rlcard.games.simpletexasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.judger">rlcard.games.simpletexasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.player">rlcard.games.simpletexasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.round">rlcard.games.simpletexasholdem.round</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.texasholdem.html">rlcard.games.texasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.dealer">rlcard.games.texasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.game">rlcard.games.texasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.judger">rlcard.games.texasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.player">rlcard.games.texasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.round">rlcard.games.texasholdem.round</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.games.limitholdem.html">rlcard.games.limitholdem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.dealer">rlcard.games.limitholdem.dealer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.game">rlcard.games.limitholdem.game</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.judger">rlcard.games.limitholdem.judger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.player">rlcard.games.limitholdem.player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.round">rlcard.games.limitholdem.round</a></li>
 </ul>
 </li>
 </ul>
@@ -260,15 +258,15 @@
 <dl class="class">
 <dt id="rlcard.games.doudizhu.dealer.DoudizhuDealer">
 <em class="property">class </em><code class="sig-prename descclassname">rlcard.games.doudizhu.dealer.</code><code class="sig-name descname">DoudizhuDealer</code><a class="headerlink" href="#rlcard.games.doudizhu.dealer.DoudizhuDealer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="rlcard.core.html#rlcard.core.Dealer" title="rlcard.core.Dealer"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.core.Dealer</span></code></a></p>
-<p>Dealer can shuffle, deal cards, and determine players’ roles</p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Dealer will shuffle, deal cards, and determine players’ roles</p>
 <dl class="method">
 <dt id="rlcard.games.doudizhu.dealer.DoudizhuDealer.deal_cards">
 <code class="sig-name descname">deal_cards</code><span class="sig-paren">(</span><em class="sig-param">players</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.dealer.DoudizhuDealer.deal_cards" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deal specific number of cards to a specific player</p>
+<dd><p>Deal cards to players</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>players</strong> – a list of Player objects</p>
+<dd class="field-odd"><p><strong>players</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – list of DoudizhuPlayer objects</p>
 </dd>
 </dl>
 </dd></dl>
@@ -276,39 +274,24 @@
 <dl class="method">
 <dt id="rlcard.games.doudizhu.dealer.DoudizhuDealer.determine_role">
 <code class="sig-name descname">determine_role</code><span class="sig-paren">(</span><em class="sig-param">players</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.dealer.DoudizhuDealer.determine_role" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determine landlord and peasants</p>
+<dd><p>Determine landlord and peasants according to players’ hand</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the number of the landlord among players</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>players</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – list of DoudizhuPlayer objects</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>landlord’s player_id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="rlcard.games.doudizhu.dealer.DoudizhuDealer.determine_role_ii">
-<code class="sig-name descname">determine_role_ii</code><span class="sig-paren">(</span><em class="sig-param">players</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.dealer.DoudizhuDealer.determine_role_ii" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.doudizhu.dealer.DoudizhuDealer.doudizhu_sort">
-<em class="property">static </em><code class="sig-name descname">doudizhu_sort</code><span class="sig-paren">(</span><em class="sig-param">card_1</em>, <em class="sig-param">card_2</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.dealer.DoudizhuDealer.doudizhu_sort" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sort the cards from the smaller to the greater</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.doudizhu.dealer.DoudizhuDealer.get_landlord_score">
-<em class="property">static </em><code class="sig-name descname">get_landlord_score</code><span class="sig-paren">(</span><em class="sig-param">remaining</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.dealer.DoudizhuDealer.get_landlord_score" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="rlcard.games.doudizhu.dealer.DoudizhuDealer.rank_list">
-<code class="sig-name descname">rank_list</code><em class="property"> = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', '2', 'BJ', 'RJ']</em><a class="headerlink" href="#rlcard.games.doudizhu.dealer.DoudizhuDealer.rank_list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="rlcard.games.doudizhu.dealer.DoudizhuDealer.shuffle">
 <code class="sig-name descname">shuffle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.dealer.DoudizhuDealer.shuffle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shuffle the cards holded by dealer(remained_cards)</p>
+<dd><p>Randomly shuffle the deck</p>
 </dd></dl>
 
 </dd></dl>
@@ -320,68 +303,113 @@
 <dl class="class">
 <dt id="rlcard.games.doudizhu.game.DoudizhuGame">
 <em class="property">class </em><code class="sig-prename descclassname">rlcard.games.doudizhu.game.</code><code class="sig-name descname">DoudizhuGame</code><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="rlcard.core.html#rlcard.core.Game" title="rlcard.core.Game"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.core.Game</span></code></a></p>
-<dl class="attribute">
-<dt id="rlcard.games.doudizhu.game.DoudizhuGame.char_list">
-<code class="sig-name descname">char_list</code><em class="property"> = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A', '2', 'B', 'R']</em><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.char_list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Provide game APIs for env to run doudizhu and get corresponding state
+information.</p>
+<dl>
+<dt>An example of state during runtime:</dt><dd><dl>
+<dt>{</dt><dd><p>‘deck’: ‘3333444455556666777788889999TTTTJJJJQQQQKKKKAAAA2222BR’,
+‘seen_cards’: ‘TQA’,
+‘landlord’: 0,
+‘self’: 2,
+‘initial_hand’: ‘3456677799TJQKAAB’,
+‘trace’: [(0, ‘8222’), (1, ‘pass’), (2, ‘pass’), (0, ‘6KKK’),</p>
+<blockquote>
+<div><p>(1, ‘pass’), (2, ‘pass’), (0, ‘8’), (1, ‘Q’)],</p>
+</div></blockquote>
+<p>‘played_cards’: [‘6’, ‘8’, ‘8’, ‘Q’, ‘K’, ‘K’, ‘K’, ‘2’, ‘2’, ‘2’],
+‘others_hand’: ‘333444555678899TTTJJJQQAA2R’,
+‘current_hand’: ‘3456677799TJQKAAB’,
+‘actions’: [‘pass’, ‘K’, ‘A’, ‘B’]</p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+</dl>
 <dl class="method">
-<dt id="rlcard.games.doudizhu.game.DoudizhuGame.doudizhu_sort">
-<em class="property">static </em><code class="sig-name descname">doudizhu_sort</code><span class="sig-paren">(</span><em class="sig-param">card_1</em>, <em class="sig-param">card_2</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.doudizhu_sort" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.doudizhu.game.DoudizhuGame.encoder">
-<code class="sig-name descname">encoder</code><span class="sig-paren">(</span><em class="sig-param">state</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.encoder" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.doudizhu.game.DoudizhuGame.end">
-<code class="sig-name descname">end</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.end" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return whether the game has been over</p>
+<dt id="rlcard.games.doudizhu.game.DoudizhuGame.get_action_num">
+<em class="property">static </em><code class="sig-name descname">get_action_num</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.get_action_num" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the total number of abstract acitons</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the total number of abstract actions of doudizhu</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="rlcard.games.doudizhu.game.DoudizhuGame.get_player_id">
 <code class="sig-name descname">get_player_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.get_player_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return current player’s id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>current player’s id</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="rlcard.games.doudizhu.game.DoudizhuGame.get_player_num">
-<code class="sig-name descname">get_player_num</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.get_player_num" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the number of players in the game</p>
+<em class="property">static </em><code class="sig-name descname">get_player_num</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.get_player_num" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of players in doudizhu</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the number of players in doudizhu</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="rlcard.games.doudizhu.game.DoudizhuGame.get_state">
 <code class="sig-name descname">get_state</code><span class="sig-paren">(</span><em class="sig-param">player_id</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.get_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return player’s state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>player_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the player_id of a player</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>corresponding player’s state</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="rlcard.games.doudizhu.game.DoudizhuGame.initiate">
-<code class="sig-name descname">initiate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.initiate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize players and state</p>
-<dl>
-<dt>An example of state during runtime:</dt><dd><dl>
-<dt>{</dt><dd><p>‘deck’: ‘3333444455556666777788889999TTTTJJJJQQQQKKKKAAAA2222BR’,
-‘cards_seen’: ‘TQA’,
-‘landlord’: 0,
-‘self’: 2,
-‘hand’: ‘3456677799TJQKAAB’,
-‘trace’: [(0, ‘8222’), (1, ‘pass’), (2, ‘pass’), (0, ‘6KKK’),</p>
-<blockquote>
-<div><p>(1, ‘pass’), (2, ‘pass’), (0, ‘8’), (1, ‘Q’)],</p>
-</div></blockquote>
-<p>‘cards_played’: [‘6’, ‘8’, ‘8’, ‘Q’, ‘K’, ‘K’, ‘K’, ‘2’, ‘2’, ‘2’],
-‘cards_others’: ‘333444555678899TTTJJJQQAA2R’,
-‘remaining’: ‘3456677799TJQKAAB’,
-‘actions’: [‘pass’, ‘K’, ‘A’, ‘B’]</p>
+<dt id="rlcard.games.doudizhu.game.DoudizhuGame.init_game">
+<code class="sig-name descname">init_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.init_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize players and state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>first state in one game
+int: current player’s id</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></p>
 </dd>
 </dl>
-<p>}</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.games.doudizhu.game.DoudizhuGame.is_over">
+<code class="sig-name descname">is_over</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.is_over" title="Permalink to this definition">¶</a></dt>
+<dd><p>Judge whether a game is over</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True(over) / False(not over)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -389,10 +417,23 @@
 <dl class="method">
 <dt id="rlcard.games.doudizhu.game.DoudizhuGame.is_winner">
 <code class="sig-name descname">is_winner</code><span class="sig-paren">(</span><em class="sig-param">player_id</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.is_winner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return 1(winner), 0(not winner)</p>
+<dd><p>Judge whether a player is winner in one game</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>player_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the player_id of a player</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>1(winner) / 0(not winner)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+</dd>
+</dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Only can be used after game ending</p>
+<ol class="arabic simple">
+<li><p>This function only can be called after game over</p></li>
+</ol>
 </div>
 </dd></dl>
 
@@ -402,26 +443,28 @@
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="rlcard.games.doudizhu.game.DoudizhuGame.set_seed">
-<code class="sig-name descname">set_seed</code><span class="sig-paren">(</span><em class="sig-param">seed</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.set_seed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
 <dt id="rlcard.games.doudizhu.game.DoudizhuGame.step">
 <code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">action</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform one draw of the game and return next player’s id,
-and the state for next player</p>
+<dd><p>Perform one draw of the game</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – specific action of doudizhu. Eg: ‘33344’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>next player’s state
+int: next player’s id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
-<dt id="rlcard.games.doudizhu.game.DoudizhuGame.test_state">
-<em class="property">static </em><code class="sig-name descname">test_state</code><span class="sig-paren">(</span><em class="sig-param">state_encoded</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.test_state" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.doudizhu.game.DoudizhuGame.update_array">
-<em class="property">static </em><code class="sig-name descname">update_array</code><span class="sig-paren">(</span><em class="sig-param">array</em>, <em class="sig-param">cards</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.update_array" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="rlcard.games.doudizhu.game.DoudizhuGame.step_back">
+<code class="sig-name descname">step_back</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.game.DoudizhuGame.step_back" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return to the previous state of the game.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -432,38 +475,25 @@ and the state for next player</p>
 <dl class="class">
 <dt id="rlcard.games.doudizhu.judger.DoudizhuJudger">
 <em class="property">class </em><code class="sig-prename descclassname">rlcard.games.doudizhu.judger.</code><code class="sig-name descname">DoudizhuJudger</code><span class="sig-paren">(</span><em class="sig-param">players</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.judger.DoudizhuJudger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="rlcard.core.html#rlcard.core.Judger" title="rlcard.core.Judger"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.core.Judger</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Determine what cards a player can play</p>
 <dl class="method">
-<dt id="rlcard.games.doudizhu.judger.DoudizhuJudger.cards2str">
-<em class="property">static </em><code class="sig-name descname">cards2str</code><span class="sig-paren">(</span><em class="sig-param">cards: list</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.judger.DoudizhuJudger.cards2str" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dt id="rlcard.games.doudizhu.judger.DoudizhuJudger.get_playable_cards">
+<code class="sig-name descname">get_playable_cards</code><span class="sig-paren">(</span><em class="sig-param">player</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.judger.DoudizhuJudger.get_playable_cards" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide all legal cards the player can play according to his
+current hand.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>cards</strong> – list of Card class</p>
+<dd class="field-odd"><p><strong>player</strong> (<em>DoudizhuPlayer object</em>) – object of DoudizhuPlayer</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Eg:</dt><dd><p>deck -&gt; 3333444455556666777788889999TTTTJJJJQQQQKKKKAAAA2222BR</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of string of playable cards</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.doudizhu.judger.DoudizhuJudger.contains_cards">
-<em class="property">static </em><code class="sig-name descname">contains_cards</code><span class="sig-paren">(</span><em class="sig-param">candidate</em>, <em class="sig-param">target</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.judger.DoudizhuJudger.contains_cards" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.doudizhu.judger.DoudizhuJudger.get_gt_cards_ii">
-<code class="sig-name descname">get_gt_cards_ii</code><span class="sig-paren">(</span><em class="sig-param">player</em>, <em class="sig-param">greater_player</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.judger.DoudizhuJudger.get_gt_cards_ii" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get player’s cards which are greater than the ones played by
-previous player(current greater_player)</p>
-<p>Note: response contains ‘pass’</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.doudizhu.judger.DoudizhuJudger.get_playable_cards_ii">
-<code class="sig-name descname">get_playable_cards_ii</code><span class="sig-paren">(</span><em class="sig-param">player</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.judger.DoudizhuJudger.get_playable_cards_ii" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -474,27 +504,29 @@ previous player(current greater_player)</p>
 <dl class="class">
 <dt id="rlcard.games.doudizhu.player.DoudizhuPlayer">
 <em class="property">class </em><code class="sig-prename descclassname">rlcard.games.doudizhu.player.</code><code class="sig-name descname">DoudizhuPlayer</code><span class="sig-paren">(</span><em class="sig-param">player_id</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.player.DoudizhuPlayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="rlcard.core.html#rlcard.core.Player" title="rlcard.core.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.core.Player</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Player can store cards in the player’s hand and the role,
 determine the actions can be made according to the rules,
-and can perfrom responding action</p>
+and can perfrom corresponding action</p>
 <dl class="method">
 <dt id="rlcard.games.doudizhu.player.DoudizhuPlayer.available_actions">
 <code class="sig-name descname">available_actions</code><span class="sig-paren">(</span><em class="sig-param">greater_player=None</em>, <em class="sig-param">judger=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.player.DoudizhuPlayer.available_actions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the actions can be made based on the rules</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>greater_player</strong> – the current winner in this round</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>a list of available orders</dt><dd><p>Eg: [‘pass’, ‘8’, ‘9’, ‘T’, ‘J’]</p>
+<dd class="field-odd"><p><strong>greater_player</strong> (<em>DoudizhuPlayer object</em>) – player who played</p>
 </dd>
 </dl>
-</p>
+<dl class="simple">
+<dt>current biggest cards.</dt><dd><p>judger (DoudizhuJudger object): object of DoudizhuJudger</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of string of actions. Eg: [‘pass’, ‘8’, ‘9’, ‘T’, ‘J’]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -504,22 +536,20 @@ and can perfrom responding action</p>
 <code class="sig-name descname">play</code><span class="sig-paren">(</span><em class="sig-param">action</em>, <em class="sig-param">greater_player=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.player.DoudizhuPlayer.play" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perfrom action</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>if current winner changed, return current winner
-else return None</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>action</strong> (<em>string</em>) – specific action</p></li>
+<li><p><strong>greater_player</strong> (<em>DoudizhuPlayer object</em>) – The player who played current biggest cards.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If there is a new greater_player, return it, if not, return None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object of DoudizhuPlayer</p>
 </dd>
 </dl>
 </dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.doudizhu.player.DoudizhuPlayer.print_remaining_and_actions">
-<code class="sig-name descname">print_remaining_and_actions</code><span class="sig-paren">(</span><em class="sig-param">greater_player=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.player.DoudizhuPlayer.print_remaining_and_actions" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.doudizhu.player.DoudizhuPlayer.print_remaining_card">
-<code class="sig-name descname">print_remaining_card</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.player.DoudizhuPlayer.print_remaining_card" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -529,13 +559,38 @@ else return None</p>
 <p>Implement Doudizhu Round class</p>
 <dl class="class">
 <dt id="rlcard.games.doudizhu.round.DoudizhuRound">
-<em class="property">class </em><code class="sig-prename descclassname">rlcard.games.doudizhu.round.</code><code class="sig-name descname">DoudizhuRound</code><span class="sig-paren">(</span><em class="sig-param">players</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.round.DoudizhuRound" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="rlcard.core.html#rlcard.core.Round" title="rlcard.core.Round"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.core.Round</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">rlcard.games.doudizhu.round.</code><code class="sig-name descname">DoudizhuRound</code><a class="headerlink" href="#rlcard.games.doudizhu.round.DoudizhuRound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Round can call other Classes’ functions to keep the game running</p>
+<dl class="method">
+<dt id="rlcard.games.doudizhu.round.DoudizhuRound.initiate">
+<code class="sig-name descname">initiate</code><span class="sig-paren">(</span><em class="sig-param">players</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.round.DoudizhuRound.initiate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call dealer to deal cards and bid landlord.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>players</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – list of DoudizhuPlayer objects</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="method">
 <dt id="rlcard.games.doudizhu.round.DoudizhuRound.proceed_round">
 <code class="sig-name descname">proceed_round</code><span class="sig-paren">(</span><em class="sig-param">player</em>, <em class="sig-param">action</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.doudizhu.round.DoudizhuRound.proceed_round" title="Permalink to this definition">¶</a></dt>
 <dd><p>Call other Classes’s functions to keep one round running</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>player</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><em>object</em></a>) – object of DoudizhuPlayer</p></li>
+<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – string of legal specific action</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>player who played current biggest cards.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object of DoudizhuPlayer</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -551,7 +606,7 @@ else return None</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="rlcard.games.simpletexasholdem.html" class="btn btn-neutral float-right" title="rlcard.games.simpletexasholdem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="rlcard.games.limitholdem.html" class="btn btn-neutral float-right" title="rlcard.games.limitholdem" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="rlcard.games.blackjack.html" class="btn btn-neutral float-left" title="rlcard.games.blackjack" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

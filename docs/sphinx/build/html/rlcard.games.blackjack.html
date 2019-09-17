@@ -108,13 +108,20 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="games.html">Games in RLCard</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="games.html#blackjack">Blackjack</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding-in-this">State Encoding In this</a></li>
-<li class="toctree-l3"><a class="reference internal" href="games.html#action-encoding">Action Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-decoding">Action Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#payoff">Payoff</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#no-limit-texas-hold-em">No-limit Texas Hold’em</a></li>
-<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id1">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-abstraction">Action Abstraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id2">Payoff</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
@@ -131,16 +138,16 @@
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="rlcard.envs.html">rlcard.envs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.env">rlcard.envs.env</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.registration">rlcard.envs.registration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.simpletexasholdem">rlcard.envs.simpletexasholdem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.texasholdem">rlcard.envs.texasholdem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.limitholdem">rlcard.envs.limitholdem</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.logger">rlcard.utils.logger</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="rlcard.games.html">rlcard.games</a><ul class="current">
@@ -149,7 +156,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#module-rlcard.games.blackjack.game">rlcard.games.blackjack.game</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-rlcard.games.blackjack.judger">rlcard.games.blackjack.judger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-rlcard.games.blackjack.player">rlcard.games.blackjack.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-rlcard.games.blackjack.round">rlcard.games.blackjack.round</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.games.doudizhu.html">rlcard.games.doudizhu</a><ul>
@@ -160,20 +166,12 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.doudizhu.html#module-rlcard.games.doudizhu.round">rlcard.games.doudizhu.round</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.simpletexasholdem.html">rlcard.games.simpletexasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.dealer">rlcard.games.simpletexasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.game">rlcard.games.simpletexasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.judger">rlcard.games.simpletexasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.player">rlcard.games.simpletexasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.round">rlcard.games.simpletexasholdem.round</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.texasholdem.html">rlcard.games.texasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.dealer">rlcard.games.texasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.game">rlcard.games.texasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.judger">rlcard.games.texasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.player">rlcard.games.texasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.round">rlcard.games.texasholdem.round</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.games.limitholdem.html">rlcard.games.limitholdem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.dealer">rlcard.games.limitholdem.dealer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.game">rlcard.games.limitholdem.game</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.judger">rlcard.games.limitholdem.judger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.player">rlcard.games.limitholdem.player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.round">rlcard.games.limitholdem.round</a></li>
 </ul>
 </li>
 </ul>
@@ -259,21 +257,22 @@
 <dl class="class">
 <dt id="rlcard.games.blackjack.dealer.BlackjackDealer">
 <em class="property">class </em><code class="sig-prename descclassname">rlcard.games.blackjack.dealer.</code><code class="sig-name descname">BlackjackDealer</code><a class="headerlink" href="#rlcard.games.blackjack.dealer.BlackjackDealer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="rlcard.core.html#rlcard.core.Dealer" title="rlcard.core.Dealer"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.core.Dealer</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="method">
 <dt id="rlcard.games.blackjack.dealer.BlackjackDealer.deal_card">
 <code class="sig-name descname">deal_card</code><span class="sig-paren">(</span><em class="sig-param">player</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.dealer.BlackjackDealer.deal_card" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.blackjack.dealer.BlackjackDealer.deal_one_card_to">
-<code class="sig-name descname">deal_one_card_to</code><span class="sig-paren">(</span><em class="sig-param">player</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.dealer.BlackjackDealer.deal_one_card_to" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Distribute one card to the player</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>player_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – the target player’s id</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="rlcard.games.blackjack.dealer.BlackjackDealer.shuffle">
 <code class="sig-name descname">shuffle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.dealer.BlackjackDealer.shuffle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shuffle the cards holded by dealer(remained_cards)</p>
+<dd><p>Shuffle the deck</p>
 </dd></dl>
 
 </dd></dl>
@@ -283,58 +282,126 @@
 <span id="rlcard-games-blackjack-game"></span><h2>rlcard.games.blackjack.game<a class="headerlink" href="#module-rlcard.games.blackjack.game" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="rlcard.games.blackjack.game.BlackjackGame">
-<em class="property">class </em><code class="sig-prename descclassname">rlcard.games.blackjack.game.</code><code class="sig-name descname">BlackjackGame</code><span class="sig-paren">(</span><em class="sig-param">seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="rlcard.core.html#rlcard.core.Game" title="rlcard.core.Game"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.core.Game</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">rlcard.games.blackjack.game.</code><code class="sig-name descname">BlackjackGame</code><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="method">
 <dt id="rlcard.games.blackjack.game.BlackjackGame.get_action_num">
-<code class="sig-name descname">get_action_num</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame.get_action_num" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the number of possible actions in the game</p>
+<em class="property">static </em><code class="sig-name descname">get_action_num</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame.get_action_num" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of applicable actions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>there are only two actions (hit and stand)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>number_of_actions (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="rlcard.games.blackjack.game.BlackjackGame.get_player_id">
 <code class="sig-name descname">get_player_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame.get_player_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the current player that will take actions soon</p>
+<dd><p>Return the current player’s id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>current player’s id</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>player_id (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="rlcard.games.blackjack.game.BlackjackGame.get_player_num">
-<code class="sig-name descname">get_player_num</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame.get_player_num" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrun the number of players in the game</p>
+<em class="property">static </em><code class="sig-name descname">get_player_num</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame.get_player_num" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of players in blackjack</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>blackjack only have 1 player</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>number_of_player (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="rlcard.games.blackjack.game.BlackjackGame.get_state">
 <code class="sig-name descname">get_state</code><span class="sig-paren">(</span><em class="sig-param">player</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame.get_state" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return player’s state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>player_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – player id</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>corresponding player’s state</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>state (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a>)</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="method">
 <dt id="rlcard.games.blackjack.game.BlackjackGame.init_game">
 <code class="sig-name descname">init_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame.init_game" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize all characters in the game and start round 1</p>
+<dd><p>Initialilze the game</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the first state of the game
+player_id (int): current player’s id</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>state (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="rlcard.games.blackjack.game.BlackjackGame.is_over">
 <code class="sig-name descname">is_over</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame.is_over" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return whether the current game is over</p>
+<dd><p>Check if the game is over</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True/False</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>status (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a>)</p>
+</dd>
+</dl>
 </dd></dl>
-
-<dl class="method">
-<dt id="rlcard.games.blackjack.game.BlackjackGame.set_seed">
-<code class="sig-name descname">set_seed</code><span class="sig-paren">(</span><em class="sig-param">seed</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame.set_seed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="method">
 <dt id="rlcard.games.blackjack.game.BlackjackGame.step">
 <code class="sig-name descname">step</code><span class="sig-paren">(</span><em class="sig-param">action</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame.step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform one draw of the game and return next player number, and the state for next player</p>
+<dd><p>Get the next state</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – a specific action of blackjack. (Hit or Stand)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>next player’s state
+int: next plater’s id</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="rlcard.games.blackjack.game.BlackjackGame.step_back">
 <code class="sig-name descname">step_back</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.game.BlackjackGame.step_back" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes one step backward and restore to the last state</p>
+<dd><p>Return to the previous state of the game</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>check if the step back is success or not</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Status (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -345,17 +412,14 @@
 <dl class="class">
 <dt id="rlcard.games.blackjack.judger.BlackjackJudger">
 <em class="property">class </em><code class="sig-prename descclassname">rlcard.games.blackjack.judger.</code><code class="sig-name descname">BlackjackJudger</code><a class="headerlink" href="#rlcard.games.blackjack.judger.BlackjackJudger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="rlcard.core.html#rlcard.core.Judger" title="rlcard.core.Judger"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.core.Judger</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="method">
 <dt id="rlcard.games.blackjack.judger.BlackjackJudger.judge_game">
-<code class="sig-name descname">judge_game</code><span class="sig-paren">(</span><em class="sig-param">game</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.judger.BlackjackJudger.judge_game" title="Permalink to this definition">¶</a></dt>
-<dd><p>decide whether the game ends, and return the winner of the game</p>
+<em class="property">static </em><code class="sig-name descname">judge_game</code><span class="sig-paren">(</span><em class="sig-param">game</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.judger.BlackjackJudger.judge_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Judge the winner of the game</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>return the player’s id who wins the game or -1 meaning the game has not ended</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>game</strong> (<em>class</em>) – target game class</p>
 </dd>
 </dl>
 </dd></dl>
@@ -363,13 +427,17 @@
 <dl class="method">
 <dt id="rlcard.games.blackjack.judger.BlackjackJudger.judge_round">
 <code class="sig-name descname">judge_round</code><span class="sig-paren">(</span><em class="sig-param">player</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.judger.BlackjackJudger.judge_round" title="Permalink to this definition">¶</a></dt>
-<dd><p>decide whether the round ends, and return the winner of the round</p>
+<dd><p>Judge the target player’s status</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>return the player’s id who wins the round or -1 meaning the round has not ended</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>player</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – target player’s id</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the status of the target player
+score (int): the current score of the player</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>status (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -377,7 +445,19 @@
 <dl class="method">
 <dt id="rlcard.games.blackjack.judger.BlackjackJudger.judge_score">
 <code class="sig-name descname">judge_score</code><span class="sig-paren">(</span><em class="sig-param">cards</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.judger.BlackjackJudger.judge_score" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Judge the score of a given cards set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cards</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – a list of cards</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the score of the given cards set</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>score (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a>)</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -387,25 +467,11 @@
 <dl class="class">
 <dt id="rlcard.games.blackjack.player.BlackjackPlayer">
 <em class="property">class </em><code class="sig-prename descclassname">rlcard.games.blackjack.player.</code><code class="sig-name descname">BlackjackPlayer</code><span class="sig-paren">(</span><em class="sig-param">player_id</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.player.BlackjackPlayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="rlcard.core.html#rlcard.core.Player" title="rlcard.core.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.core.Player</span></code></a></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <dl class="method">
 <dt id="rlcard.games.blackjack.player.BlackjackPlayer.get_player_id">
 <code class="sig-name descname">get_player_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.player.BlackjackPlayer.get_player_id" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-rlcard.games.blackjack.round">
-<span id="rlcard-games-blackjack-round"></span><h2>rlcard.games.blackjack.round<a class="headerlink" href="#module-rlcard.games.blackjack.round" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="rlcard.games.blackjack.round.BlackjackRound">
-<em class="property">class </em><code class="sig-prename descclassname">rlcard.games.blackjack.round.</code><code class="sig-name descname">BlackjackRound</code><span class="sig-paren">(</span><em class="sig-param">players</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.round.BlackjackRound" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="rlcard.core.html#rlcard.core.Round" title="rlcard.core.Round"><code class="xref py py-class docutils literal notranslate"><span class="pre">rlcard.core.Round</span></code></a></p>
-<dl class="method">
-<dt id="rlcard.games.blackjack.round.BlackjackRound.proceed_round">
-<code class="sig-name descname">proceed_round</code><span class="sig-paren">(</span><em class="sig-param">players</em>, <em class="sig-param">action</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.games.blackjack.round.BlackjackRound.proceed_round" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call other Classes’s functions to keep the game running</p>
+<dd><p>Return player’s id</p>
 </dd></dl>
 
 </dd></dl>

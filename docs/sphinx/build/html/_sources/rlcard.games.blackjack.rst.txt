@@ -32,11 +32,3 @@ rlcard.games.blackjack.player
     :members:
     :undoc-members:
     :show-inheritance:
-    
-rlcard.games.blackjack.round
-----------------------------
-
-.. automodule:: rlcard.games.blackjack.round
-    :members:
-    :undoc-members:
-    :show-inheritance:

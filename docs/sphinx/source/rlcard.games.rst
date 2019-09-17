@@ -6,5 +6,4 @@ rlcard.games
 
     rlcard.games.blackjack
     rlcard.games.doudizhu
-    rlcard.games.simpletexasholdem
-    rlcard.games.texasholdem
+    rlcard.games.limitholdem

@@ -4,11 +4,11 @@ Introduction
 RLCard: A Toolkit for Reinforcement Learning in Card Games
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-RLCard is an opensource toolkit for devopling Reinforcement Learning
+RLCard is a opensource toolkit for developing Reinforcement Learning
 (RL) algorithms in card games. It supports multiple challenging card
 game environments with common and easy-to-use interfaces. The goal of
 the toolkit is to enable more people to study game AI and push forward
-the research of imperfect information games. RLCard is developped by
+the research of imperfect information games. RLCard is developed by
 `DATA Lab <http://faculty.cs.tamu.edu/xiahu/>`__ at Texas A&M
 University.
 
@@ -18,11 +18,18 @@ Installation
 Make sure that you have **Python 3.5+** and **pip** installed. You can
 install ``rlcard`` with ``pip`` as follow:
 
-::
+.. code:: console
 
     git clone https://github.com/datamllab/rlcard.git
     cd rlcard
     pip install -e .
+
+To check whether it is intalled correctly, try the example with random
+agents:
+
+.. code:: console
+
+    python examples/blackjack_random.py
 
 Available Environments
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -32,9 +39,9 @@ available in RLCard. We provide a complexity estimation for the games on
 several aspects. **InfoSet Number:** the number of information set;
 **Avg. InfoSet Size:** the average number of states in a single
 information set; **Action Size:** the size of the action space. For some
-of the complex card games, we can only provide a range of the
-estimation. **Name** is the name that should be passed to ``env.make``
-to create the game environment.
+of the complex card games, we can only provide a range of estimation.
+**Name** is the name that should be passed to ``env.make`` to create the
+game environment.
 
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+---------------------+---------------+-------------------+-------------+
 | Game                                                                                                                                                                                                   | InfoSet Number    | Avg. InfoSet Size   | Action Size   | Name              | Status      |
@@ -51,5 +58,5 @@ to create the game environment.
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+---------------------+---------------+-------------------+-------------+
 | UNO (`wiki <https://en.wikipedia.org/wiki/Uno_(card_game>`__, `baike <https://baike.baidu.com/item/UNO%E7%89%8C/2249587>`__)                                                                           | 10^163            | 10^10               | 10^1          | -                 | Come soon   |
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+---------------------+---------------+-------------------+-------------+
-| Sheng Ji (`wiki <https://en.wikipedia.org/wiki/Sheng_ji>`__, `baike <https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150>`__)                                                                      | 10^173 ~ 10^180   | 10^61               | 10^13         | -                 | Come soon   |
+| Sheng Ji (`wiki <https://en.wikipedia.org/wiki/Sheng_ji>`__, `baike <https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150>`__)                                                                      | 10^157 ~ 10^165   | 10^61               | 10^13         | -                 | Come soon   |
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------+---------------------+---------------+-------------------+-------------+

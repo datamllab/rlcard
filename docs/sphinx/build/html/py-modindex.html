@@ -109,13 +109,20 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="games.html">Games in RLCard</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="games.html#blackjack">Blackjack</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding-in-this">State Encoding In this</a></li>
-<li class="toctree-l3"><a class="reference internal" href="games.html#action-encoding">Action Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-decoding">Action Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#payoff">Payoff</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#no-limit-texas-hold-em">No-limit Texas Hold’em</a></li>
-<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id1">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-abstraction">Action Abstraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id2">Payoff</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
@@ -132,16 +139,16 @@
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.envs.html">rlcard.envs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.env">rlcard.envs.env</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.registration">rlcard.envs.registration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.simpletexasholdem">rlcard.envs.simpletexasholdem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.texasholdem">rlcard.envs.texasholdem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.limitholdem">rlcard.envs.limitholdem</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.utils.html">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.utils.html#module-rlcard.utils.logger">rlcard.utils.logger</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.games.html">rlcard.games</a><ul>
@@ -150,7 +157,6 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.game">rlcard.games.blackjack.game</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.judger">rlcard.games.blackjack.judger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.player">rlcard.games.blackjack.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.round">rlcard.games.blackjack.round</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.games.doudizhu.html">rlcard.games.doudizhu</a><ul>
@@ -161,20 +167,12 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.doudizhu.html#module-rlcard.games.doudizhu.round">rlcard.games.doudizhu.round</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.simpletexasholdem.html">rlcard.games.simpletexasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.dealer">rlcard.games.simpletexasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.game">rlcard.games.simpletexasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.judger">rlcard.games.simpletexasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.player">rlcard.games.simpletexasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.round">rlcard.games.simpletexasholdem.round</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.texasholdem.html">rlcard.games.texasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.dealer">rlcard.games.texasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.game">rlcard.games.texasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.judger">rlcard.games.texasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.player">rlcard.games.texasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.round">rlcard.games.texasholdem.round</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.games.limitholdem.html">rlcard.games.limitholdem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.dealer">rlcard.games.limitholdem.dealer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.game">rlcard.games.limitholdem.game</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.judger">rlcard.games.limitholdem.judger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.player">rlcard.games.limitholdem.player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.round">rlcard.games.limitholdem.round</a></li>
 </ul>
 </li>
 </ul>
@@ -302,17 +300,12 @@
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
+       <a href="rlcard.envs.html#module-rlcard.envs.limitholdem"><code class="xref">rlcard.envs.limitholdem</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
        <a href="rlcard.envs.html#module-rlcard.envs.registration"><code class="xref">rlcard.envs.registration</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="rlcard.envs.html#module-rlcard.envs.simpletexasholdem"><code class="xref">rlcard.envs.simpletexasholdem</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="rlcard.envs.html#module-rlcard.envs.texasholdem"><code class="xref">rlcard.envs.texasholdem</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -333,11 +326,6 @@
        <td></td>
        <td>&#160;&#160;&#160;
        <a href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.player"><code class="xref">rlcard.games.blackjack.player</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.round"><code class="xref">rlcard.games.blackjack.round</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -367,52 +355,32 @@
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.dealer"><code class="xref">rlcard.games.simpletexasholdem.dealer</code></a></td><td>
+       <a href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.dealer"><code class="xref">rlcard.games.limitholdem.dealer</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.game"><code class="xref">rlcard.games.simpletexasholdem.game</code></a></td><td>
+       <a href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.game"><code class="xref">rlcard.games.limitholdem.game</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.judger"><code class="xref">rlcard.games.simpletexasholdem.judger</code></a></td><td>
+       <a href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.judger"><code class="xref">rlcard.games.limitholdem.judger</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.player"><code class="xref">rlcard.games.simpletexasholdem.player</code></a></td><td>
+       <a href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.player"><code class="xref">rlcard.games.limitholdem.player</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.round"><code class="xref">rlcard.games.simpletexasholdem.round</code></a></td><td>
+       <a href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.round"><code class="xref">rlcard.games.limitholdem.round</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.dealer"><code class="xref">rlcard.games.texasholdem.dealer</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.game"><code class="xref">rlcard.games.texasholdem.game</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.judger"><code class="xref">rlcard.games.texasholdem.judger</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.player"><code class="xref">rlcard.games.texasholdem.player</code></a></td><td>
-       <em></em></td></tr>
-     <tr class="cg-1">
-       <td></td>
-       <td>&#160;&#160;&#160;
-       <a href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.round"><code class="xref">rlcard.games.texasholdem.round</code></a></td><td>
+       <a href="rlcard.utils.html#module-rlcard.utils.logger"><code class="xref">rlcard.utils.logger</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>

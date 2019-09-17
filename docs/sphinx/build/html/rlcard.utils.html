@@ -108,13 +108,20 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="games.html">Games in RLCard</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="games.html#blackjack">Blackjack</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding-in-this">State Encoding In this</a></li>
-<li class="toctree-l3"><a class="reference internal" href="games.html#action-encoding">Action Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state-encoding">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-decoding">Action Decoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#payoff">Payoff</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#limit-texas-hold-em">Limit Texas Hold’em</a></li>
 <li class="toctree-l2"><a class="reference internal" href="games.html#no-limit-texas-hold-em">No-limit Texas Hold’em</a></li>
-<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="games.html#dou-dizhu">Dou Dizhu</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="games.html#state">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id1">State Encoding</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#action-abstraction">Action Abstraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="games.html#id2">Payoff</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="algorithms.html">Algorithms</a><ul>
@@ -131,16 +138,16 @@
 <p class="caption"><span class="caption-text">Package Reference:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="rlcard.envs.html">rlcard.envs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.env">rlcard.envs.env</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.registration">rlcard.envs.registration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.simpletexasholdem">rlcard.envs.simpletexasholdem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.texasholdem">rlcard.envs.texasholdem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.blackjack">rlcard.envs.blackjack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.doudizhu">rlcard.envs.doudizhu</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.envs.html#module-rlcard.envs.limitholdem">rlcard.envs.limitholdem</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">rlcard.utils</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-rlcard.utils.utils">rlcard.utils.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-rlcard.utils.logger">rlcard.utils.logger</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="rlcard.games.html">rlcard.games</a><ul>
@@ -149,7 +156,6 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.game">rlcard.games.blackjack.game</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.judger">rlcard.games.blackjack.judger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.player">rlcard.games.blackjack.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.blackjack.html#module-rlcard.games.blackjack.round">rlcard.games.blackjack.round</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="rlcard.games.doudizhu.html">rlcard.games.doudizhu</a><ul>
@@ -160,20 +166,12 @@
 <li class="toctree-l3"><a class="reference internal" href="rlcard.games.doudizhu.html#module-rlcard.games.doudizhu.round">rlcard.games.doudizhu.round</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.simpletexasholdem.html">rlcard.games.simpletexasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.dealer">rlcard.games.simpletexasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.game">rlcard.games.simpletexasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.judger">rlcard.games.simpletexasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.player">rlcard.games.simpletexasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.simpletexasholdem.html#module-rlcard.games.simpletexasholdem.round">rlcard.games.simpletexasholdem.round</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="rlcard.games.texasholdem.html">rlcard.games.texasholdem</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.dealer">rlcard.games.texasholdem.dealer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.game">rlcard.games.texasholdem.game</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.judger">rlcard.games.texasholdem.judger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.player">rlcard.games.texasholdem.player</a></li>
-<li class="toctree-l3"><a class="reference internal" href="rlcard.games.texasholdem.html#module-rlcard.games.texasholdem.round">rlcard.games.texasholdem.round</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rlcard.games.limitholdem.html">rlcard.games.limitholdem</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.dealer">rlcard.games.limitholdem.dealer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.game">rlcard.games.limitholdem.game</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.judger">rlcard.games.limitholdem.judger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.player">rlcard.games.limitholdem.player</a></li>
+<li class="toctree-l3"><a class="reference internal" href="rlcard.games.limitholdem.html#module-rlcard.games.limitholdem.round">rlcard.games.limitholdem.round</a></li>
 </ul>
 </li>
 </ul>
@@ -257,36 +255,42 @@
 <dl class="function">
 <dt id="rlcard.utils.utils.get_cards_from_ranks">
 <code class="sig-prename descclassname">rlcard.utils.utils.</code><code class="sig-name descname">get_cards_from_ranks</code><span class="sig-paren">(</span><em class="sig-param">player</em>, <em class="sig-param">ranks</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.utils.get_cards_from_ranks" title="Permalink to this definition">¶</a></dt>
-<dd><p>get chosen cards and remained cards from a player’s hand according to input rank list</p>
+<dd><p>Get chosen cards and remained cards from a player’s hand according to input rank list</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>player</strong> – Player object</p></li>
-<li><p><strong>ranks</strong> – list of rank(string)</p></li>
+<li><p><strong>player</strong> (<a class="reference internal" href="rlcard.core.html#rlcard.core.Player" title="rlcard.core.Player"><em>Player</em></a>) – Player object</p></li>
+<li><p><strong>ranks</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of rank (string)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>chosen cards
-list of Card objects: remained cards</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of Card objects</p>
+<dd class="field-even"><p><dl class="simple">
+<dt>Tuple containing:</dt><dd><p>(list): A list of Card objects, chosen cards
+(list): A list of Card objects, remained cards</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function will not affect the player’s original hand.</p>
-</div>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(tupel)</p>
+</dd>
+</dl>
+<p>Note: This function will not affect the player’s original hand.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="rlcard.utils.utils.get_downstream_player_id">
 <code class="sig-prename descclassname">rlcard.utils.utils.</code><code class="sig-name descname">get_downstream_player_id</code><span class="sig-paren">(</span><em class="sig-param">player</em>, <em class="sig-param">players</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.utils.get_downstream_player_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the downsteam player’s player_id</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function assumes player_id(s) in ‘players’ list start from 0, and are consequent.</p>
-</div>
+<dd><p>Obtain the downsteam player’s player_id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>player</strong> (<a class="reference internal" href="rlcard.core.html#rlcard.core.Player" title="rlcard.core.Player"><em>Player</em></a>) – The current player</p></li>
+<li><p><strong>players</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of players</p></li>
+</ul>
+</dd>
+</dl>
+<p>Note: This function assumes player_id(s) in ‘players’ list start from 0, and are consequent.</p>
 </dd></dl>
 
 <dl class="function">
@@ -296,17 +300,17 @@ list of Card objects: remained cards</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cards</strong> – list of Card object</p></li>
-<li><p><strong>num</strong> – int, number of cards to be chosen</p></li>
-<li><p><strong>seed</strong> – int, optional, random seed</p></li>
+<li><p><strong>cards</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – List of Card object</p></li>
+<li><p><strong>num</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The  number of cards to be chosen</p></li>
+<li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – Optional, random seed</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of chosen cards
-list: list of remained cards</p>
+<dd class="field-even"><p>A list of chosen cards
+(list): A list of remained cards</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -314,29 +318,45 @@ list: list of remained cards</p>
 <dl class="function">
 <dt id="rlcard.utils.utils.get_upstream_player_id">
 <code class="sig-prename descclassname">rlcard.utils.utils.</code><code class="sig-name descname">get_upstream_player_id</code><span class="sig-paren">(</span><em class="sig-param">player</em>, <em class="sig-param">players</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.utils.get_upstream_player_id" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the upsteam player’s player_id</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function assumes player_id(s) in ‘players’ list starts from 0, and are consequent.</p>
-</div>
+<dd><p>Obtain the upsteam player’s player_id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>player</strong> (<a class="reference internal" href="rlcard.core.html#rlcard.core.Player" title="rlcard.core.Player"><em>Player</em></a>) – The current player</p></li>
+<li><p><strong>players</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of players</p></li>
+</ul>
+</dd>
+</dl>
+<p>Note: This function assumes player_id(s) in ‘players’ list starts from 0, and are consequent.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="rlcard.utils.utils.init_54_deck">
 <code class="sig-prename descclassname">rlcard.utils.utils.</code><code class="sig-name descname">init_54_deck</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.utils.init_54_deck" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a list of Card objects which include a standard 52 cards deck, BJ and RJ</p>
+<dd><p>Initialize a standard deck of 52 cards, BJ and RJ</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Alist of Card object</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="rlcard.utils.utils.init_players">
 <code class="sig-prename descclassname">rlcard.utils.utils.</code><code class="sig-name descname">init_players</code><span class="sig-paren">(</span><em class="sig-param">n</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.utils.init_players" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a list of Player objects with n players</p>
+<dd><p>Initilize a list of Player objects with n players</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n</strong> – int, number of players to be initialized</p>
+<dd class="field-odd"><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The number of players to be initialized</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>list of Player objects with player_id(s) start from 0 and are consequent</p>
+<dd class="field-even"><p>A list of Player objects with player_id(s) start from 0 and are consequent</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -344,22 +364,33 @@ list: list of remained cards</p>
 <dl class="function">
 <dt id="rlcard.utils.utils.init_standard_deck">
 <code class="sig-prename descclassname">rlcard.utils.utils.</code><code class="sig-name descname">init_standard_deck</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.utils.init_standard_deck" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a list of Card objects which form a standard 52 cards deck</p>
+<dd><p>Initialize a standard deck of 52 cards</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of Card object</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a>)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="rlcard.utils.utils.is_in_cards">
-<code class="sig-prename descclassname">rlcard.utils.utils.</code><code class="sig-name descname">is_in_cards</code><span class="sig-paren">(</span><em class="sig-param">cards</em>, <em class="sig-param">check_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.utils.is_in_cards" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">rlcard.utils.utils.</code><code class="sig-name descname">is_in_cards</code><span class="sig-paren">(</span><em class="sig-param">origin_cards</em>, <em class="sig-param">check_cards</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.utils.is_in_cards" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if a list of Card objects contains another list of Card objects</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cards</strong> – list of Card objects which to be checked if it contains another list of Card objects</p></li>
-<li><p><strong>check_cards</strong> – list of Card objects which to be checked if it is in a list of Card objecrts</p></li>
+<li><p><strong>cards</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of Card objects which to be checked if it contains another list of Card objects</p></li>
+<li><p><strong>check_cards</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of Card objects which to be checked if it is in a list of Card objecrts</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>boolean</p>
+<dd class="field-even"><p>True if the cards are in the original cards.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(boolean)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -367,15 +398,16 @@ list: list of remained cards</p>
 <dl class="function">
 <dt id="rlcard.utils.utils.is_pair">
 <code class="sig-prename descclassname">rlcard.utils.utils.</code><code class="sig-name descname">is_pair</code><span class="sig-paren">(</span><em class="sig-param">cards</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.utils.is_pair" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Check whether the card is a pair</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>cards</strong> – list of Card object</p>
+<dd class="field-odd"><p><strong>cards</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of Card object</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>whether the input list is a pair or not</p>
+<dd class="field-even"><p>True if the list is a pair</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>boolean</p>
+<dd class="field-odd"><p>(boolean)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -383,15 +415,16 @@ list: list of remained cards</p>
 <dl class="function">
 <dt id="rlcard.utils.utils.is_single">
 <code class="sig-prename descclassname">rlcard.utils.utils.</code><code class="sig-name descname">is_single</code><span class="sig-paren">(</span><em class="sig-param">cards</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.utils.is_single" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Check whether the card is singel</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>cards</strong> – list of Card object</p>
+<dd class="field-odd"><p><strong>cards</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of Card object</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>whether the input list is a single card or not</p>
+<dd class="field-even"><p>True if the list is single</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>boolean</p>
+<dd class="field-odd"><p>(boolean)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -402,19 +435,21 @@ list: list of remained cards</p>
 <dd><p>Get the coresponding number of a rank.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>rank</strong> – rank stored in Card object</p>
+<dd class="field-odd"><p><strong>rank</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – rank stored in Card object</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>the number corresponding to the rank</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a>)</p>
 </dd>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If the input rank is an empty string, the function will return -1.
-If the input rank is not valid, the function will return None.</p>
+<ol class="arabic simple">
+<li><p>If the input rank is an empty string, the function will return -1.</p></li>
+<li><p>If the input rank is not valid, the function will return None.</p></li>
+</ol>
 </div>
 </dd></dl>
 
@@ -424,10 +459,16 @@ If the input rank is not valid, the function will return None.</p>
 <dd><p>Reorganize the trajectory to make it RL friendly</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>trajectory</strong> – original one</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trajectory</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of trajectories</p></li>
+<li><p><strong>payoffs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of payoffs for the players. Each entry corresponds to one player</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A new one</p>
+<dd class="field-even"><p>A new trajectories that can be fed into RL algorithms.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -435,7 +476,14 @@ If the input rank is not valid, the function will return None.</p>
 <dl class="function">
 <dt id="rlcard.utils.utils.set_global_seed">
 <code class="sig-prename descclassname">rlcard.utils.utils.</code><code class="sig-name descname">set_global_seed</code><span class="sig-paren">(</span><em class="sig-param">seed</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.utils.set_global_seed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Set the global see for reproducing results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – The seed</p>
+</dd>
+</dl>
+<p>Note: If using other modules with randomness, they also need to be seeded</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="rlcard.utils.utils.take_out_cards">
@@ -444,15 +492,15 @@ If the input rank is not valid, the function will return None.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cards</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – list of Card objects from which to be taken out some cards</p></li>
-<li><p><strong>remove_cards</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – list of Card objects that need to be taken out</p></li>
+<li><p><strong>cards</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of Card objects from which to be taken out some cards</p></li>
+<li><p><strong>remove_cards</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a>) – A list of Card objects that need to be taken out</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>the cards in ‘remove_cards’ list that doesn’t make cards in ‘cards’ list taken out</p>
+<dd class="field-even"><p>A list of Card objects. The cards in ‘remove_cards’ list that doesn’t make cards in ‘cards’ list taken out</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list of Card objects</p>
+<dd class="field-odd"><p>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a>)</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -463,6 +511,58 @@ but will not affect the second input Card list.
 which means to take out one kind of cards with the same suit and rank in ‘cards’ list,
 you need to have the same number of cards with the same suit and rank in ‘remove_cards’ list.</p>
 </div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-rlcard.utils.logger">
+<span id="rlcard-utils-logger"></span><h2>rlcard.utils.logger<a class="headerlink" href="#module-rlcard.utils.logger" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rlcard.utils.logger.Logger">
+<em class="property">class </em><code class="sig-prename descclassname">rlcard.utils.logger.</code><code class="sig-name descname">Logger</code><span class="sig-paren">(</span><em class="sig-param">xlabel=''</em>, <em class="sig-param">ylabel=''</em>, <em class="sig-param">legend=''</em>, <em class="sig-param">log_path=None</em>, <em class="sig-param">csv_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.logger.Logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Logger saves the running results and helps make plots from the results</p>
+<dl class="method">
+<dt id="rlcard.utils.logger.Logger.add_point">
+<code class="sig-name descname">add_point</code><span class="sig-paren">(</span><em class="sig-param">x=None</em>, <em class="sig-param">y=None</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.logger.Logger.add_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a point to the plot</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Number</em>) – x coordinate value</p></li>
+<li><p><strong>y</strong> (<em>Number</em>) – y coordinate value</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.utils.logger.Logger.close_file">
+<code class="sig-name descname">close_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.logger.Logger.close_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the created file objects</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.utils.logger.Logger.log">
+<code class="sig-name descname">log</code><span class="sig-paren">(</span><em class="sig-param">text</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.logger.Logger.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the text to log file then print it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>string</em>) – text to log</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="rlcard.utils.logger.Logger.make_plot">
+<code class="sig-name descname">make_plot</code><span class="sig-paren">(</span><em class="sig-param">save_path=''</em><span class="sig-paren">)</span><a class="headerlink" href="#rlcard.utils.logger.Logger.make_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make plot using all stored points</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>save_path</strong> (<em>string</em>) – where to store the plot</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>

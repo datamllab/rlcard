@@ -29,7 +29,6 @@ Welcome to rlcard's documentation!
    rlcard.games
    rlcard.agents
    rlcard.core
-   rlcard.logger
    
 
 Indices and tables
