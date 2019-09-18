@@ -64,7 +64,7 @@ class LimitholdemRound(object):
         '''
 
         if action not in self.get_legal_actions():
-            raise Exception('{} is not legal acyion. Legal actions: {}', action, self.get_legal_actions())
+            raise Exception('{} is not legal action. Legal actions: {}', action, self.get_legal_actions())
 
         if action == 'call':
             diff = max(self.raised) - self.raised[self.button]

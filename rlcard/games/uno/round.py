@@ -38,6 +38,8 @@ class UnoRound(object):
         color = card_info[0]
         trait = card_info[1]
 
+        print('proceed round', color, trait)
+
         # remove correspongding card
         remove_index = None
         if 'wild' in trait:
@@ -50,15 +52,17 @@ class UnoRound(object):
                 if color == card.color and trait == card.trait:
                     remove_index = index
         card = player.hand.pop(remove_index)
+        print('proceed card', card.type, card.color, card.trait)
 
         # perform the number action
-        if self.target.type == 'number':
+        if card.type == 'number':
             self.current_player = (self.current_player + self.direction) % self.num_players
             self.target = card
 
         # perform non-number action
         else:
-            self._preform_non_number_action(players, self.target)
+            print('perfrom non number')
+            self._preform_non_number_action(players, card)
 
     def _perform_draw_action(self, players):
         card = self.dealer.deck.pop()
@@ -74,6 +78,7 @@ class UnoRound(object):
                 self._preform_non_number_action(players, card)
         else:
             players[self.current_player].hand.append(card)
+            self.current_player = (self.current_player + self.direction) % self.num_players
 
     def _preform_non_number_action(self, players, card):
         current = self.current_player
@@ -83,27 +88,36 @@ class UnoRound(object):
             self.direction = -1 * direction
         elif card.trait == 'skip':
             current = (current + direction) % num_players
+            print('skip current', current)
         elif card.trait == 'draw_2':
             self.dealer.deal_cards(players[(current + direction) % num_players], 2)
             current = (current + direction) % num_players
+            print('draw_2 current', current)
         elif card.trait == 'wild_draw_4':
             self.dealer.deal_cards(players[(current + direction) % num_players], 4)
             current = (current + direction) % num_players
+            print('wild_draw_4 current', current)
         self.current_player = (current + self.direction) % num_players
+        print('non number current player', self.current_player)
         self.target = card
+        print('non number card', card.type, card.color, card.trait)
+        print('non number target', self.target.type, self.target.color, self.target.trait)
 
     def get_legal_actions(self, players, player_id):
         legal_actions = []
         wild_actions = []
         hand = players[player_id].hand
         target = self.target
-
+        print('legal action target: ', target.type, target.color, target.trait)
         # target is wild card
-        if target == 'wild' or self.target == 'wild_draw_4':
+        if target.type == 'wild':
             for card in hand:
                 if card.type == 'wild':
                     card.color = random.choice(UnoCard.info['color'])
-                    wild_actions.append(card.get_str())
+                    if card.trait == 'wild_draw_4':
+                        wild_actions.append(card.get_str())
+                    else:
+                        legal_actions.append(card.get_str())
                 elif card.color == target.color:
                     legal_actions.append(card.get_str())
 
@@ -112,8 +126,13 @@ class UnoRound(object):
             for card in hand:
                 if card.type == 'wild':
                     card.color = random.choice(UnoCard.info['color'])
-                    wild_actions.append(card.get_str())
-                if card.color == target.color or card.trait == target.trait:
+                    if card.trait == 'wild_draw_4':
+                        print('target is not wild')
+                        wild_actions.append(card.get_str())
+                        print('wild actions', wild_actions)
+                    else:
+                        legal_actions.append(card.get_str())
+                elif card.color == target.color or card.trait == target.trait:
                     legal_actions.append(card.get_str())
         if not legal_actions:
             return wild_actions
