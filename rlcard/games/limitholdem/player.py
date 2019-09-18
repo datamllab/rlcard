@@ -38,4 +38,3 @@ class LimitholdemPlayer(object):
         '''
 
         return self.player_id
-
