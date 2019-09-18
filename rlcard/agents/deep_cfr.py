@@ -34,11 +34,11 @@ from __future__ import division
 from __future__ import print_function
 
 import collections
+import math
 import random
 import numpy as np
 import tensorflow as tf
 import sonnet as snt
-
 import rlcard
 from rlcard.utils.utils import *
 
@@ -109,7 +109,7 @@ class MLP(object):
                 output_sizes,
                 w_init = None,
                 b_init = None,
-                activation=tf.nn.softmax,
+                activation=tf.nn.relu,
                 name=None):
         self.output_sizes = output_sizes
         self._activation = activation
@@ -119,16 +119,19 @@ class MLP(object):
 
     def __call__(self, inputs, is_training=None):
         fc = tf.contrib.layers.flatten(inputs)
+        input_size = fc.shape[1].value
+        stddev = 1 / math.sqrt(input_size)
         for index, output_size in enumerate(self.output_sizes):
             if index == 0:
-                w = tf.Variable(tf.truncated_normal([int(fc.shape[1]), output_size], stddev=0.2), name='w'+str(index))
+                w = tf.Variable(tf.truncated_normal([int(fc.shape[1]), output_size], stddev=stddev), name='w'+str(index))
             else:
-                w = tf.Variable(tf.truncated_normal([self.output_sizes[index-1], output_size], stddev=0.2), name='w'+str(index))
-            b = tf.Variable(tf.constant(0.1, shape=[output_size]), name='b'+str(index) )
+                w = tf.Variable(tf.truncated_normal([self.output_sizes[index-1], output_size], stddev=stddev), name='w'+str(index))
+            b = tf.Variable(tf.constant(0.0, shape=[output_size]), name='b'+str(index) )
             self.variables.append(w)
             self.variables.append(b)
+            fc = tf.contrib.layers.batch_norm(fc)
             fc = tf.nn.xw_plus_b(fc, w, b, name='fc'+str(index))
-        fc = self._activation(fc, name='activation'+str(index))
+            fc = self._activation(fc, name='activation'+str(index))
         return fc
 
     def reinitialize(self, sess):
@@ -268,7 +271,7 @@ class DeepCFR():
         ''' Reinitialize the advantage networks
         '''
         for p in range(self._num_players):
-            self._advantage_networks[p].reinitialize(self._session)
+           self._advantage_networks[p].reinitialize(self._session)
         #for p in range(self._num_players):
         #    for key in self._advantage_networks[p].initializers:
         #        self._advantage_networks[p].initializers[key]()
@@ -328,8 +331,13 @@ class DeepCFR():
         current_player = self._env.get_player_id()
         actions = self._env.get_legal_actions()
 
-        if current_player == player:
+        if self._env.is_over():
+            # Terminal state get returns.
+            payoff = self._env.get_payoffs()
+            prev_state, _ = self._env.step_back()
+            return payoff 
 
+        if current_player == player:
             sampled_regret = collections.defaultdict(float)
             # Update the policy over the info set & actions via regret matching.
             advantages, strategy = self._sample_action_from_advantage(state, player)
@@ -337,12 +345,7 @@ class DeepCFR():
                 child_state, _ = self._env.step(action)
                 child_state = child_state.flatten()
                 expected_payoff[action] = self._traverse_game_tree(child_state, player)
-
-            if self._env.is_over():
-                # Terminal state get returns.
-                payoff = self._env.get_payoffs()
-                prev_state, _ = self._env.step_back()
-                return payoff 
+            self._env.step_back()
 
             for action in actions:
                 sampled_regret[action] = expected_payoff[action][0]
