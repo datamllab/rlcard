@@ -31,7 +31,7 @@ class UnoGame(object):
         top_card = self.round.flip_top_card()
 
         # print test
-        print(top_card.get_str())
+        print('top: ', top_card.get_str())
         self.round.perform_top_card(self.players, top_card)
         for player in self.players:
             player.print_hand()
@@ -71,6 +71,7 @@ if __name__ == '__main__':
     print('*****init game*****')
     while not game.is_over():
         legal_actions = game.get_legal_actions()
+        print(legal_actions)
         if not legal_actions:
             action = 'draw'
         else:

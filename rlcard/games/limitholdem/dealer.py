@@ -27,4 +27,3 @@ class LimitholdemDealer(object):
         '''
 
         return self.deck.pop()
-
