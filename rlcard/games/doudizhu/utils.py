@@ -31,7 +31,7 @@ with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/type_card.json'), 'r'
 CARD_RANK_STR = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K',
                  'A', '2', 'B', 'R']
 # rank list
-CARD_RANK = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K',
+CARD_RANK = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K',
              'A', '2', 'BJ', 'RJ']
 
 
@@ -152,10 +152,7 @@ def cards2str(cards: list):
         if card.rank == '':
             response += card.suit[0]
         else:
-            if card.rank == '10':
-                response += 'T'
-            else:
-                response += card.rank
+            response += card.rank
     return response
 
 
@@ -215,6 +212,7 @@ def encode_cards(plane, cards):
         rank = CARD_RANK_STR.index(cards[-1])
         plane[layer][rank] = 1
         plane[0][rank] = 0
+
 
 def get_gt_cards(player, greater_player):
     ''' Provide player's cards which are greater than the ones played by

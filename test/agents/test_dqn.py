@@ -20,7 +20,8 @@ class TestUtilsMethos(unittest.TestCase):
                          batch_size=0,
                          action_num=2,
                          state_shape=[1],
-                         norm_step=0)
+                         norm_step=0,
+                         mlp_layers=[10,10])
 
         self.assertEqual(agent.replay_memory_init_size, 0)
         self.assertEqual(agent.update_target_estimator_every, 0)
@@ -44,7 +45,8 @@ class TestUtilsMethos(unittest.TestCase):
                          replay_memory_init_size=memory_init_size,
                          update_target_estimator_every=10,
                          norm_step=norm_step,
-                         state_shape=[2])
+                         state_shape=[2],
+                         mlp_layers=[10,10])
 
         for step in range(step_num):
             ts = [np.random.random_sample((2,)), np.random.randint(2), 0, np.random.random_sample((2,)), True]

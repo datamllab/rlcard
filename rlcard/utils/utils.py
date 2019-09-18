@@ -10,7 +10,7 @@ def init_standard_deck():
     '''
 
     suit_list = ['S', 'H', 'D', 'C']
-    rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
     return res
 
@@ -22,7 +22,7 @@ def init_54_deck():
     '''
 
     suit_list = ['S', 'H', 'D', 'C']
-    rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+    rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
     res.append(Card('BJ', ''))
     res.append(Card('RJ', ''))
@@ -74,7 +74,7 @@ def is_single(cards):
 
     Args:
         cards (list): A list of Card object
-    
+
     Returns:
         (boolean): True if the list is single
     '''
@@ -88,7 +88,7 @@ def rank2int(rank):
 
     Args:
         rank(str): rank stored in Card object
-    
+
     Returns:
         (int): the number corresponding to the rank
 
