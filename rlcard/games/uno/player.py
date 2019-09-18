@@ -1,3 +1,4 @@
+from rlcard.games.uno.utils import cards2list
 
 class UnoPlayer(object):
 

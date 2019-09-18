@@ -20,10 +20,11 @@ def init_deck():
         # init wild cards
         for wild in card_info['trait'][-2:]:
             deck.append(Card('wild', color, wild))
-    # test
-    #for card in deck:
-    #    print(card.type, card.color, card.trait)
-    #input()
-    # #
-
     return deck
+
+
+def cards2list(cards):
+    cards_list = []
+    for card in cards:
+        cards_list.append(card.get_str())
+    return cards_list

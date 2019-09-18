@@ -1,4 +1,5 @@
 import random
+from copy import deepcopy
 
 from rlcard.games.uno.dealer import UnoDealer as Dealer
 from rlcard.games.uno.player import UnoPlayer as Player
@@ -31,17 +32,41 @@ class UnoGame(object):
         top_card = self.round.flip_top_card()
 
         # print test
-        print('top: ', top_card.get_str())
+        #print('top: ', top_card.get_str())
         self.round.perform_top_card(self.players, top_card)
-        for player in self.players:
-            player.print_hand()
-        print(len(self.dealer.deck))
+        #for player in self.players:
+        #    player.print_hand()
+        #print(len(self.dealer.deck))
         # ##
-        self.played_cards = []
+        # Save the hisory for stepping back to the last state.
+        self.history = []
+
+        player_id = self.round.current_player
+        state = self.get_state(player_id)
+        return state, player_id
 
     def step(self, action):
+        # First snapshot the current state
+        his_dealer = deepcopy(self.dealer)
+        his_round = deepcopy(self.round)
+        his_players = deepcopy(self.players)
+        self.history.append((his_dealer, his_players, his_round))
+
         self.round.proceed_round(self.players, action)
-        print(self.round.current_player, end=': ')
+        player_id = self.round.current_player
+        state = self.get_state(player_id)
+        return state, player_id
+        # print(self.round.current_player, end=': ')
+
+    def step_back(self):
+        if not self.history:
+            return False
+        self.dealer, self.players, self.round = self.history.pop()
+        return True
+
+    def get_state(self, player_id):
+        state = self.round.get_state(self.players, player_id)
+        return state
 
     def get_legal_actions(self):
 
@@ -58,24 +83,39 @@ class UnoGame(object):
         return self.round.current_player
 
     def is_over(self):
-        if not self.players[self.round.current_player].hand:
-            return True
-        else:
-            return False
+        return self.round.is_over
 
-
+# For test
 if __name__ == '__main__':
+    import time
     random.seed(0)
+    start = time.time()
     game = UnoGame()
-    game.init_game()
-    print('*****init game*****')
-    while not game.is_over():
-        legal_actions = game.get_legal_actions()
-        print(legal_actions)
-        if not legal_actions:
-            action = 'draw'
-        else:
-            action = random.choice(legal_actions)
-        print(action)
-        print()
-        game.step(action)
+    for _ in range(100):
+        #print('*****init game*****')
+        state, button = game.init_game()
+        #print(button, state)
+        i = 0
+        while not game.is_over():
+            i += 1
+            legal_actions = game.get_legal_actions()
+            #print('legal_actions', legal_actions)
+            '''
+            if i == 3:
+                print('step back')
+                print(game.step_back())
+                print(game.get_player_id())
+                legal_actions = game.get_legal_actions()
+                print('back legal actions', legal_actions)
+                input()
+            '''
+            if not legal_actions:
+                action = 'draw'
+            else:
+                action = random.choice(legal_actions)
+            #print('action', action)
+            #print()
+            state, button = game.step(action)
+            #print(button, state)
+    end = time.time()
+    print(end-start)
