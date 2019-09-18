@@ -85,6 +85,7 @@ class BlackjackGame(object):
             Status (bool): check if the step back is success or not
         '''
 
+        #while len(self.history) > 0:
         if len(self.history) > 0:
             self.dealer, self.player, self.winner = self.history.pop()
             return True
