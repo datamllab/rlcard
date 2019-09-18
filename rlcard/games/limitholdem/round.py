@@ -18,7 +18,7 @@ class LimitholdemRound(object):
             allowed_raise_num (int): The number of allowed raise num
             num_players (int): The number of players
         '''
-        
+
         self.button = None
         self.raise_amount = raise_amount
         self.allowed_raise_num = allowed_raise_num
