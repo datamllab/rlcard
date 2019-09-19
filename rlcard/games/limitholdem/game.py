@@ -61,7 +61,7 @@ class LimitholdemGame(object):
         self.players[b].in_chips = self.big_blind
         self.players[s].in_chips = self.small_blind
 
-        # The player next to the samll blind plays the first
+        # The player next to the small blind plays the first
         self.button = (s + 1) % self.num_players
 
         # Initilize a bidding round, in the first round, the big blind and the small blind needs to

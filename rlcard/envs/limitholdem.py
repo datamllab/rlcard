@@ -36,7 +36,6 @@ class LimitholdemEnv(Env):
 
         return state
 
-
     def get_payoffs(self):
         ''' Get the payoff of a game
 
