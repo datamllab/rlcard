@@ -15,7 +15,7 @@ class LimitholdemPlayer(object):
         # The chips that this player has put in until now
         self.in_chips = 0
 
-    def get_state(self, public_cards, all_chips):
+    def get_state(self, public_cards, all_chips, legal_actions):
         ''' Encode the state for the player
 
         Args:
@@ -31,6 +31,7 @@ class LimitholdemPlayer(object):
         state['public_cards'] = [c.get_index() for c in public_cards]
         state['all_chips'] = all_chips
         state['my_chips'] = self.in_chips
+        state['legal_actions'] = legal_actions
         return state
 
     def get_player_id(self):
@@ -38,4 +39,3 @@ class LimitholdemPlayer(object):
         '''
 
         return self.player_id
-
