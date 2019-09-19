@@ -176,7 +176,8 @@ class LimitholdemGame(object):
         '''
 
         chips = [self.players[i].in_chips for i in range(self.num_players)]
-        state = self.players[player].get_state(self.public_cards, chips)
+        legal_actions = self.get_legal_actions()
+        state = self.players[player].get_state(self.public_cards, chips, legal_actions)
 
         return state
 
