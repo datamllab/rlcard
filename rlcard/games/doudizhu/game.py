@@ -51,7 +51,7 @@ class DoudizhuGame(object):
 
         # initialize public variables
         self.current_game += 1
-        self.game_result = {0: 0, 1: 0, 2: 0}
+        self.game_result = [0, 0, 0]
         self.histories = []
         self.trace = []
         self.played_cards = []
