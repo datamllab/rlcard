@@ -33,12 +33,14 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import sys
 import collections
 import random
 import numpy as np
 import tensorflow as tf
 import sonnet as snt
 from rlcard.utils.utils import *
+sys.setrecursionlimit(200000)
 
 AdvantageMemory = collections.namedtuple(
     "AdvantageMemory", "info_state iteration advantage action")
@@ -295,6 +297,8 @@ class DeepCFR():
         if self._env.is_over():
             # Terminal state get returns.
             payoff = self._env.get_payoffs()
+            if type(payoff) == dict:
+                payoff = payoff[player]
             self._env.step_back()
             return payoff
 
@@ -309,14 +313,18 @@ class DeepCFR():
             self._env.step_back()
 
             for action in actions:
-                sampled_regret[action] = expected_payoff[action][0]
+                sampled_regret[action] = expected_payoff[action]
                 for a_ in actions:
-                    sampled_regret[action] -= strategy[a_] * expected_payoff[a_][0]
-                regret = np.array([sampled_regret[act] for act in actions])
+                    sampled_regret[action] -= strategy[a_] * expected_payoff[a_]
+                regret = np.full(self._num_actions, 100, dtype=np.float64)
+                for act in actions:
+                    regret[act] = sampled_regret[act]
+                #regret = np.array([sampled_regret[act] for act in actions])
+
                 self._advantage_memories[player].add(AdvantageMemory(state, self._iteration, regret, action))
             if self._num_players == 1:
                 self._strategy_memories.add(StrategyMemory(state, self._iteration, strategy))
-            return max(expected_payoff.values())
+            return max(list(expected_payoff.values()))
         else:
             other_player = current_player
             _, strategy = self._sample_action_from_advantage(state, other_player)
@@ -405,11 +413,9 @@ class DeepCFR():
         advantages = []
         iterations = []
         for s in samples:
-            #print(s.info_state, s.action, s.advantage)
             info_states.append(s.info_state)
             advantages.append(s.advantage)
             iterations.append([s.iteration])
-
         if info_states == []:
             return None
 

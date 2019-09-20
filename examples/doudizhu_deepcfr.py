@@ -3,7 +3,7 @@ A toy example of learning a Deep-Q Agent on Blackjack
 """
 
 import rlcard
-from rlcard.agents.deep_cfr import DeepCFR
+from rlcard.agents.deep_cfr2 import DeepCFR
 from rlcard.utils.utils import *
 import tensorflow as tf
 import numpy as np
@@ -15,8 +15,8 @@ evaluate_num = 1000
 num_iteration = 1000
 i = 0
 rewards = 0
-train_env = rlcard.make('doudizhu') 
-test_env = rlcard.make('doudizhu') 
+train_env = rlcard.make('limit-holdem') 
+test_env = rlcard.make('limit-holdem') 
 with tf.Session() as sess:
     deep_cfr = DeepCFR(sess, #
                 train_env, 
