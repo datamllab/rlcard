@@ -43,14 +43,14 @@ class DoudizhuEnv(Env):
 
         legal_action_id = []
         legal_actions = state['actions']
-        #print(state)
-        #for action in legal_actions:
-        #    for abstract in SPECIFIC_MAP[action]:
-        #        action_id = ACTION_SPACE[abstract]
-        #        if action_id not in legal_action_id:
-        #            legal_action_id.append(action_id)
+        if legal_actions is not None:
+            for action in legal_actions:
+                for abstract in SPECIFIC_MAP[action]:
+                    action_id = ACTION_SPACE[abstract]
+                    if action_id not in legal_action_id:
+                        legal_action_id.append(action_id)
 
-        extrated_state = {'obs': obs, 'legal_actions': legal_actions}
+        extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
         return extrated_state
 
     def run(self, is_training=False, seed=None):
