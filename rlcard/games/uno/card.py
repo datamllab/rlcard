@@ -11,6 +11,7 @@ class UnoCard(object):
         self.type = card_type
         self.color = color
         self.trait = trait
+        self.str = self.get_str()
 
     def get_str(self):
         return self.color + '-' + self.trait

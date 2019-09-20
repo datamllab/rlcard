@@ -10,6 +10,7 @@ class UnoGame(object):
 
     def __init__(self):
         self.num_players = 4
+        self.payoffs = [0, 0, 0, 0]
 
     def init_game(self):
         # Initialize a dealer that can deal cards
@@ -23,7 +24,7 @@ class UnoGame(object):
             # print(player.get_player_id(), end=':')
             self.dealer.deal_cards(player, 7)
             # for card in player.hand:
-            # print(card.get_str(), end=',')
+            # print(card.str, end=',')
 
         # Initialize a Round
         self.round = Round(self.dealer, self.num_players)
@@ -32,7 +33,7 @@ class UnoGame(object):
         top_card = self.round.flip_top_card()
 
         # print test
-        #print('top: ', top_card.get_str())
+        #print('top: ', top_card.str)
         self.round.perform_top_card(self.players, top_card)
         #for player in self.players:
         #    player.print_hand()
@@ -68,6 +69,12 @@ class UnoGame(object):
         state = self.round.get_state(self.players, player_id)
         return state
 
+    def get_payoffs(self):
+        winner = self.round.winner
+        if winner is not None:
+            self.payoffs[winner] = 1
+        return self.payoffs
+
     def get_legal_actions(self):
 
         return self.round.get_legal_actions(self.players, self.round.current_player)
@@ -77,7 +84,7 @@ class UnoGame(object):
 
     @staticmethod
     def get_action_num():
-        return 54
+        return 60
 
     def get_player_id(self):
         return self.round.current_player
@@ -91,10 +98,10 @@ if __name__ == '__main__':
     random.seed(0)
     start = time.time()
     game = UnoGame()
-    for _ in range(100):
-        #print('*****init game*****')
+    for _ in range(1):
+        print('*****init game*****')
         state, button = game.init_game()
-        #print(button, state)
+        print(button, state)
         i = 0
         while not game.is_over():
             i += 1
@@ -116,6 +123,6 @@ if __name__ == '__main__':
             #print('action', action)
             #print()
             state, button = game.step(action)
-            #print(button, state)
+            print(button, state)
     end = time.time()
     print(end-start)

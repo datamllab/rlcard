@@ -29,5 +29,5 @@ class UnoDealer(object):
 if __name__ == '__main__':
     dealer = UnoDealer()
     for card in dealer.deck:
-        print(card.get_str())
+        print(card.str)
     print(len(dealer.deck))

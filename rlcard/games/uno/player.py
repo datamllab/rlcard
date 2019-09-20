@@ -19,5 +19,5 @@ class UnoPlayer(object):
 
     def print_hand(self):
         for card in self.hand:
-            print(card.get_str(), end=' ')
+            print(card.str, end=' ')
         print()

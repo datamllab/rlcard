@@ -14,6 +14,7 @@ class UnoRound(object):
         self.direction = 1
         self.played_cards = []
         self.is_over = False
+        self.winner = None
 
     def flip_top_card(self):
         top = self.dealer.flip_top_card()
@@ -58,6 +59,7 @@ class UnoRound(object):
         card = player.hand.pop(remove_index)
         if not player.hand:
             self.is_over = True
+            self.winner = self.current_player
         self.played_cards.append(card)
         #print('proceed card', card.type, card.color, card.trait)
 
@@ -129,11 +131,11 @@ class UnoRound(object):
                 if card.type == 'wild':
                     card.color = random.choice(UnoCard.info['color'])
                     if card.trait == 'wild_draw_4':
-                        wild_4_actions.append(card.get_str())
+                        wild_4_actions.append(card.str)
                     else:
-                        legal_actions.append(card.get_str())
+                        legal_actions.append(card.str)
                 elif card.color == target.color:
-                    legal_actions.append(card.get_str())
+                    legal_actions.append(card.str)
 
         # target is aciton card or number card
         else:
@@ -142,12 +144,12 @@ class UnoRound(object):
                     card.color = random.choice(UnoCard.info['color'])
                     if card.trait == 'wild_draw_4':
                         #print('target is not wild')
-                        wild_4_actions.append(card.get_str())
+                        wild_4_actions.append(card.str)
                         #print('wild actions', wild_4_actions)
                     else:
-                        legal_actions.append(card.get_str())
+                        legal_actions.append(card.str)
                 elif card.color == target.color or card.trait == target.trait:
-                    legal_actions.append(card.get_str())
+                    legal_actions.append(card.str)
         if not legal_actions:
             return wild_4_actions
         return legal_actions
@@ -156,7 +158,7 @@ class UnoRound(object):
         state = {}
         player = players[player_id]
         state['hand'] = cards2list(player.hand)
-        state['target'] = self.target.get_str()
+        state['target'] = self.target.str
         state['played_cards'] = cards2list(self.played_cards)
         others_hand = []
         for player in players:
