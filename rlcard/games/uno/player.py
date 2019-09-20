@@ -16,8 +16,3 @@ class MahjongPlayer(object):
         '''
 
         return self.player_id
-
-    def print_hand(self):
-        for card in self.hand:
-            print(card.get_str(), end=' ')
-        print()
