@@ -74,14 +74,8 @@ def encode_hand(encoded_hand, hand):
     return encoded_hand
 
 def encode_target(encoded_target, target):
-    # encoded_target = np.zeros((4, 15), dtype=int)
     target_info = target.split('-')
     color = COLOR_MAP[target_info[0]]
     trait = TRAIT_MAP[target_info[1]]
     encoded_target[color][trait] = 1
     return encoded_target
-
-if __name__ == '__main__':
-    hand = ['g-reverse', 'y-8', 'g-wild_draw_4', 'r-3', 'g-3', 'b-6']
-    for target in hand:
-        print(encode_target(target))

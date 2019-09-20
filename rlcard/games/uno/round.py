@@ -43,8 +43,6 @@ class UnoRound(object):
         color = card_info[0]
         trait = card_info[1]
 
-        #print('proceed round', color, trait)
-
         # remove correspongding card
         remove_index = None
         if 'wild' in trait:
@@ -61,7 +59,6 @@ class UnoRound(object):
             self.is_over = True
             self.winner = self.current_player
         self.played_cards.append(card)
-        #print('proceed card', card.type, card.color, card.trait)
 
         # perform the number action
         if card.type == 'number':
@@ -70,14 +67,11 @@ class UnoRound(object):
 
         # perform non-number action
         else:
-            #print('perfrom non number')
             self._preform_non_number_action(players, card)
 
     def _perform_draw_action(self, players):
         if not self.dealer.deck:
-            self.dealer.deck = self.played_cards
-            self.dealer.shuffle()
-            self.played_cards = []
+            self.replace_deck()
         card = self.dealer.deck.pop()
         if card.type == 'wild':
             card.color = random.choice(UnoCard.info['color'])
@@ -104,28 +98,24 @@ class UnoRound(object):
             self.direction = -1 * direction
         elif card.trait == 'skip':
             current = (current + direction) % num_players
-            #print('skip current', current)
         elif card.trait == 'draw_2':
+            if len(self.dealer.deck) < 2:
+                self.replace_deck()
             self.dealer.deal_cards(players[(current + direction) % num_players], 2)
             current = (current + direction) % num_players
-            #print('draw_2 current', current)
         elif card.trait == 'wild_draw_4':
+            if len(self.dealer.deck) < 4:
+                self.replace_deck()
             self.dealer.deal_cards(players[(current + direction) % num_players], 4)
             current = (current + direction) % num_players
-            #print('wild_draw_4 current', current)
         self.current_player = (current + self.direction) % num_players
-        #print('non number current player', self.current_player)
         self.target = card
-        #print('non number card', card.type, card.color, card.trait)
-        #print('non number target', self.target.type, self.target.color, self.target.trait)
 
     def get_legal_actions(self, players, player_id):
         legal_actions = []
         wild_4_actions = []
         hand = players[player_id].hand
         target = self.target
-        #print('legal action target: ', target.type, target.color, target.trait)
-        # target is wild card
         if target.type == 'wild':
             for card in hand:
                 if card.type == 'wild':
@@ -143,9 +133,7 @@ class UnoRound(object):
                 if card.type == 'wild':
                     card.color = random.choice(UnoCard.info['color'])
                     if card.trait == 'wild_draw_4':
-                        #print('target is not wild')
                         wild_4_actions.append(card.str)
-                        #print('wild actions', wild_4_actions)
                     else:
                         legal_actions.append(card.str)
                 elif card.color == target.color or card.trait == target.trait:
@@ -166,3 +154,8 @@ class UnoRound(object):
                 others_hand.extend(player.hand)
         state['others_hand'] = cards2list(others_hand)
         return state
+
+    def replace_deck(self):
+        self.dealer.deck = self.played_cards
+        self.dealer.shuffle()
+        self.played_cards = []

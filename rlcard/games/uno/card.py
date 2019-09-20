@@ -15,15 +15,3 @@ class UnoCard(object):
 
     def get_str(self):
         return self.color + '-' + self.trait
-
-# for test
-if __name__ == '__main__':
-    a = UnoCard('number', 'r', '5')
-    b = UnoCard('number', 'r', '6')
-    c = UnoCard('number', 'r', '7')
-    cards = [a, b, c]
-    for card in cards:
-        card.color = 'g'
-
-    for card in cards:
-        print(card.get_str())

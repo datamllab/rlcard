@@ -21,24 +21,15 @@ class UnoGame(object):
 
         # Deal 7 cards to each player to prepare for the game
         for player in self.players:
-            # print(player.get_player_id(), end=':')
             self.dealer.deal_cards(player, 7)
-            # for card in player.hand:
-            # print(card.str, end=',')
 
         # Initialize a Round
         self.round = Round(self.dealer, self.num_players)
 
         # flip and perfrom top card
         top_card = self.round.flip_top_card()
-
-        # print test
-        #print('top: ', top_card.str)
         self.round.perform_top_card(self.players, top_card)
-        #for player in self.players:
-        #    player.print_hand()
-        #print(len(self.dealer.deck))
-        # ##
+
         # Save the hisory for stepping back to the last state.
         self.history = []
 
@@ -57,7 +48,6 @@ class UnoGame(object):
         player_id = self.round.current_player
         state = self.get_state(player_id)
         return state, player_id
-        # print(self.round.current_player, end=': ')
 
     def step_back(self):
         if not self.history:
@@ -84,7 +74,7 @@ class UnoGame(object):
 
     @staticmethod
     def get_action_num():
-        return 60
+        return 61
 
     def get_player_id(self):
         return self.round.current_player
