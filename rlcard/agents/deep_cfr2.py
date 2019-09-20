@@ -247,6 +247,7 @@ class DeepCFR():
         Returns:
             action (int): an action id
         '''
+        state = state['obs']
         action_prob = self.action_probabilities(state)
         action_prob /= action_prob.sum()
         action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
@@ -261,7 +262,7 @@ class DeepCFR():
             policy loss (float): policy loss
         '''
         init_state, _ = self._env.init_game()
-        self._root_node = init_state.flatten()
+        self._root_node = init_state['obs'].flatten()
         for p in range(self._num_players):
             for _ in range(self._num_traversals):
                 self._traverse_game_tree(self._root_node, p)
@@ -308,7 +309,7 @@ class DeepCFR():
             _, strategy = self._sample_action_from_advantage(state, player)
             for action in actions:
                 child_state, _ = self._env.step(action)
-                child_state = child_state.flatten()
+                child_state = child_state['obs'].flatten()
                 expected_payoff[action] = self._traverse_game_tree(child_state, player)
             self._env.step_back()
 
@@ -333,7 +334,7 @@ class DeepCFR():
             probs /= probs.sum()
             action = np.random.choice(range(self._num_actions), p=probs)
             child_state, _ = self._env.step(action)
-            child_state = child_state.flatten()
+            child_state = child_state['obs'].flatten()
             self._strategy_memories.add(
                 StrategyMemory(
                     state,
@@ -351,7 +352,7 @@ class DeepCFR():
             1. (list) Advantage values for info state actions indexed by action.
             2. (list) Matched regrets, prob for actions indexed by action.
         '''
-        info_state = state.flatten()
+        info_state = state['obs'].flatten()
         legal_actions = self._env.get_legal_actions()
         advantages = self._session.run(
             self._advantage_outputs[player],
@@ -367,7 +368,7 @@ class DeepCFR():
         return advantages, matched_regrets
 
     def action_advantage(self, state, player):
-        state = state.flatten()
+        state = state['obs'].flatten()
         advantages = self._session.run(
             self._advantage_outputs[player],
             feed_dict={self._info_state_ph: np.expand_dims(state, axis=0)})[0]

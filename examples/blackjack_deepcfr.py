@@ -3,7 +3,7 @@ A toy example of learning a Deep-Q Agent on Blackjack
 """
 
 import rlcard
-from rlcard.agents.deep_cfr import DeepCFR
+from rlcard.agents.deep_cfr2 import DeepCFR
 from rlcard.utils.utils import *
 import tensorflow as tf
 

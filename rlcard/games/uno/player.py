@@ -1,5 +1,5 @@
 
-class MahjongPlayer(object):
+class UnoPlayer(object):
 
     def __init__(self, player_id):
         ''' Initilize a player.

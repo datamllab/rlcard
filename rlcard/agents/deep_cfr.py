@@ -155,7 +155,7 @@ class DeepCFR():
         # get initial state and players
         init_state, _ = self._env.init_game()
 
-        self._embedding_size = init_state.shape
+        self._embedding_size = init_state['obs'].shape
         self._num_traversals = num_traversals
         self._num_actions = self._env.action_num
         self._iteration = 1
@@ -259,7 +259,7 @@ class DeepCFR():
             policy loss (float): policy loss
         '''
         init_state, _ = self._env.init_game()
-        self._root_node = init_state.flatten()
+        self._root_node = init_state['obs'].flatten()
         for p in range(self._num_players):
             for _ in range(self._num_traversals):
                 self._traverse_game_tree(self._root_node, p)
@@ -304,7 +304,7 @@ class DeepCFR():
             _, strategy = self._sample_action_from_advantage(state, player)
             for action in actions:
                 child_state, _ = self._env.step(action)
-                child_state = child_state.flatten()
+                child_state = child_state['obs'].flatten()
                 expected_payoff[action] = self._traverse_game_tree(child_state, player)
             self._env.step_back()
 
@@ -325,7 +325,7 @@ class DeepCFR():
             probs /= probs.sum()
             action = np.random.choice(range(self._num_actions), p=probs)
             child_state, _ = self._env.step(action)
-            child_state = child_state.flatten()
+            child_state = child_state['obs'].flatten()
             self._strategy_memories.add(
                 StrategyMemory(
                     state,
@@ -375,7 +375,7 @@ class DeepCFR():
     def action_probabilities(self, state):
         '''Returns action probabilites dict for a single batch.
         '''
-        info_state_vector = state.flatten()
+        info_state_vector = state['obs'].flatten()
 
         if len(info_state_vector.shape) == 1:
             info_state_vector = np.expand_dims(info_state_vector, axis=0)
