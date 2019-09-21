@@ -275,7 +275,9 @@ class DeepCFR():
         # Train policy network.
         for _ in range(self._num_step):
             policy_loss = self._learn_strategy_network()
-        avg_adv_loss = sum([self.advantage_losses[p][-1] for p in self.advantage_losses.keys()]) / self._num_players / self._num_step
+
+        adv_loss = [self.advantage_losses[p][-1] for p in self.advantage_losses.keys() if self.advantage_losses[p][-1] != None]
+        avg_adv_loss = sum(adv_loss) / len(adv_loss)
         return self._policy_network, avg_adv_loss, policy_loss
 
     def _traverse_game_tree(self, state, player, count = 0):
