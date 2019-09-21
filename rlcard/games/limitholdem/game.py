@@ -1,5 +1,6 @@
 import random
 from copy import deepcopy
+import numpy as np
 
 from rlcard.games.limitholdem.dealer import LimitholdemDealer as Dealer
 from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
@@ -176,7 +177,8 @@ class LimitholdemGame(object):
         '''
 
         chips = [self.players[i].in_chips for i in range(self.num_players)]
-        state = self.players[player].get_state(self.public_cards, chips)
+        legal_actions = self.get_legal_actions()
+        state = self.players[player].get_state(self.public_cards, chips, legal_actions)
 
         return state
 
@@ -206,7 +208,8 @@ class LimitholdemGame(object):
         '''
 
         hands = [p.hand + self.public_cards if p.status=='alive' else None for p in self.players]
-        payoffs = self.judger.judge_game(self.players, hands)
+        chips_payoffs = self.judger.judge_game(self.players, hands)
+        payoffs = np.array(chips_payoffs) / (self.big_blind)
         return payoffs
 
     def get_legal_actions(self):
