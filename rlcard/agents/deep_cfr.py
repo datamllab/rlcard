@@ -33,12 +33,14 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import sys
 import collections
 import random
 import numpy as np
 import tensorflow as tf
 import sonnet as snt
 from rlcard.utils.utils import *
+sys.setrecursionlimit(10000000)
 
 AdvantageMemory = collections.namedtuple(
     "AdvantageMemory", "info_state iteration advantage action")
@@ -245,6 +247,7 @@ class DeepCFR():
         Returns:
             action (int): an action id
         '''
+        state = state['obs']
         action_prob = self.action_probabilities(state)
         action_prob /= action_prob.sum()
         action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
@@ -259,7 +262,7 @@ class DeepCFR():
             policy loss (float): policy loss
         '''
         init_state, _ = self._env.init_game()
-        self._root_node = init_state['obs'].flatten()
+        self._root_node = init_state
         for p in range(self._num_players):
             for _ in range(self._num_traversals):
                 self._traverse_game_tree(self._root_node, p)
@@ -290,11 +293,13 @@ class DeepCFR():
         '''
         expected_payoff = collections.defaultdict(float)
         current_player = self._env.get_player_id()
-        actions = self._env.get_legal_actions()
+        actions = state['legal_actions'] 
 
         if self._env.is_over():
             # Terminal state get returns.
             payoff = self._env.get_payoffs()
+            if type(payoff) == dict:
+                payoff = payoff[player]
             self._env.step_back()
             return payoff
 
@@ -304,19 +309,24 @@ class DeepCFR():
             _, strategy = self._sample_action_from_advantage(state, player)
             for action in actions:
                 child_state, _ = self._env.step(action)
-                child_state = child_state['obs'].flatten()
                 expected_payoff[action] = self._traverse_game_tree(child_state, player)
             self._env.step_back()
 
             for action in actions:
-                sampled_regret[action] = expected_payoff[action][0]
+                #print(action, expected_payoff, sampled_regret)
+                sampled_regret[action] = expected_payoff[action][player]
                 for a_ in actions:
-                    sampled_regret[action] -= strategy[a_] * expected_payoff[a_][0]
-                regret = np.array([sampled_regret[act] for act in actions])
-                self._advantage_memories[player].add(AdvantageMemory(state, self._iteration, regret, action))
+                    sampled_regret[action] -= strategy[a_] * expected_payoff[a_][player]
+                regret = np.full(self._num_actions, 100, dtype=np.float64)
+                for act in actions:
+                    regret[act] = sampled_regret[act]
+                #regret = np.array([sampled_regret[act] for act in actions])
+
+                self._advantage_memories[player].add(AdvantageMemory(state['obs'].flatten(), self._iteration, regret, action))
             if self._num_players == 1:
-                self._strategy_memories.add(StrategyMemory(state, self._iteration, strategy))
-            return max(expected_payoff.values())
+                self._strategy_memories.add(StrategyMemory(state['obs'].flatten(), self._iteration, strategy))
+            players_payoff = [max(expected_payoff[act_]) for act_ in expected_payoff.keys()]
+            return players_payoff
         else:
             other_player = current_player
             _, strategy = self._sample_action_from_advantage(state, other_player)
@@ -325,10 +335,9 @@ class DeepCFR():
             probs /= probs.sum()
             action = np.random.choice(range(self._num_actions), p=probs)
             child_state, _ = self._env.step(action)
-            child_state = child_state['obs'].flatten()
             self._strategy_memories.add(
                 StrategyMemory(
-                    state,
+                    state['obs'].flatten(),
                     self._iteration, strategy))
             return self._traverse_game_tree(child_state, player)
 
@@ -343,8 +352,8 @@ class DeepCFR():
             1. (list) Advantage values for info state actions indexed by action.
             2. (list) Matched regrets, prob for actions indexed by action.
         '''
-        info_state = state.flatten()
-        legal_actions = self._env.get_legal_actions()
+        info_state = state['obs'].flatten()
+        legal_actions = state['legal_actions'] 
         advantages = self._session.run(
             self._advantage_outputs[player],
             feed_dict={self._info_state_ph: np.expand_dims(info_state, axis=0)})[0]
@@ -359,7 +368,7 @@ class DeepCFR():
         return advantages, matched_regrets
 
     def action_advantage(self, state, player):
-        state = state.flatten()
+        state = state['obs'].flatten()
         advantages = self._session.run(
             self._advantage_outputs[player],
             feed_dict={self._info_state_ph: np.expand_dims(state, axis=0)})[0]
@@ -375,7 +384,7 @@ class DeepCFR():
     def action_probabilities(self, state):
         '''Returns action probabilites dict for a single batch.
         '''
-        info_state_vector = state['obs'].flatten()
+        info_state_vector = state
 
         if len(info_state_vector.shape) == 1:
             info_state_vector = np.expand_dims(info_state_vector, axis=0)
@@ -405,11 +414,9 @@ class DeepCFR():
         advantages = []
         iterations = []
         for s in samples:
-            #print(s.info_state, s.action, s.advantage)
             info_states.append(s.info_state)
             advantages.append(s.advantage)
             iterations.append([s.iteration])
-
         if info_states == []:
             return None
 

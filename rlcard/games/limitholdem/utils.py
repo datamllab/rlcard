@@ -309,7 +309,7 @@ def compare_hands(hand0, hand1):
     hand0.evaluateHand()
     hand1.evaluateHand()
     var = hand1.get_hand_five_cards()
-    print(var)
+    #print(var)
     # compare hands
     hand0_category = hand0.category
     hand1_category = hand1.category

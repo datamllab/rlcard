@@ -3,7 +3,7 @@ A toy example of learning a Deep-Q Agent on Blackjack
 """
 
 import rlcard
-from rlcard.agents.deep_cfr2 import DeepCFR
+from rlcard.agents.deep_cfr import DeepCFR
 from rlcard.utils.utils import *
 import tensorflow as tf
 
@@ -18,14 +18,14 @@ train_env = rlcard.make('blackjack')
 test_env = rlcard.make('blackjack')
 with tf.Session() as sess:
     deep_cfr = DeepCFR(sess,
-                train_env,
-                policy_network_layers=(32, 32),
+                train_env, 
+                policy_network_layers=(32,32),
                 advantage_network_layers=(32,32),
                 num_traversals=40,
-                num_step=1,
+                num_step=40,
                 learning_rate=1e-4,
-                batch_size_advantage=16,
-                batch_size_strategy=16,
+                batch_size_advantage=32,
+                batch_size_strategy=32,
                 memory_capacity=1e7)
 
     for i in range(num_iteration):
