@@ -24,10 +24,3 @@ class UnoDealer(object):
             self.shuffle()
             top_card = self.deck.pop()
         return top_card
-
-# For test
-if __name__ == '__main__':
-    dealer = UnoDealer()
-    for card in dealer.deck:
-        print(card.get_str())
-    print(len(dealer.deck))

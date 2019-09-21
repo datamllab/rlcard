@@ -30,17 +30,28 @@ class DoudizhuEnv(Env):
                              the union of all played cards
         '''
 
-        encoded_state = np.zeros((6, 5, 15), dtype=int)
+        obs = np.zeros((6, 5, 15), dtype=int)
         for index in range(6):
-            encoded_state[index][0] = np.ones(15, dtype=int)
-        encode_cards(encoded_state[0], state['current_hand'])
-        encode_cards(encoded_state[1], state['others_hand'])
+            obs[index][0] = np.ones(15, dtype=int)
+        encode_cards(obs[0], state['current_hand'])
+        encode_cards(obs[1], state['others_hand'])
         for i, action in enumerate(state['trace'][-3:]):
             if action[1] != 'pass':
-                encode_cards(encoded_state[4-i], action[1])
+                encode_cards(obs[4-i], action[1])
         if state['played_cards'] is not None:
-            encode_cards(encoded_state[5], state['played_cards'])
-        return encoded_state
+            encode_cards(obs[5], state['played_cards'])
+
+        legal_action_id = []
+        legal_actions = state['actions']
+        if legal_actions is not None:
+            for action in legal_actions:
+                for abstract in SPECIFIC_MAP[action]:
+                    action_id = ACTION_SPACE[abstract]
+                    if action_id not in legal_action_id:
+                        legal_action_id.append(action_id)
+
+        extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
+        return extrated_state
 
     def run(self, is_training=False, seed=None):
         ''' Run a complete game, either for evaluation or training RL agent.
@@ -140,7 +151,6 @@ class DoudizhuEnv(Env):
         Returns:
             legal_actions (list): a list of legal actions' id
         '''
-
         legal_action_id = []
         legal_actions = self.game.state['actions']
         for action in legal_actions:
