@@ -357,11 +357,11 @@ def compare_hands(hand0, hand1):
                     seen.append(_)
                 else:
                     duplicated1.append(_) 
-            if RANKS.index(duplicated0[0][1]) > RANKS.index(duplicated1[0][1]):
+            if RANKS.index(duplicated0[0][0]) > RANKS.index(duplicated1[0][0]):
                 return [1, 0]
-            elif RANKS.index(duplicated0[0][1]) < RANKS.index(duplicated1[0][1]):
+            elif RANKS.index(duplicated0[0][0]) < RANKS.index(duplicated1[0][0]):
                 return [0, 1]
-            elif RANKS.index(duplicated0[0][1]) == RANKS.index(duplicated1[0][1]):
+            elif RANKS.index(duplicated0[0][0]) == RANKS.index(duplicated1[0][0]):
                 return [1, 1]
 
         if hand0_category == 7:
