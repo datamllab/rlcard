@@ -151,7 +151,6 @@ class DoudizhuEnv(Env):
         Returns:
             legal_actions (list): a list of legal actions' id
         '''
-
         legal_action_id = []
         legal_actions = self.game.state['actions']
         for action in legal_actions:

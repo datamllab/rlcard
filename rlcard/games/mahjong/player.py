@@ -10,6 +10,7 @@ class UnoPlayer(object):
         '''
         self.player_id = player_id
         self.hand = []
+        self.pile = []
 
     def get_player_id(self):
         ''' Return the id of the player
@@ -21,3 +22,4 @@ class UnoPlayer(object):
         for card in self.hand:
             print(card.get_str(), end=' ')
         print()
+
