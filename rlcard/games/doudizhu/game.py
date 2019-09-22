@@ -48,7 +48,6 @@ class DoudizhuGame(object):
             dict: first state in one game
             int: current player's id
         '''
-
         # initialize public variables
         self.current_game += 1
         self.game_result = [0, 0, 0]
@@ -111,7 +110,6 @@ class DoudizhuGame(object):
         # perform action
         greater_player = self.rounder.proceed_round(player, action)
         next_player_id = get_downstream_player_id(player, self.players)
-
         # update next_state
         self.state['self'] = next_player_id
         next_player = self.players[next_player_id]
@@ -135,6 +133,7 @@ class DoudizhuGame(object):
         self.rounder.round_last = records['round_last']
         self.played_cards = records['played_cards']
         self.players[self.current_player] = records['player']
+        self.state = records['state']
         if records['greater_id'] is None:
             self.rounder.greater_player = None
         else:
@@ -151,6 +150,8 @@ class DoudizhuGame(object):
         Returns:
             dict: corresponding player's state
         '''
+        if player_id != self.current_player:
+            raise ValueError('can not get the state of player other than current player')
 
         player = self.players[player_id]
         if self.current_player is not None:  # when get first state
@@ -237,7 +238,8 @@ class DoudizhuGame(object):
         records = {'round_last': self.rounder.round_last,
                    'played_cards': self.played_cards.copy(),
                    'plable_cards': self.judger.playable_cards[self.current_player].copy(),
-                   'player': copy.deepcopy(player)}
+                   'player': copy.deepcopy(player),
+                   'state': copy.deepcopy(self.state)}
         if self.rounder.greater_player is None:
             records['greater_id'] = None
         else:
@@ -248,8 +250,7 @@ class DoudizhuGame(object):
         player_up = self.players[get_upstream_player_id(player, self.players)]
         player_down = self.players[get_downstream_player_id(
             player, self.players)]
-        others_hand = (player_up.current_hand +
-                        player_down.current_hand)
+        others_hand = (player_up.current_hand + player_down.current_hand)
         others_hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
         return cards2str(others_hand)
 
