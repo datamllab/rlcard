@@ -166,7 +166,7 @@ class DQNAgent(object):
         q_values = self.q_estimator.predict(self.sess, np.expand_dims(self.normalizer.normalize(state), 0))[0]
         best_action = np.argmax(q_values)
         A[best_action] += (1.0 - epsilon)
-        return A 
+        return A
 
     def train(self):
         ''' Train the network

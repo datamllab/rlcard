@@ -51,7 +51,7 @@ with tf.Session() as sess:
         
         # First sample a policy for the episode
         agent.sample_episode_policy()
-        
+
         # Generate data from the environment
         trajectories, _ = env.run(is_training=True)
 
@@ -61,7 +61,7 @@ with tf.Session() as sess:
             step_counter += 1
 
             # Train the agent
-            train_count = step_counter - (memory_init_size + norm_step) 
+            train_count = step_counter - (memory_init_size + norm_step)
             if train_count > 0 and train_count % 128 == 0:
                 for _ in range(2):
                     rl_loss = agent.train_rl()

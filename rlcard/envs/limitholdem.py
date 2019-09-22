@@ -17,7 +17,7 @@ class LimitholdemEnv(Env):
 
         super().__init__(Game())
         self.actions = ['call', 'raise', 'fold', 'check']
-        
+
         with open(os.path.join(rlcard.__path__[0], 'games/limitholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
 

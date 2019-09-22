@@ -19,7 +19,6 @@ See the paper https://arxiv.org/abs/1603.01121 for more details.
 """
 
 import collections
-import contextlib
 import random
 import enum
 import numpy as np
@@ -178,17 +177,12 @@ class NFSPAgent(object):
                 self._avg_policy_probs,
                 feed_dict={self._info_state_ph: info_state})[0]
 
-        #print('Action Probs: ', action_probs)
-
         return action_probs
 
     def _remove_illegal(self,action_probs, legal_actions):
-        #print('Probs: ', action_probs)
-        #print('Legal: ', legal_actions)
         probs = np.zeros(self._action_num)
         probs[legal_actions] = action_probs[legal_actions]
         probs /= sum(probs)
-        #print('After Probs: ', probs)
         return probs
 
     @property
@@ -220,7 +214,6 @@ class NFSPAgent(object):
         '''
 
         return self._rl_agent.train()
-        
 
     def train_sl(self):
         ''' Compute the loss on sampled transitions and perform a avg-network update.
