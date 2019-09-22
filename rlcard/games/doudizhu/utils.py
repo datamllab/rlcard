@@ -257,4 +257,11 @@ def get_gt_cards(player, greater_player):
                     if cards not in gt_cards and contains_cards(current_hand, cards):
                     # if self.contains_cards(current_hand, cards):
                         gt_cards.append(cards)
-    return gt_cards       
+    return gt_cards
+
+
+# Test json order
+if __name__ == '__main__':
+    for action, index in ACTION_SPACE.items():
+        if action != ACTION_LIST[index]:
+            print('order error')
