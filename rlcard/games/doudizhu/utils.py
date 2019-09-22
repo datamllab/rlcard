@@ -20,10 +20,6 @@ with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/action_space.json'), 
     ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
     ACTION_LIST = list(ACTION_SPACE.keys())
 
-# a map of the index of its corresponding action
-with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/index_action.json'), 'r') as file:
-    INDEX_ACTION = json.load(file, object_pairs_hook=OrderedDict)
-
 # a map of card to its type
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/card_type.json'), 'r') as file:
     CARD_TYPE = json.load(file, object_pairs_hook=OrderedDict)
