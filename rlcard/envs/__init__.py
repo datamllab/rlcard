@@ -19,6 +19,11 @@ register(
 )
 
 register(
+    env_id='unlimit-holdem',
+    entry_point='rlcard.envs.unlimitholdem:UnlimitholdemEnv',
+)
+
+register(
     env_id='uno',
     entry_point='rlcard.envs.uno:UnoEnv',
 )

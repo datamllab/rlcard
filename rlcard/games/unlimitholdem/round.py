@@ -11,17 +11,19 @@ class UnlimitholdemRound(LimitholdemRound):
     ''' Round can call other Classes' functions to keep the game running
     '''
 
-    def __init__(self, num_players):
+    def __init__(self, num_players, init_raise_amount):
         ''' Initilize the round class
 
         Args:
-            raise_amount (int): the raise amount for each raise
             allowed_raise_num (int): The number of allowed raise num
             num_players (int): The number of players
+            init_raise_amount (int): The min raise amount when every round starts
         '''
 
-        self.button = None
+        self.game_pointer = None
         self.num_players = num_players
+        self.init_raise_amount = init_raise_amount
+        self.current_raise_amount = self.init_raise_amount
 
         # Count the number without raise
         # If every player agree to not raise, the round is overr
@@ -30,7 +32,7 @@ class UnlimitholdemRound(LimitholdemRound):
         # Raised amount for each player
         self.raised = [0 for _ in range(self.num_players)]
 
-    def start_new_round(self, button, raised=None):
+    def start_new_round(self, game_pointer, raised=None):
         ''' Start a new bidding round
 
         Args:
@@ -39,8 +41,9 @@ class UnlimitholdemRound(LimitholdemRound):
         Note: For the first round of the game, we need to setup the big/small blind
         '''
 
-        self.button = button
+        self.game_pointer = game_pointer
         self.not_raise_num = 0
+        self.current_raise_amount = self.init_raise_amount
         if raised:
             self.raised = raised
         else:
@@ -54,38 +57,41 @@ class UnlimitholdemRound(LimitholdemRound):
             action (str/int): An legal action taken by the player
 
         Returns:
-            (int): The button that indicates the next player
+            (int): The game_pointer that indicates the next player
         '''
 
         # if action not in self.get_legal_actions():
         #     raise Exception('{} is not legal action. Legal actions: {}', action, self.get_legal_actions())
 
         if action == 'call':
-            diff = max(self.raised) - self.raised[self.button]
-            self.raised[self.button] = max(self.raised)
-            players[self.button].in_chips += diff
+            diff = max(self.raised) - self.raised[self.game_pointer]
+            self.raised[self.game_pointer] = max(self.raised)
+            players[self.game_pointer].in_chips += diff
             self.not_raise_num += 1
 
         elif isinstance(action, int):
-            # diff = max(self.raised) - self.raised[self.button] + action
-            self.raised[self.button] = max(self.raised) + action
-            players[self.button].in_chips += action
+            # diff = max(self.raised) - self.raised[self.game_pointer] + action
+            self.current_raise_amount = action - (max(self.raised) - self.raised[self.game_pointer])
+            self.raised[self.game_pointer] += action
+            players[self.game_pointer].in_chips += action
+            
+            # self.raised[self.game_pointer] = players[self.game_pointer].
             self.not_raise_num = 1
 
         elif action == 'fold':
-            players[self.button].status = 'folded'
+            players[self.game_pointer].status = 'folded'
             self.player_folded = True
 
         elif action == 'check':
             self.not_raise_num += 1
 
-        self.button = (self.button + 1) % self.num_players
+        self.game_pointer = (self.game_pointer + 1) % self.num_players
 
         # Skip the folded players
-        while players[self.button].status == 'folded':
-             self.button = (self.button + 1) % self.num_players
+        while players[self.game_pointer].status == 'folded':
+             self.game_pointer = (self.game_pointer + 1) % self.num_players
 
-        return self.button
+        return self.game_pointer
 
     def get_legal_actions(self, players):
         ''' Obtain the legal actions for the curent player
@@ -100,22 +106,29 @@ class UnlimitholdemRound(LimitholdemRound):
         full_actions = ['call', 'fold', 'check']
 
         # If the current chips are less than that of the highest one in the round, we can not check
-        if self.raised[self.button] < max(self.raised):
+        if self.raised[self.game_pointer] < max(self.raised):
             full_actions.remove('check')
 
         # If the current player has put in the chips that are more than others, we can not call
-        if self.raised[self.button] == max(self.raised):
+        if self.raised[self.game_pointer] == max(self.raised):
             full_actions.remove('call')
 
-        # Append available raise amount to the action list
-        last_raised_amount = max(self.raised) - self.raised[self.button]
-        min_raise_amount = 2 * last_raised_amount
+        # If the current player has no more chips after call, we cannot raise
+        diff = max(self.raised) - self.raised[self.game_pointer]
+        if players[self.game_pointer].in_chips + diff >= players[self.game_pointer].remained_chips:
+            return full_actions
 
+        # Append available raise amount to the action list
+        min_raise_amount = max(self.raised) - self.raised[self.game_pointer] + self.current_raise_amount
+        print('min_raise_amount:', max(self.raised), '-', self.raised[self.game_pointer], '+', self.current_raise_amount)
         # If the player cannot provide min raise amount, he has to all-in.
-        if players[self.button].in_chips + min_raise_amount >= players[self.button].remained_chips:
-            full_actions.append(players[self.button].remained_chips - players[self.button].in_chips)
+        if players[self.game_pointer].in_chips + min_raise_amount >= players[self.game_pointer].remained_chips:
+            full_actions.append(players[self.game_pointer].remained_chips - players[self.game_pointer].in_chips)
         else:
-            for available_raise_amount in range(min_raise_amount, players[self.button].remained_chips - players[self.button].in_chips + 1):
+            for available_raise_amount in range(min_raise_amount, players[self.game_pointer].remained_chips - players[self.game_pointer].in_chips + 1):
+                # test
+                if available_raise_amount <= 0:
+                    raise ValueError("error raise amount")
                 full_actions.append(available_raise_amount)
 
         return full_actions
