@@ -30,13 +30,8 @@ class LimitholdemJudger(object):
 
         #winners = compare_hands(hands)
         #winners = [1, 0, 0]
-        try:
-            winners = compare_hands(hands[0], hands[1])
-        except:
-            return [0., 0.]
+        winners = compare_hands(hands[0], hands[1])
 
-        if winners == None:
-            return [0., 0.]
         # Compute the total chips
         total = 0
         for p in players:

@@ -14,10 +14,10 @@ env = rlcard.make('limit-holdem')
 eval_env = rlcard.make('limit-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 200
-save_plot_every = 5000
-evaluate_num = 200
-episode_num = 1000000
+evaluate_every = 10000
+save_plot_every = 10000
+evaluate_num = 10000
+episode_num = 10000000
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
@@ -31,7 +31,7 @@ with tf.Session() as sess:
     # Set agents
     agent = DQNAgent(sess,
                        action_num=env.action_num,
-                       replay_memory_size=20000,
+                       replay_memory_size=int(1e6),
                        replay_memory_init_size=memory_init_size,
                        norm_step=norm_step,
                        state_shape=[52],
@@ -46,7 +46,7 @@ with tf.Session() as sess:
     step_counter = 0
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='eposide', ylabel='reward', legend='DQN on Dou Dizhu', log_path='./experiments/limitholdem_dqn_result/log.txt', csv_path='./experiments/limitholdem_dqn_result/performance.csv')
+    logger = Logger(xlabel='eposide', ylabel='reward', legend='DQN on Limit Texas Holdem', log_path='./experiments/limit_holdem_dqn_result/log.txt', csv_path='./experiments/limit_holdem_dqn_result/performance.csv')
 
     for episode in range(episode_num):
 
@@ -68,6 +68,7 @@ with tf.Session() as sess:
             reward = 0
             for eval_episode in range(evaluate_num):
                 _, payoffs = eval_env.run(is_training=False)
+
                 reward += payoffs[0]
 
             logger.log('\n########## Evaluation ##########')
@@ -78,7 +79,7 @@ with tf.Session() as sess:
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            logger.make_plot(save_path='./experiments/limitholdem_dqn_result/'+str(episode)+'.png')
+            logger.make_plot(save_path='./experiments/limit_holdem_dqn_result/'+str(episode)+'.png')
 
     # Make the final plot
-    logger.make_plot(save_path='./experiments/limitholdem_dqn_result/'+'final_'+str(episode)+'.png')
+    logger.make_plot(save_path='./experiments/limit_holdem_dqn_result/'+'final_'+str(episode)+'.png')

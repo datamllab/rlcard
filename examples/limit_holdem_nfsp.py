@@ -1,4 +1,4 @@
-''' A toy example of learning a Deep-Q Agent on Dou Dizhu
+''' A toy example of learning a NFSP Agent on Limit Texas Holdem
 '''
 
 import tensorflow as tf
@@ -25,7 +25,7 @@ memory_init_size = 1000
 norm_step = 100
 
 # Set a global seed
-#set_global_seed(0)
+set_global_seed(0)
 
 with tf.Session() as sess:
     # Set agents
@@ -45,14 +45,13 @@ with tf.Session() as sess:
     step_counter = 0
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='eposide', ylabel='reward', legend='DQN on Dou Dizhu', log_path='./experiments/limit_holdem_nfsp_result/log.txt', csv_path='./experiments/limit_holdem_nfsp_result/performance.csv')
+    logger = Logger(xlabel='eposide', ylabel='reward', legend='NFSP on Limit Texas Holdem', log_path='./experiments/limit_holdem_nfsp_result/log.txt', csv_path='./experiments/limit_holdem_nfsp_result/performance.csv')
 
     for episode in range(episode_num):
         
         # First sample a policy for the episode
-        #print(agent._mode)
         agent.sample_episode_policy()
-
+        
         # Generate data from the environment
         trajectories, _ = env.run(is_training=True)
 
@@ -63,15 +62,16 @@ with tf.Session() as sess:
 
             # Train the agent
             train_count = step_counter - (memory_init_size + norm_step) 
-            if train_count > 0 and train_count % 256 == 0:
+            if train_count > 0 and train_count % 128 == 0:
                 for _ in range(2):
                     rl_loss = agent.train_rl()
                     sl_loss = agent.train_sl()
-                    print('\rINFO - Step {}, rl-loss: {}, sl-loss: {}'.format(step_counter - memory_init_size - norm_step, rl_loss, sl_loss), end='')
+                    print('\rINFO - Step {}, rl-loss: {}, sl-loss: {}'.format(step_counter, rl_loss, sl_loss), end='')
 
         # Evaluate the performance. Play with random agents.
         if episode % evaluate_every == 0:
             reward = 0
+            eval_episode = 0
             for eval_episode in range(evaluate_num):
                 _, payoffs = eval_env.run(is_training=False)
                 reward += payoffs[0]
@@ -85,7 +85,7 @@ with tf.Session() as sess:
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            logger.make_plot(save_path='./experiments/doudizhu_dqn_result/'+str(episode)+'.png')
+            logger.make_plot(save_path='./experiments/limit_holdem_nfsp_result/'+str(episode)+'.png')
 
     # Make the final plot
-    logger.make_plot(save_path='./experiments/doudizhu_dqn_result/'+'final_'+str(episode)+'.png')
+    logger.make_plot(save_path='./experiments/limit_holdem_nfsp_result/'+'final_'+str(episode)+'.png')

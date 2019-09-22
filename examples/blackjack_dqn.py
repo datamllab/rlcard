@@ -23,7 +23,7 @@ memory_init_size = 100
 norm_step = 100
 
 # Set a global seed
-set_global_seed(1)
+set_global_seed(0)
 
 with tf.Session() as sess:
     # Set agents
