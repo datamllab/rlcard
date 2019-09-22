@@ -23,7 +23,7 @@ class LimitholdemGame(object):
         self.big_blind = 2 * self.small_blind
 
         # Raise amount and allowed times
-        self.raise_amount = 2 * self.big_blind
+        self.raise_amount = self.big_blind
         self.allowed_raise_num = 4
 
         self.num_players = 2
@@ -56,14 +56,14 @@ class LimitholdemGame(object):
         # Initilize public cards
         self.public_cards = []
 
-        # Randomly choose a big blind and a small blind
-        b = random.randint(0, self.num_players-1)
-        s = (b + 1) % self.num_players
+        # Randomly choose a small blind and a big blind
+        s = random.randint(0, self.num_players-1)
+        b = (s + 1) % self.num_players
         self.players[b].in_chips = self.big_blind
         self.players[s].in_chips = self.small_blind
 
-        # The player next to the small blind plays the first
-        self.button = (s + 1) % self.num_players
+        # The player next to the big blind plays the first
+        self.game_pointer = (b + 1) % self.num_players
 
         # Initilize a bidding round, in the first round, the big blind and the small blind needs to
         # be passed to the round for processing.
@@ -71,7 +71,7 @@ class LimitholdemGame(object):
                            allowed_raise_num=self.allowed_raise_num,
                            num_players=self.num_players)
 
-        self.round.start_new_round(button=self.button, raised=[p.in_chips for p in self.players])
+        self.round.start_new_round(game_pointer=self.game_pointer, raised=[p.in_chips for p in self.players])
 
         # Count the round. There are 4 rounds in each game.
         self.round_counter = 0
@@ -79,9 +79,9 @@ class LimitholdemGame(object):
         # Save the hisory for stepping back to the last state.
         self.history = []
 
-        state = self.get_state(self.button)
+        state = self.get_state(self.game_pointer)
 
-        return state, self.button
+        return state, self.game_pointer
 
     def step(self, action):
         ''' Get the next state
@@ -98,7 +98,7 @@ class LimitholdemGame(object):
 
         # First snapshot the current state
         r = deepcopy(self.round)
-        b = self.button
+        b = self.game_pointer
         r_c = self.round_counter
         d = deepcopy(self.dealer)
         p = deepcopy(self.public_cards)
@@ -106,7 +106,7 @@ class LimitholdemGame(object):
         self.history.append((r, b, r_c, d, p, ps))
 
         # Then we proceed to the next round
-        self.button = self.round.proceed_round(self.players, action)
+        self.game_pointer = self.round.proceed_round(self.players, action)
 
         # If a round is over, we deal more public cards
         if self.round.is_over():
@@ -119,12 +119,16 @@ class LimitholdemGame(object):
             elif self.round_counter <= 2:
                 self.public_cards.append(self.dealer.deal_card())
 
+            # Double the raise amount for the last two rounds
+            if self.round_counter == 1:
+                self.round.raise_amount = 2 * self.raise_amount
+
             self.round_counter += 1
-            self.round.start_new_round(self.button)
+            self.round.start_new_round(self.game_pointer)
 
-        state = self.get_state(self.button)
+        state = self.get_state(self.game_pointer)
 
-        return state, self.button
+        return state, self.game_pointer
 
     def step_back(self):
         ''' Return to the previous state of the game
@@ -134,7 +138,7 @@ class LimitholdemGame(object):
         '''
 
         if len(self.history) > 0:
-            self.round, self.button, self.round_counter, self.dealer, self.public_cards, self.players = self.history.pop()
+            self.round, self.game_pointer, self.round_counter, self.dealer, self.public_cards, self.players = self.history.pop()
             return True
         return False
 
@@ -164,7 +168,7 @@ class LimitholdemGame(object):
             (int): current player's id
         '''
 
-        return self.button
+        return self.game_pointer
 
     def get_state(self, player):
         ''' Return player's state
@@ -227,8 +231,8 @@ if __name__ == "__main__":
     game = LimitholdemGame()
     while True:
         print('New Game')
-        state, button = game.init_game()
-        print(button, state)
+        state, game_pointer = game.init_game()
+        print(game_pointer, state)
         i = 1
         while not game.is_over():
             i += 1
@@ -236,14 +240,14 @@ if __name__ == "__main__":
             if i == 3:
                 print('Step back')
                 print(game.step_back())
-                button = game.get_player_id()
-                print(button)
+                game_pointer = game.get_player_id()
+                print(game_pointer)
                 legal_actions = game.get_legal_actions()
 
             action = random.choice(legal_actions)
-            print(button, action, legal_actions)
-            state, button = game.step(action)
-            print(button, state)
+            print(game_pointer, action, legal_actions)
+            state, game_pointer = game.step(action)
+            print(game_pointer, state)
 
         print(game.get_payoffs())
 
