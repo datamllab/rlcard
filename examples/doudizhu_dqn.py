@@ -14,10 +14,10 @@ env = rlcard.make('doudizhu')
 eval_env = rlcard.make('doudizhu')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 200
+evaluate_every = 500
 save_plot_every = 5000
-evaluate_num = 200
-episode_num = 1000000
+evaluate_num = 10000
+episode_num = 10000000
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size

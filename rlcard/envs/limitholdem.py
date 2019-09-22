@@ -41,7 +41,7 @@ class LimitholdemEnv(Env):
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
         '''
-        
+
         processed_state = {}
 
         legal_actions = [self.actions.index(a) for a in state['legal_actions']]

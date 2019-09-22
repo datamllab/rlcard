@@ -56,7 +56,7 @@ class BlackjackEnv(Env):
         my_score, _ = get_scores_and_A(my_cards)
         dealer_score, _ = get_scores_and_A(dealer_cards)
         obs = np.array([my_score, dealer_score])
-        
+
         legal_actions = [i for i in range(len(self.actions))]
         extracted_state = {'obs': obs, 'legal_actions': legal_actions}
 

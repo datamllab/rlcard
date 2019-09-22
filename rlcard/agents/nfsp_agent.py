@@ -1,4 +1,4 @@
-# Copyright 2019 DATA Lab at Texas A&M University. All rights reserved. 
+# Copyright 2019 DATA Lab at Texas A&M University. All rights reserved.
 # Copyright 2019 DeepMind Technologies Ltd. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
