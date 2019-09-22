@@ -150,8 +150,8 @@ class DoudizhuGame(object):
         Returns:
             dict: corresponding player's state
         '''
-        if player_id != self.current_player:
-            raise ValueError('can not get the state of player other than current player')
+        #if player_id != self.current_player:
+        #    raise ValueError('can not get the state of player other than current player')
 
         player = self.players[player_id]
         if self.current_player is not None:  # when get first state
