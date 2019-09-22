@@ -60,9 +60,6 @@ class UnlimitholdemRound(LimitholdemRound):
             (int): The game_pointer that indicates the next player
         '''
 
-        # if action not in self.get_legal_actions():
-        #     raise Exception('{} is not legal action. Legal actions: {}', action, self.get_legal_actions())
-
         if action == 'call':
             diff = max(self.raised) - self.raised[self.game_pointer]
             self.raised[self.game_pointer] = max(self.raised)
@@ -70,12 +67,9 @@ class UnlimitholdemRound(LimitholdemRound):
             self.not_raise_num += 1
 
         elif isinstance(action, int):
-            # diff = max(self.raised) - self.raised[self.game_pointer] + action
             self.current_raise_amount = action - (max(self.raised) - self.raised[self.game_pointer])
             self.raised[self.game_pointer] += action
             players[self.game_pointer].in_chips += action
-            
-            # self.raised[self.game_pointer] = players[self.game_pointer].
             self.not_raise_num = 1
 
         elif action == 'fold':
@@ -120,15 +114,13 @@ class UnlimitholdemRound(LimitholdemRound):
 
         # Append available raise amount to the action list
         min_raise_amount = max(self.raised) - self.raised[self.game_pointer] + self.current_raise_amount
-        print('min_raise_amount:', max(self.raised), '-', self.raised[self.game_pointer], '+', self.current_raise_amount)
+        if min_raise_amount <= 0:
+            raise ValueError("Raise amount {} should not be smaller or equal to zero".format(min_raise_amount))
         # If the player cannot provide min raise amount, he has to all-in.
         if players[self.game_pointer].in_chips + min_raise_amount >= players[self.game_pointer].remained_chips:
             full_actions.append(players[self.game_pointer].remained_chips - players[self.game_pointer].in_chips)
         else:
             for available_raise_amount in range(min_raise_amount, players[self.game_pointer].remained_chips - players[self.game_pointer].in_chips + 1):
-                # test
-                if available_raise_amount <= 0:
-                    raise ValueError("error raise amount")
                 full_actions.append(available_raise_amount)
 
         return full_actions

@@ -1,4 +1,4 @@
-''' A toy example of playing Limit Texas Hold'em with random agents
+''' A toy example of playing Unlimit Texas Hold'em with random agents
 '''
 
 import rlcard
