@@ -79,7 +79,7 @@ class DoudizhuGame(object):
         self.state['deck'] = cards2str(deck)
         self.state['landlord'] = self.rounder.landlord_num
         self.state['self'] = self.current_player
-        self.state['hand'] = cards2str(player.hand)
+        self.state['initial_hand'] = cards2str(player.hand)
         self.state['seen_cards'] = self.rounder.seen_cards
         self.state['current_hand'] = cards2str(player.current_hand)
         self.state['others_hand'] = self._get_others_current_hand(player)
@@ -257,3 +257,4 @@ class DoudizhuGame(object):
     def _add_played_cards(self, action):
         self.played_cards.extend(list(action))
         self.played_cards.sort(key=functools.cmp_to_key(doudizhu_sort_str))
+    
