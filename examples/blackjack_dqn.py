@@ -55,7 +55,6 @@ with tf.Session() as sess:
             if step_counter > memory_init_size + norm_step:
                 loss = agent.train()
                 print('\rINFO - Step {}, loss: {}'.format(step_counter, loss), end='')
-     
 
         # Evaluate the performance
         if episode % evaluate_every == 0:

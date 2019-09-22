@@ -41,7 +41,7 @@ class NFSPAgent(object):
                  sess,
                  action_num=4,
                  state_shape=[52],
-                 hidden_layers_sizes=[512,512],
+                 hidden_layers_sizes=None,
                  reservoir_buffer_capacity=int(3e7),
                  anticipatory_param=0.1,
                  batch_size=256,
@@ -58,7 +58,7 @@ class NFSPAgent(object):
                  q_epsilon_decay_steps=int(1e7),
                  q_batch_size=256,
                  q_norm_step=100,
-                 q_mlp_layers=[512,512]):
+                 q_mlp_layers=None):
         ''' Initialize the NFSP agent.
         '''
 

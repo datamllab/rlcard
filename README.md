@@ -19,9 +19,10 @@ python examples/blackjack_random.py
 
 ## Getting Started
 The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) style. We recommend starting with the following **toy examples**.
-* [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
-* [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
-* [DeepCFR on Blackjack](docs/toy-examples.md#deepcfr-on-blackjack)
+
+*   [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
+*   [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
+*   [DeepCFR on Blackjack](docs/toy-examples.md#deepcfr-on-blackjack)
 
 For more examples, please refer to [examples/](examples).
 

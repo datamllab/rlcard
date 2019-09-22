@@ -32,9 +32,11 @@ with tf.Session() as sess:
     agent = NFSPAgent(sess,
                       action_num=env.action_num,
                       state_shape=[52],
+                      hidden_layers_sizes=[512,512],
                       min_buffer_size_to_learn=memory_init_size,
                       q_replay_memory_init_size=memory_init_size,
-                      q_norm_step=norm_step)
+                      q_norm_step=norm_step,
+                      q_mlp_layers=[512,512])
 
     random_agent = RandomAgent(action_num=eval_env.action_num)
 
@@ -48,7 +50,7 @@ with tf.Session() as sess:
     logger = Logger(xlabel='eposide', ylabel='reward', legend='NFSP on Limit Texas Holdem', log_path='./experiments/limit_holdem_nfsp_result/log.txt', csv_path='./experiments/limit_holdem_nfsp_result/performance.csv')
 
     for episode in range(episode_num):
-        
+
         # First sample a policy for the episode
         agent.sample_episode_policy()
 
