@@ -9,7 +9,7 @@ class TestDoudizhuEnv(unittest.TestCase):
     def test_init_game_and_extract_state(self):
         env = Env()
         state, _ = env.init_game()
-        self.assertEqual(state.size, 450)
+        self.assertEqual(state['obs'].size, 450)
 
     def test_step(self):
         env = Env()
@@ -25,7 +25,7 @@ class TestDoudizhuEnv(unittest.TestCase):
         trajectories, payoffs = env.run(is_training=False)
         self.assertEqual(len(trajectories), 3)
         win = []
-        for player_id, payoff in enumerate(payoffs.items()):
+        for player_id, payoff in enumerate(payoffs):
             if payoff == 1:
                 win.append(player_id)
         if len(win) == 1:

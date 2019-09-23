@@ -1,4 +1,3 @@
-import random
 from copy import deepcopy
 import numpy as np
 
@@ -57,7 +56,7 @@ class LimitholdemGame(object):
         self.public_cards = []
 
         # Randomly choose a small blind and a big blind
-        s = random.randint(0, self.num_players-1)
+        s = np.random.randint(0, self.num_players)
         b = (s + 1) % self.num_players
         self.players[b].in_chips = self.big_blind
         self.players[s].in_chips = self.small_blind
@@ -244,7 +243,7 @@ if __name__ == "__main__":
                 print(game_pointer)
                 legal_actions = game.get_legal_actions()
 
-            action = random.choice(legal_actions)
+            action = np.random.choice(legal_actions)
             print(game_pointer, action, legal_actions)
             state, game_pointer = game.step(action)
             print(game_pointer, state)

@@ -8,8 +8,10 @@ class TestUtilsMethos(unittest.TestCase):
     def test_init(self):
 
         sess = tf.InteractiveSession()
+        global_step = tf.Variable(0, name='global_step', trainable=False)
 
         agent = DQNAgent(sess=sess,
+                         scope='dqn',
                          replay_memory_size=0,
                          replay_memory_init_size=0,
                          update_target_estimator_every=0,
@@ -41,20 +43,23 @@ class TestUtilsMethos(unittest.TestCase):
         step_num = 300
 
         sess = tf.InteractiveSession()
+        global_step = tf.Variable(0, name='global_step', trainable=False)
         agent = DQNAgent(sess=sess,
+                         scope='dqn',
                          replay_memory_init_size=memory_init_size,
                          update_target_estimator_every=10,
                          norm_step=norm_step,
                          state_shape=[2],
                          mlp_layers=[10,10])
+        sess.run(tf.global_variables_initializer())
 
         for step in range(step_num):
-            ts = [np.random.random_sample((2,)), np.random.randint(2), 0, np.random.random_sample((2,)), True]
+            ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, True]
             agent.feed(ts)
             if step > norm_step + memory_init_size:
                 agent.train()
 
-        predicted_action = agent.eval_step(np.random.random_sample((2,)))
+        predicted_action = agent.eval_step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)
 

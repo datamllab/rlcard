@@ -1,4 +1,3 @@
-import random
 import numpy as np
 
 from rlcard.utils.utils import *
@@ -61,7 +60,7 @@ class DoudizhuEnv(Env):
               The second dimension is for different transitions. The third dimension is for the contents of each transiton
         '''
 
-        random.seed(seed)
+        np.random.seed(seed)
         trajectories = [[] for _ in range(self.player_num)]
         state, player_id = self.init_game()
 
@@ -128,12 +127,12 @@ class DoudizhuEnv(Env):
                 if abstract == abstract_action:
                     specific_actions.append(legal_action)
         if specific_actions:
-            action = random.choice(specific_actions)
+            action = np.random.choice(specific_actions)
         else:
             if "pass" in legal_actions:
                 action = "pass"
             else:
-                action = random.choice(legal_actions)
+                action = np.random.choice(legal_actions)
         return action
 
     def get_legal_actions(self):

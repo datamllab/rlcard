@@ -1,7 +1,6 @@
 import unittest
 import numpy as np
 import functools
-import random
 
 from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
@@ -54,7 +53,7 @@ class TestDoudizhuMethods(unittest.TestCase):
         state, player_id = game.init_game()
         #print(player_id, state)
         while not game.is_over():
-            action = random.choice(state['actions'])
+            action = np.random.choice(state['actions'])
             #print(action)
             #print()
             state, next_player_id = game.step(action)

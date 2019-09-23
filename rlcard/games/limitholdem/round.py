@@ -2,7 +2,7 @@
 ''' Implement Limit Texas Hold'em Round class
 '''
 
-import random
+import numpy as np
 
 from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
 
@@ -137,7 +137,7 @@ if __name__ == '__main__':
 
     while not r.is_over():
         legal_actions = r.get_legal_actions()
-        action = random.choice(legal_actions)
+        action = np.random.choice(legal_actions)
         print(game_pointer, action, legal_actions)
         game_pointer = r.proceed_round(players[game_pointer], action)
         print(r.raised, r.have_raised, r.not_raise_num)

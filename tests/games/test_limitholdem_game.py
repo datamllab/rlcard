@@ -1,5 +1,6 @@
 import unittest
-import random
+import numpy as np
+
 from rlcard.games.limitholdem.game import LimitholdemGame as Game
 
 
@@ -63,7 +64,6 @@ class TestLimitholdemMethods(unittest.TestCase):
             index += 1
             legal_actions = game.get_legal_actions()
             if index == 3:
-                previous = game.get_player_id()
                 result = game.step_back()
                 now = game.get_player_id()
                 if result:
@@ -71,7 +71,8 @@ class TestLimitholdemMethods(unittest.TestCase):
                 else:
                     self.assertEqual(len(game.history), 0)
                 break
-            action = random.choice(legal_actions)
+            previous = game.get_player_id()
+            action = np.random.choice(legal_actions)
             state, button = game.step(action)
 
     def test_payoffs(self):
@@ -80,7 +81,7 @@ class TestLimitholdemMethods(unittest.TestCase):
             game.init_game()
             while not game.is_over():
                 legal_actions = game.get_legal_actions()
-                action = random.choice(legal_actions)
+                action = np.random.choice(legal_actions)
                 game.step(action)
             payoffs = game.get_payoffs()
         total = 0
