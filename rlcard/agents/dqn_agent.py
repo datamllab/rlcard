@@ -37,8 +37,8 @@ Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state'
 class DQNAgent(object):
 
     def __init__(self,
-                 sess=None,
-                 scope='dqn',
+                 sess,
+                 scope,
                  replay_memory_size=20000,
                  replay_memory_init_size=100,
                  update_target_estimator_every=1000,
@@ -58,7 +58,8 @@ class DQNAgent(object):
         Finds the optimal greedy policy while following an epsilon-greedy policy.
 
         Args:
-            sess (tf.Session): Tensorflow Session object
+            sess (tf.Session): Tensorflow Session object.
+            scope (string): The name scope of the DQN agent.
             replay_memory_size (int): Size of the replay memory
             replay_memory_init_size (int): Number of random experiences to sampel when initializing
               the reply memory.
@@ -71,10 +72,11 @@ class DQNAgent(object):
             epsilon_decay_steps (int): Number of steps to decay epsilon over
             batch_size (int): Size of batches to sample from the replay memory
             evaluate_every (int): Evaluate every N steps
-            action_num (int): the number of the actions
-            state_space (list): the space of the state vector
-            norm_step (int): the number of the step used form noramlize state
-            mlp_layers (list): the layer number and the dimension of each layer in MLP
+            action_num (int): The number of the actions
+            state_space (list): The space of the state vector
+            norm_step (int): The number of the step used form noramlize state
+            mlp_layers (list): The layer number and the dimension of each layer in MLP
+            learning_rate (float): The learning rate of the DQN agent.
         '''
 
         self.sess = sess

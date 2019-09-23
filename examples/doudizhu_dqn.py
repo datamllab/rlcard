@@ -31,12 +31,13 @@ with tf.Session() as sess:
     # Set agents
     global_step = tf.Variable(0, name='global_step', trainable=False)
     agent = DQNAgent(sess,
-                       action_num=env.action_num,
-                       replay_memory_size=20000,
-                       replay_memory_init_size=memory_init_size,
-                       norm_step=norm_step,
-                       state_shape=[6, 5, 15],
-                       mlp_layers=[512, 512])
+                     scope='dqn',
+                     action_num=env.action_num,
+                     replay_memory_size=20000,
+                     replay_memory_init_size=memory_init_size,
+                     norm_step=norm_step,
+                     state_shape=[6, 5, 15],
+                     mlp_layers=[512, 512])
 
     random_agent = RandomAgent(action_num=eval_env.action_num)
 

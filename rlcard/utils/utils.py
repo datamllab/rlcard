@@ -273,7 +273,6 @@ def set_global_seed(seed):
     '''
 
     if seed is not None:
-        import numpy as np
         import tensorflow as tf
         tf.set_random_seed(seed)
         np.random.seed(seed)

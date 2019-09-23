@@ -13,10 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Neural Fictitious Self-Play (NFSP) agent implemented in TensorFlow.
+''' Neural Fictitious Self-Play (NFSP) agent implemented in TensorFlow.
 
 See the paper https://arxiv.org/abs/1603.01121 for more details.
-"""
+'''
 
 import collections
 import random
@@ -28,19 +28,17 @@ import tensorflow as tf
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import *
 
-Transition = collections.namedtuple("Transition", "info_state action_probs")
+Transition = collections.namedtuple('Transition', 'info_state action_probs')
 
-MODE = enum.Enum("mode", "best_response average_policy")
+MODE = enum.Enum('mode', 'best_response average_policy')
 
 class NFSPAgent(object):
-    """NFSP Agent implementation in TensorFlow.
-
-    See open_spiel/python/examples/nfsp.py for an usage example.
-    """
+    ''' NFSP Agent implementation in TensorFlow.
+    '''
 
     def __init__(self,
                  sess,
-                 scope='nfsp',
+                 scope,
                  action_num=4,
                  state_shape=[52],
                  hidden_layers_sizes=None,
@@ -61,6 +59,32 @@ class NFSPAgent(object):
                  q_norm_step=1000,
                  q_mlp_layers=None):
         ''' Initialize the NFSP agent.
+
+        Args:
+            sess (tf.Session): Tensorflow session object.
+            scope (string): The name scope of NFSPAgent.
+            action_num (int): The number of actions.
+            state_shape (list): The shape of the state space.
+            hidden_layers_sizes (list): The hidden layers sizes for the layers of 
+              the average policy.
+            reservoir_buffer_capacity (int): The size of the buffer for average policy.
+            anticipatory_param (float): The hyper-parameter that balances rl/avarage policy.
+            batch_size (int): The batch_size for training average policy.
+            rl_learning_rate (float): The learning rate of the RL agent.
+            sl_learning_rate (float): the learning rate of the average policy.
+            min_buffer_size_to_learn (int): The minimum buffer size to learn for average policy.
+            q_replay_memory_size (int): The memory size of inner DQN agent.
+            q_replay_memory_init_size (int): The initial memory size of inner DQN agent.
+            q_update_target_estimator_every (int): The frequency of updating target network for
+              inner DQN agent.
+            q_discount_factor (float): The discount factor of inner DQN agent.
+            q_epsilon_start (float): The starting epsilon of inner DQN agent.
+            q_epsilon_end (float): the end epsilon of inner DQN agent.
+            q_epsilon_decay_steps (int): The decay steps of inner DQN agent.
+            q_batch_size (int): The batch size of inner DQN agent.
+            q_norm_step (int): The normalization steps of inner DQN agent.
+            q_mlp_layers (list): The layer sizes of inner DQN agent.
+
         '''
 
         self._sess = sess
@@ -121,17 +145,23 @@ class NFSPAgent(object):
 
 
     def feed(self, ts):
+        ''' Feed data to inner RL agent
+
+        Args:
+            ts (list): A list of 5 elements that represent the transition.
+        '''
+
         self._rl_agent.feed(ts)
 
     def step(self, state):
-        """Returns the action to be taken.
+        ''' Returns the action to be taken.
 
         Args:
-            state (dict): the current state
+            state (dict): The current state
 
         Returns:
-            action (int): an action id
-        """
+            action (int): An action id
+        '''
 
         obs = state['obs']
         legal_actions = state['legal_actions']
@@ -140,7 +170,7 @@ class NFSPAgent(object):
             self._add_transition(obs, probs)
 
         elif self._mode == MODE.average_policy:
-            probs = self._act(obs, legal_actions)
+            probs = self._act(obs)
 
         probs = remove_illegal(probs, legal_actions)
         action = np.random.choice(len(probs), p=probs)
@@ -149,6 +179,12 @@ class NFSPAgent(object):
 
     def eval_step(self, state):
         ''' Use the average policy for evaluation purpose
+
+        Args:
+            state (dict): The current state.
+
+        Returns:
+            action (int): An action id.
         '''
 
         action = self._rl_agent.eval_step(state)
@@ -156,15 +192,24 @@ class NFSPAgent(object):
         return action
 
     def sample_episode_policy(self):
+        ''' Sample average/best_response policy
+        '''
+
         if np.random.rand() < self._anticipatory_param:
             self._mode = MODE.best_response
         else:
             self._mode = MODE.average_policy
 
-        #self._mode = MODE.best_response
+    def _act(self, info_state):
+        ''' Predict action probability givin the observation and legal actions
 
+        Args:
+            info_state (numpy.array): An obervation.
 
-    def _act(self, info_state, legal_actions):
+        Returns:
+            action_probs (numpy.array): The predicted action probability.
+        '''
+
         info_state = np.expand_dims(info_state, axis=0)
         action_probs = self._sess.run(
                 self._avg_policy_probs,
@@ -172,24 +217,16 @@ class NFSPAgent(object):
 
         return action_probs
 
-    @property
-    def mode(self):
-        return self._mode
-
-    @property
-    def loss(self):
-        return (self._last_sl_loss_value, self._last_rl_loss_value())
-
-
     def _add_transition(self, state, probs):
-        """Adds the new transition using `time_step` to the reservoir buffer.
+        ''' Adds the new transition to the reservoir buffer.
 
-        Transitions are in the form (time_step, agent_output.probs, legal_mask).
+        Transitions are in the form (state, probs).
 
         Args:
-            time_step: an instance of rl_environment.TimeStep.
-            agent_output: an instance of rl_agent.StepOutput.
-        """
+            state (numpy.array): The state.
+            probs (numpy.array): The probabilities of each action.
+        '''
+
         #print(len(self._reservoir_buffer))
         transition = Transition(
                 info_state=state,
@@ -209,9 +246,8 @@ class NFSPAgent(object):
         `None` is returned instead.
 
         Returns:
-            The average loss obtained on this batch of transitions or `None`.
+            loss (float): The average loss obtained on this batch of transitions or `None`.
         '''
-        #print('\n', len(self._reservoir_buffer))
 
         if (len(self._reservoir_buffer) < self._batch_size or
                 len(self._reservoir_buffer) < self._min_buffer_size_to_learn):
@@ -230,27 +266,30 @@ class NFSPAgent(object):
 
         return loss
 
-
 class ReservoirBuffer(object):
-    """Allows uniform sampling over a stream of data.
+    ''' Allows uniform sampling over a stream of data.
 
     This class supports the storage of arbitrary elements, such as observation
     tensors, integer actions, etc.
 
     See https://en.wikipedia.org/wiki/Reservoir_sampling for more details.
-    """
+    '''
 
     def __init__(self, reservoir_buffer_capacity):
+        ''' Initialize the buffer.
+        '''
+
         self._reservoir_buffer_capacity = reservoir_buffer_capacity
         self._data = []
         self._add_calls = 0
 
     def add(self, element):
-        """Potentially adds `element` to the reservoir buffer.
+        ''' Potentially adds `element` to the reservoir buffer.
 
         Args:
-            element: data to be added to the reservoir buffer.
-        """
+            element (object): data to be added to the reservoir buffer.
+        '''
+
         if len(self._data) < self._reservoir_buffer_capacity:
             self._data.append(element)
         else:
@@ -260,23 +299,27 @@ class ReservoirBuffer(object):
         self._add_calls += 1
 
     def sample(self, num_samples):
-        """Returns `num_samples` uniformly sampled from the buffer.
+        ''' Returns `num_samples` uniformly sampled from the buffer.
 
         Args:
-            num_samples: `int`, number of samples to draw.
+            num_samples (int): The number of samples to draw.
 
         Returns:
             An iterable over `num_samples` random elements of the buffer.
 
         Raises:
             ValueError: If there are less than `num_samples` elements in the buffer
-        """
+        '''
+
         if len(self._data) < num_samples:
             raise ValueError("{} elements could not be sampled from size {}".format(
                     num_samples, len(self._data)))
         return random.sample(self._data, num_samples)
 
     def clear(self):
+        ''' Clear the buffer
+        '''
+
         self._data = []
         self._add_calls = 0
 
