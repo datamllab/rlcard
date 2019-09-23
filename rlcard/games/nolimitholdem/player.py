@@ -1,6 +1,6 @@
 from rlcard.games.limitholdem.player import LimitholdemPlayer
 
-class UnlimitholdemPlayer(LimitholdemPlayer):
+class NolimitholdemPlayer(LimitholdemPlayer):
 
     def __init__(self, player_id, init_chips):
         ''' Initilize a player.
@@ -10,5 +10,5 @@ class UnlimitholdemPlayer(LimitholdemPlayer):
             init_chips (int): The number of chips the player has initially
         '''
         
-        super(UnlimitholdemPlayer, self).__init__(player_id)
+        super(NolimitholdemPlayer, self).__init__(player_id)
         self.remained_chips = init_chips

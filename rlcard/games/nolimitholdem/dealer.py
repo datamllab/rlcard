@@ -3,10 +3,10 @@ import random
 from rlcard.utils.utils import init_standard_deck
 from rlcard.games.limitholdem.dealer import LimitholdemDealer
 
-class UnlimitholdemDealer(LimitholdemDealer):
+class NolimitholdemDealer(LimitholdemDealer):
 
     def __init__(self):
-        ''' Initialize a unlimitholdem dealer class
+        ''' Initialize a nolimitholdem dealer class
         '''
 
-        super(UnlimitholdemDealer, self).__init__()
+        super(NolimitholdemDealer, self).__init__()

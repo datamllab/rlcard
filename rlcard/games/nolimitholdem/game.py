@@ -2,15 +2,15 @@ import random
 from copy import deepcopy
 from rlcard.games.limitholdem.game import LimitholdemGame
 
-from rlcard.games.unlimitholdem.dealer import UnlimitholdemDealer as Dealer
-from rlcard.games.unlimitholdem.player import UnlimitholdemPlayer as Player
-from rlcard.games.unlimitholdem.judger import UnlimitholdemJudger as Judger
-from rlcard.games.unlimitholdem.round import UnlimitholdemRound as Round
+from rlcard.games.nolimitholdem.dealer import NolimitholdemDealer as Dealer
+from rlcard.games.nolimitholdem.player import NolimitholdemPlayer as Player
+from rlcard.games.nolimitholdem.judger import NolimitholdemJudger as Judger
+from rlcard.games.nolimitholdem.round import NolimitholdemRound as Round
 
-class UnlimitholdemGame(LimitholdemGame):
+class NolimitholdemGame(LimitholdemGame):
 
     def __init__(self):
-        ''' Initialize the class unlimitholdem Game
+        ''' Initialize the class nolimitholdem Game
         '''
 
         # small blind and big blind
@@ -140,10 +140,21 @@ class UnlimitholdemGame(LimitholdemGame):
         legal_actions = self.get_legal_actions()
         state = self.players[player].get_state(self.public_cards, chips, legal_actions)
 
-        return state   
+        return state
+
+    def get_action_num(self):
+        ''' Return the number of applicable actions
+
+        Returns:
+            (int): The number of actions. There are 4 kinds actions (call, raise, check and fold). For 'raise' action, we provide all possible raise amount.
+        '''
+        return self.init_chips + 3
+
+
+
 
 if __name__ == "__main__":
-    game = UnlimitholdemGame()
+    game = NolimitholdemGame()
     
     while True:
         print('New Game')

@@ -1,4 +1,4 @@
-''' A toy example of playing Unlimit Texas Hold'em with random agents
+''' A toy example of playing Nolimit Texas Hold'em with random agents
 '''
 
 import rlcard
@@ -6,7 +6,7 @@ from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import *
 
 # Make environment
-env = rlcard.make('unlimit-holdem')
+env = rlcard.make('no-limit-holdem')
 episode_num = 1000
 
 # Set a global seed

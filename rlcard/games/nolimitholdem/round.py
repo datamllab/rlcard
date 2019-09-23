@@ -5,9 +5,9 @@
 import random
 from rlcard.games.limitholdem.round import LimitholdemRound
 
-from rlcard.games.unlimitholdem.player import UnlimitholdemPlayer as Player
+from rlcard.games.nolimitholdem.player import NolimitholdemPlayer as Player
 
-class UnlimitholdemRound(LimitholdemRound):
+class NolimitholdemRound(LimitholdemRound):
     ''' Round can call other Classes' functions to keep the game running
     '''
 

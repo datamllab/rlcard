@@ -1,7 +1,7 @@
 from rlcard.games.limitholdem.judger import LimitholdemJudger
 from rlcard.games.limitholdem.utils import *
 
-class UnlimitholdemJudger(LimitholdemJudger):
+class NolimitholdemJudger(LimitholdemJudger):
     ''' The Judger class for Texas Hold'em
     '''
 
@@ -9,4 +9,4 @@ class UnlimitholdemJudger(LimitholdemJudger):
         ''' Initialize a judger class
         '''
 
-        super(UnlimitholdemJudger, self).__init__()
+        super(NolimitholdemJudger, self).__init__()

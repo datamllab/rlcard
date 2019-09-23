@@ -156,7 +156,7 @@ class LimitholdemGame(object):
         ''' Return the number of applicable actions
 
         Returns:
-            (int): The number of cations. There are 4 actions (call, raise, check and fold)
+            (int): The number of actions. There are 4 actions (call, raise, check and fold)
         '''
 
         return 4
