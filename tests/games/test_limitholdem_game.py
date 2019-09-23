@@ -42,15 +42,6 @@ class TestLimitholdemMethods(unittest.TestCase):
         step_not_raise_num = game.round.not_raise_num
         self.assertEqual(init_not_raise_num+1, step_not_raise_num)
 
-        # test check
-        '''
-        game.init_game()
-        init_not_raise = game.round.not_raise_num
-        game.step('check')
-        step_not_raise = game.round.not_raise_num
-        self.assertEqual(init_not_raise+1, step_not_raise)
-        '''
-
         # test fold
         game.init_game()
         game.step('fold')
@@ -77,6 +68,7 @@ class TestLimitholdemMethods(unittest.TestCase):
 
     def test_payoffs(self):
         game = Game()
+        np.random.seed(0)
         for _ in range(5):
             game.init_game()
             while not game.is_over():
@@ -84,11 +76,10 @@ class TestLimitholdemMethods(unittest.TestCase):
                 action = np.random.choice(legal_actions)
                 game.step(action)
             payoffs = game.get_payoffs()
-        total = 0
-        for payoff in payoffs:
-            total += payoff
-        self.assertEqual(total, 0)
-
+            total = 0
+            for payoff in payoffs:
+                total += payoff
+            self.assertEqual(total, 0)
 
 
 if __name__ == '__main__':

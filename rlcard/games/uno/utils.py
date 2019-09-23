@@ -1,6 +1,7 @@
 import os
 import json
 import numpy as np
+from collections import OrderedDict
 
 import rlcard
 
@@ -9,7 +10,7 @@ from rlcard.games.uno.card import UnoCard as Card
 ROOT_PATH = rlcard.__path__[0]
 
 with open(os.path.join(ROOT_PATH, 'games/uno/jsondata/action_space.json'), 'r') as file:
-    ACTION_SPACE = json.load(file)
+    ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
     ACTION_LIST = list(ACTION_SPACE.keys())
 
 COLOR_MAP = {'r': 0, 'g': 1, 'b': 2, 'y': 3}
