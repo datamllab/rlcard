@@ -46,7 +46,7 @@ class EnvRegistry(object):
         '''
 
         if env_id in self.env_specs:
-            print ('Cannot re-register env_id: {}'.format(env_id))
+            raise ValueError('Cannot re-register env_id: {}'.format(env_id))
         self.env_specs[env_id] = EnvSpec(env_id, entry_point)
 
     def make(self, env_id):
@@ -57,7 +57,7 @@ class EnvRegistry(object):
         '''
 
         if env_id not in self.env_specs:
-            print ('Cannot find env_id: {}'.format(env_id))
+            raise ValueError('Cannot find env_id: {}'.format(env_id))
         return self.env_specs[env_id].make()
 
 # Have a global registry

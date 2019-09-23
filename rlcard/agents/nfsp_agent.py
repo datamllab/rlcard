@@ -40,7 +40,7 @@ class NFSPAgent(object):
                  sess,
                  scope,
                  action_num=4,
-                 state_shape=[52],
+                 state_shape=None,
                  hidden_layers_sizes=None,
                  reservoir_buffer_capacity=int(1e6),
                  anticipatory_param=0.5,
@@ -65,7 +65,7 @@ class NFSPAgent(object):
             scope (string): The name scope of NFSPAgent.
             action_num (int): The number of actions.
             state_shape (list): The shape of the state space.
-            hidden_layers_sizes (list): The hidden layers sizes for the layers of 
+            hidden_layers_sizes (list): The hidden layers sizes for the layers of
               the average policy.
             reservoir_buffer_capacity (int): The size of the buffer for average policy.
             anticipatory_param (float): The hyper-parameter that balances rl/avarage policy.

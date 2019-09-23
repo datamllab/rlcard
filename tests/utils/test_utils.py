@@ -18,6 +18,11 @@ class TestUtilsMethos(unittest.TestCase):
         chosen_cards, remained_cards = get_random_cards(hand, num)
         self.assertEqual(len(chosen_cards), num)
         self.assertEqual(len(remained_cards), len(hand) - num)
+        with self.assertRaises(AssertionError):
+            get_random_cards(hand, 1000)
+        with self.assertRaises(AssertionError):
+            get_random_cards(hand, -1)
+
 
     def test_is_pair(self):
         self.assertTrue(is_pair([Card('S', 'A'), Card('D', 'A')]))
@@ -35,6 +40,7 @@ class TestUtilsMethos(unittest.TestCase):
         self.assertEqual(rank2int('J'), 11)
         self.assertEqual(rank2int('Q'), 12)
         self.assertEqual(rank2int('1000'), None)
+        self.assertEqual(rank2int('abc123'), None)
         self.assertEqual(rank2int('K'), 13)
 
     def test_get_cards_from_ranks(self):
