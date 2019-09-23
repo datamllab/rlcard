@@ -302,16 +302,18 @@ class DeepCFR():
                 #init_state, init_player = self._env.step(action)
                 #self._root_node = init_state
             for i in range(self._num_traversals):
-                x = time.clock()
+                #x = time.clock()
                 self._traverse_game_tree(self._root_node, init_player)
-                y = time.clock() - x
+                #y = time.clock() - x
                 #print("traverse time:", y)
+
             # Re-initialize advantage networks and train from scratch.
             self.reinitialize_advantage_networks()
             for _ in range(self._num_step):
                 self.advantage_losses[p].append(self._learn_advantage_network(p))
-            z = time.clock() - y
+            #z = time.clock() - y
             #print("advantage time:", z, i, p)
+
             # Re-initialize advantage networks and train from scratch.
             self._iteration += 1
 
@@ -427,6 +429,8 @@ class DeepCFR():
         return advantages, matched_regrets
 
     def action_advantage(self, state, player):
+        '''Returns action advantages for a single batch.
+        '''
         state = state['obs'].flatten()
         advantages = self._session.run(
             self._advantage_outputs[player],
@@ -435,6 +439,8 @@ class DeepCFR():
         return advantages
 
     def _flatten_state(self, state):
+        '''Flatten the given state represenatation
+        '''
         shape = state.get_shape().as_list()
         dim = np.prod(shape[1:])
         flattened = tf.reshape(state, [-1, dim])
@@ -444,7 +450,6 @@ class DeepCFR():
         '''Returns action probabilites dict for a single batch.
         '''
         info_state_vector = state
-
         if len(info_state_vector.shape) == 1:
             info_state_vector = np.expand_dims(info_state_vector, axis=0)
 
