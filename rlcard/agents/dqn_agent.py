@@ -29,6 +29,7 @@ import numpy as np
 import tensorflow as tf
 from collections import namedtuple
 
+from rlcard.utils.utils import *
 
 Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state', 'done'])
 
@@ -36,7 +37,8 @@ Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state'
 class DQNAgent(object):
 
     def __init__(self,
-                 sess=None,
+                 sess,
+                 scope,
                  replay_memory_size=20000,
                  replay_memory_init_size=100,
                  update_target_estimator_every=1000,
@@ -56,7 +58,8 @@ class DQNAgent(object):
         Finds the optimal greedy policy while following an epsilon-greedy policy.
 
         Args:
-            sess (tf.Session): Tensorflow Session object
+            sess (tf.Session): Tensorflow Session object.
+            scope (string): The name scope of the DQN agent.
             replay_memory_size (int): Size of the replay memory
             replay_memory_init_size (int): Number of random experiences to sampel when initializing
               the reply memory.
@@ -69,10 +72,11 @@ class DQNAgent(object):
             epsilon_decay_steps (int): Number of steps to decay epsilon over
             batch_size (int): Size of batches to sample from the replay memory
             evaluate_every (int): Evaluate every N steps
-            action_num (int): the number of the actions
-            state_space (list): the space of the state vector
-            norm_step (int): the number of the step used form noramlize state
-            mlp_layers (list): the layer number and the dimension of each layer in MLP
+            action_num (int): The number of the actions
+            state_space (list): The space of the state vector
+            norm_step (int): The number of the step used form noramlize state
+            mlp_layers (list): The layer number and the dimension of each layer in MLP
+            learning_rate (float): The learning rate of the DQN agent.
         '''
 
         self.sess = sess
@@ -95,10 +99,9 @@ class DQNAgent(object):
         self.epsilons = np.linspace(epsilon_start, epsilon_end, epsilon_decay_steps)
 
         # Create estimators
+        #with tf.variable_scope(scope):
         self.q_estimator = Estimator(scope="q", action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, mlp_layers=mlp_layers)
         self.target_estimator = Estimator(scope="target_q", action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, mlp_layers=mlp_layers)
-
-        self.sess.run(tf.global_variables_initializer())
 
         # Create normalizer
         self.normalizer = Normalizer()
@@ -134,6 +137,7 @@ class DQNAgent(object):
         '''
 
         A = self.predict(state['obs'])
+        A = remove_illegal(A, state['legal_actions'])
         action = np.random.choice(np.arange(len(A)), p=A)
         return action
 
@@ -148,7 +152,8 @@ class DQNAgent(object):
         '''
 
         q_values = self.q_estimator.predict(self.sess, np.expand_dims(self.normalizer.normalize(state['obs']), 0))[0]
-        best_action = np.argmax(q_values)
+        probs = remove_illegal(np.exp(q_values), state['legal_actions'])
+        best_action = np.argmax(probs)
         return best_action
 
     def predict(self, state):
@@ -168,10 +173,11 @@ class DQNAgent(object):
         A[best_action] += (1.0 - epsilon)
         return A
 
-        
-
     def train(self):
         ''' Train the network
+
+        Returns:
+            loss (float): The loss of the current batch.
         '''
 
         state_batch, action_batch, reward_batch, next_state_batch, done_batch = self.memory.sample()
@@ -242,7 +248,8 @@ class Normalizer(object):
             a (int):  normalized state
         '''
 
-        self.append(s)
+        if self.length == 0:
+            return s
         return (s - self.mean) / (self.std + 1e-8)
 
     def append(self, s):
@@ -278,9 +285,6 @@ class Estimator():
         self.learning_rate=learning_rate
         self.state_shape = state_shape
         self.mlp_layers = mlp_layers
-
-        # Create a glboal step variable
-        self.global_step = tf.Variable(0, name='global_step', trainable=False)
 
         with tf.variable_scope(scope):
             # Build the graph

@@ -13,11 +13,13 @@ class UnoEnv(Env):
         super().__init__(Game())
 
     def extract_state(self, state):
-        encoded_state = np.zeros((7, 4, 15), dtype=int)
-        encode_hand(encoded_state[:3], state['hand'])
-        encode_target(encoded_state[3], state['target'])
-        encode_hand(encoded_state[4:], state['others_hand'])
-        return encoded_state
+        obs = np.zeros((7, 4, 15), dtype=int)
+        encode_hand(obs[:3], state['hand'])
+        encode_target(obs[3], state['target'])
+        encode_hand(obs[4:], state['others_hand'])
+        legal_action_id = self.get_legal_actions()
+        extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
+        return extrated_state
 
     def get_payoffs(self):
 

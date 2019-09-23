@@ -4,10 +4,10 @@ import numpy as np
 
 import rlcard
 from rlcard.envs.env import Env
-from rlcard.games.limitholdem.game import LimitholdemGame as Game
+from rlcard.games.nolimitholdem.game import NolimitholdemGame as Game
 from rlcard.utils.utils import *
 
-class LimitholdemEnv(Env):
+class NolimitholdemEnv(Env):
     ''' Limitholdem Environment
     '''
 
@@ -16,7 +16,9 @@ class LimitholdemEnv(Env):
         '''
 
         super().__init__(Game())
-        self.actions = ['call', 'raise', 'fold', 'check']
+        self.actions = ['call', 'fold', 'check']
+        for raise_amount in range(1, self.game.init_chips+1):
+            self.actions.append(raise_amount)
 
         with open(os.path.join(rlcard.__path__[0], 'games/limitholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)

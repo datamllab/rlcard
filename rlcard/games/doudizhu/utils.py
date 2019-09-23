@@ -3,7 +3,8 @@
 
 import os
 import json
-import random
+from collections import OrderedDict
+import numpy as np
 
 import rlcard
 
@@ -12,20 +13,20 @@ ROOT_PATH = rlcard.__path__[0]
 
 # a map of action to abstract action
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/specific_map.json'), 'r') as file:
-    SPECIFIC_MAP = json.load(file)
+    SPECIFIC_MAP = json.load(file, object_pairs_hook=OrderedDict)
 
 # a map of abstract action to its index and a list of abstract action
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/action_space.json'), 'r') as file:
-    ACTION_SPACE = json.load(file)
-    ACTION_LIST = {ACTION_SPACE[key]: key for key in ACTION_SPACE}
+    ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
+    ACTION_LIST = list(ACTION_SPACE.keys())
 
 # a map of card to its type
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/card_type.json'), 'r') as file:
-    CARD_TYPE = json.load(file)
+    CARD_TYPE = json.load(file, object_pairs_hook=OrderedDict)
 
 # a map of type to its cards
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/type_card.json'), 'r') as file:
-    TYPE_CARD = json.load(file)
+    TYPE_CARD = json.load(file, object_pairs_hook=OrderedDict)
 
 # rank list of solo character of cards
 CARD_RANK_STR = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K',
@@ -133,7 +134,7 @@ def get_optimal_action(probs, legal_actions):
     optimal_actions = [legal_actions[index] for index,
                        prob in enumerate(action_probs) if prob == optimal_prob]
     if len(optimal_actions) > 1:
-        return random.choice(optimal_actions)
+        return np.random.choice(optimal_actions)
     return optimal_actions[0]
 
 
@@ -253,3 +254,10 @@ def get_gt_cards(player, greater_player):
                     # if self.contains_cards(current_hand, cards):
                         gt_cards.append(cards)
     return gt_cards
+
+
+# Test json order
+if __name__ == '__main__':
+    for action, index in ACTION_SPACE.items():
+        if action != ACTION_LIST[index]:
+            print('order error')

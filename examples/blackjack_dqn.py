@@ -14,7 +14,7 @@ env = rlcard.make('blackjack')
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
 save_plot_every = 1000
-evaluate_num = 1000
+evaluate_num = 10000
 episode_num = 1000000
 
 # Set the the number of steps for collecting normalization statistics
@@ -23,17 +23,22 @@ memory_init_size = 100
 norm_step = 100
 
 # Set a global seed
-set_global_seed(1)
+set_global_seed(0)
 
 with tf.Session() as sess:
+
     # Set agents
+    global_step = tf.Variable(0, name='global_step', trainable=False)
     agent = DQNAgent(sess,
-                       action_num=env.action_num,
-                       replay_memory_init_size=memory_init_size,
-                       norm_step=norm_step,
-                       state_shape=[2],
-                       mlp_layers=[10,10])
+                     scope='dqn',
+                     action_num=env.action_num,
+                     replay_memory_init_size=memory_init_size,
+                     norm_step=norm_step,
+                     state_shape=[2],
+                     mlp_layers=[10,10])
     env.set_agents([agent])
+
+    sess.run(tf.global_variables_initializer())
 
     # Count the number of steps
     step_counter = 0
@@ -55,7 +60,6 @@ with tf.Session() as sess:
             if step_counter > memory_init_size + norm_step:
                 loss = agent.train()
                 print('\rINFO - Step {}, loss: {}'.format(step_counter, loss), end='')
-     
 
         # Evaluate the performance
         if episode % evaluate_every == 0:

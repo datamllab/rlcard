@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 ''' Implement Doudizhu Player class
 '''
+from copy import deepcopy
 
 from rlcard.games.doudizhu.utils import get_gt_cards
+from rlcard.games.doudizhu.utils import cards2str
 
 
 class DoudizhuPlayer(object):
@@ -25,11 +27,20 @@ class DoudizhuPlayer(object):
         '''
 
         self.player_id = player_id
-        self.hand = []
+        self.initial_hand = None
         self.current_hand = []
         self.role = ''
         self.played_cards = None
         self.singles = '3456789TJQKA2BR'
+
+    def get_state(self, public, others_hands, actions):
+        state = deepcopy(public)
+        state['self'] = self.player_id
+        state['initial_hand'] = self.initial_hand
+        state['current_hand'] = cards2str(self.current_hand)
+        state['others_hand'] = others_hands
+        state['actions'] = actions
+        return state
 
     def available_actions(self, greater_player=None, judger=None):
         ''' Get the actions can be made based on the rules

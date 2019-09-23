@@ -1,9 +1,11 @@
 import unittest
 import numpy as np
+import functools
+
 from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
 from rlcard.games.doudizhu.utils import get_landlord_score, encode_cards
-from rlcard.games.doudizhu.utils import get_optimal_action
+from rlcard.games.doudizhu.utils import get_optimal_action, doudizhu_sort_str
 
 
 class TestDoudizhuMethods(unittest.TestCase):
@@ -21,9 +23,14 @@ class TestDoudizhuMethods(unittest.TestCase):
     def test_init_game(self):
         game = Game()
         state, current_player = game.init_game()
+        total_cards = list(state['current_hand'] + state['others_hand'])
+        total_cards.sort(key=functools.cmp_to_key(doudizhu_sort_str))
+        deck = list(game.round.deck_str)
         self.assertEqual(state['self'], current_player)
         self.assertEqual(state['landlord'], current_player)
-        self.assertIs(state['played_cards'], None)
+        self.assertIs(len(state['played_cards']), 0)
+        self.assertEqual(len(total_cards), 54)
+        self.assertListEqual(total_cards, deck)
 
     def test_step(self):
         game = Game()
@@ -44,13 +51,18 @@ class TestDoudizhuMethods(unittest.TestCase):
     def test_proceed_game(self):
         game = Game()
         state, player_id = game.init_game()
+        #print(player_id, state)
         while not game.is_over():
-            action = state['actions'][0]
+            action = np.random.choice(state['actions'])
+            #print(action)
+            #print()
             state, next_player_id = game.step(action)
             player = game.players[player_id]
             self.assertEqual(get_downstream_player_id(
                 player, game.players), next_player_id)
             player_id = next_player_id
+            if not game.is_over():
+                self.assertIsNotNone(state['actions'])
         for player_id in range(3):
             state = game.get_state(player_id)
             self.assertIsNone(state['actions'])
@@ -61,8 +73,8 @@ class TestDoudizhuMethods(unittest.TestCase):
         action = state['actions'][0]
         game.step(action)
         game.step_back()
-        self.assertEqual(game.current_player, player_id)
-        self.assertEqual(len(game.histories), 0)
+        self.assertEqual(game.round.current_player, player_id)
+        self.assertEqual(len(game.history), 0)
 
     def test_get_landlord_score(self):
         score_1 = get_landlord_score('56888TTQKKKAA222R')
@@ -83,7 +95,6 @@ class TestDoudizhuMethods(unittest.TestCase):
         self.assertEqual(plane[3][0], 1)
         self.assertEqual(plane[1][13], 1)
         self.assertEqual(plane[1][14], 1)
-
 
 if __name__ == '__main__':
     unittest.main()

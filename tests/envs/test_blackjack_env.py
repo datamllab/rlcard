@@ -1,5 +1,6 @@
 import unittest
-import random
+import numpy as np
+
 from rlcard.envs.blackjack import BlackjackEnv as Env
 
 
@@ -8,7 +9,7 @@ class TestBlackjackEnv(unittest.TestCase):
     def test_init_and_extract_state(self):
         env = Env()
         state, _ = env.init_game()
-        for score in state:
+        for score in state['obs']:
             self.assertLessEqual(score, 30)
 
     def test_decode_action(self):
@@ -28,7 +29,7 @@ class TestBlackjackEnv(unittest.TestCase):
         for _ in range(100):
             env.init_game()
             while not env.is_over():
-                action = random.choice([0, 1])
+                action = np.random.choice([0, 1])
                 env.step(action)
             payoffs = env.get_payoffs()
             for payoff in payoffs:
