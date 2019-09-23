@@ -17,7 +17,7 @@ with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/specific_map.json'), 
 # a map of abstract action to its index and a list of abstract action
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/action_space.json'), 'r') as file:
     ACTION_SPACE = json.load(file)
-    ACTION_LIST = list(ACTION_SPACE.keys())
+    ACTION_LIST = {ACTION_SPACE[key]: key for key in ACTION_SPACE}
 
 # a map of card to its type
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/card_type.json'), 'r') as file:

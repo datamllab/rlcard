@@ -120,6 +120,7 @@ class DoudizhuGame(object):
         actions = next_player.available_actions(greater_player, self.judger)
         self.state['actions'] = actions
         self.state['others_hand'] = self._get_others_current_hand(next_player)
+        self.state['trace'] = self.trace
         self.current_player = next_player_id
         return copy.deepcopy(self.state), next_player_id
 
@@ -131,6 +132,7 @@ class DoudizhuGame(object):
             return False
         records = self.histories.pop()
         action = self.trace.pop()
+        self.state = records['state']
         self.current_player = action[0]
         self.rounder.round_last = records['round_last']
         self.played_cards = records['played_cards']
@@ -237,7 +239,8 @@ class DoudizhuGame(object):
         records = {'round_last': self.rounder.round_last,
                    'played_cards': self.played_cards.copy(),
                    'plable_cards': self.judger.playable_cards[self.current_player].copy(),
-                   'player': copy.deepcopy(player)}
+                   'player': copy.deepcopy(player),
+                   'state': copy.deepcopy(self.state)}
         if self.rounder.greater_player is None:
             records['greater_id'] = None
         else:

@@ -11,19 +11,21 @@ import numpy as np
 # make environment
 set_global_seed(0)
 evaluate_every = 100
-evaluate_num = 1000
-num_iteration = 1000
+evaluate_num = 100
+num_iteration = 10000
 i = 0
 rewards = 0
 train_env = rlcard.make('limit-holdem') 
 test_env = rlcard.make('limit-holdem') 
+#train_env = rlcard.make('doudizhu') 
+#test_env = rlcard.make('doudizhu') 
 with tf.Session() as sess:
     deep_cfr = DeepCFR(sess,
                 train_env,
                 policy_network_layers=(128, 128),
                 advantage_network_layers=(64,64),
-                num_traversals=128,
-                num_step=5,
+                num_traversals=10,
+                num_step=10,
                 learning_rate=1e-4,
                 batch_size_advantage=128,
                 batch_size_strategy=128,
