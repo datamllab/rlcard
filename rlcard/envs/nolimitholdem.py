@@ -5,6 +5,7 @@ import numpy as np
 import rlcard
 from rlcard.envs.env import Env
 from rlcard.games.nolimitholdem.game import NolimitholdemGame as Game
+from rlcard.envs.limitholdem import LimitholdemEnv
 from rlcard.utils.utils import *
 
 class NolimitholdemEnv(Env):
