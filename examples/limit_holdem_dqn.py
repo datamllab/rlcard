@@ -1,4 +1,4 @@
-''' A toy example of learning a Deep-Q Agent on Dou Dizhu
+''' A toy example of learning a Deep-Q Agent on Texas Limit Holdem
 '''
 
 import tensorflow as tf
@@ -17,7 +17,7 @@ eval_env = rlcard.make('limit-holdem')
 evaluate_every = 1000
 save_plot_every = 10000
 evaluate_num = 10000
-episode_num = 10000000
+episode_num = 1000000
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
@@ -29,15 +29,18 @@ set_global_seed(0)
 
 with tf.Session() as sess:
     # Set agents
+    global_step = tf.Variable(0, name='global_step', trainable=False)
     agent = DQNAgent(sess,
                        action_num=env.action_num,
-                       replay_memory_size=int(1e6),
+                       replay_memory_size=int(1e5),
                        replay_memory_init_size=memory_init_size,
                        norm_step=norm_step,
                        state_shape=[52],
                        mlp_layers=[512, 512])
 
     random_agent = RandomAgent(action_num=eval_env.action_num)
+
+    sess.run(tf.global_variables_initializer())
 
     env.set_agents([agent, random_agent])
     eval_env.set_agents([agent, random_agent])
@@ -59,7 +62,8 @@ with tf.Session() as sess:
             step_counter += 1
 
             # Train the agent
-            if step_counter > memory_init_size + norm_step:
+            train_count = step_counter - (memory_init_size + norm_step)
+            if train_count > 0:
                 loss = agent.train()
                 print('\rINFO - Step {}, loss: {}'.format(step_counter, loss), end='')
 

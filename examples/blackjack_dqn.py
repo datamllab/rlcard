@@ -26,7 +26,9 @@ norm_step = 100
 set_global_seed(0)
 
 with tf.Session() as sess:
+
     # Set agents
+    global_step = tf.Variable(0, name='global_step', trainable=False)
     agent = DQNAgent(sess,
                        action_num=env.action_num,
                        replay_memory_init_size=memory_init_size,
@@ -34,6 +36,8 @@ with tf.Session() as sess:
                        state_shape=[2],
                        mlp_layers=[10,10])
     env.set_agents([agent])
+
+    sess.run(tf.global_variables_initializer())
 
     # Count the number of steps
     step_counter = 0

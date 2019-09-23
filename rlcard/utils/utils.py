@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 from rlcard.core import Card, Player
 
@@ -277,3 +278,21 @@ def set_global_seed(seed):
         tf.set_random_seed(seed)
         np.random.seed(seed)
         random.seed(seed)
+
+def remove_illegal(action_probs, legal_actions):
+    ''' Remove illegal actions and normalize the
+        probability vector
+
+    Args:
+        action_probs (numpy.array): A 1 dimention numpy array.
+        legal_actions (list): A list of indices of legal actions.
+
+    Returns:
+        probd (numpy.array): A normalized vector without legal actions.
+    '''
+
+    probs = np.zeros(action_probs.shape[0])
+    probs[legal_actions] = action_probs[legal_actions]
+    probs /= sum(probs)
+    return probs
+

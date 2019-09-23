@@ -71,7 +71,7 @@ class DoudizhuJudger(object):
         if winner_id == landlord_id:
             payoffs[landlord_id] = 1
         else:
-            for index, payoffs in enumerate(payoffs):
+            for index, _ in enumerate(payoffs):
                 if index != landlord_id:
                     payoffs[index] = 1
         return payoffs

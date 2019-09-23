@@ -16,19 +16,20 @@ eval_env = rlcard.make('doudizhu')
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 500
 save_plot_every = 5000
-evaluate_num = 10000
-episode_num = 10000000
+evaluate_num = 200
+episode_num = 1000000
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
 memory_init_size = 1000
-norm_step = 100
+norm_step = 1000
 
 # Set a global seed
 set_global_seed(0)
 
 with tf.Session() as sess:
     # Set agents
+    global_step = tf.Variable(0, name='global_step', trainable=False)
     agent = DQNAgent(sess,
                        action_num=env.action_num,
                        replay_memory_size=20000,
@@ -38,6 +39,8 @@ with tf.Session() as sess:
                        mlp_layers=[512, 512])
 
     random_agent = RandomAgent(action_num=eval_env.action_num)
+
+    sess.run(tf.global_variables_initializer())
 
     env.set_agents([agent, random_agent, random_agent])
     eval_env.set_agents([agent, random_agent, random_agent])
@@ -59,7 +62,8 @@ with tf.Session() as sess:
             step_counter += 1
 
             # Train the agent
-            if step_counter > memory_init_size + norm_step:
+            train_count = step_counter - (memory_init_size + norm_step)
+            if train_count > 0:
                 loss = agent.train()
                 print('\rINFO - Step {}, loss: {}'.format(step_counter, loss), end='')
 

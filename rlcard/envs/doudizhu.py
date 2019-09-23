@@ -41,19 +41,10 @@ class DoudizhuEnv(Env):
         if state['played_cards'] is not None:
             encode_cards(obs[5], state['played_cards'])
 
-        legal_action_id = []
-        legal_actions = state['actions']
-        if legal_actions is not None:
-            for action in legal_actions:
-                for abstract in SPECIFIC_MAP[action]:
-                    action_id = ACTION_SPACE[abstract]
-                    if action_id not in legal_action_id:
-                        legal_action_id.append(action_id)
-
-        extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
+        extrated_state = {'obs': obs, 'legal_actions': [act for act in range(self.action_num)]}
         return extrated_state
 
-    def run(self, is_training=False, seed=None):
+    def run2(self, is_training=False, seed=None):
         ''' Run a complete game, either for evaluation or training RL agent.
 
         Args:
