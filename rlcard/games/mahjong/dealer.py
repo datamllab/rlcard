@@ -3,11 +3,12 @@ from rlcard.games.mahjong.card import MahjongCard as Card
 
 
 class MahjongDealer(object):
-    ''' Initialize a uno dealer class
+    ''' Initialize a mahjong dealer class
     '''
     def __init__(self):
         self.deck = self.init_wall()
         self.shuffle()
+        self.table = []
 
     def init_wall(self):
         deck = []
@@ -27,11 +28,7 @@ class MahjongDealer(object):
                     deck.append(card)
         deck = deck * 4
         return deck
-
         
-
-
-
     def shuffle(self):
         random.shuffle(self.deck)
 

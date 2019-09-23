@@ -21,12 +21,10 @@ class UnoGame(object):
         # Deal 7 cards to each player to prepare for the game
         for player in self.players:
             # print(player.get_player_id(), end=':')
-            self.dealer.deal_cards(player, 7)
+            self.dealer.deal_cards(player, 13)
             # for card in player.hand:
             # print(card.get_str(), end=',')
 
-        # Initialize a Round
-        self.round = Round(self.dealer, self.num_players)
 
         # flip and perfrom top card
         top_card = self.round.flip_top_card()
