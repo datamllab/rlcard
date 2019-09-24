@@ -81,7 +81,7 @@ class NolimitholdemGame(LimitholdemGame):
             (list): A list of legal actions
         '''
 
-        return self.round.get_legal_actions(self.players)
+        return self.round.get_nolimit_legal_actions(self.players)
 
     def step(self, action):
         ''' Get the next state

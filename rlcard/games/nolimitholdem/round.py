@@ -84,7 +84,7 @@ class NolimitholdemRound(LimitholdemRound):
 
         return self.game_pointer
 
-    def get_legal_actions(self, players):
+    def get_nolimit_legal_actions(self, players):
         ''' Obtain the legal actions for the curent player
 
         Args:
