@@ -13,8 +13,12 @@ setuptools.setup(
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
     packages=setuptools.find_packages(),
     install_requires=[
-        'tensorflow',
+        'tensorflow>=1.14',
+        'dm-sonnet>=1.35',
+        'numpy>=1.16',
+        'matplotlib>=3.0'
     ],
+    requires_python='>=3.5',
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",
