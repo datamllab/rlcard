@@ -1,3 +1,6 @@
+import numpy as np
+import random
+
 from rlcard.utils.utils import *
 
 class Env(object):
@@ -13,9 +16,12 @@ class Env(object):
 
         self.game = game
 
-        # get number of players in this game
+        # Get number of players/actions in this game
         self.player_num = game.get_player_num()
         self.action_num = game.get_action_num()
+
+        # A counter for the timesteps
+        self.timestep = 0
 
 
     def init_game(self):
@@ -44,6 +50,7 @@ class Env(object):
                 (int): The ID of the next player
         '''
 
+        self.timestep += 1
         next_state, player_id = self.game.step(self.decode_action(action))
         return self.extract_state(next_state), player_id
 
@@ -107,11 +114,14 @@ class Env(object):
 
         self.agents = agents
 
-    def run(self, is_training=False):
+    def run(self, is_training=False, seed=None):
         ''' Run a complete game, either for evaluation or training RL agent.
 
         Args:
             is_training (boolean): True if for training purpose.
+            seed (int): A seed for running the game. For single-process program,
+              the seed should be set to None. For multi-process program, the
+              seed should be asigned for reproducibility.
 
         Returns:
             (tuple) Tuple containing:
@@ -122,6 +132,10 @@ class Env(object):
         Note: The trajectories are 3-dimension list. The first dimension is for different players.
               The second dimension is for different transitions. The third dimension is for the contents of each transiton
         '''
+
+        if not seed:
+            np.random.seed(seed)
+            random.seed(seed)
 
         trajectories = [[] for _ in range(self.player_num)]
         state, player_id = self.init_game()

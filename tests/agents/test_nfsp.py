@@ -3,7 +3,7 @@ import tensorflow as tf
 
 from rlcard.agents.nfsp_agent import *
 
-class TestUtilsMethos(unittest.TestCase):
+class TestNFSP(unittest.TestCase):
 
     def test_init(self):
 

@@ -4,7 +4,7 @@ import rlcard
 from rlcard.envs.registration import *
 
 
-class TestBlackjackEnv(unittest.TestCase):
+class TestRegistration(unittest.TestCase):
 
     def test_register(self):
         register(env_id='test_reg', entry_point='rlcard.envs.blackjack:BlackjackEnv')

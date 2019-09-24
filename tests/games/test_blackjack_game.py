@@ -4,7 +4,7 @@ import numpy as np
 from rlcard.games.blackjack.game import BlackjackGame as Game
 
 
-class TestBlackjackMethods(unittest.TestCase):
+class TestBlackjackGame(unittest.TestCase):
 
     def test_get_player_num(self):
         game = Game()
@@ -59,7 +59,7 @@ class TestBlackjackMethods(unittest.TestCase):
 
     def test_get_state(self):
         game = Game()
-        state, _ = game.init_game()
+        game.init_game()
         self.assertEqual(len(game.get_state(0)['state'][1]), 1)
         game.step('stand')
         self.assertGreater(len(game.get_state(0)['state'][1]), 1)

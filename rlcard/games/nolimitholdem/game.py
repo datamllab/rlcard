@@ -16,7 +16,7 @@ class NolimitholdemGame(LimitholdemGame):
         # small blind and big blind
         self.small_blind = 1
         self.big_blind = 2 * self.small_blind
-        
+
         # config players
         self.num_players = 2
         self.init_chips = 100

@@ -10,6 +10,7 @@ from rlcard.utils.logger import Logger
 
 # Make environment
 env = rlcard.make('blackjack')
+eval_env = rlcard.make('blackjack')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
@@ -37,6 +38,7 @@ with tf.Session() as sess:
                      state_shape=[2],
                      mlp_layers=[10,10])
     env.set_agents([agent])
+    eval_env.set_agents([agent])
 
     sess.run(tf.global_variables_initializer())
 
@@ -44,7 +46,7 @@ with tf.Session() as sess:
     step_counter = 0
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='eposide', ylabel='reward', legend='DQN on Blackjack', log_path='./experiments/blackjack_dqn_result/log.txt', csv_path='./experiments/blackjack_dqn_result/performance.csv')
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on Blackjack', log_path='./experiments/blackjack_dqn_result/log.txt', csv_path='./experiments/blackjack_dqn_result/performance.csv')
 
     for episode in range(episode_num):
 
@@ -65,14 +67,14 @@ with tf.Session() as sess:
         if episode % evaluate_every == 0:
             reward = 0
             for eval_episode in range(evaluate_num):
-                _, payoffs = env.run(is_training=False)
+                _, payoffs = eval_env.run(is_training=False)
                 reward += payoffs[0]
 
             logger.log('\n########## Evaluation ##########')
-            logger.log('Episode: {} Average reward is {}'.format(episode, float(reward)/evaluate_num))
+            logger.log('Timestep: {} Average reward is {}'.format(env.timestep, float(reward)/evaluate_num))
 
             # Add point to logger
-            logger.add_point(x=episode, y=float(reward)/evaluate_num)
+            logger.add_point(x=env.timestep, y=float(reward)/evaluate_num)
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:

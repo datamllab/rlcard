@@ -4,7 +4,7 @@ import shutil
 
 from rlcard.utils.logger import Logger
 
-class TestLoggerMethos(unittest.TestCase):
+class TestLogger(unittest.TestCase):
 
     def test_log(self):
         log_path = "./newtest/test_log.txt"

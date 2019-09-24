@@ -1,4 +1,4 @@
-''' A toy example of learning a NFSP Agent on Limit Texas Holdem
+''' A toy example of learning a NFSP Agent on Dou Dizhu
 '''
 
 import tensorflow as tf
@@ -7,7 +7,6 @@ import rlcard
 from rlcard.agents.nfsp_agent import NFSPAgent
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import set_global_seed
-
 from rlcard.utils.logger import Logger
 
 # Make environment
@@ -55,7 +54,7 @@ with tf.Session() as sess:
     step_counters = [0 for _ in range(env.player_num)]
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='eposide', ylabel='reward', legend='NFSP on Dou Dizhu', log_path='./experiments/limit_holdem_nfsp_result/log.txt', csv_path='./experiments/limit_holdem_nfsp_result/performance.csv')
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='NFSP on Dou Dizhu', log_path='./experiments/doudizhu_nfsp_result/log.txt', csv_path='./experiments/doudizhu_nfsp_result/performance.csv')
 
     for episode in range(episode_num):
 
@@ -88,14 +87,14 @@ with tf.Session() as sess:
                 reward += payoffs[0]
 
             logger.log('\n########## Evaluation ##########')
-            logger.log('Average reward is {}'.format(float(reward)/evaluate_num))
+            logger.log('Timestep: {} Average reward is {}'.format(env.timestep, float(reward)/evaluate_num))
 
             # Add point to logger
-            logger.add_point(x=episode, y=float(reward)/evaluate_num)
+            logger.add_point(x=env.timestep, y=float(reward)/evaluate_num)
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            logger.make_plot(save_path='./experiments/limit_holdem_nfsp_result/'+str(episode)+'.png')
+            logger.make_plot(save_path='./experiments/doudizhu_nfsp_result/'+str(episode)+'.png')
 
     # Make the final plot
-    logger.make_plot(save_path='./experiments/limit_holdem_nfsp_result/'+'final_'+str(episode)+'.png')
+    logger.make_plot(save_path='./experiments/doudizhu_nfsp_result/'+'final_'+str(episode)+'.png')

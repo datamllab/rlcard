@@ -43,63 +43,6 @@ class DoudizhuEnv(Env):
         extrated_state = {'obs': obs, 'legal_actions': [act for act in range(self.action_num)]}
         return extrated_state
 
-    def run2(self, is_training=False, seed=None):
-        ''' Run a complete game, either for evaluation or training RL agent.
-
-        Args:
-            is_training (boolean): True if for training purpose.
-            seed (int): The seed
-
-        Returns:
-            (tuple) Tuple containing:
-
-                (list): A list of trajectories generated from the environment.
-                (list): A list payoffs. Each entry corresponds to one player.
-
-        Note: The trajectories are 3-dimension list. The first dimension is for different players.
-              The second dimension is for different transitions. The third dimension is for the contents of each transiton
-        '''
-
-        np.random.seed(seed)
-        trajectories = [[] for _ in range(self.player_num)]
-        state, player_id = self.init_game()
-
-        # Loop to play the game
-        trajectories[player_id].append(state)
-        while not self.is_over():
-            # Agent plays
-            if not is_training:
-                action = self.agents[player_id].eval_step(state)
-            else:
-                action = self.agents[player_id].step(state)
-
-            # Environment steps
-            next_state, next_player_id = self.step(action)
-
-            # Save action
-            trajectories[player_id].append(action)
-
-            # Set the state and player
-            state = next_state
-            player_id = next_player_id
-
-            # Save state.
-            if not self.game.is_over():
-                trajectories[player_id].append(state)
-
-        # Add a final state to all the players
-        for player_id in range(self.player_num):
-            state = self.get_state(player_id)
-            trajectories[player_id].append(state)
-
-        # Payoffs
-        payoffs = self.get_payoffs()
-
-        # Reorganize the trajectories
-        trajectories = reorganize(trajectories, payoffs)
-
-        return trajectories, payoffs
-
     def get_payoffs(self):
         ''' Get the payoffs of players. Must be implemented in the child class.
 

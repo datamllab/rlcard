@@ -1,4 +1,3 @@
-from rlcard.utils.utils import init_standard_deck
 from rlcard.games.limitholdem.dealer import LimitholdemDealer
 
 class NolimitholdemDealer(LimitholdemDealer):

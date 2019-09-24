@@ -3,7 +3,7 @@ import tensorflow as tf
 
 from rlcard.agents.dqn_agent import *
 
-class TestUtilsMethos(unittest.TestCase):
+class TestDQN(unittest.TestCase):
 
     def test_init(self):
 

@@ -4,7 +4,7 @@ from rlcard.utils.utils import *
 
 from rlcard.core import Card, Player
 
-class TestUtilsMethos(unittest.TestCase):
+class TestUtils(unittest.TestCase):
 
     def test_init_standard_deck(self):
         self.assertEqual(len(init_standard_deck()), 52)
