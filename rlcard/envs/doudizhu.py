@@ -39,8 +39,9 @@ class DoudizhuEnv(Env):
                 encode_cards(obs[4-i], action[1])
         if state['played_cards'] is not None:
             encode_cards(obs[5], state['played_cards'])
-
-        extrated_state = {'obs': obs, 'legal_actions': [act for act in range(self.action_num)]}
+        #print(state)
+        #extrated_state = {'obs': obs, 'legal_actions': [act for act in range(self.action_num)]}
+        extrated_state = {'obs': obs, 'legal_actions': self.get_legal_actions()}
         return extrated_state
 
     def get_payoffs(self):
@@ -86,9 +87,10 @@ class DoudizhuEnv(Env):
         '''
         legal_action_id = []
         legal_actions = self.game.state['actions']
-        for action in legal_actions:
-            for abstract in SPECIFIC_MAP[action]:
-                action_id = ACTION_SPACE[abstract]
-                if action_id not in legal_action_id:
-                    legal_action_id.append(action_id)
+        if legal_actions:
+            for action in legal_actions:
+                for abstract in SPECIFIC_MAP[action]:
+                    action_id = ACTION_SPACE[abstract]
+                    if action_id not in legal_action_id:
+                        legal_action_id.append(action_id)
         return legal_action_id

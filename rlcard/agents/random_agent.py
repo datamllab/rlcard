@@ -24,7 +24,8 @@ class RandomAgent(object):
             action (int): the action predicted (randomly chosen) by the random agent
         '''
 
-        return np.random.randint(0, self.action_num)
+        #return np.random.randint(0, self.action_num)
+        return np.random.choice(state['legal_actions'])
 
     def eval_step(self, state):
         ''' Predict the action given the curent state for evaluation.

@@ -133,7 +133,7 @@ class Env(object):
               The second dimension is for different transitions. The third dimension is for the contents of each transiton
         '''
 
-        if not seed:
+        if seed:
             np.random.seed(seed)
             random.seed(seed)
 

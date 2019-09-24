@@ -7,7 +7,7 @@ from rlcard.utils.utils import *
 
 # Make environment
 env = rlcard.make('no-limit-holdem')
-episode_num = 1000
+episode_num = 2
 
 # Set a global seed
 set_global_seed(0)
