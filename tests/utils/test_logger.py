@@ -36,7 +36,7 @@ class TestLoggerMethos(unittest.TestCase):
         save_dir = os.path.dirname(save_path)
         if os.path.exists(save_dir):
             shutil.rmtree(save_dir)
-        
+
         logger.make_plot(save_path=save_path)
         shutil.rmtree(save_dir)
 

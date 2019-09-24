@@ -1,5 +1,4 @@
 import unittest
-import numpy as np
 
 import rlcard
 from rlcard.envs.registration import *
@@ -19,6 +18,6 @@ class TestBlackjackEnv(unittest.TestCase):
         self.assertEqual(player, 0)
         with self.assertRaises(ValueError):
             make('test_random_make')
-            
+
 if __name__ == '__main__':
     unittest.main()

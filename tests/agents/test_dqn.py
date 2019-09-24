@@ -38,7 +38,7 @@ class TestUtilsMethos(unittest.TestCase):
 
     def test_train(self):
 
-        norm_step = 100
+        norm_step = 1100
         memory_init_size = 100
         step_num = 1000
 

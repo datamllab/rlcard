@@ -2,10 +2,7 @@
 ''' Implement Limit Texas Hold'em Round class
 '''
 
-import random
 from rlcard.games.limitholdem.round import LimitholdemRound
-
-from rlcard.games.nolimitholdem.player import NolimitholdemPlayer as Player
 
 class NolimitholdemRound(LimitholdemRound):
     ''' Round can call other Classes' functions to keep the game running

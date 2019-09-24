@@ -37,6 +37,7 @@ class TestUtilsMethos(unittest.TestCase):
                          hidden_layers_sizes=[10,10],
                          reservoir_buffer_capacity=50,
                          batch_size=4,
+                         min_buffer_size_to_learn=100,
                          q_replay_memory_size=50,
                          q_batch_size=4,
                          q_norm_step=norm_step,
@@ -54,9 +55,30 @@ class TestUtilsMethos(unittest.TestCase):
                 agent.train_rl()
                 agent.train_sl()
 
-        predicted_action = agent.step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
-        self.assertGreaterEqual(predicted_action, 0)
-        self.assertLessEqual(predicted_action, 1)
+        for _ in range(100):
+            agent.sample_episode_policy()
+            predicted_action = agent.step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
+            self.assertGreaterEqual(predicted_action, 0)
+            self.assertLessEqual(predicted_action, 1)
 
         sess.close()
         tf.reset_default_graph()
+
+    def test_reservoir_buffer(self):
+        buff = ReservoirBuffer(10)
+        for i in range(5):
+            buff.add(i)
+
+        sampled_data = buff.sample(3)
+        self.assertEqual(len(sampled_data), 3)
+
+        with self.assertRaises(ValueError):
+            buff.sample(100)
+
+        for i, element in enumerate(buff):
+            self.assertEqual(i, element)
+
+        self.assertEqual(len(buff), 5)
+
+        buff.clear()
+        self.assertEqual(len(buff), 0)
