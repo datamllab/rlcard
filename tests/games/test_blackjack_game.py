@@ -62,7 +62,7 @@ class TestBlackjackMethods(unittest.TestCase):
         state, _ = game.init_game()
         self.assertEqual(len(game.get_state(0)['state'][1]), 1)
         game.step('stand')
-        self.assertEqual(len(game.get_state(0)['state'][1]), 2)
+        self.assertGreater(len(game.get_state(0)['state'][1]), 1)
 
 
 

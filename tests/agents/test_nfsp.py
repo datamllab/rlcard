@@ -59,8 +59,8 @@ class TestUtilsMethos(unittest.TestCase):
             agent.feed(ts)
             if step > norm_step + memory_init_size:
                 agent.train_rl()
-                agent.train_sl()
 
+            agent.train_sl()
         sess.close()
         tf.reset_default_graph()
 
