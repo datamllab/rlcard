@@ -54,6 +54,17 @@ class TestBlackjackMethods(unittest.TestCase):
         test_hand = game.get_state(0)['state'][0]
         self.assertEqual(init_hand, test_hand)
         self.assertEqual(len(game.history), 0)
+        success = game.step_back()
+        self.assertEqual(success, False)
+
+    def test_get_state(self):
+        game = Game()
+        state, _ = game.init_game()
+        self.assertEqual(len(game.get_state(0)['state'][1]), 1)
+        game.step('stand')
+        self.assertEqual(len(game.get_state(0)['state'][1]), 2)
+
+
 
 if __name__ == '__main__':
     unittest.main()

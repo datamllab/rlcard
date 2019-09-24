@@ -25,7 +25,7 @@ class TestUtilsMethos(unittest.TestCase):
     def test_train(self):
 
         norm_step = 100
-        memory_init_size = 10
+        memory_init_size = 20
         step_num = 1000
 
         sess = tf.InteractiveSession()
@@ -37,8 +37,9 @@ class TestUtilsMethos(unittest.TestCase):
                          hidden_layers_sizes=[10,10],
                          reservoir_buffer_capacity=50,
                          batch_size=4,
-                         min_buffer_size_to_learn=100,
+                         min_buffer_size_to_learn=memory_init_size,
                          q_replay_memory_size=50,
+                         q_replay_memory_init_size=memory_init_size,
                          q_batch_size=4,
                          q_norm_step=norm_step,
                          q_mlp_layers=[10,10])
@@ -49,17 +50,16 @@ class TestUtilsMethos(unittest.TestCase):
         self.assertLessEqual(predicted_action, 1)
 
         for step in range(step_num):
+            agent.sample_episode_policy()
+            predicted_action = agent.step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
+            self.assertGreaterEqual(predicted_action, 0)
+            self.assertLessEqual(predicted_action, 1)
+
             ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, True]
             agent.feed(ts)
             if step > norm_step + memory_init_size:
                 agent.train_rl()
                 agent.train_sl()
-
-        for _ in range(100):
-            agent.sample_episode_policy()
-            predicted_action = agent.step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
-            self.assertGreaterEqual(predicted_action, 0)
-            self.assertLessEqual(predicted_action, 1)
 
         sess.close()
         tf.reset_default_graph()

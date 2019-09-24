@@ -40,7 +40,7 @@ class TestUtilsMethos(unittest.TestCase):
 
         norm_step = 1100
         memory_init_size = 100
-        step_num = 1000
+        step_num = 1500
 
         sess = tf.InteractiveSession()
         tf.Variable(0, name='global_step', trainable=False)
@@ -48,7 +48,7 @@ class TestUtilsMethos(unittest.TestCase):
                          scope='dqn',
                          replay_memory_size = 500,
                          replay_memory_init_size=memory_init_size,
-                         update_target_estimator_every=10,
+                         update_target_estimator_every=100,
                          norm_step=norm_step,
                          state_shape=[2],
                          mlp_layers=[10,10])
