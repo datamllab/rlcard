@@ -11,6 +11,14 @@ class TestDoudizhuEnv(unittest.TestCase):
         state, _ = env.init_game()
         self.assertEqual(state['obs'].size, 450)
 
+    def test_get_legal_actions(self):
+        env = Env()
+        env.set_agents([RandomAgent(309), RandomAgent(309), RandomAgent(309)])
+        env.init_game()
+        legal_actions = env.get_legal_actions()
+        for legal_action in legal_actions:
+            self.assertLessEqual(legal_action, 308)
+
     def test_step(self):
         env = Env()
         _, player_id = env.init_game()
@@ -33,14 +41,6 @@ class TestDoudizhuEnv(unittest.TestCase):
         if len(win) == 2:
             self.assertEqual(env.game.players[win[0]].role, 'peasant')
             self.assertEqual(env.game.players[win[1]].role, 'peasant')
-
-    def test_get_legal_actions(self):
-        env = Env()
-        env.set_agents([RandomAgent(309), RandomAgent(309), RandomAgent(309)])
-        env.init_game()
-        legal_actions = env.get_legal_actions()
-        for legal_action in legal_actions:
-            self.assertLessEqual(legal_action, 308)
 
 
 if __name__ == '__main__':
