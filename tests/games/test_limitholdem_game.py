@@ -48,6 +48,12 @@ class TestLimitholdemMethods(unittest.TestCase):
         game.step('fold')
         self.assertTrue(game.round.player_folded)
 
+        # test check
+        game.init_game()
+        game.step('call')
+        game.step('check')
+        self.assertEqual(game.round_counter, 1)
+
         # test play 4 rounds
         game.init_game()
         for i in range(19):
