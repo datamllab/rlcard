@@ -29,6 +29,13 @@ class TestLimitholdemEnv(unittest.TestCase):
             decoded = env.decode_action(action)
             self.assertIn(decoded, env.actions)
 
+        decoded = env.decode_action(3)
+        self.assertEqual(decoded, 'fold')
+
+        env.step(0)
+        decoded = env.decode_action(0)
+        self.assertEqual(decoded, 'check')
+
     def test_step(self):
         env = Env()
         state, player_id = env.init_game()

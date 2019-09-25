@@ -42,6 +42,19 @@ class TestDoudizhuEnv(unittest.TestCase):
             self.assertEqual(env.game.players[win[0]].role, 'peasant')
             self.assertEqual(env.game.players[win[1]].role, 'peasant')
 
+    def test_decode_action(self):
+        env = Env()
+        state, _ = env.init_game()
+        for action in state['legal_actions']:
+            decoded = env.decode_action(action)
+            self.assertIn(decoded, env.game.state['actions'])
+
+        state, _ = env.step(0)
+        for action in range(309):
+            if action not in state['legal_actions']:
+                decoded = env.decode_action(action)
+                self.assertEqual(decoded, 'pass')
+                break
 
 if __name__ == '__main__':
     unittest.main()

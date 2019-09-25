@@ -226,27 +226,27 @@ class LimitholdemGame(object):
 
 # Test the game
 
-if __name__ == "__main__":
-    game = LimitholdemGame()
-    while True:
-        print('New Game')
-        state, game_pointer = game.init_game()
-        print(game_pointer, state)
-        i = 1
-        while not game.is_over():
-            i += 1
-            legal_actions = game.get_legal_actions()
-            if i == 3:
-                print('Step back')
-                print(game.step_back())
-                game_pointer = game.get_player_id()
-                print(game_pointer)
-                legal_actions = game.get_legal_actions()
-
-            action = np.random.choice(legal_actions)
-            print(game_pointer, action, legal_actions)
-            state, game_pointer = game.step(action)
-            print(game_pointer, state)
-
-        print(game.get_payoffs())
+#if __name__ == "__main__":
+#    game = LimitholdemGame()
+#    while True:
+#        print('New Game')
+#        state, game_pointer = game.init_game()
+#        print(game_pointer, state)
+#        i = 1
+#        while not game.is_over():
+#            i += 1
+#            legal_actions = game.get_legal_actions()
+#            if i == 3:
+#                print('Step back')
+#                print(game.step_back())
+#                game_pointer = game.get_player_id()
+#                print(game_pointer)
+#                legal_actions = game.get_legal_actions()
+#
+#            action = np.random.choice(legal_actions)
+#            print(game_pointer, action, legal_actions)
+#            state, game_pointer = game.step(action)
+#            print(game_pointer, state)
+#
+#        print(game.get_payoffs())
 

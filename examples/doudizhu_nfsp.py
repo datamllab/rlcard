@@ -36,11 +36,16 @@ with tf.Session() as sess:
                           scope='nfsp' + str(i),
                           action_num=env.action_num,
                           state_shape=[6, 5, 15],
-                          hidden_layers_sizes=[512,512],
+                          hidden_layers_sizes=[512,1024,2048,2048,2048,1024,512],
+                          anticipatory_param=0.8,
+                          batch_size=512,
+                          rl_learning_rate=0.00001,
+                          sl_learning_rate=0.00001,
                           min_buffer_size_to_learn=memory_init_size,
                           q_replay_memory_init_size=memory_init_size,
                           q_norm_step=norm_step,
-                          q_mlp_layers=[512,512])
+                          q_batch_size=512,
+                          q_mlp_layers=[512,1024,2048,2048,3028,1024,512])
         agents.append(agent)
 
     sess.run(tf.global_variables_initializer())
@@ -73,7 +78,7 @@ with tf.Session() as sess:
 
                 # Train the agent
                 train_count = step_counters[i] - (memory_init_size + norm_step)
-                if train_count > 0 and train_count % 64 == 0:
+                if train_count > 0 and train_count % 128 == 0:
                     rl_loss = agents[i].train_rl()
                     sl_loss = agents[i].train_sl()
                     print('\rINFO - Agent {}, step {}, rl-loss: {}, sl-loss: {}'.format(i, step_counters[i], rl_loss, sl_loss), end='')

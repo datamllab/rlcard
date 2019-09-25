@@ -128,16 +128,16 @@ class LimitholdemRound(object):
             return True
         return False
 
-if __name__ == '__main__':
-    players = [Player(0), Player(1)]
-    game_pointer = 0
-    r = LimitholdemRound(game_pointer, 2, 4)
-    r.start_new_round(game_pointer=game_pointer, raised=[1, 2])
-    print(r.raised, r.have_raised, r.not_raise_num)
-
-    while not r.is_over():
-        legal_actions = r.get_legal_actions()
-        action = np.random.choice(legal_actions)
-        print(game_pointer, action, legal_actions)
-        game_pointer = r.proceed_round(players[game_pointer], action)
-        print(r.raised, r.have_raised, r.not_raise_num)
+#if __name__ == '__main__':
+#    players = [Player(0), Player(1)]
+#    game_pointer = 0
+#    r = LimitholdemRound(game_pointer, 2, 4)
+#    r.start_new_round(game_pointer=game_pointer, raised=[1, 2])
+#    print(r.raised, r.have_raised, r.not_raise_num)
+#
+#    while not r.is_over():
+#        legal_actions = r.get_legal_actions()
+#        action = np.random.choice(legal_actions)
+#        print(game_pointer, action, legal_actions)
+#        game_pointer = r.proceed_round(players[game_pointer], action)
+#        print(r.raised, r.have_raised, r.not_raise_num)
