@@ -1,5 +1,5 @@
 # Toy Examples
-In this document, we provide some toy examples for getting started. For more examples, please refer to [examples/](examples).
+In this document, we provide some toy examples for getting started. For more examples, please refer to [examples/](../examples).
 
 # Playing with Random Agents
 We have set up a random agent that can play randomly on each environment. An example of applying a random agent on Blackjack is as follow:
@@ -141,100 +141,5 @@ INFO - Step 616 loss: 0.77693158388137823
 ```
 In Blackjack, the player will get a payoff at the end of the game: 1 if the player wins, -1 if the player loses, and 0 if it is a tie. The performance is measured by the average payoff the player obtains by playing 1000 episodes. The above example shows that the agent achieves better and better performance during training. The logs and learning curves are saved in `./experiments/blackjack_dqn_result/`.
 
-# DeepCFR on Blackjack
-The third example is to use Deep Counterfactual Regret Minimization to train an agent on Blackjack. We aim to use this example to show how CFR algorithms can be developed and applied in our toolkit. We design `step` and `step_back` function which allows CFR based algorithms easily perform the game tree traversal for further optimization. The example is shown below:
+# Running Multiple Processes
 
-```python
-import rlcard
-from rlcard.agents.deep_cfr import DeepCFR
-from rlcard.utils.utils import *
-import tensorflow as tf
-import numpy as np
-
-# make environment
-set_global_seed(0)
-evaluate_every = 100
-evaluate_num = 1000
-num_iteration = 1000
-i = 0
-rewards = 0
-train_env = rlcard.make('blackjack') 
-test_env = rlcard.make('blackjack') 
-with tf.Session() as sess:
-    deep_cfr = DeepCFR(sess, #
-                train_env, 
-                policy_network_layers=(32,32),
-                advantage_network_layers=(32,32),
-                num_traversals=40,
-                num_step=40
-                learning_rate=1e-4,
-                batch_size_advantage=16,
-                batch_size_strategy=16,
-                memory_capacity=1e7)
-
-    for i in range(num_iteration):
-        # Train the agent in training environment
-        _, adv_loss, policy_loss = deep_cfr.train()
-
-        # Evaluate the agent
-        if i % evaluate_every == 0:
-            rewards = 0
-            for j in range(evaluate_num):
-                state, player = test_env.init_game()
-                while True:
-                    action_prob = deep_cfr.action_probabilities(state)
-                    action_prob /= action_prob.sum()
-                    action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
-                    state, player = test_env.step(action)
-                    if test_env.is_over():
-                        payoffs = test_env.get_payoffs()
-                        rewards += payoffs[0]
-                        break
-            print('############## Iteration '+str(i)+' #################')
-            print('Reward: ', float(rewards)/evaluate_num)
-            print('Advantage Loss: ', adv_loss)
-            print('Policy Loss: ', policy_loss)
-```
-The expected output is shown as below:
-```python
-############## Iteration 0 #################
-Reward:  -1.0
-Advantage Loss:  3.872990369796753
-Policy Loss:  0.12022944
-############## Iteration 100 #################
-Reward:  -0.214
-Advantage Loss:  32.23717498779297
-Policy Loss:  1.9331933
-############## Iteration 200 #################
-Reward:  -0.128
-Advantage Loss:  55.274147033691406
-Policy Loss:  6.15625
-############## Iteration 300 #################
-Reward:  -0.14
-Advantage Loss:  58.65533447265625
-Policy Loss:  4.0294237
-############## Iteration 400 #################
-Reward:  -0.142
-Advantage Loss:  74.10326385498047
-Policy Loss:  14.68907
-############## Iteration 500 #################
-Reward:  -0.172
-Advantage Loss:  165.66090393066406
-Policy Loss:  12.746856
-############## Iteration 600 #################
-Reward:  -0.187
-Advantage Loss:  161.6951904296875
-Policy Loss:  26.703487
-############## Iteration 700 #################
-Reward:  -0.083
-Advantage Loss:  220.24888610839844
-Policy Loss:  11.849184
-############## Iteration 800 #################
-Reward:  -0.102
-Advantage Loss:  251.22244262695312
-Policy Loss:  23.548765
-############## Iteration 900 #################
-Reward:  -0.093
-Advantage Loss:  159.9312286376953
-Policy Loss:  29.732689
-```

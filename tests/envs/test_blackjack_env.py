@@ -1,6 +1,8 @@
 import unittest
-import random
+import numpy as np
+
 from rlcard.envs.blackjack import BlackjackEnv as Env
+from rlcard.agents.random_agent import RandomAgent
 
 
 class TestBlackjackEnv(unittest.TestCase):
@@ -8,7 +10,7 @@ class TestBlackjackEnv(unittest.TestCase):
     def test_init_and_extract_state(self):
         env = Env()
         state, _ = env.init_game()
-        for score in state:
+        for score in state['obs']:
             self.assertLessEqual(score, 30)
 
     def test_decode_action(self):
@@ -28,7 +30,7 @@ class TestBlackjackEnv(unittest.TestCase):
         for _ in range(100):
             env.init_game()
             while not env.is_over():
-                action = random.choice([0, 1])
+                action = np.random.choice([0, 1])
                 env.step(action)
             payoffs = env.get_payoffs()
             for payoff in payoffs:
@@ -40,7 +42,15 @@ class TestBlackjackEnv(unittest.TestCase):
         env.step(1)
         _, back_player_id = env.step_back()
         self.assertEqual(player_id, back_player_id)
+        self.assertEqual(env.step_back(), False)
 
+    def test_run(self):
+        env = Env()
+        env.set_agents([RandomAgent(2)])
+        trajectories, _ = env.run(is_training=False)
+        self.assertEqual(len(trajectories), 1)
+        trajectories, _ = env.run(is_training=True, seed=1)
+        self.assertEqual(len(trajectories), 1)
 
 if __name__ == '__main__':
     unittest.main()

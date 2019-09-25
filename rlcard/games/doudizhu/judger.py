@@ -48,3 +48,30 @@ class DoudizhuJudger(object):
                 if not contains_cards(current_hand, cards):
                     del self.playable_cards[player_id][cards]
         return list(self.playable_cards[player_id])
+
+    @staticmethod
+    def judge_game(players, player_id):
+        ''' Judge whether the game is over
+
+        Args:
+            players (list): list of DoudizhuPlayer objects
+            player_id (int): integer of player's id
+
+        Returns:
+            (bool): True if the game is over
+        '''
+        player = players[player_id]
+        if not player.current_hand:
+            return True
+        return False
+
+    @staticmethod
+    def judge_payoffs(landlord_id, winner_id):
+        payoffs = [0, 0, 0]
+        if winner_id == landlord_id:
+            payoffs[landlord_id] = 1
+        else:
+            for index, _ in enumerate(payoffs):
+                if index != landlord_id:
+                    payoffs[index] = 1
+        return payoffs

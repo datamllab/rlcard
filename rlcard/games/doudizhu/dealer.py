@@ -4,7 +4,6 @@
 
 import random
 import functools
-import copy
 
 from rlcard.utils.utils import init_54_deck
 from rlcard.games.doudizhu.utils import doudizhu_sort_card, get_landlord_score
@@ -23,6 +22,7 @@ class DoudizhuDealer(object):
         '''
         super().__init__()
         self.deck = init_54_deck()
+        self.deck.sort(key=functools.cmp_to_key(doudizhu_sort_card))
         self.landlord = None
 
     def shuffle(self):
@@ -40,9 +40,9 @@ class DoudizhuDealer(object):
 
         hand_num = (len(self.deck) - 3) // len(players)
         for index, player in enumerate(players):
-            player.hand = self.deck[index*hand_num:(index+1)*hand_num]
-            player.hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
-            player.current_hand = copy.deepcopy(player.hand)
+            player.current_hand = self.deck[index*hand_num:(index+1)*hand_num]
+            player.current_hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
+            player.initial_hand = cards2str(player.current_hand)
 
     def determine_role(self, players):
         ''' Determine landlord and peasants according to players' hand
@@ -73,7 +73,7 @@ class DoudizhuDealer(object):
         self.landlord.role = 'landlord'
 
         # give the 'landlord' the  three cards
-        self.landlord.hand.extend(self.deck[-3:])
-        self.landlord.hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
-        self.landlord.current_hand = copy.deepcopy(self.landlord.hand)
+        self.landlord.current_hand.extend(self.deck[-3:])
+        self.landlord.current_hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
+        self.landlord.initial_hand = cards2str(self.landlord.current_hand)
         return self.landlord.player_id

@@ -1,8 +1,14 @@
 # Index
-* [Blackjack](docs/games.md#blackjack)
-* [Limit Texas Hold'em](docs/games.md#limit-texas-holdem)
-* [No-limit Texas Hold'em](docs/games.md#no-limit-texas-holdem)
-* [Dou Dizhu](docs/games.md#dou-dizhu)
+
+*   [Blackjack](games.md#blackjack)
+*   [Leduc Hold'em](games.md#leduc-holdem)
+*   [Limit Texas Hold'em](games.md#limit-texas-holdem)
+*   [Dou Dizhu](games.md#dou-dizhu)
+*   [Mahjong](games.md#mahjong)
+*   [No-limit Texas Hold'em](games.md#no-limit-texas-holdem)
+*   [UNO](games.md#uno)
+*   [Sheng Ji](games.md#sheng-ji)
+ 
 # Blackjack
 Blackjack is a globally popular banking game known as Twenty-One. The objective is to beat the dealer by reaching a higher score than the dealer without exceeding 21. In the toolkit, we implement a simple version of Blackjack. In each round, the player only has two options: "hit" which will take a card, and 'stand' which end the turn. The player will "bust" if his hands exceed 21 points. After the player completes his hands (chooses "stand" and has not busted), the dealer then reals his hidden card and "hit" until obtaining at least 17 points.
 ## State Encoding
@@ -17,10 +23,15 @@ There are two actions in the simple Blackjack. They are encoded as follows:
 
 ## Payoff
 The player may receive a reward -1 (lose), 0 (tie), or 1 (win) in the end of the game.
+
+# Leduc Hold'em
+(Under construction)
+
 # Limit Texas Hold'em
-test
-# No-limit Texas Hold'em
-test
+(Under construction)
+
+
+
 # Dou Dizhu
 
 Doudizhu is one of the most popular Chinese card games with hundreds of millions of players. It is played by three people with one pack of 54 cards including a red joker and a black joker. After bidding, one player would be the "landlord" who can get an extra three cards, and the other two would be "peasants" who work together to fight against the landlord. In each round of the game, the starting player must play a card or a combination, and the other two players can decide whether to follow or "pass." A round is finished if two consecutive players choose "pass." The player who played the cards with the highest rank will be the first to play in the next round. The objective of the game is to be the first player to get rid of all the cards in hand. For detailed rules, please refer to [Wikipedia](https://en.wikipedia.org/wiki/Dou_dizhu) or  [Baike](https://baike.baidu.com/item/%E6%96%97%E5%9C%B0%E4%B8%BB/177997?fr=aladdin).
@@ -78,3 +89,16 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 
 ## Payoff
 Each player will receive a reward 0 (lose) or 1 (win) in the end of the game.
+
+
+# Mahjong
+(Under construction)
+
+# No-limit Texas Hold'em
+(Under construction)
+
+# UNO
+(Under construction)
+
+# Sheng Ji
+(Under construction)

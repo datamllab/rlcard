@@ -1,4 +1,4 @@
-import random
+import numpy as np
 
 
 class RandomAgent(object):
@@ -24,7 +24,8 @@ class RandomAgent(object):
             action (int): the action predicted (randomly chosen) by the random agent
         '''
 
-        return random.randint(0, self.action_num-1)
+        #return np.random.randint(0, self.action_num)
+        return np.random.choice(state['legal_actions'])
 
     def eval_step(self, state):
         ''' Predict the action given the curent state for evaluation.

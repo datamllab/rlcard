@@ -2,11 +2,15 @@
 
 class Hand:
     def __init__(self):
-        self.all_cards = []
-        self.category = 0  # 0:"Not_Yet_Evaluated" 1: "High_Card" , 9:"Straight_Flush" etc
+        self.all_cards = [] # two hand cards + five public cards
+        self.category = 0 
+        # type of a players' best five cards, greater combination has higher number eg: 0:"Not_Yet_Evaluated" 1: "High_Card" , 9:"Straight_Flush" 
         self.best_five = []
+        # the greatest combination of five cards in all the seven cards
         self.flush_cards = []
+        # cards with same suit
         self.cards_by_rank = []
+        # cards after sort
         self.product = 1
         self.RANK_TO_STRING = {2: "2", 3: "3", 4: "4", 5: "5", 6: "6",
                                7: "7", 8: "8", 9: "9", 10: "T", 11: "J", 12: "Q", 13: "K", 14: "A"}
@@ -14,20 +18,27 @@ class Hand:
         self.SUIT_LOOKUP = "SCDH"
 
     def setCards(self, seven_cards=[]):
+        ''' 
+        Assign value to all_cards
+        Args:
+            seven_cards(list): # two hand cards + five public cards on deck
+        '''
         self.all_cards = seven_cards
 
     def get_hand_five_cards(self):
         return self.best_five
 
     def _sort_cards(self):
+        '''
+        Sort all the seven cards ascendingly according to RANK_LOOKUP
+        '''
         self.all_cards = sorted(
             self.all_cards, key=lambda card: self.RANK_LOOKUP.index(card[1]))
 
     def evaluateHand(self):
         """
-        Do Hand Evaluation and
-        Get the best Five Cards (for or comparing in case 2 hands have the same Category) .
-
+        Evaluate all the seven cards, get the best combination catagory 
+        And pick the best five cards (for comparing in case 2 hands have the same Category) .
         """
         if len(self.all_cards) != 7:
             raise Exception(
@@ -74,6 +85,12 @@ class Hand:
             self.best_five = self._get_High_cards()
 
     def _has_straight_flush(self):
+        '''
+        Check the existence of straight_flush cards
+        Returns:
+            True: exist
+            False: not exist
+        '''
         self.flush_cards = self._getflush_cards()
         if len(self.flush_cards) > 0:
             straightflush_cards = self._get_straightflush_cards()
@@ -83,10 +100,20 @@ class Hand:
         return False
 
     def _get_straightflush_cards(self):
+        '''
+        Pick straight_flush cards
+        Returns:
+            (list): the straightflush cards
+        '''
         straightflush_cards = self._get_straight_cards(self.flush_cards)
         return straightflush_cards
 
     def _getflush_cards(self):
+        '''
+        Pick flush cards
+        Returns:
+            (list): the flush cards
+        '''
         card_string = ''.join(self.all_cards)
         for suit in self.SUIT_LOOKUP:
             suit_count = card_string.count(suit)
@@ -97,12 +124,24 @@ class Hand:
         return []
 
     def _has_flush(self):
+        '''
+        Check the existence of flush cards
+        Returns:
+            True: exist
+            False: not exist
+        '''
         if len(self.flush_cards) > 0:
             return True
         else:
             return False
 
     def _has_straight(self, all_cards):
+        '''
+        Check the existence of straight cards
+        Returns:
+            True: exist
+            False: not exist
+        '''
         diff_rank_cards = self._get_different_rank_list(all_cards)
         self.best_five = self._get_straight_cards(diff_rank_cards)
         if len(self.best_five) != 0:
@@ -119,6 +158,11 @@ class Hand:
         return different_rank_list
 
     def _get_straight_cards(self, Cards):
+        '''
+        Pick straight cards
+        Returns:
+            (list): the straight cards
+        '''
         highest_card = Cards[-1]
         if highest_card[1] == 'A':
             Cards.insert(0, highest_card)
@@ -175,36 +219,72 @@ class Hand:
         return card_group, product
 
     def _has_four(self):
+        '''
+        Check the existence of four cards
+        Returns:
+            True: exist
+            False: not exist
+        '''
         if self.product == 5 or self.product == 10 or self.product == 15:
             return True
         else:
             return False
 
     def _has_fullhouse(self):
+        '''
+        Check the existence of fullhouse cards
+        Returns:
+            True: exist
+            False: not exist
+        '''
         if self.product == 6 or self.product == 9 or self.product == 12:
             return True
         else:
             return False
 
     def _has_three(self):
+        '''
+        Check the existence of three cards
+        Returns:
+            True: exist
+            False: not exist
+        '''
         if self.product == 3:
             return True
         else:
             return False
 
     def _has_two_pairs(self):
+        '''
+        Check the existence of 2 pair cards
+        Returns:
+            True: exist
+            False: not exist
+        '''
         if self.product == 4 or self.product == 8:
             return True
         else:
             return False
 
     def _has_pair(self):
+        '''
+        Check the existence of 1 pair cards
+        Returns:
+            True: exist
+            False: not exist
+        '''
         if self.product == 2:
             return True
         else:
             return False
 
     def _has_high_card(self):
+        '''
+        Check the existence of high cards
+        Returns:
+            True: exist
+            False: not exist
+        '''
         if self.product == 1:
             return True
         else:
@@ -286,13 +366,21 @@ class Hand:
 
 
 def compare_hands(hand0, hand1):
-        # evaluate player's hand
+    '''
+    Compare two palyer's all seven cards
+    Args:
+        hand0(list) : all the seven cards of player0
+        hand1(list) : all the seven cards of player1
+    Returns:
+        [0, 1]: player1 wins
+        [1, 0]: player0 wins
+        [1, 1]: draw
+    '''
 
     if hand0 == None:
         return [0, 1]
     elif hand1 == None:
         return [1, 0]
-        # put this in judger
     cards0, cards1 = hand0, hand1
     hand0 = Hand()
     hand1 = Hand()
@@ -308,8 +396,8 @@ def compare_hands(hand0, hand1):
 
     hand0.evaluateHand()
     hand1.evaluateHand()
-    var = hand1.get_hand_five_cards()
-    print(var)
+    #var = hand1.get_hand_five_cards()
+    #print(var)
     # compare hands
     hand0_category = hand0.category
     hand1_category = hand1.category
@@ -324,7 +412,7 @@ def compare_hands(hand0, hand1):
         hand1_5_cards = hand1.get_hand_five_cards()
         
 
-        if hand0_category == 9 or hand0_category == 5:
+        if hand0_category == 9 or hand0_category == 5 or hand0_category == 6:
             for i in reversed(range(5)):
                 hand0_card_rank = hand0_5_cards[i][1]
                 hand1_card_rank = hand1_5_cards[i][1]
@@ -332,6 +420,8 @@ def compare_hands(hand0, hand1):
                     return [1, 0]
                 elif RANKS.index(hand0_card_rank) < RANKS.index(hand1_card_rank):
                     return [0, 1]
+                elif RANKS.index(hand0_card_rank) == RANKS.index(hand1_card_rank):
+                    return [1, 1]   
         if hand0_category == 8:
             seen = []
             duplicated0 = []
@@ -355,10 +445,12 @@ def compare_hands(hand0, hand1):
                     seen.append(_)
                 else:
                     duplicated1.append(_) 
-            if RANKS.index(duplicated0[0][1]) > RANKS.index(duplicated1[0][1]):
+            if RANKS.index(duplicated0[0][0]) > RANKS.index(duplicated1[0][0]):
                 return [1, 0]
-            elif RANKS.index(duplicated0[0][1]) < RANKS.index(duplicated1[0][1]):
+            elif RANKS.index(duplicated0[0][0]) < RANKS.index(duplicated1[0][0]):
                 return [0, 1]
+            elif RANKS.index(duplicated0[0][0]) == RANKS.index(duplicated1[0][0]):
+                return [1, 1]
 
         if hand0_category == 7:
             five_cards_0 = []
@@ -438,19 +530,19 @@ def compare_hands(hand0, hand1):
                 else:
                     duplicated1.append(_) 
             
-            if RANKS.index(duplicated0[0][1]) > RANKS.index(duplicated0[1][1]):
-                large_pair0 = RANKS.index(duplicated0[0][1])
-                small_pair0 = RANKS.index(duplicated0[1][1])
+            if RANKS.index(duplicated0[0][0]) > RANKS.index(duplicated0[1][0]):
+                large_pair0 = RANKS.index(duplicated0[0][0])
+                small_pair0 = RANKS.index(duplicated0[1][0])
             else:
-                large_pair0 = RANKS.index(duplicated0[1][1])
-                small_pair0 = RANKS.index(duplicated0[0][1])
+                large_pair0 = RANKS.index(duplicated0[1][0])
+                small_pair0 = RANKS.index(duplicated0[0][0])
             
-            if RANKS.index(duplicated1[0][1]) > RANKS.index(duplicated1[1][1]):
-                large_pair1 = RANKS.index(duplicated1[0][1])
-                small_pair1 = RANKS.index(duplicated1[1][1])
+            if RANKS.index(duplicated1[0][0]) > RANKS.index(duplicated1[1][0]):
+                large_pair1 = RANKS.index(duplicated1[0][0])
+                small_pair1 = RANKS.index(duplicated1[1][0])
             else:
-                large_pair1 = RANKS.index(duplicated1[1][1])
-                small_pair1 = RANKS.index(duplicated1[0][1])
+                large_pair1 = RANKS.index(duplicated1[1][0])
+                small_pair1 = RANKS.index(duplicated1[0][0])
             
             if large_pair0 > large_pair1:
                 return [1,0]
@@ -462,17 +554,20 @@ def compare_hands(hand0, hand1):
                 if small_pair0 < small_pair1:
                     return [0,1]
                 if small_pair0 == small_pair1:
-                    for _ in range (2):
-                        five_cards_0.remove(large_pair0)
-                        five_cards_0.remove(small_pair0)
-                        five_cards_1.remove(large_pair0)
-                        five_cards_1.remove(small_pair0)
-                    if RANKS.index(five_cards_0[0][1]) > RANKS.index(five_cards_1[0][1]):
-                        return [1, 0]
-                    if RANKS.index(five_cards_0[0][1]) < RANKS.index(five_cards_1[0][1]):
-                        return [0, 1]
-                    if RANKS.index(five_cards_0[0][1]) == RANKS.index(five_cards_1[0][1]):
-                        return [1, 1]
+                    return [1,1]
+                    #five_cards_0.sort()
+                    #five_cards_1.sort()
+                    #for _ in range (2):
+                       # five_cards_0.remove(large_pair0)
+                      #  five_cards_0.remove(small_pair0)
+                      #  five_cards_1.remove(large_pair0)
+                        #five_cards_1.remove(small_pair0)
+                    #if RANKS.index(five_cards_0[0][1]) > RANKS.index(five_cards_1[0][1]):
+                        #return [1, 0]
+                    #if RANKS.index(five_cards_0[0][1]) < RANKS.index(five_cards_1[0][1]):
+                        #return [0, 1]
+                    #if RANKS.index(five_cards_0[0][1]) == RANKS.index(five_cards_1[0][1]):
+                        #return [1, 1]
 
         if hand0_category == 2:
             seen = []
@@ -498,19 +593,15 @@ def compare_hands(hand0, hand1):
                 else:
                     duplicated1.append(_) 
             
-            if RANKS.index(duplicated0[0][1]) > RANKS.index(duplicated1[0][1]):
+            if RANKS.index(duplicated0[0][0]) > RANKS.index(duplicated1[0][0]):
                 return [1, 0]
             
-            if RANKS.index(duplicated0[0][1]) > RANKS.index(duplicated1[0][1]):
+            if RANKS.index(duplicated0[0][0]) > RANKS.index(duplicated1[0][0]):
                 return [0, 1]
-            if RANKS.index(duplicated0[0][1]) == RANKS.index(duplicated1[0][1]):
+            if RANKS.index(duplicated0[0][0]) == RANKS.index(duplicated1[0][0]):
                     for _ in range (2):
-                        handcard0.remove(duplicated0[0][1])
-                        handcard1.remove(duplicated1[0][1])
-                    for i in range(3):              
-                        five_cards_0.append(RANKS.index(handcard0[i][1]))
-                    for i in range(3):              
-                        five_cards_1.append(RANKS.index(handcard1[i][1]))
+                        five_cards_0.remove(duplicated0[0][0])
+                        five_cards_1.remove(duplicated1[0][0])
                     five_cards_0.sort()
                     five_cards_1.sort()
 
@@ -530,6 +621,8 @@ def compare_hands(hand0, hand1):
                                 return [0, 1]
                             if RANKS.index(five_cards_0[0]) == RANKS.index(five_cards_1[0]):
                                 return [1, 1]
+            else:
+                return [1, 1]
 
             if hand0_category == 1:
 
@@ -567,8 +660,7 @@ def compare_hands(hand0, hand1):
                                     return [1, 1]
 
         else:
-            pass
-        # return 0 means both hands are equal
+            return [1, 1]
     else:
         return [1, 1]
 

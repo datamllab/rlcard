@@ -6,7 +6,6 @@ import rlcard
 from rlcard.agents.deep_cfr import DeepCFR
 from rlcard.utils.utils import *
 import tensorflow as tf
-import numpy as np
 
 # make environment
 set_global_seed(0)
@@ -18,16 +17,16 @@ rewards = 0
 train_env = rlcard.make('blackjack')
 test_env = rlcard.make('blackjack')
 with tf.Session() as sess:
-    deep_cfr = DeepCFR(sess, #
+    deep_cfr = DeepCFR(sess,
                 train_env, 
-                policy_network_layers=(32, 32),
+                policy_network_layers=(64,64),
                 advantage_network_layers=(32,32),
-                num_traversals=40,
-                num_step=1,
+                num_traversals=10,
+                num_step=10,
                 learning_rate=1e-4,
-                batch_size_advantage=16,
-                batch_size_strategy=16,
-                memory_capacity=1e7)
+                batch_size_advantage=32,
+                batch_size_strategy=32,
+                memory_capacity=1e3)
 
     for i in range(num_iteration):
         # Train the agent in training environment
