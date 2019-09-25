@@ -24,8 +24,14 @@ class LeducholdemJudger(object):
 
         # Judge who are the winners
         winners = [0, 0]
-        if players[0].hand.rank == players[1].hand.rank:
-            winners = [1, 1]
+        # If one player folds, the other player is the winner
+        for idx, player in enumerate(players):
+                if player.status == 'folded':
+                    winners[(idx+1)%2] = 1
+                    break
+        if sum(winners) < 1:
+            if players[0].hand.rank == players[1].hand.rank:
+                winners = [1, 1]
         if sum(winners) < 1:
             for idx, player in enumerate(players):
                 if player.hand.rank == public_card.rank:

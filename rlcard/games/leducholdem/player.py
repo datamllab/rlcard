@@ -8,6 +8,7 @@ class LeducholdemPlayer(object):
         '''
 
         self.player_id = player_id
+        self.status = 'alive'
         self.hand = None
 
         # The chips that this player has put in until now
@@ -26,7 +27,7 @@ class LeducholdemPlayer(object):
 
         state = {}
         state['hand'] = self.hand.get_index()
-        state['public_cards'] = public_card.get_index()
+        state['public_card'] = public_card.get_index() if public_card else None
         state['all_chips'] = all_chips
         state['my_chips'] = self.in_chips
         state['legal_actions'] = legal_actions
