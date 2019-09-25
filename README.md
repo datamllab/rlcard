@@ -22,7 +22,7 @@ The interfaces generally follow [OpenAI gym](https://github.com/openai/gym) styl
 
 *   [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
 *   [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
-*   [Running multiple processes](docs/toy-examples.md#runningmultiple processes)
+*   [Running multiple processes](docs/toy-examples.md#running-multiple-processes)
 
 For more examples, please refer to [examples/](examples).
 
