@@ -366,13 +366,21 @@ class Hand:
 
 
 def compare_hands(hand0, hand1):
-        # evaluate player's hand
+    '''
+    Compare two palyer's all seven cards
+    Args:
+        hand0(list) : all the seven cards of player0
+        hand1(list) : all the seven cards of player1
+    Returns:
+        [0, 1]: player1 wins
+        [1, 0]: player0 wins
+        [1, 1]: draw
+    '''
 
     if hand0 == None:
         return [0, 1]
     elif hand1 == None:
         return [1, 0]
-        # put this in judger
     cards0, cards1 = hand0, hand1
     hand0 = Hand()
     hand1 = Hand()

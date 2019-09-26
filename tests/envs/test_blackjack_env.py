@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 
 from rlcard.envs.blackjack import BlackjackEnv as Env
+from rlcard.agents.random_agent import RandomAgent
 
 
 class TestBlackjackEnv(unittest.TestCase):
@@ -41,7 +42,15 @@ class TestBlackjackEnv(unittest.TestCase):
         env.step(1)
         _, back_player_id = env.step_back()
         self.assertEqual(player_id, back_player_id)
+        self.assertEqual(env.step_back(), False)
 
+    def test_run(self):
+        env = Env()
+        env.set_agents([RandomAgent(2)])
+        trajectories, _ = env.run(is_training=False)
+        self.assertEqual(len(trajectories), 1)
+        trajectories, _ = env.run(is_training=True, seed=1)
+        self.assertEqual(len(trajectories), 1)
 
 if __name__ == '__main__':
     unittest.main()

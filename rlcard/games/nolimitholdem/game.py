@@ -1,4 +1,4 @@
-import random
+import numpy as np
 from copy import deepcopy
 from rlcard.games.limitholdem.game import LimitholdemGame
 
@@ -16,7 +16,7 @@ class NolimitholdemGame(LimitholdemGame):
         # small blind and big blind
         self.small_blind = 1
         self.big_blind = 2 * self.small_blind
-        
+
         # config players
         self.num_players = 2
         self.init_chips = 100
@@ -50,7 +50,7 @@ class NolimitholdemGame(LimitholdemGame):
         self.public_cards = []
 
         # Randomly choose a big blind and a small blind
-        s = random.randint(0, self.num_players-1)
+        s = np.random.randint(0, self.num_players)
         b = (s + 1) % self.num_players
         self.players[b].in_chips = self.big_blind
         self.players[s].in_chips = self.small_blind
@@ -81,7 +81,7 @@ class NolimitholdemGame(LimitholdemGame):
             (list): A list of legal actions
         '''
 
-        return self.round.get_legal_actions(self.players) 
+        return self.round.get_nolimit_legal_actions(self.players)
 
     def step(self, action):
         ''' Get the next state
@@ -151,11 +151,9 @@ class NolimitholdemGame(LimitholdemGame):
         return self.init_chips + 3
 
 
-
-
 if __name__ == "__main__":
     game = NolimitholdemGame()
-    
+
     while True:
         print('New Game')
         state, game_pointer = game.init_game()
@@ -171,7 +169,7 @@ if __name__ == "__main__":
             #     print(game_pointer)
             #     legal_actions = game.get_legal_actions()
 
-            action = random.choice(legal_actions)
+            action = np.random.choice(legal_actions)
             # action = input()
             # if action != 'call' and action != 'fold' and action != 'check':
             #     action = int(action)

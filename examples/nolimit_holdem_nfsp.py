@@ -1,4 +1,4 @@
-''' A toy example of learning a NFSP Agent on Limit Texas Holdem
+''' A toy example of learning a NFSP Agent on No-Limit Texas Holdem
 '''
 
 import tensorflow as tf
@@ -10,8 +10,8 @@ from rlcard.utils.utils import set_global_seed
 from rlcard.utils.logger import Logger
 
 # Make environment
-env = rlcard.make('limit-holdem')
-eval_env = rlcard.make('limit-holdem')
+env = rlcard.make('no-limit-holdem')
+eval_env = rlcard.make('no-limit-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 1000
@@ -54,7 +54,7 @@ with tf.Session() as sess:
     step_counters = [0 for _ in range(env.player_num)]
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='timestep', ylabel='reward', legend='NFSP on Limit Texas Holdem', log_path='./experiments/limit_holdem_nfsp_result/log.txt', csv_path='./experiments/limit_holdem_nfsp_result/performance.csv')
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='NFSP on No-Limit Texas Holdem', log_path='./experiments/nolimit_holdem_nfsp_result/log.txt', csv_path='./experiments/nolimit_holdem_nfsp_result/performance.csv')
 
     for episode in range(episode_num):
 
@@ -93,7 +93,7 @@ with tf.Session() as sess:
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            logger.make_plot(save_path='./experiments/limit_holdem_nfsp_result/'+str(episode)+'.png')
+            logger.make_plot(save_path='./experiments/nolimit_holdem_nfsp_result/'+str(episode)+'.png')
 
     # Make the final plot
-    logger.make_plot(save_path='./experiments/limit_holdem_nfsp_result/'+'final_'+str(episode)+'.png')
+    logger.make_plot(save_path='./experiments/nolimit_holdem_nfsp_result/'+'final_'+str(episode)+'.png')

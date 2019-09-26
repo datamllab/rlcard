@@ -6,9 +6,10 @@ from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
 from rlcard.games.doudizhu.utils import get_landlord_score, encode_cards
 from rlcard.games.doudizhu.utils import get_optimal_action, doudizhu_sort_str
+from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
 
 
-class TestDoudizhuMethods(unittest.TestCase):
+class TestDoudizhuGame(unittest.TestCase):
 
     def test_get_player_num(self):
         game = Game()
@@ -51,11 +52,8 @@ class TestDoudizhuMethods(unittest.TestCase):
     def test_proceed_game(self):
         game = Game()
         state, player_id = game.init_game()
-        #print(player_id, state)
         while not game.is_over():
             action = np.random.choice(state['actions'])
-            #print(action)
-            #print()
             state, next_player_id = game.step(action)
             player = game.players[player_id]
             self.assertEqual(get_downstream_player_id(
@@ -75,6 +73,7 @@ class TestDoudizhuMethods(unittest.TestCase):
         game.step_back()
         self.assertEqual(game.round.current_player, player_id)
         self.assertEqual(len(game.history), 0)
+        self.assertEqual(game.step_back(), False)
 
     def test_get_landlord_score(self):
         score_1 = get_landlord_score('56888TTQKKKAA222R')
@@ -95,6 +94,14 @@ class TestDoudizhuMethods(unittest.TestCase):
         self.assertEqual(plane[3][0], 1)
         self.assertEqual(plane[1][13], 1)
         self.assertEqual(plane[1][14], 1)
+
+    def test_judge_payoffs(self):
+        payoffs = Judger.judge_payoffs(0, 0)
+        self.assertEqual(payoffs[0], 1)
+        payoffs = Judger.judge_payoffs(2, 0)
+        self.assertEqual(payoffs[0], 1)
+        self.assertEqual(payoffs[1], 1)
+
 
 if __name__ == '__main__':
     unittest.main()

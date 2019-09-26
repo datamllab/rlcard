@@ -175,8 +175,8 @@ class DoudizhuGame(object):
         others_hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
         return cards2str(others_hand)
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
 
     # test init game
-    game = DoudizhuGame()
-    game.init_game()
+    #game = DoudizhuGame()
+    #game.init_game()

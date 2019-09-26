@@ -75,8 +75,6 @@ class BlackjackEnv(Env):
             return [1]
         elif self.game.winner['player'] == 1 and self.game.winner['dealer'] == 1:
             return [0]
-        else:
-            raise "There are some bugs!"
 
     def decode_action(self, action_id):
         ''' Decode the action for applying to the game

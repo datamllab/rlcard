@@ -11,6 +11,14 @@ class TestDoudizhuEnv(unittest.TestCase):
         state, _ = env.init_game()
         self.assertEqual(state['obs'].size, 450)
 
+    def test_get_legal_actions(self):
+        env = Env()
+        env.set_agents([RandomAgent(309), RandomAgent(309), RandomAgent(309)])
+        env.init_game()
+        legal_actions = env.get_legal_actions()
+        for legal_action in legal_actions:
+            self.assertLessEqual(legal_action, 308)
+
     def test_step(self):
         env = Env()
         _, player_id = env.init_game()
@@ -34,14 +42,19 @@ class TestDoudizhuEnv(unittest.TestCase):
             self.assertEqual(env.game.players[win[0]].role, 'peasant')
             self.assertEqual(env.game.players[win[1]].role, 'peasant')
 
-    def test_get_legal_actions(self):
+    def test_decode_action(self):
         env = Env()
-        env.set_agents([RandomAgent(309), RandomAgent(309), RandomAgent(309)])
-        env.init_game()
-        legal_actions = env.get_legal_actions()
-        for legal_action in legal_actions:
-            self.assertLessEqual(legal_action, 308)
+        state, _ = env.init_game()
+        for action in state['legal_actions']:
+            decoded = env.decode_action(action)
+            self.assertIn(decoded, env.game.state['actions'])
 
+        state, _ = env.step(0)
+        for action in range(309):
+            if action not in state['legal_actions']:
+                decoded = env.decode_action(action)
+                self.assertEqual(decoded, 'pass')
+                break
 
 if __name__ == '__main__':
     unittest.main()

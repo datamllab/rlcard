@@ -257,7 +257,7 @@ def get_gt_cards(player, greater_player):
 
 
 # Test json order
-if __name__ == '__main__':
-    for action, index in ACTION_SPACE.items():
-        if action != ACTION_LIST[index]:
-            print('order error')
+#if __name__ == '__main__':
+#    for action, index in ACTION_SPACE.items():
+#        if action != ACTION_LIST[index]:
+#            print('order error')

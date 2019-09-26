@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 
 from rlcard.games.limitholdem.game import LimitholdemGame as Game
+from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
 
 
 class TestLimitholdemMethods(unittest.TestCase):
@@ -47,14 +48,47 @@ class TestLimitholdemMethods(unittest.TestCase):
         game.step('fold')
         self.assertTrue(game.round.player_folded)
 
+        # test check
+        game.init_game()
+        game.step('call')
+        game.step('check')
+        self.assertEqual(game.round_counter, 1)
+
+        # test play 4 rounds
+        game.init_game()
+        for i in range(19):
+            if (i+1) % 5 == 0:
+                game.step('call')
+            else:
+                game.step('raise')
+            self.assertEqual(game.is_over(), False)
+        game.step('call')
+        self.assertEqual(game.is_over(), True)
+
+        # Test illegal actions
+        game.init_game()
+        with self.assertRaises(Exception):
+            game.step('check')
+
+        # Test the upper limit of raise
+        game.init_game()
+        for _ in range(4):
+            game.step('raise')
+
+        legal_actions = game.get_legal_actions()
+        self.assertNotIn('raise', legal_actions)
+
+
     def test_step_back(self):
         game = Game()
-        state, button = game.init_game()
+        state, _ = game.init_game()
+        self.assertEqual(game.step_back(), False)
         index = 0
+        previous = None
         while not game.is_over():
             index += 1
             legal_actions = game.get_legal_actions()
-            if index == 3:
+            if index == 2:
                 result = game.step_back()
                 now = game.get_player_id()
                 if result:
@@ -80,6 +114,10 @@ class TestLimitholdemMethods(unittest.TestCase):
             for payoff in payoffs:
                 total += payoff
             self.assertEqual(total, 0)
+
+    def test_get_player_id(self):
+        player = Player(3)
+        self.assertEqual(player.get_player_id(), 3)
 
 
 if __name__ == '__main__':

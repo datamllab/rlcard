@@ -1,9 +1,10 @@
 import unittest
-import random
+import numpy as np
+
 from rlcard.games.blackjack.game import BlackjackGame as Game
 
 
-class TestBlackjackMethods(unittest.TestCase):
+class TestBlackjackGame(unittest.TestCase):
 
     def test_get_player_num(self):
         game = Game()
@@ -40,7 +41,7 @@ class TestBlackjackMethods(unittest.TestCase):
         game = Game()
         game.init_game()
         while not game.is_over():
-            action = random.choice(['hit', 'action'])
+            action = np.random.choice(['hit', 'action'])
             state, _ = game.step(action)
         self.assertEqual(len(state['state'][1]), len(game.dealer.hand))
 
@@ -53,6 +54,17 @@ class TestBlackjackMethods(unittest.TestCase):
         test_hand = game.get_state(0)['state'][0]
         self.assertEqual(init_hand, test_hand)
         self.assertEqual(len(game.history), 0)
+        success = game.step_back()
+        self.assertEqual(success, False)
+
+    def test_get_state(self):
+        game = Game()
+        game.init_game()
+        self.assertEqual(len(game.get_state(0)['state'][1]), 1)
+        game.step('stand')
+        self.assertGreater(len(game.get_state(0)['state'][1]), 1)
+
+
 
 if __name__ == '__main__':
     unittest.main()

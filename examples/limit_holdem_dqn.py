@@ -50,7 +50,7 @@ with tf.Session() as sess:
     step_counter = 0
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='eposide', ylabel='reward', legend='DQN on Limit Texas Holdem', log_path='./experiments/limit_holdem_dqn_result/log.txt', csv_path='./experiments/limit_holdem_dqn_result/performance.csv')
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on Limit Texas Holdem', log_path='./experiments/limit_holdem_dqn_result/log.txt', csv_path='./experiments/limit_holdem_dqn_result/performance.csv')
 
     for episode in range(episode_num):
 
@@ -77,10 +77,10 @@ with tf.Session() as sess:
                 reward += payoffs[0]
 
             logger.log('\n########## Evaluation ##########')
-            logger.log('Average reward is {}'.format(float(reward)/evaluate_num))
+            logger.log('Timestep: {} Average reward is {}'.format(env.timestep, float(reward)/evaluate_num))
 
             # Add point to logger
-            logger.add_point(x=episode, y=float(reward)/evaluate_num)
+            logger.add_point(x=env.timestep, y=float(reward)/evaluate_num)
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:

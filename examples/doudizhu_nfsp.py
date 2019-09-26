@@ -1,4 +1,4 @@
-''' A toy example of learning a NFSP Agent on Limit Texas Holdem
+''' A toy example of learning a NFSP Agent on Dou Dizhu
 '''
 
 import tensorflow as tf
@@ -7,7 +7,6 @@ import rlcard
 from rlcard.agents.nfsp_agent import NFSPAgent
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import set_global_seed
-
 from rlcard.utils.logger import Logger
 
 # Make environment
@@ -37,11 +36,16 @@ with tf.Session() as sess:
                           scope='nfsp' + str(i),
                           action_num=env.action_num,
                           state_shape=[6, 5, 15],
-                          hidden_layers_sizes=[512,512],
+                          hidden_layers_sizes=[512,1024,2048,2048,2048,1024,512],
+                          anticipatory_param=0.8,
+                          batch_size=512,
+                          rl_learning_rate=0.00001,
+                          sl_learning_rate=0.00001,
                           min_buffer_size_to_learn=memory_init_size,
                           q_replay_memory_init_size=memory_init_size,
                           q_norm_step=norm_step,
-                          q_mlp_layers=[512,512])
+                          q_batch_size=512,
+                          q_mlp_layers=[512,1024,2048,2048,3028,1024,512])
         agents.append(agent)
 
     sess.run(tf.global_variables_initializer())
@@ -55,7 +59,7 @@ with tf.Session() as sess:
     step_counters = [0 for _ in range(env.player_num)]
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='eposide', ylabel='reward', legend='NFSP on Dou Dizhu', log_path='./experiments/limit_holdem_nfsp_result/log.txt', csv_path='./experiments/limit_holdem_nfsp_result/performance.csv')
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='NFSP on Dou Dizhu', log_path='./experiments/doudizhu_nfsp_result/log.txt', csv_path='./experiments/doudizhu_nfsp_result/performance.csv')
 
     for episode in range(episode_num):
 
@@ -74,7 +78,7 @@ with tf.Session() as sess:
 
                 # Train the agent
                 train_count = step_counters[i] - (memory_init_size + norm_step)
-                if train_count > 0 and train_count % 64 == 0:
+                if train_count > 0 and train_count % 128 == 0:
                     rl_loss = agents[i].train_rl()
                     sl_loss = agents[i].train_sl()
                     print('\rINFO - Agent {}, step {}, rl-loss: {}, sl-loss: {}'.format(i, step_counters[i], rl_loss, sl_loss), end='')
@@ -88,14 +92,14 @@ with tf.Session() as sess:
                 reward += payoffs[0]
 
             logger.log('\n########## Evaluation ##########')
-            logger.log('Average reward is {}'.format(float(reward)/evaluate_num))
+            logger.log('Timestep: {} Average reward is {}'.format(env.timestep, float(reward)/evaluate_num))
 
             # Add point to logger
-            logger.add_point(x=episode, y=float(reward)/evaluate_num)
+            logger.add_point(x=env.timestep, y=float(reward)/evaluate_num)
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            logger.make_plot(save_path='./experiments/limit_holdem_nfsp_result/'+str(episode)+'.png')
+            logger.make_plot(save_path='./experiments/doudizhu_nfsp_result/'+str(episode)+'.png')
 
     # Make the final plot
-    logger.make_plot(save_path='./experiments/limit_holdem_nfsp_result/'+'final_'+str(episode)+'.png')
+    logger.make_plot(save_path='./experiments/doudizhu_nfsp_result/'+'final_'+str(episode)+'.png')

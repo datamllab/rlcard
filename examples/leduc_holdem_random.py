@@ -6,8 +6,8 @@ from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import *
 
 # Make environment
-env = rlcard.make('no-limit-holdem')
-episode_num = 2
+env = rlcard.make('leduc-holdem')
+episode_num = 20
 
 # Set a global seed
 set_global_seed(0)
