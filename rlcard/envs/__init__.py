@@ -24,6 +24,11 @@ register(
 )
 
 register(
+    env_id='leduc-holdem',
+    entry_point='rlcard.envs.leducholdem:LeducholdemEnv'
+)
+
+register(
     env_id='uno',
     entry_point='rlcard.envs.uno:UnoEnv',
 )
