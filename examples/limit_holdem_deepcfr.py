@@ -10,9 +10,9 @@ import numpy as np
 
 # make environment
 set_global_seed(0)
-evaluate_every = 100
+evaluate_every = 10
 evaluate_num = 100
-num_iteration = 10000
+num_iteration = 1000
 i = 0
 rewards = 0
 train_env = rlcard.make('limit-holdem') 
@@ -22,14 +22,14 @@ test_env = rlcard.make('limit-holdem')
 with tf.Session() as sess:
     deep_cfr = DeepCFR(sess,
                 train_env,
-                policy_network_layers=(128, 128),
-                advantage_network_layers=(64,64),
-                num_traversals=10,
-                num_step=10,
-                learning_rate=1e-4,
-                batch_size_advantage=128,
-                batch_size_strategy=128,
-                memory_capacity=1e7)
+                policy_network_layers=(512, 256, 128, 64),
+                advantage_network_layers=(256, 128, 64, 32),
+                num_traversals=3000,
+                num_step=12800,
+                learning_rate=1e-6,
+                batch_size_advantage=64,
+                batch_size_strategy=64,
+                memory_capacity=1e4)
 
     for i in range(num_iteration):
         # Train the agent in training environment

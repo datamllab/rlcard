@@ -7,7 +7,7 @@ from rlcard.utils.utils import *
 
 # Make environment
 env = rlcard.make('limit-holdem')
-episode_num = 2
+episode_num = 500
 
 # Set a global seed
 set_global_seed(0)
@@ -22,6 +22,6 @@ for episode in range(episode_num):
     trajectories, _ = env.run(is_training=False)
 
     # Print out the trajectories
-    print('\nEpisode {}'.format(episode))
+    #print('\nEpisode {}'.format(episode))
     for ts in trajectories[0]:
         print('State: {}, Action: {}, Reward: {}, Next State: {}, Done: {}'.format(ts[0], ts[1], ts[2], ts[3], ts[4]))

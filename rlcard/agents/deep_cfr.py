@@ -108,7 +108,7 @@ class FixedSizeRingBuffer(object):
 
 
 class DeepCFR():
-    '''Implements a solver for the Deep CFR Algorithm.
+    '''Implement the Deep CFR Algorithm.
 
     See https://arxiv.org/abs/1811.00164.
 
@@ -386,15 +386,7 @@ class DeepCFR():
             # Recompute distribution dor numerical errors.
             probs = np.array(strategy)
             probs /= probs.sum()
-            if 1 in state['legal_actions']:
-                action = 1
-            elif 0 in state['legal_actions']:
-                action = 0
-            elif 4 in state['legal_actions']:
-                action = 4
-            else:
-                action = 3
-            #action = np.random.choice(range(self._num_actions), p=probs)
+            action = np.random.choice(range(self._num_actions), p=probs)
             child_state, _ = self._env.step(action)
             self._strategy_memories.add(
                 StrategyMemory(

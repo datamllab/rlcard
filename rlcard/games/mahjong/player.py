@@ -1,6 +1,6 @@
 from rlcard.games.uno.utils import cards2list
 
-class UnoPlayer(object):
+class MahjongPlayer(object):
 
     def __init__(self, player_id):
         ''' Initilize a player.
@@ -21,5 +21,25 @@ class UnoPlayer(object):
     def print_hand(self):
         for card in self.hand:
             print(card.get_str(), end=' ')
-        print()
 
+    def play_card(self, dealer, card):
+        card = self.hand.pop(self.hand.index(card))
+        dealer.table.append(card)
+
+    def chow(self, dealer, cards):
+        for card in cards:
+            if card in self.hand:
+                self.hand.pop(cards[i])
+        self.pile.append(cards)
+
+    def gong(self, dealer, cards):
+        for card in cards:
+            if card in self.hand:
+                self.hand.pop(cards[i])
+        self.pile.append(cards)
+
+    def pong(self, dealer, cards):
+        for card in cards:
+            if card in self.hand:
+                self.hand.pop(cards[i])
+        self.pile.append(cards)
