@@ -12,10 +12,12 @@ The toolkit wraps each game by `Env` class with easy-to-use interfaces. The goal
 *   [RLCard high-level design](high-level-design.md)
 *   [Games in RLCard](games.md)
 *   [Algorithms in RLCard](algorithms.md)
-*   [Developping new algorithms](developping-algorithms.md)
 
 # Developer Guide
+
+*   [Developping new algorithms](developping-algorithms.md)
 *   [Adding new environments](adding-new-environments.md)
+*   [Customizing environments](customizing-environments.md)
 
 # Application Programming Interface (API)
 The API documents are and available in [Github page](https://rlcard.github.io/index.html).

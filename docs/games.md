@@ -11,9 +11,9 @@
  
 # Blackjack
 Blackjack is a globally popular banking game known as Twenty-One. The objective is to beat the dealer by reaching a higher score than the dealer without exceeding 21. In the toolkit, we implement a simple version of Blackjack. In each round, the player only has two options: "hit" which will take a card, and 'stand' which end the turn. The player will "bust" if his hands exceed 21 points. After the player completes his hands (chooses "stand" and has not busted), the dealer then reals his hidden card and "hit" until obtaining at least 17 points.
-## State Encoding
+## State Representation
 In this toy environment, we encode the state as an array `[player_score, dealer_score]` where `player_score` is the score currently obtained by the player, and the `dealer_score` is derived from the card that faces up from the dealer.
-## Action Decoding
+## Action Encoding
 There are two actions in the simple Blackjack. They are encoded as follows:
 
 | Action ID                     | Action  |
@@ -28,9 +28,27 @@ The player may receive a reward -1 (lose), 0 (tie), or 1 (win) in the end of the
 (Under construction)
 
 # Limit Texas Hold'em
-(Under construction)
+Texas Hold'em is a popular betting game. Each player is dealt two face-down cards, called hole cards. Then 5 community cards are dealt in three stages (the flop, the turn and the river). Each player seeks the five best cards among the hole cards and community cards. There are 4 betting rounds. During each round each player can choose "call", "check", "raise", or "fold".
 
+In fixed limit Texas Hold'em. Each player can only choose a fixed amount of raise. And in each round the number of raises is limited to 4.
 
+## State Representation
+The state is encoded as a vector of length 52, where each element corresponds to one card. The state is represented as the two hole cards plus the observed community cards so far. The correspondence between the index and the card is as below.
+| Index          |                            Card                      |
+| ------------ | :----------------------------------------------------------- |
+|0~12         | Spade A ~ Spade K |
+|13~25         | Heart A ~ Heart K |
+|26~38         | Diamond A ~ Diamond K |
+|39~51         | Club A ~ Club K |
+
+## Action Encoding
+There 4 actions in Limit Texas Hold'em. They are encoded as below.
+| Action ID          |                            Action                      |
+| ------------ | :----------------------------------------------------------- |
+|0         | Call |
+|1         | Raise |
+|2         | Fold |
+|3         | Check |
 
 # Dou Dizhu
 
