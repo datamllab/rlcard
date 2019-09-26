@@ -16,10 +16,10 @@ In this toy environment, we encode the state as an array `[player_score, dealer_
 ## Action Encoding
 There are two actions in the simple Blackjack. They are encoded as follows:
 
-| Action ID                     | Action  |
-| ------------------------ |:--------------|
-| 0 | hit |
-| 1 | stand |
+| Action ID  | Action  |
+| -----------| :-------|
+| 0          | hit     |
+| 1          | stand   |
 
 ## Payoff
 The player may receive a reward -1 (lose), 0 (tie), or 1 (win) in the end of the game.
@@ -34,21 +34,27 @@ In fixed limit Texas Hold'em. Each player can only choose a fixed amount of rais
 
 ## State Representation
 The state is encoded as a vector of length 52, where each element corresponds to one card. The state is represented as the two hole cards plus the observed community cards so far. The correspondence between the index and the card is as below.
-| Index          |                            Card                      |
-| ------------ | :----------------------------------------------------------- |
-|0~12         | Spade A ~ Spade K |
-|13~25         | Heart A ~ Heart K |
-|26~38         | Diamond A ~ Diamond K |
-|39~51         | Club A ~ Club K |
+
+| Index   | Card                  |
+| --------| :---------------------|
+|0~12     | Spade A ~ Spade K     |
+|13~25    | Heart A ~ Heart K     |
+|26~38    | Diamond A ~ Diamond K |
+|39~51    | Club A ~ Club K       |
 
 ## Action Encoding
 There 4 actions in Limit Texas Hold'em. They are encoded as below.
-| Action ID          |                            Action                      |
-| ------------ | :----------------------------------------------------------- |
-|0         | Call |
-|1         | Raise |
-|2         | Fold |
-|3         | Check |
+
+| Action ID   |     Action    |
+| ----------- | :-------------|
+|0            | Call          |
+|1            | Raise         |
+|2            | Fold          |
+|3            | Check         |
+
+## Payoff
+The stardard unit used in the leterature is milli big blinds per hand (mbb/h). In the toolkit, the reward is calculated based on big blinds per hand. For example, a reward of 0.5 (-0.5) means that the player wins (loses) 0.5 times of the amount of big blind.
+
 
 # Dou Dizhu
 
@@ -75,35 +81,35 @@ At each decision point of the game, the corresponding player will be able to obs
 ## State Encoding
 In Dou Dizhu environment, we encode the state into 6 feature planes. The size of each plane is 5*15. Each entry of a plane can be either 1 or 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/doudizhu.py](rlcard/envs/doudizhu.py). The example encoded planes are as below:
 
-| Plane          |                            Feature                            |
-| ------------ | :----------------------------------------------------------- |
-|0         | the current hand |
-|1         | the union of the other two players' hand |
-|2-4         | the recent three actions |
-|5         | the union of all played cards |
+| Plane          |                            Feature       |
+| -------------- | :----------------------------------------|
+|0               | the current hand                         |
+|1               | the union of the other two players' hand |
+|2-4             | the recent three actions                 |
+|5               | the union of all played cards            |
 
 ## Action Abstraction
 
 The size of the action space of Dou Dizhu is 33676. This number is too large for learning algorithms. Thus, we make abstractions to the original action space and obtain 309 actions. We note that some recent studies also use similar abstraction techniques. The main idea of the abstraction is to make the kicker fuzzy and only focus on the major part of the combination. For example, "33345" is abstracted as "333**". When the predicted action of the agent is **not legal**, the agent will choose "**pass**.". Thus, the current environment is simple, since once the agent learns how to play legal actions, it can beat random agents. Users can also encode the actions for their own purposes (such as increasing the difficulty of the environment) by modifying `decode_action` function in [rlcard/envs/doudizhu.py](rlcard/envs/doudizhu.py). Users are also encouraged to include rule-based agents as opponents. The abstractions in the environment are as below. The detailed  mapping of action and its ID is in [rlcard/games/doudizhu/jsondata/action_space.json](rlcard/games/doudizhu/jsondata/action_space.json):
 
 | Type             | Number of Actions | Number of Actions after Abstraction | Action ID
-| ---------------- | :---------------: | :---------------: | :---------------: | 
-| Solo             |        15         |        15         | 0-14
-| pair             |        13         |        13         | 15-27
-| Trio             |        13         |        13         | 28-40
-| Trio with single |        182        |        13         | 41-53
-| Trio with pair   |        156        |        13         | 54-66 
-| Chain of solo  |       36       |        36         | 67-102
-| Chain of pair  |       52        |        52         | 103-154
-| Chain of trio    |        45         |        45         | 155-199
-| Plane with solo    |        24721         |        38         | 200-237
-| Plane with pair    |        6552         |        30         | 238-267
-| Quad with solo   |       1339        |        13         | 268-280
-| Quad with pair   |       1014        |        13         | 281-293
-| Bomb             |        13         |        13         | 294-306
-| Rocket           |         1         |         1         | 307
-| Pass             |         1         |         1         | 308
-| Total            |       33676       |        309        |
+| ---------------- | :---------------: | :---------------:                   | :---------------: | 
+| Solo             |        15         |        15                           | 0-14
+| pair             |        13         |        13                           | 15-27
+| Trio             |        13         |        13                           | 28-40
+| Trio with single |        182        |        13                           | 41-53
+| Trio with pair   |        156        |        13                           | 54-66 
+| Chain of solo    |       36          |        36                           | 67-102
+| Chain of pair    |       52          |        52                           | 103-154
+| Chain of trio    |        45         |        45                           | 155-199
+| Plane with solo  |        24721      |        38                           | 200-237
+| Plane with pair  |        6552       |        30                           | 238-267
+| Quad with solo   |       1339        |        13                           | 268-280
+| Quad with pair   |       1014        |        13                           | 281-293
+| Bomb             |        13         |        13                           | 294-306
+| Rocket           |         1         |         1                           | 307
+| Pass             |         1         |         1                           | 308
+| Total            |       33676       |        309                          |
 
 ## Payoff
 Each player will receive a reward 0 (lose) or 1 (win) in the end of the game.
