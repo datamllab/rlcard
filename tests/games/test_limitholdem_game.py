@@ -81,13 +81,14 @@ class TestLimitholdemMethods(unittest.TestCase):
 
     def test_step_back(self):
         game = Game()
-        state, button = game.init_game()
+        state, _ = game.init_game()
         self.assertEqual(game.step_back(), False)
         index = 0
+        previous = None
         while not game.is_over():
             index += 1
             legal_actions = game.get_legal_actions()
-            if index == 3:
+            if index == 2:
                 result = game.step_back()
                 now = game.get_player_id()
                 if result:

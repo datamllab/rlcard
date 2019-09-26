@@ -2,9 +2,6 @@
 ''' Implement Limit Texas Hold'em Round class
 '''
 
-import numpy as np
-
-from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
 
 class LimitholdemRound(object):
     ''' Round can call other Classes' functions to keep the game running
@@ -128,6 +125,9 @@ class LimitholdemRound(object):
             return True
         return False
 
+#import numpy as np
+#from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
+#
 #if __name__ == '__main__':
 #    players = [Player(0), Player(1)]
 #    game_pointer = 0

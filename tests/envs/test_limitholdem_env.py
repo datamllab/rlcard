@@ -1,8 +1,6 @@
 import unittest
-import numpy as np
 
 from rlcard.envs.limitholdem import LimitholdemEnv as Env
-from rlcard.utils.utils import get_downstream_player_id
 from rlcard.agents.random_agent import RandomAgent
 
 
