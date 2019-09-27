@@ -24,8 +24,6 @@ There are two actions in the simple Blackjack. They are encoded as follows:
 ## Payoff
 The player may receive a reward -1 (lose), 0 (tie), or 1 (win) in the end of the game.
 
-# Leduc Hold'em
-(Under construction)
 
 # Limit Texas Hold'em
 Texas Hold'em is a popular betting game. Each player is dealt two face-down cards, called hole cards. Then 5 community cards are dealt in three stages (the flop, the turn and the river). Each player seeks the five best cards among the hole cards and community cards. There are 4 betting rounds. During each round each player can choose "call", "check", "raise", or "fold".
@@ -54,6 +52,41 @@ There 4 actions in Limit Texas Hold'em. They are encoded as below.
 
 ## Payoff
 The stardard unit used in the leterature is milli big blinds per hand (mbb/h). In the toolkit, the reward is calculated based on big blinds per hand. For example, a reward of 0.5 (-0.5) means that the player wins (loses) 0.5 times of the amount of big blind.
+
+# Leduc Hold'em
+Leduc Hold'em is a smaller version of Limit Texas Hold'em (first
+introduced in [Bayes' Bluff: Opponent Modeling in Poker](http://poker.cs.ualberta.ca/publications/UAI05.pdf)). The deck consists only two pairs of King, Queen and Jack, six cards in total. Each game is fixed with two players, two rounds, two-bet maximum and raise amounts of 2 and 4 in the first and second round. In the first round, each player puts 1 unit in the pot and is dealt one card, then starts betting. In the second round, one public card is revealed first, then the players bet again. Finally, the player whose hand has the same rank as the public card is the winner. If neither, then the one with higher rank wins. Other rules such as 'fold' can refer to Limit Texas hold'em.
+
+## State Representation
+Similar to the Limit Hold'em game. The state is encoded as a vector of length 6 with each element corresponding to one card. The state contains player's hand and public card (if it has been dealt). The correspondence between the index and the card is as below.
+
+| Index   | Card                  |
+| --------| :---------------------|
+|0~2      | Spade J ~ Spade K     |
+|3~6      | Heart J ~ Heart K     |
+
+## Action Encoding
+The action encoding is the same as Limit Hold'em game.
+
+## Payoff
+The payoff is calculated similarly with Limit Hold'em game. The only difference is that Leduc Hold'em does not has the 'big blind' concept. As both players start the first round with 1 unit in the pot, we treat the 'big blind' in calculation as 1 by default.
+
+# No-limit Texas Hold'em
+No-limit Texas Hold'em has similar rule with Limit Texas Hold'em. But unlike in Limit Texas Hold'em game, each player can only choose a fixed amount of raise and the number of raises is limited. In No-limit Texas Hold'em, The player may raise with at least the same amount as previous raised amount in the same round (or the minimum raise amount set before the game if none has raised), and up to the player's remaining stack. The number of raises is also unlimited.
+
+Other than that, the state representation and payoff are exactly the same as Limit Hold'em game.
+
+## Action Encoding
+There 103 actions in No-limit Texas Hold'em. They are encoded as below.
+
+<small><sup>\*</sup>Note: Starting from Action ID 3, the action means the amount player should put in the pot when chooses 'Raise'. The action ID from 3 to 102 corresponds to the bet amount from 1 to 100.<small>
+
+| Action ID   |     Action         |
+| ----------- | :------------------|
+|0            | Call               |
+|1            | Fold               |
+|2            | Check              |
+|3 ~ 102      | <sup>\*</sup>Raise |
 
 
 # Dou Dizhu
@@ -116,9 +149,6 @@ Each player will receive a reward 0 (lose) or 1 (win) in the end of the game.
 
 
 # Mahjong
-(Under construction)
-
-# No-limit Texas Hold'em
 (Under construction)
 
 # UNO
