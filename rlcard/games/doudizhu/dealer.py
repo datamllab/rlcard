@@ -57,20 +57,24 @@ class DoudizhuDealer(object):
         # deal cards
         self.shuffle()
         self.deal_cards(players)
-        players[0].role = 'peasant'
+        players[0].role = 'landlord'
         self.landlord = players[0]
+        players[1].role = 'peasant'
+        players[1].role = 'peasant'
+        #players[0].role = 'peasant'
+        #self.landlord = players[0]
 
-        # determine 'landlord'
-        max_score = get_landlord_score(
-            cards2str(self.landlord.current_hand))
-        for player in players[1:]:
-            player.role = 'peasant'
-            score = get_landlord_score(
-                cards2str(player.current_hand))
-            if score > max_score:
-                max_score = score
-                self.landlord = player
-        self.landlord.role = 'landlord'
+        ## determine 'landlord'
+        #max_score = get_landlord_score(
+        #    cards2str(self.landlord.current_hand))
+        #for player in players[1:]:
+        #    player.role = 'peasant'
+        #    score = get_landlord_score(
+        #        cards2str(player.current_hand))
+        #    if score > max_score:
+        #        max_score = score
+        #        self.landlord = player
+        #self.landlord.role = 'landlord'
 
         # give the 'landlord' the  three cards
         self.landlord.current_hand.extend(self.deck[-3:])

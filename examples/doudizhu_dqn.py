@@ -1,4 +1,4 @@
-''' A toy example of learning a Deep-Q Agent on Dou Dizhu
+''' An example of learning a Deep-Q Agent on Dou Dizhu
 '''
 
 import tensorflow as tf

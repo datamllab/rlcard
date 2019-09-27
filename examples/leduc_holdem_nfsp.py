@@ -1,4 +1,4 @@
-''' An example of learning a NFSP Agent on No-Limit Texas Holdem
+''' An example of learning a NFSP Agent on Leduc Hold'em
 '''
 
 import tensorflow as tf
@@ -10,8 +10,8 @@ from rlcard.utils.utils import set_global_seed
 from rlcard.utils.logger import Logger
 
 # Make environment
-env = rlcard.make('no-limit-holdem')
-eval_env = rlcard.make('no-limit-holdem')
+env = rlcard.make('leduc-holdem')
+eval_env = rlcard.make('leduc-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 1000
@@ -35,12 +35,12 @@ with tf.Session() as sess:
         agent = NFSPAgent(sess,
                           scope='nfsp' + str(i),
                           action_num=env.action_num,
-                          state_shape=[52],
-                          hidden_layers_sizes=[512,512],
+                          state_shape=[6],
+                          hidden_layers_sizes=[128,128],
                           min_buffer_size_to_learn=memory_init_size,
                           q_replay_memory_init_size=memory_init_size,
                           q_norm_step=norm_step,
-                          q_mlp_layers=[512,512])
+                          q_mlp_layers=[128,128])
         agents.append(agent)
 
     sess.run(tf.global_variables_initializer())
@@ -54,7 +54,7 @@ with tf.Session() as sess:
     step_counters = [0 for _ in range(env.player_num)]
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='timestep', ylabel='reward', legend='NFSP on No-Limit Texas Holdem', log_path='./experiments/nolimit_holdem_nfsp_result/log.txt', csv_path='./experiments/nolimit_holdem_nfsp_result/performance.csv')
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='NFSP on Leduc Holdem', log_path='./experiments/leduc_holdem_nfsp_result/log.txt', csv_path='./experiments/leduc_holdem_nfsp_result/performance.csv')
 
     for episode in range(episode_num):
 
@@ -93,7 +93,7 @@ with tf.Session() as sess:
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            logger.make_plot(save_path='./experiments/nolimit_holdem_nfsp_result/'+str(episode)+'.png')
+            logger.make_plot(save_path='./experiments/leduc_holdem_nfsp_result/'+str(episode)+'.png')
 
     # Make the final plot
-    logger.make_plot(save_path='./experiments/nolimit_holdem_nfsp_result/'+'final_'+str(episode)+'.png')
+    logger.make_plot(save_path='./experiments/leduc_holdem_nfsp_result/'+'final_'+str(episode)+'.png')

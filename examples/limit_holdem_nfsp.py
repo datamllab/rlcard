@@ -1,4 +1,4 @@
-''' A toy example of learning a NFSP Agent on Limit Texas Holdem
+''' An example of learning a NFSP Agent on Limit Texas Holdem
 '''
 
 import tensorflow as tf
