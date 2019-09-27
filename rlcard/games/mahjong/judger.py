@@ -22,17 +22,17 @@ class MahjongJudger(object):
         last_card_type = last_card_str.split("-")[0]
         for player in players:
             hand = [card.get_str() for card in player.hand]
-            #print("LAST:", last_card_str,"HAND:", hand)
+            #print("LAST:", last_card_str,"HAND:", hand, "Num:", hand.count(last_card_str))
             hand_dict = defaultdict(list)
             for card in hand:
                 hand_dict[card.split("-")[0]].append(card.split("-")[1])
             pile = player.pile 
             # check pong
-            if hand.count(last_card) == 2:
+            if hand.count(last_card_str) == 2:
                 return 'pong', player, [last_card]*3
 
             # check gong
-            if hand.count(last_card) == 3:
+            if hand.count(last_card_str) == 3:
                 return 'gong', player, [last_card]*4
 
             # check chow

@@ -9,9 +9,9 @@ import tensorflow as tf
 
 # make environment
 set_global_seed(0)
-evaluate_every = 50
+evaluate_every = 1
 evaluate_num = 1000
-num_iteration = 1000
+num_iteration = 50
 i = 0
 rewards = 0
 train_env = rlcard.make('blackjack')
@@ -21,9 +21,9 @@ with tf.Session() as sess:
                 train_env, 
                 policy_network_layers=(64,64),
                 advantage_network_layers=(32,32),
-                num_traversals=10,
-                num_step=10,
-                learning_rate=1e-4,
+                num_traversals=300,
+                num_step=300,
+                learning_rate=5e-5,
                 batch_size_advantage=32,
                 batch_size_strategy=32,
                 memory_capacity=1e3)

@@ -18,6 +18,7 @@ class MahjongRound(object):
 
     def proceed_round(self, players, action):
         self.dealer.deal_cards(players[self.current_player], 1)
+        print("PR:", action)
         if action == 'stand':
             self.last_player = self.current_player
 
@@ -28,6 +29,8 @@ class MahjongRound(object):
             self.last_player = self.current_player
 
         elif action == 'pong':
+            print("PONG")
+            exit()
             if self.prev_statVus['player'] == self.current_player and self.prev_status['valid_act'] == action:
                 self.current_player.pong(self.prev_status['action_cards'])
                 self.prev_status = None
@@ -49,16 +52,17 @@ class MahjongRound(object):
             #print(self.prev_status['valid_act'])
         state = {}
         player = players[player_id]
-        if self.prev_status != None and self.prev_status['valid_act'] != 'play':
+        if self.prev_status != None and self.prev_status['valid_act'] != ['play']:
             state['valid_act'] = ['play'] 
             state['table'] = self.dealer.table
             state['player'] = self.current_player 
             state['player_pile'] = players[player_id].pile
             state['action_cards'] = players[player_id].hand # For doing action (pong, chow, gong)
+            return state
         else:
             (valid_act, player, cards) = self.judger.judge_round(self.dealer, players, self.last_player)
-            print("judge_round", valid_act, player, cards)
             if valid_act != 'play':
+                print("judge_round", valid_act, player.player_id, cards)
                 state['valid_act'] = [valid_act] 
                 state['table'] = self.dealer.table
                 state['player'] = player_id
@@ -70,10 +74,10 @@ class MahjongRound(object):
                 state['player'] = self.current_player 
                 state['player_pile'] = players[player_id].pile
                 state['action_cards'] = players[player_id].hand # For doing action (pong, chow, gong)
-            if state['valid_act'] != 'play':
+            if state['valid_act'] != ['play']:
                 self.prev_status = state 
             else:
                 self.prev_status = None
             self.current_player = player_id
-        return state 
+            return state 
 

@@ -10,8 +10,10 @@ from rlcard.utils.utils import set_global_seed
 from rlcard.utils.logger import Logger
 
 # Make environment
-env = rlcard.make('limit-holdem')
-eval_env = rlcard.make('limit-holdem')
+#env = rlcard.make('limit-holdem')
+#eval_env = rlcard.make('limit-holdem')
+env = rlcard.make('leduc-holdem')
+eval_env = rlcard.make('leduc-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 1000
@@ -36,7 +38,7 @@ with tf.Session() as sess:
                      replay_memory_size=int(1e5),
                      replay_memory_init_size=memory_init_size,
                      norm_step=norm_step,
-                     state_shape=[52],
+                     state_shape=[6],
                      mlp_layers=[512, 512])
 
     random_agent = RandomAgent(action_num=eval_env.action_num)

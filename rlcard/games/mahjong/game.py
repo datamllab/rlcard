@@ -63,13 +63,20 @@ class MahjongGame(object):
 
     def get_state(self, player_id):
         state = self.round.get_state(self.players, player_id)
+        if state['valid_act'] != ['play']:
+            print(state)
         return state
 
     def get_legal_actions(self):
-        #print(self.round.get_state(self.players, self.round.current_player)['valid_act'])
+        state = self.round.get_state(self.players, self.round.current_player)
+        print(state['valid_act'])
+        if state['valid_act'] != ['play']:
+            exit()
         if self.round.get_state(self.players, self.round.current_player)['valid_act'] == ['play']:
             return self.round.get_state(self.players, self.round.current_player)['action_cards']
         else:
+            print("Not PLAY")
+            exit()
             return self.round.get_state(self.players, self.round.current_player)['valid_act']
 
     def get_player_num(self):
