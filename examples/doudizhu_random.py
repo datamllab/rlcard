@@ -1,4 +1,4 @@
-''' A toy example of playing Doudizhu with random agents
+''' An example of playing Doudizhu with random agents
 '''
 
 import rlcard

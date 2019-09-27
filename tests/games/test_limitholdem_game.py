@@ -81,7 +81,7 @@ class TestLimitholdemMethods(unittest.TestCase):
 
     def test_step_back(self):
         game = Game()
-        state, _ = game.init_game()
+        game.init_game()
         self.assertEqual(game.step_back(), False)
         index = 0
         previous = None
@@ -98,7 +98,7 @@ class TestLimitholdemMethods(unittest.TestCase):
                 break
             previous = game.get_player_id()
             action = np.random.choice(legal_actions)
-            state, button = game.step(action)
+            game.step(action)
 
     def test_payoffs(self):
         game = Game()

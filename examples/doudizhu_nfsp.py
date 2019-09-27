@@ -1,4 +1,4 @@
-''' A toy example of learning a NFSP Agent on Dou Dizhu
+''' An example of learning a NFSP Agent on Dou Dizhu
 '''
 
 import tensorflow as tf
@@ -14,9 +14,9 @@ env = rlcard.make('doudizhu')
 eval_env = rlcard.make('doudizhu')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 1000
+evaluate_every = 500
 save_plot_every = 10000
-evaluate_num = 200
+evaluate_num = 1000
 episode_num = 10000000
 
 # Set the the number of steps for collecting normalization statistics
@@ -25,7 +25,7 @@ memory_init_size = 1000
 norm_step = 1000
 
 # Set a global seed
-set_global_seed(100)
+set_global_seed(0)
 
 with tf.Session() as sess:
     # Set agents
@@ -36,16 +36,17 @@ with tf.Session() as sess:
                           scope='nfsp' + str(i),
                           action_num=env.action_num,
                           state_shape=[6, 5, 15],
-                          hidden_layers_sizes=[512,1024,2048,2048,2048,1024,512],
-                          anticipatory_param=0.8,
-                          batch_size=512,
-                          rl_learning_rate=0.00001,
+                          hidden_layers_sizes=[512,1024,2048,1024,512],
+                          anticipatory_param=0.5,
+                          batch_size=256,
+                          rl_learning_rate=0.00005,
                           sl_learning_rate=0.00001,
                           min_buffer_size_to_learn=memory_init_size,
+                          q_replay_memory_size=int(1e5),
                           q_replay_memory_init_size=memory_init_size,
                           q_norm_step=norm_step,
-                          q_batch_size=512,
-                          q_mlp_layers=[512,1024,2048,2048,3028,1024,512])
+                          q_batch_size=256,
+                          q_mlp_layers=[512,1024,2048,1024,512])
         agents.append(agent)
 
     sess.run(tf.global_variables_initializer())

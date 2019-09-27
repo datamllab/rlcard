@@ -1,4 +1,4 @@
-''' A toy example of learning a Deep-Q Agent on Texas No-Limit Holdem
+''' An example of learning a Deep-Q Agent on Texas No-Limit Holdem
 '''
 
 import tensorflow as tf

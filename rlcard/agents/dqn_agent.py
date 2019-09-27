@@ -422,3 +422,16 @@ def copy_model_parameters(sess, estimator1, estimator2):
         update_ops.append(op)
 
     sess.run(update_ops)
+
+if __name__ == "__main__":
+    with tf.Session() as sess:
+        agent = DQNAgent(sess,
+                         scope='dqn',
+                         action_num=4,
+                         replay_memory_init_size=100,
+                         norm_step=100,
+                         state_shape=[2],
+                         mlp_layers=[10,10])
+
+        for a in tf.global_variables():
+            print(a)

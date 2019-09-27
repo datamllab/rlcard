@@ -14,7 +14,8 @@ class RandomAgent(object):
 
         self.action_num = action_num
 
-    def step(self, state):
+    @staticmethod
+    def step(state):
         ''' Predict the action given the curent state in gerenerating training data.
 
         Args:
