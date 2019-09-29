@@ -15,7 +15,7 @@ class LeducholdemGame(LimitholdemGame):
         ''' Initialize the class leducholdem Game
         '''
 
-        self.allow_step_back = False
+        self.allow_step_back = allow_step_back
         # Some configarations of the game
         # These arguments are fixed in Leduc Hold'em Game
 
@@ -24,7 +24,7 @@ class LeducholdemGame(LimitholdemGame):
         self.allowed_raise_num = 2
 
         self.num_players = 2
-    
+
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
 
