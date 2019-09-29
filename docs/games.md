@@ -11,17 +11,17 @@
  
 ## Blackjack
 Blackjack is a globally popular banking game known as Twenty-One. The objective is to beat the dealer by reaching a higher score than the dealer without exceeding 21. In the toolkit, we implement a simple version of Blackjack. In each round, the player only has two options: "hit" which will take a card, and 'stand' which end the turn. The player will "bust" if his hands exceed 21 points. After the player completes his hands (chooses "stand" and has not busted), the dealer then reals his hidden card and "hit" until obtaining at least 17 points.
-### State Representation
+### State Representation of Blackjack
 In this toy environment, we encode the state as an array `[player_score, dealer_score]` where `player_score` is the score currently obtained by the player, and the `dealer_score` is derived from the card that faces up from the dealer.
-### Action Encoding
+### Action Encoding of Blackjack
 There are two actions in the simple Blackjack. They are encoded as follows:
 
 | Action ID  | Action  |
-| -----------| :-------|
+| -----------| :------ |
 | 0          | hit     |
 | 1          | stand   |
 
-### Payoff
+### Payoff of Blackjack
 The player may receive a reward -1 (lose), 0 (tie), or 1 (win) in the end of the game.
 
 ## Limit Texas Hold'em
@@ -29,27 +29,27 @@ Texas Hold'em is a popular betting game. Each player is dealt two face-down card
 
 In fixed limit Texas Hold'em. Each player can only choose a fixed amount of raise. And in each round the number of raises is limited to 4.
 
-### State Representation
+### State Representation of Limit Texas Hold'em
 The state is encoded as a vector of length 52, where each element corresponds to one card. The state is represented as the two hole cards plus the observed community cards so far. The correspondence between the index and the card is as below.
 
 | Index   | Card                  |
-| --------| :---------------------|
+| --------| :-------------------- |
 | 0~12    | Spade A ~ Spade K     |
 | 13~25   | Heart A ~ Heart K     |
 | 26~38   | Diamond A ~ Diamond K |
 | 39~51   | Club A ~ Club K       |
 
-### Action Encoding
+### Action Encoding of Limit Texas Hold'em
 There 4 actions in Limit Texas Hold'em. They are encoded as below.
 
 | Action ID   |     Action    |
-| ----------- | :-------------|
+| ----------- | :------------ |
 | 0           | Call          |
 | 1           | Raise         |
 | 2           | Fold          |
 | 3           | Check         |
 
-### Payoff
+### Payoff of Limit Texas Hold'em
 The stardard unit used in the leterature is milli big blinds per hand (mbb/h). In the toolkit, the reward is calculated based on big blinds per hand. For example, a reward of 0.5 (-0.5) means that the player wins (loses) 0.5 times of the amount of big blind.
 
 ## Leduc Hold'em
@@ -57,18 +57,18 @@ The stardard unit used in the leterature is milli big blinds per hand (mbb/h). I
 Leduc Hold'em is a smaller version of Limit Texas Hold'em (first
 introduced in [Bayes' Bluff: Opponent Modeling in Poker](http://poker.cs.ualberta.ca/publications/UAI05.pdf)). The deck consists only two pairs of King, Queen and Jack, six cards in total. Each game is fixed with two players, two rounds, two-bet maximum and raise amounts of 2 and 4 in the first and second round. In the first round, each player puts 1 unit in the pot and is dealt one card, then starts betting. In the second round, one public card is revealed first, then the players bet again. Finally, the player whose hand has the same rank as the public card is the winner. If neither, then the one with higher rank wins. Other rules such as 'fold' can refer to Limit Texas hold'em.
 
-### State Representation
+### State Representation of Leduc Hold'em
 Similar to the Limit Hold'em game. The state is encoded as a vector of length 6 with each element corresponding to one card. The state contains player's hand and public card (if it has been dealt). The correspondence between the index and the card is as below.
 
 | Index   | Card                  |
-| --------| :---------------------|
+| --------| :-------------------- |
 | 0~2     | Spade J ~ Spade K     |
 | 3~6     | Heart J ~ Heart K     |
 
-### Action Encoding
+### Action Encoding of Leduc Hold'em
 The action encoding is the same as Limit Hold'em game.
 
-### Payoff
+### Payoff of Leduc Hold'em
 The payoff is calculated similarly with Limit Hold'em game. The only difference is that Leduc Hold'em does not has the 'big blind' concept. As both players start the first round with 1 unit in the pot, we treat the 'big blind' in calculation as 1 by default.
 
 ## No-limit Texas Hold'em
@@ -76,18 +76,17 @@ No-limit Texas Hold'em has similar rule with Limit Texas Hold'em. But unlike in 
 
 Other than that, the state representation and payoff are exactly the same as Limit Hold'em game.
 
-### Action Encoding
+### Action Encoding of No-limit Texas Hold'em
 There 103 actions in No-limit Texas Hold'em. They are encoded as below.
 
 <small><sup>\*</sup>Note: Starting from Action ID 3, the action means the amount player should put in the pot when chooses 'Raise'. The action ID from 3 to 102 corresponds to the bet amount from 1 to 100.<small>
 
 | Action ID   |     Action         |
-| ----------- | :------------------|
+| ----------- | :----------------- |
 | 0           | Call               |
 | 1           | Fold               |
 | 2           | Check              |
 | 3 ~ 102     | <sup>\*</sup>Raise |
-
 
 ## Dou Dizhu
 
@@ -95,11 +94,11 @@ Doudizhu is one of the most popular Chinese card games with hundreds of millions
 
 In the toolkit, we implement a standard version of Doudizhu. In the bidding phase, we heuristically designate one of the players as the "landlord." Specifically, we count the number of key cards or combinations (high-rank cards and bombs), and the player with the most powerful hand is chosen as "lanlord."
 
-### State
+### State Representation of Dou Dizhu
 At each decision point of the game, the corresponding player will be able to observe the current state (or information set in imperfect information game). The state consists of all the information that the player can observe from his view. We encode the information into a readable Python dictionary. The following table shows the structure of the state:
 
-| Key          | Description                                                  | Example value                                                |
-| ------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Key          | Description                                                                                                                                          | Example value                                                                                     |
+| ------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | deck         | A string of one pack of 54 cards with Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'.                  | 3333444455556666<br/>777788889999TTTTJJJJ<br/>QQQQKKKKAAAA2222BR                                  |
 | seen_cards   | Three face-down cards distributed to the landlord after bidding. Then these cards will be made public to all players.                                | TQA                                                                                               |
 | landlord     | An integer of landlord's id                                                                                                                          | 0                                                                                                 |
@@ -111,22 +110,22 @@ At each decision point of the game, the corresponding player will be able to obs
 | current_hand | The current hand of current player                                                                                                                   | 3456677799TJQKAAB                                                                                 |
 | actions      | The legal actions the current player could do                                                                                                        | ['pass', 'K', 'A', 'B']                                                                           |
 
-### State Encoding
+### State Encoding of Dou Dizhu
 In Dou Dizhu environment, we encode the state into 6 feature planes. The size of each plane is 5*15. Each entry of a plane can be either 1 or 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/doudizhu.py](rlcard/envs/doudizhu.py). The example encoded planes are as below:
 
 | Plane          |                            Feature       |
-| -------------- | :----------------------------------------|
+| -------------- | :--------------------------------------- |
 | 0              | the current hand                         |
 | 1              | the union of the other two players' hand |
 | 2-4            | the recent three actions                 |
 | 5              | the union of all played cards            |
 
-### Action Abstraction
+### Action Abstraction of Dou Dizhu
 
 The size of the action space of Dou Dizhu is 33676. This number is too large for learning algorithms. Thus, we make abstractions to the original action space and obtain 309 actions. We note that some recent studies also use similar abstraction techniques. The main idea of the abstraction is to make the kicker fuzzy and only focus on the major part of the combination. For example, "33345" is abstracted as "333**". When the predicted action of the agent is **not legal**, the agent will choose "**pass**.". Thus, the current environment is simple, since once the agent learns how to play legal actions, it can beat random agents. Users can also encode the actions for their own purposes (such as increasing the difficulty of the environment) by modifying `decode_action` function in [rlcard/envs/doudizhu.py](rlcard/envs/doudizhu.py). Users are also encouraged to include rule-based agents as opponents. The abstractions in the environment are as below. The detailed  mapping of action and its ID is in [rlcard/games/doudizhu/jsondata/action_space.json](rlcard/games/doudizhu/jsondata/action_space.json):
 
 | Type             | Number of Actions | Number of Actions after Abstraction | Action ID
-| ---------------- | :---------------: | :---------------:                   | :---------------: | 
+| ---------------- | :---------------: | :---------------------------------: | :---------------: | 
 | Solo             |        15         |        15                           | 0-14              |
 | pair             |        13         |        13                           | 15-27             |
 | Trio             |        13         |        13                           | 28-40             |
@@ -146,7 +145,6 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 
 ### Payoff
 Each player will receive a reward 0 (lose) or 1 (win) in the end of the game.
-
 
 ## Mahjong
 (Under construction)
