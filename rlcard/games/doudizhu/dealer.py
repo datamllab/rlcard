@@ -6,7 +6,7 @@ import random
 import functools
 
 from rlcard.utils.utils import init_54_deck
-from rlcard.games.doudizhu.utils import doudizhu_sort_card, get_landlord_score
+from rlcard.games.doudizhu.utils import doudizhu_sort_card
 from rlcard.games.doudizhu.judger import cards2str
 
 

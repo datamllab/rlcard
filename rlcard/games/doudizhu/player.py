@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Implement Doudizhu Player class
 '''
-from copy import deepcopy
-import time
 
 from rlcard.games.doudizhu.utils import get_gt_cards
 from rlcard.games.doudizhu.utils import cards2str
@@ -63,10 +61,7 @@ class DoudizhuPlayer(object):
 
         actions = []
         if greater_player is None or greater_player is self:
-            time_0 = time.time()
             actions = judger.get_playable_cards(self)
-            time_1 = time.time()
-            #print('playable_cards: ', time_1-time_0)
         else:
             actions = get_gt_cards(self, greater_player)
         return actions

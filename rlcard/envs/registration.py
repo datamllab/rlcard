@@ -16,14 +16,15 @@ class EnvSpec(object):
         mod_name, class_name = entry_point.split(':')
         self._entry_point = getattr(importlib.import_module(mod_name), class_name)
 
-    def make(self):
+    def make(self, allow_step_back=False):
         ''' Instantiates an instance of the environment
 
         Returns:
             env (Env): an instance of the environemnt
+            allow_step_back (boolean): True if you wants to able to step_back
         '''
 
-        env = self._entry_point()
+        env = self._entry_point(allow_step_back)
         return env
 
 
@@ -49,16 +50,17 @@ class EnvRegistry(object):
             raise ValueError('Cannot re-register env_id: {}'.format(env_id))
         self.env_specs[env_id] = EnvSpec(env_id, entry_point)
 
-    def make(self, env_id):
+    def make(self, env_id, allow_step_back=False):
         ''' Create and environment instance
 
         Args:
             env_id (string): the name of the environment
+            allow_step_back (boolean): True if you wants to able to step_back
         '''
 
         if env_id not in self.env_specs:
             raise ValueError('Cannot find env_id: {}'.format(env_id))
-        return self.env_specs[env_id].make()
+        return self.env_specs[env_id].make(allow_step_back)
 
 # Have a global registry
 registry = EnvRegistry()
@@ -74,11 +76,12 @@ def register(env_id, entry_point):
 
     return registry.register(env_id, entry_point)
 
-def make(env_id):
+def make(env_id, allow_step_back=False):
     ''' Create and environment instance
 
     Args:
         env_id (string): the name of the environment
+        allow_step_back (boolean): True if you wants to able to step_back
     '''
 
-    return registry.make(env_id)
+    return registry.make(env_id, allow_step_back)

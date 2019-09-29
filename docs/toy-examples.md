@@ -1,7 +1,7 @@
 # Toy Examples
 In this document, we provide some toy examples for getting started. For more examples, please refer to [examples/](../examples).
 
-# Playing with Random Agents
+## Playing with Random Agents
 We have set up a random agent that can play randomly on each environment. An example of applying a random agent on Blackjack is as follow:
 ```python
 import rlcard
@@ -30,7 +30,7 @@ for episode in range(episode_num):
         print('State: {}, Action: {}, Reward: {}, Next State: {}, Done: {}'.format(ts[0], ts[1], ts[2], ts[3], ts[4])) 
 ```
 The expected output should look like something as follows:
-```
+```shell
 Episode 0
 State: [19, 5], Action: 0, Reward: -1, Next State: [23, 15], Done: True
 
@@ -40,7 +40,7 @@ State: [17, 8], Action: 1, Reward: 1, Next State: [17, 25], Done: True
 ```
 Note that the states and actions are wrapped by `env` in Blackjack. In this example, the `[19, 5]` suggests the current player obtains score 19 while the card that faces up in the dealer's hand has score 5. Action 0 means "hit" while action 1 means "stand". Reward 1 suggests the player wins while reward -1 suggests the dealer wins. Reward 0 suggests a tie. The above data can be directly fed into a RL algorithm for training.
 
-# Deep-Q Learning on Blackjack
+## Deep-Q Learning on Blackjack
 The second example is to use Deep-Q learning to train an agent on Blackjack. We aim to use this example to show how reinforcement learning algorithms can be developed and applied in our toolkit. We design a `run` function which plays one complete game and provides the data for training RL agents. The example is shown below:
 ```python
 import tensorflow as tf
@@ -141,5 +141,5 @@ INFO - Step 616 loss: 0.77693158388137823
 ```
 In Blackjack, the player will get a payoff at the end of the game: 1 if the player wins, -1 if the player loses, and 0 if it is a tie. The performance is measured by the average payoff the player obtains by playing 1000 episodes. The above example shows that the agent achieves better and better performance during training. The logs and learning curves are saved in `./experiments/blackjack_dqn_result/`.
 
-# Running Multiple Processes
-
+## Running Multiple Processes
+(under construction)

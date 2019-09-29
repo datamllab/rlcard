@@ -102,6 +102,5 @@ class TestDoudizhuGame(unittest.TestCase):
         self.assertEqual(payoffs[0], 1)
         self.assertEqual(payoffs[1], 1)
 
-
 if __name__ == '__main__':
     unittest.main()

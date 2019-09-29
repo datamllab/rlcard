@@ -1,9 +1,6 @@
 import unittest
-import numpy as np
 
 from rlcard.games.nolimitholdem.game import NolimitholdemGame as Game
-from rlcard.games.nolimitholdem.player import NolimitholdemPlayer as Player
-
 
 class TestNolimitholdemMethods(unittest.TestCase):
 

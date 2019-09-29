@@ -64,7 +64,5 @@ class TestBlackjackGame(unittest.TestCase):
         game.step('stand')
         self.assertGreater(len(game.get_state(0)['state'][1]), 1)
 
-
-
 if __name__ == '__main__':
     unittest.main()
