@@ -42,6 +42,18 @@ class TestNolimitholdemEnv(unittest.TestCase):
         _, player_id = env.step(action)
         self.assertEqual(player_id, env.get_player_id())
 
+    def test_step_back(self):
+        env = Env(allow_step_back=True)
+        _, player_id = env.init_game()
+        env.step(0)
+        _, back_player_id = env.step_back()
+        self.assertEqual(player_id, back_player_id)
+        self.assertEqual(env.step_back(), False)
+
+        env = Env()
+        with self.assertRaises(Exception):
+            env.step_back()
+
     def test_run(self):
         env = Env()
         agents = [RandomAgent(env.action_num) for _ in range(env.player_num)]

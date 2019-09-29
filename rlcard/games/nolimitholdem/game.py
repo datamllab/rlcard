@@ -9,9 +9,11 @@ from rlcard.games.nolimitholdem.round import NolimitholdemRound as Round
 
 class NolimitholdemGame(LimitholdemGame):
 
-    def __init__(self):
+    def __init__(self, allow_step_back=False):
         ''' Initialize the class nolimitholdem Game
         '''
+
+        self.allow_step_back = allow_step_back
 
         # small blind and big blind
         self.small_blind = 1
@@ -96,14 +98,15 @@ class NolimitholdemGame(LimitholdemGame):
                 (int): next plater's id
         '''
 
-        # First snapshot the current state
-        r = deepcopy(self.round)
-        b = self.game_pointer
-        r_c = self.round_counter
-        d = deepcopy(self.dealer)
-        p = deepcopy(self.public_cards)
-        ps = deepcopy(self.players)
-        self.history.append((r, b, r_c, d, p, ps))
+        if self.allow_step_back:
+            # First snapshot the current state
+            r = deepcopy(self.round)
+            b = self.game_pointer
+            r_c = self.round_counter
+            d = deepcopy(self.dealer)
+            p = deepcopy(self.public_cards)
+            ps = deepcopy(self.players)
+            self.history.append((r, b, r_c, d, p, ps))
 
         # Then we proceed to the next round
         self.game_pointer = self.round.proceed_round(self.players, action)

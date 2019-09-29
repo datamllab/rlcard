@@ -53,7 +53,7 @@ class TestDoudizhuGame(unittest.TestCase):
         game = Game()
         state, player_id = game.init_game()
         while not game.is_over():
-            action = np.random.choice(state['actions'])
+            action = np.random.choice(list(state['actions']))
             state, next_player_id = game.step(action)
             player = game.players[player_id]
             self.assertEqual(get_downstream_player_id(
@@ -66,7 +66,7 @@ class TestDoudizhuGame(unittest.TestCase):
             self.assertIsNone(state['actions'])
 
     def test_step_back(self):
-        game = Game()
+        game = Game(allow_step_back=True)
         state, player_id = game.init_game()
         action = state['actions'][0]
         game.step(action)

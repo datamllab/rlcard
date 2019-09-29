@@ -11,10 +11,11 @@ from rlcard.games.limitholdem.game import LimitholdemGame
 
 class LeducholdemGame(LimitholdemGame):
     
-    def __init__(self):
+    def __init__(self, allow_step_back=False):
         ''' Initialize the class leducholdem Game
         '''
 
+        self.allow_step_back = False
         # Some configarations of the game
         # These arguments are fixed in Leduc Hold'em Game
 
@@ -83,14 +84,15 @@ class LeducholdemGame(LimitholdemGame):
                 (int): next plater's id
         '''
 
-        # First snapshot the current state
-        r = deepcopy(self.round)
-        b = self.game_pointer
-        r_c = self.round_counter
-        d = deepcopy(self.dealer)
-        p = deepcopy(self.public_card)
-        ps = deepcopy(self.players)
-        self.history.append((r, b, r_c, d, p, ps))
+        if self.allow_step_back:
+            # First snapshot the current state
+            r = deepcopy(self.round)
+            b = self.game_pointer
+            r_c = self.round_counter
+            d = deepcopy(self.dealer)
+            p = deepcopy(self.public_card)
+            ps = deepcopy(self.players)
+            self.history.append((r, b, r_c, d, p, ps))
 
         # Then we proceed to the next round
         self.game_pointer = self.round.proceed_round(self.players, action)

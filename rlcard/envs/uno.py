@@ -9,8 +9,8 @@ from rlcard.games.uno.utils import ACTION_SPACE, ACTION_LIST
 
 class UnoEnv(Env):
 
-    def __init__(self):
-        super().__init__(Game())
+    def __init__(self, allow_step_back=False):
+        super().__init__(Game(allow_step_back), allow_step_back)
 
     def extract_state(self, state):
         obs = np.zeros((7, 4, 15), dtype=int)

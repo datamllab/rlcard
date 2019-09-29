@@ -2,6 +2,7 @@
 ''' Implement Doudizhu Player class
 '''
 from copy import deepcopy
+import time
 
 from rlcard.games.doudizhu.utils import get_gt_cards
 from rlcard.games.doudizhu.utils import cards2str
@@ -34,12 +35,18 @@ class DoudizhuPlayer(object):
         self.singles = '3456789TJQKA2BR'
 
     def get_state(self, public, others_hands, actions):
-        state = deepcopy(public)
+        state = {}
+        state['deck'] = public['deck']
+        state['seen_cards'] = public['seen_cards']
+        state['landlord'] = public['landlord']
+        state['trace'] = public['trace'].copy()
+        state['played_cards'] = public['played_cards'].copy()
         state['self'] = self.player_id
         state['initial_hand'] = self.initial_hand
         state['current_hand'] = cards2str(self.current_hand)
         state['others_hand'] = others_hands
         state['actions'] = actions
+
         return state
 
     def available_actions(self, greater_player=None, judger=None):
@@ -56,7 +63,10 @@ class DoudizhuPlayer(object):
 
         actions = []
         if greater_player is None or greater_player is self:
+            time_0 = time.time()
             actions = judger.get_playable_cards(self)
+            time_1 = time.time()
+            #print('playable_cards: ', time_1-time_0)
         else:
             actions = get_gt_cards(self, greater_player)
         return actions

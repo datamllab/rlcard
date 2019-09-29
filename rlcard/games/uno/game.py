@@ -8,7 +8,8 @@ from rlcard.games.uno.round import UnoRound as Round
 
 class UnoGame(object):
 
-    def __init__(self):
+    def __init__(self, allow_step_back=False):
+        self.allow_step_back = allow_step_back
         self.num_players = 4
         self.payoffs = [0, 0, 0, 0]
 
@@ -38,11 +39,13 @@ class UnoGame(object):
         return state, player_id
 
     def step(self, action):
-        # First snapshot the current state
-        his_dealer = deepcopy(self.dealer)
-        his_round = deepcopy(self.round)
-        his_players = deepcopy(self.players)
-        self.history.append((his_dealer, his_players, his_round))
+
+        if self.allow_step_back:
+            # First snapshot the current state
+            his_dealer = deepcopy(self.dealer)
+            his_round = deepcopy(self.round)
+            his_players = deepcopy(self.players)
+            self.history.append((his_dealer, his_players, his_round))
 
         self.round.proceed_round(self.players, action)
         player_id = self.round.current_player
