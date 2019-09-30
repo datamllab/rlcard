@@ -14,8 +14,8 @@ env = rlcard.make('leduc-holdem')
 eval_env = rlcard.make('leduc-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 1000
-save_plot_every = 10000
+evaluate_every = 100
+save_plot_every = 1000
 evaluate_num = 10000
 episode_num = 1000000
 
@@ -36,7 +36,7 @@ with tf.Session() as sess:
                      replay_memory_size=int(1e5),
                      replay_memory_init_size=memory_init_size,
                      norm_step=norm_step,
-                     state_shape=[6],
+                     state_shape=state_shape,
                      mlp_layers=[128, 128])
 
     random_agent = RandomAgent(action_num=eval_env.action_num)

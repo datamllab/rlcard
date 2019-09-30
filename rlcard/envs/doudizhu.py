@@ -14,6 +14,7 @@ class DoudizhuEnv(Env):
 
     def __init__(self, allow_step_back=False):
         super().__init__(Game(allow_step_back), allow_step_back)
+        self.state_shape = [6, 5, 15]
 
     def extract_state(self, state):
         ''' Encode state

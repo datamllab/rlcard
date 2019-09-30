@@ -14,9 +14,9 @@ env = rlcard.make('doudizhu')
 eval_env = rlcard.make('doudizhu')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 500
-save_plot_every = 5000
-evaluate_num = 200
+evaluate_every = 100
+save_plot_every = 1000
+evaluate_num = 5000
 episode_num = 1000000
 
 # Set the the number of steps for collecting normalization statistics
@@ -36,7 +36,7 @@ with tf.Session() as sess:
                      replay_memory_size=20000,
                      replay_memory_init_size=memory_init_size,
                      norm_step=norm_step,
-                     state_shape=[6, 5, 15],
+                     state_shape=env.state_shape,
                      mlp_layers=[512, 512])
 
     random_agent = RandomAgent(action_num=eval_env.action_num)
