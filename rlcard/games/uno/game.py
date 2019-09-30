@@ -12,7 +12,7 @@ class UnoGame(object):
     def __init__(self, allow_step_back=False):
         self.allow_step_back = allow_step_back
         self.num_players = 2
-        self.payoffs = [0 for _ in range(self.num_players]
+        self.payoffs = [0 for _ in range(self.num_players)]
 
     def init_game(self):
         # Initalize payoffs

@@ -11,7 +11,7 @@ class UnoEnv(Env):
 
     def __init__(self, allow_step_back=False):
         super().__init__(Game(allow_step_back), allow_step_back)
-        self.state_space = [7, 4, 15]
+        self.state_shape = [7, 4, 15]
 
     def extract_state(self, state):
         obs = np.zeros((7, 4, 15), dtype=int)
