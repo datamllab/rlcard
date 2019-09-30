@@ -1,6 +1,7 @@
 import random
 
 from rlcard.games.uno.card import UnoCard
+from rlcard.games.uno.judger import UnoJudger
 from rlcard.games.uno.utils import cards2list
 
 
@@ -28,8 +29,8 @@ class UnoRound(object):
         if top_card.trait == 'skip':
             self.current_player = 1
         elif top_card.trait == 'reverse':
-            self.current_player = 3
             self.direction = -1
+            self.current_player = (0 + self.direction) % self.num_players
         elif top_card.trait == 'draw_2':
             player = players[self.current_player]
             self.dealer.deal_cards(player, 2)
@@ -57,7 +58,7 @@ class UnoRound(object):
         card = player.hand.pop(remove_index)
         if not player.hand:
             self.is_over = True
-            self.winner = self.current_player
+            self.winner = [self.current_player]
         self.played_cards.append(card)
 
         # perform the number action
@@ -72,7 +73,10 @@ class UnoRound(object):
     def _perform_draw_action(self, players):
         # replace deck if there is no card in draw pile
         if not self.dealer.deck:
-            self.replace_deck()
+            #self.replace_deck()
+            self.is_over = True
+            self.winner = UnoJudger.judge_winner(players)
+            return None
 
         card = self.dealer.deck.pop()
 
@@ -114,14 +118,20 @@ class UnoRound(object):
         # perform draw_2 card
         elif card.trait == 'draw_2':
             if len(self.dealer.deck) < 2:
-                self.replace_deck()
+                # self.replace_deck()
+                self.is_over = True
+                self.winner = UnoJudger.judge_winner(players)
+                return None
             self.dealer.deal_cards(players[(current + direction) % num_players], 2)
             current = (current + direction) % num_players
 
         # perfrom wild_draw_4 card
         elif card.trait == 'wild_draw_4':
             if len(self.dealer.deck) < 4:
-                self.replace_deck()
+                # self.replace_deck()
+                self.is_over = True
+                self.winner = UnoJudger.judge_winner(players)
+                return None
             self.dealer.deal_cards(players[(current + direction) % num_players], 4)
             current = (current + direction) % num_players
         self.current_player = (current + self.direction) % num_players
@@ -155,7 +165,8 @@ class UnoRound(object):
                 elif card.color == target.color or card.trait == target.trait:
                     legal_actions.append(card.str)
         if not legal_actions:
-            return wild_4_actions
+            legal_actions = wild_4_actions
+        legal_actions.append('draw')
         return legal_actions
 
     def get_state(self, players, player_id):
