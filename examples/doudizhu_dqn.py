@@ -24,6 +24,12 @@ episode_num = 1000000
 memory_init_size = 1000
 norm_step = 1000
 
+# The paths for saving the logs and learning curves
+root_path = './experiments/doudizhu_dqn_result/'
+log_path = root_path + 'log.txt'
+csv_path = root_path + 'performance.csv'
+figure_path = root_path + 'figures/'
+
 # Set a global seed
 set_global_seed(0)
 
@@ -50,7 +56,7 @@ with tf.Session() as sess:
     step_counter = 0
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on Dou Dizhu', log_path='./experiments/doudizhu_dqn_result/log.txt', csv_path='./experiments/doudizhu_dqn_result/performance.csv')
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on Dou Dizhu', log_path=log_path, csv_path=csv_path)
 
     for episode in range(episode_num):
 
@@ -83,7 +89,7 @@ with tf.Session() as sess:
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            logger.make_plot(save_path='./experiments/doudizhu_dqn_result/'+str(episode)+'.png')
+            logger.make_plot(save_path=figure_path+str(episode)+'.png')
 
     # Make the final plot
-    logger.make_plot(save_path='./experiments/doudizhu_dqn_result/'+'final_'+str(episode)+'.png')
+    logger.make_plot(save_path=figure_path+'final_'+str(episode)+'.png')
