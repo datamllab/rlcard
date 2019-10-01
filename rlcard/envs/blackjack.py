@@ -70,11 +70,11 @@ class BlackjackEnv(Env):
         '''
 
         if self.game.winner['player'] == 0 and self.game.winner['dealer'] == 1:
-            return [-1]
-        elif self.game.winner['dealer'] == 0 and self.game.winner['player'] == 1:
-            return [1]
-        elif self.game.winner['player'] == 1 and self.game.winner['dealer'] == 1:
             return [0]
+        elif self.game.winner['dealer'] == 0 and self.game.winner['player'] == 1:
+            return [2]
+        elif self.game.winner['player'] == 1 and self.game.winner['dealer'] == 1:
+            return [1]
 
     def decode_action(self, action_id):
         ''' Decode the action for applying to the game
