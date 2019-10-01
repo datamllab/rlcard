@@ -47,11 +47,8 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 The perfomance is measured by winning rate through self-play. Example outputs are as follows:
 ![Learning Curves](docs/imgs/curves.png "Learning Curves")
 
-## Contributions
-We call for contributions to further enrich the toolkit. Please refer to [Contributing Guide](Contributing.md).
-
-## Disclaimer
-Please note that this is a **pre-release** version of the RLCard. The toolkit is provided "**as is**," without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement.
+## Contributing
+Contribution to this project is greatly appreciated! If you would like to contribute codes to the project, please create a issue for feedback or bugs, or a pull request for new features or bugs fixed.
 
 ## Acknowledgements
 We would like to thank JJ World Network Technology Co.,LTD for the technical support.

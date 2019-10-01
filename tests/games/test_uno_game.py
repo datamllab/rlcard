@@ -3,6 +3,7 @@ import numpy as np
 import functools
 
 from rlcard.games.uno.game import UnoGame as Game
+from rlcard.games.uno.player import UnoPlayer as Player
 from rlcard.games.uno.utils import ACTION_LIST
 from rlcard.games.uno.utils import hand2dict, encode_hand, encode_target
 
@@ -70,6 +71,8 @@ class TestUnoMethods(unittest.TestCase):
         game.step_back()
         self.assertEqual(game.round.current_player, player_id)
         self.assertEqual(len(game.history), 0)
+        success = game.step_back()
+        self.assertEqual(success, False)
 
     def test_hand2dict(self):
         hand_1 = ['y-1', 'r-8', 'b-9', 'y-reverse', 'r-skip']
@@ -102,6 +105,10 @@ class TestUnoMethods(unittest.TestCase):
         target = 'r-1'
         encode_target(encoded_target, target)
         self.assertEqual(encoded_target[0][1], 1)
+
+    def test_player_get_player_id(self):
+        player = Player(0)
+        self.assertEqual(0, player.get_player_id())
 
 if __name__ == '__main__':
     unittest.main()
