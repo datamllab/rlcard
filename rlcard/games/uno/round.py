@@ -73,10 +73,10 @@ class UnoRound(object):
     def _perform_draw_action(self, players):
         # replace deck if there is no card in draw pile
         if not self.dealer.deck:
-            #self.replace_deck()
-            self.is_over = True
-            self.winner = UnoJudger.judge_winner(players)
-            return None
+            self.replace_deck()
+            #self.is_over = True
+            #self.winner = UnoJudger.judge_winner(players)
+            #return None
 
         card = self.dealer.deck.pop()
 
@@ -118,20 +118,20 @@ class UnoRound(object):
         # perform draw_2 card
         elif card.trait == 'draw_2':
             if len(self.dealer.deck) < 2:
-                # self.replace_deck()
-                self.is_over = True
-                self.winner = UnoJudger.judge_winner(players)
-                return None
+                self.replace_deck()
+                #self.is_over = True
+                #self.winner = UnoJudger.judge_winner(players)
+                #return None
             self.dealer.deal_cards(players[(current + direction) % num_players], 2)
             current = (current + direction) % num_players
 
         # perfrom wild_draw_4 card
         elif card.trait == 'wild_draw_4':
             if len(self.dealer.deck) < 4:
-                # self.replace_deck()
-                self.is_over = True
-                self.winner = UnoJudger.judge_winner(players)
-                return None
+                self.replace_deck()
+                #self.is_over = True
+                #self.winner = UnoJudger.judge_winner(players)
+                #return None
             self.dealer.deal_cards(players[(current + direction) % num_players], 4)
             current = (current + direction) % num_players
         self.current_player = (current + self.direction) % num_players
