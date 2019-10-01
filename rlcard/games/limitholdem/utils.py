@@ -6,7 +6,7 @@ class Hand:
         self.category = 0 
         # type of a players' best five cards, greater combination has higher number eg: 0:"Not_Yet_Evaluated" 1: "High_Card" , 9:"Straight_Flush" 
         self.best_five = []
-        # the greatest combination of five cards in all the seven cards
+        # the largest combination of five cards in all the seven cards
         self.flush_cards = []
         # cards with same suit
         self.cards_by_rank = []
@@ -50,38 +50,38 @@ class Hand:
 
         if self._has_straight_flush():
             self.category = 9
-            self._hand_name = "Straight Flush"
+            #Straight Flush
         elif self._has_four():
             self.category = 8
-            self._hand_name = "Four of a Kind"
+            #Four of a Kind
             self.best_five = self._get_Four_of_a_kind_cards()
         elif self._has_fullhouse():
             self.category = 7
-            self._hand_name = "Full house"
+            #Full house
             self.best_five = self._get_Fullhouse_cards()
         elif self._has_flush():
             self.category = 6
-            self._hand_name = "Flush"
+            #Flush
             i = len(self.flush_cards)
             self.best_five = [card for card in self.flush_cards[i-5:i]]
         elif self._has_straight(self.all_cards):
             self.category = 5
-            self._hand_name = "Straight"
+            #Straight
         elif self._has_three():
             self.category = 4
-            self._hand_name = "Three of a Kind"
+            #Three of a Kind
             self.best_five = self._get_Three_of_a_kind_cards()
         elif self._has_two_pairs():
             self.category = 3
-            self._hand_name = "Two Pairs"
+            #Two Pairs
             self.best_five = self._get_Two_Pair_cards()
         elif self._has_pair():
             self.category = 2
-            self._hand_name = "One Pair"
+            #One Pair
             self.best_five = self._get_One_Pair_cards()
         elif self._has_high_card():
             self.category = 1
-            self._hand_name = "High Card"
+            #High Card
             self.best_five = self._get_High_cards()
 
     def _has_straight_flush(self):
@@ -412,7 +412,7 @@ def compare_hands(hand0, hand1):
         hand1_5_cards = hand1.get_hand_five_cards()
         
 
-        if hand0_category == 9 or hand0_category == 5 or hand0_category == 6:
+        if hand0_category == 9 or hand0_category == 5:
             for i in reversed(range(5)):
                 hand0_card_rank = hand0_5_cards[i][1]
                 hand1_card_rank = hand1_5_cards[i][1]
@@ -624,7 +624,7 @@ def compare_hands(hand0, hand1):
             else:
                 return [1, 1]
 
-            if hand0_category == 1:
+            if hand0_category == 1 or hand0_category == 6:
 
                 for i in range(5):              
                     five_cards_0.append(RANKS.index(handcard0[i][1]))

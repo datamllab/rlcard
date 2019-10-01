@@ -11,10 +11,11 @@ from rlcard.games.limitholdem.game import LimitholdemGame
 
 class LeducholdemGame(LimitholdemGame):
     
-    def __init__(self):
+    def __init__(self, allow_step_back=False):
         ''' Initialize the class leducholdem Game
         '''
 
+        self.allow_step_back = allow_step_back
         # Some configarations of the game
         # These arguments are fixed in Leduc Hold'em Game
 
@@ -23,7 +24,7 @@ class LeducholdemGame(LimitholdemGame):
         self.allowed_raise_num = 2
 
         self.num_players = 2
-    
+
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
 
@@ -83,14 +84,15 @@ class LeducholdemGame(LimitholdemGame):
                 (int): next plater's id
         '''
 
-        # First snapshot the current state
-        r = deepcopy(self.round)
-        b = self.game_pointer
-        r_c = self.round_counter
-        d = deepcopy(self.dealer)
-        p = deepcopy(self.public_card)
-        ps = deepcopy(self.players)
-        self.history.append((r, b, r_c, d, p, ps))
+        if self.allow_step_back:
+            # First snapshot the current state
+            r = deepcopy(self.round)
+            b = self.game_pointer
+            r_c = self.round_counter
+            d = deepcopy(self.dealer)
+            p = deepcopy(self.public_card)
+            ps = deepcopy(self.players)
+            self.history.append((r, b, r_c, d, p, ps))
 
         # Then we proceed to the next round
         self.game_pointer = self.round.proceed_round(self.players, action)
@@ -168,27 +170,27 @@ class LeducholdemGame(LimitholdemGame):
 
 # Test the game
 
-if __name__ == "__main__":
-    game = LeducholdemGame()
-    while True:
-        print('New Game')
-        state, game_pointer = game.init_game()
-        print(game_pointer, state)
-        i = 1
-        while not game.is_over():
-            i += 1
-            legal_actions = game.get_legal_actions()
-            if i == 3:
-                print('Step back')
-                print(game.step_back())
-                game_pointer = game.get_player_id()
-                print(game_pointer)
-                legal_actions = game.get_legal_actions()
-            # action = input()
-            action = np.random.choice(legal_actions)
-            print(game_pointer, action, legal_actions)
-            state, game_pointer = game.step(action)
-            print(game_pointer, state)
-
-        print(game.get_payoffs())
+#if __name__ == "__main__":
+#    game = LeducholdemGame()
+#    while True:
+#        print('New Game')
+#        state, game_pointer = game.init_game()
+#        print(game_pointer, state)
+#        i = 1
+#        while not game.is_over():
+#            i += 1
+#            legal_actions = game.get_legal_actions()
+#            if i == 3:
+#                print('Step back')
+#                print(game.step_back())
+#                game_pointer = game.get_player_id()
+#                print(game_pointer)
+#                legal_actions = game.get_legal_actions()
+#            # action = input()
+#            action = np.random.choice(legal_actions)
+#            print(game_pointer, action, legal_actions)
+#            state, game_pointer = game.step(action)
+#            print(game_pointer, state)
+#
+#        print(game.get_payoffs())
 

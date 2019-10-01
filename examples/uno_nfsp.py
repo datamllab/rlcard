@@ -1,4 +1,4 @@
-''' An example of learning a NFSP Agent on No-Limit Texas Holdem
+''' An example of learning a NFSP Agent on Dou Dizhu
 '''
 
 import tensorflow as tf
@@ -10,13 +10,13 @@ from rlcard.utils.utils import set_global_seed
 from rlcard.utils.logger import Logger
 
 # Make environment
-env = rlcard.make('no-limit-holdem')
-eval_env = rlcard.make('no-limit-holdem')
+env = rlcard.make('uno')
+eval_env = rlcard.make('uno')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 100
+evaluate_every = 1000
 save_plot_every = 1000
-evaluate_num = 10000
+evaluate_num = 300
 episode_num = 10000000
 
 # Set the the number of steps for collecting normalization statistics
@@ -25,7 +25,7 @@ memory_init_size = 1000
 norm_step = 1000
 
 # The paths for saving the logs and learning curves
-root_path = './experiments/nolimit_holdem_nfsp_result/'
+root_path = './experiments/uno_nfsp_result/'
 log_path = root_path + 'log.txt'
 csv_path = root_path + 'performance.csv'
 figure_path = root_path + 'figures/'
@@ -42,11 +42,17 @@ with tf.Session() as sess:
                           scope='nfsp' + str(i),
                           action_num=env.action_num,
                           state_shape=env.state_shape,
-                          hidden_layers_sizes=[512,512],
+                          hidden_layers_sizes=[512,1024,2048,1024,512],
+                          anticipatory_param=0.5,
+                          batch_size=256,
+                          rl_learning_rate=0.00005,
+                          sl_learning_rate=0.00001,
                           min_buffer_size_to_learn=memory_init_size,
+                          q_replay_memory_size=int(1e5),
                           q_replay_memory_init_size=memory_init_size,
                           q_norm_step=norm_step,
-                          q_mlp_layers=[512,512])
+                          q_batch_size=256,
+                          q_mlp_layers=[512,1024,2048,1024,512])
         agents.append(agent)
 
     sess.run(tf.global_variables_initializer())
@@ -54,13 +60,13 @@ with tf.Session() as sess:
     random_agent = RandomAgent(action_num=eval_env.action_num)
 
     env.set_agents(agents)
-    eval_env.set_agents([agents[0], random_agent])
+    eval_env.set_agents([agents[0], random_agent, random_agent])
 
     # Count the number of steps
     step_counters = [0 for _ in range(env.player_num)]
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='timestep', ylabel='reward', legend='NFSP on No-Limit Texas Holdem', log_path=log_path, csv_path=csv_path)
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='NFSP on UNO', log_path=log_path, csv_path=csv_path)
 
     for episode in range(episode_num):
 
@@ -79,7 +85,7 @@ with tf.Session() as sess:
 
                 # Train the agent
                 train_count = step_counters[i] - (memory_init_size + norm_step)
-                if train_count > 0 and train_count % 64 == 0:
+                if train_count > 0 and train_count % 128 == 0:
                     rl_loss = agents[i].train_rl()
                     sl_loss = agents[i].train_sl()
                     print('\rINFO - Agent {}, step {}, rl-loss: {}, sl-loss: {}'.format(i, step_counters[i], rl_loss, sl_loss), end='')
@@ -87,6 +93,7 @@ with tf.Session() as sess:
         # Evaluate the performance. Play with random agents.
         if episode % evaluate_every == 0:
             reward = 0
+            eval_episode = 0
             for eval_episode in range(evaluate_num):
                 _, payoffs = eval_env.run(is_training=False)
                 reward += payoffs[0]

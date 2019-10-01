@@ -20,9 +20,10 @@ with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/action_space.json'), 
     ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
     ACTION_LIST = list(ACTION_SPACE.keys())
 
-# a map of card to its type
+# a map of card to its type. Also return both dict and list to accelerate
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/card_type.json'), 'r') as file:
-    CARD_TYPE = json.load(file, object_pairs_hook=OrderedDict)
+    data = json.load(file, object_pairs_hook=OrderedDict)
+    CARD_TYPE = (data, list(data), set(data))
 
 # a map of type to its cards
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/type_card.json'), 'r') as file:
@@ -156,13 +157,12 @@ def cards2str(cards: list):
             response += card.rank
     return response
 
-
 def contains_cards(candidate, target):
     ''' Check if cards of candidate contains cards of target.
 
     Args:
-        candidate (string): string represent of cards of candidate
-        target (string): string represent of cards of target
+        candidate (string): A string representing the cards of candidate
+        target (string): A string representing the number of cards of target
 
     Returns:
         boolean
@@ -180,9 +180,9 @@ def contains_cards(candidate, target):
     for tar_card in target:
         beg = candidate.find(tar_card, beg) + 1
         if beg == 0:
+        #if tar_card not in candidate:
             return False
     return True
-
 
 def encode_cards(plane, cards):
     ''' Encode cards and represerve it into plane.
@@ -234,7 +234,7 @@ def get_gt_cards(player, greater_player):
     gt_cards = ['pass']
     current_hand = cards2str(player.current_hand)
     target_cards = greater_player.played_cards
-    target_types = CARD_TYPE[target_cards]
+    target_types = CARD_TYPE[0][target_cards]
     type_dict = {}
     for card_type, weight in target_types:
         if card_type not in type_dict:

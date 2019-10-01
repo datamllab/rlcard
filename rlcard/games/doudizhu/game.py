@@ -32,7 +32,8 @@ class DoudizhuGame(object):
              'actions': ['pass', 'K', 'A', 'B']
             }
     '''
-    def __init__(self):
+    def __init__(self, allow_step_back=False):
+        self.allow_step_back = allow_step_back
         self.num_players = 3
 
     def init_game(self):
@@ -64,6 +65,7 @@ class DoudizhuGame(object):
         actions = list(self.judger.playable_cards[player_id])
         state = player.get_state(self.round.public, others_hands, actions)
         self.state = state
+
         return state, player_id
 
     def step(self, action):
@@ -76,8 +78,11 @@ class DoudizhuGame(object):
             dict: next player's state
             int: next player's id
         '''
-        # record game history
-        self._record_history()
+
+        if self.allow_step_back:
+            # record game history
+            self._record_history()
+
         # perfrom action
         player = self.players[self.round.current_player]
         self.round.proceed_round(player, action)
@@ -89,6 +94,7 @@ class DoudizhuGame(object):
         # get next state
         state = self.get_state(next_id)
         self.state = state
+
         return state, next_id
 
     def step_back(self):
@@ -118,6 +124,7 @@ class DoudizhuGame(object):
         else:
             actions = player.available_actions(self.round.greater_player, self.judger)
         state = player.get_state(self.round.public, others_hands, actions)
+
         return state
 
     @staticmethod

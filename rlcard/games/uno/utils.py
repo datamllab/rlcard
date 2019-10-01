@@ -65,10 +65,11 @@ def encode_hand(encoded_hand, hand):
         card_info = card.split('-')
         color = COLOR_MAP[card_info[0]]
         trait = TRAIT_MAP[card_info[1]]
-        if trait >= 13 and encoded_hand[1][0][trait] == 0:
-            for index in range(4):
-                encoded_hand[0][index][trait] = 0
-                encoded_hand[1][index][trait] = 1
+        if trait >= 13:
+            if encoded_hand[1][0][trait] == 0:
+                for index in range(4):
+                    encoded_hand[0][index][trait] = 0
+                    encoded_hand[1][index][trait] = 1
         else:
             encoded_hand[0][color][trait] = 0
             encoded_hand[count][color][trait] = 1

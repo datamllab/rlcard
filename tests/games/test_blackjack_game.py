@@ -46,7 +46,7 @@ class TestBlackjackGame(unittest.TestCase):
         self.assertEqual(len(state['state'][1]), len(game.dealer.hand))
 
     def test_step_back(self):
-        game = Game()
+        game = Game(allow_step_back=True)
         state, _ = game.init_game()
         init_hand = state['state'][0]
         game.step('hit')
@@ -63,8 +63,6 @@ class TestBlackjackGame(unittest.TestCase):
         self.assertEqual(len(game.get_state(0)['state'][1]), 1)
         game.step('stand')
         self.assertGreater(len(game.get_state(0)['state'][1]), 1)
-
-
 
 if __name__ == '__main__':
     unittest.main()

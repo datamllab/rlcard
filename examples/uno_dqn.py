@@ -1,4 +1,4 @@
-''' An example of learning a Deep-Q Agent on Texas Limit Holdem
+''' An example of learning a Deep-Q Agent on Dou Dizhu
 '''
 
 import tensorflow as tf
@@ -10,24 +10,22 @@ from rlcard.utils.utils import set_global_seed
 from rlcard.utils.logger import Logger
 
 # Make environment
-#env = rlcard.make('limit-holdem')
-#eval_env = rlcard.make('limit-holdem')
-env = rlcard.make('leduc-holdem')
-eval_env = rlcard.make('leduc-holdem')
+env = rlcard.make('uno')
+eval_env = rlcard.make('uno')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 100
+evaluate_every = 1000
 save_plot_every = 1000
-evaluate_num = 10000
+evaluate_num = 300
 episode_num = 1000000
 
 # Set the the number of steps for collecting normalization statistics
 # and intial memory size
 memory_init_size = 1000
-norm_step = 100
+norm_step = 1000
 
 # The paths for saving the logs and learning curves
-root_path = './experiments/limit_holdem_dqn_result/'
+root_path = './experiments/uno_dqn_result/'
 log_path = root_path + 'log.txt'
 csv_path = root_path + 'performance.csv'
 figure_path = root_path + 'figures/'
@@ -41,7 +39,7 @@ with tf.Session() as sess:
     agent = DQNAgent(sess,
                      scope='dqn',
                      action_num=env.action_num,
-                     replay_memory_size=int(1e5),
+                     replay_memory_size=20000,
                      replay_memory_init_size=memory_init_size,
                      norm_step=norm_step,
                      state_shape=env.state_shape,
@@ -51,14 +49,14 @@ with tf.Session() as sess:
 
     sess.run(tf.global_variables_initializer())
 
-    env.set_agents([agent, random_agent])
-    eval_env.set_agents([agent, random_agent])
+    env.set_agents([agent, random_agent, random_agent])
+    eval_env.set_agents([agent, random_agent, random_agent])
 
     # Count the number of steps
     step_counter = 0
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on Limit Texas Holdem', log_path=log_path, csv_path=csv_path)
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on UNO', log_path=log_path, csv_path=csv_path)
 
     for episode in range(episode_num):
 
@@ -81,7 +79,6 @@ with tf.Session() as sess:
             reward = 0
             for eval_episode in range(evaluate_num):
                 _, payoffs = eval_env.run(is_training=False)
-
                 reward += payoffs[0]
 
             logger.log('\n########## Evaluation ##########')
@@ -95,4 +92,4 @@ with tf.Session() as sess:
             logger.make_plot(save_path=figure_path+str(episode)+'.png')
 
     # Make the final plot
-    logger.make_plot(save_path=figure_path+str(episode)+'.png')
+    logger.make_plot(save_path=figure_path+'final_'+str(episode)+'.png')

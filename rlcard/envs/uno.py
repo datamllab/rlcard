@@ -9,8 +9,9 @@ from rlcard.games.uno.utils import ACTION_SPACE, ACTION_LIST
 
 class UnoEnv(Env):
 
-    def __init__(self):
-        super().__init__(Game())
+    def __init__(self, allow_step_back=False):
+        super().__init__(Game(allow_step_back), allow_step_back)
+        self.state_shape = [7, 4, 15]
 
     def extract_state(self, state):
         obs = np.zeros((7, 4, 15), dtype=int)
@@ -29,11 +30,11 @@ class UnoEnv(Env):
         legal_ids = self.get_legal_actions()
         if action_id in legal_ids:
             return ACTION_LIST[action_id]
+        if (len(self.game.dealer.deck) + len(self.game.round.played_cards)) > 17: 
+            return ACTION_LIST[60]
         return ACTION_LIST[random.choice(legal_ids)]
 
     def get_legal_actions(self):
         legal_actions = self.game.get_legal_actions()
         legal_ids = [ACTION_SPACE[action] for action in legal_actions]
-        if not legal_ids:
-            legal_ids.append(ACTION_SPACE['draw'])
         return legal_ids

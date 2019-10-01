@@ -12,8 +12,9 @@ class DoudizhuEnv(Env):
     ''' Doudizhu Environment
     '''
 
-    def __init__(self):
-        super().__init__(Game())
+    def __init__(self, allow_step_back=False):
+        super().__init__(Game(allow_step_back), allow_step_back)
+        self.state_shape = [6, 5, 15]
 
     def extract_state(self, state):
         ''' Encode state
@@ -39,8 +40,7 @@ class DoudizhuEnv(Env):
                 encode_cards(obs[4-i], action[1])
         if state['played_cards'] is not None:
             encode_cards(obs[5], state['played_cards'])
-        #print(state)
-        #extrated_state = {'obs': obs, 'legal_actions': [act for act in range(self.action_num)]}
+
         extrated_state = {'obs': obs, 'legal_actions': self.get_legal_actions()}
         return extrated_state
 
@@ -77,6 +77,7 @@ class DoudizhuEnv(Env):
                 action = "pass"
             else:
                 action = np.random.choice(legal_actions)
+
         return action
 
     def get_legal_actions(self):

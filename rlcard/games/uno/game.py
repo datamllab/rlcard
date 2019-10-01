@@ -1,4 +1,5 @@
 import random
+import time
 from copy import deepcopy
 
 from rlcard.games.uno.dealer import UnoDealer as Dealer
@@ -8,11 +9,15 @@ from rlcard.games.uno.round import UnoRound as Round
 
 class UnoGame(object):
 
-    def __init__(self):
-        self.num_players = 4
-        self.payoffs = [0, 0, 0, 0]
+    def __init__(self, allow_step_back=False):
+        self.allow_step_back = allow_step_back
+        self.num_players = 2
+        self.payoffs = [0 for _ in range(self.num_players)]
 
     def init_game(self):
+        # Initalize payoffs
+        self.payoffs = [0 for _ in range(self.num_players)]
+
         # Initialize a dealer that can deal cards
         self.dealer = Dealer()
 
@@ -38,11 +43,13 @@ class UnoGame(object):
         return state, player_id
 
     def step(self, action):
-        # First snapshot the current state
-        his_dealer = deepcopy(self.dealer)
-        his_round = deepcopy(self.round)
-        his_players = deepcopy(self.players)
-        self.history.append((his_dealer, his_players, his_round))
+
+        if self.allow_step_back:
+            # First snapshot the current state
+            his_dealer = deepcopy(self.dealer)
+            his_round = deepcopy(self.round)
+            his_players = deepcopy(self.players)
+            self.history.append((his_dealer, his_players, his_round))
 
         self.round.proceed_round(self.players, action)
         player_id = self.round.current_player
@@ -61,8 +68,9 @@ class UnoGame(object):
 
     def get_payoffs(self):
         winner = self.round.winner
-        if winner is not None:
-            self.payoffs[winner] = 1
+        if winner is not None and len(winner) == 1:
+            self.payoffs[winner[0]] = 1
+            self.payoffs[1 - winner[0]] = -1
         return self.payoffs
 
     def get_legal_actions(self):
@@ -82,22 +90,28 @@ class UnoGame(object):
     def is_over(self):
         return self.round.is_over
 
+'''
 # For test
 if __name__ == '__main__':
     import time
-    random.seed(0)
-    start = time.time()
+    #random.seed(0)
+    #start = time.time()
     game = UnoGame()
     for _ in range(1):
-        print('*****init game*****')
+        #print('*****init game*****')
         state, button = game.init_game()
-        print(button, state)
+        #print(button, state)
         i = 0
+        legal_action_time = 0
+        step_time = 0
         while not game.is_over():
             i += 1
+            start1 = time.time()
             legal_actions = game.get_legal_actions()
-            #print('legal_actions', legal_actions)
-            '''
+            end1 = time.time()
+            print('get_legal_action', end1 - start1)
+            legal_action_time += (end1 - start1)
+            print('legal_actions', legal_actions)
             if i == 3:
                 print('step back')
                 print(game.step_back())
@@ -105,14 +119,22 @@ if __name__ == '__main__':
                 legal_actions = game.get_legal_actions()
                 print('back legal actions', legal_actions)
                 input()
-            '''
             if not legal_actions:
                 action = 'draw'
             else:
                 action = random.choice(legal_actions)
-            #print('action', action)
-            #print()
+            print('action', action)
+            print()
+            start2 = time.time()
             state, button = game.step(action)
+            end2 = time.time()
+            #print('step', end2 - start2)
+            step_time += (end2 - start2)
             print(button, state)
-    end = time.time()
-    print(end-start)
+        print(game.get_payoffs())
+    #end = time.time()
+    #print(end-start)
+    print('legal_time', legal_action_time)
+    print('step time', step_time)
+    print(i)
+'''

@@ -11,12 +11,13 @@ class LimitholdemEnv(Env):
     ''' Limitholdem Environment
     '''
 
-    def __init__(self):
+    def __init__(self, allow_step_back=False):
         ''' Initialize the Limitholdem environment
         '''
 
-        super().__init__(Game())
+        super().__init__(Game(allow_step_back), allow_step_back)
         self.actions = ['call', 'raise', 'fold', 'check']
+        self.state_shape=[52]
 
         with open(os.path.join(rlcard.__path__[0], 'games/limitholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)

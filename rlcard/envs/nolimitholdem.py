@@ -11,12 +11,13 @@ class NolimitholdemEnv(Env):
     ''' Limitholdem Environment
     '''
 
-    def __init__(self):
+    def __init__(self, allow_step_back=False):
         ''' Initialize the Limitholdem environment
         '''
 
-        super().__init__(Game())
+        super().__init__(Game(allow_step_back), allow_step_back)
         self.actions = ['call', 'fold', 'check']
+        self.state_shape = [52]
         for raise_amount in range(1, self.game.init_chips+1):
             self.actions.append(raise_amount)
 

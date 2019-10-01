@@ -14,8 +14,8 @@ env = rlcard.make('no-limit-holdem')
 eval_env = rlcard.make('no-limit-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 1000
-save_plot_every = 10000
+evaluate_every = 100
+save_plot_every = 1000
 evaluate_num = 10000
 episode_num = 1000000
 
@@ -23,6 +23,12 @@ episode_num = 1000000
 # and intial memory size
 memory_init_size = 1000
 norm_step = 100
+
+# The paths for saving the logs and learning curves
+root_path = './experiments/nolimit_holdem_dqn_result/'
+log_path = root_path + 'log.txt'
+csv_path = root_path + 'performance.csv'
+figure_path = root_path + 'figures/'
 
 # Set a global seed
 set_global_seed(0)
@@ -36,7 +42,7 @@ with tf.Session() as sess:
                      replay_memory_size=int(1e5),
                      replay_memory_init_size=memory_init_size,
                      norm_step=norm_step,
-                     state_shape=[52],
+                     state_shape=env.state_shape,
                      mlp_layers=[512, 512])
 
     random_agent = RandomAgent(action_num=eval_env.action_num)
@@ -50,7 +56,7 @@ with tf.Session() as sess:
     step_counter = 0
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on No-Limit Texas Holdem', log_path='./experiments/nolimit_holdem_dqn_result/log.txt', csv_path='./experiments/nolimit_holdem_dqn_result/performance.csv')
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on No-Limit Texas Holdem', log_path=log_path, csv_path=csv_path)
 
     for episode in range(episode_num):
 
@@ -84,7 +90,7 @@ with tf.Session() as sess:
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            logger.make_plot(save_path='./experiments/nolimit_holdem_dqn_result/'+str(episode)+'.png')
+            logger.make_plot(save_path=figure_path+str(episode)+'.png')
 
     # Make the final plot
-    logger.make_plot(save_path='./experiments/nolimit_holdem_dqn_result/'+'final_'+str(episode)+'.png')
+    logger.make_plot(save_path=figure_path+str(episode)+'.png')

@@ -6,11 +6,12 @@ from rlcard.games.blackjack.judger import BlackjackJudger as Judger
 
 class BlackjackGame(object):
 
-    def __init__(self):
+    def __init__(self, allow_step_back=False):
         ''' Initialize the class Blackjack Game
         '''
 
-        super().__init__()
+        self.allow_step_back = allow_step_back
+
 
     def init_game(self):
         ''' Initialilze the game
@@ -39,16 +40,18 @@ class BlackjackGame(object):
         Args:
             action (str): a specific action of blackjack. (Hit or Stand)
 
-        Returns:
+        Returns:/
             dict: next player's state
             int: next plater's id
         '''
 
+        if self.allow_step_back:
+            p = deepcopy(self.player)
+            d = deepcopy(self.dealer)
+            w = deepcopy(self.winner)
+            self.history.append((d,p,w))
+
         next_state = {}
-        p = deepcopy(self.player)
-        d = deepcopy(self.dealer)
-        w = deepcopy(self.winner)
-        self.history.append((d,p,w))
         # Play hit
         if action != "stand":
             self.dealer.deal_card(self.player)

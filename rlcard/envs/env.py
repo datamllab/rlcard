@@ -7,14 +7,16 @@ class Env(object):
     ''' The base Env class
     '''
 
-    def __init__(self, game):
+    def __init__(self, game, allow_step_back=False):
         ''' Initialize
 
         Args:
             game (Game): The Game class
+            allow_step_back (boolean): True if allowing step_back
         '''
 
         self.game = game
+        self.allow_step_back = allow_step_back
 
         # Get number of players/actions in this game
         self.player_num = game.get_player_num()
@@ -65,6 +67,9 @@ class Env(object):
 
         Note: Error will be raised if step back from the root node.
         '''
+
+        if not self.allow_step_back:
+            raise Exception('Step back is off. To use step_back, please set allow_step_back=True in rlcard.make')
 
         if not self.game.step_back():
             return False

@@ -80,7 +80,7 @@ class TestLimitholdemMethods(unittest.TestCase):
 
 
     def test_step_back(self):
-        game = Game()
+        game = Game(allow_step_back=True)
         game.init_game()
         self.assertEqual(game.step_back(), False)
         index = 0

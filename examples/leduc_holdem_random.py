@@ -7,7 +7,7 @@ from rlcard.utils.utils import *
 
 # Make environment
 env = rlcard.make('leduc-holdem')
-episode_num = 20
+episode_num = 2
 
 # Set a global seed
 set_global_seed(0)

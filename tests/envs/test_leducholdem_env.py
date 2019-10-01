@@ -1,15 +1,15 @@
 import unittest
 
-from rlcard.envs.limitholdem import LimitholdemEnv as Env
+from rlcard.envs.leducholdem import LeducholdemEnv as Env
 from rlcard.agents.random_agent import RandomAgent
 
 
-class TestLimitholdemEnv(unittest.TestCase):
+class TestLeducholdemEnv(unittest.TestCase):
 
     def test_init_game_and_extract_state(self):
         env = Env()
         state, _ = env.init_game()
-        self.assertEqual(state['obs'].size, 52)
+        self.assertEqual(state['obs'].size, 6)
         for action in state['legal_actions']:
             self.assertLess(action, env.action_num)
 
@@ -26,13 +26,6 @@ class TestLimitholdemEnv(unittest.TestCase):
         for action in state['legal_actions']:
             decoded = env.decode_action(action)
             self.assertIn(decoded, env.actions)
-
-        decoded = env.decode_action(3)
-        self.assertEqual(decoded, 'fold')
-
-        env.step(0)
-        decoded = env.decode_action(0)
-        self.assertEqual(decoded, 'check')
 
     def test_step(self):
         env = Env()

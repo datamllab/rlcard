@@ -7,7 +7,7 @@ from rlcard.games.limitholdem.round import LimitholdemRound
 class LeducholdemRound(LimitholdemRound):
     ''' Round can call other Classes' functions to keep the game running
     '''
-    
+
     def __init__(self, raise_amount, allowed_raise_num, num_players):
         ''' Initilize the round class
 

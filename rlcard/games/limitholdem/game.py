@@ -8,11 +8,11 @@ from rlcard.games.limitholdem.round import LimitholdemRound as Round
 
 class LimitholdemGame(object):
 
-    def __init__(self):
+    def __init__(self, allow_step_back=False):
         ''' Initialize the class limitholdem Game
         '''
 
-        super().__init__()
+        self.allow_step_back = allow_step_back
 
         # Some configarations of the game
         # These arguments can be specified for creating new games
@@ -95,14 +95,15 @@ class LimitholdemGame(object):
                 (int): next plater's id
         '''
 
-        # First snapshot the current state
-        r = deepcopy(self.round)
-        b = self.game_pointer
-        r_c = self.round_counter
-        d = deepcopy(self.dealer)
-        p = deepcopy(self.public_cards)
-        ps = deepcopy(self.players)
-        self.history.append((r, b, r_c, d, p, ps))
+        if self.allow_step_back:
+            # First snapshot the current state
+            r = deepcopy(self.round)
+            b = self.game_pointer
+            r_c = self.round_counter
+            d = deepcopy(self.dealer)
+            p = deepcopy(self.public_cards)
+            ps = deepcopy(self.players)
+            self.history.append((r, b, r_c, d, p, ps))
 
         # Then we proceed to the next round
         self.game_pointer = self.round.proceed_round(self.players, action)

@@ -14,8 +14,8 @@ env = rlcard.make('leduc-holdem')
 eval_env = rlcard.make('leduc-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 1000
-save_plot_every = 10000
+evaluate_every = 100
+save_plot_every = 1000
 evaluate_num = 10000
 episode_num = 10000000
 
@@ -23,6 +23,12 @@ episode_num = 10000000
 # and intial memory size
 memory_init_size = 1000
 norm_step = 1000
+
+# The paths for saving the logs and learning curves
+root_path = './experiments/leduc_holdem_nfsp_result/'
+log_path = root_path + 'log.txt'
+csv_path = root_path + 'performance.csv'
+figure_path = root_path + 'figures/'
 
 # Set a global seed
 set_global_seed(0)
@@ -35,7 +41,7 @@ with tf.Session() as sess:
         agent = NFSPAgent(sess,
                           scope='nfsp' + str(i),
                           action_num=env.action_num,
-                          state_shape=[6],
+                          state_shape=env.state_shape,
                           hidden_layers_sizes=[128,128],
                           min_buffer_size_to_learn=memory_init_size,
                           q_replay_memory_init_size=memory_init_size,
@@ -54,7 +60,7 @@ with tf.Session() as sess:
     step_counters = [0 for _ in range(env.player_num)]
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='timestep', ylabel='reward', legend='NFSP on Leduc Holdem', log_path='./experiments/leduc_holdem_nfsp_result/log.txt', csv_path='./experiments/leduc_holdem_nfsp_result/performance.csv')
+    logger = Logger(xlabel='timestep', ylabel='reward', legend='NFSP on Leduc Holdem', log_path=log_path, csv_path=csv_path)
 
     for episode in range(episode_num):
 
@@ -93,7 +99,7 @@ with tf.Session() as sess:
 
         # Make plot
         if episode % save_plot_every == 0 and episode > 0:
-            logger.make_plot(save_path='./experiments/leduc_holdem_nfsp_result/'+str(episode)+'.png')
+            logger.make_plot(save_path=figure_path+str(episode)+'.png')
 
     # Make the final plot
-    logger.make_plot(save_path='./experiments/leduc_holdem_nfsp_result/'+'final_'+str(episode)+'.png')
+    logger.make_plot(save_path=figure_path+'final_'+str(episode)+'.png')
