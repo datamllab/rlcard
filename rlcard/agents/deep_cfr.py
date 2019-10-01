@@ -154,6 +154,7 @@ class DeepCFR():
         self._num_players = env.player_num
         self._num_step = num_step
         self.advantage_losses = collections.defaultdict(list)
+        self.traverse = []
 
         # get initial state and players
         init_state, _ = self._env.init_game()
@@ -168,7 +169,6 @@ class DeepCFR():
         info_state_shape.extend(self._embedding_size)
         # Create required TensorFlow placeholders to perform the Q-network updates.
         self._info_state_ph = tf.placeholder(
-            #shape=[None, self._embedding_size],
             shape=info_state_shape,
             dtype=tf.float32,
             name="info_state_ph")
@@ -183,7 +183,6 @@ class DeepCFR():
         for p in range(self._num_players):
             self._advantage_ph.append(
                 tf.placeholder(
-                    #shape=[None, self._num_actions],
                     shape=[None],
                     dtype=tf.float32,
                     name="advantage_ph_" + str(p)))
@@ -192,7 +191,6 @@ class DeepCFR():
         for p in range(self._num_players):
             self._action_ph.append(
                 tf.placeholder(
-                    #shape=[None, self._num_actions],
                     shape=[None],
                     dtype=tf.int32,
                     name="action_ph_" + str(p)))
@@ -298,21 +296,13 @@ class DeepCFR():
             while init_player != p:
                 init_state, init_player = self._env.init_game()
                 self._root_node = init_state
-                #action = self.simulate_other(p, init_state)
-                #init_state, init_player = self._env.step(action)
-                #self._root_node = init_state
             for i in range(self._num_traversals):
-                #x = time.clock()
                 self._traverse_game_tree(self._root_node, init_player)
-                #y = time.clock() - x
-                #print("traverse time:", y)
 
             # Re-initialize advantage networks and train from scratch.
             self.reinitialize_advantage_networks()
             for _ in range(self._num_step):
                 self.advantage_losses[p].append(self._learn_advantage_network(p))
-            #z = time.clock() - y
-            #print("advantage time:", z, i, p)
 
             # Re-initialize advantage networks and train from scratch.
             self._iteration += 1
@@ -352,6 +342,7 @@ class DeepCFR():
                 self._env.step_back()
                 if self._env.get_player_id() == player:
                     break
+            self.traverse = []
             return payoff
 
         if current_player == player:
@@ -359,11 +350,9 @@ class DeepCFR():
             # Update the policy over the info set & actions via regret matching.
             _, strategy = self._sample_action_from_advantage(state, player)
             for action in actions:
-                #print("Before:",self._env.game.get_state(player), action, self._env.decode_action(action))
-                #print(len(self._env.game.history))
                 child_state, _ = self._env.step(action)
+                self.traverse.append((action, state, child_state))
                 expected_payoff[action] = self._traverse_game_tree(child_state, player)
-            #print("BBBBB",len(self._env.game.histories))
             for _ in range(self._env.player_num):
                 self._env.step_back()
 
@@ -371,9 +360,6 @@ class DeepCFR():
                 sampled_regret[action] = expected_payoff[action][player]
                 for a_ in actions:
                     sampled_regret[action] -= strategy[a_] * expected_payoff[a_][player]
-            regret = np.full(self._num_actions, 0, dtype=np.float64)
-            for act in actions:
-                regret[act] = sampled_regret[act]
             for act in actions:
                 self._advantage_memories[player].add(AdvantageMemory(state['obs'].flatten(), self._iteration, sampled_regret[act], act))
             if self._num_players == 1:
