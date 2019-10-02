@@ -1,7 +1,9 @@
 import random
 import numpy as np
+import tensorflow as tf
 
 from rlcard.core import Card, Player
+
 
 def init_standard_deck():
     ''' Initialize a standard deck of 52 cards
@@ -289,9 +291,22 @@ def remove_illegal(action_probs, legal_actions):
     Returns:
         probd (numpy.array): A normalized vector without legal actions.
     '''
-
     probs = np.zeros(action_probs.shape[0])
     probs[legal_actions] = action_probs[legal_actions]
     probs /= sum(probs)
     return probs
 
+def make_copy_params_op(v1_list, v2_list):
+    v1_list = list(sorted(v1_list, key=lambda v: v.name))
+    v2_list = list(sorted(v2_list, key=lambda v: v.name))
+
+    update_ops = []
+    for v1, v2 in zip(v1_list, v2_list):
+        op = v2.assign(v1)
+        update_ops.append(op)
+    return update_ops
+
+def assign_task(task_num, process_num):
+    per_tasks = [task_num // process_num] * process_num
+    per_tasks[0] += (task_num % process_num)
+    return per_tasks
