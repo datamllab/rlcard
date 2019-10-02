@@ -139,7 +139,7 @@ class NFSPAgent(object):
                         labels=tf.stop_gradient(self._action_probs_ph),
                         logits=self._avg_policy))
 
-        optimizer = tf.train.AdamOptimizer(learning_rate=self._sl_learning_rate)
+        optimizer = tf.train.AdamOptimizer(learning_rate=self._sl_learning_rate, name='nfsp_adam')
 
         self._learn_step = optimizer.minimize(self._loss)
 
