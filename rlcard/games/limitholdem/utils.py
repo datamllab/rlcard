@@ -3,14 +3,14 @@
 class Hand:
     def __init__(self):
         self.all_cards = [] # two hand cards + five public cards
-        self.category = 0 
-        # type of a players' best five cards, greater combination has higher number eg: 0:"Not_Yet_Evaluated" 1: "High_Card" , 9:"Straight_Flush" 
+        self.category = 0
+        #type of a players' best five cards, greater combination has higher number eg: 0:"Not_Yet_Evaluated" 1: "High_Card" , 9:"Straight_Flush"
         self.best_five = []
-        # the largest combination of five cards in all the seven cards
+        #the largest combination of five cards in all the seven cards
         self.flush_cards = []
-        # cards with same suit
+        #cards with same suit
         self.cards_by_rank = []
-        # cards after sort
+        #cards after sort
         self.product = 1
         self.RANK_TO_STRING = {2: "2", 3: "3", 4: "4", 5: "5", 6: "6",
                                7: "7", 8: "8", 9: "9", 10: "T", 11: "J", 12: "Q", 13: "K", 14: "A"}
@@ -18,7 +18,7 @@ class Hand:
         self.SUIT_LOOKUP = "SCDH"
 
     def setCards(self, seven_cards=[]):
-        ''' 
+        '''
         Assign value to all_cards
         Args:
             seven_cards(list): # two hand cards + five public cards on deck
@@ -410,8 +410,6 @@ def compare_hands(hand0, hand1):
         # compare equal category
         hand0_5_cards = hand0.get_hand_five_cards()
         hand1_5_cards = hand1.get_hand_five_cards()
-        
-
         if hand0_category == 9 or hand0_category == 5:
             for i in reversed(range(5)):
                 hand0_card_rank = hand0_5_cards[i][1]
@@ -421,7 +419,7 @@ def compare_hands(hand0, hand1):
                 elif RANKS.index(hand0_card_rank) < RANKS.index(hand1_card_rank):
                     return [0, 1]
                 elif RANKS.index(hand0_card_rank) == RANKS.index(hand1_card_rank):
-                    return [1, 1]   
+                    return [1, 1]  
         if hand0_category == 8:
             seen = []
             duplicated0 = []
@@ -502,7 +500,7 @@ def compare_hands(hand0, hand1):
                     if five_cards_0[0] > five_cards_1[0]:
                         return [1,0]
                     if five_cards_0[0] < five_cards_1[0]:
-                        return [0,1] 
+                        return [0,1]
                     if five_cards_0[0] == five_cards_1[0]:
                         return [1,1]
         
@@ -582,20 +580,19 @@ def compare_hands(hand0, hand1):
                 if _ not in seen:  
                     seen.append(_)
                 else:
-                    duplicated0.append(_)            
+                    duplicated0.append(_)           
             seen = []
             duplicated1 = []
             for i in range(5):              
                 five_cards_1.append(handcard1[i][1])
-            for _ in five_cards_1:  
+            for _ in five_cards_1: 
                 if _ not in seen:  
                     seen.append(_)
                 else:
-                    duplicated1.append(_) 
+                    duplicated1.append(_)
             
             if RANKS.index(duplicated0[0][0]) > RANKS.index(duplicated1[0][0]):
-                return [1, 0]
-            
+                return [1, 0]      
             if RANKS.index(duplicated0[0][0]) > RANKS.index(duplicated1[0][0]):
                 return [0, 1]
             if RANKS.index(duplicated0[0][0]) == RANKS.index(duplicated1[0][0]):
@@ -626,9 +623,9 @@ def compare_hands(hand0, hand1):
 
             if hand0_category == 1 or hand0_category == 6:
 
-                for i in range(5):              
+                for i in range(5):
                     five_cards_0.append(RANKS.index(handcard0[i][1]))
-                for i in range(5):              
+                for i in range(5):
                     five_cards_1.append(RANKS.index(handcard1[i][1]))
                 five_cards_0.sort()
                 five_cards_1.sort()
