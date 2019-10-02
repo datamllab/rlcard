@@ -57,7 +57,7 @@ class TestLeducholdemMethods(unittest.TestCase):
         game.step_back()
         self.assertEqual(game.game_pointer, player_id)
         self.assertEqual(game.step_back(), False)
-    
+
     def test_judge_game(self):
         players = [Player(0), Player(1)]
         players[0].in_chips = 10

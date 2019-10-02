@@ -23,7 +23,7 @@ class LimitholdemGame(object):
 
         # Raise amount and allowed times
         self.raise_amount = self.big_blind
-        self.allowed_raise_num = 1
+        self.allowed_raise_num = 4
 
         self.num_players = 2
 
@@ -115,15 +115,14 @@ class LimitholdemGame(object):
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
-                self.public_cards.append(self.dealer.deal_card())
-                self.public_cards.append(self.dealer.deal_card())
-            ## For the following rounds, we deal only 1 card
-            #elif self.round_counter <= 2:
-            #    self.public_cards.append(self.dealer.deal_card())
 
-            ## Double the raise amount for the last two rounds
-            #if self.round_counter == 1:
-            #    self.round.raise_amount = 2 * self.raise_amount
+            # For the following rounds, we deal only 1 card
+            elif self.round_counter <= 2:
+                self.public_cards.append(self.dealer.deal_card())
+
+            # Double the raise amount for the last two rounds
+            if self.round_counter == 1:
+                self.round.raise_amount = 2 * self.raise_amount
 
             self.round_counter += 1
             self.round.start_new_round(self.game_pointer)
@@ -202,7 +201,7 @@ class LimitholdemGame(object):
             return True
 
         # If all rounds are finshed
-        if self.round_counter >= 2:
+        if self.round_counter >= 4:
             return True
         return False
 

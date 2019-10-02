@@ -3,14 +3,14 @@
 class Hand:
     def __init__(self):
         self.all_cards = [] # two hand cards + five public cards
-        self.category = 0 
-        # type of a players' best five cards, greater combination has higher number eg: 0:"Not_Yet_Evaluated" 1: "High_Card" , 9:"Straight_Flush" 
+        self.category = 0
+        #type of a players' best five cards, greater combination has higher number eg: 0:"Not_Yet_Evaluated" 1: "High_Card" , 9:"Straight_Flush"
         self.best_five = []
-        # the largest combination of five cards in all the seven cards
+        #the largest combination of five cards in all the seven cards
         self.flush_cards = []
-        # cards with same suit
+        #cards with same suit
         self.cards_by_rank = []
-        # cards after sort
+        #cards after sort
         self.product = 1
         self.RANK_TO_STRING = {2: "2", 3: "3", 4: "4", 5: "5", 6: "6",
                                7: "7", 8: "8", 9: "9", 10: "T", 11: "J", 12: "Q", 13: "K", 14: "A"}
@@ -18,14 +18,19 @@ class Hand:
         self.SUIT_LOOKUP = "SCDH"
 
     def setCards(self, seven_cards=[]):
-        ''' 
+        '''
         Assign value to all_cards
         Args:
-            seven_cards(list): # two hand cards + five public cards on deck
+            seven_cards(list): two hand cards + five public cards on deck
         '''
         self.all_cards = seven_cards
 
     def get_hand_five_cards(self):
+        '''
+        Get the best five cards of a player
+        Returns:
+            (list): the best five cards among the seven cards of a player
+        '''
         return self.best_five
 
     def _sort_cards(self):
@@ -150,10 +155,17 @@ class Hand:
             return False
 
     def _get_different_rank_list(self, all_cards):
+        '''
+        Get cards with different ranks, that is to say, remove duplicate-ranking cards, for picking straight cards' use
+        Args:
+            (list): two hand cards + five public cards
+        Returns:
+            (list): a list of cards with duplicate-ranking cards removed
+        '''
         different_rank_list = []
         different_rank_list.append(all_cards[0])
         for card in all_cards:
-            if(card[1] != different_rank_list[-1][0]):
+            if(card[1] != different_rank_list[-1][1]):
                 different_rank_list.append(card)
         return different_rank_list
 
@@ -178,6 +190,14 @@ class Hand:
         return []
 
     def _getcards_by_rank(self, all_cards):
+        '''
+        Get cards by rank
+        Args:
+            (list): # two hand cards + five public cards
+        Return:
+            card_group(list): 
+            product(int):
+        '''
         card_group = []
         card_group_element = []
         product = 1
@@ -291,6 +311,11 @@ class Hand:
             return False
 
     def _get_Four_of_a_kind_cards(self):
+        '''
+        Get the four of a kind cards among a player's cards
+        Returns:
+            (list): the four of a kind cards
+        '''
         Four_of_a_Kind = []
         cards_by_rank = self.cards_by_rank
         cards_len = len(cards_by_rank)
@@ -305,6 +330,11 @@ class Hand:
         return Four_of_a_Kind
 
     def _get_Fullhouse_cards(self):
+        '''
+        Get the fullhouse cards among a player's cards
+        Returns:
+            (list): fullhouse cards, that is to say, the triple cards and the pair cards
+        '''
         Fullhouse = []
         cards_by_rank = self.cards_by_rank
         cards_len = len(cards_by_rank)
@@ -320,6 +350,11 @@ class Hand:
         return Fullhouse
 
     def _get_Three_of_a_kind_cards(self):
+        '''
+        Get the three of a kind cards among a player's cards
+        Returns:
+            (list): the three of a kind cards
+        '''
         Trip_cards = []
         cards_by_rank = self.cards_by_rank
         cards_len = len(cards_by_rank)
@@ -334,6 +369,11 @@ class Hand:
         return Trip_cards
 
     def _get_Two_Pair_cards(self):
+        '''
+        Get the two pair cards among a player's cards
+        Returns:
+            (list): the two pair cards
+        '''
         Two_Pair_cards = []
         cards_by_rank = self.cards_by_rank
         cards_len = len(cards_by_rank)
@@ -346,6 +386,11 @@ class Hand:
         return Two_Pair_cards
 
     def _get_One_Pair_cards(self):
+        '''
+        Get the one pair cards among a player's cards
+        Returns:
+            (list): the one pair cards
+        '''
         One_Pair_cards = []
         cards_by_rank = self.cards_by_rank
         cards_len = len(cards_by_rank)
@@ -361,6 +406,11 @@ class Hand:
         return One_Pair_cards
 
     def _get_High_cards(self):
+        '''
+        Get the high cards among a player's cards
+        Returns:
+            (list): the high cards
+        '''
         High_cards = self.all_cards[2:7]
         return High_cards
 
@@ -410,8 +460,6 @@ def compare_hands(hand0, hand1):
         # compare equal category
         hand0_5_cards = hand0.get_hand_five_cards()
         hand1_5_cards = hand1.get_hand_five_cards()
-        
-
         if hand0_category == 9 or hand0_category == 5:
             for i in reversed(range(5)):
                 hand0_card_rank = hand0_5_cards[i][1]
@@ -421,7 +469,7 @@ def compare_hands(hand0, hand1):
                 elif RANKS.index(hand0_card_rank) < RANKS.index(hand1_card_rank):
                     return [0, 1]
                 elif RANKS.index(hand0_card_rank) == RANKS.index(hand1_card_rank):
-                    return [1, 1]   
+                    return [1, 1]  
         if hand0_category == 8:
             seen = []
             duplicated0 = []
@@ -502,7 +550,7 @@ def compare_hands(hand0, hand1):
                     if five_cards_0[0] > five_cards_1[0]:
                         return [1,0]
                     if five_cards_0[0] < five_cards_1[0]:
-                        return [0,1] 
+                        return [0,1]
                     if five_cards_0[0] == five_cards_1[0]:
                         return [1,1]
         
@@ -582,20 +630,19 @@ def compare_hands(hand0, hand1):
                 if _ not in seen:  
                     seen.append(_)
                 else:
-                    duplicated0.append(_)            
+                    duplicated0.append(_)           
             seen = []
             duplicated1 = []
             for i in range(5):              
                 five_cards_1.append(handcard1[i][1])
-            for _ in five_cards_1:  
+            for _ in five_cards_1: 
                 if _ not in seen:  
                     seen.append(_)
                 else:
-                    duplicated1.append(_) 
+                    duplicated1.append(_)
             
             if RANKS.index(duplicated0[0][0]) > RANKS.index(duplicated1[0][0]):
-                return [1, 0]
-            
+                return [1, 0]      
             if RANKS.index(duplicated0[0][0]) > RANKS.index(duplicated1[0][0]):
                 return [0, 1]
             if RANKS.index(duplicated0[0][0]) == RANKS.index(duplicated1[0][0]):
@@ -626,9 +673,9 @@ def compare_hands(hand0, hand1):
 
             if hand0_category == 1 or hand0_category == 6:
 
-                for i in range(5):              
+                for i in range(5):
                     five_cards_0.append(RANKS.index(handcard0[i][1]))
-                for i in range(5):              
+                for i in range(5):
                     five_cards_1.append(RANKS.index(handcard1[i][1]))
                 five_cards_0.sort()
                 five_cards_1.sort()

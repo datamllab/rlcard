@@ -10,10 +10,8 @@ from rlcard.utils.utils import set_global_seed
 from rlcard.utils.logger import Logger
 
 # Make environment
-#env = rlcard.make('limit-holdem')
-#eval_env = rlcard.make('limit-holdem')
-env = rlcard.make('leduc-holdem')
-eval_env = rlcard.make('leduc-holdem')
+env = rlcard.make('limit-holdem')
+eval_env = rlcard.make('limit-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100

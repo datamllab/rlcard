@@ -15,7 +15,7 @@ class BlackjackEnv(Env):
         super().__init__(Game(allow_step_back), allow_step_back)
         self.rank2score = {"A":10, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":10, "Q":10, "K":10}
         self.actions = ['hit', 'stand']
-        self.state_shape = [2] 
+        self.state_shape = [2]
 
     def get_legal_actions(self):
         ''' Get all leagal actions
@@ -71,11 +71,11 @@ class BlackjackEnv(Env):
         '''
 
         if self.game.winner['player'] == 0 and self.game.winner['dealer'] == 1:
-            return [0]
+            return [-1]
         elif self.game.winner['dealer'] == 0 and self.game.winner['player'] == 1:
-            return [2]
-        elif self.game.winner['player'] == 1 and self.game.winner['dealer'] == 1:
             return [1]
+        elif self.game.winner['player'] == 1 and self.game.winner['dealer'] == 1:
+            return [0]
 
     def decode_action(self, action_id):
         ''' Decode the action for applying to the game

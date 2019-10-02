@@ -90,7 +90,7 @@ class UnoGame(object):
     def is_over(self):
         return self.round.is_over
 
-'''
+
 # For test
 if __name__ == '__main__':
     import time
@@ -98,43 +98,17 @@ if __name__ == '__main__':
     #start = time.time()
     game = UnoGame()
     for _ in range(1):
-        #print('*****init game*****')
         state, button = game.init_game()
-        #print(button, state)
+        print(button, state)
         i = 0
-        legal_action_time = 0
-        step_time = 0
         while not game.is_over():
             i += 1
-            start1 = time.time()
             legal_actions = game.get_legal_actions()
-            end1 = time.time()
-            print('get_legal_action', end1 - start1)
-            legal_action_time += (end1 - start1)
             print('legal_actions', legal_actions)
-            if i == 3:
-                print('step back')
-                print(game.step_back())
-                print(game.get_player_id())
-                legal_actions = game.get_legal_actions()
-                print('back legal actions', legal_actions)
-                input()
-            if not legal_actions:
-                action = 'draw'
-            else:
-                action = random.choice(legal_actions)
+            action = random.choice(legal_actions)
             print('action', action)
             print()
-            start2 = time.time()
             state, button = game.step(action)
-            end2 = time.time()
-            #print('step', end2 - start2)
-            step_time += (end2 - start2)
             print(button, state)
         print(game.get_payoffs())
-    #end = time.time()
-    #print(end-start)
-    print('legal_time', legal_action_time)
-    print('step time', step_time)
-    print(i)
-'''
+    print('step', i)

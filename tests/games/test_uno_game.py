@@ -1,6 +1,5 @@
 import unittest
 import numpy as np
-import functools
 
 from rlcard.games.uno.game import UnoGame as Game
 from rlcard.games.uno.player import UnoPlayer as Player

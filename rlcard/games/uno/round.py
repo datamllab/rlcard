@@ -1,4 +1,4 @@
-import random
+import numpy as np
 
 from rlcard.games.uno.card import UnoCard
 from rlcard.games.uno.judger import UnoJudger
@@ -20,7 +20,7 @@ class UnoRound(object):
     def flip_top_card(self):
         top = self.dealer.flip_top_card()
         if top.trait == 'wild':
-            top.color = random.choice(UnoCard.info['color'])
+            top.color = np.random.choice(UnoCard.info['color'])
         self.target = top
         self.played_cards.append(top)
         return top
@@ -73,16 +73,16 @@ class UnoRound(object):
     def _perform_draw_action(self, players):
         # replace deck if there is no card in draw pile
         if not self.dealer.deck:
-            #self.replace_deck()
-            self.is_over = True
-            self.winner = UnoJudger.judge_winner(players)
-            return None
+            self.replace_deck()
+            #self.is_over = True
+            #self.winner = UnoJudger.judge_winner(players)
+            #return None
 
         card = self.dealer.deck.pop()
 
         # draw a wild card
         if card.type == 'wild':
-            card.color = random.choice(UnoCard.info['color'])
+            card.color = np.random.choice(UnoCard.info['color'])
             self.target = card
             self.played_cards.append(card)
             self.current_player = (self.current_player + self.direction) % self.num_players
@@ -118,20 +118,20 @@ class UnoRound(object):
         # perform draw_2 card
         elif card.trait == 'draw_2':
             if len(self.dealer.deck) < 2:
-                # self.replace_deck()
-                self.is_over = True
-                self.winner = UnoJudger.judge_winner(players)
-                return None
+                self.replace_deck()
+                #self.is_over = True
+                #self.winner = UnoJudger.judge_winner(players)
+                #return None
             self.dealer.deal_cards(players[(current + direction) % num_players], 2)
             current = (current + direction) % num_players
 
         # perfrom wild_draw_4 card
         elif card.trait == 'wild_draw_4':
             if len(self.dealer.deck) < 4:
-                # self.replace_deck()
-                self.is_over = True
-                self.winner = UnoJudger.judge_winner(players)
-                return None
+                self.replace_deck()
+                #self.is_over = True
+                #self.winner = UnoJudger.judge_winner(players)
+                #return None
             self.dealer.deal_cards(players[(current + direction) % num_players], 4)
             current = (current + direction) % num_players
         self.current_player = (current + self.direction) % num_players
@@ -145,7 +145,7 @@ class UnoRound(object):
         if target.type == 'wild':
             for card in hand:
                 if card.type == 'wild':
-                    card.color = random.choice(UnoCard.info['color'])
+                    card.color = np.random.choice(UnoCard.info['color'])
                     if card.trait == 'wild_draw_4':
                         wild_4_actions.append(card.str)
                     else:
@@ -157,7 +157,7 @@ class UnoRound(object):
         else:
             for card in hand:
                 if card.type == 'wild':
-                    card.color = random.choice(UnoCard.info['color'])
+                    card.color = np.random.choice(UnoCard.info['color'])
                     if card.trait == 'wild_draw_4':
                         wild_4_actions.append(card.str)
                     else:
@@ -166,7 +166,8 @@ class UnoRound(object):
                     legal_actions.append(card.str)
         if not legal_actions:
             legal_actions = wild_4_actions
-        legal_actions.append('draw')
+        if not legal_actions:
+            legal_actions = ['draw']
         return legal_actions
 
     def get_state(self, players, player_id):
