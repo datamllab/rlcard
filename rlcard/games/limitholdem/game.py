@@ -201,7 +201,7 @@ class LimitholdemGame(object):
             return True
 
         # If all rounds are finshed
-        if self.round_counter >= 2:
+        if self.round_counter >= 4:
             return True
         return False
 
