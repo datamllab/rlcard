@@ -21,11 +21,16 @@ class Hand:
         '''
         Assign value to all_cards
         Args:
-            seven_cards(list): # two hand cards + five public cards on deck
+            seven_cards(list): two hand cards + five public cards on deck
         '''
         self.all_cards = seven_cards
 
     def get_hand_five_cards(self):
+        '''
+        Get the best five cards of a player
+        Returns:
+            (list): the best five cards among the seven cards of a player
+        '''
         return self.best_five
 
     def _sort_cards(self):
@@ -150,10 +155,17 @@ class Hand:
             return False
 
     def _get_different_rank_list(self, all_cards):
+        '''
+        Get cards with different ranks, that is to say, remove duplicate-ranking cards, for picking straight cards' use
+        Args:
+            (list): two hand cards + five public cards
+        Returns:
+            (list): a list of cards with duplicate-ranking cards removed
+        '''
         different_rank_list = []
         different_rank_list.append(all_cards[0])
         for card in all_cards:
-            if(card[1] != different_rank_list[-1][0]):
+            if(card[1] != different_rank_list[-1][1]):
                 different_rank_list.append(card)
         return different_rank_list
 
@@ -178,6 +190,14 @@ class Hand:
         return []
 
     def _getcards_by_rank(self, all_cards):
+        '''
+        Get cards by rank
+        Args:
+            (list): # two hand cards + five public cards
+        Return:
+            card_group(list): 
+            product(int):
+        '''
         card_group = []
         card_group_element = []
         product = 1
@@ -291,6 +311,11 @@ class Hand:
             return False
 
     def _get_Four_of_a_kind_cards(self):
+        '''
+        Get the four of a kind cards among a player's cards
+        Returns:
+            (list): the four of a kind cards
+        '''
         Four_of_a_Kind = []
         cards_by_rank = self.cards_by_rank
         cards_len = len(cards_by_rank)
@@ -305,6 +330,11 @@ class Hand:
         return Four_of_a_Kind
 
     def _get_Fullhouse_cards(self):
+        '''
+        Get the fullhouse cards among a player's cards
+        Returns:
+            (list): fullhouse cards, that is to say, the triple cards and the pair cards
+        '''
         Fullhouse = []
         cards_by_rank = self.cards_by_rank
         cards_len = len(cards_by_rank)
@@ -320,6 +350,11 @@ class Hand:
         return Fullhouse
 
     def _get_Three_of_a_kind_cards(self):
+        '''
+        Get the three of a kind cards among a player's cards
+        Returns:
+            (list): the three of a kind cards
+        '''
         Trip_cards = []
         cards_by_rank = self.cards_by_rank
         cards_len = len(cards_by_rank)
@@ -334,6 +369,11 @@ class Hand:
         return Trip_cards
 
     def _get_Two_Pair_cards(self):
+        '''
+        Get the two pair cards among a player's cards
+        Returns:
+            (list): the two pair cards
+        '''
         Two_Pair_cards = []
         cards_by_rank = self.cards_by_rank
         cards_len = len(cards_by_rank)
@@ -346,6 +386,11 @@ class Hand:
         return Two_Pair_cards
 
     def _get_One_Pair_cards(self):
+        '''
+        Get the one pair cards among a player's cards
+        Returns:
+            (list): the one pair cards
+        '''
         One_Pair_cards = []
         cards_by_rank = self.cards_by_rank
         cards_len = len(cards_by_rank)
@@ -361,6 +406,11 @@ class Hand:
         return One_Pair_cards
 
     def _get_High_cards(self):
+        '''
+        Get the high cards among a player's cards
+        Returns:
+            (list): the high cards
+        '''
         High_cards = self.all_cards[2:7]
         return High_cards
 
