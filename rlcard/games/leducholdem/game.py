@@ -10,7 +10,7 @@ from rlcard.games.leducholdem.round import LeducholdemRound as Round
 from rlcard.games.limitholdem.game import LimitholdemGame
 
 class LeducholdemGame(LimitholdemGame):
-    
+
     def __init__(self, allow_step_back=False):
         ''' Initialize the class leducholdem Game
         '''
