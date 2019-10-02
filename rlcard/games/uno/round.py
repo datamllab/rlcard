@@ -1,4 +1,4 @@
-import random
+import numpy as np
 
 from rlcard.games.uno.card import UnoCard
 from rlcard.games.uno.judger import UnoJudger
@@ -20,7 +20,7 @@ class UnoRound(object):
     def flip_top_card(self):
         top = self.dealer.flip_top_card()
         if top.trait == 'wild':
-            top.color = random.choice(UnoCard.info['color'])
+            top.color = np.random.choice(UnoCard.info['color'])
         self.target = top
         self.played_cards.append(top)
         return top
@@ -82,7 +82,7 @@ class UnoRound(object):
 
         # draw a wild card
         if card.type == 'wild':
-            card.color = random.choice(UnoCard.info['color'])
+            card.color = np.random.choice(UnoCard.info['color'])
             self.target = card
             self.played_cards.append(card)
             self.current_player = (self.current_player + self.direction) % self.num_players
@@ -145,7 +145,7 @@ class UnoRound(object):
         if target.type == 'wild':
             for card in hand:
                 if card.type == 'wild':
-                    card.color = random.choice(UnoCard.info['color'])
+                    card.color = np.random.choice(UnoCard.info['color'])
                     if card.trait == 'wild_draw_4':
                         wild_4_actions.append(card.str)
                     else:
@@ -157,7 +157,7 @@ class UnoRound(object):
         else:
             for card in hand:
                 if card.type == 'wild':
-                    card.color = random.choice(UnoCard.info['color'])
+                    card.color = np.random.choice(UnoCard.info['color'])
                     if card.trait == 'wild_draw_4':
                         wild_4_actions.append(card.str)
                     else:
@@ -166,7 +166,8 @@ class UnoRound(object):
                     legal_actions.append(card.str)
         if not legal_actions:
             legal_actions = wild_4_actions
-        legal_actions.append('draw')
+        if not legal_actions:
+            legal_actions = ['draw']
         return legal_actions
 
     def get_state(self, players, player_id):

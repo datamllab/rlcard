@@ -138,7 +138,7 @@ class Env(object):
               The second dimension is for different transitions. The third dimension is for the contents of each transiton
         '''
 
-        if seed:
+        if seed is not None:
             np.random.seed(seed)
             random.seed(seed)
 
@@ -181,6 +181,11 @@ class Env(object):
 
         return trajectories, payoffs
 
+    def run_multi(self, task_num, result, is_training=False, seed=None):
+        if seed is not None:
+            np.random.seed(seed)
+        for _ in range(task_num):
+            result.append(self.run(is_training=is_training))
 
     def extract_state(self, state):
         ''' Extract useful information from state for RL. Must be implemented in the child class.
