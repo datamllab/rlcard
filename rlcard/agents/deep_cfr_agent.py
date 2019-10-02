@@ -377,8 +377,6 @@ class DeepCFR():
         if self._env.is_over():
             # Terminal state get returns.
             payoff = self._env.get_payoffs()
-            if isinstance(payoff, dict):
-                payoff = payoff[player]
             while True:
                 self._env.step_back()
                 if self._env.get_player_id() == player:
@@ -403,8 +401,6 @@ class DeepCFR():
                     sampled_regret[action] -= strategy[a_] * expected_payoff[a_][player]
             for act in actions:
                 self._advantage_memories[player].add(AdvantageMemory(state['obs'].flatten(), self._iteration, sampled_regret[act], act))
-            if self._num_players == 1:
-                self._strategy_memories.add(StrategyMemory(state['obs'].flatten(), self._iteration, strategy))
             players_payoff = [max(expected_payoff[act_]) for act_ in expected_payoff.keys()]
             return players_payoff
         else:
