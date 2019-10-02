@@ -21,7 +21,7 @@ with tf.Session() as sess:
                 train_env, 
                 policy_network_layers=(64,64),
                 advantage_network_layers=(32,32),
-                num_traversals=300,
+                num_traversals=2,
                 num_step=300,
                 learning_rate=5e-5,
                 batch_size_advantage=32,
@@ -44,6 +44,8 @@ with tf.Session() as sess:
                         payoffs = test_env.get_payoffs()
                         rewards += payoffs[0]
                         break
+
+            print(train_env.timestep, test_env.timestep)
             print('############## Iteration '+str(i)+' #################')
             print('Reward: ', float(rewards)/evaluate_num)
             print('Advantage Loss: ', adv_loss)
