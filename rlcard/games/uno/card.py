@@ -8,10 +8,22 @@ class UnoCard(object):
             }
 
     def __init__(self, card_type, color, trait):
+        ''' Initialize the class of UnoCard
+
+        Args:
+            card_type (str): The type of card
+            color (str): The color of card
+            trait (str): The trait of card
+        '''
         self.type = card_type
         self.color = color
         self.trait = trait
         self.str = self.get_str()
 
     def get_str(self):
+        ''' Get the string representation of card
+
+        Return:
+            (str): The string of card's color and trait
+        '''
         return self.color + '-' + self.trait
