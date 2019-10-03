@@ -300,7 +300,7 @@ class Env(object):
 
     def print_result(self, player):
         ''' Print the game result when the game is over
-        
+
         Args:
             player (int): The human player id
         '''

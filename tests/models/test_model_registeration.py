@@ -13,7 +13,7 @@ class TestRegistration(unittest.TestCase):
 
     def test_load(self):
         register(model_id='test_load', entry_point='rlcard.models.pretrained_models:LeducHoldemNFSPModel')
-        model = models.load('test_load')
+        models.load('test_load')
         with self.assertRaises(ValueError):
             load('test_random_make')
 

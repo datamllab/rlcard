@@ -302,7 +302,7 @@ class DeepCFR():
         obs = state['obs']
         legal_actions = state['legal_actions']
         action_prob = self.action_probabilities(obs)
-        action_probs = remove_illegal(action_prob, legal_actions)
+        action_prob = remove_illegal(action_prob, legal_actions)
         action_prob /= action_prob.sum()
         action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
         return action
@@ -449,7 +449,7 @@ class DeepCFR():
         ''' Flatten the given state represenatation
 
         Args:
-            state (tf.placeholder): current state 
+            state (tf.placeholder): current state
 
         Returns:
             flattened (tensor): flattened state

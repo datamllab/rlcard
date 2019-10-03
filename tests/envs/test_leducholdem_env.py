@@ -84,8 +84,8 @@ class TestLeducholdemEnv(unittest.TestCase):
 
         state = env.reset()
         self.assertIsInstance(state, dict)
-        for _ in range(10):
-            state, _, _ = env.step(np.random.choice(state['legal_actions'])) 
+        for _ in range(100):
+            state, _, _ = env.step(np.random.choice(state['legal_actions']))
 
     def test_human_mode(self):
         env = Env()
@@ -101,8 +101,8 @@ class TestLeducholdemEnv(unittest.TestCase):
 
         state = env.reset()
         self.assertIsInstance(state, dict)
-        for _ in range(10):
-            state, _, _ = env.step(np.random.choice(state['legal_actions'])) 
+        for _ in range(100):
+            state, _, _ = env.step(np.random.choice(state['legal_actions']))
 
 if __name__ == '__main__':
     unittest.main()

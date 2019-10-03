@@ -1,6 +1,5 @@
 import random
 import numpy as np
-import tensorflow as tf
 
 from rlcard.core import Card, Player
 
