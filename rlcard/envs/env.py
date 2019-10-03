@@ -15,6 +15,7 @@ class Env(object):
             allow_step_back (boolean): True if allowing step_back
         '''
 
+        self.name = None
         self.game = game
         self.allow_step_back = allow_step_back
 
@@ -24,6 +25,11 @@ class Env(object):
 
         # A counter for the timesteps
         self.timestep = 0
+
+        # MODES
+        self.single_agent_mode = False
+        self.active_player = None
+        self.human_mode = False
 
 
     def init_game(self):
@@ -52,9 +58,77 @@ class Env(object):
                 (int): The ID of the next player
         '''
 
+        if self.single_agent_mode or self.human_mode:
+            return self.single_agent_step(action)
+
         self.timestep += 1
         next_state, player_id = self.game.step(self.decode_action(action))
+        
         return self.extract_state(next_state), player_id
+
+    def single_agent_step(self, action):
+        ''' Step forward for human/single agent
+
+        Args:
+            action (int): the action takem by the current player
+
+        Returns:
+            next_state (numpy.array): The next state
+        '''
+
+        reward = 0.
+        done = False
+        self.timestep += 1
+        state, player_id = self.game.step(self.decode_action(action))
+        while not self.game.is_over() and not player_id == self.active_player:
+            self.timestep += 1
+            action = self.agents[player_id].eval_step(self.extract_state(state))
+            if self.human_mode:
+                print('>> Agent {} plays {}'.format(player_id, self.decode_action(action)))
+            state, player_id = self.game.step(self.decode_action(action))
+
+        if self.game.is_over():
+            reward = self.get_payoffs()[self.active_player]
+            done = True
+            if self.human_mode:
+                self.print_result(self.active_player)
+            self.reset()
+
+        elif self.human_mode:
+            self.print_state(self.active_player)
+
+        return self.extract_state(state), reward, done
+
+    def reset(self):
+        ''' Reset environment in single-agent mode
+        '''
+
+        if not self.single_agent_mode and not self.human_mode:
+            raise ValueError('Reset can only be used in single-agent mode or human mode')
+
+        if self.human_mode:
+            history = []
+        while True:
+            state, player_id = self.game.init_game()
+            while not player_id == self.active_player:
+                self.timestep += 1
+                action = self.agents[player_id].eval_step(self.extract_state(state))
+                if self.human_mode:
+                    history.append((player_id, action))
+                state, player_id = self.game.step(self.decode_action(action))
+
+            if not self.game.is_over():
+                if self.human_mode:
+                    print('\n>> Starting a new game!')
+                    for player_id, action in history:
+                        print('>> Agent {} plays {}'.format(player_id, self.decode_action(action)))
+                    self.print_state(self.active_player)
+                break
+            else:
+                if self.human_mode:
+                    history.clear()
+
+        return self.extract_state(state)
 
     def step_back(self):
         ''' Take one step backward.
@@ -116,6 +190,9 @@ class Env(object):
         Args:
             agents (list): List of Agent classes
         '''
+        
+        if self.single_agent_mode or self.human_mode:
+            raise ValueError('Setting agent in single agent mode or human mode is not allowed.')
 
         self.agents = agents
 
@@ -137,6 +214,9 @@ class Env(object):
         Note: The trajectories are 3-dimension list. The first dimension is for different players.
               The second dimension is for different transitions. The third dimension is for the contents of each transiton
         '''
+
+        if self.single_agent_mode or self.human_mode:
+            raise ValueError('Run in single agent mode or human mode is not allowed.')
 
         if seed is not None:
             np.random.seed(seed)
@@ -187,6 +267,55 @@ class Env(object):
         for _ in range(task_num):
             result.append(self.run(is_training=is_training))
 
+    def set_mode(self, active_player=0, single_agent_mode=False, human_mode=False):
+        ''' Turn on the single-agent-mode. Pretrained models will
+            be loaded to simulate other agents
+
+        Args:
+            active_player (int): The player that does not use pretrained models
+        '''
+
+        if not isinstance(active_player, int) or active_player < 0 or active_player >= self.player_num:
+            raise ValueError('Active player should be a positiv integer less than the player number')
+
+        if not single_agent_mode and not human_mode:
+            raise ValueError('You must set single_agent_mode=True, or human_mode=True')
+
+        if single_agent_mode and human_mode:
+            raise ValueError('You can not set single_agentmode=True and human_mode=True together/')
+
+        self.agents = self.load_pretrained_models()
+        self.active_player = active_player
+        self.single_agent_mode = single_agent_mode
+        self.human_mode = human_mode
+
+    def print_state(self, player):
+        ''' Print out the state of a given player
+        
+        Args:
+            player (int): Player id
+        '''
+
+        raise NotImplementedError
+
+    def print_result(self, player):
+        ''' Print the game result when the game is over
+        
+        Args:
+            player (int): The human player id
+        '''
+
+        raise NotImplementedError
+
+    def load_pretrained_models(self):
+        ''' Load pretrained models
+
+        Returns:
+            agents (list): A list of agents
+        '''
+
+        raise NotImplementedError
+
     def extract_state(self, state):
         ''' Extract useful information from state for RL. Must be implemented in the child class.
 
@@ -197,7 +326,7 @@ class Env(object):
             (numpy.array): the extracted state
         '''
 
-        pass
+        raise NotImplementedError
 
     def get_payoffs(self):
         ''' Get the payoffs of players. Must be implemented in the child class.
@@ -208,7 +337,7 @@ class Env(object):
         Note: Must be implemented in the child class.
         '''
 
-        pass
+        raise NotImplementedError
 
     def decode_action(self, action_id):
         ''' Decode Action id to the action in the game.
@@ -222,7 +351,7 @@ class Env(object):
         Note: Must be implemented in the child class.
         '''
 
-        pass
+        raise NotImplementedError
 
     def get_legal_actions(self):
         ''' Get all legal actions for current state.
@@ -232,4 +361,5 @@ class Env(object):
 
         Note: Must be implemented in the child class.
         '''
-        pass
+
+        raise NotImplementedError

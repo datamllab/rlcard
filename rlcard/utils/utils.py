@@ -293,7 +293,10 @@ def remove_illegal(action_probs, legal_actions):
     '''
     probs = np.zeros(action_probs.shape[0])
     probs[legal_actions] = action_probs[legal_actions]
-    probs /= sum(probs)
+    if np.sum(probs) == 0:
+        probs[legal_actions] = 1 / len(legal_actions)
+    else:
+        probs /= sum(probs)
     return probs
 
 def make_copy_params_op(v1_list, v2_list):
