@@ -8,16 +8,16 @@ We provide some running examples. A few examples can not achieve good results, e
 *   `doudizhu_random.py`: run random agents on Dou Dizhu.
 *   `doudizhu_random_multi_process.py`: run random agents on Dou Dizhu with multiple processes.
 *   `leduc_holdem_dqn.py': train DQN on Leduc Hold'em.
-*   `leduc\_holdem\_human.py`: play against re-trained model on Leduc Hold'em.
-*   `leduc\_holdem\_nfsp.py`: train NFSP on Leduc Hold'em.
-*   `leduc\_holdem\_random.py`: run random agents on Leduc Hold'em.
-*   `leduc\_holdem\_single.py`: train DQN on Leduc Hold'em as single-agent environment.
-*   `limit\_holdem\_dqn.py`: train DQN on Limit Texas Hold'em.
-*   `limit\_holdem\_nfsp.py`: train NFSP on Limit Texas Hold'em.
-*   `limit\_holdem\_random.py`: run random agents on Limit Texas Hold'em.
-*   `nolimit\_holdem\_dqn.py`: train DQN on No-Limit Texas Hold'em.
-*   `nolimit\_holdem\_nfsp.py`: train NFSP on No-Limit Texas Hold'em.
-*   `nolimit\_holdem\_random.py`: run random agents on No-Limit Gexas Hold'em.
-*   `uno\_dqn.py`: train DQN on UNO.
-*   `uno\_nfsp.py`: train NFSP on UNO.
-*   `uno\_rabdom.py`: run random agents on UNO.
+*   `leducg_holdem_human.py`: play against re-trained model on Leduc Hold'em.
+*   `leducg_holdem_nfsp.py`: train NFSP on Leduc Hold'em.
+*   `leducg_holdem_random.py`: run random agents on Leduc Hold'em.
+*   `leducg_holdem_single.py`: train DQN on Leduc Hold'em as single-agent environment.
+*   `limitg_holdem_dqn.py`: train DQN on Limit Texas Hold'em.
+*   `limitg_holdem_nfsp.py`: train NFSP on Limit Texas Hold'em.
+*   `limitg_holdem_random.py`: run random agents on Limit Texas Hold'em.
+*   `nolimitg_holdem_dqn.py`: train DQN on No-Limit Texas Hold'em.
+*   `nolimitg_holdem_nfsp.py`: train NFSP on No-Limit Texas Hold'em.
+*   `nolimitg_holdem_random.py`: run random agents on No-Limit Gexas Hold'em.
+*   `unog_dqn.py`: train DQN on UNO.
+*   `unog_nfsp.py`: train NFSP on UNO.
+*   `unog_rabdom.py`: run random agents on UNO.
