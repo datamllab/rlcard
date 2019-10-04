@@ -82,7 +82,7 @@ class Env(object):
                 action = self.model.agents[player_id].eval_step(state)
             else:
                 action = self.model.agents[player_id].eval_step(self.extract_state(state))
-                action = self.decode_action(action) 
+                action = self.decode_action(action)
             if self.human_mode:
                 print('>> Agent {} plays {}'.format(player_id, action))
             state, player_id = self.game.step(action)

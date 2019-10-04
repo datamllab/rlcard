@@ -24,8 +24,7 @@ class UnoEnv(Env):
         print('----------------------------------------------')
         print('My hand: ', ' '.join(state['hand']))
         print('Lastcard: ', state['target'])
-        legal_action_id = self.get_legal_actions()
-        print('Actions you can choose: ', ', '.join([str(legal_action_id.index(action)) + ': ' + action for action in state['legal_actions']]))
+        print('Actions you can choose: ', ', '.join([str(ACTION_SPACE[action]) + ': ' + action for action in state['legal_actions']]))
         print('----------------------------------------------')       
 
     def load_model(self):

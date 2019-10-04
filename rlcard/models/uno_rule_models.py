@@ -22,10 +22,11 @@ class UNORuleAgentV1(object):
         Returns:
             action (str): Predicted action
         '''
-        print('-------------------')
+        print('****************************')
         print('Target: ', state['target'])
         print('Hand: ', state['hand'])
         print('Actions: ', state['legal_actions'])
+        print('****************************')
         legal_actions = state['legal_actions']
         hand = self.filter_wild(state['hand'])
 
