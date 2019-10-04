@@ -473,33 +473,15 @@ def compare_hands(hand0, hand1):
                 elif RANKS.index(hand0_card_rank) == RANKS.index(hand1_card_rank):
                     return [1, 1]  
         if hand0_category == 8:
-            seen = []
-            duplicated0 = []
             five_cards_0 = []
             five_cards_1 = []
             handcard0 = hand0.get_hand_five_cards()
             handcard1 = hand1.get_hand_five_cards()
-            for i in range(5):              
-                five_cards_0.append(handcard0[i][1])
-            for _ in five_cards_0:  
-                if _ not in seen:  
-                    seen.append(_)
-                else:
-                    duplicated0.append(_)            
-            seen = []
-            duplicated1 = []
-            for i in range(5):              
-                five_cards_1.append(handcard1[i][1])
-            for _ in five_cards_1:  
-                if _ not in seen:  
-                    seen.append(_)
-                else:
-                    duplicated1.append(_) 
-            if RANKS.index(duplicated0[0][0]) > RANKS.index(duplicated1[0][0]):
-                return [1, 0]
-            elif RANKS.index(duplicated0[0][0]) < RANKS.index(duplicated1[0][0]):
+            if RANKS.index(handcard0[0][1]) > RANKS.index(handcard1[0][1]):
+                return [1, 0]              
+            if RANKS.index(handcard0[0][1]) < RANKS.index(handcard1[0][1]):
                 return [0, 1]
-            elif RANKS.index(duplicated0[0][0]) == RANKS.index(duplicated1[0][0]):
+            if RANKS.index(handcard0[0][1]) == RANKS.index(handcard1[0][1]):
                 return [1, 1]
 
         if hand0_category == 7:
