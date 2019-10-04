@@ -43,6 +43,7 @@ with tf.Session() as sess:
                           action_num=env.action_num,
                           state_shape=env.state_shape,
                           hidden_layers_sizes=[512,512],
+                          anticipatory_param=0.1,
                           min_buffer_size_to_learn=memory_init_size,
                           q_replay_memory_init_size=memory_init_size,
                           q_norm_step=norm_step,

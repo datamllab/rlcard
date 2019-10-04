@@ -86,7 +86,6 @@ class NFSPAgent(object):
             q_mlp_layers (list): The layer sizes of inner DQN agent.
 
         '''
-
         self._sess = sess
         self._action_num = action_num
         self._state_shape = state_shape
@@ -115,7 +114,6 @@ class NFSPAgent(object):
     def _build_model(self):
         ''' build the model for supervised learning
         '''
-
         # Placeholders.
         input_shape = [None]
         input_shape.extend(self._state_shape)
@@ -150,7 +148,6 @@ class NFSPAgent(object):
         Args:
             ts (list): A list of 5 elements that represent the transition.
         '''
-
         self._rl_agent.feed(ts)
 
     def step(self, state):
@@ -162,7 +159,6 @@ class NFSPAgent(object):
         Returns:
             action (int): An action id
         '''
-
         obs = state['obs']
         legal_actions = state['legal_actions']
         if self._mode == MODE.best_response:
@@ -186,7 +182,6 @@ class NFSPAgent(object):
         Returns:
             action (int): An action id.
         '''
-
         action = self._rl_agent.eval_step(state)
 
         return action
@@ -194,7 +189,6 @@ class NFSPAgent(object):
     def sample_episode_policy(self):
         ''' Sample average/best_response policy
         '''
-
         if np.random.rand() < self._anticipatory_param:
             self._mode = MODE.best_response
         else:
@@ -209,7 +203,6 @@ class NFSPAgent(object):
         Returns:
             action_probs (numpy.array): The predicted action probability.
         '''
-
         info_state = np.expand_dims(info_state, axis=0)
         action_probs = self._sess.run(
                 self._avg_policy_probs,
@@ -226,7 +219,6 @@ class NFSPAgent(object):
             state (numpy.array): The state.
             probs (numpy.array): The probabilities of each action.
         '''
-
         #print(len(self._reservoir_buffer))
         transition = Transition(
                 info_state=state,
@@ -236,7 +228,6 @@ class NFSPAgent(object):
     def train_rl(self):
         ''' Update the inner RL agent
         '''
-
         return self._rl_agent.train()
 
     def train_sl(self):
@@ -248,7 +239,6 @@ class NFSPAgent(object):
         Returns:
             loss (float): The average loss obtained on this batch of transitions or `None`.
         '''
-
         if (len(self._reservoir_buffer) < self._batch_size or
                 len(self._reservoir_buffer) < self._min_buffer_size_to_learn):
             return None
@@ -278,7 +268,6 @@ class ReservoirBuffer(object):
     def __init__(self, reservoir_buffer_capacity):
         ''' Initialize the buffer.
         '''
-
         self._reservoir_buffer_capacity = reservoir_buffer_capacity
         self._data = []
         self._add_calls = 0
@@ -289,7 +278,6 @@ class ReservoirBuffer(object):
         Args:
             element (object): data to be added to the reservoir buffer.
         '''
-
         if len(self._data) < self._reservoir_buffer_capacity:
             self._data.append(element)
         else:
@@ -310,7 +298,6 @@ class ReservoirBuffer(object):
         Raises:
             ValueError: If there are less than `num_samples` elements in the buffer
         '''
-
         if len(self._data) < num_samples:
             raise ValueError("{} elements could not be sampled from size {}".format(
                     num_samples, len(self._data)))
@@ -319,7 +306,6 @@ class ReservoirBuffer(object):
     def clear(self):
         ''' Clear the buffer
         '''
-
         self._data = []
         self._add_calls = 0
 

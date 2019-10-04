@@ -28,7 +28,6 @@ class DoudizhuDealer(object):
     def shuffle(self):
         ''' Randomly shuffle the deck
         '''
-
         random.shuffle(self.deck)
 
     def deal_cards(self, players):
@@ -37,7 +36,6 @@ class DoudizhuDealer(object):
         Args:
             players (list): list of DoudizhuPlayer objects
         '''
-
         hand_num = (len(self.deck) - 3) // len(players)
         for index, player in enumerate(players):
             player.current_hand = self.deck[index*hand_num:(index+1)*hand_num]
@@ -53,7 +51,6 @@ class DoudizhuDealer(object):
         Returns:
             int: landlord's player_id
         '''
-
         # deal cards
         self.shuffle()
         self.deal_cards(players)

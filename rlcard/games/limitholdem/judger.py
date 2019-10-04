@@ -7,7 +7,6 @@ class LimitholdemJudger(object):
     def __init__(self):
         ''' Initialize a judger class
         '''
-
         super().__init__()
 
     @staticmethod
@@ -21,7 +20,6 @@ class LimitholdemJudger(object):
         Returns:
             (list): Each entry of the list corresponds to one entry of the
         '''
-
         # Convert the hands into card indexes
         for i, hand in enumerate(hands):
             if hands[i] != None:

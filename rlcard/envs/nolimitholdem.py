@@ -14,7 +14,6 @@ class NolimitholdemEnv(Env):
     def __init__(self, allow_step_back=False):
         ''' Initialize the Limitholdem environment
         '''
-
         super().__init__(Game(allow_step_back), allow_step_back)
         self.actions = ['call', 'fold', 'check']
         self.state_shape = [54]
@@ -30,7 +29,6 @@ class NolimitholdemEnv(Env):
         Returns:
             encoded_action_list (list): return encoded legal action list (from str to int)
         '''
-
         return self.game.get_legal_actions()
 
     def extract_state(self, state):
@@ -44,7 +42,6 @@ class NolimitholdemEnv(Env):
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
         '''
-
         processed_state = {}
 
         legal_actions = [self.actions.index(a) for a in state['legal_actions']]
@@ -70,7 +67,6 @@ class NolimitholdemEnv(Env):
         Returns:
            payoffs (list): list of payoffs
         '''
-
         return self.game.get_payoffs()
 
     def decode_action(self, action_id):

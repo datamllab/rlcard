@@ -11,7 +11,6 @@ class ModelSpec(object):
             model_id (string): the name of the model
             entry_point (string): a string that indicates the location of the model class
         '''
-
         self.model_id = model_id
         mod_name, class_name = entry_point.split(':')
         self._entry_point = getattr(importlib.import_module(mod_name), class_name)
@@ -22,7 +21,6 @@ class ModelSpec(object):
         Returns:
             Model (Model): an instance of the Model
         '''
-
         model = self._entry_point()
         return model
 
@@ -34,7 +32,6 @@ class ModelRegistry(object):
     def __init__(self):
         ''' Initilize
         '''
-
         self.model_specs = {}
 
     def register(self, model_id, entry_point):
@@ -44,7 +41,6 @@ class ModelRegistry(object):
             model_id (string): the name of the model
             entry_point (string): a string the indicates the location of the model class
         '''
-
         if model_id in self.model_specs:
             raise ValueError('Cannot re-register model_id: {}'.format(model_id))
         self.model_specs[model_id] = ModelSpec(model_id, entry_point)
@@ -55,7 +51,6 @@ class ModelRegistry(object):
         Args:
             model_id (string): the name of the model
         '''
-
         if model_id not in self.model_specs:
             raise ValueError('Cannot find model_id: {}'.format(model_id))
         return self.model_specs[model_id].load()
@@ -71,7 +66,6 @@ def register(model_id, entry_point):
         model_id (string): the name of the model
         entry_point (string): a string the indicates the location of the model class
     '''
-
     return model_registry.register(model_id, entry_point)
 
 def load(model_id):
@@ -80,5 +74,4 @@ def load(model_id):
     Args:
         model_id (string): the name of the model
     '''
-
     return model_registry.load(model_id)

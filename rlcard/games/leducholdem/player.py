@@ -6,7 +6,6 @@ class LeducholdemPlayer(object):
         Args:
             player_id (int): The id of the player
         '''
-
         self.player_id = player_id
         self.status = 'alive'
         self.hand = None
@@ -24,7 +23,6 @@ class LeducholdemPlayer(object):
         Returns:
             (dict): The state of the player
         '''
-
         state = {}
         state['hand'] = self.hand.get_index()
         state['public_card'] = public_card.get_index() if public_card else None
@@ -36,5 +34,4 @@ class LeducholdemPlayer(object):
     def get_player_id(self):
         ''' Return the id of the player
         '''
-
         return self.player_id

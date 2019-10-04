@@ -16,7 +16,6 @@ class LeducholdemEnv(Env):
     def __init__(self, allow_step_back=False):
         ''' Initialize the Limitholdem environment
         '''
-
         super().__init__(Game(allow_step_back), allow_step_back)
         self.actions = ['call', 'raise', 'fold', 'check']
         self.state_shape = [6]
@@ -26,11 +25,10 @@ class LeducholdemEnv(Env):
 
     def print_state(self, player):
         ''' Print out the state of a given player
-        
+
         Args:
             player (int): Player id
         '''
-
         state = self.game.get_state(player)
         print('----------------------------------------------')
         print('Public cards: ', state['public_card'])
@@ -40,37 +38,13 @@ class LeducholdemEnv(Env):
         print('Actions you can choose: ', ', '.join([str(self.actions.index(action)) + ': ' + action for action in state['legal_actions']]))
         print('----------------------------------------------')
 
-    def print_result(self, player):
-        ''' Print the game result when the game is over
-
-        Args:
-            player (int): The human player id
-        '''
-
-        payoffs = self.get_payoffs()
-        hands = [self.game.players[i].hand.get_index() for i in range(self.player_num)]
-        public_card = self.game.public_card.get_index() if self.game.public_card else ''
-
-
-        for i in range(self.player_num):
-            print('>> Player {}: {} {}'.format(i, hands[i], public_card))
-
-        if payoffs[player] > 0:
-            print('>> You win {}!'.format(payoffs[player]))
-        elif payoffs[player] == 0:
-            print('>> You do not win/lose')
-        else:
-            print('>> You lose {}!'.format(-payoffs[player]))
-
-    def load_pretrained_models(self):
-        ''' Load pretrained models
+    def load_model(self):
+        ''' Load pretrained/rule model
 
         Returns:
-            agents (list): A list of agents
+            model (Model): A Model object
         '''
-
-        model = models.load('leduc-holdem-nfsp')
-        return model.get_agents()
+        return models.load('leduc-holdem-nfsp')
 
     def get_legal_actions(self):
         ''' Get all leagal actions
@@ -78,7 +52,6 @@ class LeducholdemEnv(Env):
         Returns:
             encoded_action_list (list): return encoded legal action list (from str to int)
         '''
-
         return self.game.get_legal_actions()
 
     def extract_state(self, state):
@@ -92,7 +65,6 @@ class LeducholdemEnv(Env):
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
         '''
-
         processed_state = {}
 
         legal_actions = [self.actions.index(a) for a in state['legal_actions']]
@@ -116,7 +88,6 @@ class LeducholdemEnv(Env):
         Returns:
            payoffs (list): list of payoffs
         '''
-
         return self.game.get_payoffs()
 
     def decode_action(self, action_id):

@@ -7,7 +7,6 @@ class LimitholdemPlayer(object):
         Args:
             player_id (int): The id of the player
         '''
-
         self.player_id = player_id
         self.hand = []
         self.status = 'alive'
@@ -25,7 +24,6 @@ class LimitholdemPlayer(object):
         Returns:
             (dict): The state of the player
         '''
-
         state = {}
         state['hand'] = [c.get_index() for c in self.hand]
         state['public_cards'] = [c.get_index() for c in public_cards]
@@ -37,5 +35,4 @@ class LimitholdemPlayer(object):
     def get_player_id(self):
         ''' Return the id of the player
         '''
-
         return self.player_id

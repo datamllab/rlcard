@@ -9,7 +9,6 @@ class BlackjackGame(object):
     def __init__(self, allow_step_back=False):
         ''' Initialize the class Blackjack Game
         '''
-
         self.allow_step_back = allow_step_back
 
 
@@ -20,7 +19,6 @@ class BlackjackGame(object):
             state (dict): the first state of the game
             player_id (int): current player's id
         '''
-
         self.dealer = Dealer()
         self.player = Player(0)
         self.judger = Judger()
@@ -44,7 +42,6 @@ class BlackjackGame(object):
             dict: next player's state
             int: next plater's id
         '''
-
         if self.allow_step_back:
             p = deepcopy(self.player)
             d = deepcopy(self.dealer)
@@ -87,7 +84,6 @@ class BlackjackGame(object):
         Returns:
             Status (bool): check if the step back is success or not
         '''
-
         #while len(self.history) > 0:
         if len(self.history) > 0:
             self.dealer, self.player, self.winner = self.history.pop()
@@ -101,7 +97,6 @@ class BlackjackGame(object):
         Returns:
             number_of_player (int): blackjack only have 1 player
         '''
-
         return 1
 
     @staticmethod
@@ -119,7 +114,6 @@ class BlackjackGame(object):
         Returns:
             player_id (int): current player's id
         '''
-
         return self.player.get_player_id()
 
     def get_state(self, player):
@@ -131,7 +125,6 @@ class BlackjackGame(object):
         Returns:
             state (dict): corresponding player's state
         '''
-
         state = {}
         state['actions'] = ('hit', 'stand')
         hand = [card.get_index() for card in self.player.hand]
@@ -148,7 +141,6 @@ class BlackjackGame(object):
         Returns:
             status (bool): True/False
         '''
-
         if self.player.status == 'bust'or self.dealer.status == 'bust' or (self.winner['dealer'] != 0 or self.winner['player'] != 0):
             return True
         else:

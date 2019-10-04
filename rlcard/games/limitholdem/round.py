@@ -15,7 +15,6 @@ class LimitholdemRound(object):
             allowed_raise_num (int): The number of allowed raise num
             num_players (int): The number of players
         '''
-
         self.game_pointer = None
         self.raise_amount = raise_amount
         self.allowed_raise_num = allowed_raise_num
@@ -40,7 +39,6 @@ class LimitholdemRound(object):
 
         Note: For the first round of the game, we need to setup the big/small blind
         '''
-
         self.game_pointer = game_pointer
         self.have_raised = 0
         self.not_raise_num = 0
@@ -59,7 +57,6 @@ class LimitholdemRound(object):
         Returns:
             (int): The game_pointer that indicates the next player
         '''
-
         if action not in self.get_legal_actions():
             raise Exception('{} is not legal action. Legal actions: {}'.format(action, self.get_legal_actions()))
 
@@ -97,7 +94,6 @@ class LimitholdemRound(object):
         Returns:
            (list):  A list of legal actions
         '''
-
         full_actions = ['call', 'raise', 'fold', 'check']
 
         # If the the number of raises already reaches the maximum number raises, we can not raise any more
@@ -120,7 +116,6 @@ class LimitholdemRound(object):
         Returns:
             (boolean): True if the current round is over
         '''
-
         if self.not_raise_num >= self.num_players:
             return True
         return False

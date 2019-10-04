@@ -6,10 +6,10 @@ class Model(object):
     def __init__(self):
         ''' Load the model here
         '''
-
         pass
 
-    def get_agents(self):
+    @property
+    def agents(self):
         ''' Get a list of agents for each position in a the game
 
         Returns:
@@ -18,5 +18,13 @@ class Model(object):
         Note: Each agent should be just like RL agent with step and eval_step
               functioning well.
         '''
+        raise NotImplementedError
 
+    @property
+    def use_raw(self):
+        ''' Indicate whether use raw state and action
+
+        Returns:
+            use_raw (boolean): True if using raw state and action
+        '''
         raise NotImplementedError

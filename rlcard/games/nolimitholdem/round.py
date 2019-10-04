@@ -16,7 +16,6 @@ class NolimitholdemRound(LimitholdemRound):
             num_players (int): The number of players
             init_raise_amount (int): The min raise amount when every round starts
         '''
-
         self.game_pointer = None
         self.num_players = num_players
         self.init_raise_amount = init_raise_amount
@@ -37,7 +36,6 @@ class NolimitholdemRound(LimitholdemRound):
 
         Note: For the first round of the game, we need to setup the big/small blind
         '''
-
         self.game_pointer = game_pointer
         self.not_raise_num = 0
         self.current_raise_amount = self.init_raise_amount
@@ -56,7 +54,6 @@ class NolimitholdemRound(LimitholdemRound):
         Returns:
             (int): The game_pointer that indicates the next player
         '''
-
         if action == 'call':
             diff = max(self.raised) - self.raised[self.game_pointer]
             self.raised[self.game_pointer] = max(self.raised)
@@ -93,7 +90,6 @@ class NolimitholdemRound(LimitholdemRound):
         Returns:
            (list):  A list of legal actions
         '''
-
         full_actions = ['call', 'fold', 'check']
 
         # If the current chips are less than that of the highest one in the round, we can not check

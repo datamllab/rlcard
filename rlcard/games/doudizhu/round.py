@@ -28,7 +28,6 @@ class DoudizhuRound(object):
         Args:
             players (list): list of DoudizhuPlayer objects
         '''
-
         landlord_id = self.dealer.determine_role(players)
         seen_cards = self.dealer.deck[-3:]
         seen_cards.sort(key=functools.cmp_to_key(doudizhu_sort_card))

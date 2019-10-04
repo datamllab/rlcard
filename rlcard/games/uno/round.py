@@ -144,6 +144,7 @@ class UnoRound(object):
             if player.player_id != player_id:
                 others_hand.extend(player.hand)
         state['others_hand'] = cards2list(others_hand)
+        state['legal_actions'] = self.get_legal_actions(players, player_id)
         return state
 
     def replace_deck(self):

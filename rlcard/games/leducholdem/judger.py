@@ -7,7 +7,6 @@ class LeducholdemJudger(object):
     def __init__(self):
         ''' Initialize a judger class
         '''
-
         super().__init__()
 
     @staticmethod
@@ -21,7 +20,6 @@ class LeducholdemJudger(object):
         Returns:
             (list): Each entry of the list corresponds to one entry of the
         '''
-
         # Judge who are the winners
         winners = [0, 0]
         # If one player folds, the other player is the winner

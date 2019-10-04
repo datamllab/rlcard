@@ -47,7 +47,6 @@ def doudizhu_sort_str(card_1, card_2):
     Returns:
         int: 1(card_1 > card_2) / 0(card_1 = card2) / -1(card_1 < card_2)
     '''
-
     key_1 = CARD_RANK_STR.index(card_1)
     key_2 = CARD_RANK_STR.index(card_2)
     if key_1 > key_2:
@@ -64,7 +63,6 @@ def doudizhu_sort_card(card_1, card_2):
         card_1 (object): object of Card
         card_2 (object): object of card
     '''
-
     key = []
     for card in [card_1, card_2]:
         if card.rank == '':
@@ -88,7 +86,6 @@ def get_landlord_score(current_hand):
     Returns:
         int: score
     '''
-
     score_map = {'A': 1, '2': 2, 'B': 3, 'R': 4}
     score = 0
     # rocket
@@ -121,7 +118,6 @@ def get_optimal_action(probs, legal_actions):
     Returns:
         str: optimal legal action
     '''
-
     abstract_actions = [SPECIFIC_MAP[action] for action in legal_actions]
     action_probs = []
     for actions in abstract_actions:
@@ -148,7 +144,6 @@ def cards2str(cards: list):
     Returns:
         string: string representation of cards
     '''
-
     response = ''
     for card in cards:
         if card.rank == '':
@@ -167,7 +162,6 @@ def contains_cards(candidate, target):
     Returns:
         boolean
     '''
-
     len_can = len(candidate)
     len_tar = len(target)
     if len_can < len_tar:
@@ -191,7 +185,6 @@ def encode_cards(plane, cards):
         cards (list or str): list or str of cards, every entry is a
     character of solo representation of card
     '''
-
     if not cards:
         return None
     layer = 1
@@ -229,7 +222,6 @@ def get_gt_cards(player, greater_player):
     Note:
         1. return value contains 'pass'
     '''
-
     # add 'pass' to legal actions
     gt_cards = ['pass']
     current_hand = cards2str(player.current_hand)

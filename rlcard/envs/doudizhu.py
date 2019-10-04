@@ -29,7 +29,6 @@ class DoudizhuEnv(Env):
                              the recent three actions
                              the union of all played cards
         '''
-
         obs = np.zeros((6, 5, 15), dtype=int)
         for index in range(6):
             obs[index][0] = np.ones(15, dtype=int)
@@ -50,7 +49,6 @@ class DoudizhuEnv(Env):
         Returns:
             payoffs (list): a list of payoffs for each player
         '''
-
         return self.game.judger.judge_payoffs(self.game.round.landlord_id, self.game.winner_id)
 
     def decode_action(self, action_id):
@@ -62,7 +60,6 @@ class DoudizhuEnv(Env):
         Returns:
             action (string): the action that will be passed to the game engine.
         '''
-
         abstract_action = ACTION_LIST[action_id]
         legal_actions = self.game.state['actions']
         specific_actions = []
