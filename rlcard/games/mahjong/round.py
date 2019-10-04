@@ -14,70 +14,78 @@ class MahjongRound(object):
         self.direction = 1
         self.played_cards = []
         self.is_over = False
+        self.player_before_act = 0
         self.prev_status = None
+        self.valid_act = False
+        self.last_cards = []
 
     def proceed_round(self, players, action):
-        self.dealer.deal_cards(players[self.current_player], 1)
-        print("PR:", action)
+        hand_len = [len(p.hand) for p in players]
+        pile_len = [sum([len([c for c in p]) for p in pp.pile]) for pp in players]
+        total_len = [i + j for i, j in zip(hand_len, pile_len)]
         if action == 'stand':
-            self.last_player = self.current_player
+            (valid_act, player, cards) = self.judger.judge_chow(self.dealer, players, self.last_player)
+            if valid_act != False:
+                self.valid_act = valid_act
+                self.last_cards = cards
+                self.last_player = self.current_player
+                self.current_player = player.player_id
+            else:
+                self.last_player = self.current_player
+                self.current_player = (self.player_before_act + 1) % 4
+                self.dealer.deal_cards(players[self.current_player], 1)
+                self.valid_act = False
 
         elif action == 'gong':
-            if self.prev_statVus['player'] == self.current_player and self.prev_status['valid_act'] == action:
-                self.current_player.gong(self.prev_status['action_cards'])
-                self.prev_status = None
+            players[self.current_player].gong(self.dealer, self.last_cards)
             self.last_player = self.current_player
+            self.valid_act = False
 
         elif action == 'pong':
-            print("PONG")
-            exit()
-            if self.prev_statVus['player'] == self.current_player and self.prev_status['valid_act'] == action:
-                self.current_player.pong(self.prev_status['action_cards'])
-                self.prev_status = None
+            players[self.current_player].pong(self.dealer, self.last_cards)
             self.last_player = self.current_player
+            self.valid_act = False
 
         elif action == 'chow':
-            if self.prev_statVus['player'] == self.current_player and self.prev_status['valid_act'] == action:
-                self.current_player.pong(self.prev_status['action_cards'])
-                self.prev_status = None
+            players[self.current_player].chow(self.dealer, self.last_cards)
             self.last_player = self.current_player
+            self.valid_act = False
 
         else: # Play game: Proceed to next player
             players[self.current_player].play_card(self.dealer, action)
+            self.player_before_act = self.current_player
             self.last_player = self.current_player
-            self.current_player = (self.current_player + 1) % 4
+            (valid_act, player, cards) = self.judger.judge_pong_gong(self.dealer, players, self.last_player)
+            if valid_act != False:
+                self.valid_act = valid_act
+                self.last_cards = cards
+                self.last_player = self.current_player
+                self.current_player = player.player_id
+            else:
+                self.last_player = self.current_player
+                self.current_player = (self.current_player + 1) % 4
+                self.dealer.deal_cards(players[self.current_player], 1)
+                
+        hand_len = [len(p.hand) for p in players]
+        pile_len = [sum([len([c for c in p]) for p in pp.pile]) for pp in players]
+        total_len = [i + j for i, j in zip(hand_len, pile_len)]
 
     def get_state(self, players, player_id):
-        #if self.prev_status != None:
-            #print(self.prev_status['valid_act'])
         state = {}
-        player = players[player_id]
-        if self.prev_status != None and self.prev_status['valid_act'] != ['play']:
-            state['valid_act'] = ['play'] 
+        #(valid_act, player, cards) = self.judger.judge_pong_gong(self.dealer, players, self.last_player)
+        if self.valid_act != False: # PONG/GONG/CHOW
+            state['valid_act'] = [self.valid_act, 'stand'] 
+            state['table'] = self.dealer.table
+            state['player'] = self.current_player
+            state['current_hand'] = players[self.current_player].hand
+            state['players_pile'] = {p.player_id: p.pile for p in players}
+            state['action_cards'] = self.last_cards # For doing action (pong, chow, gong)
+        else: # Regular Play
+            state['valid_act'] = ['play']
             state['table'] = self.dealer.table
             state['player'] = self.current_player 
-            state['player_pile'] = players[player_id].pile
+            state['current_hand'] = players[player_id].hand
+            state['players_pile'] = {p.player_id: p.pile for p in players}
             state['action_cards'] = players[player_id].hand # For doing action (pong, chow, gong)
-            return state
-        else:
-            (valid_act, player, cards) = self.judger.judge_round(self.dealer, players, self.last_player)
-            if valid_act != 'play':
-                print("judge_round", valid_act, player.player_id, cards)
-                state['valid_act'] = [valid_act] 
-                state['table'] = self.dealer.table
-                state['player'] = player_id
-                state['player_pile'] = player.pile
-                state['action_cards'] = cards # For doing action (pong, chow, gong)
-            else:
-                state['valid_act'] = [valid_act]
-                state['table'] = self.dealer.table
-                state['player'] = self.current_player 
-                state['player_pile'] = players[player_id].pile
-                state['action_cards'] = players[player_id].hand # For doing action (pong, chow, gong)
-            if state['valid_act'] != ['play']:
-                self.prev_status = state 
-            else:
-                self.prev_status = None
-            self.current_player = player_id
-            return state 
+        return state 
 

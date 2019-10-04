@@ -19,27 +19,30 @@ class MahjongPlayer(object):
         return self.player_id
 
     def print_hand(self):
-        for card in self.hand:
-            print(card.get_str(), end=' ')
+        print([c.get_str() for c in self.hand])
+
+    def print_pile(self):
+        print([[c.get_str() for c in s]for s in self.pile])
 
     def play_card(self, dealer, card):
         card = self.hand.pop(self.hand.index(card))
         dealer.table.append(card)
 
     def chow(self, dealer, cards):
+        last_card = dealer.table.pop(-1)
         for card in cards:
-            if card in self.hand:
-                self.hand.pop(cards[i])
+            if card in self.hand and card != last_card:
+                self.hand.pop(self.hand.index(card))
         self.pile.append(cards)
 
     def gong(self, dealer, cards):
         for card in cards:
             if card in self.hand:
-                self.hand.pop(cards[i])
+                self.hand.pop(self.hand.index(card))
         self.pile.append(cards)
 
     def pong(self, dealer, cards):
         for card in cards:
             if card in self.hand:
-                self.hand.pop(cards[i])
+                self.hand.pop(self.hand.index(card))
         self.pile.append(cards)

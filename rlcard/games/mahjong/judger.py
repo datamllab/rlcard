@@ -3,38 +3,49 @@
 '''
 from collections import Counter
 from collections import defaultdict
+from rlcard.games.mahjong.player import MahjongPlayer as Player
+from rlcard.games.mahjong.card import MahjongCard as Card
 
 class MahjongJudger(object):
     ''' Determine what cards a player can play
     '''
 
-    def __init__(self, players):
+    def __init__(self):
         ''' Initilize the Judger class for Dou Dizhu
         '''
         pass
 
-    def judge_round(self, dealer, players, last_player):
-        if len(dealer.table) == 0:
-            return 'play', None, None
+
+    def judge_pong_gong(self, dealer, players, last_player):  
         last_card = dealer.table[-1]
         last_card_str = last_card.get_str()
         last_card_value = last_card_str.split("-")[-1]
         last_card_type = last_card_str.split("-")[0]
         for player in players:
             hand = [card.get_str() for card in player.hand]
-            #print("LAST:", last_card_str,"HAND:", hand, "Num:", hand.count(last_card_str))
             hand_dict = defaultdict(list)
             for card in hand:
                 hand_dict[card.split("-")[0]].append(card.split("-")[1])
             pile = player.pile 
-            # check pong
-            if hand.count(last_card_str) == 2:
-                return 'pong', player, [last_card]*3
-
             # check gong
-            if hand.count(last_card_str) == 3:
+            if hand.count(last_card_str) == 3 and last_player != player.player_id:
                 return 'gong', player, [last_card]*4
+            # check pong
+            if hand.count(last_card_str) == 2 and last_player != player.player_id:
+                return 'pong', player, [last_card]*3
+        return False, None, None
 
+    def judge_chow(self, dealer, players, last_player):
+        last_card = dealer.table[-1]
+        last_card_str = last_card.get_str()
+        last_card_value = last_card_str.split("-")[-1]
+        last_card_type = last_card_str.split("-")[0]
+        for player in players:
+            hand = [card.get_str() for card in player.hand]
+            hand_dict = defaultdict(list)
+            for card in hand:
+                hand_dict[card.split("-")[0]].append(card.split("-")[1])
+            pile = player.pile 
             # check chow
             if last_card_type != "dragons" and last_card_type != "winds" and last_player == player.get_player_id() - 1:
                 flag = False
@@ -47,51 +58,69 @@ class MahjongJudger(object):
                 test_cases = []
                 if test_card_index == 0:
                     test_cases.append([test_value_list[test_card_index], test_value_list[test_card_index+1], test_value_list[test_card_index+2]])
-                #elif test_card_index <= len(test_value_list) - 2:
                 elif test_card_index < len(test_value_list): 
                     test_cases.append([test_value_list[test_card_index-2], test_value_list[test_card_index-1], test_value_list[test_card_index]])
-                #if test_card_index >= 2 and test_card_index <= len(test_value_list) - 2:
                 else:
                     test_cases.append([test_value_list[test_card_index-1], test_value_list[test_card_index], test_value_list[test_card_index+1]])
-                    #test_cases.append([test_value_list[test_card_index-2], test_value_list[test_card_index-1], test_value_list[test_card_index]])
-                    #test_cases.append([test_value_list[test_card_index], test_value_list[test_card_index+1], test_value_list[test_card_index+2]])
 
                 for l in test_cases:
                     if self.check_consecutive(l):
-                        return 'chow', player, l
-
-        return 'play', None, None
+                        suit = last_card_type
+                        cards_str= [suit+"-"+i for i in l]
+                        cards = []
+                        for card in player.hand:
+                            if card.get_str() in cards_str and card.get_str() != last_card_str:
+                                cards.append(card)
+                                cards_str.pop(cards_str.index(card.get_str()))
+                            if len(cards_str) == 1:
+                                cards.append(last_card)
+                                break
+                        return 'chow', player, cards
+        return False, None, None
 
     def judge_game(self, game):
         if len(game.dealer.deck) == 0:
-            return True
+            return True, -1
+        players_val = []
         for player in game.players:
-            set_count = 0
-            hand = [card.get_str() for card in player.hand]
-            count_dict = {card: hand.count(card) for card in hand}
-            pile = player.pile 
-            set_count += len(pile)
-            #if set_count != 0:
-            #    print(hand, set_count, player.pile)
-            used = []
-            for each in count_dict:
-                if each in used:
-                    continue
-                tmp_set_count = 0
-                tmp_hand = hand.copy()
-                if count_dict[each] == 2:
-                    for i in range(count_dict[each]):
-                        tmp_hand.pop(tmp_hand.index(each))    
-                    tmp_set_count, _set = self.cal_set(tmp_hand)
-                    used.extend(_set)
-                    if tmp_set_count + set_count >= 4:
-                        #print(set_count)
-                        print(player.get_player_id(), sorted([card.get_str() for card in player.hand]))
-                        return True
-        return False
+            win, val = self.judge_hu(player)
+            if win == True:
+                return True, player.player_id
+            players_val.append(val)
+        player_id = players_val.index(max(players_val))
+        return False, player_id 
 
-    def check_consecutive(self, l):
-        l = list(map(int, l))
+    def judge_hu(self, player):
+        set_count = 0
+        hand = [card.get_str() for card in player.hand]
+        count_dict = {card: hand.count(card) for card in hand}
+        pile = player.pile 
+        set_count += len(pile)
+        used = []
+        maximum = 0
+        for each in count_dict:
+            if each in used:
+                continue
+            tmp_set_count = 0
+            tmp_hand = hand.copy()
+            if count_dict[each] == 2:
+                for i in range(count_dict[each]):
+                    tmp_hand.pop(tmp_hand.index(each))    
+                tmp_set_count, _set = self.cal_set(tmp_hand)
+                used.extend(_set)
+                if tmp_set_count + set_count > maximum:
+                    maximum = tmp_set_count + set_count
+                if tmp_set_count + set_count >= 4:
+                    #print(player.get_player_id(), sorted([card.get_str() for card in player.hand]))
+                    #print([[c.get_str() for c in s] for s in player.pile])
+                    #print(len(player.hand), sum([len(s) for s in player.pile]))
+                    #exit()
+                    return True, maximum
+        return False, maximum
+
+
+    def check_consecutive(self, _list):
+        l = list(map(int, _list))
         if sorted(l) == list(range(min(l), max(l)+1)):
             return True
         return False
@@ -135,3 +164,18 @@ class MahjongJudger(object):
                             if c in tmp_cards:
                                 tmp_cards.pop(tmp_cards.index(c))
         return set_count, sets
+
+if __name__ == "__main__":
+    judger = MahjongJudger()
+    player = Player(0)
+    card_info = Card.info
+    #print(card_info)
+    player.pile.append([Card(card_info['type'][0], card_info['trait'][0])]*3)
+    #player.hand.extend([Card(card_info['type'][0], card_info['trait'][0])]*2)
+    player.hand.extend([Card(card_info['type'][1], card_info['trait'][1])]*4)
+    player.hand.extend([Card(card_info['type'][2], card_info['trait'][1])]*3)
+    player.hand.extend([Card(card_info['type'][0], card_info['trait'][2])]*3)
+    player.hand.extend([Card(card_info['type'][3], card_info['trait'][9])]*2)
+    #player.hand.extend([Card(card_info['type'][2], card_info['trait'][4])]*1)
+    print([card.get_str() for card in player.hand])
+    print(judger.judge_hu(player))

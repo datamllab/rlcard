@@ -32,3 +32,8 @@ register(
     env_id='uno',
     entry_point='rlcard.envs.uno:UnoEnv',
 )
+
+register(
+    env_id='mahjong',
+    entry_point='rlcard.envs.mahjong:MahjongEnv',
+)

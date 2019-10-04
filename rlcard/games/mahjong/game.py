@@ -5,12 +5,12 @@ from rlcard.games.mahjong.dealer import MahjongDealer as Dealer
 from rlcard.games.mahjong.player import MahjongPlayer as Player
 from rlcard.games.mahjong.round import MahjongRound as Round
 from rlcard.games.mahjong.judger import MahjongJudger as Judger
+from rlcard.games.mahjong.utils import *
 
 
-random.seed(10)
 class MahjongGame(object):
 
-    def __init__(self):
+    def __init__(self, allow_step_back=False):
         self.num_players = 4
 
     def init_game(self):
@@ -20,40 +20,32 @@ class MahjongGame(object):
         # Initialize four players to play the game
         self.players = [Player(i) for i in range(self.num_players)]
 
-        self.judger = Judger(self.players)
+        self.judger = Judger()
         self.round = Round(self.judger, self.dealer, self.num_players)
 
         # Deal 13 cards to each player to prepare for the game
         for player in self.players:
-            # print(player.get_player_id(), end=':')
             self.dealer.deal_cards(player, 13)
-            # for card in player.hand:
-            # print(card.get_str(), end=',')
 
-        # print test
-        #for player in self.players:
-        #    player.print_hand()
-        #print(len(self.dealer.deck))
-        # ##
         # Save the hisory for stepping back to the last state.
         self.history = []
-
-        player_id = self.round.current_player
-        state = self.get_state(player_id)
-        return state, player_id
+        
+        self.dealer.deal_cards(self.players[self.round.current_player], 1)
+        state = self.get_state(self.round.current_player)
+        self.cur_state = state
+        return state, self.round.current_player
 
     def step(self, action):
         # First snapshot the current state
-        hist_dealer = deepcopy(self.dealer)
-        hist_round = deepcopy(self.round)
-        hist_players = deepcopy(self.players)
-        self.history.append((hist_dealer, hist_players, hist_round))
+        #hist_dealer = deepcopy(self.dealer)
+        #hist_round = deepcopy(self.round)
+        #hist_players = deepcopy(self.players)
+        #self.history.append((hist_dealer, hist_players, hist_round))
 
         self.round.proceed_round(self.players, action)
-        player_id = self.round.current_player
-        state = self.get_state(player_id)
-        return state, player_id
-        # print(self.round.current_player, end=': ')
+        state = self.get_state(self.round.current_player)
+        self.cur_state = state
+        return state, self.round.current_player
 
     def step_back(self):
         if not self.history:
@@ -61,62 +53,64 @@ class MahjongGame(object):
         self.dealer, self.players, self.round = self.history.pop()
         return True
 
-    def get_state(self, player_id):
+    def get_state(self, player_id, is_proceed=True):
+        #if is_proceed:
         state = self.round.get_state(self.players, player_id)
-        if state['valid_act'] != ['play']:
-            print(state)
+        #else:
+        #    state = self.cur_state
         return state
 
-    def get_legal_actions(self):
-        state = self.round.get_state(self.players, self.round.current_player)
-        print(state['valid_act'])
-        if state['valid_act'] != ['play']:
-            exit()
-        if self.round.get_state(self.players, self.round.current_player)['valid_act'] == ['play']:
-            return self.round.get_state(self.players, self.round.current_player)['action_cards']
+    def get_legal_actions(self, state):
+        if state['valid_act'] == ['play']:
+            state['valid_act'] = state['action_cards']
+            return state['action_cards']
         else:
-            print("Not PLAY")
-            exit()
-            return self.round.get_state(self.players, self.round.current_player)['valid_act']
+            return state['valid_act']
+
+    def get_action_num(self):
+        return 38 
 
     def get_player_num(self):
         return self.num_players
 
     def is_over(self):
-        return self.judger.judge_game(self)
+        win, player = self.judger.judge_game(self)
+        pile =[sorted([c.get_str() for c in s ]) for s in self.players[player].pile if self.players[player].pile != None]
+        cards = sorted([c.get_str() for c in self.players[player].hand])
+        count = len(cards) + sum([len(p) for p in pile])
+        self.winner = player
+        #print(win, self.round.current_player, player, cards, pile, count)
+        return win
 
 # For test
 if __name__ == '__main__':
     import time
-    random.seed(0)
+    random.seed(2)
     start = time.time()
     game = MahjongGame()
-    for _ in range(100):
+    for _ in range(100000):
         #print('*****init game*****')
         state, button = game.init_game()
-        #print(button, state)
         i = 0
         while not game.is_over():
             i += 1
-            legal_actions = game.get_legal_actions()
-            #print('legal_actions', legal_actions)
-            '''
-            if i == 3:
-                print('step back')
-                print(game.step_back())
-                print(game.get_player_id())
-                legal_actions = game.get_legal_actions()
-                print('back legal actions', legal_actions)
-                input()
-            '''
+            legal_actions = game.get_legal_actions(state)
             action = random.choice(legal_actions)
-            if len(legal_actions) < 3:
-                print(legal_actions, action)
-                exit()
-            #print('action', action)
-            #print()
+            flag=0
+            #if len(legal_actions) < 3:
+            #    flag=1
+            #    print("Before:", state)
+            #    print(game.round.current_player, action)
             state, button = game.step(action)
+            #if action != 'stand' and flag==1:
+            #    print("After:", state)
+            #    print(state, game.round.current_player)
+            #    exit()
             #print(button, state)
-        print(len(game.dealer.deck))
+        winner_hand = [c.get_str() for c in game.players[game.winner].hand]
+        winnder_pile = [[c.get_str() for c in s] for s in game.players[game.winner].pile]
+        print(_, len(game.dealer.deck), game.winner, winner_hand, winnder_pile)
+        if game.winner != -1:
+            exit()
     end = time.time()
     print(end-start)
