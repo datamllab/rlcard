@@ -2,6 +2,7 @@ import random
 import numpy as np
 
 from rlcard.envs.env import Env
+from rlcard import models
 from rlcard.games.uno.game import UnoGame as Game
 from rlcard.games.uno.utils import encode_hand, encode_target
 from rlcard.games.uno.utils import ACTION_SPACE, ACTION_LIST
@@ -12,6 +13,28 @@ class UnoEnv(Env):
     def __init__(self, allow_step_back=False):
         super().__init__(Game(allow_step_back), allow_step_back)
         self.state_shape = [7, 4, 15]
+
+    def print_state(self, player):
+        ''' Print out the state of a given player
+        
+        Args:
+            player (int): Player id
+        '''  
+        state = self.game.get_state(player)
+        print('----------------------------------------------')
+        print('My hand: ', ' '.join(state['hand']))
+        print('Lastcard: ', state['target'])
+        legal_action_id = self.get_legal_actions()
+        print('Actions you can choose: ', ', '.join([str(legal_action_id.index(action)) + ': ' + action for action in state['legal_actions']]))
+        print('----------------------------------------------')       
+
+    def load_model(self):
+        ''' Load pretrained/rule model
+
+        Returns:
+            model (Model): A Model object
+        '''
+        return models.load('uno-rule-v1')
 
     def extract_state(self, state):
         obs = np.zeros((7, 4, 15), dtype=int)

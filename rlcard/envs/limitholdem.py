@@ -14,10 +14,9 @@ class LimitholdemEnv(Env):
     def __init__(self, allow_step_back=False):
         ''' Initialize the Limitholdem environment
         '''
-
         super().__init__(Game(allow_step_back), allow_step_back)
         self.actions = ['call', 'raise', 'fold', 'check']
-        self.state_shape=[54]
+        self.state_shape=[72]
 
         with open(os.path.join(rlcard.__path__[0], 'games/limitholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
@@ -28,7 +27,6 @@ class LimitholdemEnv(Env):
         Returns:
             encoded_action_list (list): return encoded legal action list (from str to int)
         '''
-
         return self.game.get_legal_actions()
 
     def extract_state(self, state):
@@ -42,7 +40,6 @@ class LimitholdemEnv(Env):
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
         '''
-
         processed_state = {}
 
         legal_actions = [self.actions.index(a) for a in state['legal_actions']]
@@ -50,14 +47,13 @@ class LimitholdemEnv(Env):
 
         public_cards = state['public_cards']
         hand = state['hand']
-        my_chips = state['my_chips']
-        all_chips = state['all_chips']
+        raise_nums = state['raise_nums']
         cards = public_cards + hand
         idx = [self.card2index[card] for card in cards]
-        obs = np.zeros(54)
+        obs = np.zeros(72)
         obs[idx] = 1
-        obs[52] = float(my_chips)
-        obs[53] = float(max(all_chips))
+        for i, num in enumerate(raise_nums):
+            obs[52 + i * 5 + num] = 1
         processed_state['obs'] = obs
 
         return processed_state
@@ -68,7 +64,6 @@ class LimitholdemEnv(Env):
         Returns:
            payoffs (list): list of payoffs
         '''
-
         return self.game.get_payoffs()
 
     def decode_action(self, action_id):

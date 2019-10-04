@@ -9,7 +9,7 @@ class TestLimitholdemEnv(unittest.TestCase):
     def test_init_game_and_extract_state(self):
         env = Env()
         state, _ = env.init_game()
-        self.assertEqual(state['obs'].size, 54)
+        self.assertEqual(state['obs'].size, 72)
         for action in state['legal_actions']:
             self.assertLess(action, env.action_num)
 

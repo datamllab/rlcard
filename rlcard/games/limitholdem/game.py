@@ -27,6 +27,9 @@ class LimitholdemGame(object):
 
         self.num_players = 2
 
+        # Save betting history
+        self.history_raise_nums = [0 for _ in range(4)]
+
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
 
@@ -108,6 +111,9 @@ class LimitholdemGame(object):
         # Then we proceed to the next round
         self.game_pointer = self.round.proceed_round(self.players, action)
 
+        # Save the current raise num to history
+        self.history_raise_nums[self.round_counter] = self.round.have_raised
+
         # If a round is over, we deal more public cards
         if self.round.is_over():
             # For the first round, we deal 3 cards
@@ -184,6 +190,7 @@ class LimitholdemGame(object):
         chips = [self.players[i].in_chips for i in range(self.num_players)]
         legal_actions = self.get_legal_actions()
         state = self.players[player].get_state(self.public_cards, chips, legal_actions)
+        state['raise_nums'] = self.history_raise_nums
 
         return state
 
