@@ -12,6 +12,7 @@ class Hand:
         self.cards_by_rank = []
         #cards after sort
         self.product = 1
+        #cards’ type indicator
         self.RANK_TO_STRING = {2: "2", 3: "3", 4: "4", 5: "5", 6: "6",
                                7: "7", 8: "8", 9: "9", 10: "T", 11: "J", 12: "Q", 13: "K", 14: "A"}
         self.RANK_LOOKUP = "23456789TJQKA"
@@ -195,8 +196,8 @@ class Hand:
         Args:
             (list): # two hand cards + five public cards
         Return:
-            card_group(list): 
-            product(int):
+            card_group(list): cards after sort
+            product(int):cards‘ type indicator
         '''
         card_group = []
         card_group_element = []
@@ -635,7 +636,7 @@ def compare_hands(hand0, hand1):
             duplicated1 = []
             for i in range(5):              
                 five_cards_1.append(handcard1[i][1])
-            for _ in five_cards_1: 
+            for _ in five_cards_1:
                 if _ not in seen:  
                     seen.append(_)
                 else:

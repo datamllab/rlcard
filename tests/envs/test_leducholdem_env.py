@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 
 from rlcard.envs.leducholdem import LeducholdemEnv as Env
 from rlcard.agents.random_agent import RandomAgent
@@ -58,6 +59,50 @@ class TestLeducholdemEnv(unittest.TestCase):
             total += payoff
         self.assertEqual(total, 0)
 
+    def test_set_mode(self):
+        env = Env()
+        with self.assertRaises(ValueError):
+            env.set_mode()
+
+        with self.assertRaises(ValueError):
+            env.set_mode(active_player=100)
+
+        with self.assertRaises(ValueError):
+            env.set_mode(single_agent_mode=True, human_mode=True)
+
+    def test_single_agent_mode(self):
+        env = Env()
+        with self.assertRaises(ValueError):
+            env.reset()
+
+        env.set_mode(single_agent_mode=True)
+        with self.assertRaises(ValueError):
+            env.set_agents([])
+
+        with self.assertRaises(ValueError):
+            env.run()
+
+        state = env.reset()
+        self.assertIsInstance(state, dict)
+        for _ in range(100):
+            state, _, _ = env.step(np.random.choice(state['legal_actions']))
+
+    def test_human_mode(self):
+        env = Env()
+        with self.assertRaises(ValueError):
+            env.reset()
+
+        env.set_mode(human_mode=True)
+        with self.assertRaises(ValueError):
+            env.set_agents([])
+
+        with self.assertRaises(ValueError):
+            env.run()
+
+        state = env.reset()
+        self.assertIsInstance(state, dict)
+        for _ in range(100):
+            state, _, _ = env.step(np.random.choice(state['legal_actions']))
 
 if __name__ == '__main__':
     unittest.main()

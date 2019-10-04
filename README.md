@@ -23,6 +23,8 @@ We recommend starting with the following **toy examples**.
 *   [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
 *   [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
 *   [Running multiple processes](docs/toy-examples.md#running-multiple-processes)
+*   [Having fun with pretrained Leduc model](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
+*   [Leduc Hold'em as single-agent environment](docs/toy-examples.md#leduc-holdem-as-single-agent-environment)
 
 For more examples, please refer to [examples/](examples).
 
@@ -48,7 +50,7 @@ The perfomance is measured by winning rate through self-play. Example outputs ar
 ![Learning Curves](docs/imgs/curves.png "Learning Curves")
 
 ## Contributing
-Contribution to this project is greatly appreciated! If you would like to contribute codes to the project, please create a issue for feedback or bugs, or a pull request for new features or bugs fixed.
+Contribution to this project is greatly appreciated! Please create a issue for feedback or bugs. Please send a pull request for new features or fixing bugs.
 
 ## Acknowledgements
 We would like to thank JJ World Network Technology Co.,LTD for the technical support.

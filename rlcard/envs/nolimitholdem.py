@@ -17,7 +17,7 @@ class NolimitholdemEnv(Env):
 
         super().__init__(Game(allow_step_back), allow_step_back)
         self.actions = ['call', 'fold', 'check']
-        self.state_shape = [52]
+        self.state_shape = [54]
         for raise_amount in range(1, self.game.init_chips+1):
             self.actions.append(raise_amount)
 
@@ -52,10 +52,14 @@ class NolimitholdemEnv(Env):
 
         public_cards = state['public_cards']
         hand = state['hand']
+        my_chips = state['my_chips']
+        all_chips = state['all_chips']
         cards = public_cards + hand
         idx = [self.card2index[card] for card in cards]
-        obs = np.zeros(52)
+        obs = np.zeros(54)
         obs[idx] = 1
+        obs[52] = float(my_chips)
+        obs[53] = float(max(all_chips))
         processed_state['obs'] = obs
 
         return processed_state

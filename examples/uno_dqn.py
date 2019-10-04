@@ -14,9 +14,9 @@ env = rlcard.make('uno')
 eval_env = rlcard.make('uno')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 1000
+evaluate_every = 100
 save_plot_every = 1000
-evaluate_num = 300
+evaluate_num = 10000
 episode_num = 1000000
 
 # Set the the number of steps for collecting normalization statistics

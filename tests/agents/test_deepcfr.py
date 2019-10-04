@@ -60,8 +60,37 @@ class TestUtilsMethos(unittest.TestCase):
         action = agent.simulate_other(0, state)
         self.assertIn(action, [a for a in range(env.action_num)])
 
+        # Test action advantage
+        advantages = agent.action_advantage(state, 0)
+        self.assertEqual(advantages.shape[0], env.action_num)
+
         sess.close()
         tf.reset_default_graph()
+
+    def test_fixed_size_ring_buffer(self):
+        buf = FixedSizeRingBuffer(10)
+
+        # Test add data
+        for i in range(50):
+            buf.add(i)
+        self.assertIn(49, buf._data)
+        self.assertNotIn(1, buf._data)
+
+        # Test sample
+        self.assertEqual(len(buf.sample(3)), 3)
+        with self.assertRaises(ValueError):
+            buf.sample(100)
+
+        # Test leagth
+        self.assertEqual(len(buf), 10)
+
+        # Test iteration
+        for element in buf:
+            self.assertIsInstance(element, int)
+
+        # Test clear
+        buf.clear()
+        self.assertEqual(len(buf), 0)
 
 
 if __name__ == '__main__':

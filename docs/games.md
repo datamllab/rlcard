@@ -151,7 +151,57 @@ Each player will receive a reward 0 (lose) or 1 (win) in the end of the game.
 (Under construction)
 
 ## UNO
-(Under construction)
+
+Uno is an American shedding-type card game that is played with a specially deck.The game is for 2-10 players. Every player starts with seven cards, and they are dealt face down. The rest of the cards are placed in a Draw Pile face down. Next to the pile a space should be designated for a Discard Pile. The top card should be placed in the Discard Pile, and the game begins. The first player is normally the player to the left of the dealer and gameplay usually follows a clockwise direction. Every player views his/her cards and tries to match the card in the Discard pile. Players have to match either by the number, color, or the symbol/action. If the player has no matches, they must draw a card. If that card can be played, play it. Otherwise, keep the card. The objective of the game is to be the first player to get rid of all the cards in hand. For detailed rules, please refer to [Wikipedia](https://en.wikipedia.org/wiki/Uno_(card_game)) or [Uno Rules](https://www.unorules.com/). And in our toolkit, the number of players is 2.
+
+### State Representation of Uno
+
+In state representation, each card is represented as a string of color and trait(number, symbol/action). 'r', 'b', 'y', 'g' represent red, blue, yellow and green respectively. And at each decision point of the game, the corresponding player will be able to observe the current state (or information set in imperfect information game). The state consists of all the information that the player can observe from his view. We encode the information into a readable Python dictionary. The following table shows the structure of the state:
+
+| Key          | Description                                                  | Example value                                                |
+| ------------ | :----------------------------------------------------------- | ------------------------------------------------------------ |
+| hand         | A list of  the player's current hand.                        | ['g-wild', 'b-0', 'g-draw_2', 'y-skip', 'r-draw_2', 'y-3', 'y-wild'] |
+| target       | The top card in the Discard pile                             | 'g-wild'                                                     |
+| played_cards | As the game progresses, the cards which have been played by the players | ['g-3', 'g-wild']                                            |
+| others_hand  | The union of the other player's current hand                 | ['b-0', 'g-draw_2', 'y-skip', 'r-draw_2', 'y-3', 'r-wild']   |
+
+### State Encoding of Uno
+
+In Uno environment, we encode the state into 7 feature planes. The size of each plane is 4*15. Each entry of a plane can be either 1 or 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/uno.py](rlcard/envs/uno.py). The example encoded planes are as below:
+
+| Plane | Feature                  |
+| ----- | :----------------------- |
+| 0-2   | hand                     |
+| 3     | target                   |
+| 4-6   | the recent three actions |
+
+### Action Encoding of Uno
+
+There are 61 actions in Uno. They are encoded as below. The detailed  mapping of action and its ID is in [rlcard/games/uno/jsondata/action_space.json](rlcard/games/uno/jsondata/action_space.json):
+
+| Action ID |                   Action                   |
+| --------- | :----------------------------------------: |
+| 0~9       |        Red number cards from 0 to 9        |
+| 10~12     |  Red action cards: skip, reverse, draw 2   |
+| 13        |               Red wild card                |
+| 14        |          Red wild and draw 4 card          |
+| 15~24     |       green number cards from 0 to 9       |
+| 25~27     | green action cards: skip, reverse, draw 2  |
+| 28        |              green wild card               |
+| 29        |         green wild and draw 4 card         |
+| 30~39     |       blue number cards from 0 to 9        |
+| 40~42     |  blue action cards: skip, reverse, draw 2  |
+| 43        |               blue wild card               |
+| 44        |         blue wild and draw 4 card          |
+| 45~54     |      yellow number cards from 0 to 9       |
+| 55~57     | yellow action cards: skip, reverse, draw 2 |
+| 58        |              yellow wild card              |
+| 59        |        yellow wild and draw 4 card         |
+| 60        |                    draw                    |
+
+### Payoff
+
+Each player will receive a reward -1 (lose) or 1 (win) in the end of the game.
 
 ## Sheng Ji
 (Under construction)

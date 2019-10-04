@@ -6,6 +6,8 @@ import rlcard
 from rlcard.envs.env import Env
 from rlcard.games.leducholdem.game import LeducholdemGame as Game
 from rlcard.utils.utils import *
+from rlcard import models
+
 
 class LeducholdemEnv(Env):
     ''' Limitholdem Environment
@@ -21,6 +23,54 @@ class LeducholdemEnv(Env):
 
         with open(os.path.join(rlcard.__path__[0], 'games/leducholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
+
+    def print_state(self, player):
+        ''' Print out the state of a given player
+        
+        Args:
+            player (int): Player id
+        '''
+
+        state = self.game.get_state(player)
+        print('----------------------------------------------')
+        print('Public cards: ', state['public_card'])
+        print('My cards: ', state['hand'])
+        print('All player chips: ', ' '.join([str(chip) for chip in state['all_chips']]))
+        print('My chips: ', str(state['my_chips']))
+        print('Actions you can choose: ', ', '.join([str(self.actions.index(action)) + ': ' + action for action in state['legal_actions']]))
+        print('----------------------------------------------')
+
+    def print_result(self, player):
+        ''' Print the game result when the game is over
+
+        Args:
+            player (int): The human player id
+        '''
+
+        payoffs = self.get_payoffs()
+        hands = [self.game.players[i].hand.get_index() for i in range(self.player_num)]
+        public_card = self.game.public_card.get_index() if self.game.public_card else ''
+
+
+        for i in range(self.player_num):
+            print('>> Player {}: {} {}'.format(i, hands[i], public_card))
+
+        if payoffs[player] > 0:
+            print('>> You win {}!'.format(payoffs[player]))
+        elif payoffs[player] == 0:
+            print('>> You do not win/lose')
+        else:
+            print('>> You lose {}!'.format(-payoffs[player]))
+
+    def load_pretrained_models(self):
+        ''' Load pretrained models
+
+        Returns:
+            agents (list): A list of agents
+        '''
+
+        model = models.load('leduc-holdem-nfsp')
+        return model.get_agents()
 
     def get_legal_actions(self):
         ''' Get all leagal actions
