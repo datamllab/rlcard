@@ -1,8 +1,8 @@
 
 
 class Hand:
-    def __init__(self):
-        self.all_cards = [] # two hand cards + five public cards
+    def __init__(self, all_cards = []):
+        self.all_cards = all_cards # two hand cards + five public cards
         self.category = 0
         #type of a players' best five cards, greater combination has higher number eg: 0:"Not_Yet_Evaluated" 1: "High_Card" , 9:"Straight_Flush"
         self.best_five = []
@@ -18,13 +18,13 @@ class Hand:
         self.RANK_LOOKUP = "23456789TJQKA"
         self.SUIT_LOOKUP = "SCDH"
 
-    def setCards(self, seven_cards=[]):
+    #def setCards(self, seven_cards=[]):
         '''
         Assign value to all_cards
         Args:
             seven_cards(list): two hand cards + five public cards on deck
         '''
-        self.all_cards = seven_cards
+        #self.all_cards = seven_cards
 
     def get_hand_five_cards(self):
         '''
@@ -125,7 +125,7 @@ class Hand:
             suit_count = card_string.count(suit)
             if suit_count >= 5:
                 flush_cards = [
-                    card for card in self.all_cards if card[1] == suit]
+                    card for card in self.all_cards if card[0] == suit]
                 return flush_cards
         return []
 
@@ -411,6 +411,7 @@ class Hand:
         Get the high cards among a player's cards
         Returns:
             (list): the high cards
+        Maybe with issues
         '''
         High_cards = self.all_cards[2:7]
         return High_cards
@@ -432,18 +433,18 @@ def compare_hands(hand0, hand1):
         return [0, 1]
     elif hand1 == None:
         return [1, 0]
-    cards0, cards1 = hand0, hand1
-    hand0 = Hand()
-    hand1 = Hand()
+    #cards0, cards1 = hand0, hand1
+    hand0 = Hand(hand0)
+    hand1 = Hand(hand1)
     RANKS = '23456789TJQKA'
 
-    for card in cards0:
+    #for card in cards0:
 
-        hand0.all_cards.append(card)
+        #hand0.all_cards.append(card)
 
-    for card in cards1:
+    #for card in cards1:
 
-        hand1.all_cards.append(card)
+        #hand1.all_cards.append(card)
 
     hand0.evaluateHand()
     hand1.evaluateHand()
@@ -672,44 +673,44 @@ def compare_hands(hand0, hand1):
             else:
                 return [1, 1]
 
-            if hand0_category == 1 or hand0_category == 6:
-
-                for i in range(5):
-                    five_cards_0.append(RANKS.index(handcard0[i][1]))
-                for i in range(5):
-                    five_cards_1.append(RANKS.index(handcard1[i][1]))
-                five_cards_0.sort()
-                five_cards_1.sort()
-                if five_cards_0[4] > five_cards_1[4]:
+        if hand0_category == 1 or hand0_category == 6:
+            five_cards_0 = []
+            five_cards_1 = []
+            handcard0 = hand0.get_hand_five_cards()
+            handcard1 = hand1.get_hand_five_cards()
+            for i in range(5):
+                five_cards_0.append(RANKS.index(handcard0[i][1]))
+            for i in range(5):
+                five_cards_1.append(RANKS.index(handcard1[i][1]))
+            five_cards_0.sort()
+            five_cards_1.sort()
+            if five_cards_0[4] > five_cards_1[4]:
+                return [1, 0]              
+            if five_cards_0[4] < five_cards_1[4]:
+                return [0, 1]
+            if five_cards_0[4] == five_cards_1[4]:
+                if five_cards_0[3] > five_cards_1[3]:
                     return [1, 0]              
-                if five_cards_0[4] < five_cards_1[4]:
+                if five_cards_0[3] < five_cards_1[3]:
                     return [0, 1]
-                if five_cards_0[4] == five_cards_1[4]:
-                    if five_cards_0[3] > five_cards_1[3]:
+                if five_cards_0[3] == five_cards_1[3]:
+                    if five_cards_0[2] > five_cards_1[2]:
                         return [1, 0]              
-                    if five_cards_0[3] < five_cards_1[3]:
+                    if five_cards_0[2] < five_cards_1[2]:
                         return [0, 1]
-                    if five_cards_0[3] == five_cards_1[3]:
-                        if five_cards_0[2] > five_cards_1[2]:
+                    if five_cards_0[2] == five_cards_1[2]:
+                        if five_cards_0[1] > five_cards_1[1]:
                             return [1, 0]              
-                        if five_cards_0[2] < five_cards_1[2]:
+                        if five_cards_0[1] < five_cards_1[1]:
                             return [0, 1]
-                        if five_cards_0[2] == five_cards_1[2]:
+                        if five_cards_0[1] == five_cards_1[1]:
                             if five_cards_0[1] > five_cards_1[1]:
                                 return [1, 0]              
                             if five_cards_0[1] < five_cards_1[1]:
                                 return [0, 1]
                             if five_cards_0[1] == five_cards_1[1]:
-                                if five_cards_0[1] > five_cards_1[1]:
-                                    return [1, 0]              
-                                if five_cards_0[1] < five_cards_1[1]:
-                                    return [0, 1]
-                                if five_cards_0[1] == five_cards_1[1]:
-                                    return [1, 1]
+                                return [1, 1]
 
-        else:
-            return [1, 1]
-    else:
-        return [1, 1]
+
 
 
