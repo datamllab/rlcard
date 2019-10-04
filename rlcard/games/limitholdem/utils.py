@@ -18,14 +18,6 @@ class Hand:
         self.RANK_LOOKUP = "23456789TJQKA"
         self.SUIT_LOOKUP = "SCDH"
 
-    #def setCards(self, seven_cards=[]):
-        '''
-        Assign value to all_cards
-        Args:
-            seven_cards(list): two hand cards + five public cards on deck
-        '''
-        #self.all_cards = seven_cards
-
     def get_hand_five_cards(self):
         '''
         Get the best five cards of a player
@@ -433,24 +425,11 @@ def compare_hands(hand0, hand1):
         return [0, 1]
     elif hand1 == None:
         return [1, 0]
-    #cards0, cards1 = hand0, hand1
     hand0 = Hand(hand0)
     hand1 = Hand(hand1)
     RANKS = '23456789TJQKA'
-
-    #for card in cards0:
-
-        #hand0.all_cards.append(card)
-
-    #for card in cards1:
-
-        #hand1.all_cards.append(card)
-
     hand0.evaluateHand()
     hand1.evaluateHand()
-    #var = hand1.get_hand_five_cards()
-    #print(var)
-    # compare hands
     hand0_category = hand0.category
     hand1_category = hand1.category
 
@@ -495,7 +474,8 @@ def compare_hands(hand0, hand1):
                 if RANKS.index(handcard0[0][1]) < RANKS.index(handcard1[0][1]):
                     return [0, 1]
                 if RANKS.index(handcard0[0][1]) == RANKS.index(handcard1[0][1]):
-                    return [1, 1]                       
+                    return [1, 1]
+                       
         if hand0_category == 4:
             handcard0 = hand0.get_hand_five_cards()
             handcard1 = hand1.get_hand_five_cards()
@@ -561,8 +541,6 @@ def compare_hands(hand0, hand1):
                         if RANKS.index(handcard0[0][1]) == RANKS.index(handcard1[0][1]):
                             return[1, 1]
     
-
-
         if hand0_category == 1 or hand0_category == 6:
             handcard0 = hand0.get_hand_five_cards()
             handcard1 = hand1.get_hand_five_cards()
