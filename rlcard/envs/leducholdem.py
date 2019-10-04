@@ -42,7 +42,7 @@ class LeducholdemEnv(Env):
 
     def print_result(self, player):
         ''' Print the game result when the game is over
-        
+
         Args:
             player (int): The human player id
         '''
@@ -70,7 +70,7 @@ class LeducholdemEnv(Env):
         '''
 
         model = models.load('leduc-holdem-nfsp')
-        return model.agents
+        return model.get_agents()
 
     def get_legal_actions(self):
         ''' Get all leagal actions

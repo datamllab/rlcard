@@ -44,6 +44,18 @@ class LeducHoldemNFSPModel(Model):
                 saver = tf.train.Saver(tf.model_variables())
                 saver.restore(self.sess, tf.train.latest_checkpoint(check_point_path))
 
+    def get_agents(self):
+        ''' Get a list of agents for each position in a the game
+
+        Returns:
+            agents (list): A list of agents
+
+        Note: Each agent should be just like RL agent with step and eval_step
+              functioning well.
+        '''
+
+        return self.agents
+
 def normalize(e, agents, num):
     ''' Feed random data to normalizer
 
