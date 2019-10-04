@@ -61,7 +61,6 @@ class LeducHoldemNFSPModel(Model):
         Returns:
             use_raw (boolean): True if using raw state and action
         '''
-
         return False
 
 

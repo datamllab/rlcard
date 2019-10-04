@@ -25,7 +25,7 @@ class LeducholdemEnv(Env):
 
     def print_state(self, player):
         ''' Print out the state of a given player
-        
+
         Args:
             player (int): Player id
         '''

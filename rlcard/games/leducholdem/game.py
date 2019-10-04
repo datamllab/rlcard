@@ -14,7 +14,6 @@ class LeducholdemGame(LimitholdemGame):
     def __init__(self, allow_step_back=False):
         ''' Initialize the class leducholdem Game
         '''
-
         self.allow_step_back = allow_step_back
         # Some configarations of the game
         # These arguments are fixed in Leduc Hold'em Game
@@ -36,7 +35,6 @@ class LeducholdemGame(LimitholdemGame):
                 (dict): The first state of the game
                 (int): Current player's id
         '''
-
         # Initilize a dealer that can deal cards
         self.dealer = Dealer()
 
@@ -83,7 +81,6 @@ class LeducholdemGame(LimitholdemGame):
                 (dict): next player's state
                 (int): next plater's id
         '''
-
         if self.allow_step_back:
             # First snapshot the current state
             r = deepcopy(self.round)
@@ -120,7 +117,6 @@ class LeducholdemGame(LimitholdemGame):
         Returns:
             (dict): The state of the player
         '''
-
         chips = [self.players[i].in_chips for i in range(self.num_players)]
         legal_actions = self.get_legal_actions()
         state = self.players[player].get_state(self.public_card, chips, legal_actions)
@@ -133,7 +129,6 @@ class LeducholdemGame(LimitholdemGame):
         Returns:
             (boolean): True if the game is over
         '''
-
         alive_players = [1 if p.status=='alive' else 0 for p in self.players]
         # If only one player is alive, the game is over.
         if sum(alive_players) == 1:
@@ -150,7 +145,6 @@ class LeducholdemGame(LimitholdemGame):
         Returns:
             (list): Each entry corresponds to the payoff of one player
         '''
-
         chips_payoffs = self.judger.judge_game(self.players, self.public_card)
         payoffs = np.array(chips_payoffs)
         return payoffs
@@ -161,7 +155,6 @@ class LeducholdemGame(LimitholdemGame):
         Returns:
             (bool): True if the game steps back successfully
         '''
-
         if len(self.history) > 0:
             self.round, self.game_pointer, self.round_counter, self.dealer, self.public_card, self.players = self.history.pop()
             return True

@@ -8,5 +8,4 @@ class NolimitholdemJudger(LimitholdemJudger):
     def __init__(self):
         ''' Initialize a judger class
         '''
-
         super(NolimitholdemJudger, self).__init__()

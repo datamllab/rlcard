@@ -12,7 +12,6 @@ class NolimitholdemGame(LimitholdemGame):
     def __init__(self, allow_step_back=False):
         ''' Initialize the class nolimitholdem Game
         '''
-
         self.allow_step_back = allow_step_back
 
         # small blind and big blind
@@ -34,7 +33,6 @@ class NolimitholdemGame(LimitholdemGame):
                 (dict): The first state of the game
                 (int): Current player's id
         '''
-
         # Initilize a dealer that can deal cards
         self.dealer = Dealer()
 
@@ -82,7 +80,6 @@ class NolimitholdemGame(LimitholdemGame):
         Returns:
             (list): A list of legal actions
         '''
-
         return self.round.get_nolimit_legal_actions(self.players)
 
     def step(self, action):
@@ -97,7 +94,6 @@ class NolimitholdemGame(LimitholdemGame):
                 (dict): next player's state
                 (int): next plater's id
         '''
-
         if self.allow_step_back:
             # First snapshot the current state
             r = deepcopy(self.round)
@@ -138,7 +134,6 @@ class NolimitholdemGame(LimitholdemGame):
         Returns:
             (dict): The state of the player
         '''
-
         chips = [self.players[i].in_chips for i in range(self.num_players)]
         legal_actions = self.get_legal_actions()
         state = self.players[player].get_state(self.public_cards, chips, legal_actions)

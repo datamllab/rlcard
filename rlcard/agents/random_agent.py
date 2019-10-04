@@ -11,7 +11,6 @@ class RandomAgent(object):
         Args:
             action_num (int): the size of the ouput action space
         '''
-
         self.action_num = action_num
 
     @staticmethod
@@ -24,7 +23,6 @@ class RandomAgent(object):
         Returns:
             action (int): the action predicted (randomly chosen) by the random agent
         '''
-
         #return np.random.randint(0, self.action_num)
         return np.random.choice(state['legal_actions'])
 
@@ -38,5 +36,4 @@ class RandomAgent(object):
         Returns:
             action (int): the action predicted (randomly chosen) by the random agent
         '''
-
         return self.step(state)

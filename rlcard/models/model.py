@@ -6,7 +6,6 @@ class Model(object):
     def __init__(self):
         ''' Load the model here
         '''
-
         pass
 
     @property

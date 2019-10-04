@@ -22,7 +22,6 @@ class Card(object):
             suit: string, suit of the card, should be one of valid_suit
             rank: string, rank of the card, should be one of valid_rank
         '''
-
         self.suit = suit
         self.rank = rank
 
@@ -47,13 +46,11 @@ class Dealer(object):
     def __init__(self):
         ''' The dealer should have all the cards at the beginning of a game
         '''
-
         raise NotImplementedError
 
     def shuffle(self):
         ''' Shuffle the cards holded by dealer(remained_cards)
         '''
-
         raise NotImplementedError
 
     def deal_cards(self, **kwargs):
@@ -63,7 +60,6 @@ class Dealer(object):
             player_id: the id of the player to be dealt cards
             num: number of cards to be dealt
         '''
-
         raise NotImplementedError
 
 class Player(object):
@@ -84,13 +80,11 @@ class Player(object):
         Returns:
             list: a list of available orders
         '''
-
         raise NotImplementedError
 
     def play(self):
         ''' Player's actual action in the round
         '''
-
         raise NotImplementedError
 
 class Judger(object):
@@ -103,7 +97,6 @@ class Judger(object):
         Returns:
             int: return the player's id who wins the round or -1 meaning the round has not ended
         '''
-
         raise NotImplementedError
 
     def judge_game(self, **kwargs):
@@ -112,7 +105,6 @@ class Judger(object):
         Returns:
             int: return the player's id who wins the game or -1 meaning the game has not ended
         '''
-
         raise NotImplementedError
 
 
@@ -129,7 +121,6 @@ class Round(object):
     def proceed_round(self, **kwargs):
         ''' Call other Classes's functions to keep the game running
         '''
-
         raise NotImplementedError
 
 
@@ -140,42 +131,35 @@ class Game(object):
     def init_game(self):
         ''' Initialize all characters in the game and start round 1
         '''
-
         raise NotImplementedError
 
     def step(self, action):
         ''' Perform one draw of the game and return next player number, and the state for next player
         '''
-
         raise NotImplementedError
 
     def step_back(self):
         ''' Takes one step backward and restore to the last state
         '''
-
         raise NotImplementedError
 
     def get_player_num(self):
         ''' Retrun the number of players in the game
         '''
-
         raise NotImplementedError
 
     def get_action_num(self):
         ''' Return the number of possible actions in the game
         '''
-
         raise NotImplementedError
 
     def get_player_id(self):
         ''' Return the current player that will take actions soon
         '''
-
         raise NotImplementedError
 
     def is_over(self):
         ''' Return whether the current game is over
         '''
-
         raise NotImplementedError
 

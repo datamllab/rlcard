@@ -11,7 +11,6 @@ class LimitholdemGame(object):
     def __init__(self, allow_step_back=False):
         ''' Initialize the class limitholdem Game
         '''
-
         self.allow_step_back = allow_step_back
 
         # Some configarations of the game
@@ -41,7 +40,6 @@ class LimitholdemGame(object):
                 (dict): The first state of the game
                 (int): Current player's id
         '''
-
         # Initilize a dealer that can deal cards
         self.dealer = Dealer()
 
@@ -97,7 +95,6 @@ class LimitholdemGame(object):
                 (dict): next player's state
                 (int): next plater's id
         '''
-
         if self.allow_step_back:
             # First snapshot the current state
             r = deepcopy(self.round)
@@ -143,7 +140,6 @@ class LimitholdemGame(object):
         Returns:
             (bool): True if the game steps back successfully
         '''
-
         if len(self.history) > 0:
             self.round, self.game_pointer, self.round_counter, self.dealer, self.public_cards, self.players = self.history.pop()
             return True
@@ -155,7 +151,6 @@ class LimitholdemGame(object):
         Returns:
             (int): The number of players in the game
         '''
-
         return self.num_players
 
     @staticmethod
@@ -165,7 +160,6 @@ class LimitholdemGame(object):
         Returns:
             (int): The number of actions. There are 4 actions (call, raise, check and fold)
         '''
-
         return 4
 
     def get_player_id(self):
@@ -174,7 +168,6 @@ class LimitholdemGame(object):
         Returns:
             (int): current player's id
         '''
-
         return self.game_pointer
 
     def get_state(self, player):
@@ -186,7 +179,6 @@ class LimitholdemGame(object):
         Returns:
             (dict): The state of the player
         '''
-
         chips = [self.players[i].in_chips for i in range(self.num_players)]
         legal_actions = self.get_legal_actions()
         state = self.players[player].get_state(self.public_cards, chips, legal_actions)
@@ -201,7 +193,6 @@ class LimitholdemGame(object):
         Returns:
             (boolean): True if the game is over
         '''
-
         alive_players = [1 if p.status=='alive' else 0 for p in self.players]
         # If only one player is alive, the game is over.
         if sum(alive_players) == 1:
@@ -218,7 +209,6 @@ class LimitholdemGame(object):
         Returns:
             (list): Each entry corresponds to the payoff of one player
         '''
-
         hands = [p.hand + self.public_cards if p.status=='alive' else None for p in self.players]
         chips_payoffs = self.judger.judge_game(self.players, hands)
         payoffs = np.array(chips_payoffs) / (self.big_blind)
@@ -230,7 +220,6 @@ class LimitholdemGame(object):
         Returns:
             (list): A list of legal actions
         '''
-
         return self.round.get_legal_actions()
 
 # Test the game

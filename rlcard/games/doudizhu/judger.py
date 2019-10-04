@@ -34,7 +34,6 @@ class DoudizhuJudger(object):
         Returns:
             list: list of string of playable cards
         '''
-
         player_id = player.player_id
         current_hand = cards2str(player.current_hand)
         missed = None

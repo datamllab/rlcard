@@ -16,5 +16,4 @@ class LeducholdemRound(LimitholdemRound):
             allowed_raise_num (int): The number of allowed raise num
             num_players (int): The number of players
         '''
-
         super(LeducholdemRound, self).__init__(raise_amount, allowed_raise_num, num_players)

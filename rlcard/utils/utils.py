@@ -10,7 +10,6 @@ def init_standard_deck():
     Returns:
         (list): A list of Card object
     '''
-
     suit_list = ['S', 'H', 'D', 'C']
     rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
@@ -22,7 +21,6 @@ def init_54_deck():
     Returns:
         (list): Alist of Card object
     '''
-
     suit_list = ['S', 'H', 'D', 'C']
     rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
@@ -43,7 +41,6 @@ def get_random_cards(cards, num, seed=None):
         (list): A list of chosen cards
         (list): A list of remained cards
     '''
-
     if not num> 0:
         raise AssertionError('Invalid input number')
     if not num <= len(cards):
@@ -65,7 +62,6 @@ def is_pair(cards):
     Returns:
         (boolean): True if the list is a pair
     '''
-
     if len(cards) == 2 and cards[0].rank == cards[1].rank:
         return True
     else:
@@ -98,7 +94,6 @@ def rank2int(rank):
         1. If the input rank is an empty string, the function will return -1.
         2. If the input rank is not valid, the function will return None.
     '''
-
     if rank == '':
         return -1
     elif rank.isdigit():
@@ -132,7 +127,6 @@ def get_cards_from_ranks(player, ranks):
 
     Note: This function will not affect the player's original hand.
     '''
-
     chosen_cards = []
     remained_cards = player.hand.copy()
     for rank in ranks:
@@ -159,7 +153,6 @@ def take_out_cards(cards, remove_cards):
         which means to take out one kind of cards with the same suit and rank in 'cards' list,
         you need to have the same number of cards with the same suit and rank in 'remove_cards' list.
     '''
-
     remove_cards_cp = remove_cards
     for card in cards:
         for remove_card in remove_cards_cp:
@@ -178,7 +171,6 @@ def is_in_cards(origin_cards, check_cards):
     Returns:
         (boolean): True if the cards are in the original cards.
     '''
-
     check_cards_cp = check_cards.copy()
     cards = origin_cards.copy()
     i = 0
@@ -246,7 +238,6 @@ def reorganize(trajectories, payoffs):
         (list): A new trajectories that can be fed into RL algorithms.
 
     '''
-
     player_num = len(trajectories)
     new_trajectories = [[] for _ in range(player_num)]
 
@@ -272,7 +263,6 @@ def set_global_seed(seed):
 
     Note: If using other modules with randomness, they also need to be seeded
     '''
-
     if seed is not None:
         import tensorflow as tf
         tf.set_random_seed(seed)

@@ -57,7 +57,6 @@ class FixedSizeRingBuffer(object):
     The underlying datastructure is a ring buffer, allowing 0(1) adding and
     sampling.
     '''
-
     def __init__(self, replay_buffer_capacity):
         ''' Initialize the buffer
         '''
@@ -74,7 +73,6 @@ class FixedSizeRingBuffer(object):
         Args:
             element: data to be added to the buffer.
         '''
-
         if len(self._data) < self._replay_buffer_capacity:
             self._data.append(element)
         else:
@@ -95,7 +93,6 @@ class FixedSizeRingBuffer(object):
         Raises:
             ValueError: If there are less than `num_samples` elements in the buffer
         '''
-
         if len(self._data) < num_samples:
             raise ValueError("{} elements could not be sampled from size {}".format(
                 num_samples, len(self._data)))
@@ -104,7 +101,6 @@ class FixedSizeRingBuffer(object):
     def clear(self):
         ''' Clear the buffer
         '''
-
         self._data = []
         self._next_entry_index = 0
 
@@ -155,7 +151,6 @@ class DeepCFR():
             memories
             memory_capacity (int): Number af samples that can be stored in memory
         '''
-
         self._env = env
         self._session = session
         self._batch_size_advantage = batch_size_advantage
@@ -262,7 +257,6 @@ class DeepCFR():
             average advantage loss (float): players average advantage loss
             policy loss (float): policy loss
         '''
-
         init_state, init_player = self._env.init_game()
         self._root_node = init_state
         for p in range(self._num_players):
@@ -298,7 +292,6 @@ class DeepCFR():
         returns:
             action (int): an action id
         '''
-
         obs = state['obs']
         legal_actions = state['legal_actions']
         action_prob = self.action_probabilities(obs)
@@ -310,7 +303,6 @@ class DeepCFR():
     def reinitialize_advantage_networks(self):
         ''' Reinitialize the advantage networks
         '''
-
         for p in range(self._num_players):
             for key in self._advantage_networks[p].initializers:
                 self._advantage_networks[p].initializers[key]()
@@ -318,7 +310,6 @@ class DeepCFR():
     def action_advantage(self, state, player):
         ''' Returns action advantages for a single batch.
         '''
-
         state = state['obs'].flatten()
         advantages = self._session.run(
             self._advantage_outputs[player],
@@ -336,7 +327,6 @@ class DeepCFR():
         returns:
             action (int): an action id
         '''
-
         _, strategy = self._sample_action_from_advantage(state, player)
         # Recompute distribution dor numerical errors.
         probs = np.array(strategy)
@@ -347,7 +337,6 @@ class DeepCFR():
     def action_probabilities(self, state):
         ''' Returns action probabilites dict for a single batch.
         '''
-
         info_state_vector = state
         if len(info_state_vector.shape) == 1:
             info_state_vector = np.expand_dims(info_state_vector, axis=0)
@@ -370,7 +359,6 @@ class DeepCFR():
         Returns:
             payoff (list): Recursively returns expected payoffs for each action.
         '''
-
         expected_payoff = collections.defaultdict(float)
         current_player = self._env.get_player_id()
         actions = state['legal_actions']
@@ -428,7 +416,6 @@ class DeepCFR():
             1. (list) Advantage values for info state actions indexed by action.
             2. (list) Matched regrets, prob for actions indexed by action.
         '''
-
         info_state = state['obs'].flatten()
         legal_actions = state['legal_actions']
         advantages = self._session.run(
@@ -454,7 +441,6 @@ class DeepCFR():
         Returns:
             flattened (tensor): flattened state
         '''
-
         shape = state.get_shape().as_list()
         dim = np.prod(shape[1:])
         flattened = tf.reshape(state, [-1, dim])
@@ -472,7 +458,6 @@ class DeepCFR():
         Returns:
             loss advantages (float): The average loss over the advantage network.
         '''
-
         if self._batch_size_advantage and self._batch_size_advantage < len(self._advantage_memories[player]._data):
             samples = self._advantage_memories[player].sample(self._batch_size_advantage)
         else:
@@ -505,7 +490,6 @@ class DeepCFR():
         Returns:
             The average loss obtained on this batch of transitions or `None`.
         '''
-
         if self._batch_size_strategy and self._batch_size_strategy < len(self._strategy_memories._data):
             samples = self._strategy_memories.sample(self._batch_size_strategy)
         else:

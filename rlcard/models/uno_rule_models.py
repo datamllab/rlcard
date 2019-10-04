@@ -108,7 +108,7 @@ class UNORuleModelV1(Model):
               functioning well.
         '''
         return self.rule_agents
-    
+
     @property
     def use_raw(self):
         ''' Indicate whether use raw state and action

@@ -32,6 +32,7 @@ class DoudizhuGame(object):
              'actions': ['pass', 'K', 'A', 'B']
             }
     '''
+
     def __init__(self, allow_step_back=False):
         self.allow_step_back = allow_step_back
         self.num_players = 3
@@ -78,7 +79,6 @@ class DoudizhuGame(object):
             dict: next player's state
             int: next player's id
         '''
-
         if self.allow_step_back:
             # record game history
             self._record_history()
@@ -134,7 +134,6 @@ class DoudizhuGame(object):
         Returns:
             int: the total number of abstract actions of doudizhu
         '''
-
         return 309
 
     def get_player_id(self):
@@ -143,7 +142,6 @@ class DoudizhuGame(object):
         Returns:
             int: current player's id
         '''
-
         return self.round.current_player
 
     def get_player_num(self):
@@ -152,7 +150,6 @@ class DoudizhuGame(object):
         Returns:
             int: the number of players in doudizhu
         '''
-
         return self.num_players
 
     def is_over(self):

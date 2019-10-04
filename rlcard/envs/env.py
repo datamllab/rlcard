@@ -60,7 +60,7 @@ class Env(object):
 
         self.timestep += 1
         next_state, player_id = self.game.step(self.decode_action(action))
-        
+
         return self.extract_state(next_state), player_id
 
     def single_agent_step(self, action):
@@ -115,7 +115,7 @@ class Env(object):
                     action = self.model.agents[player_id].eval_step(state)
                 else:
                     action = self.model.agents[player_id].eval_step(self.extract_state(state))
-                    action = self.decode_action(action) 
+                    action = self.decode_action(action)
                 if self.human_mode:
                     history.append((player_id, action))
                 state, player_id = self.game.step(action)

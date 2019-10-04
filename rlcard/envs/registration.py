@@ -11,7 +11,6 @@ class EnvSpec(object):
             env_id (string): the name of the environent
             entry_point (string): a string the indicates the location of the envronment class
         '''
-
         self.env_id = env_id
         mod_name, class_name = entry_point.split(':')
         self._entry_point = getattr(importlib.import_module(mod_name), class_name)
@@ -23,7 +22,6 @@ class EnvSpec(object):
             env (Env): an instance of the environemnt
             allow_step_back (boolean): True if you wants to able to step_back
         '''
-
         env = self._entry_point(allow_step_back)
         return env
 
@@ -35,7 +33,6 @@ class EnvRegistry(object):
     def __init__(self):
         ''' Initilize
         '''
-
         self.env_specs = {}
 
     def register(self, env_id, entry_point):
@@ -45,7 +42,6 @@ class EnvRegistry(object):
             env_id (string): the name of the environent
             entry_point (string): a string the indicates the location of the envronment class
         '''
-
         if env_id in self.env_specs:
             raise ValueError('Cannot re-register env_id: {}'.format(env_id))
         self.env_specs[env_id] = EnvSpec(env_id, entry_point)
@@ -57,7 +53,6 @@ class EnvRegistry(object):
             env_id (string): the name of the environment
             allow_step_back (boolean): True if you wants to able to step_back
         '''
-
         if env_id not in self.env_specs:
             raise ValueError('Cannot find env_id: {}'.format(env_id))
         return self.env_specs[env_id].make(allow_step_back)
@@ -73,7 +68,6 @@ def register(env_id, entry_point):
         env_id (string): the name of the environent
         entry_point (string): a string the indicates the location of the envronment class
     '''
-
     return registry.register(env_id, entry_point)
 
 def make(env_id, allow_step_back=False):
@@ -83,5 +77,4 @@ def make(env_id, allow_step_back=False):
         env_id (string): the name of the environment
         allow_step_back (boolean): True if you wants to able to step_back
     '''
-
     return registry.make(env_id, allow_step_back)
