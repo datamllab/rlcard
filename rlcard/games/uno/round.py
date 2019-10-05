@@ -105,12 +105,14 @@ class UnoRound(object):
             for card in hand:
                 if card.type == 'wild':
                     #card.color = np.random.choice(UnoCard.info['color'])
-                    if card.trait == 'wild_draw_4' and wild_draw_4_flag == 0:
-                        wild_draw_4_flag = 1
-                        wild_4_actions.extend(WILD_DRAW_4)
-                    elif wild_flag == 0:
-                        wild_flag = 1
-                        legal_actions.extend(WILD)
+                    if card.trait == 'wild_draw_4':
+                        if wild_draw_4_flag == 0:
+                            wild_draw_4_flag = 1
+                            wild_4_actions.extend(WILD_DRAW_4)
+                    else:
+                        if wild_flag == 0:
+                            wild_flag = 1
+                            legal_actions.extend(WILD)
                 elif card.color == target.color:
                     legal_actions.append(card.str)
 
@@ -118,12 +120,14 @@ class UnoRound(object):
         else:
             for card in hand:
                 if card.type == 'wild':
-                    if card.trait == 'wild_draw_4' and wild_draw_4_flag == 0:
-                        wild_draw_4_flag = 1
-                        wild_4_actions.extend(WILD_DRAW_4)
-                    elif wild_flag == 0:
-                        wild_flag = 1
-                        legal_actions.extend(WILD)
+                    if card.trait == 'wild_draw_4':
+                        if wild_draw_4_flag == 0:
+                            wild_draw_4_flag = 1
+                            wild_4_actions.extend(WILD_DRAW_4)
+                    else:
+                        if wild_flag == 0:
+                            wild_flag = 1
+                            legal_actions.extend(WILD)
                 elif card.color == target.color or card.trait == target.trait:
                     legal_actions.append(card.str)
         if not legal_actions:
