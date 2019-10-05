@@ -3,7 +3,9 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/248eb15c086748a4bcc830755f1bd798)](https://www.codacy.com/manual/daochenzha/rlcard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=datamllab/rlcard&amp;utm_campaign=Badge_Grade)
 [![Coverage Status](https://coveralls.io/repos/github/datamllab/rlcard/badge.svg?branch=master)](https://coveralls.io/github/datamllab/rlcard?branch=master)
 
-RLCard is a toolkit for developing Reinforcement Learning (RL) algorithms in card games. It supports multiple challenging card environments with common and easy-to-use interfaces. The goal of RLCard is to bridge reinforcement learning and game theory, and push forward the research of reinforcement learning in domains with multiple agents, imperfect information, and large state and action space. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University. **NOTE: The project is still in final testing!**
+RLCard is a toolkit for developing Reinforcement Learning (RL) algorithms in card games. It supports multiple challenging card environments with common and easy-to-use interfaces. The goal of RLCard is to bridge reinforcement learning and game theory, and push forward the research of reinforcement learning in domains with multiple agents, imperfect information, and large state and action space. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
+
+*   [Official Websit](http://www.rlcard.org)
 
 ## Installation
 Make sure that you have **Python 3.5+** and **pip** installed. You can install `rlcard` with `pip` as follow:
@@ -12,9 +14,44 @@ git clone https://github.com/datamllab/rlcard.git
 cd rlcard
 pip install -e .
 ```
-To check whether it is intalled correctly, try the example with random agents:
+To check whether it is intalled correctly, try to play with the pre-trained Leduc Hold'em AI:
 ```console
-python examples/blackjack_random.py
+python examples/leduc_holdem_human.py
+```
+Expected output should be:
+```console
+>> Leduc Hold'em pre-trained model
+
+>> Start a new game!
+>> Agent 1 chooses raise
+
+=============== Community Card ===============
+┌─────────┐
+│░░░░░░░░░│
+│░░░░░░░░░│
+│░░░░░░░░░│
+│░░░░░░░░░│
+│░░░░░░░░░│
+│░░░░░░░░░│
+│░░░░░░░░░│
+└─────────┘
+===============   Your Hand    ===============
+┌─────────┐
+│J        │
+│         │
+│         │
+│    ♥    │
+│         │
+│         │
+│        J│
+└─────────┘
+===============     Chips      ===============
+Yours:   +
+Agent 1: +++
+=========== Actions You Can Choose ===========
+0: call, 1: raise, 2: fold
+
+>> You choose action (integer):
 ```
 
 ## Getting Started
@@ -29,7 +66,7 @@ We recommend starting with the following **toy examples**.
 For more examples, please refer to [examples/](examples).
 
 ## Documents
-Please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [github page](https://rlcard.github.io/index.html).
+Please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
 
 ## Available Environments
 We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information set; **Avg. InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space. **Name:** the name that should be passed to `env.make` to create the game environment.

@@ -189,6 +189,68 @@ def is_in_cards(origin_cards, check_cards):
         i += 1
     return len(check_cards_cp) == 0
 
+def elegent_form(card):
+    ''' Get a elegent form of a card string
+
+    Args:
+        card (string): A card string
+
+    Returns:
+        elegent_card (string): A nice form of card
+    '''
+    suits = {'S': '♠', 'H': '♥', 'D': '♦', 'C': '♣','s': '♠', 'h': '♥', 'd': '♦', 'c': '♣' }
+    rank = '10' if card[1] == 'T' else card[1]
+
+    return suits[card[0]] + rank
+
+def print_card(cards):
+    ''' Nicely print a card or list of cards
+
+    Args:
+        card (string or list): The card(s) to be printed
+    '''
+    if cards == None:
+        cards = [None]
+    if isinstance(cards, str):
+        cards = [cards]
+
+    lines = [[] for _ in range(9)]
+
+    for card in cards:
+        if card == None:
+            lines[0].append('┌─────────┐')
+            lines[1].append('│░░░░░░░░░│')
+            lines[2].append('│░░░░░░░░░│')
+            lines[3].append('│░░░░░░░░░│')
+            lines[4].append('│░░░░░░░░░│')
+            lines[5].append('│░░░░░░░░░│')
+            lines[6].append('│░░░░░░░░░│')
+            lines[7].append('│░░░░░░░░░│')
+            lines[8].append('└─────────┘')
+        else:
+            elegent_card = elegent_form(card)
+            suit = elegent_card[0]
+            rank = elegent_card[1]
+            if len(elegent_card) == 3:
+                space = elegent_card[2]
+            else:
+                space = ' '
+
+            lines[0].append('┌─────────┐')
+            lines[1].append('│{}{}       │'.format(rank, space))
+            lines[2].append('│         │')
+            lines[3].append('│         │')
+            lines[4].append('│    {}    │'.format(suit))
+            lines[5].append('│         │')
+            lines[6].append('│         │')
+            lines[7].append('│       {}{}│'.format(space, rank))
+            lines[8].append('└─────────┘')
+
+    for line in lines:
+        print ('   '.join(line))
+
+
+
 def init_players(n):
     ''' Initilize a list of Player objects with n players
 

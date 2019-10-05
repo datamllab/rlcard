@@ -65,5 +65,21 @@ class TestDoudizhuEnv(unittest.TestCase):
             decoded = env.decode_action(legal_action)
             self.assertLessEqual(decoded, ACTION_LIST[legal_action])
 
+    def test_single_agent_mode(self):
+        env = Env()
+        env.set_mode(single_agent_mode=True)
+        state = env.reset()
+        self.assertIsInstance(state, dict)
+        for _ in range(100):
+            state, _, _ = env.step(np.random.choice(state['legal_actions']))
+
+    def test_human_mode(self):
+        env = Env()
+        env.set_mode(human_mode=True)
+        state = env.reset()
+        self.assertIsInstance(state, dict)
+        for _ in range(100):
+            state, _, _ = env.step(np.random.choice(state['legal_actions']))
+
 if __name__ == '__main__':
     unittest.main()

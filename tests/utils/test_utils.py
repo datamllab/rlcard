@@ -76,6 +76,14 @@ class TestUtils(unittest.TestCase):
         self.assertTrue(is_in_cards(deck54, [Card('BJ', ''), Card('RJ', '')]))
         self.assertFalse(is_in_cards(deck54, [Card('BJ', ''), Card('BJ', '')]))
 
+    def test_print_cards(self):
+        self.assertEqual(len(elegent_form('S9')), 2)
+        self.assertEqual(len(elegent_form('ST')), 3)
+
+        print_card(None)
+        print_card('S9')
+        print_card('ST')
+
     def test_init_players(self):
         self.assertTrue(len(init_players(5)), 5)
 

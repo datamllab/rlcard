@@ -6,6 +6,7 @@ from rlcard import models
 from rlcard.games.uno.game import UnoGame as Game
 from rlcard.games.uno.utils import encode_hand, encode_target
 from rlcard.games.uno.utils import ACTION_SPACE, ACTION_LIST
+from rlcard.games.uno.card import UnoCard
 
 
 class UnoEnv(Env):
@@ -21,11 +22,46 @@ class UnoEnv(Env):
             player (int): Player id
         '''  
         state = self.game.get_state(player)
-        print('----------------------------------------------')
-        print('My hand: ', ' '.join(state['hand']))
-        print('Lastcard: ', state['target'])
-        print('Actions you can choose: ', ', '.join([str(ACTION_SPACE[action]) + ': ' + action for action in state['legal_actions']]))
-        print('----------------------------------------------')       
+        print('\n=============== Your Hand ===============')
+        UnoCard.print_cards(state['hand'])
+        print('')
+        print('=============== Last Card ===============')
+        UnoCard.print_cards(state['target'], wild_color=True)
+        print('')
+        print('========== Agents Card Number ===========')
+        for i in range(self.player_num):
+            if i != self.active_player:
+                print('Agent {} has {} cards.'.format(i, len(self.game.players[i].hand)))
+        print('======== Actions You Can Choose =========')
+        for i, action in enumerate(state['legal_actions']):
+            print(str(ACTION_SPACE[action])+': ', end='')
+            UnoCard.print_cards(action, wild_color=True)
+            if i < len(state['legal_actions']) - 1:
+                print(', ', end='')
+        print('\n')
+
+    def print_result(self, player):
+        ''' Print the game result when the game is over
+
+        Args:
+            player (int): The human player id
+        '''
+        payoffs = self.get_payoffs()
+        print('===============     Result     ===============')
+        if payoffs[player] > 0:
+            print('You win!')
+        else:
+            print('You lose!')
+        print('')
+
+    @staticmethod
+    def print_action(action):
+        ''' Print out an action in a nice form
+
+        Args:
+            action (str): A string a action
+        '''
+        UnoCard.print_cards(action, wild_color=True)
 
     def load_model(self):
         ''' Load pretrained/rule model
