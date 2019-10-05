@@ -233,7 +233,6 @@ class Env(object):
 
             # Environment steps
             next_state, next_player_id = self.step(action)
-
             # Save action
             trajectories[player_id].append(action)
 

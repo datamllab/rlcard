@@ -53,9 +53,12 @@ class MahjongEnv(Env):
         Returns:
             payoffs (list): a list of payoffs for each player
         '''
-        win, player = self.game.judger.judge_game(self.game)
-        payoffs = [0, 0, 0, 0]
-        payoffs[player] = 1
+        win, player, players_val = self.game.judger.judge_game(self.game)
+        if player == -1:
+            payoffs = [0, 0, 0, 0]
+        else:
+            payoffs = [-1, -1, -1, -1]
+            payoffs[player] = 1
         return payoffs 
 
     def decode_action(self, action_id):
@@ -69,7 +72,7 @@ class MahjongEnv(Env):
         '''
         action = self.de_action_id[action_id]
         if action_id < 34:
-            candidates = self.game.get_legal_actions(self.game.get_state(self.game.round.current_player, is_proceed=False))
+            candidates = self.game.get_legal_actions(self.game.get_state(self.game.round.current_player))
             for card in candidates:
                 if card.get_str() == action:
                     action = card
@@ -87,7 +90,7 @@ class MahjongEnv(Env):
             legal_actions (list): a list of legal actions' id
         '''
         legal_action_id = []
-        legal_actions = self.game.get_legal_actions(self.game.get_state(self.game.round.current_player, is_proceed=False))
+        legal_actions = self.game.get_legal_actions(self.game.get_state(self.game.round.current_player))
         if legal_actions:
             for action in legal_actions:
                 if type(action) == Card:
@@ -97,6 +100,9 @@ class MahjongEnv(Env):
         else:
             print("##########################")
             print("No Legal Actions")
-            print(self.game.get_state(self.game.round.current_player, is_proceed=False))
+            print(self.game.judger.judge_game(self.game))
+            print(self.game.is_over())
+            print([len(p.pile) for p in self.game.players])
+            print(self.game.get_state(self.game.round.current_player))
             exit()
         return legal_action_id
