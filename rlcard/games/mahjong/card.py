@@ -6,10 +6,21 @@ class MahjongCard(object):
             }
 
     def __init__(self, card_type, trait):
+        ''' Initialize the class of MahjongCard
+
+        Args:
+            card_type (str): The type of card
+            trait (str): The trait of card
+        '''
         self.type = card_type
         self.trait = trait
 
     def get_str(self):
+        ''' Get the string representation of card
+
+        Return:
+            (str): The string of card's color and trait
+        '''
         return self.type+ '-'+ self.trait
     
 

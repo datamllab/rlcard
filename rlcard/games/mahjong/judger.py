@@ -11,12 +11,19 @@ class MahjongJudger(object):
     '''
 
     def __init__(self):
-        ''' Initilize the Judger class for Dou Dizhu
+        ''' Initilize the Judger class for Mahjong 
         '''
         pass
 
 
     def judge_pong_gong(self, dealer, players, last_player):  
+        ''' Judge which player has pong/gong
+        Args:
+            dealer (object): The dealer object.
+            players (list): List of all players
+            last_player (int): The player id of last player
+
+        '''
         last_card = dealer.table[-1]
         last_card_str = last_card.get_str()
         last_card_value = last_card_str.split("-")[-1]
@@ -36,6 +43,12 @@ class MahjongJudger(object):
         return False, None, None
 
     def judge_chow(self, dealer, players, last_player):
+        ''' Judge which player has chow 
+        Args:
+            dealer (object): The dealer object.
+            players (list): List of all players
+            last_player (int): The player id of last player
+        '''
         last_card = dealer.table[-1]
         last_card_str = last_card.get_str()
         last_card_value = last_card_str.split("-")[-1]
@@ -79,23 +92,42 @@ class MahjongJudger(object):
         return False, None, None
 
     def judge_game(self, game):
-        if len(game.dealer.deck) == 0:
-            return True, -1
+        ''' Judge which player has win the game 
+        Args:
+            dealer (object): The dealer object.
+            players (list): List of all players
+            last_player (int): The player id of last player
+        '''
         players_val = []
+        win_player = -1
+        win_val = 0
         for player in game.players:
             win, val = self.judge_hu(player)
-            if win == True:
-                return True, player.player_id
             players_val.append(val)
-        player_id = players_val.index(max(players_val))
-        return False, player_id 
+            if win == True:
+                win_player = player.player_id
+                win_val = val
+        if win_player != -1 or len(game.dealer.deck) == 0:
+            return True, win_player, players_val
+        else:
+            player_id = players_val.index(max(players_val))
+            return False, win_player, players_val 
 
     def judge_hu(self, player):
+        ''' Judge whether the player has win the game 
+        Args:
+            player (object): Target player 
+
+        Return:
+            Result (bool): Win or not
+            Maximum_score (int): Set count score of the player
+        '''
         set_count = 0
         hand = [card.get_str() for card in player.hand]
         count_dict = {card: hand.count(card) for card in hand}
-        pile = player.pile 
-        set_count += len(pile)
+        set_count = len(player.pile)
+        if set_count >= 4:
+            return True, set_count
         used = []
         maximum = 0
         for each in count_dict:
@@ -120,12 +152,27 @@ class MahjongJudger(object):
 
 
     def check_consecutive(self, _list):
+        ''' Check if list is consecutive
+        Args:
+            List (list): The target list
+
+        Return:
+            Result (bool): consecutive or not
+        '''
         l = list(map(int, _list))
         if sorted(l) == list(range(min(l), max(l)+1)):
             return True
         return False
 
     def cal_set(self, cards): 
+        ''' Calculate the set for given cards
+        Args:
+            Cards (list): List of cards.
+
+        Return:
+            Set_count (int): 
+            Sets (list): List of cards that has been pop from user's hand
+        '''
         tmp_cards = cards.copy()
         sets = []
         set_count = 0
@@ -137,6 +184,7 @@ class MahjongJudger(object):
                 for i in range(_dict[each]):
                     tmp_cards.pop(tmp_cards.index(each))
 
+        # get all of the traits of each type in hand (except dragons and winds)
         _dict_by_type = defaultdict(list)
         for card in tmp_cards:
             _type = card.split("-")[0]

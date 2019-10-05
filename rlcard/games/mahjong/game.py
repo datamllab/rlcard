@@ -11,9 +11,22 @@ from rlcard.games.mahjong.utils import *
 class MahjongGame(object):
 
     def __init__(self, allow_step_back=False):
+        '''Initialize the class MajongGame
+        '''
         self.num_players = 4
+        self.allow_step_back = allow_step_back
 
     def init_game(self):
+        ''' Initialilze the game of Limit Texas Hold'em
+
+        This version supports two-player limit texas hold'em
+
+        Returns:
+            (tuple): Tuple containing:
+
+                (dict): The first state of the game
+                (int): Current player's id
+        '''
         # Initialize a dealer that can deal cards
         self.dealer = Dealer()
 
@@ -33,14 +46,27 @@ class MahjongGame(object):
         self.dealer.deal_cards(self.players[self.round.current_player], 1)
         state = self.get_state(self.round.current_player)
         self.cur_state = state
+        print("INIT THE GAME")
         return state, self.round.current_player
 
     def step(self, action):
+        ''' Get the next state
+
+        Args:
+            action (str): a specific action. (call, raise, fold, or check)
+
+        Returns:
+            (tuple): Tuple containing:
+
+                (dict): next player's state
+                (int): next plater's id
+        '''
         # First snapshot the current state
-        #hist_dealer = deepcopy(self.dealer)
-        #hist_round = deepcopy(self.round)
-        #hist_players = deepcopy(self.players)
-        #self.history.append((hist_dealer, hist_players, hist_round))
+        if self.allow_step_back:
+            hist_dealer = deepcopy(self.dealer)
+            hist_round = deepcopy(self.round)
+            hist_players = deepcopy(self.players)
+            self.history.append((hist_dealer, hist_players, hist_round))
 
         self.round.proceed_round(self.players, action)
         state = self.get_state(self.round.current_player)
@@ -48,19 +74,34 @@ class MahjongGame(object):
         return state, self.round.current_player
 
     def step_back(self):
+        ''' Return to the previous state of the game
+
+        Returns:
+            (bool): True if the game steps back successfully
+        '''
         if not self.history:
             return False
         self.dealer, self.players, self.round = self.history.pop()
         return True
 
-    def get_state(self, player_id, is_proceed=True):
-        #if is_proceed:
+    def get_state(self, player_id):
+        ''' Return player's state
+
+        Args:
+            player_id (int): player id
+
+        Returns:
+            (dict): The state of the player
+        '''
         state = self.round.get_state(self.players, player_id)
-        #else:
-        #    state = self.cur_state
         return state
 
     def get_legal_actions(self, state):
+        ''' Return the legal actions for current player
+
+        Returns:
+            (list): A list of legal actions
+        '''
         if state['valid_act'] == ['play']:
             state['valid_act'] = state['action_cards']
             return state['action_cards']
@@ -68,17 +109,33 @@ class MahjongGame(object):
             return state['valid_act']
 
     def get_action_num(self):
+        ''' Return the number of applicable actions
+
+        Returns:
+            (int): The number of actions. There are 4 actions (call, raise, check and fold)
+        '''
         return 38 
 
     def get_player_num(self):
+        ''' Return the number of players in Limit Texas Hold'em
+
+        Returns:
+            (int): The number of players in the game
+        '''
         return self.num_players
 
     def is_over(self):
-        win, player = self.judger.judge_game(self)
+        ''' Check if the game is over
+
+        Returns:
+            (boolean): True if the game is over
+        '''
+        win, player, players_val = self.judger.judge_game(self)
         pile =[sorted([c.get_str() for c in s ]) for s in self.players[player].pile if self.players[player].pile != None]
         cards = sorted([c.get_str() for c in self.players[player].hand])
         count = len(cards) + sum([len(p) for p in pile])
         self.winner = player
+        #print(win, player, players_val)
         #print(win, self.round.current_player, player, cards, pile, count)
         return win
 

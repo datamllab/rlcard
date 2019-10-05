@@ -5,6 +5,13 @@ from rlcard.games.mahjong.judger import MahjongJudger as Judger
 class MahjongRound(object):
 
     def __init__(self, judger, dealer, num_players):
+        ''' Initialize the round class
+
+        Args:
+            judger (object): the object of MahjongJudger
+            dealer (object): the object of MahjongDealer
+            num_players (int): the number of players in game
+        '''
         self.judger = judger
         self.dealer = dealer
         self.target = None
@@ -20,6 +27,12 @@ class MahjongRound(object):
         self.last_cards = []
 
     def proceed_round(self, players, action):
+        ''' Call other Classes's functions to keep one round running
+
+        Args:
+            player (object): object of UnoPlayer
+            action (str): string of legal action
+        '''
         hand_len = [len(p.hand) for p in players]
         pile_len = [sum([len([c for c in p]) for p in pp.pile]) for pp in players]
         total_len = [i + j for i, j in zip(hand_len, pile_len)]
@@ -71,6 +84,14 @@ class MahjongRound(object):
         total_len = [i + j for i, j in zip(hand_len, pile_len)]
 
     def get_state(self, players, player_id):
+        ''' Get player's state
+
+        Args:
+            players (list): The list of UnoPlayer 
+            player_id (int): The id of the player
+        Return:
+            state (dict): The information of the state 
+        '''
         state = {}
         #(valid_act, player, cards) = self.judger.judge_pong_gong(self.dealer, players, self.last_player)
         if self.valid_act != False: # PONG/GONG/CHOW
