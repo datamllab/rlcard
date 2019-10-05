@@ -173,7 +173,7 @@ In Blackjack, the player will get a payoff at the end of the game: 1 if the play
 (under construction)
 
 ## Having Fun with Pretrained Leduc Model
-We have designed simple human interfaces to play against the pretrained model! Example of playing against Leduc Hold'em AI is as below: ()
+We have designed simple human interfaces to play against the pretrained model! Example of playing against Leduc Hold'em AI is as below:
 ```python
 import rlcard
 

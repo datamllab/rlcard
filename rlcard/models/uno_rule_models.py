@@ -38,7 +38,7 @@ class UNORuleAgentV1(object):
                 action = max(color_nums, key=color_nums.get) + '-wild_draw_4'
                 return action
 
-        # Without wild-4, we randomly choose one 
+        # Without wild-4, we randomly choose one
         action = np.random.choice(self.filter_wild(legal_actions))
         return action
 
@@ -69,7 +69,7 @@ class UNORuleAgentV1(object):
 
     @staticmethod
     def count_colors(hand):
-        ''' Count the number of cards in each color in hand 
+        ''' Count the number of cards in each color in hand
 
         Args:
             hand (list): A list of UNO card string

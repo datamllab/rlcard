@@ -1,5 +1,4 @@
 import random
-import time
 from copy import deepcopy
 
 from rlcard.games.uno.dealer import UnoDealer as Dealer
