@@ -418,7 +418,7 @@ def compare_ranks(position, handcard0, handcard1):
         [0, 1]: player1 wins
         [1, 0]: player0 wins
         [1, 1]: draw
-    '''   
+    '''
     RANKS = '23456789TJQKA'
     if RANKS.index(handcard0[position][1]) > RANKS.index(handcard1[position][1]):
         return [1, 0]
