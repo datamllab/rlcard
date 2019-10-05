@@ -173,7 +173,7 @@ In Blackjack, the player will get a payoff at the end of the game: 1 if the play
 (under construction)
 
 ## Having Fun with Pretrained Leduc Model
-We have designed simple human interfaces to play against the pretrained model! Example of playing against Leduc Hold'em AI is as below: ()
+We have designed simple human interfaces to play against the pretrained model! Example of playing against Leduc Hold'em AI is as below:
 ```python
 import rlcard
 
@@ -192,28 +192,38 @@ while True:
 ```
 Example output is as follow:
 ```shell
->> Starting a new game!
->> Agent 1 plays check
-----------------------------------------------
-Public cards:  None
-My cards:  HJ
-All player chips:  1 1
-My chips:  1
-Actions you can choose:  1: raise, 2: fold, 3: check
-----------------------------------------------
->> You choose action (integer): 3
->> Agent 1 plays raise
-----------------------------------------------
-Public cards:  HK
-My cards:  HJ
-All player chips:  1 5
-My chips:  1
-Actions you can choose:  0: call, 1: raise, 2: fold
-----------------------------------------------
->> You choose action (integer): 0
->> Player 0: HJ HK
->> Player 1: SK HK
->> You lose 5.0!
+>> Leduc Hold'em pre-trained model
+
+>> Start a new game!
+>> Agent 1 chooses raise
+
+=============== Community Card ===============
+┌─────────┐
+│░░░░░░░░░│
+│░░░░░░░░░│
+│░░░░░░░░░│
+│░░░░░░░░░│
+│░░░░░░░░░│
+│░░░░░░░░░│
+│░░░░░░░░░│
+└─────────┘
+===============   Your Hand    ===============
+┌─────────┐
+│J        │
+│         │
+│         │
+│    ♥    │
+│         │
+│         │
+│        J│
+└─────────┘
+===============     Chips      ===============
+Yours:   +
+Agent 1: +++
+=========== Actions You Can Choose ===========
+0: call, 1: raise, 2: fold
+
+>> You choose action (integer):
 ```
 
 ## Leduc Hold'em as Single-Agent Environment

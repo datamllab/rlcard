@@ -23,4 +23,4 @@ The toolkit wraps each game by `Env` class with easy-to-use interfaces. The goal
 *   [Adding pre-trained/rule-based models](adding-models.md)
 
 ## Application Programming Interface (API)
-The API documents are and available in [Github page](https://rlcard.github.io/index.html).
+The API documents are and available in [Websit](http://www.rlcard.org).

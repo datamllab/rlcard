@@ -1,15 +1,15 @@
-''' A toy example of playing against pretrianed AI on Leduc Hold'em
+''' A toy example of playing against rule-based bot on Leduc Hold'em
 '''
 
 import rlcard
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem')
+env = rlcard.make('uno')
 
 # Set it to human mode
 env.set_mode(human_mode=True)
 
-print(">> Leduc Hold'em pre-trained model")
+print(">> UNO rule model V1")
 
 # Reset environment
 state = env.reset()

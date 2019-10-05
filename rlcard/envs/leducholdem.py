@@ -30,13 +30,57 @@ class LeducholdemEnv(Env):
             player (int): Player id
         '''
         state = self.game.get_state(player)
-        print('----------------------------------------------')
-        print('Public cards: ', state['public_card'])
-        print('My cards: ', state['hand'])
-        print('All player chips: ', ' '.join([str(chip) for chip in state['all_chips']]))
-        print('My chips: ', str(state['my_chips']))
-        print('Actions you can choose: ', ', '.join([str(self.actions.index(action)) + ': ' + action for action in state['legal_actions']]))
-        print('----------------------------------------------')
+        print('\n=============== Community Card ===============')
+        print_card(state['public_card'])
+        print('===============   Your Hand    ===============')
+        print_card(state['hand'])
+        print('===============     Chips      ===============')
+        print('Yours:   ', end='')
+        for _ in range(state['my_chips']):
+            print('+', end='')
+        print('')
+        for i in range(self.player_num):
+            if i != self.active_player:
+                print('Agent {}: '.format(i) , end='')
+                for _ in range(state['all_chips'][i]):
+                    print('+', end='')
+        print('\n=========== Actions You Can Choose ===========')
+        print(', '.join([str(self.actions.index(action)) + ': ' + action for action in state['legal_actions']]))
+        print('')
+
+    def print_result(self, player):
+        ''' Print the game result when the game is over
+
+        Args:
+            player (int): The human player id
+        '''
+        payoffs = self.get_payoffs()
+        hands = [self.game.players[i].hand.get_index() for i in range(self.player_num)]
+        print('')
+
+        if not self.game.players[self.active_player].status == 'fold':
+            for i in range(self.player_num):
+                if i != self.active_player:
+                    print('===============     Agent {}    ==============='.format(i))
+                    print_card(hands[i])
+
+        print('===============     Result     ===============')
+        if payoffs[player] > 0:
+            print('You win {} chips!'.format(payoffs[player]))
+        elif payoffs[player] == 0:
+            print('It is a tie.')
+        else:
+            print('You lose {} chips!'.format(-payoffs[player]))
+        print('')
+
+    @staticmethod
+    def print_action(action):
+        ''' Print out an action in a nice form
+
+        Args:
+            action (str): A string a action
+        '''
+        print(action, end='')
 
     def load_model(self):
         ''' Load pretrained/rule model

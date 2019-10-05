@@ -84,7 +84,9 @@ class Env(object):
                 action = self.model.agents[player_id].eval_step(self.extract_state(state))
                 action = self.decode_action(action)
             if self.human_mode:
-                print('>> Agent {} plays {}'.format(player_id, action))
+                print('\r>> Agent {} chooses '.format(player_id), end='')
+                self.print_action(action)
+                print('')
             state, player_id = self.game.step(action)
 
         if self.game.is_over():
@@ -122,9 +124,11 @@ class Env(object):
 
             if not self.game.is_over():
                 if self.human_mode:
-                    print('\n>> Starting a new game!')
+                    print('\n>> Start a new game!')
                     for player_id, action in history:
-                        print('>> Agent {} plays {}'.format(player_id, action))
+                        print('\r>> Agent {} chooses '.format(player_id), end='')
+                        self.print_action(action)
+                        print('')
                     self.print_state(self.active_player)
                 break
             else:
@@ -298,19 +302,16 @@ class Env(object):
         Args:
             player (int): The human player id
         '''
-        payoffs = self.get_payoffs()
-        hands = [self.game.players[i].hand.get_index() for i in range(self.player_num)]
-        public_card = self.game.public_card.get_index() if self.game.public_card else ''
+        raise NotImplementedError
 
-        for i in range(self.player_num):
-            print('>> Player {}: {} {}'.format(i, hands[i], public_card))
+    @staticmethod
+    def print_action(action):
+        ''' Print out an action in a nice form
 
-        if payoffs[player] > 0:
-            print('>> You win {}!'.format(payoffs[player]))
-        elif payoffs[player] == 0:
-            print('>> You do not win/lose')
-        else:
-            print('>> You lose {}!'.format(-payoffs[player]))
+        Args:
+            action (str): A string a action
+        '''
+        raise NotImplementedError
 
     def load_model(self):
         ''' Load pretrained/rule model

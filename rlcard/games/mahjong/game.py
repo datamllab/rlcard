@@ -1,4 +1,4 @@
-import random
+import numpy as np
 from copy import deepcopy
 
 from rlcard.games.mahjong.dealer import MahjongDealer as Dealer
@@ -42,7 +42,7 @@ class MahjongGame(object):
 
         # Save the hisory for stepping back to the last state.
         self.history = []
-        
+
         self.dealer.deal_cards(self.players[self.round.current_player], 1)
         state = self.get_state(self.round.current_player)
         self.cur_state = state
@@ -96,7 +96,8 @@ class MahjongGame(object):
         state = self.round.get_state(self.players, player_id)
         return state
 
-    def get_legal_actions(self, state):
+    @staticmethod
+    def get_legal_actions(state):
         ''' Return the legal actions for current player
 
         Returns:
@@ -108,13 +109,14 @@ class MahjongGame(object):
         else:
             return state['valid_act']
 
-    def get_action_num(self):
+    @staticmethod
+    def get_action_num():
         ''' Return the number of applicable actions
 
         Returns:
             (int): The number of actions. There are 4 actions (call, raise, check and fold)
         '''
-        return 38 
+        return 38
 
     def get_player_num(self):
         ''' Return the number of players in Limit Texas Hold'em
@@ -130,10 +132,10 @@ class MahjongGame(object):
         Returns:
             (boolean): True if the game is over
         '''
-        win, player, players_val = self.judger.judge_game(self)
+        _, player, _ = self.judger.judge_game(self)
         pile =[sorted([c.get_str() for c in s ]) for s in self.players[player].pile if self.players[player].pile != None]
         cards = sorted([c.get_str() for c in self.players[player].hand])
-        count = len(cards) + sum([len(p) for p in pile])
+        #count = len(cards) + sum([len(p) for p in pile])
         self.winner = player
         #print(win, player, players_val)
         #print(win, self.round.current_player, player, cards, pile, count)
@@ -142,7 +144,7 @@ class MahjongGame(object):
 # For test
 if __name__ == '__main__':
     import time
-    random.seed(2)
+    np.random.seed(2)
     start = time.time()
     game = MahjongGame()
     for _ in range(100000):
@@ -152,7 +154,7 @@ if __name__ == '__main__':
         while not game.is_over():
             i += 1
             legal_actions = game.get_legal_actions(state)
-            action = random.choice(legal_actions)
+            action = np.random.choice(legal_actions)
             flag=0
             #if len(legal_actions) < 3:
             #    flag=1

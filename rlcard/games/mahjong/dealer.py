@@ -1,5 +1,4 @@
 import random
-from rlcard.games.mahjong.card import MahjongCard as Card
 from rlcard.games.mahjong.utils import *
 
 

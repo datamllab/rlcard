@@ -1,7 +1,7 @@
 
 
 class Hand:
-    def __init__(self, all_cards = []):
+    def __init__(self, all_cards):
         self.all_cards = all_cards # two hand cards + five public cards
         self.category = 0
         #type of a players' best five cards, greater combination has higher number eg: 0:"Not_Yet_Evaluated" 1: "High_Card" , 9:"Straight_Flush"
@@ -35,7 +35,7 @@ class Hand:
 
     def evaluateHand(self):
         """
-        Evaluate all the seven cards, get the best combination catagory 
+        Evaluate all the seven cards, get the best combination catagory
         And pick the best five cards (for comparing in case 2 hands have the same Category) .
         """
         if len(self.all_cards) != 7:
@@ -146,7 +146,7 @@ class Hand:
             return True
         else:
             return False
-
+    @classmethod
     def _get_different_rank_list(self, all_cards):
         '''
         Get cards with different ranks, that is to say, remove duplicate-ranking cards, for picking straight cards' use
@@ -212,8 +212,8 @@ class Hand:
                 # if there is a Quad, then product = 5 ( 4, 1, 1, 1) or product = 10 ( 4, 2, 1) or product= 15 (4,3)
                 # if there is a Fullhouse, then product = 12 ( 3, 2, 2) or product = 9 (3, 3, 1) or product = 6 ( 3, 2, 1, 1)
                 # if there is a Trip, then product = 3 ( 3, 1, 1, 1, 1)
-                # if there is TwoPair, then product = 4 ( 2, 1, 2, 1, 1) or product = 8 ( 2, 2, 2, 1)
-                # if there is a Pair, then product = 2 (2, 1, 1, 1, 1, 1)
+                # if there is two Pair, then product = 4 ( 2, 1, 2, 1, 1) or product = 8 ( 2, 2, 2, 1)
+                # if there is one Pair, then product = 2 (2, 1, 1, 1, 1, 1)
                 # if there is HighCard, then product = 1 (1, 1, 1, 1, 1, 1, 1)
                 card_group_element.insert(0, count)
                 card_group.append(card_group_element)
@@ -307,7 +307,7 @@ class Hand:
         '''
         Get the four of a kind cards among a player's cards
         Returns:
-            (list): the four of a kind cards
+            (list): best five hand cards after sort
         '''
         Four_of_a_Kind = []
         cards_by_rank = self.cards_by_rank
@@ -326,7 +326,7 @@ class Hand:
         '''
         Get the fullhouse cards among a player's cards
         Returns:
-            (list): fullhouse cards, that is to say, the triple cards and the pair cards
+            (list): best five hand cards after sort
         '''
         Fullhouse = []
         cards_by_rank = self.cards_by_rank
@@ -346,7 +346,7 @@ class Hand:
         '''
         Get the three of a kind cards among a player's cards
         Returns:
-            (list): the three of a kind cards
+            (list): best five hand cards after sort
         '''
         Trip_cards = []
         cards_by_rank = self.cards_by_rank
@@ -365,7 +365,7 @@ class Hand:
         '''
         Get the two pair cards among a player's cards
         Returns:
-            (list): the two pair cards
+            (list): best five hand cards after sort
         '''
         Two_Pair_cards = []
         cards_by_rank = self.cards_by_rank
@@ -382,7 +382,7 @@ class Hand:
         '''
         Get the one pair cards among a player's cards
         Returns:
-            (list): the one pair cards
+            (list): best five hand cards after sort
         '''
         One_Pair_cards = []
         cards_by_rank = self.cards_by_rank
@@ -402,12 +402,48 @@ class Hand:
         '''
         Get the high cards among a player's cards
         Returns:
-            (list): the high cards
-        Maybe with issues
+            (list): best five hand cards after sort
         '''
         High_cards = self.all_cards[2:7]
         return High_cards
 
+def compare_ranks(position, handcard0, handcard1):
+    '''
+    Compare cards in same position of plays' five handcards
+    Args:
+        position(int): the position of a card in a sorted handcard
+        handcard0(list) : five best cards of player0
+        handcard1(list) : five best cards of player1
+    Returns:
+        [0, 1]: player1 wins
+        [1, 0]: player0 wins
+        [1, 1]: draw
+    '''
+    RANKS = '23456789TJQKA'
+    if RANKS.index(handcard0[position][1]) > RANKS.index(handcard1[position][1]):
+        return [1, 0]
+    if RANKS.index(handcard0[position][1]) < RANKS.index(handcard1[position][1]):
+        return [0, 1]
+    if RANKS.index(handcard0[position][1]) == RANKS.index(handcard1[position][1]):
+        return [1, 1]
+
+def determine_winner(key_index, hand0_5_cards, hand1_5_cards):
+    '''
+    Determine who wins
+    Args:
+        key_index(int): the position of a card in a sorted handcard
+        hand0_5_cards(list) : five best cards of player0
+        hand0_5_cards(list) : five best cards of player1
+    Returns:
+        [0, 1]: player1 wins
+        [1, 0]: player0 wins
+        [1, 1]: draw
+    '''
+    for _ in key_index:
+        winner = compare_ranks(_, hand0_5_cards, hand1_5_cards)
+        if winner != [1, 1]:
+            break
+    return winner
 
 def compare_hands(hand0, hand1):
     '''
@@ -427,7 +463,6 @@ def compare_hands(hand0, hand1):
         return [1, 0]
     hand0 = Hand(hand0)
     hand1 = Hand(hand1)
-    RANKS = '23456789TJQKA'
     hand0.evaluateHand()
     hand1.evaluateHand()
     hand0_category = hand0.category
@@ -441,135 +476,15 @@ def compare_hands(hand0, hand1):
         # compare equal category
         hand0_5_cards = hand0.get_hand_five_cards()
         hand1_5_cards = hand1.get_hand_five_cards()
-        if hand0_category == 9 or hand0_category == 5:
-            for i in reversed(range(5)):
-                hand0_card_rank = hand0_5_cards[i][1]
-                hand1_card_rank = hand1_5_cards[i][1]
-                if RANKS.index(hand0_card_rank) > RANKS.index(hand1_card_rank):
-                    return [1, 0]
-                elif RANKS.index(hand0_card_rank) < RANKS.index(hand1_card_rank):
-                    return [0, 1]
-                elif RANKS.index(hand0_card_rank) == RANKS.index(hand1_card_rank):
-                    return [1, 1]  
-        if hand0_category == 8:
-            handcard0 = hand0.get_hand_five_cards()
-            handcard1 = hand1.get_hand_five_cards()
-            if RANKS.index(handcard0[0][1]) > RANKS.index(handcard1[0][1]):
-                return [1, 0]              
-            if RANKS.index(handcard0[0][1]) < RANKS.index(handcard1[0][1]):
-                return [0, 1]
-            if RANKS.index(handcard0[0][1]) == RANKS.index(handcard1[0][1]):
-                return [1, 1]
-
+        if hand0_category == 9 or hand0_category == 5 or hand0_category == 8:
+            return determine_winner([0], hand0_5_cards, hand1_5_cards)
         if hand0_category == 7:
-            handcard0 = hand0.get_hand_five_cards()
-            handcard1 = hand1.get_hand_five_cards()
-            if RANKS.index(handcard0[2][1]) > RANKS.index(handcard1[2][1]):
-                return [1, 0]              
-            if RANKS.index(handcard0[2][1]) < RANKS.index(handcard1[2][1]):
-                return [0, 1]
-            if RANKS.index(handcard0[2][1]) == RANKS.index(handcard1[2][1]):
-                if RANKS.index(handcard0[0][1]) > RANKS.index(handcard1[0][1]):
-                    return [1, 0]
-                if RANKS.index(handcard0[0][1]) < RANKS.index(handcard1[0][1]):
-                    return [0, 1]
-                if RANKS.index(handcard0[0][1]) == RANKS.index(handcard1[0][1]):
-                    return [1, 1]
-                       
+            return determine_winner([2, 0], hand0_5_cards, hand1_5_cards)
         if hand0_category == 4:
-            handcard0 = hand0.get_hand_five_cards()
-            handcard1 = hand1.get_hand_five_cards()
-            if RANKS.index(handcard0[2][1]) > RANKS.index(handcard1[2][1]):
-                return [1, 0]
-            if RANKS.index(handcard0[2][1]) < RANKS.index(handcard1[2][1]):
-                return [0, 1]
-            if RANKS.index(handcard0[2][1]) == RANKS.index(handcard1[2][1]):
-                if RANKS.index(handcard0[1][1]) > RANKS.index(handcard1[1][1]):
-                    return [1, 0]
-                if RANKS.index(handcard0[1][1]) < RANKS.index(handcard1[1][1]):
-                    return [0, 1]
-                if RANKS.index(handcard0[1][1]) == RANKS.index(handcard1[1][1]):
-                    if RANKS.index(handcard0[0][1]) > RANKS.index(handcard1[0][1]):
-                        return [1, 0]
-                    if RANKS.index(handcard0[0][1]) < RANKS.index(handcard1[0][1]):
-                            return [0, 1]
-                    if RANKS.index(handcard0[0][1]) == RANKS.index(handcard1[0][1]):
-                            return [1, 1]
-        
+            return determine_winner([2, 1, 0], hand0_5_cards, hand1_5_cards)
         if hand0_category == 3:
-            handcard0 = hand0.get_hand_five_cards()
-            handcard1 = hand1.get_hand_five_cards()
-            if RANKS.index(handcard0[4][1]) > RANKS.index(handcard1[4][1]):
-                return [1, 0]
-            if RANKS.index(handcard0[4][1]) < RANKS.index(handcard1[4][1]):
-                return [0, 1]
-            if RANKS.index(handcard0[4][1]) == RANKS.index(handcard1[4][1]):
-                if RANKS.index(handcard0[1][1]) > RANKS.index(handcard1[1][1]):
-                    return [1, 0]
-                if RANKS.index(handcard0[1][1]) < RANKS.index(handcard1[1][1]):
-                    return [0, 1]
-                if RANKS.index(handcard0[1][1]) == RANKS.index(handcard1[1][1]):
-                    if RANKS.index(handcard0[0][1]) > RANKS.index(handcard1[0][1]):
-                        return [1, 0]
-                    if RANKS.index(handcard0[0][1]) < RANKS.index(handcard1[0][1]):
-                            return [0, 1]
-                    if RANKS.index(handcard0[0][1]) == RANKS.index(handcard1[0][1]):
-                            return [1, 1]
-
+            return determine_winner([4, 2, 0], hand0_5_cards, hand1_5_cards)
         if hand0_category == 2:
-            handcard0 = hand0.get_hand_five_cards()
-            handcard1 = hand1.get_hand_five_cards()
-            if RANKS.index(handcard0[4][1]) > RANKS.index(handcard1[4][1]):
-                return [1, 0]
-            if RANKS.index(handcard0[4][1]) < RANKS.index(handcard1[4][1]):
-                return [0, 1]
-            if RANKS.index(handcard0[4][1]) == RANKS.index(handcard1[4][1]):
-                if RANKS.index(handcard0[2][1]) > RANKS.index(handcard1[2][1]):
-                    return [1, 0]
-                if RANKS.index(handcard0[2][1]) < RANKS.index(handcard1[2][1]):
-                    return [0, 1]
-                if RANKS.index(handcard0[2][1]) == RANKS.index(handcard1[2][1]):
-                    if RANKS.index(handcard0[1][1]) > RANKS.index(handcard1[1][1]):
-                        return [1, 0]
-                    if RANKS.index(handcard0[1][1]) < RANKS.index(handcard1[1][1]):
-                            return [0, 1]
-                    if RANKS.index(handcard0[1][1]) == RANKS.index(handcard1[1][1]):
-                        if RANKS.index(handcard0[0][1]) > RANKS.index(handcard1[0][1]):
-                            return [1, 0]
-                        if RANKS.index(handcard0[0][1]) < RANKS.index(handcard1[0][1]):
-                            return [0, 1]
-                        if RANKS.index(handcard0[0][1]) == RANKS.index(handcard1[0][1]):
-                            return[1, 1]
-    
+            return determine_winner([4, 2, 1, 0], hand0_5_cards, hand1_5_cards)
         if hand0_category == 1 or hand0_category == 6:
-            handcard0 = hand0.get_hand_five_cards()
-            handcard1 = hand1.get_hand_five_cards()
-            if RANKS.index(handcard0[4][1]) > RANKS.index(handcard1[4][1]):
-                return [1, 0]              
-            if RANKS.index(handcard0[4][1]) < RANKS.index(handcard1[4][1]):
-                return [0, 1]
-            if RANKS.index(handcard0[4][1]) == RANKS.index(handcard1[4][1]):
-                if RANKS.index(handcard0[3][1]) > RANKS.index(handcard1[3][1]):
-                    return [1, 0]
-                if RANKS.index(handcard0[3][1]) < RANKS.index(handcard1[3][1]):
-                    return [0, 1]
-                if RANKS.index(handcard0[3][1]) == RANKS.index(handcard1[3][1]):
-                    if RANKS.index(handcard0[2][1]) > RANKS.index(handcard1[2][1]):
-                        return [1, 0]
-                    if RANKS.index(handcard0[2][1]) < RANKS.index(handcard1[2][1]):
-                        return [0, 1]
-                    if RANKS.index(handcard0[2][1]) == RANKS.index(handcard1[2][1]):
-                        if RANKS.index(handcard0[1][1]) > RANKS.index(handcard1[1][1]):
-                            return [1, 0]
-                        if RANKS.index(handcard0[1][1]) < RANKS.index(handcard1[1][1]):
-                            return [0, 1]
-                        if RANKS.index(handcard0[1][1]) == RANKS.index(handcard1[1][1]):
-                            if RANKS.index(handcard0[0][1]) > RANKS.index(handcard1[0][1]):
-                                return [1, 0]
-                            if RANKS.index(handcard0[0][1]) < RANKS.index(handcard1[0][1]):
-                                return [0, 1]
-                            if RANKS.index(handcard0[0][1]) == RANKS.index(handcard1[0][1]):
-                                return [1, 1]
-
-
-
+            return determine_winner([4, 3, 2, 1, 0], hand0_5_cards, hand1_5_cards)

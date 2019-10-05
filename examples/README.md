@@ -22,5 +22,7 @@ We provide some running examples. A few examples can not achieve good results, e
 *   `nolimit_holdem_nfsp.py`: train NFSP on No-Limit Texas Hold'em.
 *   `nolimit_holdem_random.py`: run random agents on No-Limit Gexas Hold'em.
 *   `uno_dqn.py`: train DQN on UNO.
+*   `uno_human.py`: play against rule-based model on UNO.
 *   `uno_nfsp.py`: train NFSP on UNO.
-*   `uno_rabdom.py`: run random agents on UNO.
+*   `uno_random.py`: run random agents on UNO.
+*   `uno_single.py`: train DQN on UNO as single-agent environment.

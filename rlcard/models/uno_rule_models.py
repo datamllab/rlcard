@@ -1,6 +1,8 @@
 ''' UNO rule models
 '''
 
+import numpy as np
+
 import rlcard
 from rlcard.models.model import Model
 
@@ -22,24 +24,22 @@ class UNORuleAgentV1(object):
         Returns:
             action (str): Predicted action
         '''
-        print('****************************')
-        print('Target: ', state['target'])
-        print('Hand: ', state['hand'])
-        print('Actions: ', state['legal_actions'])
-        print('****************************')
+
         legal_actions = state['legal_actions']
-        hand = self.filter_wild(state['hand'])
+        if 'draw' in legal_actions:
+            return 'draw'
 
-        min_color_num = 0
-        min_index = 0
-        for i, action in enumerate(legal_actions):
-            color_num = self.count_color(action, hand)
-            if color_num < min_color_num:
-                min_color_num = color_num
-                min_index = i
-        
-        action = legal_actions[min_index]
+        hand = state['hand']
 
+        # If we have wild-4 simply play it and choose color that appears most in hand
+        for action in legal_actions:
+            if action.split('-')[1] == 'wild_draw_4':
+                color_nums = self.count_colors(self.filter_wild(hand))
+                action = max(color_nums, key=color_nums.get) + '-wild_draw_4'
+                return action
+
+        # Without wild-4, we randomly choose one
+        action = np.random.choice(self.filter_wild(legal_actions))
         return action
 
     def eval_step(self, state):
@@ -68,23 +68,23 @@ class UNORuleAgentV1(object):
         return filtered_hand
 
     @staticmethod
-    def count_color(card, hand):
-        ''' Count the number of cards in hand that have same color as the card
+    def count_colors(hand):
+        ''' Count the number of cards in each color in hand
 
         Args:
-            card (str): A UNO card string
             hand (list): A list of UNO card string
 
         Returns:
-            color_num (int): The number cards that have the same color
+            color_nums (dict): The number cards of each color
         '''
-        color = card[0]
-        color_num = 0
-        for c in hand:
-            if c[0] == color:
-                color_num += 1
+        color_nums = {}
+        for card in hand:
+            color = card[0]
+            if color not in color_nums:
+                color_nums[color] = 0
+            color_nums[color] += 1
 
-        return color_num
+        return color_nums
 
 class UNORuleModelV1(Model):
     ''' UNO Rule Model version 1

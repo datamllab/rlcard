@@ -1,5 +1,4 @@
 import random
-import time
 from copy import deepcopy
 
 from rlcard.games.uno.dealer import UnoDealer as Dealer
@@ -80,7 +79,7 @@ class UnoGame(object):
 
         Returns:
             (bool): True if the game steps back successfully
-        ''' 
+        '''
         if not self.history:
             return False
         self.dealer, self.players, self.round = self.history.pop()
@@ -155,7 +154,7 @@ class UnoGame(object):
 
 # For test
 if __name__ == '__main__':
-    import time
+    #import time
     #random.seed(0)
     #start = time.time()
     game = UnoGame()

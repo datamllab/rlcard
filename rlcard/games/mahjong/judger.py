@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Implement Mahjong Judger class
 '''
-from collections import Counter
 from collections import defaultdict
 from rlcard.games.mahjong.player import MahjongPlayer as Player
 from rlcard.games.mahjong.card import MahjongCard as Card
@@ -11,12 +10,12 @@ class MahjongJudger(object):
     '''
 
     def __init__(self):
-        ''' Initilize the Judger class for Mahjong 
+        ''' Initilize the Judger class for Mahjong
         '''
         pass
 
-
-    def judge_pong_gong(self, dealer, players, last_player):  
+    @staticmethod
+    def judge_pong_gong(dealer, players, last_player):
         ''' Judge which player has pong/gong
         Args:
             dealer (object): The dealer object.
@@ -26,8 +25,8 @@ class MahjongJudger(object):
         '''
         last_card = dealer.table[-1]
         last_card_str = last_card.get_str()
-        last_card_value = last_card_str.split("-")[-1]
-        last_card_type = last_card_str.split("-")[0]
+        #last_card_value = last_card_str.split("-")[-1]
+        #last_card_type = last_card_str.split("-")[0]
         for player in players:
             hand = [card.get_str() for card in player.hand]
             hand_dict = defaultdict(list)
@@ -43,7 +42,7 @@ class MahjongJudger(object):
         return False, None, None
 
     def judge_chow(self, dealer, players, last_player):
-        ''' Judge which player has chow 
+        ''' Judge which player has chow
         Args:
             dealer (object): The dealer object.
             players (list): List of all players
@@ -58,20 +57,20 @@ class MahjongJudger(object):
             hand_dict = defaultdict(list)
             for card in hand:
                 hand_dict[card.split("-")[0]].append(card.split("-")[1])
-            pile = player.pile 
+            #pile = player.pile
             # check chow
             if last_card_type != "dragons" and last_card_type != "winds" and last_player == player.get_player_id() - 1:
-                flag = False
+                #flag = False
                 type_values = hand_dict[last_card_type]
                 type_values.append(last_card_value)
                 test_value_list = sorted(type_values)
                 if len(test_value_list) < 3:
-                    continue 
+                    continue
                 test_card_index = test_value_list.index(last_card_value)
                 test_cases = []
                 if test_card_index == 0:
                     test_cases.append([test_value_list[test_card_index], test_value_list[test_card_index+1], test_value_list[test_card_index+2]])
-                elif test_card_index < len(test_value_list): 
+                elif test_card_index < len(test_value_list):
                     test_cases.append([test_value_list[test_card_index-2], test_value_list[test_card_index-1], test_value_list[test_card_index]])
                 else:
                     test_cases.append([test_value_list[test_card_index-1], test_value_list[test_card_index], test_value_list[test_card_index+1]])
@@ -92,7 +91,7 @@ class MahjongJudger(object):
         return False, None, None
 
     def judge_game(self, game):
-        ''' Judge which player has win the game 
+        ''' Judge which player has win the game
         Args:
             dealer (object): The dealer object.
             players (list): List of all players
@@ -100,7 +99,7 @@ class MahjongJudger(object):
         '''
         players_val = []
         win_player = -1
-        win_val = 0
+        #win_val = 0
         for player in game.players:
             win, val = self.judge_hu(player)
             players_val.append(val)
@@ -110,13 +109,13 @@ class MahjongJudger(object):
         if win_player != -1 or len(game.dealer.deck) == 0:
             return True, win_player, players_val
         else:
-            player_id = players_val.index(max(players_val))
-            return False, win_player, players_val 
+            #player_id = players_val.index(max(players_val))
+            return False, win_player, players_val
 
     def judge_hu(self, player):
-        ''' Judge whether the player has win the game 
+        ''' Judge whether the player has win the game
         Args:
-            player (object): Target player 
+            player (object): Target player
 
         Return:
             Result (bool): Win or not
@@ -136,8 +135,8 @@ class MahjongJudger(object):
             tmp_set_count = 0
             tmp_hand = hand.copy()
             if count_dict[each] == 2:
-                for i in range(count_dict[each]):
-                    tmp_hand.pop(tmp_hand.index(each))    
+                for _ in range(count_dict[each]):
+                    tmp_hand.pop(tmp_hand.index(each))
                 tmp_set_count, _set = self.cal_set(tmp_hand)
                 used.extend(_set)
                 if tmp_set_count + set_count > maximum:
@@ -150,11 +149,11 @@ class MahjongJudger(object):
                     return True, maximum
         return False, maximum
 
-
-    def check_consecutive(self, _list):
+    @staticmethod
+    def check_consecutive(_list):
         ''' Check if list is consecutive
         Args:
-            List (list): The target list
+            _list (list): The target list
 
         Return:
             Result (bool): consecutive or not
@@ -164,13 +163,13 @@ class MahjongJudger(object):
             return True
         return False
 
-    def cal_set(self, cards): 
+    def cal_set(self, cards):
         ''' Calculate the set for given cards
         Args:
             Cards (list): List of cards.
 
         Return:
-            Set_count (int): 
+            Set_count (int):
             Sets (list): List of cards that has been pop from user's hand
         '''
         tmp_cards = cards.copy()
@@ -181,7 +180,7 @@ class MahjongJudger(object):
         for each in _dict:
             if _dict[each] == 3 or _dict[each] == 4:
                 set_count += 1
-                for i in range(_dict[each]):
+                for _ in range(_dict[each]):
                     tmp_cards.pop(tmp_cards.index(each))
 
         # get all of the traits of each type in hand (except dragons and winds)
@@ -194,9 +193,9 @@ class MahjongJudger(object):
             else:
                 _dict_by_type[_type].append(_trait)
         for _type in _dict_by_type.keys():
-            values = sorted(_dict_by_type[_type]) 
+            values = sorted(_dict_by_type[_type])
             if len(values) > 2:
-                for index, val in enumerate(values):
+                for index, _ in enumerate(values):
                     if index == 0:
                         test_case = [values[index], values[index+1], values[index+2]]
                     elif index == len(values)-1:
