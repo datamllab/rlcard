@@ -438,7 +438,7 @@ def determine_winner(key_index, hand0_5_cards, hand1_5_cards):
         [0, 1]: player1 wins
         [1, 0]: player0 wins
         [1, 1]: draw
-    '''  
+    '''
     for _ in key_index:
         winner = compare_ranks(_, hand0_5_cards, hand1_5_cards)
         if winner != [1, 1]:
@@ -488,7 +488,3 @@ def compare_hands(hand0, hand1):
             return determine_winner([4, 2, 1, 0], hand0_5_cards, hand1_5_cards)
         if hand0_category == 1 or hand0_category == 6:
             return determine_winner([4, 3, 2, 1, 0], hand0_5_cards, hand1_5_cards)
-    
-
-
-
