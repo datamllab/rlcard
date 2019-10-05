@@ -21,7 +21,7 @@ for _trait in ['east', 'west', 'north', 'south']:
 
 def init_deck():
     deck = []
-    info = Card.info 
+    info = Card.info
     for _type in info['type']:
         if _type != 'dragons' and _type != 'winds':
             for _trait in info['trait'][:9]:
@@ -59,4 +59,4 @@ def encode_cards(cards):
         index = card_encoding_dict[card]
         num = cards.count(card)
         plane[index][:num] = 1
-    return plane 
+    return plane

@@ -1,4 +1,3 @@
-from rlcard.games.uno.utils import cards2list
 
 class MahjongPlayer(object):
 
@@ -38,7 +37,7 @@ class MahjongPlayer(object):
         dealer.table.append(card)
 
     def chow(self, dealer, cards):
-        ''' Perform Chow 
+        ''' Perform Chow
         Args:
             dealer (object): Dealer
             Cards (object): The cards to be Chow.
@@ -50,7 +49,7 @@ class MahjongPlayer(object):
         self.pile.append(cards)
 
     def gong(self, dealer, cards):
-        ''' Perform Gong 
+        ''' Perform Gong
         Args:
             dealer (object): Dealer
             Cards (object): The cards to be Gong.
@@ -61,7 +60,7 @@ class MahjongPlayer(object):
         self.pile.append(cards)
 
     def pong(self, dealer, cards):
-        ''' Perform Pong 
+        ''' Perform Pong
         Args:
             dealer (object): Dealer
             Cards (object): The cards to be Pong.

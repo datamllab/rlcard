@@ -13,7 +13,7 @@ class MahjongEnv(Env):
     def __init__(self, allow_step_back=False):
         super().__init__(Game(allow_step_back), allow_step_back)
         self.action_id = card_encoding_dict
-        self.action_id['pong'] = num 
+        self.action_id['pong'] = num
         self.action_id['chow'] = num + 1
         self.action_id['gong'] = num + 2
         self.action_id['stand'] = num + 3
@@ -53,10 +53,10 @@ class MahjongEnv(Env):
         Returns:
             payoffs (list): a list of payoffs for each player
         '''
-        win, player = self.game.judger.judge_game(self.game)
+        _, player = self.game.judger.judge_game(self.game)
         payoffs = [0, 0, 0, 0]
         payoffs[player] = 1
-        return payoffs 
+        return payoffs
 
     def decode_action(self, action_id):
         ''' Action id -> the action in the game. Must be implemented in the child class.
@@ -90,7 +90,7 @@ class MahjongEnv(Env):
         legal_actions = self.game.get_legal_actions(self.game.get_state(self.game.round.current_player, is_proceed=False))
         if legal_actions:
             for action in legal_actions:
-                if type(action) == Card:
+                if isinstance(action, Card):
                     action = action.get_str()
                 action_id = self.action_id[action]
                 legal_action_id.append(action_id)

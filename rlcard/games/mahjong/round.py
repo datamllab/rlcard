@@ -1,6 +1,3 @@
-import random
-from rlcard.games.mahjong.judger import MahjongJudger as Judger
-
 
 class MahjongRound(object):
 
@@ -35,7 +32,7 @@ class MahjongRound(object):
         '''
         hand_len = [len(p.hand) for p in players]
         pile_len = [sum([len([c for c in p]) for p in pp.pile]) for pp in players]
-        total_len = [i + j for i, j in zip(hand_len, pile_len)]
+        #total_len = [i + j for i, j in zip(hand_len, pile_len)]
         if action == 'stand':
             (valid_act, player, cards) = self.judger.judge_chow(self.dealer, players, self.last_player)
             if valid_act != False:
@@ -78,7 +75,7 @@ class MahjongRound(object):
                 self.last_player = self.current_player
                 self.current_player = (self.current_player + 1) % 4
                 self.dealer.deal_cards(players[self.current_player], 1)
-                
+
         hand_len = [len(p.hand) for p in players]
         pile_len = [sum([len([c for c in p]) for p in pp.pile]) for pp in players]
         total_len = [i + j for i, j in zip(hand_len, pile_len)]
@@ -87,15 +84,15 @@ class MahjongRound(object):
         ''' Get player's state
 
         Args:
-            players (list): The list of UnoPlayer 
+            players (list): The list of MahjongPlayer
             player_id (int): The id of the player
         Return:
-            state (dict): The information of the state 
+            state (dict): The information of the state
         '''
         state = {}
         #(valid_act, player, cards) = self.judger.judge_pong_gong(self.dealer, players, self.last_player)
         if self.valid_act != False: # PONG/GONG/CHOW
-            state['valid_act'] = [self.valid_act, 'stand'] 
+            state['valid_act'] = [self.valid_act, 'stand']
             state['table'] = self.dealer.table
             state['player'] = self.current_player
             state['current_hand'] = players[self.current_player].hand
@@ -104,9 +101,9 @@ class MahjongRound(object):
         else: # Regular Play
             state['valid_act'] = ['play']
             state['table'] = self.dealer.table
-            state['player'] = self.current_player 
+            state['player'] = self.current_player
             state['current_hand'] = players[player_id].hand
             state['players_pile'] = {p.player_id: p.pile for p in players}
             state['action_cards'] = players[player_id].hand # For doing action (pong, chow, gong)
-        return state 
+        return state
 

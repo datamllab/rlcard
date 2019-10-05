@@ -22,7 +22,7 @@ class MahjongCard(object):
             (str): The string of card's color and trait
         '''
         return self.type+ '-'+ self.trait
-    
+
 
 # for test
 if __name__ == '__main__':
