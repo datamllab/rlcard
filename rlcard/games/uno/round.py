@@ -67,20 +67,17 @@ class UnoRound(object):
         card_info = action.split('-')
         color = card_info[0]
         trait = card_info[1]
-        print(color, trait)
         # remove correspongding card
         remove_index = None
         if trait == 'wild' or trait == 'wild_draw_4':
             for index, card in enumerate(player.hand):
                 if trait == card.trait:
                     remove_index = index
-                    print('wild')
                     break
         else:
             for index, card in enumerate(player.hand):
                 if color == card.color and trait == card.trait:
                     remove_index = index
-                    print('not wild')
                     break
         card = player.hand.pop(remove_index)
         if not player.hand:
