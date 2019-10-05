@@ -1,7 +1,7 @@
 
 
 class Hand:
-    def __init__(self, all_cards = []):
+    def __init__(self, all_cards):
         self.all_cards = all_cards # two hand cards + five public cards
         self.category = 0
         #type of a players' best five cards, greater combination has higher number eg: 0:"Not_Yet_Evaluated" 1: "High_Card" , 9:"Straight_Flush"
@@ -35,7 +35,7 @@ class Hand:
 
     def evaluateHand(self):
         """
-        Evaluate all the seven cards, get the best combination catagory 
+        Evaluate all the seven cards, get the best combination catagory
         And pick the best five cards (for comparing in case 2 hands have the same Category) .
         """
         if len(self.all_cards) != 7:
@@ -146,7 +146,7 @@ class Hand:
             return True
         else:
             return False
-
+    @classmethod
     def _get_different_rank_list(self, all_cards):
         '''
         Get cards with different ranks, that is to say, remove duplicate-ranking cards, for picking straight cards' use
@@ -450,7 +450,7 @@ def compare_hands(hand0, hand1):
                 elif RANKS.index(hand0_card_rank) < RANKS.index(hand1_card_rank):
                     return [0, 1]
                 elif RANKS.index(hand0_card_rank) == RANKS.index(hand1_card_rank):
-                    return [1, 1]  
+                    return [1, 1]
         if hand0_category == 8:
             handcard0 = hand0.get_hand_five_cards()
             handcard1 = hand1.get_hand_five_cards()
@@ -540,12 +540,12 @@ def compare_hands(hand0, hand1):
                             return [0, 1]
                         if RANKS.index(handcard0[0][1]) == RANKS.index(handcard1[0][1]):
                             return[1, 1]
-    
+
         if hand0_category == 1 or hand0_category == 6:
             handcard0 = hand0.get_hand_five_cards()
             handcard1 = hand1.get_hand_five_cards()
             if RANKS.index(handcard0[4][1]) > RANKS.index(handcard1[4][1]):
-                return [1, 0]              
+                return [1, 0]
             if RANKS.index(handcard0[4][1]) < RANKS.index(handcard1[4][1]):
                 return [0, 1]
             if RANKS.index(handcard0[4][1]) == RANKS.index(handcard1[4][1]):
