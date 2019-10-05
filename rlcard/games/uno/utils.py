@@ -23,6 +23,10 @@ TRAIT_MAP = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
              '8': 8, '9': 9, 'skip': 10, 'reverse': 11, 'draw_2': 12,
              'wild': 13, 'wild_draw_4': 14}
 
+WILD = ['r-wild', 'g-wild', 'b-wild', 'y-wild']
+
+WILD_DRAW_4 = ['r-wild_draw_4', 'g-wild_draw_4', 'b-wild_draw_4', 'y-wild_draw_4']
+
 
 def init_deck():
     ''' Generate uno deck of 108 cards
