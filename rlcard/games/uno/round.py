@@ -2,7 +2,7 @@ import numpy as np
 
 from rlcard.games.uno.card import UnoCard
 from rlcard.games.uno.judger import UnoJudger
-from rlcard.games.uno.utils import cards2list
+from rlcard.games.uno.utils import cards2list, WILD, WILD_DRAW_4
 
 
 class UnoRound(object):
@@ -67,18 +67,21 @@ class UnoRound(object):
         card_info = action.split('-')
         color = card_info[0]
         trait = card_info[1]
-
+        print(color, trait)
         # remove correspongding card
         remove_index = None
-        if 'wild' in trait:
+        if trait == 'wild' or trait == 'wild_draw_4':
             for index, card in enumerate(player.hand):
                 if trait == card.trait:
                     remove_index = index
+                    print('wild')
                     break
         else:
             for index, card in enumerate(player.hand):
                 if color == card.color and trait == card.trait:
                     remove_index = index
+                    print('not wild')
+                    break
         card = player.hand.pop(remove_index)
         if not player.hand:
             self.is_over = True
@@ -90,11 +93,13 @@ class UnoRound(object):
             self.current_player = (self.current_player + self.direction) % self.num_players
             self.target = card
 
-        # perform non-number action
+        # perform non-number action                                
         else:
             self._preform_non_number_action(players, card)
 
     def get_legal_actions(self, players, player_id):
+        wild_flag = 0
+        wild_draw_4_flag = 0
         legal_actions = []
         wild_4_actions = []
         hand = players[player_id].hand
@@ -102,11 +107,13 @@ class UnoRound(object):
         if target.type == 'wild':
             for card in hand:
                 if card.type == 'wild':
-                    card.color = np.random.choice(UnoCard.info['color'])
-                    if card.trait == 'wild_draw_4':
-                        wild_4_actions.append(card.str)
-                    else:
-                        legal_actions.append(card.str)
+                    #card.color = np.random.choice(UnoCard.info['color'])
+                    if card.trait == 'wild_draw_4' and wild_draw_4_flag == 0:
+                        wild_draw_4_flag = 1
+                        wild_4_actions.extend(WILD_DRAW_4)
+                    elif wild_flag == 0:
+                        wild_flag = 1
+                        legal_actions.extend(WILD)
                 elif card.color == target.color:
                     legal_actions.append(card.str)
 
@@ -114,11 +121,12 @@ class UnoRound(object):
         else:
             for card in hand:
                 if card.type == 'wild':
-                    card.color = np.random.choice(UnoCard.info['color'])
-                    if card.trait == 'wild_draw_4':
-                        wild_4_actions.append(card.str)
-                    else:
-                        legal_actions.append(card.str)
+                    if card.trait == 'wild_draw_4' and wild_draw_4_flag == 0:
+                        wild_draw_4_flag = 1
+                        wild_4_actions.extend(WILD_DRAW_4)
+                    elif wild_flag == 0:
+                        wild_flag = 1
+                        legal_actions.extend(WILD)
                 elif card.color == target.color or card.trait == target.trait:
                     legal_actions.append(card.str)
         if not legal_actions:
