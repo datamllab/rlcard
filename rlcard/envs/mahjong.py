@@ -53,7 +53,6 @@ class MahjongEnv(Env):
         Returns:
             payoffs (list): a list of payoffs for each player
         '''
-<<<<<<< HEAD
         win, player, players_val = self.game.judger.judge_game(self.game)
         if player == -1:
             payoffs = [0, 0, 0, 0]
@@ -61,12 +60,6 @@ class MahjongEnv(Env):
             payoffs = [-1, -1, -1, -1]
             payoffs[player] = 1
         return payoffs 
-=======
-        _, player = self.game.judger.judge_game(self.game)
-        payoffs = [0, 0, 0, 0]
-        payoffs[player] = 1
-        return payoffs
->>>>>>> 49e3477fe596859cdc92ad62e971febff4602b84
 
     def decode_action(self, action_id):
         ''' Action id -> the action in the game. Must be implemented in the child class.
