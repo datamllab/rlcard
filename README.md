@@ -3,23 +3,44 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/248eb15c086748a4bcc830755f1bd798)](https://www.codacy.com/manual/daochenzha/rlcard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=datamllab/rlcard&amp;utm_campaign=Badge_Grade)
 [![Coverage Status](https://coveralls.io/repos/github/datamllab/rlcard/badge.svg?branch=master)](https://coveralls.io/github/datamllab/rlcard?branch=master)
 
-RLCard is a toolkit for developing Reinforcement Learning (RL) algorithms in card games. It supports multiple challenging card environments with common and easy-to-use interfaces. The goal of RLCard is to bridge reinforcement learning and game theory, and push forward the research of reinforcement learning in domains with multiple agents, imperfect information, and large state and action space. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
+RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports multiple card environments with easy-to-use interfaces. The goal of RLCard is to bridge reinforcement learning and imperfect information games, and push forward the research of reinforcement learning in domains with multiple agents, large state and action space, and sparse reward. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
 
 *   Official Website: [http://www.rlcard.org](http://www.rlcard.org)
 
 ## Installation
 Make sure that you have **Python 3.5+** and **pip** installed. You can install `rlcard` with `pip` as follow:
-```console
+```shell
 git clone https://github.com/datamllab/rlcard.git
 cd rlcard
 pip install -e .
 ```
-To check whether it is intalled correctly, try to play with the pre-trained Leduc Hold'em AI:
-```console
-python examples/leduc_holdem_human.py
+
+## Examples
+A short example is as below.
+```python
+import rlcard
+from rlcard.agents.random_agent import RandomAgent
+
+env = rlcard.make('blackjack')
+env.set_agents([RandomAgent()])
+
+trajectories, payoffs = env.run()
 ```
-Expected output should be:
-```console
+We also recommend the following **toy examples**.
+
+*   [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
+*   [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
+*   [Running multiple processes](docs/toy-examples.md#running-multiple-processes)
+*   [Having fun with pretrained Leduc model](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
+*   [Leduc Hold'em as single-agent environment](docs/toy-examples.md#leduc-holdem-as-single-agent-environment)
+
+For more examples, please refer to [examples/](examples).
+
+## Demo
+Play with the pre-trained Leduc Hold'em model:
+```shell
+python examples/leduc_holdem_human.py
+
 >> Leduc Hold'em pre-trained model
 
 >> Start a new game!
@@ -54,17 +75,6 @@ Agent 1: +++
 >> You choose action (integer):
 ```
 
-## Getting Started
-We recommend starting with the following **toy examples**.
-
-*   [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
-*   [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
-*   [Running multiple processes](docs/toy-examples.md#running-multiple-processes)
-*   [Having fun with pretrained Leduc model](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
-*   [Leduc Hold'em as single-agent environment](docs/toy-examples.md#leduc-holdem-as-single-agent-environment)
-
-For more examples, please refer to [examples/](examples).
-
 ## Documents
 Please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
 
@@ -83,7 +93,7 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 | Sheng Ji ([wiki](https://en.wikipedia.org/wiki/Sheng_ji), [baike](https://baike.baidu.com/item/%E5%8D%87%E7%BA%A7/3563150))                                                                    | 10^157 ~ 10^165 | 10^61             | 10^11       | -               | Come soon |
 
 ## Evaluation
-The perfomance is measured by winning rate through self-play. Example outputs are as follows:
+The perfomance is measured by winning rate through tournaments. Example outputs are as follows:
 ![Learning Curves](docs/imgs/curves.png "Learning Curves")
 
 ## Contributing
