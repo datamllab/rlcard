@@ -9,11 +9,10 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 
 ## Installation
 Make sure that you have **Python 3.5+** and **pip** installed. You can install `rlcard` with `pip` as follow:
-```shell
-git clone https://github.com/datamllab/rlcard.git
-cd rlcard
-pip install -e .
-```
+
+	git clone https://github.com/datamllab/rlcard.git
+	cd rlcard
+	pip install -e .
 
 ## Examples
 A short example is as below.
@@ -38,42 +37,41 @@ For more examples, please refer to [examples/](examples).
 
 ## Demo
 Play with the pre-trained Leduc Hold'em model:
-```shell
-python examples/leduc_holdem_human.py
 
->> Leduc Hold'em pre-trained model
+	python examples/leduc_holdem_human.py
 
->> Start a new game!
->> Agent 1 chooses raise
+	>> Leduc Hold'em pre-trained model
 
-=============== Community Card ===============
-┌─────────┐
-│░░░░░░░░░│
-│░░░░░░░░░│
-│░░░░░░░░░│
-│░░░░░░░░░│
-│░░░░░░░░░│
-│░░░░░░░░░│
-│░░░░░░░░░│
-└─────────┘
-===============   Your Hand    ===============
-┌─────────┐
-│J        │
-│         │
-│         │
-│    ♥    │
-│         │
-│         │
-│        J│
-└─────────┘
-===============     Chips      ===============
-Yours:   +
-Agent 1: +++
-=========== Actions You Can Choose ===========
-0: call, 1: raise, 2: fold
+	>> Start a new game!
+	>> Agent 1 chooses raise
 
->> You choose action (integer):
-```
+	=============== Community Card ===============
+	┌─────────┐
+	│░░░░░░░░░│
+	│░░░░░░░░░│
+	│░░░░░░░░░│
+	│░░░░░░░░░│
+	│░░░░░░░░░│
+	│░░░░░░░░░│
+	│░░░░░░░░░│
+	└─────────┘
+	===============   Your Hand    ===============
+	┌─────────┐
+	│J        │
+	│         │
+	│         │
+	│    ♥    │
+	│         │
+	│         │
+	│        J│
+	└─────────┘
+	===============     Chips      ===============
+	Yours:   +
+	Agent 1: +++
+	=========== Actions You Can Choose ===========
+	0: call, 1: raise, 2: fold
+
+	>> You choose action (integer):
 
 ## Documents
 Please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
