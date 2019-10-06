@@ -1,5 +1,5 @@
 # Examples
-We provide some running examples. A few examples can not achieve good results, especially on large games like Dou Dizhu and UNO. We will update the examples if we achieve better results.
+We provide some running examples. We will update the examples if we achieve better results on large games such as Dou Dizhu, UNO and Mahjong.
 
 *   `blackjack_dqn.py`: train DQN on Blackjack.
 *   `blackjack_random.py`: run random agents on Blackjcak.
