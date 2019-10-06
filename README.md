@@ -10,12 +10,13 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 ## Installation
 Make sure that you have **Python 3.5+** and **pip** installed. You can install `rlcard` with `pip` as follow:
 
-	git clone https://github.com/datamllab/rlcard.git
-	cd rlcard
-	pip install -e .
+    git clone https://github.com/datamllab/rlcard.git
+    cd rlcard
+    pip install -e .
 
 ## Examples
-A short example is as below.
+Please refer to [examples/](examples). A **short example** is as below.
+
 ```python
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
@@ -25,6 +26,7 @@ env.set_agents([RandomAgent()])
 
 trajectories, payoffs = env.run()
 ```
+
 We also recommend the following **toy examples**.
 
 *   [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
@@ -33,45 +35,41 @@ We also recommend the following **toy examples**.
 *   [Having fun with pretrained Leduc model](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
 *   [Leduc Hold'em as single-agent environment](docs/toy-examples.md#leduc-holdem-as-single-agent-environment)
 
-For more examples, please refer to [examples/](examples).
-
 ## Demo
-Play with the pre-trained Leduc Hold'em model:
+Run `examples/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model:
 
-	python examples/leduc_holdem_human.py
-
-	>> Leduc Hold'em pre-trained model
-
-	>> Start a new game!
-	>> Agent 1 chooses raise
-
-	=============== Community Card ===============
-	┌─────────┐
-	│░░░░░░░░░│
-	│░░░░░░░░░│
-	│░░░░░░░░░│
-	│░░░░░░░░░│
-	│░░░░░░░░░│
-	│░░░░░░░░░│
-	│░░░░░░░░░│
-	└─────────┘
-	===============   Your Hand    ===============
-	┌─────────┐
-	│J        │
-	│         │
-	│         │
-	│    ♥    │
-	│         │
-	│         │
-	│        J│
-	└─────────┘
-	===============     Chips      ===============
-	Yours:   +
-	Agent 1: +++
-	=========== Actions You Can Choose ===========
-	0: call, 1: raise, 2: fold
-
-	>> You choose action (integer):
+    >> Leduc Hold'em pre-trained model
+    
+    >> Start a new game!
+    >> Agent 1 chooses raise
+    
+    =============== Community Card ===============
+    ┌─────────┐
+    │░░░░░░░░░│
+    │░░░░░░░░░│
+    │░░░░░░░░░│
+    │░░░░░░░░░│
+    │░░░░░░░░░│
+    │░░░░░░░░░│
+    │░░░░░░░░░│
+    └─────────┘
+    ===============   Your Hand    ===============
+    ┌─────────┐
+    │J        │
+    │         │
+    │         │
+    │    ♥    │
+    │         │
+    │         │
+    │        J│
+    └─────────┘
+    ===============     Chips      ===============
+    Yours:   +
+    Agent 1: +++
+    =========== Actions You Can Choose ===========
+    0: call, 1: raise, 2: fold
+    
+    >> You choose action (integer):
 
 ## Documents
 Please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
