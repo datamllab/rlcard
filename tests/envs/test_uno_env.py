@@ -5,7 +5,8 @@ from rlcard.envs.uno import UnoEnv as Env
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.games.uno.utils import ACTION_LIST
 
-class TestDoudizhuEnv(unittest.TestCase):
+
+class TestUnoEnv(unittest.TestCase):
 
     def test_init_game_and_extract_state(self):
         env = Env()
