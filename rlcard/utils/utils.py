@@ -351,8 +351,8 @@ def remove_illegal(action_probs, legal_actions):
     return probs
 
 def make_copy_params_op(v1_list, v2_list):
-    v1_list = list(sorted(v1_list, key=lambda v: v.name))
-    v2_list = list(sorted(v2_list, key=lambda v: v.name))
+    v1_list = list(sorted(v1_list, key=lambda v: v.scope))
+    v2_list = list(sorted(v2_list, key=lambda v: v.scope))
 
     update_ops = []
     for v1, v2 in zip(v1_list, v2_list):
