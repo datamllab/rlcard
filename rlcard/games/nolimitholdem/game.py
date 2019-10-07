@@ -140,6 +140,17 @@ class NolimitholdemGame(LimitholdemGame):
 
         return state
 
+    def step_back(self):
+        ''' Return to the previous state of the game
+
+        Returns:
+            (bool): True if the game steps back successfully
+        '''
+        if len(self.history) > 0:
+            self.round, self.game_pointer, self.round_counter, self.dealer, self.public_cards, self.players = self.history.pop()
+            return True
+        return False
+
     def get_action_num(self):
         ''' Return the number of applicable actions
 

@@ -1,9 +1,7 @@
 import unittest
-import numpy as np
 from rlcard.games.limitholdem.utils import *
 from rlcard.games.limitholdem.utils import Hand as Hand
-'''
-Combinations selected for testing compare_hands function
+''' Combinations selected for testing compare_hands function
 Royal straight flush ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'CA']
 Straight flush ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'C7']
 Four of a kind ['CJ', 'SJ', 'HJ', 'BJ', 'C9', 'C8', 'C7'] ['CT', 'ST', 'HT, 'BT', 'CK', 'C8', 'C7']
@@ -42,7 +40,7 @@ class TestHoldemUtils(unittest.TestCase):
         self.assertEqual(winner, [1, 0])
         winner = compare_hands(['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'C7'], ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'C7'])
         self.assertEqual(winner, [1, 1])
-        #Compare between different catagories    
+        #Compare between different catagories
         winner = compare_hands(['CJ', 'SJ', 'HJ', 'BJ', 'C9', 'C8', 'C7'], ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'CA'])
         self.assertEqual(winner, [0, 1])
         winner = compare_hands( ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'CA'], ['CJ', 'SJ', 'HJ', 'BJ', 'C9', 'C8', 'C7'])
@@ -172,11 +170,11 @@ class TestHoldemUtils(unittest.TestCase):
         winner = compare_hands(['CJ', 'SJ', 'HJ', 'B9', 'C2', 'C7', 'C4'], ['CJ', 'SJ', 'HJ', 'B9', 'C3', 'C6', 'C4'])
         self.assertEqual(winner, [1, 0])
         winner = compare_hands(['CJ', 'SJ', 'HJ', 'B9', 'C2', 'C7', 'C4'], ['CJ', 'SJ', 'HJ', 'B9', 'C3', 'C8', 'C4'])
-        self.assertEqual(winner, [0, 1])       
+        self.assertEqual(winner, [0, 1]) 
         winner = compare_hands(['CJ', 'SJ', 'HJ', 'B9', 'C2', 'C7', 'C4'], ['CJ', 'SJ', 'HJ', 'B9', 'C3', 'C8', 'C4'])
         self.assertEqual(winner, [0, 1])
         winner = compare_hands(['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'H6', 'B6', 'C2', 'C8', 'C7'])
-        self.assertEqual(winner, [1, 0])   
+        self.assertEqual(winner, [1, 0])
         winner = compare_hands(['CJ', 'SJ', 'H9', 'B9', 'C2', 'C5', 'C7'], ['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'])
         self.assertEqual(winner, [0, 1])
         winner = compare_hands(['CJ', 'SJ', 'HJ', 'B9', 'C2', 'C8', 'C4'], ['CJ', 'SJ', 'HJ', 'B9', 'C3', 'C8', 'C4'])
@@ -224,13 +222,7 @@ class TestHoldemUtils(unittest.TestCase):
         winner = compare_hands(['CK', 'SJ', 'H9', 'C7', 'C5', 'B3', 'C2'], ['CK', 'SJ', 'H9', 'C7', 'C6', 'B3', 'C2'])
         self.assertEqual(winner, [0, 1])
         winner = compare_hands(['CK', 'SJ', 'H9', 'C7', 'C6', 'B3', 'C2'], ['CK', 'SJ', 'H9', 'C7', 'C6', 'B3', 'C2'])
-        self.assertEqual(winner, [1, 1])       
-
-
-
-
-
-
+        self.assertEqual(winner, [1, 1])
 
 if __name__ == '__main__':
     unittest.main()

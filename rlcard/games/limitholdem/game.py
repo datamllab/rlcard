@@ -1,4 +1,4 @@
-from copy import deepcopy
+from copy import deepcopy, copy
 import numpy as np
 
 from rlcard.games.limitholdem.dealer import LimitholdemDealer as Dealer
@@ -81,6 +81,9 @@ class LimitholdemGame(object):
 
         state = self.get_state(self.game_pointer)
 
+        # Save betting history
+        self.history_raise_nums = [0 for _ in range(4)]
+
         return state, self.game_pointer
 
     def step(self, action):
@@ -103,7 +106,8 @@ class LimitholdemGame(object):
             d = deepcopy(self.dealer)
             p = deepcopy(self.public_cards)
             ps = deepcopy(self.players)
-            self.history.append((r, b, r_c, d, p, ps))
+            rn = copy(self.history_raise_nums)
+            self.history.append((r, b, r_c, d, p, ps, rn))
 
         # Then we proceed to the next round
         self.game_pointer = self.round.proceed_round(self.players, action)
@@ -141,7 +145,7 @@ class LimitholdemGame(object):
             (bool): True if the game steps back successfully
         '''
         if len(self.history) > 0:
-            self.round, self.game_pointer, self.round_counter, self.dealer, self.public_cards, self.players = self.history.pop()
+            self.round, self.game_pointer, self.round_counter, self.dealer, self.public_cards, self.players, self.history_raises_nums = self.history.pop()
             return True
         return False
 

@@ -30,7 +30,8 @@ for episode in range(episode_num):
         print('State: {}, Action: {}, Reward: {}, Next State: {}, Done: {}'.format(ts[0], ts[1], ts[2], ts[3], ts[4]))
 ```
 The expected output should look like something as follows:
-```shell
+
+```
 Episode 0
 State: {'obs': array([20,  3]), 'legal_actions': [0, 1]}, Action: 0, Reward: 0, Next State: {'obs': array([15,  3]), 'legal_actions': [0, 1]}, Done: False
 State: {'obs': array([15,  3]), 'legal_actions': [0, 1]}, Action: 1, Reward: -1, Next State: {'obs': array([15, 20]), 'legal_actions': [0, 1]}, Done: True
@@ -38,6 +39,7 @@ State: {'obs': array([15,  3]), 'legal_actions': [0, 1]}, Action: 1, Reward: -1,
 Episode 1
 State: {'obs': array([15,  5]), 'legal_actions': [0, 1]}, Action: 1, Reward: 1, Next State: {'obs': array([15, 23]), 'legal_actions': [0, 1]}, Done: True
 ```
+
 Note that the states and actions are wrapped by `env` in Blackjack. In this example, the `[20, 3]` suggests the current player obtains score 20 while the card that faces up in the dealer's hand has score 3. Action 0 means "hit" while action 1 means "stand". Reward 1 suggests the player wins while reward -1 suggests the dealer wins. Reward 0 suggests a tie. The above data can be directly fed into a RL algorithm for training.
 
 ## Deep-Q Learning on Blackjack
@@ -132,7 +134,8 @@ with tf.Session() as sess:
     logger.make_plot(save_path=figure_path+'final_'+str(episode)+'.png')
 ```
 The expected output is something like below:
-```shell
+
+```
 ########## Evaluation ##########
 Timestep: 1 Average reward is -0.2868
 
@@ -167,6 +170,7 @@ INFO - Step 1221, loss: 0.7781758308410645
 ########## Evaluation ##########
 Timestep: 1221 Average reward is -0.2197
 ```
+
 In Blackjack, the player will get a payoff at the end of the game: 1 if the player wins, -1 if the player loses, and 0 if it is a tie. The performance is measured by the average payoff the player obtains by playing 1000 episodes. The above example shows that the agent achieves better and better performance during training. The logs and learning curves are saved in `./experiments/blackjack_dqn_result/`.
 
 ## Running Multiple Processes
@@ -191,7 +195,8 @@ while True:
     env.step(action)
 ```
 Example output is as follow:
-```shell
+
+```
 >> Leduc Hold'em pre-trained model
 
 >> Start a new game!

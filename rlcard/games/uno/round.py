@@ -1,7 +1,6 @@
 import numpy as np
 
 from rlcard.games.uno.card import UnoCard
-from rlcard.games.uno.judger import UnoJudger
 from rlcard.games.uno.utils import cards2list, WILD, WILD_DRAW_4
 
 
@@ -90,7 +89,7 @@ class UnoRound(object):
             self.current_player = (self.current_player + self.direction) % self.num_players
             self.target = card
 
-        # perform non-number action                                
+        # perform non-number action
         else:
             self._preform_non_number_action(players, card)
 
@@ -140,7 +139,7 @@ class UnoRound(object):
         ''' Get player's state
 
         Args:
-            players (list): The list of UnoPlayer 
+            players (list): The list of UnoPlayer
             player_id (int): The id of the player
         '''
         state = {}

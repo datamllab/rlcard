@@ -1,4 +1,4 @@
-import random
+import numpy as np
 from copy import deepcopy
 
 from rlcard.games.uno.dealer import UnoDealer as Dealer
@@ -152,24 +152,24 @@ class UnoGame(object):
         return self.round.is_over
 
 
-# For test
-if __name__ == '__main__':
-    #import time
-    #random.seed(0)
-    #start = time.time()
-    game = UnoGame()
-    for _ in range(1):
-        state, button = game.init_game()
-        print(button, state)
-        i = 0
-        while not game.is_over():
-            i += 1
-            legal_actions = game.get_legal_actions()
-            print('legal_actions', legal_actions)
-            action = random.choice(legal_actions)
-            print('action', action)
-            print()
-            state, button = game.step(action)
-            print(button, state)
-        print(game.get_payoffs())
-    print('step', i)
+## For test
+#if __name__ == '__main__':
+#    #import time
+#    #random.seed(0)
+#    #start = time.time()
+#    game = UnoGame()
+#    for _ in range(1):
+#        state, button = game.init_game()
+#        print(button, state)
+#        i = 0
+#        while not game.is_over():
+#            i += 1
+#            legal_actions = game.get_legal_actions()
+#            print('legal_actions', legal_actions)
+#            action = np.random.choice(legal_actions)
+#            print('action', action)
+#            print()
+#            state, button = game.step(action)
+#            print(button, state)
+#        print(game.get_payoffs())
+#    print('step', i)
