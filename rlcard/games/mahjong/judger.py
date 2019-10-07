@@ -32,7 +32,7 @@ class MahjongJudger(object):
             hand_dict = defaultdict(list)
             for card in hand:
                 hand_dict[card.split("-")[0]].append(card.split("-")[1])
-            pile = player.pile 
+            #pile = player.pile
             # check gong
             if hand.count(last_card_str) == 3 and last_player != player.player_id:
                 return 'gong', player, [last_card]*4
