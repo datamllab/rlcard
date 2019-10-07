@@ -1,4 +1,3 @@
-import random
 import numpy as np
 
 from rlcard.envs.env import Env
@@ -17,10 +16,10 @@ class UnoEnv(Env):
 
     def print_state(self, player):
         ''' Print out the state of a given player
-        
+
         Args:
             player (int): Player id
-        '''  
+        '''
         state = self.game.get_state(player)
         print('\n=============== Your Hand ===============')
         UnoCard.print_cards(state['hand'])
@@ -88,7 +87,7 @@ class UnoEnv(Env):
         legal_ids = self.get_legal_actions()
         if action_id in legal_ids:
             return ACTION_LIST[action_id]
-        #if (len(self.game.dealer.deck) + len(self.game.round.played_cards)) > 17: 
+        #if (len(self.game.dealer.deck) + len(self.game.round.played_cards)) > 17:
         #    return ACTION_LIST[60]
         return ACTION_LIST[np.random.choice(legal_ids)]
 

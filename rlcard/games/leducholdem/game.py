@@ -1,6 +1,5 @@
-from copy import deepcopy
 import numpy as np
-
+from copy import copy
 
 from rlcard.games.leducholdem.dealer import LeducholdemDealer as Dealer
 from rlcard.games.leducholdem.player import LeducholdemPlayer as Player
@@ -83,13 +82,15 @@ class LeducholdemGame(LimitholdemGame):
         '''
         if self.allow_step_back:
             # First snapshot the current state
-            r = deepcopy(self.round)
-            b = self.game_pointer
+            r = copy(self.round)
+            r_raised = copy(self.round.raised)
+            gp = self.game_pointer
             r_c = self.round_counter
-            d = deepcopy(self.dealer)
-            p = deepcopy(self.public_card)
-            ps = deepcopy(self.players)
-            self.history.append((r, b, r_c, d, p, ps))
+            d_deck = copy(self.dealer.deck)
+            p = copy(self.public_card)
+            ps = [copy(self.players[i]) for i in range(self.num_players)]
+            ps_hand = [copy(self.players[i].hand) for i in range(self.num_players)]
+            self.history.append((r, r_raised, gp, r_c, d_deck, p, ps, ps_hand))
 
         # Then we proceed to the next round
         self.game_pointer = self.round.proceed_round(self.players, action)
@@ -156,7 +157,11 @@ class LeducholdemGame(LimitholdemGame):
             (bool): True if the game steps back successfully
         '''
         if len(self.history) > 0:
-            self.round, self.game_pointer, self.round_counter, self.dealer, self.public_card, self.players = self.history.pop()
+            self.round, r_raised, self.game_pointer, self.round_counter, d_deck, self.public_card, self.players, ps_hand = self.history.pop()
+            self.round.raised = r_raised
+            self.dealer.deck = d_deck
+            for i, hand in enumerate(ps_hand):
+                self.players[i].hand = hand
             return True
         return False
 
@@ -164,7 +169,7 @@ class LeducholdemGame(LimitholdemGame):
 # Test the game
 
 #if __name__ == "__main__":
-#    game = LeducholdemGame()
+#    game = LeducholdemGame(allow_step_back=True)
 #    while True:
 #        print('New Game')
 #        state, game_pointer = game.init_game()
@@ -173,15 +178,16 @@ class LeducholdemGame(LimitholdemGame):
 #        while not game.is_over():
 #            i += 1
 #            legal_actions = game.get_legal_actions()
-#            if i == 3:
+#            if i == 4:
 #                print('Step back')
 #                print(game.step_back())
 #                game_pointer = game.get_player_id()
 #                print(game_pointer)
+#                state = game.get_state(game_pointer)
 #                legal_actions = game.get_legal_actions()
 #            # action = input()
 #            action = np.random.choice(legal_actions)
-#            print(game_pointer, action, legal_actions)
+#            print(game_pointer, action, legal_actions, state)
 #            state, game_pointer = game.step(action)
 #            print(game_pointer, state)
 #
