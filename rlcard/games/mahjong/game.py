@@ -46,7 +46,6 @@ class MahjongGame(object):
         self.dealer.deal_cards(self.players[self.round.current_player], 1)
         state = self.get_state(self.round.current_player)
         self.cur_state = state
-        print("INIT THE GAME")
         return state, self.round.current_player
 
     def step(self, action):

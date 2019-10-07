@@ -103,6 +103,6 @@ class MahjongEnv(Env):
             print(self.game.judger.judge_game(self.game))
             print(self.game.is_over())
             print([len(p.pile) for p in self.game.players])
-            print(self.game.get_state(self.game.round.current_player))
-            exit()
+            #print(self.game.get_state(self.game.round.current_player))
+            #exit()
         return legal_action_id

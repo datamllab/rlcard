@@ -99,13 +99,11 @@ class MahjongJudger(object):
         '''
         players_val = []
         win_player = -1
-        #win_val = 0
         for player in game.players:
             win, val = self.judge_hu(player)
             players_val.append(val)
             if win == True:
                 win_player = player.player_id
-                win_val = val
         if win_player != -1 or len(game.dealer.deck) == 0:
             return True, win_player, players_val
         else:
