@@ -5,7 +5,7 @@ This document introduces the high-level design for the environments, the games, 
 We wrap each game with an `Env` class. The responsibility of `Env` is to help you generate trajectories of the games. For developing Reinforcement Learning (RL) algorithms, we recommend to use the following interfaces:
 
 *   `set_agents`: This function tells the `Env` what agents will be used to perform actions in the game. Different games may have a different number of agents. The input of the function is a list of `Agent` class. For example, `env.set_agent([RandomAgent(), RandomAgent()])` indicates that two random agents will be used to generate the trajectories.
-*   `run`: After setting the agents, this interface will run a complete trajectory of the game, calculate the reward for each transition, and reorganize the data so that it can be directly fed into a RL algorithm. Moreover, the interface support multi-process, i.e., you can specify the number of workers and run several trajectories parallelly.
+*   `run`: After setting the agents, this interface will run a complete trajectory of the game, calculate the reward for each transition, and reorganize the data so that it can be directly fed into a RL algorithm.
 
 For advanced access to the environment, such as traversal of the game tree, we provide the following interfaces:
 
@@ -30,4 +30,4 @@ Card games usually have similar structures. We abstract some concepts in card ga
 To summarize, in one `Game`, a `Dealer` deals the cards for each `Player`. In each `Round` of the game, a `Judger` will make major decisions about the next round and the payoffs in the end of the game.
 
 ## Agents
-We provide examples of several representative algorithms and wrap them as `Agent` to show how a learning algorithm can be connected to the toolkit. The first example is DQN which is a representative of the Reinforcement Learning (RL) algorithms category. The second example is NFSP which is a representative of the Reinforcement Learning (RL) with self-play. We provide CFR and DeepCFR which belong to Conterfactual Regret Minimization (CFR) category. Other algorithms from these three categories can be connected in similar ways.
+We provide examples of several representative algorithms and wrap them as `Agent` to show how a learning algorithm can be connected to the toolkit. The first example is DQN which is a representative of the Reinforcement Learning (RL) algorithms category. The second example is NFSP which is a representative of the Reinforcement Learning (RL) with self-play. We also provide CFR and DeepCFR which belong to Conterfactual Regret Minimization (CFR) category. Other algorithms from these three categories can be connected in similar ways.
