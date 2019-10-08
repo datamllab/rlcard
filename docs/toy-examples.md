@@ -426,4 +426,4 @@ Iteration 1200
 ########## Evaluation ##########
 Iteration: 1200 Average reward is 0.0434
 ```
-We observe that CFR becomes stronger than NFSP after 1200 iterations.
+We observe that CFR becomes stronger than NFSP after 1200 iterations. In our experiments, we observe CFR has better performance than NFSP. However, CFR requires traversal of the game tree, which is infeasible in large environments.

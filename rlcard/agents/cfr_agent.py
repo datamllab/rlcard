@@ -1,6 +1,5 @@
 import numpy as np
 import collections
-from copy import copy
 
 from rlcard.utils.utils import *
 
@@ -158,7 +157,7 @@ class CFRAgent():
 
         Args:
             player_id (int): The player id
-        
+
         Returns:
             (tuple) that contains:
                 state (str): The state str

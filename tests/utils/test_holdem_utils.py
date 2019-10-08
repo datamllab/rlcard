@@ -71,7 +71,7 @@ class TestHoldemUtils(unittest.TestCase):
         winner = compare_hands(['CJ', 'SJ', 'HJ', 'BJ', 'C9', 'C8', 'C7'], ['CA', 'CQ', 'CT', 'C8', 'C6', 'C4', 'C2'])
         self.assertEqual(winner, [1, 0])
         winner = compare_hands(['CJ', 'SJ', 'HJ', 'BJ', 'C9', 'C8', 'C7'], ['CJ', 'ST', 'HQ', 'BK', 'B9', 'C8', 'C7'])
-        self.assertEqual(winner, [1, 0])     
+        self.assertEqual(winner, [1, 0])
         winner = compare_hands(['CJ', 'SJ', 'HJ', 'BJ', 'C9', 'C8', 'C7'], ['CJ', 'SJ', 'HJ', 'B9', 'C2', 'C8', 'C7'])
         self.assertEqual(winner, [1, 0])
         winner = compare_hands(['CJ', 'SJ', 'HJ', 'BJ', 'C9', 'C8', 'C7'], ['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'])
