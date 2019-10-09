@@ -151,7 +151,7 @@ class CFRAgent():
         probs = self.action_probs(state['obs'].tostring(), state['legal_actions'], self.average_policy)
         action = np.random.choice(len(probs), p=probs)
         return action
-        
+
     def get_state(self, player_id):
         ''' Get state_str of the player
 
