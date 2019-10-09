@@ -138,7 +138,7 @@ Mahjong is a tile-based game developed in China, and has spread throughout the w
 but 4 players. The game is played with a set of 136 tiles. In turn players draw and discard tiles until  
 The goal of the game is to complete the leagal hand using the 14th drawn tile to form 4 sets and a pair. 
 We revised the game into a simple version that all of the winning set are equal, and player will win as long as she complete 
-forming 4 sets and a pair. Please refer the detail on [Wikipedia](https://en.wikipedia.org/wiki/Mahjong) or  [Wikidot](http://mahjong.wikidot.com/index:main).
+forming 4 sets and a pair. Please refer the detail on [Wikipedia](https://en.wikipedia.org/wiki/Mahjong) or  [Baike](https://baike.baidu.com/item/麻将/215).
 
 ### State Representation of Mahjong 
 The state representation of Mahjong is encoded as 6 feature planes, where each plane has 34 X 4 dimensions.
