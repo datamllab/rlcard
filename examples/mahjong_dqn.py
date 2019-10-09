@@ -14,9 +14,9 @@ env = rlcard.make('mahjong')
 eval_env = rlcard.make('mahjong')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 2000
+evaluate_every = 100
 save_plot_every = 1000
-evaluate_num = 1000
+evaluate_num = 5000
 episode_num = 1000000
 
 # Set the the number of steps for collecting normalization statistics

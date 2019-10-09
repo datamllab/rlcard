@@ -1,4 +1,3 @@
-import numpy as np
 from copy import deepcopy
 
 from rlcard.games.uno.dealer import UnoDealer as Dealer

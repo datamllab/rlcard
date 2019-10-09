@@ -68,4 +68,4 @@ class UnoCard(object):
                 print(colored(trait, 'yellow'), end='')
 
             if i < len(cards) - 1:
-                print(', ', end='') 
+                print(', ', end='')

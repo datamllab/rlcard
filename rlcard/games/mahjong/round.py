@@ -30,8 +30,8 @@ class MahjongRound(object):
             player (object): object of UnoPlayer
             action (str): string of legal action
         '''
-        hand_len = [len(p.hand) for p in players]
-        pile_len = [sum([len([c for c in p]) for p in pp.pile]) for pp in players]
+        #hand_len = [len(p.hand) for p in players]
+        #pile_len = [sum([len([c for c in p]) for p in pp.pile]) for pp in players]
         #total_len = [i + j for i, j in zip(hand_len, pile_len)]
         if action == 'stand':
             (valid_act, player, cards) = self.judger.judge_chow(self.dealer, players, self.last_player)
@@ -76,9 +76,9 @@ class MahjongRound(object):
                 self.current_player = (self.current_player + 1) % 4
                 self.dealer.deal_cards(players[self.current_player], 1)
 
-        hand_len = [len(p.hand) for p in players]
-        pile_len = [sum([len([c for c in p]) for p in pp.pile]) for pp in players]
-        total_len = [i + j for i, j in zip(hand_len, pile_len)]
+        #hand_len = [len(p.hand) for p in players]
+        #pile_len = [sum([len([c for c in p]) for p in pp.pile]) for pp in players]
+        #total_len = [i + j for i, j in zip(hand_len, pile_len)]
 
     def get_state(self, players, player_id):
         ''' Get player's state

@@ -139,8 +139,8 @@ class MahjongGame(object):
             (boolean): True if the game is over
         '''
         win, player, _ = self.judger.judge_game(self)
-        pile =[sorted([c.get_str() for c in s ]) for s in self.players[player].pile if self.players[player].pile != None]
-        cards = sorted([c.get_str() for c in self.players[player].hand])
+        #pile =[sorted([c.get_str() for c in s ]) for s in self.players[player].pile if self.players[player].pile != None]
+        #cards = sorted([c.get_str() for c in self.players[player].hand])
         #count = len(cards) + sum([len(p) for p in pile])
         self.winner = player
         #print(win, player, players_val)

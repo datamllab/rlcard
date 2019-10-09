@@ -36,6 +36,7 @@ We also recommend the following **toy examples**.
 *   [Running multiple processes](docs/toy-examples.md#running-multiple-processes)
 *   [Having fun with pretrained Leduc model](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
 *   [Leduc Hold'em as single-agent environment](docs/toy-examples.md#leduc-holdem-as-single-agent-environment)
+*   [Training CFR on Leduc Hold'em](docs/toy-examples.md#training-cfr-on-leduc-holdem)
 
 ## Demo
 Run `examples/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model:
