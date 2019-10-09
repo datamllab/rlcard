@@ -134,7 +134,47 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 Each player will receive a reward 0 (lose) or 1 (win) in the end of the game.
 
 ## Mahjong
-(Under construction)
+Mahjong is a tile-based game developed in China, and has spread throughout the world since 20th century. It is commonly played
+but 4 players. The game is played with a set of 136 tiles. In turn players draw and discard tiles until  
+The goal of the game is to complete the leagal hand using the 14th drawn tile to form 4 sets and a pair. 
+We revised the game into a simple version that all of the winning set are equal, and player will win as long as she complete 
+forming 4 sets and a pair. Please refer the detail on [Wikipedia](https://en.wikipedia.org/wiki/Mahjong) or  [Wikidot](http://mahjong.wikidot.com/index:main).
+
+### State Representation of Mahjong 
+The state representation of Mahjong is encoded as 6 feature planes, where each plane has 34 X 4 dimensions.
+For each plane, the column of the plane indicates the number of the cards in the given cards set, and the
+row of the plane represents each kind of cards (Please refer to the action space table). The information that
+has been encoded can be refered as follows:
+
+| Plane          |                            Feature       |
+| -------------- | :--------------------------------------- |
+| 0              | the cards in current player's hand       |
+| 1              | the played cards on the table 			|
+| 2-5            | the public piles of each players      	|
+
+### Action Space of Mahjong
+There are 38 actions in Mahjong.
+| Action ID   |     Action         			|
+| ----------- | :-------------------------: |
+| 0 ~ 8       | Bamboo-1 ~ Bamboo-9 		|
+| 9 ~ 17      | Characters-1 ~ Character-9 	|
+| 18 ~ 26     | Dots-1 ~ Dots-9 			|
+| 27     	  | Dragons-green 				|
+| 28     	  | Dragons-red 				|
+| 29     	  | Dragons-white 				|
+| 30     	  | Winds-east 					|
+| 31     	  | Winds-west 					|
+| 32     	  | Winds-north					|
+| 33     	  | Winds-south					|
+| 34     	  | Pong						|
+| 35     	  | Chow						|
+| 36     	  | Gong						|
+| 37     	  | Stand						|
+
+### Payoff of Mahjong 
+The reward is calculated by the terminal state of the game, where winning player is awarded as 1, losing players are punished as -1.
+And if no one win the game, then all players' reward will be 0.
+
 
 ## No-limit Texas Hold'em
 No-limit Texas Hold'em has similar rule with Limit Texas Hold'em. But unlike in Limit Texas Hold'em game in which each player can only choose a fixed amount of raise and the number of raises is limited. In No-limit Texas Hold'em, The player may raise with at least the same amount as previous raised amount in the same round (or the minimum raise amount set before the game if none has raised), and up to the player's remaining stack. The number of raises is also unlimited.
@@ -152,7 +192,7 @@ The state representation is similar to Limit Hold'em game. The state is represen
 | 53      | Chips of player 2       |
 
 ### Action Encoding of No-Limit Texas Hold'em
-There 103 actions in No-limit Texas Hold'em. They are encoded as below.
+There are 103 actions in No-limit Texas Hold'em. They are encoded as below.
 
 <small><sup>\*</sup>Note: Starting from Action ID 3, the action means the amount player should put in the pot when chooses 'Raise'. The action ID from 3 to 102 corresponds to the bet amount from 1 to 100.<small>
 
