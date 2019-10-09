@@ -152,9 +152,9 @@ has been encoded can be refered as follows:
 | 1              | the played cards on the table            |
 | 2-5            | the public piles of each players         |
 
-
 ### Action Space of Mahjong
 There are 38 actions in Mahjong.
+
 | Action ID   |     Action                  |
 | ----------- | :-------------------------: |
 | 0 ~ 8       | Bamboo-1 ~ Bamboo-9         |
