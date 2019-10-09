@@ -13,10 +13,6 @@ class MahjongEnv(Env):
     def __init__(self, allow_step_back=False):
         super().__init__(Game(allow_step_back), allow_step_back)
         self.action_id = card_encoding_dict
-        self.action_id['pong'] = num
-        self.action_id['chow'] = num + 1
-        self.action_id['gong'] = num + 2
-        self.action_id['stand'] = num + 3
         self.de_action_id = {self.action_id[key]: key for key in self.action_id.keys()}
         self.state_shape = [6, 34, 4]
 

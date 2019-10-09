@@ -17,9 +17,9 @@ class MahjongGame(object):
         self.allow_step_back = allow_step_back
 
     def init_game(self):
-        ''' Initialilze the game of Limit Texas Hold'em
+        ''' Initialilze the game of Mahjong
 
-        This version supports two-player limit texas hold'em
+        This version supports two-player Mahjong
 
         Returns:
             (tuple): Tuple containing:
@@ -66,7 +66,6 @@ class MahjongGame(object):
             hist_round = deepcopy(self.round)
             hist_players = deepcopy(self.players)
             self.history.append((hist_dealer, hist_players, hist_round))
-
         self.round.proceed_round(self.players, action)
         state = self.get_state(self.round.current_player)
         self.cur_state = state
@@ -118,12 +117,20 @@ class MahjongGame(object):
         return 38
 
     def get_player_num(self):
-        ''' Return the number of players in Limit Texas Hold'em
+        ''' return the number of players in Mahjong 
 
-        Returns:
-            (int): The number of players in the game
+        returns:
+            (int): the number of players in the game
         '''
         return self.num_players
+
+    def get_player_id(self):
+        ''' return the id of current player in Mahjong
+
+        returns:
+            (int): the number of players in the game
+        '''
+        return self.round.current_player
 
     def is_over(self):
         ''' Check if the game is over

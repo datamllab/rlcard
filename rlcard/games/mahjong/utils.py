@@ -18,6 +18,12 @@ for _trait in ['east', 'west', 'north', 'south']:
     card = 'winds-'+_trait
     card_encoding_dict[card] = num
     num += 1
+card_encoding_dict['pong'] = num
+card_encoding_dict['chow'] = num + 1
+card_encoding_dict['gong'] = num + 2
+card_encoding_dict['stand'] = num + 3
+
+card_decoding_dict = {card_encoding_dict[key]: key for key in card_encoding_dict.keys()}
 
 def init_deck():
     deck = []
