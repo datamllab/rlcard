@@ -98,7 +98,7 @@ The perfomance is measured by winning rate through tournaments. Example outputs 
 ![Learning Curves](docs/imgs/curves.png "Learning Curves")
 
 ## Contributing
-Contribution to this project is greatly appreciated! Please create a issue/pull request for feedbacks/bugs/new features.
+Contribution to this project is greatly appreciated! Please create a issue for feedbacks/bugs. If you want to contribute codes, pleast contact <daochen.zha@tamu.edu> or <khlai037@tamu.edu>.
 
 ## Acknowledgements
 We would like to thank JJ World Network Technology Co.,LTD for the technical support.
