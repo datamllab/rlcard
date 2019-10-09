@@ -32,7 +32,7 @@ introduced in [Bayes' Bluff: Opponent Modeling in Poker](http://poker.cs.ualbert
 Similar to the Limit Hold'em game. The state is encoded as a vector of length 6 with each element corresponding to one card. The state contains player's hand and public card (if it has been dealt). The correspondence between the index and the card is as below.
 
 | Index   | Card                  |
-| --------| :-------------------- |
+| --------| :--------------------:|
 | 0~2     | Spade J ~ Spade K     |
 | 3~6     | Heart J ~ Heart K     |
 
@@ -51,7 +51,7 @@ In fixed limit Texas Hold'em. Each player can only choose a fixed amount of rais
 The state is encoded as a vector of length 72. The first 52 elements represent cards, where each element corresponds to one card. The hand is represented as the two hole cards plus the observed community cards so far. The last 20 elements are the betting history. The correspondence between the index and the card is as below.
 
 | Index   | Meaning                 |
-| ------- | :---------------------- |
+| ------- | :----------------------:|
 | 0~12    | Spade A ~ Spade K       |
 | 13~25   | Heart A ~ Heart K       |
 | 26~38   | Diamond A ~ Diamond K   |
@@ -149,27 +149,27 @@ has been encoded can be refered as follows:
 | Plane          |                            Feature       |
 | -------------- | :--------------------------------------- |
 | 0              | the cards in current player's hand       |
-| 1              | the played cards on the table 			|
-| 2-5            | the public piles of each players      	|
+| 1              | the played cards on the table            |
+| 2-5            | the public piles of each players         |
 
 ### Action Space of Mahjong
 There are 38 actions in Mahjong.
-| Action ID   |     Action         			|
+| Action ID   |     Action                  |
 | ----------- | :-------------------------: |
-| 0 ~ 8       | Bamboo-1 ~ Bamboo-9 		|
-| 9 ~ 17      | Characters-1 ~ Character-9 	|
-| 18 ~ 26     | Dots-1 ~ Dots-9 			|
-| 27     	  | Dragons-green 				|
-| 28     	  | Dragons-red 				|
-| 29     	  | Dragons-white 				|
-| 30     	  | Winds-east 					|
-| 31     	  | Winds-west 					|
-| 32     	  | Winds-north					|
-| 33     	  | Winds-south					|
-| 34     	  | Pong						|
-| 35     	  | Chow						|
-| 36     	  | Gong						|
-| 37     	  | Stand						|
+| 0 ~ 8       | Bamboo-1 ~ Bamboo-9         |
+| 9 ~ 17      | Characters-1 ~ Character-9  |
+| 18 ~ 26     | Dots-1 ~ Dots-9             |
+| 27          | Dragons-green               |
+| 28          | Dragons-red                 |
+| 29          | Dragons-white               |
+| 30          | Winds-east                  |
+| 31          | Winds-west                  |
+| 32          | Winds-north                 |
+| 33          | Winds-south                 |
+| 34          | Pong                        |
+| 35          | Chow                        |
+| 36          | Gong                        |
+| 37          | Stand                       |
 
 ### Payoff of Mahjong 
 The reward is calculated by the terminal state of the game, where winning player is awarded as 1, losing players are punished as -1.
