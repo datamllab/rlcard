@@ -1,3 +1,4 @@
+from termcolor import colored
 
 class UnoCard(object):
 
@@ -8,21 +9,63 @@ class UnoCard(object):
             }
 
     def __init__(self, card_type, color, trait):
+        ''' Initialize the class of UnoCard
+
+        Args:
+            card_type (str): The type of card
+            color (str): The color of card
+            trait (str): The trait of card
+        '''
         self.type = card_type
         self.color = color
         self.trait = trait
+        self.str = self.get_str()
 
     def get_str(self):
+        ''' Get the string representation of card
+
+        Return:
+            (str): The string of card's color and trait
+        '''
         return self.color + '-' + self.trait
 
-# for test
-if __name__ == '__main__':
-    a = UnoCard('number', 'r', '5')
-    b = UnoCard('number', 'r', '6')
-    c = UnoCard('number', 'r', '7')
-    cards = [a, b, c]
-    for card in cards:
-        card.color = 'g'
 
-    for card in cards:
-        print(card.get_str())
+    @staticmethod
+    def print_cards(cards, wild_color=False):
+        ''' Print out card in a nice form
+
+        Args:
+            card (str or list): The string form or a list of a UNO card
+            wild_color (boolean): True if assign collor to wild cards
+        '''
+        if isinstance(cards, str):
+            cards = [cards]
+        for i, card in enumerate(cards):
+            if card == 'draw':
+                trait = 'Draw'
+            else:
+                color, trait = card.split('-')
+                if trait == 'skip':
+                    trait = 'Skip'
+                elif trait == 'reverse':
+                    trait = 'Reverse'
+                elif trait == 'draw_2':
+                    trait = 'Draw-2'
+                elif trait == 'wild':
+                    trait = 'Wild'
+                elif trait == 'wild_draw_4':
+                    trait = 'Wild-Draw-4'
+
+            if trait == 'Draw' or (trait[:4] == 'Wild' and not wild_color):
+                print(trait, end='')
+            elif color == 'r':
+                print(colored(trait, 'red'), end='')
+            elif color == 'g':
+                print(colored(trait, 'green'), end='')
+            elif color == 'b':
+                print(colored(trait, 'blue'), end='')
+            elif color == 'y':
+                print(colored(trait, 'yellow'), end='')
+
+            if i < len(cards) - 1:
+                print(', ', end='')
