@@ -19,7 +19,6 @@ class Logger(object):
             1. log_path must be provided to use the log() method. If the log file already exists, it will be deleted when Logger is initialized.
             2. If csv_path is provided, then one record will be write to the file everytime add_point() method is called.
         '''
-
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.legend = legend
@@ -48,7 +47,6 @@ class Logger(object):
         Args:
             text(string): text to log
         '''
-
         self.log_file.write(text+'\n')
         self.log_file.flush()
         print(text)
@@ -60,7 +58,6 @@ class Logger(object):
             x (Number): x coordinate value
             y (Number): y coordinate value
         '''
-
         if x != None and y != None:
             self.xs.append(x)
             self.ys.append(y)
@@ -78,7 +75,6 @@ class Logger(object):
         Args:
             save_path (string): where to store the plot
         '''
-
         fig, ax = plt.subplots()
         ax.plot(self.xs, self.ys, label=self.legend)
         ax.set(xlabel=self.xlabel, ylabel=self.ylabel)

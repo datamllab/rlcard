@@ -1,6 +1,8 @@
 import random
+import numpy as np
 
 from rlcard.core import Card, Player
+
 
 def init_standard_deck():
     ''' Initialize a standard deck of 52 cards
@@ -8,7 +10,6 @@ def init_standard_deck():
     Returns:
         (list): A list of Card object
     '''
-
     suit_list = ['S', 'H', 'D', 'C']
     rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
@@ -20,7 +21,6 @@ def init_54_deck():
     Returns:
         (list): Alist of Card object
     '''
-
     suit_list = ['S', 'H', 'D', 'C']
     rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
@@ -41,7 +41,6 @@ def get_random_cards(cards, num, seed=None):
         (list): A list of chosen cards
         (list): A list of remained cards
     '''
-
     if not num> 0:
         raise AssertionError('Invalid input number')
     if not num <= len(cards):
@@ -63,7 +62,6 @@ def is_pair(cards):
     Returns:
         (boolean): True if the list is a pair
     '''
-
     if len(cards) == 2 and cards[0].rank == cards[1].rank:
         return True
     else:
@@ -96,7 +94,6 @@ def rank2int(rank):
         1. If the input rank is an empty string, the function will return -1.
         2. If the input rank is not valid, the function will return None.
     '''
-
     if rank == '':
         return -1
     elif rank.isdigit():
@@ -130,7 +127,6 @@ def get_cards_from_ranks(player, ranks):
 
     Note: This function will not affect the player's original hand.
     '''
-
     chosen_cards = []
     remained_cards = player.hand.copy()
     for rank in ranks:
@@ -157,7 +153,6 @@ def take_out_cards(cards, remove_cards):
         which means to take out one kind of cards with the same suit and rank in 'cards' list,
         you need to have the same number of cards with the same suit and rank in 'remove_cards' list.
     '''
-
     remove_cards_cp = remove_cards
     for card in cards:
         for remove_card in remove_cards_cp:
@@ -176,7 +171,6 @@ def is_in_cards(origin_cards, check_cards):
     Returns:
         (boolean): True if the cards are in the original cards.
     '''
-
     check_cards_cp = check_cards.copy()
     cards = origin_cards.copy()
     i = 0
@@ -194,6 +188,68 @@ def is_in_cards(origin_cards, check_cards):
             break
         i += 1
     return len(check_cards_cp) == 0
+
+def elegent_form(card):
+    ''' Get a elegent form of a card string
+
+    Args:
+        card (string): A card string
+
+    Returns:
+        elegent_card (string): A nice form of card
+    '''
+    suits = {'S': '♠', 'H': '♥', 'D': '♦', 'C': '♣','s': '♠', 'h': '♥', 'd': '♦', 'c': '♣' }
+    rank = '10' if card[1] == 'T' else card[1]
+
+    return suits[card[0]] + rank
+
+def print_card(cards):
+    ''' Nicely print a card or list of cards
+
+    Args:
+        card (string or list): The card(s) to be printed
+    '''
+    if cards == None:
+        cards = [None]
+    if isinstance(cards, str):
+        cards = [cards]
+
+    lines = [[] for _ in range(9)]
+
+    for card in cards:
+        if card == None:
+            lines[0].append('┌─────────┐')
+            lines[1].append('│░░░░░░░░░│')
+            lines[2].append('│░░░░░░░░░│')
+            lines[3].append('│░░░░░░░░░│')
+            lines[4].append('│░░░░░░░░░│')
+            lines[5].append('│░░░░░░░░░│')
+            lines[6].append('│░░░░░░░░░│')
+            lines[7].append('│░░░░░░░░░│')
+            lines[8].append('└─────────┘')
+        else:
+            elegent_card = elegent_form(card)
+            suit = elegent_card[0]
+            rank = elegent_card[1]
+            if len(elegent_card) == 3:
+                space = elegent_card[2]
+            else:
+                space = ' '
+
+            lines[0].append('┌─────────┐')
+            lines[1].append('│{}{}       │'.format(rank, space))
+            lines[2].append('│         │')
+            lines[3].append('│         │')
+            lines[4].append('│    {}    │'.format(suit))
+            lines[5].append('│         │')
+            lines[6].append('│         │')
+            lines[7].append('│       {}{}│'.format(space, rank))
+            lines[8].append('└─────────┘')
+
+    for line in lines:
+        print ('   '.join(line))
+
+
 
 def init_players(n):
     ''' Initilize a list of Player objects with n players
@@ -244,7 +300,6 @@ def reorganize(trajectories, payoffs):
         (list): A new trajectories that can be fed into RL algorithms.
 
     '''
-
     player_num = len(trajectories)
     new_trajectories = [[] for _ in range(player_num)]
 
@@ -270,10 +325,42 @@ def set_global_seed(seed):
 
     Note: If using other modules with randomness, they also need to be seeded
     '''
-
     if seed is not None:
-        import numpy as np
         import tensorflow as tf
         tf.set_random_seed(seed)
         np.random.seed(seed)
         random.seed(seed)
+
+def remove_illegal(action_probs, legal_actions):
+    ''' Remove illegal actions and normalize the
+        probability vector
+
+    Args:
+        action_probs (numpy.array): A 1 dimention numpy array.
+        legal_actions (list): A list of indices of legal actions.
+
+    Returns:
+        probd (numpy.array): A normalized vector without legal actions.
+    '''
+    probs = np.zeros(action_probs.shape[0])
+    probs[legal_actions] = action_probs[legal_actions]
+    if np.sum(probs) == 0:
+        probs[legal_actions] = 1 / len(legal_actions)
+    else:
+        probs /= sum(probs)
+    return probs
+
+
+def assign_task(task_num, process_num):
+    ''' Assign the number of tasks according to the number of processes
+
+    Args:
+        task_num (int): An integer of assignments of tasks
+        process_num (int): An integer of the number of processes
+
+    Returns:
+        per_stasks (list): An list of the numbers of tasks assigned to processes
+    '''
+    per_tasks = [task_num // process_num] * process_num
+    per_tasks[0] += (task_num % process_num)
+    return per_tasks

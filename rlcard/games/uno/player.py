@@ -9,14 +9,10 @@ class UnoPlayer(object):
         '''
         self.player_id = player_id
         self.hand = []
+        self.stack = []
 
     def get_player_id(self):
         ''' Return the id of the player
         '''
 
         return self.player_id
-
-    def print_hand(self):
-        for card in self.hand:
-            print(card.get_str(), end=' ')
-        print()

@@ -3,7 +3,8 @@
 
 import os
 import json
-import random
+from collections import OrderedDict
+import numpy as np
 
 import rlcard
 
@@ -12,20 +13,21 @@ ROOT_PATH = rlcard.__path__[0]
 
 # a map of action to abstract action
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/specific_map.json'), 'r') as file:
-    SPECIFIC_MAP = json.load(file)
+    SPECIFIC_MAP = json.load(file, object_pairs_hook=OrderedDict)
 
 # a map of abstract action to its index and a list of abstract action
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/action_space.json'), 'r') as file:
-    ACTION_SPACE = json.load(file)
+    ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
     ACTION_LIST = list(ACTION_SPACE.keys())
 
-# a map of card to its type
+# a map of card to its type. Also return both dict and list to accelerate
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/card_type.json'), 'r') as file:
-    CARD_TYPE = json.load(file)
+    data = json.load(file, object_pairs_hook=OrderedDict)
+    CARD_TYPE = (data, list(data), set(data))
 
 # a map of type to its cards
 with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/type_card.json'), 'r') as file:
-    TYPE_CARD = json.load(file)
+    TYPE_CARD = json.load(file, object_pairs_hook=OrderedDict)
 
 # rank list of solo character of cards
 CARD_RANK_STR = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K',
@@ -45,7 +47,6 @@ def doudizhu_sort_str(card_1, card_2):
     Returns:
         int: 1(card_1 > card_2) / 0(card_1 = card2) / -1(card_1 < card_2)
     '''
-
     key_1 = CARD_RANK_STR.index(card_1)
     key_2 = CARD_RANK_STR.index(card_2)
     if key_1 > key_2:
@@ -62,7 +63,6 @@ def doudizhu_sort_card(card_1, card_2):
         card_1 (object): object of Card
         card_2 (object): object of card
     '''
-
     key = []
     for card in [card_1, card_2]:
         if card.rank == '':
@@ -86,7 +86,6 @@ def get_landlord_score(current_hand):
     Returns:
         int: score
     '''
-
     score_map = {'A': 1, '2': 2, 'B': 3, 'R': 4}
     score = 0
     # rocket
@@ -119,7 +118,6 @@ def get_optimal_action(probs, legal_actions):
     Returns:
         str: optimal legal action
     '''
-
     abstract_actions = [SPECIFIC_MAP[action] for action in legal_actions]
     action_probs = []
     for actions in abstract_actions:
@@ -133,7 +131,7 @@ def get_optimal_action(probs, legal_actions):
     optimal_actions = [legal_actions[index] for index,
                        prob in enumerate(action_probs) if prob == optimal_prob]
     if len(optimal_actions) > 1:
-        return random.choice(optimal_actions)
+        return np.random.choice(optimal_actions)
     return optimal_actions[0]
 
 
@@ -146,7 +144,6 @@ def cards2str(cards: list):
     Returns:
         string: string representation of cards
     '''
-
     response = ''
     for card in cards:
         if card.rank == '':
@@ -155,18 +152,16 @@ def cards2str(cards: list):
             response += card.rank
     return response
 
-
 def contains_cards(candidate, target):
     ''' Check if cards of candidate contains cards of target.
 
     Args:
-        candidate (string): string represent of cards of candidate
-        target (string): string represent of cards of target
+        candidate (string): A string representing the cards of candidate
+        target (string): A string representing the number of cards of target
 
     Returns:
         boolean
     '''
-
     len_can = len(candidate)
     len_tar = len(target)
     if len_can < len_tar:
@@ -179,9 +174,9 @@ def contains_cards(candidate, target):
     for tar_card in target:
         beg = candidate.find(tar_card, beg) + 1
         if beg == 0:
+        #if tar_card not in candidate:
             return False
     return True
-
 
 def encode_cards(plane, cards):
     ''' Encode cards and represerve it into plane.
@@ -190,7 +185,6 @@ def encode_cards(plane, cards):
         cards (list or str): list or str of cards, every entry is a
     character of solo representation of card
     '''
-
     if not cards:
         return None
     layer = 1
@@ -228,12 +222,11 @@ def get_gt_cards(player, greater_player):
     Note:
         1. return value contains 'pass'
     '''
-
     # add 'pass' to legal actions
     gt_cards = ['pass']
     current_hand = cards2str(player.current_hand)
     target_cards = greater_player.played_cards
-    target_types = CARD_TYPE[target_cards]
+    target_types = CARD_TYPE[0][target_cards]
     type_dict = {}
     for card_type, weight in target_types:
         if card_type not in type_dict:
@@ -253,3 +246,10 @@ def get_gt_cards(player, greater_player):
                     # if self.contains_cards(current_hand, cards):
                         gt_cards.append(cards)
     return gt_cards
+
+
+# Test json order
+#if __name__ == '__main__':
+#    for action, index in ACTION_SPACE.items():
+#        if action != ACTION_LIST[index]:
+#            print('order error')

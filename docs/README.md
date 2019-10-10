@@ -1,20 +1,24 @@
-# Overview
-The toolkit wraps each game by `Env` with easy-to-use interfaces. The goal of this toolkit is to enable the users to focus on algorithm design on challenging card games instead of developping game engines. The following design principles are applied:
-* **Simple.** We make the interfaces straightforward and simple. Users can easily run one game and obtain the statistics of the game.
-* **Consistent.** All the games are implemented following the same logical pattern. The main classes/functions of each game share the same class/function name. Users can easily understand each game and modify the rules for research purpose.
-* **Reproducible.** The results can be seeded for reproducibility purpose.
-* **Minimum Dependency.** We minimize the dependencies used in the toolkit so that the codes are easy to modify or migrate.
-* **Scalable.** New card environments can be added conveniently into RLCard with the above design principles.
+# Documents of RLCard
 
-# User Guide
-* [Toy examples](toy-examples.md)
-* [RLCard high-level design](high-level-design.md)
-* [Games in RLCard](games.md)
-* [Algorithms in RLCard](algorithms.md)
-* [Developping new algorithms](developping-algorithms.md)
+## Overview
+The toolkit wraps each game by `Env` class with easy-to-use interfaces. The goal of this toolkit is to enable the users to focus on algorithm development without caring about the environment. The following design principles are applied when developing the toolkit:
+*   **Reproducible.** Results on the environments can be reproduced. The same result should be obtained with the same random seed in different runs.
+*   **Accessible.** The experiences are collected and well organized after each game with easy-to-use interfaces. Uses can conveniently configure state representation, action encoding, reward design, or even the game rules.
+*   **Scalable.** New card environments can be added conveniently into the toolkit with the above design principles. We also try to minimize the dependencies in the toolkit so that the codes can be easily maintained.
 
-# Developer Guide
-* [Adding new environments](adding-new-environments.md)
+## User Guide
 
-# Application Programming Interface (API)
-The API documents are and available in [github page](https://rlcard.github.io/index.html).
+*   [Toy examples](toy-examples.md)
+*   [RLCard high-level design](high-level-design.md)
+*   [Games in RLCard](games.md)
+*   [Algorithms in RLCard](algorithms.md)
+
+## Developer Guide
+
+*   [Developping new algorithms](developping-algorithms.md)
+*   [Adding new environments](adding-new-environments.md)
+*   [Customizing environments](customizing-environments.md)
+*   [Adding pre-trained/rule-based models](adding-models.md)
+
+## Application Programming Interface (API)
+The API documents are and available at [Official Website](http://www.rlcard.org).

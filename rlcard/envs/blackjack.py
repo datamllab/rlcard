@@ -8,13 +8,13 @@ class BlackjackEnv(Env):
     ''' Blackjack Environment
     '''
 
-    def __init__(self):
+    def __init__(self, allow_step_back=False):
         ''' Initialize the Blackjack environment
         '''
-
-        super().__init__(Game())
+        super().__init__(Game(allow_step_back), allow_step_back)
         self.rank2score = {"A":10, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":10, "Q":10, "K":10}
         self.actions = ['hit', 'stand']
+        self.state_shape = [2]
 
     def get_legal_actions(self):
         ''' Get all leagal actions
@@ -22,7 +22,6 @@ class BlackjackEnv(Env):
         Returns:
             encoded_action_list (list): return encoded legal action list (from str to int)
         '''
-
         encoded_action_list = []
         for i in range(len(self.actions)):
             encoded_action_list.append(i)
@@ -37,7 +36,6 @@ class BlackjackEnv(Env):
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
         '''
-
         cards = state['state']
         my_cards = cards[0]
         dealer_cards = cards[1]
@@ -56,7 +54,11 @@ class BlackjackEnv(Env):
         my_score, _ = get_scores_and_A(my_cards)
         dealer_score, _ = get_scores_and_A(dealer_cards)
         obs = np.array([my_score, dealer_score])
-        return obs
+
+        legal_actions = [i for i in range(len(self.actions))]
+        extracted_state = {'obs': obs, 'legal_actions': legal_actions}
+
+        return extracted_state
 
     def get_payoffs(self):
         ''' Get the payoff of a game
@@ -64,15 +66,12 @@ class BlackjackEnv(Env):
         Returns:
            payoffs (list): list of payoffs
         '''
-
         if self.game.winner['player'] == 0 and self.game.winner['dealer'] == 1:
             return [-1]
         elif self.game.winner['dealer'] == 0 and self.game.winner['player'] == 1:
             return [1]
         elif self.game.winner['player'] == 1 and self.game.winner['dealer'] == 1:
             return [0]
-        else:
-            raise "There are some bugs!"
 
     def decode_action(self, action_id):
         ''' Decode the action for applying to the game
@@ -83,5 +82,4 @@ class BlackjackEnv(Env):
         Returns:
             action (str): action for the game
         '''
-
         return self.actions[action_id]
