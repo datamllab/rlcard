@@ -7,7 +7,6 @@ class BlackjackPlayer(object):
         Args:
             player_id (int): id for the player
         '''
-
         self.player_id = player_id
         self.hand = []
         self.status = 'alive'
@@ -16,5 +15,4 @@ class BlackjackPlayer(object):
     def get_player_id(self):
         ''' Return player's id
         '''
-
         return self.player_id

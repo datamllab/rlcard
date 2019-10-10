@@ -7,7 +7,6 @@ class LimitholdemDealer(object):
     def __init__(self):
         ''' Initialize a limitholdem dealer class
         '''
-
         super().__init__()
         self.deck = init_standard_deck()
         self.shuffle()
@@ -16,7 +15,6 @@ class LimitholdemDealer(object):
     def shuffle(self):
         ''' Shuffle the deck
         '''
-
         random.shuffle(self.deck)
 
     def deal_card(self):
@@ -25,5 +23,4 @@ class LimitholdemDealer(object):
         Returns:
             (Card): The drawn card from the deck
         '''
-
         return self.deck.pop()
