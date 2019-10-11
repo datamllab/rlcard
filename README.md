@@ -1,4 +1,6 @@
 # RLCard: A Toolkit for Reinforcement Learning in Card Games
+![Logo](./docs/imgs/logo.jpg "Logo")
+
 [![Build Status](https://travis-ci.org/datamllab/RLCard.svg?branch=master)](https://travis-ci.org/datamllab/RLCard)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/248eb15c086748a4bcc830755f1bd798)](https://www.codacy.com/manual/daochenzha/rlcard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=datamllab/rlcard&amp;utm_campaign=Badge_Grade)
 [![Coverage Status](https://coveralls.io/repos/github/datamllab/rlcard/badge.svg)](https://coveralls.io/github/datamllab/rlcard?branch=master)
@@ -103,6 +105,19 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 ## Evaluation
 The perfomance is measured by winning rates through tournaments. Example outputs are as follows:
 ![Learning Curves](http://rlcard.org/imgs/curves.png "Learning Curves")
+
+## Cite this work
+
+```
+@misc{zha2019rlcard,
+    title={RLCard: A Toolkit for Reinforcement Learning in Card Games},
+    author={Daochen Zha and Kwei-Herng Lai and Yuanpu Cao and Songyi Huang and Ruzhe Wei and Junyu Guo and Xia Hu},
+    year={2019},
+    eprint={1910.04376},
+    archivePrefix={arXiv},
+    primaryClass={cs.AI}
+}
+```
 
 ## Contributing
 Contribution to this project is greatly appreciated! Please create a issue for feedbacks/bugs. If you want to contribute codes, pleast contact [daochen.zha@tamu.edu](mailto:daochen.zha@tamu.edu) or [khlai037@tamu.edu](khlai037@tamu.edu).
