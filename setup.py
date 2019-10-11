@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf8") as fh:
 
 setuptools.setup(
     name="rlcard",
-    version="0.1.5",
+    version="0.1.6",
     author="Data Analytics at Texas A&M (DATA) Lab",
     author_email="khlai037@tamu.edu",
     description="A Toolkit for Reinforcement Learning in Card Games",
@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/datamllab/rlcard",
     keywords=["Reinforcement Learning", "game", "RL", "AI"],
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=('tests',)),
     package_data={
     	'rlcard': [ 'models/pretrained/leduc_holdem_nfsp/*',
     				'games/uno/jsondata/action_space.json',
