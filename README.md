@@ -121,7 +121,7 @@ The perfomance is measured by winning rates through tournaments. Example outputs
 ```
 
 ## Contributing
-Contribution to this project is greatly appreciated! Please create a issue for feedbacks/bugs. If you want to contribute codes, pleast contact [daochen.zha@tamu.edu](mailto:daochen.zha@tamu.edu) or [khlai037@tamu.edu](mailto:khlai037@tamu.edu).
+Contribution to this project is greatly appreciated! Please create an issue for feedbacks/bugs. If you want to contribute codes, please refer to [Contributing Guide](./CONTRIBUTING.md).
 
 ## Acknowledgements
 We would like to thank JJ World Network Technology Co.,LTD for the generous support.
