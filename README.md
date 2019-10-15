@@ -110,13 +110,11 @@ The perfomance is measured by winning rates through tournaments. Example outputs
 ## Cite this work
 
 ```
-@misc{zha2019rlcard,
-    title={RLCard: A Toolkit for Reinforcement Learning in Card Games},
-    author={Daochen Zha and Kwei-Herng Lai and Yuanpu Cao and Songyi Huang and Ruzhe Wei and Junyu Guo and Xia Hu},
-    year={2019},
-    eprint={1910.04376},
-    archivePrefix={arXiv},
-    primaryClass={cs.AI}
+@article{zha2019rlcard,
+  title={RLCard: A Toolkit for Reinforcement Learning in Card Games},
+  author={Zha, Daochen and Lai, Kwei-Herng and Cao, Yuanpu and Huang, Songyi and Wei, Ruzhe and Guo, Junyu and Hu, Xia},
+  journal={arXiv preprint arXiv:1910.04376},
+  year={2019}
 }
 ```
 
