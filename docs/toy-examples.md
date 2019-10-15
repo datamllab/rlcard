@@ -33,7 +33,7 @@ The expected output should look like something as follows:
 
 ```
 Episode 0
-State: {'obs': array([20,  3]), 'legal_actions': [0, 1]}, Action: 0, Reward: 0, Next State: {'obs': array([15,  3]), 'legal_actions': [0, 1]}, Done: False
+State: {'obs': array([21,  3]), 'legal_actions': [0, 1]}, Action: 0, Reward: 0, Next State: {'obs': array([15,  3]), 'legal_actions': [0, 1]}, Done: False
 State: {'obs': array([15,  3]), 'legal_actions': [0, 1]}, Action: 1, Reward: -1, Next State: {'obs': array([15, 20]), 'legal_actions': [0, 1]}, Done: True
 
 Episode 1
