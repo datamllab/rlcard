@@ -411,7 +411,7 @@ INFO - Step 2199, loss: 0.75212180614471447
 ```
 
 ## Having Fun with Pretrained Leduc Model
-We have designed simple human interfaces to play against the pretrained model. Example of playing against Leduc Hold'em NFSP model is as below:
+We have designed simple human interfaces to play against the pretrained model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](games.md#leduc-holdem). Example of playing against Leduc Hold'em NFSP model is as below:
 ```python
 import rlcard
 
