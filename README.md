@@ -11,6 +11,8 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Official Website: [http://www.rlcard.org](http://www.rlcard.org)
 *   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
 
+We have just initialized a list of [Awesome-Game-AI resources](https://github.com/datamllab/awesome-game-ai). Check it out!
+
 ## Installation
 Make sure that you have **Python 3.5+** and **pip** installed. We recommend installing `rlcard` with `pip` as follow:
 
