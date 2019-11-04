@@ -76,11 +76,12 @@ class DoudizhuEnv(Env):
                     kickers.append(legal_action.replace(main, '', 1))
                     break
         # choose kicker with minimum score
+        player_id = self.game.get_player_id()
         kicker_scores = []
         for kicker in kickers:
             score = 0
-            for legal_action in legal_actions:
-                if kicker in legal_action:
+            for action in self.game.judger.playable_cards[player_id]:
+                if kicker in action:
                     score += 1
             kicker_scores.append(score+CARD_RANK_STR.index(kicker[0]))
         min_index = 0
@@ -106,15 +107,3 @@ class DoudizhuEnv(Env):
                     if action_id not in legal_action_id:
                         legal_action_id.append(action_id)
         return legal_action_id
-
-
-# Test for decode_action
-#if __name__ == '__main__':
-#    env = DoudizhuEnv()
-#    env.init_game()
-#    env.game.state['actions'] = ['444', '33344', '33355']
-#    print(env.decode_action(54))
-#    env.game.state['actions'] = ['444', '33344', '33355']
-#    print(env.decode_action(29))
-#    env.game.state['actions'] = ['5', '6', '66', '55', '555', '33366', '33355']
-#    print(env.decode_action(54))
