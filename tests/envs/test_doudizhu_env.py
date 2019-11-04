@@ -56,17 +56,14 @@ class TestDoudizhuEnv(unittest.TestCase):
 
     def test_decode_action(self):
         env = Env()
-        state, _ = env.init_game()
-        for action in state['legal_actions']:
-            decoded = env.decode_action(action)
-            self.assertIn(decoded, env.game.state['actions'])
-
-        state, _ = env.step(0)
-        for action in range(309):
-            if action not in state['legal_actions']:
-                decoded = env.decode_action(action)
-                self.assertEqual(decoded, 'pass')
-                break
+        env.init_game()
+        env.game.state['actions'] = ['33366', '33355']
+        env.game.judger.playable_cards[0] = ['5', '6', '55', '555', '33366', '33355']
+        decoded = env.decode_action(54)
+        self.assertEqual(decoded, '33366')
+        env.game.state['actions'] = ['444', '44466', '44455']
+        decoded = env.decode_action(29)
+        self.assertEqual(decoded, '444')
 
 if __name__ == '__main__':
     unittest.main()
