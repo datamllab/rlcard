@@ -29,3 +29,5 @@ We provide some running examples. We will update the examples if we achieve bett
 *   `uno_nfsp.py`: train NFSP on UNO.
 *   `uno_random.py`: run random agents on UNO.
 *   `uno_single.py`: train DQN on UNO as single-agent environment.
+*   **Save models**: refer to `leduc_holdem_nfsp_save_model.py`.
+*   **Load models**: refer to [rlcard/models/pretrained\_models.py](../rlcard/models/pretrained_models.py)
