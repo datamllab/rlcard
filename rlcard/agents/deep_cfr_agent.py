@@ -40,7 +40,7 @@ import numpy as np
 import tensorflow as tf
 import sonnet as snt
 
-from rlcard.utils.utils import *
+from rlcard.utils.utils import remove_illegal
 sys.setrecursionlimit(10000000)
 
 AdvantageMemory = collections.namedtuple(
@@ -278,7 +278,7 @@ class DeepCFR():
         for _ in range(self._num_step):
             policy_loss = self._learn_strategy_network()
 
-        adv_loss = [self.advantage_losses[p][-1] for p in self.advantage_losses.keys() if self.advantage_losses[p][-1] != None]
+        adv_loss = [self.advantage_losses[p][-1] for p in self.advantage_losses.keys() if self.advantage_losses[p][-1] is not None]
         avg_adv_loss = sum(adv_loss) / len(adv_loss)
 
         return self._policy_network, avg_adv_loss, policy_loss

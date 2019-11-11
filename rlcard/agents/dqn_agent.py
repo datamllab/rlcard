@@ -29,7 +29,7 @@ import numpy as np
 import tensorflow as tf
 from collections import namedtuple
 
-from rlcard.utils.utils import *
+from rlcard.utils.utils import remove_illegal
 
 Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state', 'done'])
 
@@ -354,7 +354,7 @@ class Estimator():
         feed_dict = { self.X_pl: s, self.y_pl: y, self.actions_pl: a }
         _, _, loss = sess.run(
                 [tf.contrib.framework.get_global_step(), self.train_op, self.loss],
-                    feed_dict)
+                feed_dict)
         return loss
 
 class Memory(object):

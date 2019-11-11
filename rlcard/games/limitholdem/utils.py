@@ -457,9 +457,9 @@ def compare_hands(hand0, hand1):
         [1, 1]: draw
     '''
 
-    if hand0 == None:
+    if hand0 is None:
         return [0, 1]
-    elif hand1 == None:
+    elif hand1 is None:
         return [1, 0]
     hand0 = Hand(hand0)
     hand1 = Hand(hand1)
