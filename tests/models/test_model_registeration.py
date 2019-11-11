@@ -1,7 +1,7 @@
 import unittest
 
 from  rlcard import models
-from rlcard.models.registration import *
+from rlcard.models.registration import register, load
 
 
 class TestRegistration(unittest.TestCase):

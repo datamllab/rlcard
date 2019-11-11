@@ -5,7 +5,6 @@ import numpy as np
 import rlcard
 from rlcard.envs.env import Env
 from rlcard.games.limitholdem.game import LimitholdemGame as Game
-from rlcard.utils.utils import *
 
 class LimitholdemEnv(Env):
     ''' Limitholdem Environment

@@ -1,6 +1,5 @@
 import numpy as np
 
-from rlcard.utils.utils import *
 from rlcard.envs.env import Env
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
 from rlcard.games.doudizhu.utils import SPECIFIC_MAP, CARD_RANK_STR

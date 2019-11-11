@@ -3,7 +3,7 @@ import tensorflow as tf
 import numpy as np
 import rlcard
 
-from rlcard.agents.deep_cfr_agent import *
+from rlcard.agents.deep_cfr_agent import DeepCFR, FixedSizeRingBuffer
 
 class TestUtilsMethos(unittest.TestCase):
 

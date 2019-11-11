@@ -26,7 +26,7 @@ import sonnet as snt
 import tensorflow as tf
 
 from rlcard.agents.dqn_agent import DQNAgent
-from rlcard.utils.utils import *
+from rlcard.utils.utils import remove_illegal
 
 Transition = collections.namedtuple('Transition', 'info_state action_probs')
 

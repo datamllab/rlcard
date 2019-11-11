@@ -209,7 +209,7 @@ def print_card(cards):
     Args:
         card (string or list): The card(s) to be printed
     '''
-    if cards == None:
+    if cards is None:
         cards = [None]
     if isinstance(cards, str):
         cards = [cards]
@@ -217,7 +217,7 @@ def print_card(cards):
     lines = [[] for _ in range(9)]
 
     for card in cards:
-        if card == None:
+        if card is None:
             lines[0].append('┌─────────┐')
             lines[1].append('│░░░░░░░░░│')
             lines[2].append('│░░░░░░░░░│')

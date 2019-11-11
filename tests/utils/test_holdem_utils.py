@@ -1,5 +1,5 @@
 import unittest
-from rlcard.games.limitholdem.utils import *
+from rlcard.games.limitholdem.utils import compare_hands
 from rlcard.games.limitholdem.utils import Hand as Hand
 ''' Combinations selected for testing compare_hands function
 Royal straight flush ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'CA']

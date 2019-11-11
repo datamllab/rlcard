@@ -1,10 +1,9 @@
 import numpy as np
 
-from rlcard.utils.utils import *
 from rlcard.envs.env import Env
 from rlcard.games.mahjong.game import MahjongGame as Game
 from rlcard.games.mahjong.card import MahjongCard as Card
-from rlcard.games.mahjong.utils import *
+from rlcard.games.mahjong.utils import card_encoding_dict, encode_cards, pile2list
 
 class MahjongEnv(Env):
     ''' Mahjong Environment
