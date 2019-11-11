@@ -1,20 +1,24 @@
 import numpy as np
 import collections
 
+import os
+import pickle
+
 from rlcard.utils.utils import *
 
 class CFRAgent():
     ''' Implement CFR algorithm
     '''
 
-    def __init__(self, env):
+    def __init__(self, env, model_path='./cfr_model'):
         ''' Initilize Agent
         
         Args:
             env (Env): Env class
         '''
         self.env = env
-        
+        self.model_path = model_path
+
         # A policy is a dict state_str -> action probabilities
         self.policy = collections.defaultdict(list)
         self.average_policy =collections.defaultdict(np.array)
@@ -165,3 +169,48 @@ class CFRAgent():
         '''
         state = self.env.get_state(player_id)
         return state['obs'].tostring(), state['legal_actions']
+
+    def save(self):
+        ''' Save model
+        '''
+        if not os.path.exists(self.model_path):
+            os.makedirs(self.model_path)
+
+        policy_file = open(os.path.join(self.model_path, 'policy.pkl'),'wb')
+        pickle.dump(self.policy, policy_file)
+        policy_file.close()
+
+        average_policy_file = open(os.path.join(self.model_path, 'average_policy.pkl'),'wb')
+        pickle.dump(self.average_policy, average_policy_file)
+        average_policy_file.close()
+
+        regrets_file = open(os.path.join(self.model_path, 'regrets.pkl'),'wb')
+        pickle.dump(self.regrets, regrets_file)
+        regrets_file.close()
+
+        iteration_file = open(os.path.join(self.model_path, 'iteration.pkl'),'wb')
+        pickle.dump(self.iteration, iteration_file)
+        iteration_file.close()
+
+    def load(self):
+        ''' Load model
+        '''
+        if not os.path.exists(self.model_path):
+            return
+
+        policy_file = open(os.path.join(self.model_path, 'policy.pkl'),'rb')
+        self.policy = pickle.load(policy_file)
+        policy_file.close()
+
+        average_policy_file = open(os.path.join(self.model_path, 'average_policy.pkl'),'rb')
+        self.average_policy = pickle.load(average_policy_file)
+        average_policy_file.close()
+
+        regrets_file = open(os.path.join(self.model_path, 'regrets.pkl'),'rb')
+        self.regrets = pickle.load(regrets_file)
+        regrets_file.close()
+
+        iteration_file = open(os.path.join(self.model_path, 'iteration.pkl'),'rb')
+        self.iteration = pickle.load(iteration_file)
+        iteration_file.close()
+
