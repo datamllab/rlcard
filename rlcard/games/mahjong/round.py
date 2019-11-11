@@ -66,7 +66,7 @@ class MahjongRound(object):
             self.player_before_act = self.current_player
             self.last_player = self.current_player
             (valid_act, player, cards) = self.judger.judge_pong_gong(self.dealer, players, self.last_player)
-            if valid_act != False:
+            if valid_act:
                 self.valid_act = valid_act
                 self.last_cards = cards
                 self.last_player = self.current_player
