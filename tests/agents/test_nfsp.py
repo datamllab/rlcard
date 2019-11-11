@@ -1,7 +1,8 @@
 import unittest
 import tensorflow as tf
+import numpy as np
 
-from rlcard.agents.nfsp_agent import *
+from rlcard.agents.nfsp_agent import NFSPAgent, ReservoirBuffer
 
 class TestNFSP(unittest.TestCase):
 

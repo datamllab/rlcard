@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 
 import rlcard
-from rlcard.agents.cfr_agent import *
+from rlcard.agents.cfr_agent import CFRAgent
 
 class TestNFSP(unittest.TestCase):
 

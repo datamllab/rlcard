@@ -1,7 +1,7 @@
 import unittest
 
 import rlcard
-from rlcard.envs.registration import *
+from rlcard.envs.registration import register, make
 
 
 class TestRegistration(unittest.TestCase):

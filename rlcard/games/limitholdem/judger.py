@@ -1,4 +1,4 @@
-from rlcard.games.limitholdem.utils import *
+from rlcard.games.limitholdem.utils import compare_hands
 
 class LimitholdemJudger(object):
     ''' The Judger class for Texas Hold'em
@@ -22,7 +22,7 @@ class LimitholdemJudger(object):
         '''
         # Convert the hands into card indexes
         for i, hand in enumerate(hands):
-            if hands[i] != None:
+            if hands[i] is not None:
                 h = [card.get_index() for card in hand]
                 hands[i] = h
 

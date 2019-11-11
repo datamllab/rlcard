@@ -135,7 +135,7 @@ def get_optimal_action(probs, legal_actions):
     return optimal_actions[0]
 
 
-def cards2str(cards: list):
+def cards2str(cards):
     ''' Get the corresponding string representation of cards
 
     Args:
@@ -174,7 +174,7 @@ def contains_cards(candidate, target):
     for tar_card in target:
         beg = candidate.find(tar_card, beg) + 1
         if beg == 0:
-        #if tar_card not in candidate:
+            #if tar_card not in candidate:
             return False
     return True
 
@@ -243,7 +243,7 @@ def get_gt_cards(player, greater_player):
                 for cards in cards_list:
                     # TODO: improve efficiency
                     if cards not in gt_cards and contains_cards(current_hand, cards):
-                    # if self.contains_cards(current_hand, cards):
+                        # if self.contains_cards(current_hand, cards):
                         gt_cards.append(cards)
     return gt_cards
 

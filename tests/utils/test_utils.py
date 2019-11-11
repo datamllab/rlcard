@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from rlcard.utils.utils import *
+from rlcard.utils.utils import get_random_cards, is_single, init_54_deck, init_standard_deck, is_in_cards, is_pair, is_single, rank2int, take_out_cards, print_card, get_random_cards, elegent_form, init_players, get_upstream_player_id, get_downstream_player_id, reorganize, set_global_seed, get_cards_from_ranks
 
 from rlcard.core import Card, Player
 

@@ -102,7 +102,7 @@ class MahjongJudger(object):
         for player in game.players:
             win, val = self.judge_hu(player)
             players_val.append(val)
-            if win == True:
+            if win:
                 win_player = player.player_id
         if win_player != -1 or len(game.dealer.deck) == 0:
             return True, win_player, players_val

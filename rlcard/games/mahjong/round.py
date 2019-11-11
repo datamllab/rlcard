@@ -35,7 +35,7 @@ class MahjongRound(object):
         #total_len = [i + j for i, j in zip(hand_len, pile_len)]
         if action == 'stand':
             (valid_act, player, cards) = self.judger.judge_chow(self.dealer, players, self.last_player)
-            if valid_act != False:
+            if valid_act:
                 self.valid_act = valid_act
                 self.last_cards = cards
                 self.last_player = self.current_player
@@ -91,7 +91,7 @@ class MahjongRound(object):
         '''
         state = {}
         #(valid_act, player, cards) = self.judger.judge_pong_gong(self.dealer, players, self.last_player)
-        if self.valid_act != False: # PONG/GONG/CHOW
+        if self.valid_act: # PONG/GONG/CHOW
             state['valid_act'] = [self.valid_act, 'stand']
             state['table'] = self.dealer.table
             state['player'] = self.current_player

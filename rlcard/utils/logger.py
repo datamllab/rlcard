@@ -28,12 +28,12 @@ class Logger(object):
         self.csv_path = csv_path
         self.log_file = None
         self.csv_file = None
-        if log_path != None:
+        if log_path is not None:
             log_dir = os.path.dirname(log_path)
             if not os.path.exists(log_dir):
                 os.makedirs(log_dir)
             self.log_file = open(log_path, 'w')
-        if csv_path != None:
+        if csv_path is not None:
             csv_dir = os.path.dirname(csv_path)
             if not os.path.exists(csv_dir):
                 os.makedirs(csv_dir)
@@ -58,7 +58,7 @@ class Logger(object):
             x (Number): x coordinate value
             y (Number): y coordinate value
         '''
-        if x != None and y != None:
+        if x is not None and y is not None:
             self.xs.append(x)
             self.ys.append(y)
         else:
@@ -90,7 +90,7 @@ class Logger(object):
     def close_file(self):
         ''' Close the created file objects
         '''
-        if self.log_path != None:
+        if self.log_path is not None:
             self.log_file.close()
-        if self.csv_path != None:
+        if self.csv_path is not None:
             self.csv_file.close()
