@@ -12,7 +12,7 @@ class CFRAgent():
 
     def __init__(self, env, model_path='./cfr_model'):
         ''' Initilize Agent
-        
+
         Args:
             env (Env): Env class
         '''
