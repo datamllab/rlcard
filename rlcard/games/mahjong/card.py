@@ -25,10 +25,10 @@ class MahjongCard(object):
 
 
 # for test
-if __name__ == '__main__':
-    a = MajongCard('dots', '5')
-    b = MajongCard('bamboo', '6')
-    c = MajongCard('winds', 'south')
-    cards = [a, b, c]
-    for card in cards:
-        print(card.get_str())
+#if __name__ == '__main__':
+#    a = MajongCard('dots', '5')
+#    b = MajongCard('bamboo', '6')
+#    c = MajongCard('winds', 'south')
+#    cards = [a, b, c]
+#    for card in cards:
+#        print(card.get_str())
