@@ -65,7 +65,7 @@ class Logger(object):
             raise ValueError('x and y should not be None.')
 
         # If csv_path is not None then write x and y to file
-        if self.csv_path != None:
+        if self.csv_path is not None:
             self.csv_file.write(str(x)+','+str(y)+'\n')
             self.csv_file.flush()
 
