@@ -29,6 +29,7 @@ set_global_seed(0)
 
 # Initilize CFR Agent
 agent = CFRAgent(env)
+agent.load()  # If we have saved model, we first load the model
 
 # Evaluate CFR against pre-trained NFSP
 eval_env.set_agents([agent, models.load('leduc-holdem-nfsp').agents[0]])
@@ -41,6 +42,8 @@ for episode in range(episode_num):
     print('\rIteration {}'.format(episode), end='')
     # Evaluate the performance. Play with NFSP agents.
     if episode % evaluate_every == 0:
+        agent.save() # Save model
+
         reward = 0
         for eval_episode in range(evaluate_num):
             _, payoffs = eval_env.run(is_training=False)

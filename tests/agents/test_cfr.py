@@ -18,3 +18,20 @@ class TestNFSP(unittest.TestCase):
         action = agent.eval_step(state)
 
         self.assertIn(action, [0, 2])
+
+    def test_save_and_load(self):
+        env = rlcard.make('leduc-holdem', allow_step_back=True)
+        agent = CFRAgent(env)
+
+        for _ in range(100):
+            agent.train()
+
+        agent.save()
+
+        new_agent = CFRAgent(env)
+        new_agent.load()
+        self.assertEqual(len(agent.policy), len(new_agent.policy))
+        self.assertEqual(len(agent.average_policy), len(new_agent.average_policy))
+        self.assertEqual(len(agent.regrets), len(new_agent.regrets))
+        self.assertEqual(agent.iteration, new_agent.iteration)
+
