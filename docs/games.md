@@ -97,7 +97,7 @@ At each decision point of the game, the corresponding player will be able to obs
 | actions       | The legal actions the current player could do                                                                                                        | \['pass', 'K', 'A', 'B'\]                                                                           |
 
 ### State Encoding of Dou Dizhu
-In Dou Dizhu environment, we encode the state into 6 feature planes. The size of each plane is 5*15. Each entry of a plane can be either 1 or 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/doudizhu.py](rlcard/envs/doudizhu.py). The example encoded planes are as below:
+In Dou Dizhu environment, we encode the state into 6 feature planes. The size of each plane is 5*15. Each entry of a plane can be either 1 or 0. The 5 rows represent 0, 1, 2, 3, 4 corresonding cards, respectively. The 15 columns start from "3" to "RJ" (Black Jack). For example, if we have a "3", then the entry (1, 0) would be 1, and the rest of column 0 would be 0. If we have a pair of "4", then the entry (2, 1) would be 1, and the rest of column 1 would be 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/doudizhu.py](../rlcard/envs/doudizhu.py). The example encoded planes are as below:
 
 | Plane          |                            Feature       |
 | -------------- | :--------------------------------------- |
@@ -109,7 +109,7 @@ In Dou Dizhu environment, we encode the state into 6 feature planes. The size of
 ### Action Abstraction of Dou Dizhu
 
 The size of the action space of Dou Dizhu is 33676. This number is too large for learning algorithms. Thus, we make abstractions to the original action space and obtain 309 actions. We note that some recent studies also use similar abstraction techniques. The main idea of the abstraction is to make the kicker fuzzy and only focus on the major part of the combination. For example, "33345" is abstracted as "333
-\*\*". When the predicted action of the agent is **not legal**, the agent will choose "**pass**.". Thus, the current environment is simple, since once the agent learns how to play legal actions, it can beat random agents. Users can also encode the actions for their own purposes (such as increasing the difficulty of the environment) by modifying `decode_action` function in [rlcard/envs/doudizhu.py](rlcard/envs/doudizhu.py). Users are also encouraged to include rule-based agents as opponents. The abstractions in the environment are as below. The detailed  mapping of action and its ID is in [rlcard/games/doudizhu/jsondata/action_space.json](rlcard/games/doudizhu/jsondata/action_space.json):
+\*\*". When the predicted action of the agent is **not legal**, the agent will choose "**pass**.". Thus, the current environment is simple, since once the agent learns how to play legal actions, it can beat random agents. Users can also encode the actions for their own purposes (such as increasing the difficulty of the environment) by modifying `decode_action` function in [rlcard/envs/doudizhu.py](../rlcard/envs/doudizhu.py). Users are also encouraged to include rule-based agents as opponents. The abstractions in the environment are as below. The detailed  mapping of action and its ID is in [rlcard/games/doudizhu/jsondata/action_space.json](../rlcard/games/doudizhu/jsondata/action_space.json):
 
 | Type             | Number of Actions | Number of Actions after Abstraction | Action ID         |
 | ---------------- | :---------------: | :---------------------------------: | :---------------: | 
@@ -223,7 +223,7 @@ In state representation, each card is represented as a string of color and trait
 
 ### State Encoding of Uno
 
-In Uno environment, we encode the state into 7 feature planes. The size of each plane is 4*15. Each entry of a plane can be either 1 or 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/uno.py](rlcard/envs/uno.py). The example encoded planes are as below:
+In Uno environment, we encode the state into 7 feature planes. The size of each plane is 4*15. Each entry of a plane can be either 1 or 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/uno.py](../rlcard/envs/uno.py). The example encoded planes are as below:
 
 | Plane | Feature                  |
 | ----- | :----------------------- |
@@ -233,7 +233,7 @@ In Uno environment, we encode the state into 7 feature planes. The size of each 
 
 ### Action Encoding of Uno
 
-There are 61 actions in Uno. They are encoded as below. The detailed  mapping of action and its ID is in [rlcard/games/uno/jsondata/action_space.json](rlcard/games/uno/jsondata/action_space.json):
+There are 61 actions in Uno. They are encoded as below. The detailed  mapping of action and its ID is in [rlcard/games/uno/jsondata/action_space.json](../rlcard/games/uno/jsondata/action_space.json):
 
 | Action ID |                   Action                   |
 | --------- | :----------------------------------------: |
