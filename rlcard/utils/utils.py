@@ -171,23 +171,19 @@ def is_in_cards(origin_cards, check_cards):
     Returns:
         (boolean): True if the cards are in the original cards.
     '''
-    check_cards_cp = check_cards.copy()
-    cards = origin_cards.copy()
-    i = 0
-    while i < len(check_cards_cp):
-        j = 0
-        while j < len(cards):
-            if cards[j].rank == check_cards_cp[i].rank and cards[j].suit == check_cards_cp[i].suit:
-                cards.pop(j)
-                check_cards_cp.pop(i)
-                if(len(cards) == 0 or len(check_cards_cp) == 0):
-                    break
-                j -= 1
-            j += 1
-        if(len(cards) == 0 or len(check_cards_cp) == 0):
-            break
-        i += 1
-    return len(check_cards_cp) == 0
+    check_cards_pos = set()
+    for check_card in check_cards:
+        found = False
+        for i in range(len(origin_cards)):
+            if i in check_cards_pos:
+                continue
+            if check_card.rank == origin_cards[i].rank and check_card.suit == origin_cards[i].suit:
+                found = True
+                check_cards_pos.add(i)
+                break
+        if not found:
+            return False
+    return True
 
 def elegent_form(card):
     ''' Get a elegent form of a card string
