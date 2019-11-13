@@ -72,9 +72,13 @@ class TestUtils(unittest.TestCase):
     def test_is_in_cards(self):
         deck54 = init_54_deck()
         deck_standard = init_standard_deck()
+        deck54_plus_BJ = init_54_deck()
+        deck54_plus_BJ.append(Card('BJ', ''))
         self.assertTrue(is_in_cards(deck54, deck_standard))
         self.assertTrue(is_in_cards(deck54, [Card('BJ', ''), Card('RJ', '')]))
         self.assertFalse(is_in_cards(deck54, [Card('BJ', ''), Card('BJ', '')]))
+        self.assertFalse(is_in_cards(deck54, [Card('BJ', ''), Card('BJ', ''), Card('D', '3')]))
+        self.assertTrue(is_in_cards(deck54_plus_BJ, [Card('BJ', ''), Card('BJ', ''), Card('D', '3')]))
 
     def test_print_cards(self):
         self.assertEqual(len(elegent_form('S9')), 2)
