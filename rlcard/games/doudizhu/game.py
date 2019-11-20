@@ -106,6 +106,7 @@ class DoudizhuGame(object):
         if not self.history:
             return False
         self.winner_id, self.players, self.round, self.judger = self.history.pop()
+        self.state = self.get_state(self.round.current_player)
         return True
 
     def get_state(self, player_id):
@@ -122,7 +123,7 @@ class DoudizhuGame(object):
         if self.is_over():
             actions = None
         else:
-            actions = player.available_actions(self.round.greater_player, self.judger)
+            actions = list(player.available_actions(self.round.greater_player, self.judger))
         state = player.get_state(self.round.public, others_hands, actions)
 
         return state
