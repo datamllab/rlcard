@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Implement Doudizhu Judger class
 '''
+import numpy as np
 
 from rlcard.games.doudizhu.utils import CARD_TYPE
 from rlcard.games.doudizhu.utils import cards2str, contains_cards
@@ -75,7 +76,7 @@ class DoudizhuJudger(object):
 
     @staticmethod
     def judge_payoffs(landlord_id, winner_id):
-        payoffs = [0, 0, 0]
+        payoffs = np.array([0, 0, 0])
         if winner_id == landlord_id:
             payoffs[landlord_id] = 1
         else:
