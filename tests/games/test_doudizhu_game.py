@@ -73,6 +73,9 @@ class TestDoudizhuGame(unittest.TestCase):
         game.step_back()
         self.assertEqual(game.round.current_player, player_id)
         self.assertEqual(len(game.history), 0)
+        game.state['actions'].sort()
+        state['actions'].sort()
+        self.assertEqual(game.state, state)
         self.assertEqual(game.step_back(), False)
 
     def test_get_landlord_score(self):
