@@ -60,7 +60,7 @@ class DoudizhuPlayer(object):
         '''
 
         actions = []
-        if greater_player is None or greater_player is self:
+        if greater_player is None or greater_player.player_id == self.player_id:
             actions = judger.get_playable_cards(self)
         else:
             actions = get_gt_cards(self, greater_player)
