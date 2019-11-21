@@ -78,6 +78,20 @@ class TestDoudizhuGame(unittest.TestCase):
         self.assertEqual(game.state, state)
         self.assertEqual(game.step_back(), False)
 
+        #actions should be the same after step_back()
+        game = Game(allow_step_back=True)
+        state, player_id = game.init_game()
+        action = state['actions'][0]
+        game.step(action)
+        game.step('pass')
+        game.step('pass')
+        actions = game.state['actions']
+        game.step(actions[0])
+        game.step_back()
+        actions.sort()
+        game.state['actions'].sort()
+        self.assertEqual(game.state['actions'], actions)
+
     def test_get_landlord_score(self):
         score_1 = get_landlord_score('56888TTQKKKAA222R')
         self.assertEqual(score_1, 12)
