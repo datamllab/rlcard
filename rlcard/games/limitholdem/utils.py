@@ -426,12 +426,15 @@ def compare_ranks(position, hands):
         winner.append(0)
         handcard.append(['1', 'J'])
         i = hands[_].get_hand_five_cards()
-        for p in range(len(i)):
-            i[p] = i[p][1:]
+        if len(i[0]) != 1:
+            for p in range(len(i)):
+                i[p] = i[p][1:]
         handcard[_] = i
 
     #handcard[0] = hands[0].get_hand_five_cards()
     #handcard[1] = hands[1].get_hand_five_cards()
+    #这里改成取最大的index，有重复就返回重复的
+    '''
     if RANKS.index(handcard[0][position]) > RANKS.index(handcard[1][position]):
         winner[0] = 1
         return winner
@@ -442,6 +445,20 @@ def compare_ranks(position, hands):
         winner[0] = 1
         winner[1] = 1
         return winner
+    '''
+    a = []
+    b = []
+    for _ in range(len(handcard)):
+        a.append(handcard[_][position])
+        b.append(RANKS.index(a[_]))
+    m = max(b)
+
+    i = [i for i, j in enumerate(b) if j == m]
+
+    for _ in i:
+        winner[_] = 1
+    
+    return winner
 
 def determine_winner(key_index, hands):
     '''
@@ -456,8 +473,8 @@ def determine_winner(key_index, hands):
         [1, 1]: draw
     '''
     for _ in key_index:
-        winner = compare_ranks(_, hands)
-        if winner != [1, 1]:
+        winner = compare_ranks(_, hands)#这里改成取最大
+        if winner.count(1) == 1:#这里改成判断是否只有一个1
             break
     return winner
 
@@ -477,37 +494,75 @@ def compare_hands(hands):
         return [0, 1]
     elif hands[1] == None:
         return [1, 0]
-    #hand = []
+    hand_category = []
     winner = []
     for i in range(len(hands)):
         if hands[i] != None:
             hands[i] = Hand(hands[i])
             hands[i].evaluateHand()
             winner.append(0)
-            #hand_category.append(hands[i].category)
+            hand_category.append(hands[i].category)
     #print (hands[0].category)
     #hand_category.append(hands[0].category)
     #hand_category.append(hands[1].category)
+    m = max(hand_category)
+    i = [i for i, j in enumerate(hand_category) if j == m]
+    #print(i)
 
-    if hands[0].category > hands[1].category:
-        winner[0] = 1
+    if len(i) == 1:
+        winner[i[0]] = 1
         return winner
-    elif hands[0].category < hands[1].category:
-        winner[1] = 1
-        return winner
-    elif hands[0].category == hands[1].category:
+    #elif hands[0].category < hands[1].category:
+        #winner[1] = 1
+        #return winner
+    elif len(i) > 1:
         # compare equal category
-        hand0_5_cards = hands[0].get_hand_five_cards()
-        hand1_5_cards = hands[1].get_hand_five_cards()
-        if hands[0].category == 9 or hands[0].category == 5 or hands[0].category == 8:
-            return determine_winner([0], hands)
-        if hands[0].category == 7:
-            return determine_winner([2, 0], hands)
-        if hands[0].category == 4:
-            return determine_winner([2, 1, 0], hands)
-        if hands[0].category == 3:
-            return determine_winner([4, 2, 0], hands)
-        if hands[0].category == 2:
-            return determine_winner([4, 2, 1, 0], hands)
-        if hands[0].category == 1 or hands[0].category == 6:
-            return determine_winner([4, 3, 2, 1, 0], hands)
+        # 其它删掉只取最大
+        equal_hands = []
+        for _ in i:
+            equal_hands.append(hands[_])
+
+        #hand0_5_cards = hands[0].get_hand_five_cards()
+        #hand1_5_cards = hands[1].get_hand_five_cards()
+        if hands[i[0]].category == 9 or hands[i[0]].category == 5 or hands[i[0]].category == 8:
+            count = 0
+            for _ in determine_winner([0], equal_hands):
+                if _ == 1:
+                    winner[i[count]] = 1
+                count+=1
+            return winner
+        if hands[i[0]].category == 7:
+            count = 0
+            for _ in determine_winner([2, 0], equal_hands):
+                if _ == 1:
+                    winner[i[count]] = 1
+                count+=1
+            return winner
+        if hands[i[0]].category == 4:
+            count = 0
+            for _ in determine_winner([2, 1, 0], equal_hands):
+                if _ == 1:
+                    winner[i[count]] = 1
+                count+=1
+            return winner
+        if hands[i[0]].category == 3:
+            count = 0
+            for _ in determine_winner([4, 2, 0], equal_hands):
+                if _ == 1:
+                    winner[i[count]] = 1
+                count+=1
+            return winner
+        if hands[i[0]].category == 2:
+            count = 0
+            for _ in determine_winner([4, 2, 1, 0], equal_hands):
+                if _ == 1:
+                    winner[i[count]] = 1
+                count+=1
+            return winner
+        if hands[i[0]].category == 1 or hands[i[0]].category == 6:
+            count = 0
+            for _ in determine_winner([4, 3, 2, 1, 0], equal_hands):
+                if _ == 1:
+                    winner[i[count]] = 1
+                count+=1
+            return winner
