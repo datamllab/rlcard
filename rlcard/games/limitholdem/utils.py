@@ -445,7 +445,7 @@ def determine_winner(key_index, hand0_5_cards, hand1_5_cards):
             break
     return winner
 
-def compare_hands(hand0, hand1):
+def compare_hands(hands):
     '''
     Compare two palyer's all seven cards
     Args:
@@ -456,35 +456,39 @@ def compare_hands(hand0, hand1):
         [1, 0]: player0 wins
         [1, 1]: draw
     '''
-
-    if hand0 == None:
+    #此处判断先往后放
+    if hands[0] == None:
         return [0, 1]
-    elif hand1 == None:
+    elif hands[1] == None:
         return [1, 0]
-    hand0 = Hand(hand0)
-    hand1 = Hand(hand1)
-    hand0.evaluateHand()
-    hand1.evaluateHand()
-    hand0_category = hand0.category
-    hand1_category = hand1.category
+    #hand = []
+    hand_category = []
+    for i in range(len(hands)):
+        if hands[i] != None:
+            hands[i] = Hand(hands[i])
+            hands[i].evaluateHand()
+            hand_category.append(hands[i].category)
+    #print (hands[0].category)
+    #hand_category.append(hands[0].category)
+    #hand_category.append(hands[1].category)
 
-    if hand0_category > hand1_category:
+    if hand_category[0] > hand_category[1]:
         return [1, 0]
-    elif hand0_category < hand1_category:
+    elif hand_category[0] < hand_category[1]:
         return [0, 1]
-    elif hand0_category == hand1_category:
+    elif hand_category[0] == hand_category[1]:
         # compare equal category
-        hand0_5_cards = hand0.get_hand_five_cards()
-        hand1_5_cards = hand1.get_hand_five_cards()
-        if hand0_category == 9 or hand0_category == 5 or hand0_category == 8:
+        hand0_5_cards = hands[0].get_hand_five_cards()
+        hand1_5_cards = hands[1].get_hand_five_cards()
+        if hand_category[0] == 9 or hand_category[0] == 5 or hand_category[0] == 8:
             return determine_winner([0], hand0_5_cards, hand1_5_cards)
-        if hand0_category == 7:
+        if hand_category[0] == 7:
             return determine_winner([2, 0], hand0_5_cards, hand1_5_cards)
-        if hand0_category == 4:
+        if hand_category[0] == 4:
             return determine_winner([2, 1, 0], hand0_5_cards, hand1_5_cards)
-        if hand0_category == 3:
+        if hand_category[0] == 3:
             return determine_winner([4, 2, 0], hand0_5_cards, hand1_5_cards)
-        if hand0_category == 2:
+        if hand_category[0] == 2:
             return determine_winner([4, 2, 1, 0], hand0_5_cards, hand1_5_cards)
-        if hand0_category == 1 or hand0_category == 6:
+        if hand_category[0] == 1 or hand_category[0] == 6:
             return determine_winner([4, 3, 2, 1, 0], hand0_5_cards, hand1_5_cards)
