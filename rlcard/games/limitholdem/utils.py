@@ -422,11 +422,9 @@ def compare_ranks(position, hands):
 
     '''
     RANKS = '23456789TJQKA'
-    winner = []
-    figure = [] #cards without suit
+    winner = [0]*len(hands)
+    figure = [['1', 'J']]*len(hands) #cards without suit
     for _ in range(len(hands)):
-        winner.append(0)
-        figure.append(['1', 'J'])
         i = hands[_].get_hand_five_cards()
         if len(i[0]) != 1:
             for p in range(len(i)):
@@ -461,17 +459,15 @@ def determine_winner(key_index, hands, all_players, potential_winner_index):
 
     '''
     count = 0
-    winner = []
-    for _ in range(len(hands)):
-        winner.append(1)
+    winner = [1]*len(hands)
     for _ in key_index:
-        index_winner = compare_ranks(_, hands)#这里改成取最大
+        index_winner = compare_ranks(_, hands)
         for _ in range(len(winner)):
             if winner[_] == 1:
                 winner[_] = index_winner[_]
             if winner[_] == 0:
                 continue
-        if winner.count(1) == 1:#这里改成判断是否只有一个1
+        if winner.count(1) == 1:
             break
     for _ in winner:
         if _ == 1:
@@ -491,17 +487,29 @@ def compare_hands(hands):
         [1, 1, 1]: draw
         [1, 1, 0]: player1 and player0 draws
     '''
+    '''
+    if hands[0] == None:
+        return [0, 1]
+    elif hands[1] == None:
+        return [1, 0]
+    '''
     hand_category = [] #such as high_card, straight_flush, etc
-    all_players = [] #all the players in this round, 0 for losing and 1 for winning or draw
+    all_players = [0]*len(hands) #all the players in this round, 0 for losing and 1 for winning or draw
+    if None in hands:
+        i = [i for i, j in enumerate(hands) if j == None]
+        for _ in range(len(hands)):
+            if _ in i:
+                all_players[_] = 0
+            else:
+                all_players[_] = 1
+        return all_players
     for i in range(len(hands)):
         if hands[i] != None:
             hands[i] = Hand(hands[i])
             hands[i].evaluateHand()
-            all_players.append(0)
             hand_category.append(hands[i].category)
         elif hands[i] == None:
             hand_category.append(0)
-            all_players.append(0)
     potential_winner_index = [i for i, j in enumerate(hand_category) if j == max(hand_category)]# potential winner are those with same max card_catagory
 
     if len(potential_winner_index) == 1:
