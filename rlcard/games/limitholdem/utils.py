@@ -472,8 +472,16 @@ def determine_winner(key_index, hands):
         [1, 0]: player0 wins
         [1, 1]: draw
     '''
+    winner = []
+    for _ in range(len(hands)):
+        winner.append(1)
     for _ in key_index:
-        winner = compare_ranks(_, hands)#这里改成取最大
+        index_winner = compare_ranks(_, hands)#这里改成取最大
+        for _ in range(len(winner)):
+            if winner[_] == 1:
+                winner[_] = index_winner[_]
+            if winner[_] == 0:
+                continue
         if winner.count(1) == 1:#这里改成判断是否只有一个1
             break
     return winner
@@ -490,10 +498,6 @@ def compare_hands(hands):
         [1, 1]: draw
     '''
     #此处判断先往后放
-    if hands[0] == None:
-        return [0, 1]
-    elif hands[1] == None:
-        return [1, 0]
     hand_category = []
     winner = []
     for i in range(len(hands)):
@@ -502,12 +506,11 @@ def compare_hands(hands):
             hands[i].evaluateHand()
             winner.append(0)
             hand_category.append(hands[i].category)
-    #print (hands[0].category)
-    #hand_category.append(hands[0].category)
-    #hand_category.append(hands[1].category)
+        elif hands[i] == None:
+            hand_category.append(0)
+            winner.append(0)
     m = max(hand_category)
     i = [i for i, j in enumerate(hand_category) if j == m]
-    #print(i)
 
     if len(i) == 1:
         winner[i[0]] = 1
