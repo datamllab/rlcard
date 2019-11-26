@@ -38,8 +38,9 @@ class DoudizhuDealer(object):
         '''
         hand_num = (len(self.deck) - 3) // len(players)
         for index, player in enumerate(players):
-            player.current_hand = self.deck[index*hand_num:(index+1)*hand_num]
-            player.current_hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
+            current_hand = self.deck[index*hand_num:(index+1)*hand_num]
+            current_hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
+            player.set_current_hand(current_hand)
             player.initial_hand = cards2str(player.current_hand)
 
     def determine_role(self, players):
