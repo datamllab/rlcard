@@ -62,3 +62,27 @@ class DoudizhuRound(object):
         self.update_public(action)
         self.greater_player = player.play(action, self.greater_player)
         return self.greater_player
+
+    def find_last_greater_player_id_in_trace(self):
+        ''' Find the last greater_player's id in trace
+
+        Returns:
+            the last greater_player's id in trace
+        '''
+        for i in range(len(self.trace) - 1, -1, -1):
+            id, action = self.trace[i]
+            if (action != 'pass'):
+                return id
+        return None
+
+    def find_last_played_cards_in_trace(self, player_id):
+        ''' Find the player_id's last played_cards in trace
+
+        Returns:
+            The player_id's last played_cards in trace
+        '''
+        for i in range(len(self.trace) - 1, -1, -1):
+            id, action = self.trace[i]
+            if (id == player_id and action != 'pass'):
+                return action
+        return None
