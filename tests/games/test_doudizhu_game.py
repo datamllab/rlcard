@@ -66,11 +66,15 @@ class TestDoudizhuGame(unittest.TestCase):
             self.assertIsNone(state['actions'])
 
     def test_step_back(self):
+        #case 1: action, stepback
         game = Game(allow_step_back=True)
         state, player_id = game.init_game()
         action = state['actions'][0]
+        playable_cards = game.judger.playable_cards
         game.step(action)
         game.step_back()
+        self.assertEqual(game.judger.playable_cards, playable_cards)
+        self.assertEqual(game.round.greater_player, None)
         self.assertEqual(game.round.current_player, player_id)
         self.assertEqual(len(game.history), 0)
         game.state['actions'].sort()
@@ -78,7 +82,28 @@ class TestDoudizhuGame(unittest.TestCase):
         self.assertEqual(game.state, state)
         self.assertEqual(game.step_back(), False)
 
+        #case 2: action, pass, stepback
+        game = Game(allow_step_back=True)
+        state, player_id = game.init_game()
+        action = state['actions'][0]
+        game.step(action)
+        actions = game.state['actions']
+        playable_cards = game.judger.playable_cards
+        played_cards = game.players[game.round.current_player].played_cards
+        game.step('pass')
+        game.step_back()
+        #judger.playable_cards should be the same
+        self.assertEqual(game.judger.playable_cards, playable_cards)
+        #players[current_player].played_cards should be the same
+        self.assertEqual(game.players[game.round.current_player].played_cards, played_cards)
+        #greater_player should be the same
+        self.assertEqual(game.round.greater_player.player_id, 0)
+        actions.sort()
+        game.state['actions'].sort()
         #actions should be the same after step_back()
+        self.assertEqual(game.state['actions'], actions)
+        
+        #case 3: action, pass, pass, action, stepback
         game = Game(allow_step_back=True)
         state, player_id = game.init_game()
         action = state['actions'][0]
@@ -86,11 +111,23 @@ class TestDoudizhuGame(unittest.TestCase):
         game.step('pass')
         game.step('pass')
         actions = game.state['actions']
+        playable_cards = game.judger.playable_cards
+        played_cards = game.players[game.round.current_player].played_cards
         game.step(actions[0])
         game.step_back()
+        #judger.playable_cards should be the same
+        self.assertEqual(game.judger.playable_cards, playable_cards)
+        #players[current_player].played_cards should be the same
+        self.assertEqual(game.players[game.round.current_player].played_cards, played_cards)
+        #greater_player should be the same
+        self.assertEqual(game.round.greater_player.player_id, 0)
         actions.sort()
         game.state['actions'].sort()
+        #actions should be the same after step_back()
         self.assertEqual(game.state['actions'], actions)
+        game.step_back()
+        #greater_player should be the same
+        self.assertEqual(game.round.greater_player.player_id, 0)
 
     def test_get_landlord_score(self):
         score_1 = get_landlord_score('56888TTQKKKAA222R')
