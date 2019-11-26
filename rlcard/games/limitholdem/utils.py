@@ -436,7 +436,7 @@ def compare_ranks(position, hands):
     for _ in range(len(figure)):
         rival_figures.append(figure[_][position])
         rival_ranks.append(RANKS.index(rival_figures[_]))
-    high_ranks = [i for i, j in enumerate(rival_ranks) if j == max(rival_ranks)]
+    high_ranks = [q for q, j in enumerate(rival_ranks) if j == max(rival_ranks)]
     for _ in high_ranks:
         winner[_] = 1
     
