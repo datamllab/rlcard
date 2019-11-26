@@ -424,16 +424,16 @@ def compare_ranks(position, hands):
     RANKS = '23456789TJQKA'
     winner = [0]*len(hands)
     figure = [['1', 'J']]*len(hands) #cards without suit
-    for _ in range(len(hands)):
+    for _, j in enumerate(hands):
         i = hands[_].get_hand_five_cards()
-        if len(i[0]) != 1:
-            for p in range(len(i)):
+        if len(i[0]) != 1:# remove suit
+            for p in range(5):
                 i[p] = i[p][1:]
         figure[_] = i
 
     rival_figures = [] # figures in the same position, to be compared
     rival_ranks = [] # ranks of rival_figures
-    for _ in range(len(figure)):
+    for _, j in enumerate(figure):
         rival_figures.append(figure[_][position])
         rival_ranks.append(RANKS.index(rival_figures[_]))
     high_ranks = [q for q, j in enumerate(rival_ranks) if j == max(rival_ranks)]
@@ -462,7 +462,7 @@ def determine_winner(key_index, hands, all_players, potential_winner_index):
     winner = [1]*len(hands)
     for _ in key_index:
         index_winner = compare_ranks(_, hands)
-        for _ in range(len(winner)):
+        for _, j in enumerate(winner):
             if winner[_] == 1:
                 winner[_] = index_winner[_]
             if winner[_] == 0:
@@ -496,13 +496,13 @@ def compare_hands(hands):
     all_players = [0]*len(hands) #all the players in this round, 0 for losing and 1 for winning or draw
     if None in hands:
         fold_players = [i for i, j in enumerate(hands) if j is None]
-        for _ in range(len(hands)):
+        for _, j in enumerate(hands):
             if _ in fold_players:
                 all_players[_] = 0
             else:
                 all_players[_] = 1
         return all_players
-    for i in range(len(hands)):
+    for i, j in enumerate(hands):
         #if hands[i] is not None:
             hands[i] = Hand(hands[i])
             hands[i].evaluateHand()
