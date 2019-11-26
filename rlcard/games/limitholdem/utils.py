@@ -495,22 +495,25 @@ def compare_hands(hands):
     hand_category = [] #such as high_card, straight_flush, etc
     all_players = [0]*len(hands) #all the players in this round, 0 for losing and 1 for winning or draw
     if None in hands:
-        flod_players = [i for i, j in enumerate(hands) if j is None]
+        fold_players = [i for i, j in enumerate(hands) if j is None]
         for _ in range(len(hands)):
-            if _ in flod_players:
+            if _ in fold_players:
                 all_players[_] = 0
             else:
                 all_players[_] = 1
         return all_players
     for i in range(len(hands)):
-        if hands[i] is not None:
+        #if hands[i] is not None:
             hands[i] = Hand(hands[i])
             hands[i].evaluateHand()
             hand_category.append(hands[i].category)
-        elif hands[i] is None:
-            hand_category.append(0)
+        #elif hands[i] is None:
+            #hand_category.append(0)
     potential_winner_index = [i for i, j in enumerate(hand_category) if j == max(hand_category)]# potential winner are those with same max card_catagory
 
+    return final_compare(hands, potential_winner_index, all_players)
+
+def final_compare(hands, potential_winner_index, all_players):
     if len(potential_winner_index) == 1:
         all_players[potential_winner_index[0]] = 1
         return all_players
