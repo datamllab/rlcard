@@ -36,14 +36,15 @@ class TestHoldemUtils(unittest.TestCase):
         winner = compare_hands( [None, ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'C7']])
         self.assertEqual(winner, [0, 1])
         #straight flush
-        hands1 = [['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], 
-        ['CJ', 'SJ', 'HT', 'BT', 'C2', 'C8', 'C7'], 
-        ['CJ', 'SJ', 'HT', 'BT', 'C2', 'C8', 'C7'], 
-        ['CJ', 'SJ', 'HT', 'BT', 'C2', 'C8', 'C7'], 
+        hands1 = [['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'],
+        ['CJ', 'SJ', 'HT', 'BT', 'C2', 'C8', 'C7'],
+        ['CJ', 'SJ', 'HT', 'BT', 'C2', 'C8', 'C7'],
+        ['CJ', 'SJ', 'HT', 'BT', 'C2', 'C8', 'C7'],
         ['CJ', 'SJ', 'HT', 'BT', 'C2', 'C8', 'C7']]
         winner = compare_hands(hands1)
         self.assertEqual(winner, [0, 1, 1, 1, 1])
-        winner = compare_hands( [['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'C7'], ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'CA'],['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'C7']])
+        winner = compare_hands( [['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'C7'], ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'CA'],
+        ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'C7']])
         self.assertEqual(winner, [0, 1, 0])
         winner = compare_hands( [['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'CA'], ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'C7']])
         self.assertEqual(winner, [1, 0])
@@ -60,8 +61,8 @@ class TestHoldemUtils(unittest.TestCase):
         self.assertEqual(winner, [0, 1])
         winner = compare_hands( [['CA', 'CQ', 'CT', 'C8', 'C6', 'C4', 'C2'], ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'CA']])
         self.assertEqual(winner, [0, 1])
-        hands2 = [['CJ', 'ST', 'HQ', 'BK', 'B9', 'C8', 'C7'], 
-        ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'CA'], 
+        hands2 = [['CJ', 'ST', 'HQ', 'BK', 'B9', 'C8', 'C7'],
+        ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'CA'],
         ['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8', 'CA'], 
         ['CJ', 'ST', 'HQ', 'BK', 'B9', 'C8', 'C7']]
         winner = compare_hands(hands2)
@@ -145,9 +146,11 @@ class TestHoldemUtils(unittest.TestCase):
         #Two pairs
         winner = compare_hands( [['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7']])
         self.assertEqual(winner, [1, 0])
-        winner = compare_hands( [['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7']])
+        winner = compare_hands( [['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], 
+        ['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7']])
         self.assertEqual(winner, [0, 1, 0])
-        winner = compare_hands( [['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'HT', 'BT', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'HT', 'BT', 'C2', 'C8', 'C7']])
+        winner = compare_hands( [['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'HT', 'BT', 'C2', 'C8', 'C7'], 
+        ['CJ', 'SJ', 'HT', 'BT', 'C2', 'C8', 'C7']])
         self.assertEqual(winner, [0, 1, 1])
         winner = compare_hands( [['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'H9', 'B9', 'C2', 'C5', 'C7']])
         self.assertEqual(winner, [1, 0])
