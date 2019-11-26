@@ -80,12 +80,14 @@ class DoudizhuGame(object):
             int: next player's id
         '''
         if self.allow_step_back:
-            # record game history
-            self._record_history()
+            # TODO: don't record game.round, game.players, game.judger if allow_step_back not set
+            pass
 
         # perfrom action
         player = self.players[self.round.current_player]
         self.round.proceed_round(player, action)
+        if (action != 'pass'):
+            self.judger.calc_playable_cards(player)
         if self.judger.judge_game(self.players, self.round.current_player):
             self.winner_id = self.round.current_player
         next_id = get_downstream_player_id(player, self.players)
@@ -102,10 +104,34 @@ class DoudizhuGame(object):
 
         Returns:
             (bool): True if the game steps back successfully
-        '''
-        if not self.history:
+        '''            
+        if not self.round.trace:
             return False
-        self.winner_id, self.players, self.round, self.judger = self.history.pop()
+
+        #winner_id will be always None no matter step_back from any case
+        self.winner_id = None
+
+        #reverse round
+        player_id, cards = self.round.trace.pop()
+        self.round.current_player = player_id
+        if (cards != 'pass'):
+            for card in cards:
+                self.round.played_cards.remove(card)
+        greater_player_id = self.round.find_last_greater_player_id_in_trace()
+        if (greater_player_id is not None):
+            self.round.greater_player = self.players[greater_player_id]
+        else:
+            self.round.greater_player = None
+
+        #reverse player
+        if (cards != 'pass'):
+            self.players[player_id].played_cards = self.round.find_last_played_cards_in_trace(player_id)
+        self.players[player_id].play_back()
+
+        #reverse judger.played_cards if needed
+        if (cards != 'pass'):
+            self.judger.restore_playable_cards(player_id)
+
         self.state = self.get_state(self.round.current_player)
         return True
 
@@ -162,15 +188,6 @@ class DoudizhuGame(object):
         if self.winner_id is None:
             return False
         return True
-
-    def _record_history(self):
-        ''' Record history
-        '''
-        winner_id_cp = copy.deepcopy(self.winner_id)
-        players_cp = copy.deepcopy(self.players)
-        round_cp = copy.deepcopy(self.round)
-        judger_cp = copy.deepcopy(self.judger)
-        self.history.append((winner_id_cp, players_cp, round_cp, judger_cp))
 
     def _get_others_current_hand(self, player):
         player_up = self.players[get_upstream_player_id(player, self.players)]
