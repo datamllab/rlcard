@@ -407,84 +407,129 @@ class Hand:
         High_cards = self.all_cards[2:7]
         return High_cards
 
-def compare_ranks(position, handcard0, handcard1):
+def compare_ranks(position, hands):
     '''
     Compare cards in same position of plays' five handcards
     Args:
         position(int): the position of a card in a sorted handcard
-        handcard0(list) : five best cards of player0
-        handcard1(list) : five best cards of player1
+        hands(list): cards of those players.
+        e.g. hands = [['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7']]
     Returns:
-        [0, 1]: player1 wins
-        [1, 0]: player0 wins
-        [1, 1]: draw
+        [0, 1, 0]: player1 wins
+        [1, 0, 0]: player0 wins
+        [1, 1, 1]: draw
+        [1, 1, 0]: player1 and player0 draws
+
     '''
     RANKS = '23456789TJQKA'
-    if RANKS.index(handcard0[position][1]) > RANKS.index(handcard1[position][1]):
-        return [1, 0]
-    if RANKS.index(handcard0[position][1]) < RANKS.index(handcard1[position][1]):
-        return [0, 1]
-    if RANKS.index(handcard0[position][1]) == RANKS.index(handcard1[position][1]):
-        return [1, 1]
+    winner = [0]*len(hands)
+    figure = [['1', 'J']]*len(hands) #cards without suit
+    for _ in enumerate(hands):
+        i = hands[_[0]].get_hand_five_cards()
+        if len(i[0]) != 1:# remove suit
+            for p in range(5):
+                i[p] = i[p][1:]
+        figure[_[0]] = i
 
-def determine_winner(key_index, hand0_5_cards, hand1_5_cards):
-    '''
-    Determine who wins
-    Args:
-        key_index(int): the position of a card in a sorted handcard
-        hand0_5_cards(list) : five best cards of player0
-        hand0_5_cards(list) : five best cards of player1
-    Returns:
-        [0, 1]: player1 wins
-        [1, 0]: player0 wins
-        [1, 1]: draw
-    '''
-    for _ in key_index:
-        winner = compare_ranks(_, hand0_5_cards, hand1_5_cards)
-        if winner != [1, 1]:
-            break
+    rival_figures = [] # figures in the same position, to be compared
+    rival_ranks = [] # ranks of rival_figures
+    for _ in enumerate(figure):
+        rival_figures.append(figure[_[0]][position])
+        rival_ranks.append(RANKS.index(rival_figures[_[0]]))
+    high_ranks = [q for q, j in enumerate(rival_ranks) if j == max(rival_ranks)]
+    for _ in high_ranks:
+        winner[_] = 1
     return winner
 
-def compare_hands(hand0, hand1):
+def determine_winner(key_index, hands, all_players, potential_winner_index):
+    '''
+    Find out who wins in the situation of having players with same highest hand_catagory
+    Args:
+        key_index(int): the position of a card in a sorted handcard
+        hands(list): cards of those players with same highest hand_catagory. 
+        e.g. hands = [['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7']]
+        all_players(list): all the players in this round, 0 for losing and 1 for winning or draw
+        potential_winner_index(list): the positions of those players with same highest hand_catagory in all_players
+    Returns:
+        [0, 1, 0]: player1 wins
+        [1, 0, 0]: player0 wins
+        [1, 1, 1]: draw
+        [1, 1, 0]: player1 and player0 draws
+
+    '''
+    count = 0
+    winner = [1]*len(hands)
+    for _ in key_index:
+        index_winner = compare_ranks(_, hands)
+        for _ in enumerate(winner):
+            if winner[_[0]] == 1:
+                winner[_[0]] = index_winner[_[0]]
+            if winner[_[0]] == 0:
+                continue
+        if winner.count(1) == 1:
+            break
+    for _ in winner:
+        if _ == 1:
+            all_players[potential_winner_index[count]] = 1
+        count+=1
+    return all_players
+
+def compare_hands(hands):
     '''
     Compare two palyer's all seven cards
     Args:
-        hand0(list) : all the seven cards of player0
-        hand1(list) : all the seven cards of player1
+        hands(list): cards of those players with same highest hand_catagory.
+        e.g. hands = [['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7']]
     Returns:
-        [0, 1]: player1 wins
-        [1, 0]: player0 wins
-        [1, 1]: draw
+        [0, 1, 0]: player1 wins
+        [1, 0, 0]: player0 wins
+        [1, 1, 1]: draw
+        [1, 1, 0]: player1 and player0 draws
+
+    if hands[0] == None:
+        return [0, 1]
+    elif hands[1] == None:
+        return [1, 0]
     '''
+    hand_category = [] #such as high_card, straight_flush, etc
+    all_players = [0]*len(hands) #all the players in this round, 0 for losing and 1 for winning or draw
+    if None in hands:
+        fold_players = [i for i, j in enumerate(hands) if j is None]
+        for _ in enumerate(hands):
+            if _[0] in fold_players:
+                all_players[_[0]] = 0
+            else:
+                all_players[_[0]] = 1
+        return all_players
+    for i in enumerate(hands):
+        #if hands[i] is not None:
+            hands[i[0]] = Hand(hands[i[0]])
+            hands[i[0]].evaluateHand()
+            hand_category.append(hands[i[0]].category)
+        #elif hands[i] is None:
+            #hand_category.append(0)
+    potential_winner_index = [i for i, j in enumerate(hand_category) if j == max(hand_category)]# potential winner are those with same max card_catagory
 
-    if hand0 is None:
-        return [0, 1]
-    elif hand1 is None:
-        return [1, 0]
-    hand0 = Hand(hand0)
-    hand1 = Hand(hand1)
-    hand0.evaluateHand()
-    hand1.evaluateHand()
-    hand0_category = hand0.category
-    hand1_category = hand1.category
+    return final_compare(hands, potential_winner_index, all_players)
 
-    if hand0_category > hand1_category:
-        return [1, 0]
-    elif hand0_category < hand1_category:
-        return [0, 1]
-    elif hand0_category == hand1_category:
-        # compare equal category
-        hand0_5_cards = hand0.get_hand_five_cards()
-        hand1_5_cards = hand1.get_hand_five_cards()
-        if hand0_category == 9 or hand0_category == 5 or hand0_category == 8:
-            return determine_winner([0], hand0_5_cards, hand1_5_cards)
-        if hand0_category == 7:
-            return determine_winner([2, 0], hand0_5_cards, hand1_5_cards)
-        if hand0_category == 4:
-            return determine_winner([2, 1, 0], hand0_5_cards, hand1_5_cards)
-        if hand0_category == 3:
-            return determine_winner([4, 2, 0], hand0_5_cards, hand1_5_cards)
-        if hand0_category == 2:
-            return determine_winner([4, 2, 1, 0], hand0_5_cards, hand1_5_cards)
-        if hand0_category == 1 or hand0_category == 6:
-            return determine_winner([4, 3, 2, 1, 0], hand0_5_cards, hand1_5_cards)
+def final_compare(hands, potential_winner_index, all_players):
+    if len(potential_winner_index) == 1:
+        all_players[potential_winner_index[0]] = 1
+        return all_players
+    elif len(potential_winner_index) > 1:
+        # compare when having equal max categories
+        equal_hands = []
+        for _ in potential_winner_index:
+            equal_hands.append(hands[_])
+        if hands[potential_winner_index[0]].category == 9 or hands[potential_winner_index[0]].category == 5 or hands[potential_winner_index[0]].category == 8:
+            return determine_winner([0], equal_hands, all_players, potential_winner_index)
+        if hands[potential_winner_index[0]].category == 7:
+            return determine_winner([2, 0], equal_hands, all_players, potential_winner_index)
+        if hands[potential_winner_index[0]].category == 4:
+            return determine_winner([2, 1, 0], equal_hands, all_players, potential_winner_index)
+        if hands[potential_winner_index[0]].category == 3:
+            return determine_winner([4, 2, 0], equal_hands, all_players, potential_winner_index)
+        if hands[potential_winner_index[0]].category == 2:
+            return determine_winner([4, 2, 1, 0], equal_hands, all_players, potential_winner_index)
+        if hands[potential_winner_index[0]].category == 1 or hands[potential_winner_index[0]].category == 6:
+            return determine_winner([4, 3, 2, 1, 0], equal_hands, all_players, potential_winner_index)
