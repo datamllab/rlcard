@@ -504,11 +504,11 @@ def compare_hands(hands):
             return all_players
         else:
             for _ in enumerate(hands):
-                if hands[_] is not None:
+                if hands[_[0]] is not None:
                     hands[_[0]] = Hand(hands[_[0]])
                     hands[_[0]].evaluateHand()
                     hand_category.append(hands[_[0]].category)
-                elif hands[_] is None:
+                elif hands[_[0]] is None:
                     hand_category.append(0)
     else:
             for i in enumerate(hands):
