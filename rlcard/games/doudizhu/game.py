@@ -4,6 +4,7 @@
 
 import functools
 import copy
+from heapq import merge 
 
 from rlcard.games.doudizhu.judger import cards2str
 from rlcard.games.doudizhu.player import DoudizhuPlayer as Player
@@ -193,8 +194,7 @@ class DoudizhuGame(object):
         player_up = self.players[get_upstream_player_id(player, self.players)]
         player_down = self.players[get_downstream_player_id(
             player, self.players)]
-        others_hand = (player_up.current_hand + player_down.current_hand)
-        others_hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
+        others_hand = merge(player_up.current_hand, player_down.current_hand, key=functools.cmp_to_key(doudizhu_sort_card))
         return cards2str(others_hand)
 
 #if __name__ == '__main__':
