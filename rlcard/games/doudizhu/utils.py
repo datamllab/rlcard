@@ -5,6 +5,8 @@ import os
 import json
 from collections import OrderedDict
 import numpy as np
+import threading
+import collections
 
 import rlcard
 
@@ -152,6 +154,8 @@ def cards2str(cards):
             response += card.rank
     return response
 
+_local_objs = threading.local()
+_local_objs.cached_candidate_cards = None
 def contains_cards(candidate, target):
     ''' Check if cards of candidate contains cards of target.
 
@@ -162,20 +166,31 @@ def contains_cards(candidate, target):
     Returns:
         boolean
     '''
-    len_can = len(candidate)
-    len_tar = len(target)
-    if len_can < len_tar:
+    # In normal cases, most continuous calls of this function 
+    #   will test different targets against the same candidate.
+    # So the cached counts of each card in candidate can speed up 
+    #   the comparison for following tests if candidate keeps the same.
+    if not _local_objs.cached_candidate_cards or _local_objs.cached_candidate_cards != candidate:
+        _local_objs.cached_candidate_cards = candidate
+        cards_dict = collections.defaultdict(int)
+        for card in candidate:
+            cards_dict[card] += 1
+        _local_objs.cached_candidate_cards_dict = cards_dict
+    cards_dict = _local_objs.cached_candidate_cards_dict
+    if (target == ''):
+        return True
+    curr_card = target[0]
+    curr_count = 1
+    for card in target[1:]:
+        if (card != curr_card):
+            if (cards_dict[curr_card] < curr_count):
+                return False
+            curr_card = card
+            curr_count = 1
+        else:
+            curr_count += 1
+    if (cards_dict[curr_card] < curr_count):
         return False
-    if len_can == len_tar:
-        if candidate == target:
-            return True
-        return False
-    beg = 0
-    for tar_card in target:
-        beg = candidate.find(tar_card, beg) + 1
-        if beg == 0:
-            #if tar_card not in candidate:
-            return False
     return True
 
 def encode_cards(plane, cards):
