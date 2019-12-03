@@ -254,7 +254,7 @@ def get_gt_cards(player, greater_player):
     for card_type, weight in type_dict.items():
         candidate = TYPE_CARD[card_type]
         for can_weight, cards_list in candidate.items():
-            if int(can_weight) > weight:
+            if int(can_weight) > int(weight):
                 for cards in cards_list:
                     # TODO: improve efficiency
                     if cards not in gt_cards and contains_cards(current_hand, cards):
