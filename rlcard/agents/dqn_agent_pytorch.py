@@ -25,7 +25,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 
-import random
 import numpy as np
 import torch
 import torch.nn as nn
@@ -111,8 +110,10 @@ class DQNAgent(object):
 
         # Create estimators
         #with tf.variable_scope(scope):
-        self.q_estimator = Estimator(action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, mlp_layers=mlp_layers, device=self.device)
-        self.target_estimator = Estimator(action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, mlp_layers=mlp_layers, device=self.device)
+        self.q_estimator = Estimator(action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, \
+            mlp_layers=mlp_layers, device=self.device)
+        self.target_estimator = Estimator(action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, \
+            mlp_layers=mlp_layers, device=self.device)
 
         # Create normalizer
         self.normalizer = Normalizer()
