@@ -27,7 +27,7 @@ setuptools.setup(
         'dm-sonnet==1.35',
         'numpy>=1.16.3',
         'matplotlib>=3.0',
-        'pytorch>=1.3'
+        'torch>=1.3'
     ],
     requires_python='>=3.5',
     classifiers=[

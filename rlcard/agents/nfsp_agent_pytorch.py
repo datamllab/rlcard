@@ -26,7 +26,6 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from copy import deepcopy
 
 from rlcard.agents.dqn_agent_pytorch import DQNAgent
 from rlcard.agents.nfsp_agent import ReservoirBuffer
@@ -115,7 +114,10 @@ class NFSPAgent(object):
         self._step_counter = 0
 
         # Build the action-value network
-        self._rl_agent = DQNAgent('dqn', q_replay_memory_size, q_replay_memory_init_size, q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_norm_step, q_mlp_layers, rl_learning_rate, device)
+        self._rl_agent = DQNAgent('dqn', q_replay_memory_size, q_replay_memory_init_size, \
+            q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, \
+            q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_norm_step, q_mlp_layers, \
+            rl_learning_rate, device)
 
         # Build the average policy supervised model
         self._build_model()
