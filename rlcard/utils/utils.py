@@ -323,7 +323,9 @@ def set_global_seed(seed):
     '''
     if seed is not None:
         import tensorflow as tf
+        import torch
         tf.set_random_seed(seed)
+        torch.manual_seed(seed)
         np.random.seed(seed)
         random.seed(seed)
 
