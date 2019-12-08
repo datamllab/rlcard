@@ -20,7 +20,6 @@ See the paper https://arxiv.org/abs/1603.01121 for more details.
 '''
 
 import collections
-import random
 import enum
 import numpy as np
 import torch
