@@ -57,7 +57,8 @@ class NFSPAgent(object):
                  q_epsilon_decay_steps=int(1e6),
                  q_batch_size=256,
                  q_norm_step=1000,
-                 q_mlp_layers=None):
+                 q_mlp_layers=None,
+                 evaluate_with='best_response'):
         ''' Initialize the NFSP agent.
 
         Args:
@@ -84,6 +85,7 @@ class NFSPAgent(object):
             q_batch_size (int): The batch size of inner DQN agent.
             q_norm_step (int): The normalization steps of inner DQN agent.
             q_mlp_layers (list): The layer sizes of inner DQN agent.
+            evaluate_with (string): The value can be 'best_response' or 'average_policy'
 
         '''
         self._sess = sess
@@ -98,6 +100,7 @@ class NFSPAgent(object):
         self._reservoir_buffer = ReservoirBuffer(reservoir_buffer_capacity)
         self._prev_timestep = None
         self._prev_action = None
+        self.evaluate_with = evaluate_with
 
         # Step counter to keep track of learning.
         self._step_counter = 0
@@ -182,7 +185,17 @@ class NFSPAgent(object):
         Returns:
             action (int): An action id.
         '''
-        action = self._rl_agent.eval_step(state)
+        if self.evaluate_with == 'best_response':
+            action = self._rl_agent.eval_step(state)
+        elif self.evaluate_with == 'average_policy':
+            obs = state['obs']
+            legal_actions = state['legal_actions']
+            probs = self._act(obs)
+            probs = remove_illegal(probs, legal_actions)
+            action = np.random.choice(len(probs), p=probs)
+        else:
+            raise ValueError("'evaluate_with' should be either 'average_policy' or 'best_response'.")
+             
 
         return action
 
