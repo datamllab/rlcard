@@ -38,7 +38,7 @@ class NFSPAgent(object):
     ''' An approximate clone of rlcard.agents.nfsp_agent that uses
     pytorch instead of tensorflow.  Note that this implementation
     differs from Henrich and Silver (2016) in that the supervised
-    training minimizez cross-entropy with respectto the stored
+    training minimizes cross-entropy with respect to the stored
     action probabilities rather than the realized actions.
     '''
 
@@ -220,18 +220,17 @@ class NFSPAgent(object):
             state (numpy.array): The state.
             probs (numpy.array): The probabilities of each action.
         '''
-        #print(len(self._reservoir_buffer))
         transition = Transition(
                 info_state=state,
                 action_probs=probs)
         self._reservoir_buffer.add(transition)
 
-    def train_rl(self): # DONT CHANGE
+    def train_rl(self):
         ''' Update the inner RL agent
         '''
         return self._rl_agent.train()
 
-    def train_sl(self): # TO DO
+    def train_sl(self):
         ''' Compute the loss on sampled transitions and perform a avg-network update.
 
         If there are not enough elements in the buffer, no loss is computed and
