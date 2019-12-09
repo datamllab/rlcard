@@ -10,7 +10,9 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Official Website: [http://www.rlcard.org](http://www.rlcard.org)
 *   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
 
-We have just initialized a list of [Awesome-Game-AI resources](https://github.com/datamllab/awesome-game-ai). Check it out!
+**News:**
+>> PyTorch implementation available. Thanks for the contribution of [@mjudell](https://github.com/mjudell).
+>> We have just initialized a list of [Awesome-Game-AI resources](https://github.com/datamllab/awesome-game-ai). Check it out!
 
 ## Installation
 Make sure that you have **Python 3.5+** and **pip** installed. We recommend installing `rlcard` with `pip` as follow:
@@ -19,12 +21,6 @@ Make sure that you have **Python 3.5+** and **pip** installed. We recommend inst
 git clone https://github.com/datamllab/rlcard.git
 cd rlcard
 pip install -e .
-```
-
-Or you can directly install the package with
-
-```
-pip install rlcard
 ```
 
 ## Examples
@@ -109,7 +105,7 @@ The perfomance is measured by winning rates through tournaments. Example outputs
 ![Learning Curves](http://rlcard.org/imgs/curves.png "Learning Curves")
 
 ## Cite this work
-
+If you find this repo useful, you may cite:
 ```
 @article{zha2019rlcard,
   title={RLCard: A Toolkit for Reinforcement Learning in Card Games},
