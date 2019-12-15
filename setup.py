@@ -3,6 +3,10 @@ import setuptools
 with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
+extras = {
+    'with_torch': ['torch>=1.3']
+}
+
 setuptools.setup(
     name="rlcard",
     version="0.1.6",
@@ -26,9 +30,9 @@ setuptools.setup(
         'tensorflow_probability==0.7.0',
         'dm-sonnet==1.35',
         'numpy>=1.16.3',
-        'matplotlib>=3.0',
-        'torch>=1.3'
+        'matplotlib>=3.0'
     ],
+    extras_require=extras,
     requires_python='>=3.5',
     classifiers=[
         "Programming Language :: Python :: 3.6",
