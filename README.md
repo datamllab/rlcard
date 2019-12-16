@@ -23,6 +23,14 @@ cd rlcard
 pip install -e .
 ```
 
+To try out our PyTorch implementation, please install by using: 
+
+```
+git clone https://github.com/datamllab/rlcard.git
+cd rlcard
+pip install -e .[with_torch]
+```
+
 ## Examples
 Please refer to [examples/](examples). A **short example** is as below.
 
