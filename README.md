@@ -23,11 +23,9 @@ cd rlcard
 pip install -e .
 ```
 
-To try out our PyTorch implementation, please install by using: 
+To try out PyTorch implementation for DQN and NFSP, please also run the following command: 
 
 ```
-git clone https://github.com/datamllab/rlcard.git
-cd rlcard
 pip install -e .[with_torch]
 ```
 
