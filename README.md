@@ -28,7 +28,7 @@ To try out PyTorch implementation for DQN and NFSP, please also run the followin
 ```
 pip install -e .[with_torch]
 ```
-If you meet meet any problem with installing PyTorch using the command above, you may as well follow the instruction on [PyTorch official website](https://pytorch.org/get-started/locally/) to manually install PyTorch.
+If you meet any problem with installing PyTorch using the command above, you may follow the instruction on [PyTorch official website](https://pytorch.org/get-started/locally/) to manually install PyTorch.
 
 ## Examples
 Please refer to [examples/](examples). A **short example** is as below.
