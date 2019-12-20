@@ -1,3 +1,4 @@
+# Copyright 2019 Matthew Judell. All rights reserved.
 # Copyright 2019 DATA Lab at Texas A&M University. All rights reserved.
 # Copyright 2019 DeepMind Technologies Ltd. All rights reserved.
 #
@@ -19,13 +20,14 @@ See the paper https://arxiv.org/abs/1603.01121 for more details.
 '''
 
 import collections
-import random
 import enum
 import numpy as np
-import sonnet as snt
-import tensorflow as tf
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
-from rlcard.agents.dqn_agent import DQNAgent
+from rlcard.agents.dqn_agent_pytorch import DQNAgent
+from rlcard.agents.nfsp_agent import ReservoirBuffer
 from rlcard.utils.utils import remove_illegal
 
 Transition = collections.namedtuple('Transition', 'info_state action_probs')
@@ -33,11 +35,14 @@ Transition = collections.namedtuple('Transition', 'info_state action_probs')
 MODE = enum.Enum('mode', 'best_response average_policy')
 
 class NFSPAgent(object):
-    ''' NFSP Agent implementation in TensorFlow.
+    ''' An approximate clone of rlcard.agents.nfsp_agent that uses
+    pytorch instead of tensorflow.  Note that this implementation
+    differs from Henrich and Silver (2016) in that the supervised
+    training minimizes cross-entropy with respect to the stored
+    action probabilities rather than the realized actions.
     '''
 
     def __init__(self,
-                 sess,
                  scope,
                  action_num=4,
                  state_shape=None,
@@ -58,11 +63,10 @@ class NFSPAgent(object):
                  q_batch_size=256,
                  q_norm_step=1000,
                  q_mlp_layers=None,
-                 evaluate_with='best_response'):
+                 device=None):
         ''' Initialize the NFSP agent.
 
         Args:
-            sess (tf.Session): Tensorflow session object.
             scope (string): The name scope of NFSPAgent.
             action_num (int): The number of actions.
             state_shape (list): The shape of the state space.
@@ -85,10 +89,9 @@ class NFSPAgent(object):
             q_batch_size (int): The batch size of inner DQN agent.
             q_norm_step (int): The normalization steps of inner DQN agent.
             q_mlp_layers (list): The layer sizes of inner DQN agent.
-            evaluate_with (string): The value can be 'best_response' or 'average_policy'
-
+            device (torch.device): Whether to use the cpu or gpu
         '''
-        self._sess = sess
+        self.scope = scope
         self._action_num = action_num
         self._state_shape = state_shape
         self._layer_sizes = hidden_layers_sizes + [action_num]
@@ -100,50 +103,43 @@ class NFSPAgent(object):
         self._reservoir_buffer = ReservoirBuffer(reservoir_buffer_capacity)
         self._prev_timestep = None
         self._prev_action = None
-        self.evaluate_with = evaluate_with
+
+        if device is None:
+            self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        else:
+            self.device = device
 
         # Step counter to keep track of learning.
         self._step_counter = 0
 
-        with tf.variable_scope(scope):
-            # Inner RL agent
-            self._rl_agent = DQNAgent(sess, 'dqn', q_replay_memory_size, q_replay_memory_init_size, q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_norm_step, q_mlp_layers, rl_learning_rate)
+        # Build the action-value network
+        self._rl_agent = DQNAgent('dqn', q_replay_memory_size, q_replay_memory_init_size, \
+            q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, \
+            q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_norm_step, q_mlp_layers, \
+            rl_learning_rate, device)
 
-            # Build supervised model
-            self._build_model()
+        # Build the average policy supervised model
+        self._build_model()
 
         self.sample_episode_policy()
 
     def _build_model(self):
-        ''' build the model for supervised learning
+        ''' Build the average policy network
         '''
-        # Placeholders.
-        input_shape = [None]
-        input_shape.extend(self._state_shape)
-        self._info_state_ph = tf.placeholder(
-                shape=input_shape,
-                dtype=tf.float32)
 
-        self._X = tf.contrib.layers.flatten(self._info_state_ph)
+        # configure the average policy network
+        policy_network = AveragePolicyNetwork(self._action_num, self._state_shape, self._layer_sizes)
+        policy_network = policy_network.to(self.device)
+        self.policy_network = policy_network
+        self.policy_network.eval()
 
-        self._action_probs_ph = tf.placeholder(
-                shape=[None, self._action_num], dtype=tf.float32)
+        # xavier init
+        for p in self.policy_network.parameters():
+            if len(p.data.shape) > 1:
+                nn.init.xavier_uniform_(p.data)
 
-        # Average policy network.
-        self._avg_network = snt.nets.MLP(output_sizes=self._layer_sizes)
-        self._avg_policy = self._avg_network(self._X)
-        self._avg_policy_probs = tf.nn.softmax(self._avg_policy)
-
-        # Loss
-        self._loss = tf.reduce_mean(
-                tf.nn.softmax_cross_entropy_with_logits_v2(
-                        labels=tf.stop_gradient(self._action_probs_ph),
-                        logits=self._avg_policy))
-
-        optimizer = tf.train.AdamOptimizer(learning_rate=self._sl_learning_rate, name='nfsp_adam')
-
-        self._learn_step = optimizer.minimize(self._loss)
-
+        # configure optimizer
+        self.policy_network_optimizer = torch.optim.Adam(self.policy_network.parameters(), lr=self._sl_learning_rate)
 
     def feed(self, ts):
         ''' Feed data to inner RL agent
@@ -185,18 +181,7 @@ class NFSPAgent(object):
         Returns:
             action (int): An action id.
         '''
-        if self.evaluate_with == 'best_response':
-            action = self._rl_agent.eval_step(state)
-        elif self.evaluate_with == 'average_policy':
-            obs = state['obs']
-            legal_actions = state['legal_actions']
-            probs = self._act(obs)
-            probs = remove_illegal(probs, legal_actions)
-            action = np.random.choice(len(probs), p=probs)
-        else:
-            raise ValueError("'evaluate_with' should be either 'average_policy' or 'best_response'.")
-             
-
+        action = self._rl_agent.eval_step(state)
         return action
 
     def sample_episode_policy(self):
@@ -209,7 +194,7 @@ class NFSPAgent(object):
 
     def _act(self, info_state):
         ''' Predict action probability givin the observation and legal actions
-
+            Not connected to computation graph
         Args:
             info_state (numpy.array): An obervation.
 
@@ -217,9 +202,12 @@ class NFSPAgent(object):
             action_probs (numpy.array): The predicted action probability.
         '''
         info_state = np.expand_dims(info_state, axis=0)
-        action_probs = self._sess.run(
-                self._avg_policy_probs,
-                feed_dict={self._info_state_ph: info_state})[0]
+        info_state = torch.from_numpy(info_state).float().to(self.device)
+
+        with torch.no_grad():
+            log_action_probs = self.policy_network(info_state).numpy()
+
+        action_probs = np.exp(log_action_probs)[0]
 
         return action_probs
 
@@ -232,7 +220,6 @@ class NFSPAgent(object):
             state (numpy.array): The state.
             probs (numpy.array): The probabilities of each action.
         '''
-        #print(len(self._reservoir_buffer))
         transition = Transition(
                 info_state=state,
                 action_probs=probs)
@@ -260,70 +247,68 @@ class NFSPAgent(object):
         info_states = [t.info_state for t in transitions]
         action_probs = [t.action_probs for t in transitions]
 
-        loss, _ = self._sess.run(
-                [self._loss, self._learn_step],
-                feed_dict={
-                        self._info_state_ph: info_states,
-                        self._action_probs_ph: action_probs,
-                })
+        self.policy_network_optimizer.zero_grad()
+        self.policy_network.train()
 
-        return loss
+        # (batch, state_size)
+        info_states = torch.from_numpy(np.array(info_states)).float().to(self.device)
 
-class ReservoirBuffer(object):
-    ''' Allows uniform sampling over a stream of data.
+        # (batch, action_num)
+        eval_action_probs = torch.from_numpy(np.array(action_probs)).float().to(self.device)
 
-    This class supports the storage of arbitrary elements, such as observation
-    tensors, integer actions, etc.
+        # (batch, action_num)
+        log_forecast_action_probs = self.policy_network(info_states)
 
-    See https://en.wikipedia.org/wiki/Reservoir_sampling for more details.
+        ce_loss = - (eval_action_probs * log_forecast_action_probs).sum(dim=-1).mean()
+        ce_loss.backward()
+
+        self.policy_network_optimizer.step()
+        ce_loss = ce_loss.item()
+        self.policy_network.eval()
+
+        return ce_loss
+
+class AveragePolicyNetwork(nn.Module):
+    '''
+    Approximates the history of action probabilities
+    given state (average policy). Forward pass returns
+    log probabilities of actions.
     '''
 
-    def __init__(self, reservoir_buffer_capacity):
-        ''' Initialize the buffer.
-        '''
-        self._reservoir_buffer_capacity = reservoir_buffer_capacity
-        self._data = []
-        self._add_calls = 0
-
-    def add(self, element):
-        ''' Potentially adds `element` to the reservoir buffer.
+    def __init__(self, action_num=2, state_shape=None, mlp_layers=None):
+        ''' Initialize the policy network.  It's just a bunch of ReLU
+        layers with no activation on the final one, initialized with
+        Xavier (sonnet.nets.MLP and tensorflow defaults)
 
         Args:
-            element (object): data to be added to the reservoir buffer.
+            action_num (int): number of output actions
+            state_shape (list): shape of state tensor for each sample
+            mlp_laters (list): output size of each mlp layer including final
         '''
-        if len(self._data) < self._reservoir_buffer_capacity:
-            self._data.append(element)
-        else:
-            idx = np.random.randint(0, self._add_calls + 1)
-            if idx < self._reservoir_buffer_capacity:
-                self._data[idx] = element
-        self._add_calls += 1
+        super(AveragePolicyNetwork, self).__init__()
 
-    def sample(self, num_samples):
-        ''' Returns `num_samples` uniformly sampled from the buffer.
+        self.action_num = action_num
+        self.state_shape = state_shape
+        self.mlp_layers = mlp_layers
+
+        # set up mlp w/ relu activations
+        layer_dims = [np.prod(self.state_shape)] + self.mlp_layers
+        mlp = [nn.Flatten()]
+        for i in range(len(layer_dims)-1):
+            mlp.append(nn.Linear(layer_dims[i], layer_dims[i+1]))
+            if i != len(layer_dims) - 2: # all but final have relu
+                mlp.append(nn.ReLU())
+        self.mlp = nn.Sequential(*mlp)
+
+    def forward(self, s):
+        ''' Log action probabilities of each action from state
 
         Args:
-            num_samples (int): The number of samples to draw.
+            s (Tensor): (batch, state_shape) state tensor
 
         Returns:
-            An iterable over `num_samples` random elements of the buffer.
-
-        Raises:
-            ValueError: If there are less than `num_samples` elements in the buffer
+            log_action_probs (Tensor): (batch, action_num)
         '''
-        if len(self._data) < num_samples:
-            raise ValueError("{} elements could not be sampled from size {}".format(
-                    num_samples, len(self._data)))
-        return random.sample(self._data, num_samples)
-
-    def clear(self):
-        ''' Clear the buffer
-        '''
-        self._data = []
-        self._add_calls = 0
-
-    def __len__(self):
-        return len(self._data)
-
-    def __iter__(self):
-        return iter(self._data)
+        logits = self.mlp(s)
+        log_action_probs = F.log_softmax(logits, dim=-1)
+        return log_action_probs
