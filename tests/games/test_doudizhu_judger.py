@@ -114,8 +114,8 @@ class TestDoudizhuGame(unittest.TestCase):
         #     self.assertNotIn(e, playable_cards)
 
         # #trio_solo_chain_2 -- trio_solo_chain_5
-        # in_cards = ('34777888', '3777888T', '3456777888999TTTJJJQ', '777888999TTTJJJQK2BR', '66777888', '777888999TTTJJJJ')
-        # not_in_cards = ('37777888', )
+        # in_cards = ('34777888', '3777888T', '3456777888999TTTJJJQ', '66777888')
+        # not_in_cards = ('37777888', '777888999TTTJJJQK2BR', '777888999TTTJJJJ')
         # hand =  '34556677778888999TTTTJJJJQQQQKA2BR'
         # playable_cards = Judger.playable_cards_from_hand(hand)
         # for e in in_cards:
@@ -124,8 +124,8 @@ class TestDoudizhuGame(unittest.TestCase):
         #     self.assertNotIn(e, playable_cards)
         
         # #trio_pair_chain_2 -- #trio_pair_chain_4
-        # in_cards = ('5566777888', '55777888TT', '777888QQQQ')
-        # not_in_cards = ()
+        # in_cards = ('5566777888', '55777888TT')
+        # not_in_cards = ('777888QQQQ', )
         # hand =  '34556677778888999TTTTJJJJQQQQKA2BR'
         # playable_cards = Judger.playable_cards_from_hand(hand)
         # for e in in_cards:
@@ -134,8 +134,8 @@ class TestDoudizhuGame(unittest.TestCase):
         #     self.assertNotIn(e, playable_cards)
 
         # #four_two_solo, #four_two_pair
-        # in_cards = ('357777', '557777', '567777', '777788', '55667777', '66777799', '557777TT', '55777788', '77778888')
-        # not_in_cards = ()
+        # in_cards = ('357777', '557777', '567777', '777788', '55667777', '66777799', '557777TT', '55777788')
+        # not_in_cards = ('77778888', )
         # hand =  '34556677778888999TTTTJJJJQQQQKA2BR'
         # playable_cards = Judger.playable_cards_from_hand(hand)
         # for e in in_cards:
@@ -146,8 +146,12 @@ class TestDoudizhuGame(unittest.TestCase):
         playable_cards = list(Judger.playable_cards_from_hand('3333444455556666777788889999TTTTJJJJQQQQKKKKAAAA2222BR'))
         all_cards_list = CARD_TYPE[1]
         for c in playable_cards:
+            # if (c not in all_cards_list):
+            #     print(c)
             self.assertIn(c, all_cards_list)
         for c in all_cards_list:
+            # if (c not in playable_cards):
+            #     print('\t' + c)
             self.assertIn(c, playable_cards)
         self.assertEqual(len(playable_cards), len(all_cards_list))
 
