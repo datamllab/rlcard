@@ -65,8 +65,29 @@ class DoudizhuJudger(object):
                             the first one contains indexes of attached cards larger than the index of chain_start
         '''
         attachments = set()
-        candidates = [cls.INDEX[i] for i in filter(lambda x: cls.INDEX[x] < chain_start or cls.INDEX[x] >= chain_start + chain_length, hands)]
+        candidates = []
+        prev_card = None
+        same_card_count = 0
+        for card in hands:
+            #dont count those cards in the chain
+            if (cls.INDEX[card] >= chain_start and cls.INDEX[card] < chain_start + chain_length):
+                continue
+            if (card == prev_card):
+                #attachments can not have bomb
+                if (same_card_count == 3):
+                    continue
+                #attachments can not have 3 same cards consecutive with the trio (except 3 cards of '222')
+                elif (same_card_count == 2 and (cls.INDEX[card] == chain_start - 1 or cls.INDEX[card] == chain_start + chain_length) and card != '2'):
+                    continue
+                else:
+                    same_card_count += 1
+            else:
+                prev_card = card
+                same_card_count = 1
+            candidates.append(cls.INDEX[card])
         for attachment in combinations(candidates, size):
+            if (attachment[-1] == 14 and attachment[-2] == 13):
+                continue
             i = bisect_left(attachment, chain_start)
             attachments.add((attachment[:i], attachment[i:]))
         return list(attachments)
@@ -96,8 +117,9 @@ class DoudizhuJudger(object):
                 candidates.append(i)
             elif (cards_count[i] == 4):
                 candidates.append(i)
-                candidates.append(i)
         for attachment in combinations(candidates, size):
+            if (attachment[-1] == 14 and attachment[-2] == 13):
+                continue
             i = bisect_left(attachment, chain_start)
             attachments.add((attachment[:i], attachment[i:]))
         return list(attachments)
