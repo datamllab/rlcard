@@ -1,7 +1,8 @@
-''' Limit Hold 'em rule models
+''' Limit Hold 'em rule model
 '''
 import rlcard
 from rlcard.models.model import Model
+from rlcard.games.limitholdem.game import LimitholdemGame
 
 class LimitholdemRuleAgentV1(object):
     ''' Limit Hold 'em Rule agent version 1
@@ -10,7 +11,7 @@ class LimitholdemRuleAgentV1(object):
     def __init__(self):
         pass
 
-    def step(self, state):
+    def step(self, state, game):
         ''' Predict the action when given raw state. A simple rule-based AI.
         Args:
             state (dict): Raw state from the game
@@ -21,12 +22,6 @@ class LimitholdemRuleAgentV1(object):
         hand = state['hand']
         public_cards = state['public_cards']
         action = 'fold'
-        '''
-        legal_actions = game.get_legal_actions
-        legal_action = []
-        for _ in enumerate(legal_actions):
-            legal_action[_] = legal_actions[_]
-        '''
         '''
         When having only 2 hand cards at the game start, choose fold to drop terrible cards:
         Acceptable hand cards:
@@ -92,17 +87,28 @@ class LimitholdemRuleAgentV1(object):
                     elif hand[0][0] == hand[1][0]:
                         if hand[0][0] in public_cards_flush:
                             action = 'raise'
-            elif max(public_cards_ranks) in [5, 4, 3 , 2]: # for KQ, KJ, QJ, JT, fold when having no cards higher than 5 
+            elif max(public_cards_ranks) in [5, 4, 3, 2]: # for KQ, KJ, QJ, JT, fold when having no cards higher than 5 
                 action = 'fold'
             else:
                 action = 'call'
-        
-        return action
 
-    def eval_step(self, state):
+        #return action
+        if action in game.get_legal_actions():
+            return action
+        else:
+            if action == 'raise':
+                return 'call'
+            if action == 'check':
+                return 'fold'
+            if action == 'call':
+                return 'raise'
+            else:
+                return action
+
+    def eval_step(self, state, game):
         ''' Step for evaluation. The same to step
         '''
-        return self.step(state)
+        return self.step(state, game)
 
 class LimitholdemRuleModelV1(Model):
     ''' Limitholdem Rule Model version 1
