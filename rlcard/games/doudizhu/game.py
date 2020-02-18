@@ -113,16 +113,7 @@ class DoudizhuGame(object):
         self.winner_id = None
 
         #reverse round
-        player_id, cards = self.round.trace.pop()
-        self.round.current_player = player_id
-        if (cards != 'pass'):
-            for card in cards:
-                self.round.played_cards.remove(card)
-        greater_player_id = self.round.find_last_greater_player_id_in_trace()
-        if (greater_player_id is not None):
-            self.round.greater_player = self.players[greater_player_id]
-        else:
-            self.round.greater_player = None
+        player_id, cards = self.round.step_back(self.players)
 
         #reverse player
         if (cards != 'pass'):
