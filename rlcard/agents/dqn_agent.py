@@ -267,7 +267,7 @@ class Normalizer(object):
             self.state_memory.pop(0)
         self.state_memory.append(s)
         self.mean = np.mean(self.state_memory, axis=0)
-        self.std = np.mean(self.state_memory, axis=0)
+        self.std = np.std(self.state_memory, axis=0)
         self.length = len(self.state_memory)
 
 

@@ -34,6 +34,9 @@ with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/type_card.json'), 'r'
 # rank list of solo character of cards
 CARD_RANK_STR = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K',
                  'A', '2', 'B', 'R']
+CARD_RANK_STR_INDEX = {'3': 0, '4': 1, '5': 2, '6': 3, '7': 4, 
+            '8': 5, '9': 6, 'T': 7, 'J': 8, 'Q': 9, 
+            'K': 10, 'A': 11, '2': 12, 'B': 13, 'R': 14}
 # rank list
 CARD_RANK = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K',
              'A', '2', 'BJ', 'RJ']
