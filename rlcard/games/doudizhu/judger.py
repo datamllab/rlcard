@@ -6,18 +6,14 @@ import collections
 from itertools import combinations
 from bisect import bisect_left
 
-from rlcard.games.doudizhu.utils import CARD_TYPE
+from rlcard.games.doudizhu.utils import CARD_TYPE, CARD_RANK_STR, CARD_RANK_STR_INDEX
 from rlcard.games.doudizhu.utils import cards2str, contains_cards
+
 
 
 class DoudizhuJudger(object):
     ''' Determine what cards a player can play
     '''
-    CARDS = "3456789TJQKA2BR"
-    INDEX = {'3': 0, '4': 1, '5': 2, '6': 3, '7': 4, 
-            '8': 5, '9': 6, 'T': 7, 'J': 8, 'Q': 9, 
-            'K': 10, 'A': 11, '2': 12, 'B': 13, 'R': 14}
-
     @staticmethod
     def chain_indexes(indexes_list):
         ''' Find chains for solos, pairs and trios by using indexes_list
@@ -70,21 +66,21 @@ class DoudizhuJudger(object):
         same_card_count = 0
         for card in hands:
             #dont count those cards in the chain
-            if (cls.INDEX[card] >= chain_start and cls.INDEX[card] < chain_start + chain_length):
+            if (CARD_RANK_STR_INDEX[card] >= chain_start and CARD_RANK_STR_INDEX[card] < chain_start + chain_length):
                 continue
             if (card == prev_card):
                 #attachments can not have bomb
                 if (same_card_count == 3):
                     continue
                 #attachments can not have 3 same cards consecutive with the trio (except 3 cards of '222')
-                elif (same_card_count == 2 and (cls.INDEX[card] == chain_start - 1 or cls.INDEX[card] == chain_start + chain_length) and card != '2'):
+                elif (same_card_count == 2 and (CARD_RANK_STR_INDEX[card] == chain_start - 1 or CARD_RANK_STR_INDEX[card] == chain_start + chain_length) and card != '2'):
                     continue
                 else:
                     same_card_count += 1
             else:
                 prev_card = card
                 same_card_count = 1
-            candidates.append(cls.INDEX[card])
+            candidates.append(CARD_RANK_STR_INDEX[card])
         for attachment in combinations(candidates, size):
             if (attachment[-1] == 14 and attachment[-2] == 13):
                 continue
@@ -131,11 +127,10 @@ class DoudizhuJudger(object):
         Returns:
             set: set of string of playable cards
         '''
-        CARDS = "3456789TJQKA2BR"
         cards_dict = collections.defaultdict(int)
         for card in current_hand:
             cards_dict[card] += 1
-        cards_count = np.array([cards_dict[k] for k in CARDS])
+        cards_count = np.array([cards_dict[k] for k in CARD_RANK_STR])
         playable_cards = set()
         
         non_zero_indexes = np.argwhere(cards_count > 0)
@@ -144,29 +139,29 @@ class DoudizhuJudger(object):
         more_than_3_indexes = np.argwhere(cards_count > 3)
         #solo
         for i in non_zero_indexes:
-            playable_cards.add(CARDS[i[0]])
+            playable_cards.add(CARD_RANK_STR[i[0]])
         #pair
         for i in more_than_1_indexes:
-            playable_cards.add(CARDS[i[0]] * 2)
+            playable_cards.add(CARD_RANK_STR[i[0]] * 2)
         #bomb, four_two_solo, four_two_pair
         for i in more_than_3_indexes:
-            cards = CARDS[i[0]] * 4
+            cards = CARD_RANK_STR[i[0]] * 4
             playable_cards.add(cards)
             for left, right in DoudizhuJudger.solo_attachments(current_hand, i[0], 1, 2):
                 pre_attached = ''
                 for j in left:
-                    pre_attached += CARDS[j]
+                    pre_attached += CARD_RANK_STR[j]
                 post_attached = ''
                 for j in right:
-                    post_attached += CARDS[j]
+                    post_attached += CARD_RANK_STR[j]
                 playable_cards.add(pre_attached + cards + post_attached)
             for left, right in DoudizhuJudger.pair_attachments(cards_count, i[0], 1, 2):
                 pre_attached = ''
                 for j in left:
-                    pre_attached += CARDS[j] * 2
+                    pre_attached += CARD_RANK_STR[j] * 2
                 post_attached = ''
                 for j in right:
-                    post_attached += CARDS[j] * 2
+                    post_attached += CARD_RANK_STR[j] * 2
                 playable_cards.add(pre_attached + cards + post_attached)
 
         #solo_chain_5 -- #solo_chain_12
@@ -180,7 +175,7 @@ class DoudizhuJudger(object):
                 while (curr_length < l and curr_length < 12):
                     curr_index += 1
                     curr_length += 1
-                    cards += CARDS[curr_index]
+                    cards += CARD_RANK_STR[curr_index]
                     if (curr_length >= 5):
                         playable_cards.add(cards)
                 l -= 1
@@ -197,7 +192,7 @@ class DoudizhuJudger(object):
                 while (curr_length < l and curr_length < 10):
                     curr_index += 1
                     curr_length += 1
-                    cards += CARDS[curr_index] * 2
+                    cards += CARD_RANK_STR[curr_index] * 2
                     if (curr_length >= 3):
                         playable_cards.add(cards)
                 l -= 1
@@ -205,17 +200,17 @@ class DoudizhuJudger(object):
         
         #trio, trio_solo and trio_pair
         for i in more_than_2_indexes:
-            playable_cards.add(CARDS[i[0]] * 3)
+            playable_cards.add(CARD_RANK_STR[i[0]] * 3)
             for j in non_zero_indexes:
                 if (j < i):
-                    playable_cards.add(CARDS[j[0]] + CARDS[i[0]] * 3)
+                    playable_cards.add(CARD_RANK_STR[j[0]] + CARD_RANK_STR[i[0]] * 3)
                 elif (j > i):
-                    playable_cards.add(CARDS[i[0]] * 3 + CARDS[j[0]])
+                    playable_cards.add(CARD_RANK_STR[i[0]] * 3 + CARD_RANK_STR[j[0]])
             for j in more_than_1_indexes:
                 if (j < i):
-                    playable_cards.add(CARDS[j[0]] * 2 + CARDS[i[0]] * 3)
+                    playable_cards.add(CARD_RANK_STR[j[0]] * 2 + CARD_RANK_STR[i[0]] * 3)
                 elif (j > i):
-                    playable_cards.add(CARDS[i[0]] * 3 + CARDS[j[0]] * 2)
+                    playable_cards.add(CARD_RANK_STR[i[0]] * 3 + CARD_RANK_STR[j[0]] * 2)
 
         #trio_solo, trio_pair, #trio -- trio_chain_2 -- trio_chain_6; trio_solo_chain_2 -- trio_solo_chain_5; trio_pair_chain_2 -- trio_pair_chain_4
         trio_chain_indexes = DoudizhuJudger.chain_indexes(more_than_2_indexes)
@@ -228,7 +223,7 @@ class DoudizhuJudger(object):
                 while (curr_length < l and curr_length < 6):
                     curr_index += 1
                     curr_length += 1
-                    cards += CARDS[curr_index] * 3
+                    cards += CARD_RANK_STR[curr_index] * 3
 
                     #trio_chain_2 to trio_chain_6
                     if (curr_length >= 2 and curr_length <= 6):
@@ -239,10 +234,10 @@ class DoudizhuJudger(object):
                         for left, right in DoudizhuJudger.solo_attachments(current_hand, s, curr_length, curr_length):
                             pre_attached = ''
                             for j in left:
-                                pre_attached += CARDS[j]
+                                pre_attached += CARD_RANK_STR[j]
                             post_attached = ''
                             for j in right:
-                                post_attached += CARDS[j]
+                                post_attached += CARD_RANK_STR[j]
                             playable_cards.add(pre_attached + cards + post_attached)
                     
                     #trio_pair_chain2 -- trio_pair_chain_4
@@ -250,16 +245,16 @@ class DoudizhuJudger(object):
                         for left, right in DoudizhuJudger.pair_attachments(cards_count, s, curr_length, curr_length):
                             pre_attached = ''
                             for j in left:
-                                pre_attached += CARDS[j] * 2
+                                pre_attached += CARD_RANK_STR[j] * 2
                             post_attached = ''
                             for j in right:
-                                post_attached += CARDS[j] * 2
+                                post_attached += CARD_RANK_STR[j] * 2
                             playable_cards.add(pre_attached + cards + post_attached)
                 l -= 1
                 s += 1
         #rocket
         if (cards_count[13] and cards_count[14]):
-            playable_cards.add(CARDS[13:])
+            playable_cards.add(CARD_RANK_STR[13] + CARD_RANK_STR[14])
         return playable_cards
 
     def __init__(self, players):
