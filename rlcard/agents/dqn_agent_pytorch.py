@@ -84,6 +84,7 @@ class DQNAgent(object):
             learning_rate (float): The learning rate of the DQN agent.
             device (torch.device): whether to use the cpu or gpu
         '''
+        self.use_raw = False
         self.scope = scope
         self.replay_memory_init_size = replay_memory_init_size
         self.update_target_estimator_every = update_target_estimator_every

@@ -151,6 +151,7 @@ class DeepCFR():
             memories
             memory_capacity (int): Number af samples that can be stored in memory
         '''
+        self.use_raw = False
         self._env = env
         self._session = session
         self._batch_size_advantage = batch_size_advantage

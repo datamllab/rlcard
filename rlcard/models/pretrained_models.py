@@ -3,7 +3,6 @@
 
 import os
 import tensorflow as tf
-
 import rlcard
 from rlcard.agents.nfsp_agent import NFSPAgent
 from rlcard.agents.random_agent import RandomAgent
@@ -51,13 +50,3 @@ class LeducHoldemNFSPModel(Model):
               functioning well.
         '''
         return self.nfsp_agents
-
-    @property
-    def use_raw(self):
-        ''' Indicate whether use raw state and action
-
-        Returns:
-            use_raw (boolean): True if using raw state and action
-        '''
-        return False
-

@@ -88,8 +88,8 @@ class NFSPAgent(object):
             q_norm_step (int): The normalization steps of inner DQN agent.
             q_mlp_layers (list): The layer sizes of inner DQN agent.
             evaluate_with (string): The value can be 'best_response' or 'average_policy'
-
         '''
+        self.use_raw = False
         self._sess = sess
         self._scope = scope
         self._action_num = action_num

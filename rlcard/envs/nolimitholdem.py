@@ -10,10 +10,10 @@ class NolimitholdemEnv(Env):
     ''' Limitholdem Environment
     '''
 
-    def __init__(self, allow_step_back=False):
+    def __init__(self, allow_step_back=False, allow_raw_data=False):
         ''' Initialize the Limitholdem environment
         '''
-        super().__init__(Game(allow_step_back), allow_step_back)
+        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
         self.actions = ['call', 'fold', 'check']
         self.state_shape = [54]
         for raise_amount in range(1, self.game.init_chips+1):
@@ -58,6 +58,9 @@ class NolimitholdemEnv(Env):
         obs[53] = float(max(all_chips))
         processed_state['obs'] = obs
 
+        if self.allow_raw_data:
+            processed_state['raw_obs'] = state
+            processed_state['raw_legal_actions'] = [a for a in state['legal_actions']]
         return processed_state
 
     def get_payoffs(self):

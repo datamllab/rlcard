@@ -11,7 +11,7 @@ class UNORuleAgentV1(object):
     '''
 
     def __init__(self):
-        pass
+        self.use_raw = True
 
     def step(self, state):
         ''' Predict the action given raw state. A naive rule. Choose the color
@@ -25,7 +25,8 @@ class UNORuleAgentV1(object):
             action (str): Predicted action
         '''
 
-        legal_actions = state['legal_actions']
+        legal_actions = state['raw_legal_actions']
+        state = state['raw_obs']
         if 'draw' in legal_actions:
             return 'draw'
 

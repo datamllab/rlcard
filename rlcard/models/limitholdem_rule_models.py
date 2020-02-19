@@ -9,7 +9,7 @@ class LimitholdemRuleAgentV1(object):
     '''
 
     def __init__(self):
-        pass
+        self.use_raw = True
 
     def step(self, state):
         ''' Predict the action when given raw state. A simple rule-based AI.
@@ -19,9 +19,10 @@ class LimitholdemRuleAgentV1(object):
         Returns:
             action (str): Predicted action
         '''
+        legal_actions = state['raw_legal_actions']
+        state = state['raw_obs']
         hand = state['hand']
         public_cards = state['public_cards']
-        legal_actions = state['legal_actions']
         action = 'fold'
         '''
         When having only 2 hand cards at the game start, choose fold to drop terrible cards:
