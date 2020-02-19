@@ -11,7 +11,7 @@ class LimitholdemRuleAgentV1(object):
     def __init__(self):
         pass
 
-    def step(self, state, game):
+    def step(self, state):
         ''' Predict the action when given raw state. A simple rule-based AI.
         Args:
             state (dict): Raw state from the game
@@ -21,6 +21,7 @@ class LimitholdemRuleAgentV1(object):
         '''
         hand = state['hand']
         public_cards = state['public_cards']
+        legal_actions = state['legal_actions']
         action = 'fold'
         '''
         When having only 2 hand cards at the game start, choose fold to drop terrible cards:
@@ -93,7 +94,7 @@ class LimitholdemRuleAgentV1(object):
                 action = 'call'
 
         #return action
-        if action in game.get_legal_actions():
+        if action in legal_actions:
             return action
         else:
             if action == 'raise':
@@ -105,10 +106,10 @@ class LimitholdemRuleAgentV1(object):
             else:
                 return action
 
-    def eval_step(self, state, game):
+    def eval_step(self, state):
         ''' Step for evaluation. The same to step
         '''
-        return self.step(state, game), []
+        return self.step(state)
 
 class LimitholdemRuleModelV1(Model):
     ''' Limitholdem Rule Model version 1
