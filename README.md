@@ -22,11 +22,18 @@ git clone https://github.com/datamllab/rlcard.git
 cd rlcard
 pip install -e .
 ```
-
+or use PyPI
+```
+pip install rlcard
+```
+To use tensorflow implementation, run the following command:
+```
+pip install -e .[tensorflow]
+```
 To try out PyTorch implementation for DQN and NFSP, please also run the following command: 
 
 ```
-pip install -e .[with_torch]
+pip install -e .[torch]
 ```
 If you meet any problem with installing PyTorch using the command above, you may follow the instruction on [PyTorch official website](https://pytorch.org/get-started/locally/) to manually install PyTorch.
 

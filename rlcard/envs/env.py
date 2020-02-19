@@ -79,9 +79,9 @@ class Env(object):
         while not self.game.is_over() and not player_id == self.active_player:
             self.timestep += 1
             if self.model.use_raw:
-                action = self.model.agents[player_id].eval_step(state)
+                action, _ = self.model.agents[player_id].eval_step(state)
             else:
-                action = self.model.agents[player_id].eval_step(self.extract_state(state))
+                action, _ = self.model.agents[player_id].eval_step(self.extract_state(state))
                 action = self.decode_action(action)
             if self.human_mode:
                 print('\r>> Agent {} chooses '.format(player_id), end='')
@@ -115,9 +115,9 @@ class Env(object):
             while not player_id == self.active_player:
                 self.timestep += 1
                 if self.model.use_raw:
-                    action = self.model.agents[player_id].eval_step(state)
+                    action, _ = self.model.agents[player_id].eval_step(state)
                 else:
-                    action = self.model.agents[player_id].eval_step(self.extract_state(state))
+                    action, _ = self.model.agents[player_id].eval_step(self.extract_state(state))
                     action = self.decode_action(action)
                 if self.human_mode:
                     history.append((player_id, action))
@@ -232,7 +232,7 @@ class Env(object):
         while not self.is_over():
             # Agent plays
             if not is_training:
-                action = self.agents[player_id].eval_step(state)
+                action, _ = self.agents[player_id].eval_step(state)
             else:
                 action = self.agents[player_id].step(state)
 

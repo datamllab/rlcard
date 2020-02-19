@@ -45,7 +45,7 @@ class UNORuleAgentV1(object):
     def eval_step(self, state):
         ''' Step for evaluation. The same to step
         '''
-        return self.step(state)
+        return self.step(state), []
 
     @staticmethod
     def filter_wild(hand):
