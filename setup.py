@@ -10,7 +10,7 @@ extras = {
 
 setuptools.setup(
     name="rlcard",
-    version="0.1.6",
+    version="0.1.9",
     author="Data Analytics at Texas A&M (DATA) Lab",
     author_email="khlai037@tamu.edu",
     description="A Toolkit for Reinforcement Learning in Card Games",
@@ -24,7 +24,8 @@ setuptools.setup(
     				'games/uno/jsondata/action_space.json',
     				'games/limitholdem/card2index.json',
     				'games/leducholdem/card2index.json',
-    				'games/doudizhu/jsondata/*'
+    				'games/doudizhu/jsondata/*',
+				'games/uno/jsondata/*'
 	]},
     install_requires=[
         'numpy>=1.16.3',
