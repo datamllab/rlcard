@@ -12,7 +12,7 @@ class DouDizhuRuleAgentV1(object):
     '''
 
     def __init__(self):
-        pass
+        self.use_raw = True
 
     def step(self, state):
         ''' Predict the action given raw state. A naive rule.
@@ -22,6 +22,7 @@ class DouDizhuRuleAgentV1(object):
         Returns:
             action (str): Predicted action
         '''
+        state = state['raw_obs']
         trace = state['trace']
         # the rule of leading round
         if len(trace) == 0 or (len(trace) >= 3 and trace[-1][1] == 'pass' and trace[-2][1] == 'pass'):
@@ -177,12 +178,3 @@ class DouDizhuRuleModelV1(Model):
               functioning well.
         '''
         return self.rule_agents
-
-    @property
-    def use_raw(self):
-        ''' Indicate whether use raw state and action
-
-        Returns:
-            use_raw (boolean): True if using raw state and action
-        '''
-        return True

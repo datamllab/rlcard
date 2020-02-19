@@ -8,10 +8,10 @@ class BlackjackEnv(Env):
     ''' Blackjack Environment
     '''
 
-    def __init__(self, allow_step_back=False):
+    def __init__(self, allow_step_back=False, allow_raw_data=False):
         ''' Initialize the Blackjack environment
         '''
-        super().__init__(Game(allow_step_back), allow_step_back)
+        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
         self.rank2score = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":10, "Q":10, "K":10}
         self.actions = ['hit', 'stand']
         self.state_shape = [2]
@@ -57,7 +57,9 @@ class BlackjackEnv(Env):
 
         legal_actions = [i for i in range(len(self.actions))]
         extracted_state = {'obs': obs, 'legal_actions': legal_actions}
-
+        if self.allow_raw_data:
+            extracted_state['raw_obs'] = state
+            extracted_state['raw_legal_actions'] = [a for a in self.actions]
         return extracted_state
 
     def get_payoffs(self):

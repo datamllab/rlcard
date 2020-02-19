@@ -91,6 +91,7 @@ class NFSPAgent(object):
             q_mlp_layers (list): The layer sizes of inner DQN agent.
             device (torch.device): Whether to use the cpu or gpu
         '''
+        self.use_raw = False
         self.scope = scope
         self._action_num = action_num
         self._state_shape = state_shape

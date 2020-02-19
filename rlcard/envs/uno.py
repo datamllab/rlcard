@@ -10,8 +10,8 @@ from rlcard.games.uno.card import UnoCard
 
 class UnoEnv(Env):
 
-    def __init__(self, allow_step_back=False):
-        super().__init__(Game(allow_step_back), allow_step_back)
+    def __init__(self, allow_step_back=False, allow_raw_data=False):
+        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
         self.state_shape = [7, 4, 15]
 
     def print_state(self, player):
@@ -76,8 +76,11 @@ class UnoEnv(Env):
         encode_target(obs[3], state['target'])
         encode_hand(obs[4:], state['others_hand'])
         legal_action_id = self.get_legal_actions()
-        extrated_state = {'obs': obs, 'legal_actions': legal_action_id}
-        return extrated_state
+        extracted_state = {'obs': obs, 'legal_actions': legal_action_id}
+        if self.allow_raw_data:
+            extracted_state['raw_obs'] = state
+            extracted_state['raw_legal_actions'] = [a for a in state['legal_actions']]
+        return extracted_state
 
     def get_payoffs(self):
 
