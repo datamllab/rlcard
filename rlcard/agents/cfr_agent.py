@@ -16,6 +16,7 @@ class CFRAgent():
         Args:
             env (Env): Env class
         '''
+        self.use_raw = False
         self.env = env
         self.model_path = model_path
 

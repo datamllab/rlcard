@@ -78,6 +78,7 @@ class DQNAgent(object):
             mlp_layers (list): The layer number and the dimension of each layer in MLP
             learning_rate (float): The learning rate of the DQN agent.
         '''
+        self.use_raw = False
         self.sess = sess
         self.scope = scope
         self.replay_memory_init_size = replay_memory_init_size

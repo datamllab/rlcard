@@ -7,16 +7,19 @@ class Env(object):
     ''' The base Env class
     '''
 
-    def __init__(self, game, allow_step_back=False):
+    def __init__(self, game, allow_step_back=False, allow_raw_data=False):
         ''' Initialize
 
         Args:
             game (Game): The Game class
             allow_step_back (boolean): True if allowing step_back
+            allow_raw_data (boolean): True if allow raw obs in state['raw_obs'] and raw
+             legal actions in state['raw_legal_actions']
         '''
         self.name = None
         self.game = game
         self.allow_step_back = allow_step_back
+        self.allow_raw_data = allow_raw_data
 
         # Get number of players/actions in this game
         self.player_num = game.get_player_num()
@@ -43,11 +46,12 @@ class Env(object):
         state, player_id = self.game.init_game()
         return self.extract_state(state), player_id
 
-    def step(self, action):
+    def step(self, action, raw_action=False):
         ''' Step forward
 
         Args:
             action (int): the action taken by the current player
+            raw_action (boolean): True if the action is a raw action
 
         Returns:
             (tuple): Tuple containing:
@@ -55,11 +59,13 @@ class Env(object):
                 (numpy.array): The next state
                 (int): The ID of the next player
         '''
+        if not raw_action:
+            action = self.decode_action(action)
         if self.single_agent_mode or self.human_mode:
             return self.single_agent_step(action)
 
         self.timestep += 1
-        next_state, player_id = self.game.step(self.decode_action(action))
+        next_state, player_id = self.game.step(action)
 
         return self.extract_state(next_state), player_id
 
@@ -75,13 +81,11 @@ class Env(object):
         reward = 0.
         done = False
         self.timestep += 1
-        state, player_id = self.game.step(self.decode_action(action))
+        state, player_id = self.game.step(action)
         while not self.game.is_over() and not player_id == self.active_player:
             self.timestep += 1
-            if self.model.use_raw:
-                action, _ = self.model.agents[player_id].eval_step(state)
-            else:
-                action, _ = self.model.agents[player_id].eval_step(self.extract_state(state))
+            action, _ = self.model.agents[player_id].eval_step(self.extract_state(state))
+            if not self.model.agents[player_id].use_raw:
                 action = self.decode_action(action)
             if self.human_mode:
                 print('\r>> Agent {} chooses '.format(player_id), end='')
@@ -114,10 +118,8 @@ class Env(object):
             state, player_id = self.game.init_game()
             while not player_id == self.active_player:
                 self.timestep += 1
-                if self.model.use_raw:
-                    action, _ = self.model.agents[player_id].eval_step(state)
-                else:
-                    action, _ = self.model.agents[player_id].eval_step(self.extract_state(state))
+                action, _ = self.model.agents[player_id].eval_step(self.extract_state(state))
+                if not self.model.agents[player_id].use_raw:
                     action = self.decode_action(action)
                 if self.human_mode:
                     history.append((player_id, action))
@@ -237,7 +239,7 @@ class Env(object):
                 action = self.agents[player_id].step(state)
 
             # Environment steps
-            next_state, next_player_id = self.step(action)
+            next_state, next_player_id = self.step(action, self.agents[player_id].use_raw)
             # Save action
             trajectories[player_id].append(action)
 
@@ -282,9 +284,13 @@ class Env(object):
             raise ValueError('You must set single_agent_mode=True, or human_mode=True')
 
         if single_agent_mode and human_mode:
-            raise ValueError('You can not set single_agentmode=True and human_mode=True together/')
+            raise ValueError('You can not set single_agentmode=True and human_mode=True together')
 
         self.model = self.load_model()
+        for agent in self.model.agents:
+            if agent.use_raw:
+                self.allow_raw_data = True
+                break
         self.active_player = active_player
         self.single_agent_mode = single_agent_mode
         self.human_mode = human_mode

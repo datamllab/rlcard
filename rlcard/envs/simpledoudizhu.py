@@ -11,8 +11,8 @@ class SimpleDoudizhuEnv(Env):
     ''' SimpleDoudizhu Environment
     '''
 
-    def __init__(self, allow_step_back=False):
-        super().__init__(Game(allow_step_back), allow_step_back)
+    def __init__(self, allow_step_back=False, allow_raw_data=False):
+        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
         self.state_shape = [6, 5, 15]
 
     def extract_state(self, state):
@@ -40,6 +40,9 @@ class SimpleDoudizhuEnv(Env):
             encode_cards(obs[5], state['played_cards'])
 
         extrated_state = {'obs': obs, 'legal_actions': self.get_legal_actions()}
+        if self.allow_raw_data:
+            extracted_state_state['raw_obs'] = state
+            extracted_state['raw_legal_actions'] = [a for a in state['actions']]
         return extrated_state
 
     def get_payoffs(self):
