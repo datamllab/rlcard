@@ -35,5 +35,6 @@ class RandomAgent(object):
 
         Returns:
             action (int): the action predicted (randomly chosen) by the random agent
+            probs (list): The list of action probabilities
         '''
-        return self.step(state)
+        return self.step(state), [1/self.action_num for _ in range(self.action_num)]

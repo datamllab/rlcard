@@ -31,7 +31,7 @@ import torch.nn as nn
 from collections import namedtuple
 from copy import deepcopy
 
-from rlcard.agents.dqn_agent import Memory, Normalizer
+from rlcard.agents.dqn_agent import Memory
 from rlcard.utils.utils import remove_illegal
 
 Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state', 'done'])
@@ -164,7 +164,7 @@ class DQNAgent(object):
         q_values = self.q_estimator.predict_nograd(np.expand_dims(self.normalizer.normalize(state['obs']), 0))[0]
         probs = remove_illegal(np.exp(q_values), state['legal_actions'])
         best_action = np.argmax(probs)
-        return best_action
+        return best_action, probs
 
     def predict(self, state):
         ''' Predict the action probabilities but have them
@@ -364,3 +364,43 @@ class EstimatorNetwork(nn.Module):
             s  (Tensor): (batch, state_shape)
         '''
         return self.fc_layers(s)
+
+class Normalizer(object):
+    ''' Normalizer class that tracks the running statistics for normlization
+    '''
+
+    def __init__(self):
+        ''' Initialize a Normalizer instance.
+        '''
+        self.mean = None
+        self.std = None
+        self.state_memory = []
+        self.max_size = 1000
+        self.length = 0
+
+    def normalize(self, s):
+        ''' Normalize the state with the running mean and std.
+
+        Args:
+            s (numpy.array): the input state
+
+        Returns:
+            a (int):  normalized state
+        '''
+        if self.length == 0:
+            return s
+        return (s - self.mean) / (self.std + 1e-8)
+
+    def append(self, s):
+        ''' Append a new state and update the running statistics
+
+        Args:
+            s (numpy.array): the input state
+        '''
+        if len(self.state_memory) > self.max_size:
+            self.state_memory.pop(0)
+        self.state_memory.append(s)
+        self.mean = np.mean(self.state_memory, axis=0)
+        self.std = np.std(self.state_memory, axis=0)
+        self.length = len(self.state_memory)
+

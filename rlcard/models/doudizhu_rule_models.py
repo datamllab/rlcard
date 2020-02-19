@@ -56,7 +56,7 @@ class DouDizhuRuleAgentV1(object):
     def eval_step(self, state):
         ''' Step for evaluation. The same to step
         '''
-        return self.step(state)
+        return self.step(state), []
 
     def combine_cards(self, hand):
         '''Get optimal combinations of cards in hand

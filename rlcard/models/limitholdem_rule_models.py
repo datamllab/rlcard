@@ -108,7 +108,7 @@ class LimitholdemRuleAgentV1(object):
     def eval_step(self, state, game):
         ''' Step for evaluation. The same to step
         '''
-        return self.step(state, game)
+        return self.step(state, game), []
 
 class LimitholdemRuleModelV1(Model):
     ''' Limitholdem Rule Model version 1

@@ -181,8 +181,8 @@ class NFSPAgent(object):
         Returns:
             action (int): An action id.
         '''
-        action = self._rl_agent.eval_step(state)
-        return action
+        action, probs = self._rl_agent.eval_step(state)
+        return action, probs
 
     def sample_episode_policy(self):
         ''' Sample average/best_response policy
