@@ -298,7 +298,7 @@ class DeepCFR():
         action_prob = remove_illegal(action_prob, legal_actions)
         action_prob /= action_prob.sum()
         action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
-        return action
+        return action, action_prob
 
     def reinitialize_advantage_networks(self):
         ''' Reinitialize the advantage networks

@@ -5,7 +5,7 @@ import torch
 import rlcard
 from rlcard.agents.nfsp_agent_pytorch import NFSPAgent
 from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.utils import set_global_seed
+from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
 # Make environment
@@ -24,10 +24,7 @@ memory_init_size = 1000
 norm_step = 1000
 
 # The paths for saving the logs and learning curves
-root_path = './experiments/limit_holdem_nfsp_pytorch_result/'
-log_path = root_path + 'log.txt'
-csv_path = root_path + 'performance.csv'
-figure_path = root_path + 'figures/'
+log_dir = './experiments/limit_holdem_nfsp_result/'
 
 # Set a global seed
 set_global_seed(0)
@@ -55,7 +52,7 @@ eval_env.set_agents([agents[0], random_agent])
 step_counters = [0 for _ in range(env.player_num)]
 
 # Init a Logger to plot the learning curve
-logger = Logger(xlabel='timestep', ylabel='reward', legend='NFSP on Limit Texas Holdem', log_path=log_path, csv_path=csv_path)
+logger = Logger(log_dir)
 
 for episode in range(episode_num):
 
@@ -81,20 +78,10 @@ for episode in range(episode_num):
 
     # Evaluate the performance. Play with random agents.
     if episode % evaluate_every == 0:
-        reward = 0
-        for eval_episode in range(evaluate_num):
-            _, payoffs = eval_env.run(is_training=False)
-            reward += payoffs[0]
+        logger.log_performance(env.timestep, tournament(eval_env, evaluate_num)[0])
 
-        logger.log('\n########## Evaluation ##########')
-        logger.log('Timestep: {} Average reward is {}'.format(env.timestep, float(reward)/evaluate_num))
+# Close files in the logger
+logger.close_files()
 
-        # Add point to logger
-        logger.add_point(x=env.timestep, y=float(reward)/evaluate_num)
-
-    # Make plot
-    if episode % save_plot_every == 0 and episode > 0:
-        logger.make_plot(save_path=figure_path+str(episode)+'.png')
-
-# Make the final plot
-logger.make_plot(save_path=figure_path+'final_'+str(episode)+'.png')
+# Plot the learning curve
+logger.plot('NFSP')

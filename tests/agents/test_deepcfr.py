@@ -53,7 +53,7 @@ class TestUtilsMethos(unittest.TestCase):
 
         # Test eval_step
         state = {'obs': np.random.random_sample(env.state_shape), 'legal_actions': [a for a in range(env.action_num)]}
-        action = agent.eval_step(state)
+        action, _ = agent.eval_step(state)
         self.assertIn(action, [a for a in range(env.action_num)])
 
         # Test simulate other
