@@ -36,7 +36,7 @@ class SimpleDoudizhuDealer(object):
         Args:
             players (list): list of DoudizhuPlayer objects
         '''
-        hand_num = (len(self.deck) - 3) // len(players)
+        hand_num = (len(self.deck) - 1) // len(players)
         for index, player in enumerate(players):
             current_hand = self.deck[index*hand_num:(index+1)*hand_num]
             current_hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
@@ -75,7 +75,7 @@ class SimpleDoudizhuDealer(object):
         #self.landlord.role = 'landlord'
 
         # give the 'landlord' the  three cards
-        self.landlord.current_hand.extend(self.deck[-3:])
+        self.landlord.current_hand.extend(self.deck[-1:])
         self.landlord.current_hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))
         self.landlord.initial_hand = cards2str(self.landlord.current_hand)
         return self.landlord.player_id

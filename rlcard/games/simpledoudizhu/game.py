@@ -100,16 +100,7 @@ class SimpleDoudizhuGame(object):
         self.winner_id = None
 
         #reverse round
-        player_id, cards = self.round.trace.pop()
-        self.round.current_player = player_id
-        if (cards != 'pass'):
-            for card in cards:
-                self.round.played_cards.remove(card)
-        greater_player_id = self.round.find_last_greater_player_id_in_trace()
-        if (greater_player_id is not None):
-            self.round.greater_player = self.players[greater_player_id]
-        else:
-            self.round.greater_player = None
+        player_id, cards = self.round.step_back(self.players)
 
         #reverse player
         if (cards != 'pass'):
@@ -183,14 +174,15 @@ class SimpleDoudizhuGame(object):
             player, self.players)]
         others_hand = merge(player_up.current_hand, player_down.current_hand, key=functools.cmp_to_key(doudizhu_sort_card))
         return cards2str(others_hand)
-
-#if __name__ == '__main__':
-#    import numpy as np
-#    game = SimpleDoudizhuGame()
-#    state, player_id = game.init_game()
-#    print(state)
-#    while not game.is_over():
-#        action = np.random.choice(list(state['actions']))
-#        print(action)
-#        state, next_player_id = game.step(action)
-#        print(state)
+'''
+if __name__ == '__main__':
+    import numpy as np
+    game = SimpleDoudizhuGame()
+    state, player_id = game.init_game()
+    print(state)
+    while not game.is_over():
+        action = np.random.choice(list(state['actions']))
+        print(action)
+        state, next_player_id = game.step(action)
+        print(state)
+'''
