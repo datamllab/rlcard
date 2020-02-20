@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from rlcard.utils.utils import get_random_cards, init_54_deck, init_standard_deck, is_in_cards, is_pair, is_single, rank2int, take_out_cards, print_card, get_random_cards, elegent_form, init_players, get_upstream_player_id, get_downstream_player_id, reorganize, set_global_seed, get_cards_from_ranks,tournament
+from rlcard.utils.utils import get_random_cards, init_54_deck, init_standard_deck, is_in_cards, is_pair, is_single, rank2int, take_out_cards, print_card, elegent_form, init_players, get_upstream_player_id, get_downstream_player_id, reorganize, set_global_seed, get_cards_from_ranks,tournament
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
 

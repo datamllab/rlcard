@@ -119,7 +119,6 @@ class DQNAgent(object):
         tmp = self.total_t - self.replay_memory_init_size
         if tmp>=0 and tmp%self.train_every == 0:
             loss = self.train()
-            return loss
             print('\rINFO - Step {}, loss: {}'.format(self.total_t, loss), end='')
 
     def step(self, state):

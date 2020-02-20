@@ -5,7 +5,6 @@ import os
 import tensorflow as tf
 import rlcard
 from rlcard.agents.nfsp_agent import NFSPAgent
-from rlcard.agents.random_agent import RandomAgent
 from rlcard.models.model import Model
 
 # Root path of pretrianed models
