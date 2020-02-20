@@ -16,7 +16,7 @@ class Logger(object):
         self.txt_path = os.path.join(log_dir, 'log.txt')
         self.csv_path = os.path.join(log_dir, 'performance.csv')
         self.fig_path = os.path.join(log_dir, 'fig.png')
-        
+
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
 

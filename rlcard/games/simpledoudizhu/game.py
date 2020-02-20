@@ -3,8 +3,7 @@
 '''
 
 import functools
-import copy
-from heapq import merge 
+from heapq import merge
 
 from rlcard.games.doudizhu.judger import cards2str
 from rlcard.games.simpledoudizhu.player import SimpleDoudizhuPlayer as Player
@@ -92,7 +91,7 @@ class SimpleDoudizhuGame(object):
 
         Returns:
             (bool): True if the game steps back successfully
-        '''            
+        '''
         if not self.round.trace:
             return False
 

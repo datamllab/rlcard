@@ -76,7 +76,7 @@ class DoudizhuPlayer(object):
             actions = judger.get_playable_cards(self)
         else:
             actions = get_gt_cards(self, greater_player)
-        return actions 
+        return actions
 
     def play(self, action, greater_player=None):
         ''' Perfrom action
@@ -112,7 +112,7 @@ class DoudizhuPlayer(object):
             return self
 
     def play_back(self):
-        ''' Restore recorded cards back to self._current_hand 
+        ''' Restore recorded cards back to self._current_hand
         '''
         removed_cards = self._recorded_played_cards.pop()
         self._current_hand.extend(removed_cards)
