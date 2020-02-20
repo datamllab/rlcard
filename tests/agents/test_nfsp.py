@@ -48,7 +48,7 @@ class TestNFSP(unittest.TestCase):
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)
 
-        for step in range(step_num):
+        for _ in range(step_num):
             agent.sample_episode_policy()
             predicted_action = agent.step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
             self.assertGreaterEqual(predicted_action, 0)

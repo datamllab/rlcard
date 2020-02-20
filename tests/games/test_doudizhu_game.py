@@ -102,7 +102,7 @@ class TestDoudizhuGame(unittest.TestCase):
         game.state['actions'].sort()
         #actions should be the same after step_back()
         self.assertEqual(game.state['actions'], actions)
-        
+
         #case 3: action, pass, pass, action, stepback
         game = Game(allow_step_back=True)
         state, player_id = game.init_game()

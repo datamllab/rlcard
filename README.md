@@ -99,7 +99,7 @@ Agent 1: +++
 
 ## Cheat sheet
 *   `rlcard.make(env_id, allow_step_back=False, allow_raw_data=False)` - Make an environment. `env_id`: a string of a environment; `allow_step_back` - true if allowing `step_back` function to traverse backward in the tree; `allow_raw_data`: true if allowing raw data in the `state`.
-*   `env.step(action, raw_action=False` - Take one step in the environment. `action`: the action can be raw action or integer; `raw_action`: true if the action is raw action, i,e., string.
+*   `env.step(action, raw_action=False)` - Take one step in the environment. `action`: the action can be raw action or integer; `raw_action`: true if the action is raw action, i,e., string.
 *   `env.init_game()` - Initialize a game. Return the state and the first player ID.
 *   `env.run()` - Run a complete game and return trajectories and payoffs. The function can be used after the agents are set up.
 *   `state` - State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.

@@ -8,7 +8,6 @@ import numpy as np
 from rlcard.games.doudizhu.dealer import DoudizhuDealer as Dealer
 from rlcard.games.doudizhu.judger import cards2str
 from rlcard.games.doudizhu.utils import doudizhu_sort_card
-from rlcard.games.doudizhu.utils import doudizhu_sort_str
 from rlcard.games.doudizhu.utils import CARD_RANK_STR, CARD_RANK_STR_INDEX
 
 
@@ -76,8 +75,8 @@ class DoudizhuRound(object):
         return self.greater_player
 
     def step_back(self, players):
-        ''' Reverse the last action 
-        
+        ''' Reverse the last action
+
         Args:
             players (list): list of DoudizhuPlayer objects
         Returns:
@@ -116,7 +115,7 @@ class DoudizhuRound(object):
             The player_id's last played_cards in trace
         '''
         for i in range(len(self.trace) - 1, -1, -1):
-            id, action = self.trace[i]
-            if (id == player_id and action != 'pass'):
+            _id, action = self.trace[i]
+            if (_id == player_id and action != 'pass'):
                 return action
         return None

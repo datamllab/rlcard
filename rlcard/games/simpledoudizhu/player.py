@@ -109,7 +109,7 @@ class SimpleDoudizhuPlayer(object):
             return self
 
     def play_back(self):
-        ''' Restore recorded cards back to self._current_hand 
+        ''' Restore recorded cards back to self._current_hand
         '''
         removed_cards = self._recorded_played_cards.pop()
         self._current_hand.extend(removed_cards)

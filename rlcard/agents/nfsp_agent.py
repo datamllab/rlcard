@@ -139,7 +139,7 @@ class NFSPAgent(object):
 
         # Batch Normalization
         self._X = tf.layers.batch_normalization(self._X, training=True)
-        
+
         self._action_probs_ph = tf.placeholder(
                 shape=[None, self._action_num], dtype=tf.float32)
 
