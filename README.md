@@ -22,7 +22,7 @@ git clone https://github.com/datamllab/rlcard.git
 cd rlcard
 pip install -e .
 ```
-or use PyPI
+or use PyPI with:
 ```
 pip install rlcard
 ```
@@ -60,7 +60,7 @@ We also recommend the following **toy examples**.
 *   [Training CFR on Leduc Hold'em](docs/toy-examples.md#training-cfr-on-leduc-holdem)
 
 ## Demo
-Run `examples/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](docs/games.md#leduc-holdem).
+With `tensorflow` installed, run `examples/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](docs/games.md#leduc-holdem).
 
 ```
 >> Leduc Hold'em pre-trained model
@@ -97,11 +97,18 @@ Agent 1: +++
 >> You choose action (integer):
 ```
 
+## Cheat sheet
+*   `rlcard.make(env_id, allow_step_back=False, allow_raw_data=False)` - Make an environment. `env_id`: a string of a environment; `allow_step_back` - true if allowing `step_back` function to traverse backward in the tree; `allow_raw_data`: true if allowing raw data in the `state`.
+*   `env.step(action, raw_action=False` - Take one step in the environment. `action`: the action can be raw action or integer; `raw_action`: true if the action is raw action, i,e., string.
+*   `env.init_game()` - Initialize a game. Return the state and the first player ID.
+*   `env.run()` - Run a complete game and return trajectories and payoffs. The function can be used after the agents are set up.
+*   `state` - State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
+
 ## Documents
 Please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
 
 ## Available Environments
-We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information sets; **Avg. InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space. **Name:** the name that should be passed to `env.make` to create the game environment.
+We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information sets; **Avg. InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space. **Name:** the name that should be passed to `rlcard.make` to create the game environment.
 
 | Game                                                                                                                                                                                           | InfoSet Number  | Avg. InfoSet Size | Action Size | Name            | Status     |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------: | :---------------: | :---------: | :-------------: | :--------: |

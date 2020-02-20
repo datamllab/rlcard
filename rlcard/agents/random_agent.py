@@ -11,6 +11,7 @@ class RandomAgent(object):
         Args:
             action_num (int): the size of the ouput action space
         '''
+        self.use_raw = False
         self.action_num = action_num
 
     @staticmethod

@@ -9,8 +9,8 @@ class MahjongEnv(Env):
     ''' Mahjong Environment
     '''
 
-    def __init__(self, allow_step_back=False):
-        super().__init__(Game(allow_step_back), allow_step_back)
+    def __init__(self, allow_step_back=False, allow_raw_data=False):
+        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
         self.action_id = card_encoding_dict
         self.de_action_id = {self.action_id[key]: key for key in self.action_id.keys()}
         self.state_shape = [6, 34, 4]
@@ -39,8 +39,11 @@ class MahjongEnv(Env):
         rep.extend(piles_rep)
         obs = np.array(rep)
 
-        extrated_state = {'obs': obs, 'legal_actions': self.get_legal_actions()}
-        return extrated_state
+        extracted_state = {'obs': obs, 'legal_actions': self.get_legal_actions()}
+        if self.allow_raw_data:
+            extracted_state['raw_obs'] = state
+            extracted_state['raw_legal_actions'] = [a for a in state['action_cards']]
+        return extracted_state
 
     def get_payoffs(self):
         ''' Get the payoffs of players. Must be implemented in the child class.
