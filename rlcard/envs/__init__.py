@@ -14,6 +14,11 @@ register(
 )
 
 register(
+    env_id='simpledoudizhu',
+    entry_point='rlcard.envs.simpledoudizhu:SimpleDoudizhuEnv',
+)
+
+register(
     env_id='limit-holdem',
     entry_point='rlcard.envs.limitholdem:LimitholdemEnv',
 )

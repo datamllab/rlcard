@@ -3,8 +3,10 @@ import numpy as np
 import functools
 
 from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
-from rlcard.games.doudizhu.utils import get_optimal_action, doudizhu_sort_str
 from rlcard.games.simpledoudizhu.game import SimpleDoudizhuGame as Game
+from rlcard.games.doudizhu.utils import get_landlord_score, encode_cards
+from rlcard.games.doudizhu.utils import get_optimal_action, doudizhu_sort_str
+from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
 
 class TestSimpleDoudizhuGame(unittest.TestCase):
 
@@ -23,14 +25,13 @@ class TestSimpleDoudizhuGame(unittest.TestCase):
         state, current_player = game.init_game()
         total_cards = list(state['current_hand'] + state['others_hand'])
         total_cards.sort(key=functools.cmp_to_key(doudizhu_sort_str))
-        print(total_cards)
         deck = list(game.round.deck_str)
         self.assertEqual(state['self'], current_player)
         self.assertEqual(state['landlord'], current_player)
         self.assertIs(len(state['played_cards']), 0)
         self.assertEqual(len(total_cards), 28)
         self.assertListEqual(total_cards, deck)
-    '''
+
     def test_step(self):
         game = Game()
         state, _ = game.init_game()
@@ -153,6 +154,6 @@ class TestSimpleDoudizhuGame(unittest.TestCase):
         payoffs = Judger.judge_payoffs(2, 0)
         self.assertEqual(payoffs[0], 1)
         self.assertEqual(payoffs[1], 1)
-'''
+
 if __name__ == '__main__':
     unittest.main()

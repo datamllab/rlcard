@@ -25,7 +25,8 @@ setuptools.setup(
     				'games/limitholdem/card2index.json',
     				'games/leducholdem/card2index.json',
     				'games/doudizhu/jsondata/*',
-				'games/uno/jsondata/*'
+				'games/uno/jsondata/*',
+                'games/simpledoudizhu/jsondata/*'
 	]},
     install_requires=[
         'numpy>=1.16.3',
