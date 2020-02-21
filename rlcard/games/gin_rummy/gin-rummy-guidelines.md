@@ -60,7 +60,7 @@ If the hand is declared dead, both players are punished by the negative of their
 
 The following options can be set.
 
-| Option                                |    Default value
+| Option                                |    Default value          |
 | ------------------------------------- | :-----------------------: |
 | dealer_for_round                      | DealerForRound.Random     |
 | stockpile_dead_card_count             | 2                         |
@@ -104,7 +104,7 @@ The best strategy is to discard kings and queens.
 
 The settings are:
 
-| Option                                | Default value
+| Option                                | Default value             |
 | ------------------------------------- | :-----------------------: |
 | dealer_for_round                      | DealerForRound.Random     |
 | stockpile_dead_card_count             | 2                         |
