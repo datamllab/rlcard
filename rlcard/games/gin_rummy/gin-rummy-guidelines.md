@@ -25,27 +25,27 @@ The state representation of Gin Rummy is encoded as 5 feature planes, where each
 For each plane, the column of the plane indicates the presence of the card (ordered from AS to KC).
 The information that has been encoded can be referred as follows:
 
-| Plane          |              Feature       
-| -------------- | --------------------------------------- |
-| 0              | the cards in current player's hand       
-| 1              | the top card of the discard pile
-| 2              | the dead cards: cards in discard pile (excluding the top card)
-| 3              | opponent known cards: cards picked up from discard pile, but not discarded
-| 4              | the unknown cards: cards in stockpile or in opponent hand (but not known)
+| Plane          |              Feature                    |
+| :------------: | --------------------------------------- |
+| 0              | the cards in current player's hand      |
+| 1              | the top card of the discard pile        |
+| 2              | the dead cards: cards in discard pile (excluding the top card)               |
+| 3              | opponent known cards: cards picked up from discard pile, but not discarded   |
+| 4              | the unknown cards: cards in stockpile or in opponent hand (but not known)    |
 
 ### Action Space of Gin Rummy
 There are 110 actions in Gin Rummy.
 
 | Action ID     |     Action                 |
-| ------------- | :------------------------- |
-| 0             | score_player_0_action
-| 1             | score_player_1_action
-| 2             | draw_card_action
-| 3             | pick_up_discard_action
-| 4             | declare_dead_hand_action
-| 5             | gin_action
-| 6 - 57        | discard_action
-| 58 - 109      | knock_action
+| :-----------: | -------------------------- |
+| 0             | score_player_0_action      |
+| 1             | score_player_1_action      |
+| 2             | draw_card_action           |
+| 3             | pick_up_discard_action     |
+| 4             | declare_dead_hand_action   |
+| 5             | gin_action                 |
+| 6 - 57        | discard_action             |
+| 58 - 109      | knock_action               |
 
 ### Payoff of Gin Rummy 
 The reward is calculated by the terminal state of the game.
@@ -60,18 +60,18 @@ If the hand is declared dead, both players are punished by the negative of their
 
 The following options can be set.
 
-| Option                                | Default value
-| -------------                         | :------------------------- |
-| dealer_for_round                      | DealerForRound.Random
-| stockpile_dead_card_count             | 2
-| going_out_deadwood_count              | 10
-| max_drawn_card_count                  | 52
-| is_allowed_knock                      | True
-| is_allowed_gin                        | True
-| is_allowed_pick_up_discard            | True
-| is_allowed_to_discard_picked_up_card  | False
-| is_always_knock                       | False
-| is_south_never_knocks                 | False
+| Option                                |    Default value
+| ------------------------------------- | :-----------------------: |
+| dealer_for_round                      | DealerForRound.Random     |
+| stockpile_dead_card_count             | 2                         |
+| going_out_deadwood_count              | 10                        |
+| max_drawn_card_count                  | 52                        |
+| is_allowed_knock                      | True                      |
+| is_allowed_gin                        | True                      |
+| is_allowed_pick_up_discard            | True                      |
+| is_allowed_to_discard_picked_up_card  | False                     |
+| is_always_knock                       | False                     |
+| is_south_never_knocks                 | False                     |
 
 ### Variations
 
@@ -105,14 +105,14 @@ The best strategy is to discard kings and queens.
 The settings are:
 
 | Option                                | Default value
-| -------------                         | :------------------------- |
-| dealer_for_round                      | DealerForRound.Random
-| stockpile_dead_card_count             | 2
-| going_out_deadwood_count              | 10
-| max_drawn_card_count                  | 20
-| is_allowed_knock                      | False
-| is_allowed_gin                        | False
-| is_allowed_pick_up_discard            | False
-| is_allowed_to_discard_picked_up_card  | False
-| is_always_knock                       | False
-| is_south_never_knocks                 | False
+| ------------------------------------- | :-----------------------: |
+| dealer_for_round                      | DealerForRound.Random     |
+| stockpile_dead_card_count             | 2                         |
+| going_out_deadwood_count              | 10                        |
+| max_drawn_card_count                  | 20                        |
+| is_allowed_knock                      | False                     |
+| is_allowed_gin                        | False                     |
+| is_allowed_pick_up_discard            | False                     |
+| is_allowed_to_discard_picked_up_card  | False                     |
+| is_always_knock                       | False                     |
+| is_south_never_knocks                 | False                     |
