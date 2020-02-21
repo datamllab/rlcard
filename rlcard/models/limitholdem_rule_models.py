@@ -119,7 +119,7 @@ class LimitholdemRuleModelV1(Model):
     def __init__(self):
         ''' Load pretrained model
         '''
-        env = rlcard.make('limitholdem')
+        env = rlcard.make('limit-holdem')
 
         rule_agent = LimitholdemRuleAgentV1()
         self.rule_agents = [rule_agent for _ in range(env.player_num)]
