@@ -25,10 +25,10 @@ The state representation of Gin Rummy is encoded as 5 feature planes, where each
 For each plane, the column of the plane indicates the presence of the card (ordered from AS to KC).
 The information that has been encoded can be referred as follows:
 
-| Plane          |              Feature                    |
-| :------------: | --------------------------------------- |
-| 0              | the cards in current player's hand      |
-| 1              | the top card of the discard pile        |
+| Plane          |              Feature                                                         |
+| :------------: | ---------------------------------------------------------------------------- |
+| 0              | the cards in current player's hand                                           |
+| 1              | the top card of the discard pile                                             |
 | 2              | the dead cards: cards in discard pile (excluding the top card)               |
 | 3              | opponent known cards: cards picked up from discard pile, but not discarded   |
 | 4              | the unknown cards: cards in stockpile or in opponent hand (but not known)    |
