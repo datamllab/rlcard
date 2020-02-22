@@ -43,7 +43,7 @@ class TestMahjongEnv(unittest.TestCase):
 
     def test_run(self):
         env = Env()
-        env.set_agents([RandomAgent(37), RandomAgent(37), RandomAgent(37), RandomAgent(37)])
+        env.set_agents([RandomAgent(env.action_num), RandomAgent(env.action_num), RandomAgent(env.action_num), RandomAgent(env.action_num)])
         trajectories, payoffs = env.run(is_training=False)
         self.assertEqual(len(trajectories), 4)
         total = 0
