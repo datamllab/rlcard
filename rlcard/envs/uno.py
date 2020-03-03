@@ -10,11 +10,12 @@ from rlcard.games.uno.card import UnoCard
 
 class UnoEnv(Env):
 
-    def __init__(self, allow_step_back=False, allow_raw_data=False):
-        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
+    def __init__(self, config):
+        self.game = Game()
+        super().__init__(config)
         self.state_shape = [7, 4, 15]
 
-    def print_state(self, player):
+    def _print_state(self, player):
         ''' Print out the state of a given player
 
         Args:
@@ -39,7 +40,7 @@ class UnoEnv(Env):
                 print(', ', end='')
         print('\n')
 
-    def print_result(self, player):
+    def _print_result(self, player):
         ''' Print the game result when the game is over
 
         Args:
@@ -54,7 +55,7 @@ class UnoEnv(Env):
         print('')
 
     @staticmethod
-    def print_action(action):
+    def _print_action(action):
         ''' Print out an action in a nice form
 
         Args:
@@ -62,7 +63,7 @@ class UnoEnv(Env):
         '''
         UnoCard.print_cards(action, wild_color=True)
 
-    def load_model(self):
+    def _load_model(self):
         ''' Load pretrained/rule model
 
         Returns:
@@ -70,12 +71,12 @@ class UnoEnv(Env):
         '''
         return models.load('uno-rule-v1')
 
-    def extract_state(self, state):
+    def _extract_state(self, state):
         obs = np.zeros((7, 4, 15), dtype=int)
         encode_hand(obs[:3], state['hand'])
         encode_target(obs[3], state['target'])
         encode_hand(obs[4:], state['others_hand'])
-        legal_action_id = self.get_legal_actions()
+        legal_action_id = self._get_legal_actions()
         extracted_state = {'obs': obs, 'legal_actions': legal_action_id}
         if self.allow_raw_data:
             extracted_state['raw_obs'] = state
@@ -86,15 +87,15 @@ class UnoEnv(Env):
 
         return self.game.get_payoffs()
 
-    def decode_action(self, action_id):
-        legal_ids = self.get_legal_actions()
+    def _decode_action(self, action_id):
+        legal_ids = self._get_legal_actions()
         if action_id in legal_ids:
             return ACTION_LIST[action_id]
         #if (len(self.game.dealer.deck) + len(self.game.round.played_cards)) > 17:
         #    return ACTION_LIST[60]
         return ACTION_LIST[np.random.choice(legal_ids)]
 
-    def get_legal_actions(self):
+    def _get_legal_actions(self):
         legal_actions = self.game.get_legal_actions()
         legal_ids = [ACTION_SPACE[action] for action in legal_actions]
         return legal_ids

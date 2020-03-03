@@ -24,6 +24,7 @@ We provide some running examples. We will update the examples if we achieve bett
 *   `nolimit_holdem_dqn.py`: train DQN on No-Limit Texas Hold'em.
 *   `nolimit_holdem_nfsp.py`: train NFSP on No-Limit Texas Hold'em.
 *   `nolimit_holdem_random.py`: run random agents on No-Limit Gexas Hold'em.
+*	`simple_doudizhu_random.py`: run random agents on Simple Dou Dizhu.
 *   `uno_dqn.py`: train DQN on UNO.
 *   `uno_human.py`: play against rule-based model on UNO.
 *   `uno_nfsp.py`: train NFSP on UNO.
