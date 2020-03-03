@@ -10,17 +10,18 @@ class LimitholdemEnv(Env):
     ''' Limitholdem Environment
     '''
 
-    def __init__(self, allow_step_back=False, allow_raw_data=False):
+    def __init__(self, config):
         ''' Initialize the Limitholdem environment
         '''
-        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
+        self.game = Game()
+        super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']
         self.state_shape=[72]
 
         with open(os.path.join(rlcard.__path__[0], 'games/limitholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
 
-    def get_legal_actions(self):
+    def _get_legal_actions(self):
         ''' Get all leagal actions
 
         Returns:
@@ -28,7 +29,7 @@ class LimitholdemEnv(Env):
         '''
         return self.game.get_legal_actions()
 
-    def extract_state(self, state):
+    def _extract_state(self, state):
         ''' Extract the state representation from state dictionary for agent
 
         Note: Currently the use the hand cards and the public cards. TODO: encode the states
@@ -68,7 +69,7 @@ class LimitholdemEnv(Env):
         '''
         return self.game.get_payoffs()
 
-    def decode_action(self, action_id):
+    def _decode_action(self, action_id):
         ''' Decode the action for applying to the game
 
         Args:

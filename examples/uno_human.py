@@ -4,10 +4,7 @@
 import rlcard
 
 # Make environment and enable human mode
-env = rlcard.make('uno')
-
-# Set it to human mode
-env.set_mode(human_mode=True)
+env = rlcard.make('uno', config={'human_mode':True})
 
 print(">> UNO rule model V1")
 

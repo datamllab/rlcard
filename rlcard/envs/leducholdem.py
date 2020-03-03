@@ -13,17 +13,18 @@ class LeducholdemEnv(Env):
     ''' Leduc Hold'em Environment
     '''
 
-    def __init__(self, allow_step_back=False, allow_raw_data=False):
+    def __init__(self, config):
         ''' Initialize the Limitholdem environment
         '''
-        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
+        self.game = Game()
+        super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']
         self.state_shape = [6]
 
         with open(os.path.join(rlcard.__path__[0], 'games/leducholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
 
-    def print_state(self, player):
+    def _print_state(self, player):
         ''' Print out the state of a given player
 
         Args:
@@ -48,7 +49,7 @@ class LeducholdemEnv(Env):
         print(', '.join([str(self.actions.index(action)) + ': ' + action for action in state['legal_actions']]))
         print('')
 
-    def print_result(self, player):
+    def _print_result(self, player):
         ''' Print the game result when the game is over
 
         Args:
@@ -75,7 +76,7 @@ class LeducholdemEnv(Env):
         print('')
 
     @staticmethod
-    def print_action(action):
+    def _print_action(action):
         ''' Print out an action in a nice form
 
         Args:
@@ -83,7 +84,7 @@ class LeducholdemEnv(Env):
         '''
         print(action, end='')
 
-    def load_model(self):
+    def _load_model(self):
         ''' Load pretrained/rule model
 
         Returns:
@@ -91,7 +92,7 @@ class LeducholdemEnv(Env):
         '''
         return models.load('leduc-holdem-nfsp')
 
-    def get_legal_actions(self):
+    def _get_legal_actions(self):
         ''' Get all leagal actions
 
         Returns:
@@ -99,7 +100,7 @@ class LeducholdemEnv(Env):
         '''
         return self.game.get_legal_actions()
 
-    def extract_state(self, state):
+    def _extract_state(self, state):
         ''' Extract the state representation from state dictionary for agent
 
         Note: Currently the use the hand cards and the public cards. TODO: encode the states
@@ -138,7 +139,7 @@ class LeducholdemEnv(Env):
         '''
         return self.game.get_payoffs()
 
-    def decode_action(self, action_id):
+    def _decode_action(self, action_id):
         ''' Decode the action for applying to the game
 
         Args:

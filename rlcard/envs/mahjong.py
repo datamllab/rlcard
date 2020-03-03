@@ -9,13 +9,14 @@ class MahjongEnv(Env):
     ''' Mahjong Environment
     '''
 
-    def __init__(self, allow_step_back=False, allow_raw_data=False):
-        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
+    def __init__(self, config):
+        self.game = Game()
+        super().__init__(config)
         self.action_id = card_encoding_dict
         self.de_action_id = {self.action_id[key]: key for key in self.action_id.keys()}
         self.state_shape = [6, 34, 4]
 
-    def extract_state(self, state):
+    def _extract_state(self, state):
         ''' Encode state
 
         Args:
@@ -39,7 +40,7 @@ class MahjongEnv(Env):
         rep.extend(piles_rep)
         obs = np.array(rep)
 
-        extracted_state = {'obs': obs, 'legal_actions': self.get_legal_actions()}
+        extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions()}
         if self.allow_raw_data:
             extracted_state['raw_obs'] = state
             extracted_state['raw_legal_actions'] = [a for a in state['action_cards']]
@@ -59,7 +60,7 @@ class MahjongEnv(Env):
             payoffs[player] = 1
         return payoffs
 
-    def decode_action(self, action_id):
+    def _decode_action(self, action_id):
         ''' Action id -> the action in the game. Must be implemented in the child class.
 
         Args:
@@ -77,7 +78,7 @@ class MahjongEnv(Env):
                     break
         return action
 
-    def get_legal_actions(self):
+    def _get_legal_actions(self):
         ''' Get all legal actions for current state
 
         Returns:

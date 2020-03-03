@@ -49,7 +49,7 @@ import tensorflow as tf
 import os
 
 import rlcard
-from rlcard.agents.nfsp_agent import DQNAgent
+from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
@@ -402,17 +402,20 @@ We have designed simple human interfaces to play against the pretrained model. L
 import rlcard
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem')
+env = rlcard.make('leduc-holdem', config={'human_mode':True})
 
-# Set it to human mode
-env.set_mode(human_mode=True)
+print(">> Leduc Hold'em pre-trained model")
 
 # Reset environment
-env.reset()
+state = env.reset()
 
 while True:
-    action = int(input(">> You choose action (integer): "))
-    env.step(action)
+    action = input('>> You choose action (integer): ')
+    while not action.isdigit() or int(action) not in state['legal_actions']:
+        print('Action illegel...')
+        action = input('>> Re-choose action (integer): ')
+         
+    state, _, _ = env.step(int(action))
 ```
 Example output is as follow:
 
@@ -460,16 +463,14 @@ import os
 import numpy as np
 
 import rlcard
-from rlcard.agents.nfsp_agent import DQNAgent
+from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
 # Make environment
-env = rlcard.make('leduc-holdem')
-eval_env = rlcard.make('leduc-holdem')
-env.set_mode(single_agent_mode=True)
-eval_env.set_mode(single_agent_mode=True)
+env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
+eval_env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 1000
@@ -551,7 +552,7 @@ from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem', allow_step_back=True)
+env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
 eval_env = rlcard.make('leduc-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
@@ -561,7 +562,7 @@ evaluate_num = 10000
 episode_num = 10000
 
 # The paths for saving the logs and learning curves
-log_dir = './experiments/leduc_holdem_nfsp_result/'
+log_dir = './experiments/leduc_holdem_cfr_result/'
 
 # Set a global seed
 set_global_seed(0)

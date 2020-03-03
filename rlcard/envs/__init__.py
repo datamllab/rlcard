@@ -14,7 +14,7 @@ register(
 )
 
 register(
-    env_id='simpledoudizhu',
+    env_id='simple-doudizhu',
     entry_point='rlcard.envs.simpledoudizhu:SimpleDoudizhuEnv',
 )
 

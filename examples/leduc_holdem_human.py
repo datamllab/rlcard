@@ -4,10 +4,7 @@
 import rlcard
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem')
-
-# Set it to human mode
-env.set_mode(human_mode=True)
+env = rlcard.make('leduc-holdem', config={'human_mode':True})
 
 print(">> Leduc Hold'em pre-trained model")
 

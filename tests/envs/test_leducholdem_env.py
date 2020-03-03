@@ -1,35 +1,35 @@
 import unittest
 import numpy as np
 
-from rlcard.envs.leducholdem import LeducholdemEnv as Env
+import rlcard
 from rlcard.agents.random_agent import RandomAgent
 
 
 class TestLeducholdemEnv(unittest.TestCase):
 
     def test_init_game_and_extract_state(self):
-        env = Env()
+        env = rlcard.make('leduc-holdem')
         state, _ = env.init_game()
         self.assertEqual(state['obs'].size, 6)
         for action in state['legal_actions']:
             self.assertLess(action, env.action_num)
 
     def test_get_legal_actions(self):
-        env = Env()
+        env = rlcard.make('leduc-holdem')
         env.init_game()
-        legal_actions = env.get_legal_actions()
+        legal_actions = env._get_legal_actions()
         for action in legal_actions:
             self.assertIn(action, env.actions)
 
     def test_decode_action(self):
-        env = Env()
+        env = rlcard.make('leduc-holdem')
         state, _ = env.init_game()
         for action in state['legal_actions']:
-            decoded = env.decode_action(action)
+            decoded = env._decode_action(action)
             self.assertIn(decoded, env.actions)
 
     def test_step(self):
-        env = Env()
+        env = rlcard.make('leduc-holdem')
         state, player_id = env.init_game()
         self.assertEqual(player_id, env.get_player_id())
         action = state['legal_actions'][0]
@@ -37,19 +37,19 @@ class TestLeducholdemEnv(unittest.TestCase):
         self.assertEqual(player_id, env.get_player_id())
 
     def test_step_back(self):
-        env = Env(allow_step_back=True)
+        env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
         _, player_id = env.init_game()
         env.step(0)
         _, back_player_id = env.step_back()
         self.assertEqual(player_id, back_player_id)
         self.assertEqual(env.step_back(), False)
 
-        env = Env()
+        env = rlcard.make('leduc-holdem')
         with self.assertRaises(Exception):
             env.step_back()
 
     def test_run(self):
-        env = Env()
+        env = rlcard.make('leduc-holdem')
         agents = [RandomAgent(env.action_num) for _ in range(env.player_num)]
         env.set_agents(agents)
         trajectories, payoffs = env.run(is_training=False)
@@ -59,23 +59,12 @@ class TestLeducholdemEnv(unittest.TestCase):
             total += payoff
         self.assertEqual(total, 0)
 
-    def test_set_mode(self):
-        env = Env()
-        with self.assertRaises(ValueError):
-            env.set_mode()
-
-        with self.assertRaises(ValueError):
-            env.set_mode(active_player=100)
-
-        with self.assertRaises(ValueError):
-            env.set_mode(single_agent_mode=True, human_mode=True)
-
     def test_single_agent_mode(self):
-        env = Env()
+        env = rlcard.make('leduc-holdem')
         with self.assertRaises(ValueError):
             env.reset()
 
-        env.set_mode(single_agent_mode=True)
+        env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
         with self.assertRaises(ValueError):
             env.set_agents([])
 
@@ -88,11 +77,11 @@ class TestLeducholdemEnv(unittest.TestCase):
             state, _, _ = env.step(np.random.choice(state['legal_actions']))
 
     def test_human_mode(self):
-        env = Env()
+        env = rlcard.make('leduc-holdem')
         with self.assertRaises(ValueError):
             env.reset()
 
-        env.set_mode(human_mode=True)
+        env = rlcard.make('leduc-holdem', config={'human_mode':True})
         with self.assertRaises(ValueError):
             env.set_agents([])
 

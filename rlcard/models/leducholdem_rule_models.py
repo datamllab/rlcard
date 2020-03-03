@@ -7,7 +7,6 @@ from rlcard.games.leducholdem.game import LeducholdemGame
 class LeducholdemRuleAgentV1(object):
     ''' Leduc Hold 'em Rule agent version 1
     '''
-
     def __init__(self):
         self.use_raw = True
 
@@ -24,15 +23,7 @@ class LeducholdemRuleAgentV1(object):
         hand = state['hand']
         public_card = state['public_card']
         action = 'fold'
-        '''
-        When having only 2 hand cards at the game start, choose fold to drop terrible cards:
-        Acceptable hand cards:
-        Pairs
-        AK, AQ, AJ, AT
-        A9s, A8s, ... A2s(s means flush)
-        KQ, KJ, QJ, JT
-        Fold all hand types except those mentioned above to save money
-        '''
+        # Aggressively play 'raise' and 'call'
         if 'raise' in legal_actions:
             return 'raise'
         if 'call' in legal_actions:
@@ -95,6 +86,60 @@ class LeducholdemRuleAgentV1(object):
         ''' Step for evaluation. The same to step
         '''
         return self.step(state), []
+
+class LeducholdemRuleAgentV2(object):
+    ''' Leduc Hold 'em Rule agent version 2
+    '''
+    def __init__(self):
+        self.use_raw = True
+
+    def step(self, state):
+        ''' Predict the action when given raw state. A simple rule-based AI.
+        Args:
+            state (dict): Raw state from the game
+
+        Returns:
+            action (str): Predicted action
+        '''
+        legal_actions = state['raw_legal_actions']
+        state = state['raw_obs']
+        hand = state['hand']
+        public_card = state['public_card']
+        action = 'fold'
+        '''
+        When having only 2 hand cards at the game start, choose fold to drop terrible cards:
+        Acceptable hand cards:
+        Pairs
+        AK, AQ, AJ, AT
+        A9s, A8s, ... A2s(s means flush)
+        KQ, KJ, QJ, JT
+        Fold all hand types except those mentioned above to save money
+        '''
+        if public_card == None:
+            if hand[0] == 'K':
+                action = 'raise'
+            elif hand[0] == 'Q':
+                action = 'check'
+            else:
+                action = 'fold'
+        if public_card != None:
+            if public_cards[1] == hand[1]:
+                action = 'raise'
+            else:
+                action = 'fold'
+
+        #return action
+        if action in legal_actions:
+            return action
+        else:
+            if action == 'raise':
+                return 'call'
+            if action == 'check':
+                return 'fold'
+            if action == 'call':
+                return 'raise'
+            else:
+                return action
 
 class LeducholdemRuleModelV1(Model):
     ''' Leduc holdem Rule Model version 1
