@@ -5,6 +5,7 @@ import os
 import tensorflow as tf
 import rlcard
 from rlcard.agents.nfsp_agent import NFSPAgent
+from rlcard.agents.cfr_agent import CFRAgent
 from rlcard.models.model import Model
 
 # Root path of pretrianed models
@@ -49,3 +50,26 @@ class LeducHoldemNFSPModel(Model):
               functioning well.
         '''
         return self.nfsp_agents
+
+class LeducHoldemCFRModel(Model):
+    ''' A pretrained model on Leduc Holdem with CFR
+    '''
+
+    def __init__(self):
+        ''' Load pretrained model
+        '''
+        env = rlcard.make('leduc-holdem')
+        self.agent = CFRAgent(env, model_path=os.path.join(ROOT_PATH, 'leduc_holdem_cfr'))
+        self.agent.load()
+    @property
+    def agents(self):
+        ''' Get a list of agents for each position in a the game
+
+        Returns:
+            agents (list): A list of agents
+
+        Note: Each agent should be just like RL agent with step and eval_step
+              functioning well.
+        '''
+        return [self.agent, self.agent]
+
