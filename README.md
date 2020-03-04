@@ -26,14 +26,21 @@ or use PyPI with:
 ```
 pip install rlcard
 ```
-To use tensorflow implementation, run the following command:
+To use tensorflow implementation, run:
 ```
 pip install -e .[tensorflow]
 ```
-To try out PyTorch implementation for DQN and NFSP, please also run the following command: 
-
+or 
+```
+pip install -e rlcard[tensorflow]
+```
+To try out PyTorch implementation for DQN and NFSP, please run: 
 ```
 pip install -e .[torch]
+```
+or
+```
+pip install -e rlcard[torch]
 ```
 If you meet any problem with installing PyTorch using the command above, you may follow the instruction on [PyTorch official website](https://pytorch.org/get-started/locally/) to manually install PyTorch.
 
