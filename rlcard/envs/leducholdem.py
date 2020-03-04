@@ -19,7 +19,7 @@ class LeducholdemEnv(Env):
         self.game = Game()
         super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']
-        self.state_shape = [6]
+        self.state_shape = [34]
 
         with open(os.path.join(rlcard.__path__[0], 'games/leducholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
@@ -90,7 +90,7 @@ class LeducholdemEnv(Env):
         Returns:
             model (Model): A Model object
         '''
-        return models.load('leduc-holdem-nfsp')
+        return models.load('leduc-holdem-cfr')
 
     def _get_legal_actions(self):
         ''' Get all leagal actions
@@ -118,12 +118,12 @@ class LeducholdemEnv(Env):
 
         public_card = state['public_card']
         hand = state['hand']
-        cards = [] + [hand]
+        obs = np.zeros(34)
+        obs[self.card2index[hand]] = 1
         if public_card:
-            cards.append(public_card)
-        idx = [self.card2index[card] for card in cards]
-        obs = np.zeros(6)
-        obs[idx] = 1
+            obs[self.card2index[public_card]+3] = 1
+        obs[state['my_chips']+6] = 1
+        obs[state['all_chips'][1]+20] = 1
         processed_state['obs'] = obs
 
         if self.allow_raw_data:

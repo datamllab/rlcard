@@ -17,7 +17,7 @@ eval_env = rlcard.make('leduc-holdem')
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 10000
 evaluate_num = 10000
-episode_num = 100000
+episode_num = 200000
 
 # The intial memory size
 memory_init_size = 1000
