@@ -303,6 +303,16 @@ class Env(object):
         '''
         raise NotImplementedError
 
+    def get_perfect_information(self):
+        ''' Get the perfect information of the current state
+
+        Returns:
+            (dict): A dictionary of all the perfect information of the current state
+
+        Note: Must be implemented in the child class.
+        '''
+        raise NotImplementedError
+
     def _decode_action(self, action_id):
         ''' Decode Action id to the action in the game.
 
