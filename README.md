@@ -32,7 +32,7 @@ pip install -e .[tensorflow]
 ```
 or 
 ```
-pip install -e rlcard[tensorflow]
+pip install rlcard[tensorflow]
 ```
 To try out PyTorch implementation for DQN and NFSP, please run: 
 ```
@@ -40,7 +40,7 @@ pip install -e .[torch]
 ```
 or
 ```
-pip install -e rlcard[torch]
+pip install rlcard[torch]
 ```
 If you meet any problem with installing PyTorch using the command above, you may follow the instruction on [PyTorch official website](https://pytorch.org/get-started/locally/) to manually install PyTorch.
 
