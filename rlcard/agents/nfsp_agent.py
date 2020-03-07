@@ -85,7 +85,7 @@ class NFSPAgent(object):
             q_epsilon_end (float): the end epsilon of inner DQN agent.
             q_epsilon_decay_steps (int): The decay steps of inner DQN agent.
             q_batch_size (int): The batch size of inner DQN agent.
-            q_norm_step (int): The normalization steps of inner DQN agent.
+            q_train_step (int): Train the model every X steps.
             q_mlp_layers (list): The layer sizes of inner DQN agent.
             evaluate_with (string): The value can be 'best_response' or 'average_policy'
         '''
@@ -114,7 +114,7 @@ class NFSPAgent(object):
 
         with tf.variable_scope(scope):
             # Inner RL agent
-            self._rl_agent = DQNAgent(sess, 'dqn', q_replay_memory_size, q_replay_memory_init_size, q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_train_every, q_mlp_layers, rl_learning_rate)
+            self._rl_agent = DQNAgent(sess, scope+'_dqn', q_replay_memory_size, q_replay_memory_init_size, q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_train_every, q_mlp_layers, rl_learning_rate)
 
             with tf.variable_scope('sl'):
                 # Build supervised model

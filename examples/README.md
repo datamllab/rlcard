@@ -11,8 +11,10 @@ We provide some running examples. We will update the examples if we achieve bett
 *   `doudizhu_random_process_pool.py`:run random agents on Dou Dizhu with multiple processes using process pool.
 *   `leduc_holdem_cfr.py`: train CFR on Leduc Hold'em.
 *   `leduc_holdem_dqn.py`: train DQN on Leduc Hold'em.
+*   `leduc_holdem_dqn_pytorch.py`: train DQN on Leduc Hold'em (pytorch implementation).
 *   `leduc_holdem_human.py`: play against re-trained model on Leduc Hold'em.
 *   `leduc_holdem_nfsp.py`: train NFSP on Leduc Hold'em.
+*   `leduc_holdem_nfsp_pytorch.py`: train NFSP on Leduc Hold'em (pytorch implementation).
 *   `leduc_holdem_random.py`: run random agents on Leduc Hold'em.
 *   `leduc_holdem_single.py`: train DQN on Leduc Hold'em as single-agent environment.
 *   `limit_holdem_dqn.py`: train DQN on Limit Texas Hold'em.
