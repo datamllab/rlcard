@@ -288,7 +288,7 @@ class Estimator(object):
         '''
         with torch.no_grad():
             s = torch.from_numpy(s).float().to(self.device)
-            q_as = self.qnet(s).numpy()
+            q_as = self.qnet(s).cpu().numpy()
         return q_as
 
     def update(self, s, a, y):
