@@ -1,4 +1,4 @@
-''' An example of learning a NFSP Agent on Limit Texas Holdem
+''' An example of learning a NFSP Agent on Leduc Holdem
 '''
 import torch
 
@@ -13,18 +13,18 @@ env = rlcard.make('limit-holdem')
 eval_env = rlcard.make('limit-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 100
-save_plot_every = 1000
+evaluate_every = 10000
 evaluate_num = 10000
-episode_num = 10000000
+episode_num = 200000
 
-# Set the the number of steps for collecting normalization statistics
-# and intial memory size
+# The intial memory size
 memory_init_size = 1000
-norm_step = 1000
+
+# Train the agent every X steps
+train_every = 64
 
 # The paths for saving the logs and learning curves
-log_dir = './experiments/limit_holdem_nfsp_result/'
+log_dir = './experiments/leduc_holdem_nfsp_result/'
 
 # Set a global seed
 set_global_seed(0)
@@ -35,21 +35,18 @@ for i in range(env.player_num):
     agent = NFSPAgent(scope='nfsp' + str(i),
                       action_num=env.action_num,
                       state_shape=env.state_shape,
-                      hidden_layers_sizes=[512,512],
-                      anticipatory_param=0.1,
+                      hidden_layers_sizes=[128,128],
                       min_buffer_size_to_learn=memory_init_size,
                       q_replay_memory_init_size=memory_init_size,
-                      q_norm_step=norm_step,
-                      q_mlp_layers=[512,512])
+                      train_every=train_every,
+                      q_train_every = train_every,
+                      q_mlp_layers=[128,128],
+                    device=torch.device('cpu'))
     agents.append(agent)
-
 random_agent = RandomAgent(action_num=eval_env.action_num)
 
 env.set_agents(agents)
 eval_env.set_agents([agents[0], random_agent])
-
-# Count the number of steps
-step_counters = [0 for _ in range(env.player_num)]
 
 # Init a Logger to plot the learning curve
 logger = Logger(log_dir)
@@ -67,14 +64,6 @@ for episode in range(episode_num):
     for i in range(env.player_num):
         for ts in trajectories[i]:
             agents[i].feed(ts)
-            step_counters[i] += 1
-
-            # Train the agent
-            train_count = step_counters[i] - (memory_init_size + norm_step)
-            if train_count > 0 and train_count % 64 == 0:
-                rl_loss = agents[i].train_rl()
-                sl_loss = agents[i].train_sl()
-                print('\rINFO - Agent {}, step {}, rl-loss: {}, sl-loss: {}'.format(i, step_counters[i], rl_loss, sl_loss), end='')
 
     # Evaluate the performance. Play with random agents.
     if episode % evaluate_every == 0:

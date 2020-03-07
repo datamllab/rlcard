@@ -45,8 +45,8 @@ with tf.Session() as sess:
                      state_shape=env.state_shape,
                      mlp_layers=[512,512])
     random_agent = RandomAgent(action_num=eval_env.action_num)
-    env.set_agents([agent, random_agent, random_agent])
-    eval_env.set_agents([agent, random_agent, random_agent])
+    env.set_agents([agent, random_agent])
+    eval_env.set_agents([agent, random_agent])
 
     # Initialize global variables
     sess.run(tf.global_variables_initializer())
