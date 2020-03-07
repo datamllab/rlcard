@@ -155,3 +155,20 @@ class LeducholdemEnv(Env):
             else:
                 return 'fold'
         return self.actions[action_id]
+
+    def get_perfect_information(self):
+        ''' Get the perfect information of the current state
+
+        Returns:
+            (dict): A dictionary of all the perfect information of the current state
+        '''
+        state = {}
+        state['chips'] = [self.game.players[i].in_chips for i in range(self.player_num)]
+        state['public_card'] = self.game.public_card.get_index() if self.game.public_card else None
+        state['hand_cards'] = [self.game.players[i].hand.get_index() for i in range(self.player_num)]
+        state['current_player'] = self.game.game_pointer
+        state['legal_actions'] = self.game.get_legal_actions()
+        return state
+
+        
+
