@@ -110,7 +110,6 @@ class DQNAgent(object):
         self.epsilons = np.linspace(epsilon_start, epsilon_end, epsilon_decay_steps)
 
         # Create estimators
-        #with tf.variable_scope(scope):
         self.q_estimator = Estimator(action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, \
             mlp_layers=mlp_layers, device=self.device)
         self.target_estimator = Estimator(action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, \
@@ -222,6 +221,29 @@ class DQNAgent(object):
         '''
         self.memory.save(state, action, reward, next_state, done)
 
+    def get_state_dict(self):
+        ''' Get the state dict to save models
+
+        Returns:
+            (dict): A dict of model states
+        '''
+        q_key = self.scope + '_q_estimator'
+        q_value = self.q_estimator.qnet.state_dict()
+        target_key = self.scope + '_target_estimator'
+        target_value = self.target_estimator.qnet.state_dict()
+        return {q_key: q_value, target_key: target_value}
+
+    def load(self, checkpoint):
+        ''' Load model
+
+        Args:
+            checkpoint (dict): the loaded state
+        '''
+        q_key = self.scope + '_q_estimator'
+        self.q_estimator.qnet.load_state_dict(checkpoint[q_key])
+        target_key = self.scope + '_target_estimator'
+        self.target_estimator.qnet.load_state_dict(checkpoint[target_key])
+
 class Estimator(object):
     '''
     Approximate clone of rlcard.agents.dqn_agent.Estimator that
@@ -317,6 +339,7 @@ class Estimator(object):
         self.qnet.eval()
 
         return batch_loss
+
 
 class EstimatorNetwork(nn.Module):
     ''' The function approximation network for Estimator

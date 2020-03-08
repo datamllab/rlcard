@@ -98,11 +98,11 @@ Agent 1: +++
 
 ## Cheat sheet
 *   `rlcard.make(env_id, config={})`: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
-	*	`allow_step_back` defualt `False`. True if allowing `step_back` function to traverse backward in the tree.
-	*	`allow_raw_data`: default `False`. True if allowing raw data in the `state`.
-	*	`single_agent_mode`: default `False`. True if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
-	*	`active_player`: defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
-	*	`human_mode`: Default `False`. True if using human mode.
+	*   `allow_step_back` defualt `False`. True if allowing `step_back` function to traverse backward in the tree.
+	*   `allow_raw_data`: default `False`. True if allowing raw data in the `state`.
+	*   `single_agent_mode`: default `False`. True if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
+	*   `active_player`: defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
+	*   `human_mode`: Default `False`. True if using human mode.
 *   `env.step(action, raw_action=False)`: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be true if the action is raw action, i,e., string.
 *   `env.init_game()`: Initialize a game. Return the state and the first player ID.
 *   `env.run()`: Run a complete game and return trajectories and payoffs. The function can be used after the agents are set up.

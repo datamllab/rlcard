@@ -1,5 +1,6 @@
 ''' An example of learning a NFSP Agent on Leduc Holdem
 '''
+import os
 import torch
 
 import rlcard
@@ -9,13 +10,13 @@ from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
 # Make environment
-env = rlcard.make('limit-holdem')
-eval_env = rlcard.make('limit-holdem')
+env = rlcard.make('leduc-holdem')
+eval_env = rlcard.make('leduc-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 10000
 evaluate_num = 10000
-episode_num = 200000
+episode_num = 100000
 
 # The intial memory size
 memory_init_size = 1000
@@ -74,3 +75,12 @@ logger.close_files()
 
 # Plot the learning curve
 logger.plot('NFSP')
+
+# Save model
+save_dir = 'models/leduc_holdem_nfsp_pytorch'
+if not os.path.exists(save_dir):
+    os.makedirs(save_dir)
+state_dict = {}
+for agent in agents:
+    state_dict.update(agent.get_state_dict())
+torch.save(state_dict, os.path.join(save_dir, 'model.pth'))
