@@ -14,7 +14,11 @@ We provide some running examples. We will update the examples if we achieve bett
 *   `leduc_holdem_dqn_pytorch.py`: train DQN on Leduc Hold'em (pytorch implementation).
 *   `leduc_holdem_human.py`: play against re-trained model on Leduc Hold'em.
 *   `leduc_holdem_nfsp.py`: train NFSP on Leduc Hold'em.
+*   `leduc_holdem_nfsp_load_model.py`: an example of loading pre-trained Leduc Hold'em model.
+*   `leduc_holdem_nfsp_load_model_2.py`: another example of loading pre-trained Leduc Hold'em model with model zoo.
 *   `leduc_holdem_nfsp_pytorch.py`: train NFSP on Leduc Hold'em (pytorch implementation).
+*   `leduc_holdem_nfsp_pytorch_load_model.py`: an example of loading pre-trained Leduc Hold'em model (Pytorch).
+*   `leduc_holdem_nfsp_pytorch_load_model_2.py`: another example of loading pre-trained Leduc Hold'em model with model zoo (Pytorch).
 *   `leduc_holdem_random.py`: run random agents on Leduc Hold'em.
 *   `leduc_holdem_single.py`: train DQN on Leduc Hold'em as single-agent environment.
 *   `limit_holdem_dqn.py`: train DQN on Limit Texas Hold'em.

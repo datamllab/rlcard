@@ -7,6 +7,10 @@ try:
     register(
         model_id = 'leduc-holdem-nfsp',
         entry_point='rlcard.models.pretrained_models:LeducHoldemNFSPModel')
+
+    register(
+        model_id = 'leduc-holdem-nfsp-pytorch',
+        entry_point='rlcard.models.pretrained_models:LeducHoldemNFSPPytorchModel')
 except:
     pass
 
