@@ -596,27 +596,32 @@ In the above example, the performance is measured by playing against a pre-train
 Iteration 0
 ----------------------------------------
   timestep     |  192
-  reward       |  -0.063
+  reward       |  -1.3662
 ----------------------------------------
 Iteration 100
 ----------------------------------------
   timestep     |  19392
-  reward       |  0.5715
+  reward       |  0.9462
 ----------------------------------------
 Iteration 200
 ----------------------------------------
   timestep     |  38592
-  reward       |  0.7314
+  reward       |  0.8591
 ----------------------------------------
 Iteration 300
 ----------------------------------------
   timestep     |  57792
-  reward       |  0.9001
+  reward       |  0.7861
 ----------------------------------------
 Iteration 400
 ----------------------------------------
   timestep     |  76992
-  reward       |  0.9354
+  reward       |  0.7752
+----------------------------------------
+Iteration 500
+----------------------------------------
+  timestep     |  96192
+  reward       |  0.7215
 ----------------------------------------
 ```
 We observe that CFR achieves better performance as NFSP. However, CFR requires traversal of the game tree, which is infeasible in large environments.

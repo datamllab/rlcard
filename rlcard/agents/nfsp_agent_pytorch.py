@@ -285,6 +285,24 @@ class NFSPAgent(object):
 
         return ce_loss
 
+    def get_state_dict(self):
+        ''' Get the state dict to save models
+
+        Returns:
+            (dict): A dict of model states
+        '''
+        state_dict = self._rl_agent.get_state_dict()
+        state_dict[self._scope] = self.policy_network.state_dict()
+        return state_dict
+
+    def load(self, checkpoint):
+        ''' Load model
+
+        Args:
+            checkpoint (dict): the loaded state
+        '''
+        self.policy_network.load_state_dict(checkpoint[self._scope])
+
 class AveragePolicyNetwork(nn.Module):
     '''
     Approximates the history of action probabilities

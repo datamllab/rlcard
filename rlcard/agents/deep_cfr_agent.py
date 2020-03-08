@@ -38,7 +38,6 @@ import collections
 import random
 import numpy as np
 import tensorflow as tf
-import sonnet as snt
 
 from rlcard.utils.utils import remove_illegal
 sys.setrecursionlimit(10000000)
@@ -203,10 +202,10 @@ class DeepCFR():
         # Define strategy network, loss & memory.
         self._strategy_memories = FixedSizeRingBuffer(memory_capacity)
 
-        self._policy_network = snt.nets.MLP(
-            list(policy_network_layers) + [self._num_actions])
-
-        action_logits = self._policy_network(self._info_state_ph)
+        fc = self._info_state_ph
+        for dim in list(policy_network_layers):
+            fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)
+        action_logits = tf.contrib.layers.fully_connected(fc, self._num_actions, activation_fn=None)
 
         # Illegal actions are handled in the traversal code where expected payoff
         # and sampled regret is computed from the advantage networks.
@@ -222,14 +221,14 @@ class DeepCFR():
         self._advantage_memories = [
             FixedSizeRingBuffer(memory_capacity) for _ in range(self._num_players)
         ]
-        self._advantage_networks = [
-            snt.nets.MLP(list(advantage_network_layers) + [self._num_actions])
-            for _ in range(self._num_players)
-        ]
-        self._advantage_outputs = [
-            self._advantage_networks[i](self._info_state_ph)
-            for i in range(self._num_players)
-        ]
+        self._advantage_outputs = []
+        with tf.variable_scope('advantage') as vs:
+            for i in range(self._num_players):
+                fc = self._info_state_ph
+                for dim in list(advantage_network_layers):
+                    fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)
+                self._advantage_outputs.append(tf.contrib.layers.fully_connected(fc, self._num_actions, activation_fn=None))
+
         self._loss_advantages = []
         self._optimizer_advantages = []
         self._learn_step_advantages = []
@@ -282,7 +281,7 @@ class DeepCFR():
         adv_loss = [self.advantage_losses[p][-1] for p in self.advantage_losses.keys() if self.advantage_losses[p][-1] is not None]
         avg_adv_loss = sum(adv_loss) / len(adv_loss)
 
-        return self._policy_network, avg_adv_loss, policy_loss
+        return avg_adv_loss, policy_loss
 
     def eval_step(self, state):
         ''' Predict the action given state for evaluation
@@ -304,9 +303,8 @@ class DeepCFR():
     def reinitialize_advantage_networks(self):
         ''' Reinitialize the advantage networks
         '''
-        for p in range(self._num_players):
-            for key in self._advantage_networks[p].initializers:
-                self._advantage_networks[p].initializers[key]()
+        advantage_vars = [v for v in tf.global_variables() if 'advantage' in v.name]
+        tf.variables_initializer(var_list=advantage_vars)
 
     def action_advantage(self, state, player):
         ''' Returns action advantages for a single batch.

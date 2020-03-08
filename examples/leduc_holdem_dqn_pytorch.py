@@ -62,3 +62,12 @@ logger.close_files()
 
 # Plot the learning curve
 logger.plot('DQN')
+
+# Save model
+save_dir = 'models/leduc_holdem_dqn_pytorch'
+if not os.path.exists(save_dir):
+    os.makedirs(save_dir)
+state_dict = agent.get_state_dict()
+print(state_dict. keys())
+torch.save(state_dict, os.path.join(save_dir, 'model.pth'))
+

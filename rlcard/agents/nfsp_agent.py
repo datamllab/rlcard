@@ -22,7 +22,6 @@ import collections
 import random
 import enum
 import numpy as np
-import sonnet as snt
 import tensorflow as tf
 
 from rlcard.agents.dqn_agent import DQNAgent
@@ -94,7 +93,7 @@ class NFSPAgent(object):
         self._scope = scope
         self._action_num = action_num
         self._state_shape = state_shape
-        self._layer_sizes = hidden_layers_sizes + [action_num]
+        self._layer_sizes = hidden_layers_sizes
         self._batch_size = batch_size
         self._train_every = train_every
         self._sl_learning_rate = sl_learning_rate
@@ -144,8 +143,10 @@ class NFSPAgent(object):
                 shape=[None, self._action_num], dtype=tf.float32)
 
         # Average policy network.
-        self._avg_network = snt.nets.MLP(output_sizes=self._layer_sizes)
-        self._avg_policy = self._avg_network(self._X)
+        fc = self._X
+        for dim in self._layer_sizes:
+            fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)
+        self._avg_policy = tf.contrib.layers.fully_connected(fc, self._action_num, activation_fn=None)
         self._avg_policy_probs = tf.nn.softmax(self._avg_policy)
 
         # Loss
