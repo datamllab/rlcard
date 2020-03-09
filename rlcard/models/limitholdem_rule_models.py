@@ -59,11 +59,11 @@ class LimitholdemRuleAgentV1(object):
                     # For AK, AQ, AJ, AT types, if public cards have A, K, Q, J, T, raise, because the chance of getting a straight greatly increases
                     if 'A' in public_cards_ranks or 'K' in public_cards_ranks or 'Q' in public_cards_ranks or 'J' in public_cards_ranks or 'T' in public_cards_ranks:
                         action = 'raise'
-                    # For A9s, A8s, ... A2s types, if public cards have same flush as the hand cards, raise, because the chance of getting a flush greatly increases
-                    elif hand[0][0] == hand[1][0]:
-                        if hand[0][0] in public_cards_flush:
-                            action = 'raise'
-            elif max(public_cards_ranks) in [5, 4 ,3, 2]: # for KQ, KJ, QJ, JT, check when having no cards higher than 5 
+                # For A9s, A8s, ... A2s types, if public cards have same flush as the hand cards, raise, because the chance of getting a flush greatly increases
+                elif hand[0][0] == hand[1][0]:
+                    if hand[0][0] in public_cards_flush:
+                        action = 'raise'
+            elif max(public_cards_ranks) in ['5', '4' ,'3', '2']: # for KQ, KJ, QJ, JT, check when having no cards higher than 5 
                 action = 'check'
             else:
                 action = 'call'
@@ -86,10 +86,10 @@ class LimitholdemRuleAgentV1(object):
                     if 'A' in public_cards_ranks or 'K' in public_cards_ranks or 'Q' in public_cards_ranks or 'J' in public_cards_ranks or 'T' in public_cards_ranks:
                         action = 'raise'
                     # For A9s, A8s, ... A2s types, if public cards have same flush as the hand cards, raise, because the chance of getting a flush greatly increases
-                    elif hand[0][0] == hand[1][0]:
-                        if hand[0][0] in public_cards_flush:
-                            action = 'raise'
-            elif max(public_cards_ranks) in [5, 4, 3, 2]: # for KQ, KJ, QJ, JT, fold when having no cards higher than 5 
+                elif hand[0][0] == hand[1][0]:
+                    if hand[0][0] in public_cards_flush:
+                        action = 'raise'
+            elif max(public_cards_ranks) in ['5', '4', '3', '2']: # for KQ, KJ, QJ, JT, fold when having no cards higher than 5 
                 action = 'fold'
             else:
                 action = 'call'
