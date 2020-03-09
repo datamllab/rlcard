@@ -29,3 +29,7 @@ register(
 register(
     model_id = 'uno-rule-v1',
     entry_point='rlcard.models.uno_rule_models:UNORuleModelV1')
+
+register(
+    model_id = 'limit-holdem-rule-v1',
+    entry_point='rlcard.models.limitholdem_rule_models:LimitholdemRuleModelV1')

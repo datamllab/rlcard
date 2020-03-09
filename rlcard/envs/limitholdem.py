@@ -5,6 +5,7 @@ import numpy as np
 import rlcard
 from rlcard.envs.env import Env
 from rlcard.games.limitholdem.game import LimitholdemGame as Game
+from rlcard import models
 
 class LimitholdemEnv(Env):
     ''' Limitholdem Environment
@@ -85,3 +86,11 @@ class LimitholdemEnv(Env):
             else:
                 return 'fold'
         return self.actions[action_id]
+
+    def _load_model(self):
+        ''' Load pretrained/rule model
+
+        Returns:
+            model (Model): A Model object
+        '''
+        return models.load('limit-holdem-rule-v1')
