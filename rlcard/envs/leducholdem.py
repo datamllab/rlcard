@@ -13,85 +13,26 @@ class LeducholdemEnv(Env):
     ''' Leduc Hold'em Environment
     '''
 
-    def __init__(self, allow_step_back=False, allow_raw_data=False):
+    def __init__(self, config):
         ''' Initialize the Limitholdem environment
         '''
-        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
+        self.game = Game()
+        super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']
-        self.state_shape = [6]
+        self.state_shape = [34]
 
         with open(os.path.join(rlcard.__path__[0], 'games/leducholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
 
-    def print_state(self, player):
-        ''' Print out the state of a given player
-
-        Args:
-            player (int): Player id
-        '''
-        state = self.game.get_state(player)
-        print('\n=============== Community Card ===============')
-        print_card(state['public_card'])
-        print('===============   Your Hand    ===============')
-        print_card(state['hand'])
-        print('===============     Chips      ===============')
-        print('Yours:   ', end='')
-        for _ in range(state['my_chips']):
-            print('+', end='')
-        print('')
-        for i in range(self.player_num):
-            if i != self.active_player:
-                print('Agent {}: '.format(i) , end='')
-                for _ in range(state['all_chips'][i]):
-                    print('+', end='')
-        print('\n=========== Actions You Can Choose ===========')
-        print(', '.join([str(self.actions.index(action)) + ': ' + action for action in state['legal_actions']]))
-        print('')
-
-    def print_result(self, player):
-        ''' Print the game result when the game is over
-
-        Args:
-            player (int): The human player id
-        '''
-        payoffs = self.get_payoffs()
-        hands = [self.game.players[i].hand.get_index() for i in range(self.player_num)]
-        print('')
-
-        if not self.game.players[self.active_player].status == 'folded':
-            for i in range(self.player_num):
-                if i != self.active_player:
-                    if not self.game.players[i].status == 'fold':
-                        print('===============     Agent {}    ==============='.format(i))
-                        print_card(hands[i])
-
-        print('===============     Result     ===============')
-        if payoffs[player] > 0:
-            print('You win {} chips!'.format(payoffs[player]))
-        elif payoffs[player] == 0:
-            print('It is a tie.')
-        else:
-            print('You lose {} chips!'.format(-payoffs[player]))
-        print('')
-
-    @staticmethod
-    def print_action(action):
-        ''' Print out an action in a nice form
-
-        Args:
-            action (str): A string a action
-        '''
-        print(action, end='')
-
-    def load_model(self):
+    def _load_model(self):
         ''' Load pretrained/rule model
 
         Returns:
             model (Model): A Model object
         '''
-        return models.load('leduc-holdem-nfsp')
+        return models.load('leduc-holdem-cfr')
 
-    def get_legal_actions(self):
+    def _get_legal_actions(self):
         ''' Get all leagal actions
 
         Returns:
@@ -99,7 +40,7 @@ class LeducholdemEnv(Env):
         '''
         return self.game.get_legal_actions()
 
-    def extract_state(self, state):
+    def _extract_state(self, state):
         ''' Extract the state representation from state dictionary for agent
 
         Note: Currently the use the hand cards and the public cards. TODO: encode the states
@@ -110,25 +51,28 @@ class LeducholdemEnv(Env):
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
         '''
-        processed_state = {}
+        extracted_state = {}
 
         legal_actions = [self.actions.index(a) for a in state['legal_actions']]
-        processed_state['legal_actions'] = legal_actions
+        extracted_state['legal_actions'] = legal_actions
 
         public_card = state['public_card']
         hand = state['hand']
-        cards = [] + [hand]
+        obs = np.zeros(34)
+        obs[self.card2index[hand]] = 1
         if public_card:
-            cards.append(public_card)
-        idx = [self.card2index[card] for card in cards]
-        obs = np.zeros(6)
-        obs[idx] = 1
-        processed_state['obs'] = obs
+            obs[self.card2index[public_card]+3] = 1
+        obs[state['my_chips']+6] = 1
+        obs[state['all_chips'][1]+20] = 1
+        extracted_state['obs'] = obs
 
         if self.allow_raw_data:
-            processed_state['raw_obs'] = state
-            processed_state['raw_legal_actions'] = [a for a in state['legal_actions']]
-        return processed_state
+            extracted_state['raw_obs'] = state
+            extracted_state['raw_legal_actions'] = [a for a in state['legal_actions']]
+        if self.record_action:
+            extracted_state['action_record'] = self.action_recorder
+
+        return extracted_state
 
     def get_payoffs(self):
         ''' Get the payoff of a game
@@ -138,7 +82,7 @@ class LeducholdemEnv(Env):
         '''
         return self.game.get_payoffs()
 
-    def decode_action(self, action_id):
+    def _decode_action(self, action_id):
         ''' Decode the action for applying to the game
 
         Args:
@@ -154,3 +98,17 @@ class LeducholdemEnv(Env):
             else:
                 return 'fold'
         return self.actions[action_id]
+
+    def get_perfect_information(self):
+        ''' Get the perfect information of the current state
+
+        Returns:
+            (dict): A dictionary of all the perfect information of the current state
+        '''
+        state = {}
+        state['chips'] = [self.game.players[i].in_chips for i in range(self.player_num)]
+        state['public_card'] = self.game.public_card.get_index() if self.game.public_card else None
+        state['hand_cards'] = [self.game.players[i].hand.get_index() for i in range(self.player_num)]
+        state['current_player'] = self.game.game_pointer
+        state['legal_actions'] = self.game.get_legal_actions()
+        return state
