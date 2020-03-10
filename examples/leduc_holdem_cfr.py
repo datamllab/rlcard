@@ -9,7 +9,7 @@ from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem', allow_step_back=True)
+env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
 eval_env = rlcard.make('leduc-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
@@ -19,7 +19,7 @@ evaluate_num = 10000
 episode_num = 10000
 
 # The paths for saving the logs and learning curves
-log_dir = './experiments/leduc_holdem_nfsp_result/'
+log_dir = './experiments/leduc_holdem_cfr_result/'
 
 # Set a global seed
 set_global_seed(0)

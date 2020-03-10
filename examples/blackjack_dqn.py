@@ -5,7 +5,7 @@ import tensorflow as tf
 import os
 
 import rlcard
-from rlcard.agents.nfsp_agent import DQNAgent
+from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
