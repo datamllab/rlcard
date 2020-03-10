@@ -49,7 +49,7 @@ import tensorflow as tf
 import os
 
 import rlcard
-from rlcard.agents.nfsp_agent import DQNAgent
+from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
@@ -397,22 +397,25 @@ INFO - Step 2199, loss: 0.75212180614471447
 ```
 
 ## Having Fun with Pretrained Leduc Model
-We have designed simple human interfaces to play against the pretrained model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](games.md#leduc-holdem). Example of playing against Leduc Hold'em NFSP model is as below:
+We have designed simple human interfaces to play against the pretrained model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](games.md#leduc-holdem). Example of playing against Leduc Hold'em CFR model is as below:
 ```python
 import rlcard
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem')
+env = rlcard.make('leduc-holdem', config={'human_mode':True})
 
-# Set it to human mode
-env.set_mode(human_mode=True)
+print(">> Leduc Hold'em pre-trained model")
 
 # Reset environment
-env.reset()
+state = env.reset()
 
 while True:
-    action = int(input(">> You choose action (integer): "))
-    env.step(action)
+    action = input('>> You choose action (integer): ')
+    while not action.isdigit() or int(action) not in state['legal_actions']:
+        print('Action illegel...')
+        action = input('>> Re-choose action (integer): ')
+         
+    state, _, _ = env.step(int(action))
 ```
 Example output is as follow:
 
@@ -460,16 +463,14 @@ import os
 import numpy as np
 
 import rlcard
-from rlcard.agents.nfsp_agent import DQNAgent
+from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
 # Make environment
-env = rlcard.make('leduc-holdem')
-eval_env = rlcard.make('leduc-holdem')
-env.set_mode(single_agent_mode=True)
-eval_env.set_mode(single_agent_mode=True)
+env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
+eval_env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 1000
@@ -551,7 +552,7 @@ from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem', allow_step_back=True)
+env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
 eval_env = rlcard.make('leduc-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
@@ -561,7 +562,7 @@ evaluate_num = 10000
 episode_num = 10000
 
 # The paths for saving the logs and learning curves
-log_dir = './experiments/leduc_holdem_nfsp_result/'
+log_dir = './experiments/leduc_holdem_cfr_result/'
 
 # Set a global seed
 set_global_seed(0)
@@ -595,27 +596,32 @@ In the above example, the performance is measured by playing against a pre-train
 Iteration 0
 ----------------------------------------
   timestep     |  192
-  reward       |  -0.063
+  reward       |  -1.3662
 ----------------------------------------
 Iteration 100
 ----------------------------------------
   timestep     |  19392
-  reward       |  0.5715
+  reward       |  0.9462
 ----------------------------------------
 Iteration 200
 ----------------------------------------
   timestep     |  38592
-  reward       |  0.7314
+  reward       |  0.8591
 ----------------------------------------
 Iteration 300
 ----------------------------------------
   timestep     |  57792
-  reward       |  0.9001
+  reward       |  0.7861
 ----------------------------------------
 Iteration 400
 ----------------------------------------
   timestep     |  76992
-  reward       |  0.9354
+  reward       |  0.7752
+----------------------------------------
+Iteration 500
+----------------------------------------
+  timestep     |  96192
+  reward       |  0.7215
 ----------------------------------------
 ```
 We observe that CFR achieves better performance as NFSP. However, CFR requires traversal of the game tree, which is infeasible in large environments.

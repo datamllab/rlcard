@@ -54,7 +54,7 @@ class DQNAgent(object):
                  batch_size=32,
                  action_num=2,
                  state_shape=None,
-                 norm_step=100,
+                 train_every=1,
                  mlp_layers=None,
                  learning_rate=0.00005,
                  device=None):
@@ -79,7 +79,7 @@ class DQNAgent(object):
             evaluate_every (int): Evaluate every N steps
             action_num (int): The number of the actions
             state_space (list): The space of the state vector
-            norm_step (int): The number of the step used form noramlize state
+            train_every (int): Train the network every X steps.
             mlp_layers (list): The layer number and the dimension of each layer in MLP
             learning_rate (float): The learning rate of the DQN agent.
             device (torch.device): whether to use the cpu or gpu
@@ -92,7 +92,7 @@ class DQNAgent(object):
         self.epsilon_decay_steps = epsilon_decay_steps
         self.batch_size = batch_size
         self.action_num = action_num
-        self.norm_step = norm_step
+        self.train_every = train_every
 
         # Torch device
         if device is None:
@@ -110,33 +110,28 @@ class DQNAgent(object):
         self.epsilons = np.linspace(epsilon_start, epsilon_end, epsilon_decay_steps)
 
         # Create estimators
-        #with tf.variable_scope(scope):
         self.q_estimator = Estimator(action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, \
             mlp_layers=mlp_layers, device=self.device)
         self.target_estimator = Estimator(action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, \
             mlp_layers=mlp_layers, device=self.device)
-
-        # Create normalizer
-        self.normalizer = Normalizer()
 
         # Create replay memory
         self.memory = Memory(replay_memory_size, batch_size)
 
     def feed(self, ts):
         ''' Store data in to replay buffer and train the agent. There are two stages.
-            In stage 1, populate the Normalizer to calculate mean and std.
-            The transition is NOT stored in the memory
-            In stage 2, the transition is stored to the memory.
+            In stage 1, populate the memory without training
+            In stage 2, train the agent every several timesteps
 
         Args:
             ts (list): a list of 5 elements that represent the transition
         '''
         (state, action, reward, next_state, done) = tuple(ts)
-        if self.total_t < self.norm_step:
-            self.feed_norm(state['obs'])
-        else:
-            self.feed_memory(state['obs'], action, reward, next_state['obs'], done)
+        self.feed_memory(state['obs'], action, reward, next_state['obs'], done)
         self.total_t += 1
+        tmp = self.total_t - self.replay_memory_init_size
+        if tmp>=0 and tmp%self.train_every == 0:
+            loss = self.train()
 
     def step(self, state):
         ''' Predict the action for genrating training data but
@@ -162,7 +157,7 @@ class DQNAgent(object):
         Returns:
             action (int): an action id
         '''
-        q_values = self.q_estimator.predict_nograd(np.expand_dims(self.normalizer.normalize(state['obs']), 0))[0]
+        q_values = self.q_estimator.predict_nograd(np.expand_dims(state['obs'], 0))[0]
         probs = remove_illegal(np.exp(q_values), state['legal_actions'])
         best_action = np.argmax(probs)
         return best_action, probs
@@ -179,7 +174,7 @@ class DQNAgent(object):
         '''
         epsilon = self.epsilons[min(self.total_t, self.epsilon_decay_steps-1)]
         A = np.ones(self.action_num, dtype=float) * epsilon / self.action_num
-        q_values = self.q_estimator.predict_nograd(np.expand_dims(self.normalizer.normalize(state), 0))[0]
+        q_values = self.q_estimator.predict_nograd(np.expand_dims(state, 0))[0]
         best_action = np.argmax(q_values)
         A[best_action] += (1.0 - epsilon)
         return A
@@ -205,6 +200,7 @@ class DQNAgent(object):
         state_batch = np.array(state_batch)
 
         loss = self.q_estimator.update(state_batch, action_batch, target_batch)
+        print('\rINFO - Agent {}, step {}, rl-loss: {}'.format(self.scope, self.total_t, loss), end='')
 
         # Update the target estimator
         if self.train_t % self.update_target_estimator_every == 0:
@@ -212,15 +208,6 @@ class DQNAgent(object):
             print("\nINFO - Copied model parameters to target network.")
 
         self.train_t += 1
-        return loss
-
-    def feed_norm(self, state):
-        ''' Feed state to normalizer to collect statistics
-
-        Args:
-            state (numpy.array): the state that will be feed into normalizer
-        '''
-        self.normalizer.append(state)
 
     def feed_memory(self, state, action, reward, next_state, done):
         ''' Feed transition to memory
@@ -232,7 +219,30 @@ class DQNAgent(object):
             next_state (numpy.array): the next state after performing the action
             done (boolean): whether the episode is finished
         '''
-        self.memory.save(self.normalizer.normalize(state), action, reward, self.normalizer.normalize(next_state), done)
+        self.memory.save(state, action, reward, next_state, done)
+
+    def get_state_dict(self):
+        ''' Get the state dict to save models
+
+        Returns:
+            (dict): A dict of model states
+        '''
+        q_key = self.scope + '_q_estimator'
+        q_value = self.q_estimator.qnet.state_dict()
+        target_key = self.scope + '_target_estimator'
+        target_value = self.target_estimator.qnet.state_dict()
+        return {q_key: q_value, target_key: target_value}
+
+    def load(self, checkpoint):
+        ''' Load model
+
+        Args:
+            checkpoint (dict): the loaded state
+        '''
+        q_key = self.scope + '_q_estimator'
+        self.q_estimator.qnet.load_state_dict(checkpoint[q_key])
+        target_key = self.scope + '_target_estimator'
+        self.target_estimator.qnet.load_state_dict(checkpoint[target_key])
 
 class Estimator(object):
     '''
@@ -289,7 +299,7 @@ class Estimator(object):
         '''
         with torch.no_grad():
             s = torch.from_numpy(s).float().to(self.device)
-            q_as = self.qnet(s).numpy()
+            q_as = self.qnet(s).cpu().numpy()
         return q_as
 
     def update(self, s, a, y):
@@ -330,6 +340,7 @@ class Estimator(object):
 
         return batch_loss
 
+
 class EstimatorNetwork(nn.Module):
     ''' The function approximation network for Estimator
         It is just a series of tanh layers. All in/out are torch.tensor
@@ -352,6 +363,7 @@ class EstimatorNetwork(nn.Module):
         # build the Q network
         layer_dims = [np.prod(self.state_shape)] + self.mlp_layers
         fc = [nn.Flatten()]
+        fc.append(nn.BatchNorm1d(layer_dims[0]))
         for i in range(len(layer_dims)-1):
             fc.append(nn.Linear(layer_dims[i], layer_dims[i+1], bias=True))
             fc.append(nn.Tanh())
@@ -365,43 +377,3 @@ class EstimatorNetwork(nn.Module):
             s  (Tensor): (batch, state_shape)
         '''
         return self.fc_layers(s)
-
-class Normalizer(object):
-    ''' Normalizer class that tracks the running statistics for normlization
-    '''
-
-    def __init__(self):
-        ''' Initialize a Normalizer instance.
-        '''
-        self.mean = None
-        self.std = None
-        self.state_memory = []
-        self.max_size = 1000
-        self.length = 0
-
-    def normalize(self, s):
-        ''' Normalize the state with the running mean and std.
-
-        Args:
-            s (numpy.array): the input state
-
-        Returns:
-            a (int):  normalized state
-        '''
-        if self.length == 0:
-            return s
-        return (s - self.mean) / (self.std + 1e-8)
-
-    def append(self, s):
-        ''' Append a new state and update the running statistics
-
-        Args:
-            s (numpy.array): the input state
-        '''
-        if len(self.state_memory) > self.max_size:
-            self.state_memory.pop(0)
-        self.state_memory.append(s)
-        self.mean = np.mean(self.state_memory, axis=0)
-        self.std = np.std(self.state_memory, axis=0)
-        self.length = len(self.state_memory)
-
