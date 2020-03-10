@@ -61,6 +61,8 @@ class Env(object):
                 (int): The begining player
         '''
         state, player_id = self.game.init_game()
+        if self.record_action:
+            self.action_recorder = []
         return self._extract_state(state), player_id
 
     def step(self, action, raw_action=False):
