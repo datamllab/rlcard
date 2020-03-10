@@ -22,7 +22,6 @@ import collections
 import random
 import enum
 import numpy as np
-import sonnet as snt
 import tensorflow as tf
 
 from rlcard.agents.dqn_agent import DQNAgent
@@ -43,18 +42,18 @@ class NFSPAgent(object):
                  state_shape=None,
                  hidden_layers_sizes=None,
                  reservoir_buffer_capacity=int(1e6),
-                 anticipatory_param=0.5,
+                 anticipatory_param=0.1,
                  batch_size=256,
                  train_every=1,
-                 rl_learning_rate=0.0001,
-                 sl_learning_rate=0.0001,
+                 rl_learning_rate=0.1,
+                 sl_learning_rate=0.005,
                  min_buffer_size_to_learn=1000,
                  q_replay_memory_size=30000,
                  q_replay_memory_init_size=1000,
                  q_update_target_estimator_every=1000,
                  q_discount_factor=0.99,
-                 q_epsilon_start=1,
-                 q_epsilon_end=0.1,
+                 q_epsilon_start=0.06,
+                 q_epsilon_end=0,
                  q_epsilon_decay_steps=int(1e6),
                  q_batch_size=256,
                  q_train_every=1,
@@ -85,7 +84,7 @@ class NFSPAgent(object):
             q_epsilon_end (float): the end epsilon of inner DQN agent.
             q_epsilon_decay_steps (int): The decay steps of inner DQN agent.
             q_batch_size (int): The batch size of inner DQN agent.
-            q_norm_step (int): The normalization steps of inner DQN agent.
+            q_train_step (int): Train the model every X steps.
             q_mlp_layers (list): The layer sizes of inner DQN agent.
             evaluate_with (string): The value can be 'best_response' or 'average_policy'
         '''
@@ -94,7 +93,7 @@ class NFSPAgent(object):
         self._scope = scope
         self._action_num = action_num
         self._state_shape = state_shape
-        self._layer_sizes = hidden_layers_sizes + [action_num]
+        self._layer_sizes = hidden_layers_sizes
         self._batch_size = batch_size
         self._train_every = train_every
         self._sl_learning_rate = sl_learning_rate
@@ -114,7 +113,7 @@ class NFSPAgent(object):
 
         with tf.variable_scope(scope):
             # Inner RL agent
-            self._rl_agent = DQNAgent(sess, 'dqn', q_replay_memory_size, q_replay_memory_init_size, q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_train_every, q_mlp_layers, rl_learning_rate)
+            self._rl_agent = DQNAgent(sess, scope+'_dqn', q_replay_memory_size, q_replay_memory_init_size, q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_train_every, q_mlp_layers, rl_learning_rate)
 
             with tf.variable_scope('sl'):
                 # Build supervised model
@@ -144,8 +143,10 @@ class NFSPAgent(object):
                 shape=[None, self._action_num], dtype=tf.float32)
 
         # Average policy network.
-        self._avg_network = snt.nets.MLP(output_sizes=self._layer_sizes)
-        self._avg_policy = self._avg_network(self._X)
+        fc = self._X
+        for dim in self._layer_sizes:
+            fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)
+        self._avg_policy = tf.contrib.layers.fully_connected(fc, self._action_num, activation_fn=None)
         self._avg_policy_probs = tf.nn.softmax(self._avg_policy)
 
         # Loss

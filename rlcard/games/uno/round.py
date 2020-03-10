@@ -153,6 +153,9 @@ class UnoRound(object):
                 others_hand.extend(player.hand)
         state['others_hand'] = cards2list(others_hand)
         state['legal_actions'] = self.get_legal_actions(players, player_id)
+        state['card_num'] = []
+        for player in players:
+            state['card_num'].append(len(player.hand))
         return state
 
     def replace_deck(self):

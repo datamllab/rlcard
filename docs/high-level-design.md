@@ -15,8 +15,8 @@ For advanced access to the environment, such as traversal of the game tree, we p
 
 We also support single-agent mode and human mode. Examples can be found in [examples/](../examples).
 
-*   Single agent mode: single-agent environments are developped by simulating other players with pre-trained models or rule-based models. You can enable single-agent mode by `env.set_mode(single_agent_mode=True)`. Then the `step` function will return `(next_state, reward, done)` just as common single-agent environments. `env.reset()` will reset the game and return the first state.
-*   Human mode: we provide interfaces to play with the trained agents. You can enable single-agent mode by `env.set_mode(human_mode=True)`. Then the terminal will print out game information and we play with the agents.
+*   Single agent mode: single-agent environments are developped by simulating other players with pre-trained models or rule-based models. You can enable single-agent mode by `rlcard.make(ENV_ID, config={'single_agent_mode':True})`. Then the `step` function will return `(next_state, reward, done)` just as common single-agent environments. `env.reset()` will reset the game and return the first state.
+*   Human mode: we provide interfaces to play with the trained agents. You can enable human mode by `rlcard.make(ENV_ID, config={'human_mode':True})`. Then the terminal will print out game information and we play with the agents.
 
 ## Games
 Card games usually have similar structures. We abstract some concepts in card games and follow the same design pattern. In this way, users/developers can easily dig into the code and change the rules for research purpose. Specifically, the following classes are used in all the games:

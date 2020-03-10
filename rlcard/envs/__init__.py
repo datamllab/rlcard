@@ -12,7 +12,10 @@ register(
     env_id='doudizhu',
     entry_point='rlcard.envs.doudizhu:DoudizhuEnv',
 )
-
+register(
+    env_id='simple-doudizhu',
+    entry_point='rlcard.envs.simpledoudizhu:SimpleDoudizhuEnv',
+)
 register(
     env_id='limit-holdem',
     entry_point='rlcard.envs.limitholdem:LimitholdemEnv',
