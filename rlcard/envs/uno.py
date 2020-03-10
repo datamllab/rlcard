@@ -15,54 +15,6 @@ class UnoEnv(Env):
         super().__init__(config)
         self.state_shape = [7, 4, 15]
 
-    def _print_state(self, player):
-        ''' Print out the state of a given player
-
-        Args:
-            player (int): Player id
-        '''
-        state = self.game.get_state(player)
-        print('\n=============== Your Hand ===============')
-        UnoCard.print_cards(state['hand'])
-        print('')
-        print('=============== Last Card ===============')
-        UnoCard.print_cards(state['target'], wild_color=True)
-        print('')
-        print('========== Agents Card Number ===========')
-        for i in range(self.player_num):
-            if i != self.active_player:
-                print('Agent {} has {} cards.'.format(i, len(self.game.players[i].hand)))
-        print('======== Actions You Can Choose =========')
-        for i, action in enumerate(state['legal_actions']):
-            print(str(ACTION_SPACE[action])+': ', end='')
-            UnoCard.print_cards(action, wild_color=True)
-            if i < len(state['legal_actions']) - 1:
-                print(', ', end='')
-        print('\n')
-
-    def _print_result(self, player):
-        ''' Print the game result when the game is over
-
-        Args:
-            player (int): The human player id
-        '''
-        payoffs = self.get_payoffs()
-        print('===============     Result     ===============')
-        if payoffs[player] > 0:
-            print('You win!')
-        else:
-            print('You lose!')
-        print('')
-
-    @staticmethod
-    def _print_action(action):
-        ''' Print out an action in a nice form
-
-        Args:
-            action (str): A string a action
-        '''
-        UnoCard.print_cards(action, wild_color=True)
-
     def _load_model(self):
         ''' Load pretrained/rule model
 
@@ -81,6 +33,8 @@ class UnoEnv(Env):
         if self.allow_raw_data:
             extracted_state['raw_obs'] = state
             extracted_state['raw_legal_actions'] = [a for a in state['legal_actions']]
+        if self.record_action:
+            extracted_state['action_record'] = self.action_recorder
         return extracted_state
 
     def get_payoffs(self):

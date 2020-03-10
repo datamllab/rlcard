@@ -23,8 +23,6 @@ class TestRegistration(unittest.TestCase):
         register(env_id='test_env', entry_point='rlcard.envs.blackjack:BlackjackEnv')
         with self.assertRaises(ValueError):
             make('test_env', config={'active_player':-1})
-        with self.assertRaises(ValueError):
-            make('test_env', config={'single_agent_mode':True, 'human_mode':True})
 
 if __name__ == '__main__':
     unittest.main()
