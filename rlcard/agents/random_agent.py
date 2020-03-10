@@ -9,7 +9,7 @@ class RandomAgent(object):
         ''' Initilize the random agent
 
         Args:
-            action_num (int): the size of the ouput action space
+            action_num (int): The size of the ouput action space
         '''
         self.use_raw = False
         self.action_num = action_num
@@ -19,10 +19,10 @@ class RandomAgent(object):
         ''' Predict the action given the curent state in gerenerating training data.
 
         Args:
-            state (numpy.array): an numpy array that represents the current state
+            state (dict): An dictionary that represents the current state
 
         Returns:
-            action (int): the action predicted (randomly chosen) by the random agent
+            action (int): The action predicted (randomly chosen) by the random agent
         '''
         #return np.random.randint(0, self.action_num)
         return np.random.choice(state['legal_actions'])
@@ -32,10 +32,10 @@ class RandomAgent(object):
             Since the random agents are not trained. This function is equivalent to step function
 
         Args:
-            state (numpy.array): an numpy array that represents the current state
+            state (dict): An dictionary that represents the current state
 
         Returns:
-            action (int): the action predicted (randomly chosen) by the random agent
+            action (int): The action predicted (randomly chosen) by the random agent
             probs (list): The list of action probabilities
         '''
         probs = [0 for _ in range(self.action_num)]

@@ -24,66 +24,6 @@ class LeducholdemEnv(Env):
         with open(os.path.join(rlcard.__path__[0], 'games/leducholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
 
-    def _print_state(self, player):
-        ''' Print out the state of a given player
-
-        Args:
-            player (int): Player id
-        '''
-        state = self.game.get_state(player)
-        print('\n=============== Community Card ===============')
-        print_card(state['public_card'])
-        print('===============   Your Hand    ===============')
-        print_card(state['hand'])
-        print('===============     Chips      ===============')
-        print('Yours:   ', end='')
-        for _ in range(state['my_chips']):
-            print('+', end='')
-        print('')
-        for i in range(self.player_num):
-            if i != self.active_player:
-                print('Agent {}: '.format(i) , end='')
-                for _ in range(state['all_chips'][i]):
-                    print('+', end='')
-        print('\n=========== Actions You Can Choose ===========')
-        print(', '.join([str(self.actions.index(action)) + ': ' + action for action in state['legal_actions']]))
-        print('')
-
-    def _print_result(self, player):
-        ''' Print the game result when the game is over
-
-        Args:
-            player (int): The human player id
-        '''
-        payoffs = self.get_payoffs()
-        hands = [self.game.players[i].hand.get_index() for i in range(self.player_num)]
-        print('')
-
-        if not self.game.players[self.active_player].status == 'folded':
-            for i in range(self.player_num):
-                if i != self.active_player:
-                    if not self.game.players[i].status == 'fold':
-                        print('===============     Agent {}    ==============='.format(i))
-                        print_card(hands[i])
-
-        print('===============     Result     ===============')
-        if payoffs[player] > 0:
-            print('You win {} chips!'.format(payoffs[player]))
-        elif payoffs[player] == 0:
-            print('It is a tie.')
-        else:
-            print('You lose {} chips!'.format(-payoffs[player]))
-        print('')
-
-    @staticmethod
-    def _print_action(action):
-        ''' Print out an action in a nice form
-
-        Args:
-            action (str): A string a action
-        '''
-        print(action, end='')
-
     def _load_model(self):
         ''' Load pretrained/rule model
 
@@ -111,10 +51,10 @@ class LeducholdemEnv(Env):
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
         '''
-        processed_state = {}
+        extracted_state = {}
 
         legal_actions = [self.actions.index(a) for a in state['legal_actions']]
-        processed_state['legal_actions'] = legal_actions
+        extracted_state['legal_actions'] = legal_actions
 
         public_card = state['public_card']
         hand = state['hand']
@@ -124,12 +64,15 @@ class LeducholdemEnv(Env):
             obs[self.card2index[public_card]+3] = 1
         obs[state['my_chips']+6] = 1
         obs[state['all_chips'][1]+20] = 1
-        processed_state['obs'] = obs
+        extracted_state['obs'] = obs
 
         if self.allow_raw_data:
-            processed_state['raw_obs'] = state
-            processed_state['raw_legal_actions'] = [a for a in state['legal_actions']]
-        return processed_state
+            extracted_state['raw_obs'] = state
+            extracted_state['raw_legal_actions'] = [a for a in state['legal_actions']]
+        if self.record_action:
+            extracted_state['action_record'] = self.action_recorder
+
+        return extracted_state
 
     def get_payoffs(self):
         ''' Get the payoff of a game
@@ -169,6 +112,3 @@ class LeducholdemEnv(Env):
         state['current_player'] = self.game.game_pointer
         state['legal_actions'] = self.game.get_legal_actions()
         return state
-
-        
-

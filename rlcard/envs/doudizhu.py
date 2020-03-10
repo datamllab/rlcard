@@ -48,6 +48,8 @@ class DoudizhuEnv(Env):
                 extracted_state['raw_legal_actions'] = []
             else:
                 extracted_state['raw_legal_actions'] = [a for a in state['actions']]
+        if self.record_action:
+            extracted_state['action_record'] = self.action_recorder
         return extracted_state
 
     def get_payoffs(self):

@@ -76,23 +76,6 @@ class TestLeducholdemEnv(unittest.TestCase):
         for _ in range(100):
             state, _, _ = env.step(np.random.choice(state['legal_actions']))
 
-    def test_human_mode(self):
-        env = rlcard.make('leduc-holdem')
-        with self.assertRaises(ValueError):
-            env.reset()
-
-        env = rlcard.make('leduc-holdem', config={'human_mode':True})
-        with self.assertRaises(ValueError):
-            env.set_agents([])
-
-        with self.assertRaises(ValueError):
-            env.run()
-
-        state = env.reset()
-        self.assertIsInstance(state, dict)
-        for _ in range(100):
-            state, _, _ = env.step(np.random.choice(state['legal_actions']))
-
     def test_get_perfrect_information(self):
         env = rlcard.make('leduc-holdem')
         _, player_id = env.init_game()
