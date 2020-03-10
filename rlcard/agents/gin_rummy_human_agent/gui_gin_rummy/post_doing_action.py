@@ -10,10 +10,10 @@ if TYPE_CHECKING:
 
 from typing import List, Tuple
 
-import examples.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
-import examples.gin_rummy_human_agent.gui_gin_rummy.query as query
-import examples.gin_rummy_human_agent.gui_gin_rummy.status_messaging as status_messaging
-import examples.gin_rummy_human_agent.gui_gin_rummy.utils as utils
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.query as query
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.status_messaging as status_messaging
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.utils as utils
 
 from .player_type import PlayerType
 

@@ -8,8 +8,8 @@ if TYPE_CHECKING:
     from .env_controller import EnvController
     from .game_canvas import GameCanvas
 
-import examples.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
-import examples.gin_rummy_human_agent.gui_gin_rummy.query as query
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.query as query
 
 from .configurations import DECLARE_DEAD_HAND_ACTION_ID
 

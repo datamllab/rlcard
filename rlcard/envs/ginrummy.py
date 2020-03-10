@@ -24,13 +24,14 @@ class GinRummyEnv(Env):
     ''' GinRummy Environment
     '''
 
-    def __init__(self, allow_step_back=False, allow_raw_data=False):
-        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
+    def __init__(self, config):
+        self.game = Game()
+        super().__init__(config=config)
         self.state_shape = [5, 52]
         self.judge = GinRummyJudge(game=self.game)
         self.scorer: Scorer = scorers.GinRummyScorer()
 
-    def extract_state(self, state):  # 200213 don't use state ???
+    def _extract_state(self, state):  # 200213 don't use state ???
         ''' Encode state
 
         Args:
@@ -75,7 +76,7 @@ class GinRummyEnv(Env):
         payoffs = self.scorer.get_payoffs(game=self.game)
         return payoffs
 
-    def decode_action(self, action_id) -> ActionEvent:  # FIXME 200213 should return str
+    def _decode_action(self, action_id) -> ActionEvent:  # FIXME 200213 should return str
         ''' Action id -> the action in the game. Must be implemented in the child class.
 
         Args:
@@ -86,7 +87,7 @@ class GinRummyEnv(Env):
         '''
         return self.game.decode_action(action_id=action_id)
 
-    def get_legal_actions(self):
+    def _get_legal_actions(self):
         ''' Get all legal actions for current state
 
         Returns:
@@ -95,6 +96,15 @@ class GinRummyEnv(Env):
         legal_actions = self.judge.get_legal_actions()
         legal_actions_ids = [action_event.action_id for action_event in legal_actions]
         return legal_actions_ids
+
+    def _load_model(self):
+        ''' Load pretrained/rule model
+
+        Returns:
+            model (Model): A Model object
+        '''
+        assert False  # FIXME: stub
+        return models.load('uno-rule-v1')  # FIXME: stub
 
     def set_scorer(self, printing_configuration: bool = False,
                    get_payoff: Callable[[GinRummyPlayer, Game], int or float] = None):
@@ -169,12 +179,3 @@ class GinRummyEnv(Env):
             action (str): A string a action
         '''
         print(f"GinRummyEnv print_action: action={action}")  # FIXME: stub
-
-    def load_model(self):
-        ''' Load pretrained/rule model
-
-        Returns:
-            model (Model): A Model object
-        '''
-        assert False  # FIXME: stub
-        return models.load('uno-rule-v1')  # FIXME: stub

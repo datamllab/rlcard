@@ -4,7 +4,7 @@
 
 from PIL import Image, ImageTk, ImageDraw
 
-image_dir = "gui_cards"
+image_dir = "."
 
 ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
 suits = ['C', 'D', 'H', 'S']

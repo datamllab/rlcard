@@ -6,7 +6,7 @@ from tkinter import *
 import tkinter.colorchooser as colorchooser
 from configparser import ConfigParser
 
-import examples.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
 from .configurations import settings_section
 from .configurations import show_status_messages_option, warning_as_option, game_background_color_option
 from .configurations import window_size_factor_option
