@@ -57,7 +57,7 @@ class EnvController(object):
             status_messaging.show_game_over_message(env_controller=self)
         else:
             self.current_player_id = self.env.get_player_id()
-            self.legal_actions = self.env.get_legal_actions()
+            self.legal_actions = self.env._get_legal_actions()
             # show status message
             if query.can_declare_dead_hand(game_canvas=self.game_canvas):
                 status_messaging.show_get_card_message(game_canvas=self.game_canvas)
