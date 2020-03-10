@@ -10,8 +10,8 @@ if TYPE_CHECKING:
 from .canvas_item import CanvasItem
 from .player_type import PlayerType
 
-import examples.gin_rummy_human_agent.gui_gin_rummy.query as query
-import examples.gin_rummy_human_agent.gui_gin_rummy.utils as utils
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.query as query
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.utils as utils
 
 
 def handle_tap_to_arrange_held_pile(hit_item: CanvasItem, game_canvas: 'GameCanvas'):

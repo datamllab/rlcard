@@ -15,12 +15,12 @@ from typing import List
 from .canvas_item import CardItem, CanvasItem
 from .env_controller import EnvController
 
-import examples.gin_rummy_human_agent.gui_gin_rummy.handling_tap_to_arrange_held_pile as handling_tap_to_arrange_held_pile
-import examples.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
-import examples.gin_rummy_human_agent.gui_gin_rummy.post_doing_action as post_doing_action
-import examples.gin_rummy_human_agent.gui_gin_rummy.handling_tap as handling_tap
-import examples.gin_rummy_human_agent.gui_gin_rummy.query as query
-import examples.gin_rummy_human_agent.gui_gin_rummy.utils as utils
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.handling_tap_to_arrange_held_pile as handling_tap_to_arrange_held_pile
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.post_doing_action as post_doing_action
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.handling_tap as handling_tap
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.query as query
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.utils as utils
 
 is_debug = __debug__
 

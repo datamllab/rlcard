@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .game_canvas import GameCanvas
 
-import examples.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
 from .player_type import PlayerType
 
 
