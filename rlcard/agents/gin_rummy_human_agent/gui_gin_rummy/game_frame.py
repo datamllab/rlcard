@@ -8,8 +8,8 @@ from rlcard.envs.ginrummy import GinRummyEnv
 
 from .game_canvas import GameCanvas
 
-import examples.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
-import examples.gin_rummy_human_agent.gui_gin_rummy.starting_new_game as starting_new_game
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.starting_new_game as starting_new_game
 
 is_debug = __debug__
 

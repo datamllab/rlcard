@@ -15,7 +15,7 @@ from .handling_tap_discard_pile import handle_tap_discard_pile
 from .handling_tap_held_pile import handle_tap_held_pile
 from .handling_tap_player_pane import handle_tap_player_pane
 
-import examples.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
 
 
 def handle_tap(hit_item: CanvasItem, event, game_canvas: 'GameCanvas'):

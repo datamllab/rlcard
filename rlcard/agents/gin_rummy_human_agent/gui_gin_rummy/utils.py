@@ -18,8 +18,8 @@ from .configurations import DRAW_CARD_ACTION_ID, PICK_UP_DISCARD_ACTION_ID
 from .configurations import DECLARE_DEAD_HAND_ACTION_ID
 from .configurations import DISCARD_ACTION_ID, KNOCK_ACTION_ID
 
-import examples.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
-import examples.gin_rummy_human_agent.gui_gin_rummy.exceptions as exceptions
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.exceptions as exceptions
 
 
 def gin_rummy_sort_order_id(card_id: int) -> int:

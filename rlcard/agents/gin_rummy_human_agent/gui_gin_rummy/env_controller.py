@@ -11,14 +11,14 @@ import random
 
 from rlcard.envs.ginrummy import GinRummyEnv
 
-import examples.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
-import examples.gin_rummy_human_agent.gui_gin_rummy.handling_tap_discard_pile as handling_tap_discard_pile
-import examples.gin_rummy_human_agent.gui_gin_rummy.handling_tap_held_pile as handling_tap_held_pile
-import examples.gin_rummy_human_agent.gui_gin_rummy.post_doing_action as post_doing_action
-import examples.gin_rummy_human_agent.gui_gin_rummy.query as query
-import examples.gin_rummy_human_agent.gui_gin_rummy.status_messaging as status_messaging
-import examples.gin_rummy_human_agent.gui_gin_rummy.utils as utils
-import examples.gin_rummy_human_agent.gui_gin_rummy.exceptions as exceptions
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.handling_tap_discard_pile as handling_tap_discard_pile
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.handling_tap_held_pile as handling_tap_held_pile
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.post_doing_action as post_doing_action
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.query as query
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.status_messaging as status_messaging
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.utils as utils
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.exceptions as exceptions
 
 from .player_type import PlayerType
 

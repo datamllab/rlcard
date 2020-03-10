@@ -9,10 +9,10 @@ if TYPE_CHECKING:
 
 from .canvas_item import CanvasItem
 
-import examples.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
-import examples.gin_rummy_human_agent.gui_gin_rummy.exceptions as exceptions
-import examples.gin_rummy_human_agent.gui_gin_rummy.query as query
-import examples.gin_rummy_human_agent.gui_gin_rummy.utils as utils
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.configurations as configurations
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.exceptions as exceptions
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.query as query
+import rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.utils as utils
 
 
 def handle_tap_stock_pile(hit_item: CanvasItem, game_canvas: 'GameCanvas'):  # hit_item is source
