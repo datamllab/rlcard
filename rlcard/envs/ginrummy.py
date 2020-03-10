@@ -4,6 +4,8 @@
     Date created: 2/12/2020
 '''
 
+from rlcard import models
+
 from rlcard.envs.env import Env
 from rlcard.games.gin_rummy.action_event import *
 from rlcard.games.gin_rummy.game import GinRummyGame as Game
@@ -22,8 +24,8 @@ class GinRummyEnv(Env):
     ''' GinRummy Environment
     '''
 
-    def __init__(self, allow_step_back=False):
-        super().__init__(Game(allow_step_back), allow_step_back)
+    def __init__(self, allow_step_back=False, allow_raw_data=False):
+        super().__init__(Game(allow_step_back), allow_step_back, allow_raw_data)
         self.state_shape = [5, 52]
         self.judge = GinRummyJudge(game=self.game)
         self.scorer: Scorer = scorers.GinRummyScorer()
@@ -107,3 +109,72 @@ class GinRummyEnv(Env):
             print("========== Scorer ==========")
             print(f"Scorer is {self.scorer.name}")
             print("============================")
+
+    def print_state(self, player):  # FIXME: stub
+        ''' Print out the state of a given player
+
+        Args:
+            player (int): Player id
+        '''
+        state = self.game.get_state(player)  # FIXME: should I be using just this ???
+        dealer_id = self.game.round.dealer_id
+        current_player_id = self.game.round.current_player_id
+        stock_pile = self.game.round.dealer.stock_pile
+        discard_pile = self.game.round.dealer.discard_pile
+        #  FIXME: game needs card sort function
+        north_held_pile = sorted(self.game.round.players[0].hand, key=lambda card: card.card_id, reverse=True)
+        south_held_pile = sorted(self.game.round.players[1].hand, key=lambda card: card.card_id, reverse=True)
+        print('\n=============== Your Hand ===============')
+        print(f"{[str(card) for card in south_held_pile]}")
+        print('')
+        print('=============== Last Card ===============')
+        print('')
+        print('========== Agents Card Number ===========')
+        for i in range(self.player_num):
+            if i != self.active_player:
+                print('Agent {} has {} cards.'.format(i, len(self.game.round.players[i].hand)))
+        print('======== Actions You Can Choose =========')
+        # for i, action in enumerate(state['legal_actions']):
+        #     if i < len(state['legal_actions']) - 1:
+        #         print(', ', end='')
+        print('\n')
+        # FIXME: new version
+        lines = []
+        lines.append(f"--- New version ---")
+        #  FIXME: game needs short name for player
+        # lines.append(f"dealer: {utils.player_short_name(dealer_id)}")
+        # lines.append(f"current_player: {utils.player_short_name(current_player_id)}")
+        lines.append(f"dealer: {dealer_id}")
+        lines.append(f"current_player: {current_player_id}")
+        lines.append(f"north hand: {[str(card) for card in north_held_pile]}")
+        lines.append(f"stockpile: {[str(card) for card in stock_pile]}")
+        lines.append(f"discard pile: {[str(card) for card in discard_pile]}")
+        lines.append(f"south hand: {[str(card) for card in south_held_pile]}")
+        print("\n".join(lines))
+
+
+    def print_result(self, player):
+        ''' Print the game result when the game is over
+
+        Args:
+            player (int): The human player id
+        '''
+        print(f"GinRummyEnv print_result: player={player}")  # FIXME: stub
+
+    @staticmethod
+    def print_action(action):
+        ''' Print out an action in a nice form
+
+        Args:
+            action (str): A string a action
+        '''
+        print(f"GinRummyEnv print_action: action={action}")  # FIXME: stub
+
+    def load_model(self):
+        ''' Load pretrained/rule model
+
+        Returns:
+            model (Model): A Model object
+        '''
+        assert False  # FIXME: stub
+        return models.load('uno-rule-v1')  # FIXME: stub
