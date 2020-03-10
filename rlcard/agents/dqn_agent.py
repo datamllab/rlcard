@@ -75,6 +75,7 @@ class DQNAgent(object):
             evaluate_every (int): Evaluate every N steps
             action_num (int): The number of the actions
             state_space (list): The space of the state vector
+            train_every (int): Train the network every X steps.
             mlp_layers (list): The layer number and the dimension of each layer in MLP
             learning_rate (float): The learning rate of the DQN agent.
         '''
@@ -119,7 +120,6 @@ class DQNAgent(object):
         tmp = self.total_t - self.replay_memory_init_size
         if tmp>=0 and tmp%self.train_every == 0:
             loss = self.train()
-            print('\rINFO - Step {}, loss: {}'.format(self.total_t, loss), end='')
 
     def step(self, state):
         ''' Predict the action for genrating training data

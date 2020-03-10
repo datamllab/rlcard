@@ -1,32 +1,32 @@
 import unittest
 import numpy as np
 
-from rlcard.envs.blackjack import BlackjackEnv as Env
+import rlcard
 from rlcard.agents.random_agent import RandomAgent
 
 
 class TestBlackjackEnv(unittest.TestCase):
 
     def test_init_and_extract_state(self):
-        env = Env()
+        env = rlcard.make('blackjack')
         state, _ = env.init_game()
         for score in state['obs']:
             self.assertLessEqual(score, 30)
 
     def test_decode_action(self):
-        env = Env()
-        self.assertEqual(env.decode_action(0), 'hit')
-        self.assertEqual(env.decode_action(1), 'stand')
+        env = rlcard.make('blackjack')
+        self.assertEqual(env._decode_action(0), 'hit')
+        self.assertEqual(env._decode_action(1), 'stand')
 
     def test_get_legal_actions(self):
-        env = Env()
-        actions = env.get_legal_actions()
+        env = rlcard.make('blackjack')
+        actions = env._get_legal_actions()
         self.assertEqual(len(actions), 2)
         self.assertEqual(actions[0], 0)
         self.assertEqual(actions[1], 1)
 
     def test_get_payoffs(self):
-        env = Env()
+        env = rlcard.make('blackjack')
         for _ in range(100):
             env.init_game()
             while not env.is_over():
@@ -37,20 +37,20 @@ class TestBlackjackEnv(unittest.TestCase):
                 self.assertIn(payoff, [-1, 1, 0])
 
     def test_step_back(self):
-        env = Env(allow_step_back=True)
+        env = rlcard.make('blackjack', config={'allow_step_back':True})
         _, player_id = env.init_game()
         env.step(1)
         _, back_player_id = env.step_back()
         self.assertEqual(player_id, back_player_id)
         self.assertEqual(env.step_back(), False)
 
-        env = Env()
+        env = rlcard.make('blackjack')
         with self.assertRaises(Exception):
             env.step_back()
 
     def test_run(self):
-        env = Env()
-        env.set_agents([RandomAgent(2)])
+        env = rlcard.make('blackjack')
+        env.set_agents([RandomAgent(env.action_num)])
         trajectories, _ = env.run(is_training=False)
         self.assertEqual(len(trajectories), 1)
         trajectories, _ = env.run(is_training=True, seed=1)

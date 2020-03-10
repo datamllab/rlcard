@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf8") as fh:
 
 extras = {
     'torch': ['torch>=1.3'],
-    'tensorflow': ['tensorflow>=1.14,<2.0', 'tensorflow_probability==0.7.0', 'dm-sonnet==1.35']
+    'tensorflow': ['tensorflow>=1.14,<2.0', 'tensorflow_probability==0.7.0']
 }
 
 setuptools.setup(
