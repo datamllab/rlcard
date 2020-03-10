@@ -6,7 +6,7 @@ DEFAULT_CONFIG = {
         'allow_raw_data': False,
         'single_agent_mode' : False,
         'active_player' : 0,
-        'human_mode': False
+        'record_action' : False,
         }
 
 class EnvSpec(object):
@@ -94,7 +94,4 @@ def make(env_id, config={}):
     if not isinstance(_config['active_player'], int) or _config['active_player'] < 0:
         raise ValueError('Active player should be a non-negative integer')
 
-    if _config['single_agent_mode'] and _config['human_mode']:
-        raise ValueError('You can not set single_agentmode=True and human_mode=True together')
-    
     return registry.make(env_id, _config)

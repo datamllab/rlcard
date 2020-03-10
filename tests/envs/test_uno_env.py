@@ -73,12 +73,5 @@ class TestUnoEnv(unittest.TestCase):
         for _ in range(100):
             state, _, _ = env.step(np.random.choice(state['legal_actions']))
 
-    def test_human_mode(self):
-        env = rlcard.make('uno', config={'human_mode':True})
-        state = env.reset()
-        self.assertIsInstance(state, dict)
-        for _ in range(100):
-            state, _, _ = env.step(np.random.choice(state['legal_actions']))
-
 if __name__ == '__main__':
     unittest.main()

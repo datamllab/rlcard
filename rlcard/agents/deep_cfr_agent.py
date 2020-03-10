@@ -40,6 +40,7 @@ import numpy as np
 import tensorflow as tf
 
 from rlcard.utils.utils import remove_illegal
+
 sys.setrecursionlimit(10000000)
 
 AdvantageMemory = collections.namedtuple(
@@ -47,68 +48,6 @@ AdvantageMemory = collections.namedtuple(
 
 StrategyMemory = collections.namedtuple(
     'StrategyMemory', 'info_state iteration strategy_action_probs')
-
-class FixedSizeRingBuffer(object):
-    ''' ReplayBuffer of fixed size with a FIFO replacement policy.
-
-    Stored transitions can be sampled uniformly.
-
-    The underlying datastructure is a ring buffer, allowing 0(1) adding and
-    sampling.
-    '''
-    def __init__(self, replay_buffer_capacity):
-        ''' Initialize the buffer
-        '''
-
-        self._replay_buffer_capacity = replay_buffer_capacity
-        self._data = []
-        self._next_entry_index = 0
-
-    def add(self, element):
-        '''Adds `element` to the buffer.
-
-        If the buffer is full, the oldest element will be replaced.
-
-        Args:
-            element: data to be added to the buffer.
-        '''
-        if len(self._data) < self._replay_buffer_capacity:
-            self._data.append(element)
-        else:
-            self._next_entry_index = int(self._next_entry_index)
-            self._data[self._next_entry_index] = element
-            self._next_entry_index += 1
-            self._next_entry_index %= self._replay_buffer_capacity
-
-    def sample(self, num_samples):
-        ''' Returns `num_samples` uniformly sampled from the buffer.
-
-        Args:
-            num_samples (int): number of samples to draw.
-
-        Returns:
-            sample data (list): a list of random sampled elements of the buffer
-
-        Raises:
-            ValueError: If there are less than `num_samples` elements in the buffer
-        '''
-        if len(self._data) < num_samples:
-            raise ValueError("{} elements could not be sampled from size {}".format(
-                num_samples, len(self._data)))
-        return random.sample(self._data, num_samples)
-
-    def clear(self):
-        ''' Clear the buffer
-        '''
-        self._data = []
-        self._next_entry_index = 0
-
-    def __len__(self):
-        return len(self._data)
-
-    def __iter__(self):
-        return iter(self._data)
-
 
 class DeepCFR():
     ''' Implement the Deep CFR Algorithm.
@@ -510,3 +449,65 @@ class DeepCFR():
                 self._iter_ph: np.array(iterations),
             })
         return loss_strategy
+
+class FixedSizeRingBuffer(object):
+    ''' ReplayBuffer of fixed size with a FIFO replacement policy.
+
+    Stored transitions can be sampled uniformly.
+
+    The underlying datastructure is a ring buffer, allowing 0(1) adding and
+    sampling.
+    '''
+    def __init__(self, replay_buffer_capacity):
+        ''' Initialize the buffer
+        '''
+
+        self._replay_buffer_capacity = replay_buffer_capacity
+        self._data = []
+        self._next_entry_index = 0
+
+    def add(self, element):
+        '''Adds `element` to the buffer.
+
+        If the buffer is full, the oldest element will be replaced.
+
+        Args:
+            element: data to be added to the buffer.
+        '''
+        if len(self._data) < self._replay_buffer_capacity:
+            self._data.append(element)
+        else:
+            self._next_entry_index = int(self._next_entry_index)
+            self._data[self._next_entry_index] = element
+            self._next_entry_index += 1
+            self._next_entry_index %= self._replay_buffer_capacity
+
+    def sample(self, num_samples):
+        ''' Returns `num_samples` uniformly sampled from the buffer.
+
+        Args:
+            num_samples (int): number of samples to draw.
+
+        Returns:
+            sample data (list): a list of random sampled elements of the buffer
+
+        Raises:
+            ValueError: If there are less than `num_samples` elements in the buffer
+        '''
+        if len(self._data) < num_samples:
+            raise ValueError("{} elements could not be sampled from size {}".format(
+                num_samples, len(self._data)))
+        return random.sample(self._data, num_samples)
+
+    def clear(self):
+        ''' Clear the buffer
+        '''
+        self._data = []
+        self._next_entry_index = 0
+
+    def __len__(self):
+        return len(self._data)
+
+    def __iter__(self):
+        return iter(self._data)
+

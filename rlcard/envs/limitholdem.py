@@ -41,10 +41,10 @@ class LimitholdemEnv(Env):
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
         '''
-        processed_state = {}
+        extracted_state = {}
 
         legal_actions = [self.actions.index(a) for a in state['legal_actions']]
-        processed_state['legal_actions'] = legal_actions
+        extracted_state['legal_actions'] = legal_actions
 
         public_cards = state['public_cards']
         hand = state['hand']
@@ -55,12 +55,14 @@ class LimitholdemEnv(Env):
         obs[idx] = 1
         for i, num in enumerate(raise_nums):
             obs[52 + i * 5 + num] = 1
-        processed_state['obs'] = obs
+        extracted_state['obs'] = obs
 
         if self.allow_raw_data:
-            processed_state['raw_obs'] = state
-            processed_state['raw_legal_actions'] = [a for a in state['legal_actions']]
-        return processed_state
+            extracted_state['raw_obs'] = state
+            extracted_state['raw_legal_actions'] = [a for a in state['legal_actions']]
+        if self.record_action:
+            extracted_state['action_record'] = self.action_recorder
+        return extracted_state
 
     def get_payoffs(self):
         ''' Get the payoff of a game
