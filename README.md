@@ -102,7 +102,7 @@ Agent 1: +++
 	*   `allow_raw_data`: default `False`. True if allowing raw data in the `state`.
 	*   `single_agent_mode`: default `False`. True if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
 	*   `active_player`: defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
-	*   `human_mode`: Default `False`. True if using human mode.
+	*   `record_action`: Default `False`. If True, a field of `action_record` will be in the state to record the historical actions. This may be used for human-agent play.
 *   `env.step(action, raw_action=False)`: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be true if the action is raw action, i,e., string.
 *   `env.init_game()`: Initialize a game. Return the state and the first player ID.
 *   `env.run()`: Run a complete game and return trajectories and payoffs. The function can be used after the agents are set up.
