@@ -4,12 +4,15 @@
 import os
 try:
     import tensorflow as tf
-    import torch
+    from rlcard.agents.nfsp_agent import NFSPAgent
 except:
-    pass
+    print('WARNING: Tensorflow not installed. Run "pip install rlcard[tensorflow]" to install Tensorflow')
+try:
+    import torch
+    from rlcard.agents.nfsp_agent_pytorch import NFSPAgent as NFSPAgentPytorch
+except:
+    print('WAINING: PyTorch not installed. Run "pip install rlcard[torch]" to install PyTorch')
 import rlcard
-from rlcard.agents.nfsp_agent import NFSPAgent
-from rlcard.agents.nfsp_agent_pytorch import NFSPAgent as NFSPAgentPytorch
 from rlcard.agents.cfr_agent import CFRAgent
 from rlcard.models.model import Model
 
