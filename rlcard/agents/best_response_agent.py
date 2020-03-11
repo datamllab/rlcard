@@ -16,6 +16,7 @@ class BRAgent():
         Args:
             env (Env): Env class
         '''
+        self.use_raw = False
         self.env = env
         self._num_of_player = env.player_num
         if self._num_of_player > 2:
@@ -46,7 +47,8 @@ class BRAgent():
         current_player = self.env.get_player_id()
 
         obs, legal_actions = self.get_state(current_player)
-        action_probs = self.action_probs(obs, legal_actions, self.opponent_policy)
+        state = self.env.get_state(current_player)
+        action_probs = self.action_probs(state, self.opponent_policy)
 
         for action in legal_actions:
             action_prob = action_probs[action]
@@ -71,31 +73,35 @@ class BRAgent():
             print(self.env.get_payoffs())
             return self.env.get_payoffs()
         elif this_player == curr_player: 
+            print("Is current Player")
             self.infosets = collections.defaultdict(list)
             probs = np.ones(self.env.player_num)
             self.traverse_tree(probs, this_player)
             action = self.best_response_action(this_player, state['obs'].tostring())
             q_val = self.get_q_value(action, [0.0, 0.0])
-            return q_val 
+            return q_val[this_player]
         else:
-            action_probs = self.action_probs(state['obs'].tostring(), state['legal_actions'], self.opponent_policy)
+            print("Not current Player")
+            action_probs = self.action_probs(state, self.opponent_policy)
             sum_qval = np.array([0.0, 0.0])
-            for a, p in enumerate(self.action_probs(state['obs'].tostring(), state['legal_actions'], self.opponent_policy)):
+            for a, p in enumerate(self.action_probs(state, self.opponent_policy)):
                 q_val = self.get_q_value(a, [0.0, 0.0])
                 weighted_qval = np.array([q*p for q in q_val])
                 sum_qval += weighted_qval
-            return sum_qval
+            return sum_qval[this_player]
 
     def get_q_value(self, action, q_value):
         if self.env.is_over():
             return self.env.get_payoffs()
         current_player = self.env.get_player_id()
         obs, legal_actions = self.get_state(current_player)
+        curr_state = self.env.get_state(current_player)
+        action_probs = self.action_probs(curr_state, self.opponent_policy)
         for act in legal_actions:
             self.env.step(act)
             q_val_out = q_value.copy()
             curr_qval = np.array(self.get_q_value(act, q_value))
-            q_val_out += curr_qval
+            q_val_out += curr_qval * action_probs[act]
             #q_value += self.get_q_value(act, q_value)
             self.env.step_back()
         return q_val_out
@@ -118,13 +124,11 @@ class BRAgent():
                     best_act = a
         return best_act
 
-    def action_probs(self, obs, legal_actions, policy):
+    def action_probs(self, state, policy):
         ''' Obtain the action probabilities of the current state
 
         Args:
-            obs (str): state_str
-            legal_actions (list): List of leagel actions
-            player_id (int): The current player
+            state(dictionaty): The state dictionary
             policy (dict): The used policy
 
         Returns:
@@ -132,7 +136,10 @@ class BRAgent():
                 action_probs(numpy.array): The action probabilities
                 legal_actions (list): Indices of legal actions
         '''
-        action_probs = policy.policy[obs]
+        #obs = state['obs']
+        legal_actions = state['legal_actions']
+
+        _, action_probs = policy.eval_step(state)
         if action_probs != []:
             action_probs = np.array(action_probs)
             action_probs = remove_illegal(action_probs, legal_actions)
@@ -158,7 +165,7 @@ class BRAgent():
         obs, legal_act = self.get_state(this_player)
         self.traverse_tree(probs, this_player)
         act = self.best_response_action(this_player, state['obs'].tostring())
-        return act 
+        return act, []
 
     def get_state(self, player_id):
         ''' Get state_str of the player
