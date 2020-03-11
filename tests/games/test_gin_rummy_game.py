@@ -1,6 +1,11 @@
+'''
+    File name: test_gin_rummy_game.py
+    Author: William Hale
+    Date created: 3/11/2020
+'''
+
 import unittest
 import numpy as np
-
 
 from rlcard.games.gin_rummy.game import GinRummyGame as Game
 from rlcard.games.gin_rummy.judge import GinRummyJudge
@@ -13,6 +18,7 @@ discard_action_ids = list(range(discard_action_id, discard_action_id + 52))
 knock_action_ids = list(range(knock_action_id, knock_action_id + 52))
 put_action_ids = [gin_action_id] + discard_action_ids + knock_action_ids
 get_action_ids = [draw_card_action_id, pick_up_discard_action_id, declare_dead_hand_action_id]
+
 
 class TestGinRummyGame(unittest.TestCase):
 
