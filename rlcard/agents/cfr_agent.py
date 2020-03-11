@@ -22,7 +22,7 @@ class CFRAgent():
 
         # A policy is a dict state_str -> action probabilities
         self.policy = collections.defaultdict(list)
-        self.average_policy =collections.defaultdict(np.array)
+        self.average_policy = collections.defaultdict(np.array)
 
         # Regret is a dict state_str -> action regrets
         self.regrets = collections.defaultdict(np.array)
@@ -119,7 +119,6 @@ class CFRAgent():
         else:
             for action in range(self.env.action_num):
                 action_probs[action] = 1.0 / self.env.action_num
-
         return action_probs
 
     def action_probs(self, obs, legal_actions, policy):
@@ -136,7 +135,7 @@ class CFRAgent():
                 action_probs(numpy.array): The action probabilities
                 legal_actions (list): Indices of legal actions
         '''
-        if obs not in policy:
+        if obs not in policy.keys():
             action_probs = np.array([1.0/self.env.action_num for _ in range(self.env.action_num)])
             self.policy[obs] = action_probs
         else:
