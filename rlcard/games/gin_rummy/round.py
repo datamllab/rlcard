@@ -4,13 +4,13 @@
     Date created: 2/12/2020
 '''
 
-from rlcard.games.gin_rummy.action_event import *
+from rlcard.games.gin_rummy.utils.action_event import *
 from rlcard.games.gin_rummy.player import GinRummyPlayer
 from rlcard.games.gin_rummy.dealer import GinRummyDealer
-from rlcard.games.gin_rummy.move import *
+from rlcard.games.gin_rummy.utils.move import *
 
-import rlcard.games.gin_rummy.melding as melding
-import rlcard.games.gin_rummy.utils as utils
+import rlcard.games.gin_rummy.utils.melding as melding
+import rlcard.games.gin_rummy.utils.utils as utils
 
 from typing import List
 
@@ -23,14 +23,14 @@ class GinRummyRound(object):
         Args:
             dealer_id: int
         '''
-        self.dealer_id: int = dealer_id
+        self.dealer_id = dealer_id
         self.dealer = GinRummyDealer()
         self.players = [GinRummyPlayer(player_id=0), GinRummyPlayer(player_id=1)]
-        self.current_player_id: int = (dealer_id + 1) % 2
-        self.is_over: bool = False
-        self.going_out_action: int or None = None
-        self.going_out_player_id: int or None = None
-        self.move_sheet: List[GinRummyMove] = []
+        self.current_player_id = (dealer_id + 1) % 2
+        self.is_over = False
+        self.going_out_action = None
+        self.going_out_player_id = None
+        self.move_sheet = []
         player_dealing = GinRummyPlayer(player_id=dealer_id)
         shuffled_deck = self.dealer.shuffled_deck
         self.move_sheet.append(DealHandMove(player_dealing=player_dealing, shuffled_deck=shuffled_deck))

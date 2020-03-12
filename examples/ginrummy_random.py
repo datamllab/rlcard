@@ -5,7 +5,7 @@ import rlcard
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import set_global_seed
 
-from rlcard.games.gin_rummy.move import *
+from rlcard.games.gin_rummy.utils.move import *
 from rlcard.games.gin_rummy.player import GinRummyPlayer
 from rlcard.games.gin_rummy.agents import HighLowAgent
 
@@ -52,15 +52,15 @@ for episode in range(episode_num):
     move_sheet_count = len(move_sheet)
     for i in range(move_sheet_count):
         move = move_sheet[i]
-        print(f"{move}")
+        print(move)
         if i == 0 and type(move) is DealHandMove:
             player_dealing = move.player_dealing
             leading_player = GinRummyPlayer.opponent_of(player_dealing)
             shuffle_deck = move.shuffled_deck
-            leading_player_hand_text = [f"{card}" for card in shuffle_deck[-11:]]
-            dealing_player_hand_text = [f"{card}" for card in shuffle_deck[-21:-11]]
-            stock_pile_text = [f"{card}" for card in shuffle_deck[:31]]
-            print(f"player_dealing is {player_dealing}; leading_player is {leading_player}.")
-            print(f"leading player hand: {leading_player_hand_text}")
-            print(f"dealing player hand: {dealing_player_hand_text}")
-            print(f"stock_pile: {stock_pile_text}")
+            leading_player_hand_text = [str(card) for card in shuffle_deck[-11:]]
+            dealing_player_hand_text = [str(card) for card in shuffle_deck[-21:-11]]
+            stock_pile_text = [str(card) for card in shuffle_deck[:31]]
+            print("player_dealing is", player_dealing, "; leading_player is ", leading_player)
+            print("leading player hand:", leading_player_hand_text)
+            print("dealing player hand:", dealing_player_hand_text)
+            print("stock_pile:", stock_pile_text)

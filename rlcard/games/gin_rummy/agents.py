@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from rlcard.games.gin_rummy.action_event import *
+from rlcard.games.gin_rummy.utils.action_event import *
 from rlcard.games.gin_rummy.card import Card
 
-import rlcard.games.gin_rummy.utils as utils
+import rlcard.games.gin_rummy.utils.utils as utils
 
 #
 #   You can choose a random agent or one of the agents below for the opponent of the agent being trained.

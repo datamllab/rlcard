@@ -17,9 +17,9 @@ class GinRummyPlayer(object):
         Args:
             player_id (int): id for the player
         '''
-        self.player_id: int = player_id
-        self.hand: List[Card] = []
-        self.known_cards: List[Card] = []  # opponent knows cards picked up by player and not yet discarded
+        self.player_id = player_id
+        self.hand = []
+        self.known_cards = []  # opponent knows cards picked up by player and not yet discarded
 
     def get_player_id(self) -> int:
         ''' Return player's id
