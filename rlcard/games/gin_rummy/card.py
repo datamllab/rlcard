@@ -83,7 +83,7 @@ class Card(object):
 
 
 # deck is always in order from AS, 2S, ..., AH, 2H, ..., AD, 2D, ..., AC, 2C, ... QC, KC
-_deck: List[Card] = Card.init_standard_deck()  # want this to be read-only
+_deck = Card.init_standard_deck()  # want this to be read-only
 
 
 def get_deck():
