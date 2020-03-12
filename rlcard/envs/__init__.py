@@ -12,12 +12,10 @@ register(
     env_id='doudizhu',
     entry_point='rlcard.envs.doudizhu:DoudizhuEnv',
 )
-
 register(
     env_id='simple-doudizhu',
     entry_point='rlcard.envs.simpledoudizhu:SimpleDoudizhuEnv',
 )
-
 register(
     env_id='limit-holdem',
     entry_point='rlcard.envs.limitholdem:LimitholdemEnv',
@@ -41,4 +39,9 @@ register(
 register(
     env_id='mahjong',
     entry_point='rlcard.envs.mahjong:MahjongEnv',
+)
+
+register(  # 200213
+    env_id='gin-rummy',
+    entry_point='rlcard.envs.ginrummy:GinRummyEnv',
 )
