@@ -18,12 +18,12 @@ class GinRummyDealer(object):
     def __init__(self):
         ''' Empty discard_pile, set shuffled_deck, set stock_pile
         '''
-        self.discard_pile: List[Card] = []
+        self.discard_pile = []
         self.shuffled_deck = get_deck().copy()  # keep a copy of the shuffled cards at start of new hand
         random.shuffle(self.shuffled_deck)
-        self.stock_pile: List[Card] = self.shuffled_deck.copy()
+        self.stock_pile = self.shuffled_deck.copy()
 
-    def deal_cards(self, player: GinRummyPlayer, num: int):
+    def deal_cards(self, player: GinRummyPlayer, num):
         ''' Deal some cards from stock_pile to one player
 
         Args:
@@ -41,19 +41,19 @@ def test_gin_rummy_dealer():
     current_deck = get_deck()
     deck_text = [card.rank + card.suit for card in current_deck]
     deck_card_ids = [card.card_id for card in current_deck]
-    print(f"deck={deck_text}")
+    print("deck=", deck_text)
     print(deck_card_ids)
-    print(f"Deal 10 cards.")
+    print("Deal 10 cards.")
     player = GinRummyPlayer(player_id=0)
     dealer.deal_cards(player=player, num=10)
-    print(f"shuffled_deck_count={len(dealer.shuffled_deck)}")
-    print(f"stock_pile_count={len(dealer.stock_pile)}")
-    print(f"current_deck_count={len(current_deck)}")
-    print(f"new_deck_count={len(get_deck())}")
+    print("shuffled_deck_count=", len(dealer.shuffled_deck))
+    print("stock_pile_count=", len(dealer.stock_pile))
+    print("current_deck_count=", len(current_deck))
+    print("new_deck_count", len(get_deck()))
 
-    print(f"Pop top_card from current_deck.")
+    print("Pop top_card from current_deck.")
     top_card = current_deck.pop(-1)
-    print(f"top_card={top_card} current_deck_count={len(current_deck)} new_deck_count={len(get_deck())}")
+    print("top_card=", top_card, "current_deck_count=", len(current_deck), "new_deck_count=", len(get_deck()))
 
 
 if __name__ == '__main__':

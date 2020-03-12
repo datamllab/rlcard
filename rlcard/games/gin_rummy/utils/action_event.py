@@ -69,7 +69,7 @@ class ActionEvent(object):
             card = get_card(card_id=card_id)
             action_event = KnockAction(card=card)
         else:
-            raise Exception(f"decode_action: unknown action_id={action_id}")
+            raise Exception("decode_action: unknown action_id=", action_id)
         return action_event
 
 
@@ -134,7 +134,7 @@ class DiscardAction(ActionEvent):
         self.card = card
 
     def __str__(self):
-        return f"discard {self.card}"
+        return "discard "+str(self.card)
 
 
 class KnockAction(ActionEvent):
@@ -144,4 +144,4 @@ class KnockAction(ActionEvent):
         self.card = card
 
     def __str__(self):
-        return f"knock {self.card}"
+        return "knock "+str(self.card)

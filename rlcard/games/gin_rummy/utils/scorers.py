@@ -4,13 +4,13 @@
     Date created: 2/15/2020
 '''
 
-from rlcard.games.gin_rummy.action_event import *
+from rlcard.games.gin_rummy.utils.action_event import *
 from rlcard.games.gin_rummy.game import GinRummyGame
 from rlcard.games.gin_rummy.player import GinRummyPlayer
 from rlcard.games.gin_rummy.round import GinRummyRound
 
-import rlcard.games.gin_rummy.melding as melding
-import rlcard.games.gin_rummy.utils as utils
+import rlcard.games.gin_rummy.utils.melding as melding
+import rlcard.games.gin_rummy.utils.utils as utils
 
 from typing import Callable
 
@@ -40,7 +40,7 @@ class GinRummyScorer(Scorer):
             payoffs (list): a list of payoffs for each player
         '''
         payoffs = [0, 0]
-        game_round: GinRummyRound = game.round
+        game_round = game.round
         last_action = game.actions[-1]
         assert game_round.is_over
         assert type(last_action) is ScoreSouthPlayerAction
@@ -81,7 +81,7 @@ class HighLowScorer(Scorer):
             payoffs (list): a list of payoffs for each player
         '''
         payoffs = [0, 0]
-        game_round: GinRummyRound = game.round
+        game_round = game.round
         last_action = game.actions[-1]
         assert game_round.is_over
         assert type(last_action) is ScoreSouthPlayerAction

@@ -9,10 +9,10 @@ import numpy as np
 
 from rlcard.games.gin_rummy.game import GinRummyGame as Game
 from rlcard.games.gin_rummy.judge import GinRummyJudge
-from rlcard.games.gin_rummy.action_event import score_player_1_action_id
-from rlcard.games.gin_rummy.action_event import draw_card_action_id, pick_up_discard_action_id
-from rlcard.games.gin_rummy.action_event import declare_dead_hand_action_id
-from rlcard.games.gin_rummy.action_event import gin_action_id, discard_action_id, knock_action_id
+from rlcard.games.gin_rummy.utils.action_event import score_player_1_action_id
+from rlcard.games.gin_rummy.utils.action_event import draw_card_action_id, pick_up_discard_action_id
+from rlcard.games.gin_rummy.utils.action_event import declare_dead_hand_action_id
+from rlcard.games.gin_rummy.utils.action_event import gin_action_id, discard_action_id, knock_action_id
 
 discard_action_ids = list(range(discard_action_id, discard_action_id + 52))
 knock_action_ids = list(range(knock_action_id, knock_action_id + 52))

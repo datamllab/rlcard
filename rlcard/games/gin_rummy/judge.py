@@ -4,14 +4,14 @@
     Date created: 2/12/2020
 '''
 
-from rlcard.games.gin_rummy.action_event import *
+from rlcard.games.gin_rummy.utils.action_event import *
 from rlcard.games.gin_rummy.card import Card
 from rlcard.games.gin_rummy.game import GinRummyGame
 
 from typing import List
 
-import rlcard.games.gin_rummy.melding as melding
-import rlcard.games.gin_rummy.utils as utils
+import rlcard.games.gin_rummy.utils.melding as melding
+import rlcard.games.gin_rummy.utils.utils as utils
 
 
 class GinRummyJudge(object):
@@ -30,7 +30,7 @@ class GinRummyJudge(object):
         """
         :return: List[ActionEvent] of legal actions
         """
-        legal_actions: List[ActionEvent] = []
+        legal_actions = []
         last_action = self.game.get_last_action()
         last_action_type = type(last_action)
         if last_action is None or \
