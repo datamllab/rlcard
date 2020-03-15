@@ -43,7 +43,21 @@ class TestModel(unittest.TestCase):
     def test_leduc_holdem_rule_model_v2(self):
         model = LeducHoldemRuleModelV2()
         self.assertIsInstance(model, LeducHoldemRuleModelV2)
-        # TODO: Add detailed tests
+        agent = model.agents[0]
+        action = agent.step({'raw_legal_actions':['raise', 'fold', 'check', 'call'], 'raw_obs':{'hand':['K'], 'public_card':[]}})
+        self.assertEqual(action, 'raise')
+        action = agent.step({'raw_legal_actions':['raise', 'fold', 'check', 'call'], 'raw_obs':{'hand':['Q'], 'public_card':[]}})
+        self.assertEqual(action, 'check')
+        action = agent.step({'raw_legal_actions':['raise', 'fold', 'check', 'call'], 'raw_obs':{'hand':['J'], 'public_card':[]}})
+        self.assertEqual(action, 'fold')
+        action = agent.step({'raw_legal_actions':['raise', 'fold', 'check', 'call'], 'raw_obs':{'hand':['K', 'J'], 'public_card':['K','J']}})
+        self.assertEqual(action, 'raise')
+        action = agent.step({'raw_legal_actions':['raise', 'fold', 'check', 'call'], 'raw_obs':{'hand':['K', 'Q'], 'public_card':['K','J']}})
+        self.assertEqual(action, 'fold')
+        action = agent.step({'raw_legal_actions':['fold', 'check', 'call'], 'raw_obs':{'hand':['K'], 'public_card':[]}})
+        self.assertEqual(action, 'call')
+        action = agent.step({'raw_legal_actions':['fold', 'call'], 'raw_obs':{'hand':['Q'], 'public_card':[]}})
+        self.assertEqual(action, 'fold') 
 
     def test_limit_holdem_rule_model_v1(self):
         model = LimitholdemRuleModelV1()
