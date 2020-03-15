@@ -62,16 +62,16 @@ class LeducHoldemRuleAgentV2(object):
         KQ, KJ, QJ, JT
         Fold all hand types except those mentioned above to save money
         '''
-        if public_card == None:
+        if public_card:
+            if public_card[1] == hand[1]:
+                action = 'raise'
+            else:
+                action = 'fold'
+        else:
             if hand[0] == 'K':
                 action = 'raise'
             elif hand[0] == 'Q':
                 action = 'check'
-            else:
-                action = 'fold'
-        if public_card != None:
-            if public_cards[1] == hand[1]:
-                action = 'raise'
             else:
                 action = 'fold'
 
@@ -133,4 +133,3 @@ class LeducHoldemRuleModelV2(Model):
               functioning well.
         '''
         return self.rule_agents
-
