@@ -1,6 +1,7 @@
 language: python
 install: 
-  - pip install -e .[with_torch]
+  - pip install -e .[torch]
+  - pip install -e .[tensorflow]
 before_script:
   - pip install python-coveralls
   - pip install pytest-cover

@@ -46,10 +46,11 @@ Note that the states and actions are wrapped by `env` in Blackjack. In this exam
 The second example is to use Deep-Q learning to train an agent on Blackjack. We aim to use this example to show how reinforcement learning algorithms can be developed and applied in our toolkit. We design a `run` function which plays one complete game and provides the data for training RL agents. The example is shown below:
 ```python
 import tensorflow as tf
+import os
 
 import rlcard
 from rlcard.agents.dqn_agent import DQNAgent
-from rlcard.utils.utils import set_global_seed
+from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
 # Make environment
@@ -58,120 +59,105 @@ eval_env = rlcard.make('blackjack')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
-save_plot_every = 1000
 evaluate_num = 10000
-episode_num = 1000000
+episode_num = 100000
 
-# Set the the number of steps for collecting normalization statistics
-# and intial memory size
+# The intial memory size
 memory_init_size = 100
-norm_step = 100
+
+# Train the agent every X steps
+train_every = 1
 
 # The paths for saving the logs and learning curves
-root_path = './experiments/blackjack_dqn_result/'
-log_path = root_path + 'log.txt'
-csv_path = root_path + 'performance.csv'
-figure_path = root_path + 'figures/'
+log_dir = './experiments/blackjack_dqn_result/'
 
 # Set a global seed
 set_global_seed(0)
 
 with tf.Session() as sess:
 
-    # Set agents
+    # Initialize a global step
     global_step = tf.Variable(0, name='global_step', trainable=False)
+
+    # Set up the agents
     agent = DQNAgent(sess,
                      scope='dqn',
                      action_num=env.action_num,
                      replay_memory_init_size=memory_init_size,
-                     norm_step=norm_step,
+                     train_every=train_every,
                      state_shape=env.state_shape,
                      mlp_layers=[10,10])
     env.set_agents([agent])
     eval_env.set_agents([agent])
 
+    # Initialize global variables
     sess.run(tf.global_variables_initializer())
 
-    # Count the number of steps
-    step_counter = 0
-
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on Blackjack', log_path=log_path, csv_path=csv_path)
+    logger = Logger(log_dir)
 
     for episode in range(episode_num):
 
         # Generate data from the environment
         trajectories, _ = env.run(is_training=True)
 
-        # Feed transitions into agent memory, and train
+        # Feed transitions into agent memory, and train the agent
         for ts in trajectories[0]:
             agent.feed(ts)
-            step_counter += 1
 
-            # Train the agent
-            if step_counter > memory_init_size + norm_step:
-                loss = agent.train()
-                print('\rINFO - Step {}, loss: {}'.format(step_counter, loss), end='')
-
-        # Evaluate the performance
+        # Evaluate the performance. Play with random agents.
         if episode % evaluate_every == 0:
-            reward = 0
-            for eval_episode in range(evaluate_num):
-                _, payoffs = eval_env.run(is_training=False)
-                reward += payoffs[0]
+            logger.log_performance(env.timestep, tournament(eval_env, evaluate_num)[0])
 
-            logger.log('\n########## Evaluation ##########')
-            logger.log('Timestep: {} Average reward is {}'.format(env.timestep, float(reward)/evaluate_num))
+    # Close files in the logger
+    logger.close_files()
 
-            # Add point to logger
-            logger.add_point(x=env.timestep, y=float(reward)/evaluate_num)
-
-        # Make plot
-        if episode % save_plot_every == 0 and episode > 0:
-            logger.make_plot(save_path=figure_path+str(episode)+'.png')
-
-    # Make the final plot
-    logger.make_plot(save_path=figure_path+'final_'+str(episode)+'.png')
+    # Plot the learning curve
+    logger.plot('DQN')
+    
+    # Save model
+    save_dir = 'models/blackjack_dqn'
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    saver = tf.train.Saver()
+    saver.save(sess, os.path.join(save_dir, 'model'))
 ```
 The expected output is something like below:
 
 ```
-########## Evaluation ##########
-Timestep: 1 Average reward is -0.2868
-
-########## Evaluation ##########
-Timestep: 136 Average reward is -0.642
-
+----------------------------------------
+  timestep     |  1
+  reward       |  -0.7342
+----------------------------------------
+INFO - Agent dqn, step 100, rl-loss: 1.0042707920074463
 INFO - Copied model parameters to target network.
-INFO - Step 271, loss: 0.6861089468002319
-########## Evaluation ##########
-Timestep: 271 Average reward is -0.5751
-INFO - Step 402, loss: 0.7866340875625612
-########## Evaluation ##########
-Timestep: 402 Average reward is -0.5857
-INFO - Step 537, loss: 0.7525347471237183
-########## Evaluation ##########
-Timestep: 537 Average reward is -0.5762
-INFO - Step 681, loss: 0.7957633137702942
-########## Evaluation ##########
-Timestep: 681 Average reward is -0.4895
-INFO - Step 824, loss: 0.8273138403892517
-########## Evaluation ##########
-Timestep: 824 Average reward is -0.4341
-INFO - Step 958, loss: 0.7127346992492676
-########## Evaluation ##########
-Timestep: 958 Average reward is -0.3816
-INFO - Step 1093, loss: 0.61426079273223884
-########## Evaluation ##########
-Timestep: 1093 Average reward is -0.2907
-INFO - Step 1200, loss: 0.7053447961807251
-INFO - Copied model parameters to target network.
-INFO - Step 1221, loss: 0.7781758308410645
-########## Evaluation ##########
-Timestep: 1221 Average reward is -0.2197
+INFO - Agent dqn, step 136, rl-loss: 0.7888197302818298
+----------------------------------------
+  timestep     |  136
+  reward       |  -0.1406
+----------------------------------------
+INFO - Agent dqn, step 278, rl-loss: 0.6946825981140137
+----------------------------------------
+  timestep     |  278
+  reward       |  -0.1523
+----------------------------------------
+INFO - Agent dqn, step 412, rl-loss: 0.62268990278244025
+----------------------------------------
+  timestep     |  412
+  reward       |  -0.088
+----------------------------------------
+INFO - Agent dqn, step 544, rl-loss: 0.69050502777099616
+----------------------------------------
+  timestep     |  544
+  reward       |  -0.08
+----------------------------------------
+INFO - Agent dqn, step 681, rl-loss: 0.61789089441299444
+----------------------------------------
+  timestep     |  681
+  reward       |  -0.0793
+----------------------------------------
 ```
-
-In Blackjack, the player will get a payoff at the end of the game: 1 if the player wins, -1 if the player loses, and 0 if it is a tie. The performance is measured by the average payoff the player obtains by playing 1000 episodes. The above example shows that the agent achieves better and better performance during training. The logs and learning curves are saved in `./experiments/blackjack_dqn_result/`.
+In Blackjack, the player will get a payoff at the end of the game: 1 if the player wins, -1 if the player loses, and 0 if it is a tie. The performance is measured by the average payoff the player obtains by playing 10000 episodes. The above example shows that the agent achieves better and better performance during training. The logs and learning curves are saved in `./experiments/blackjack_dqn_result/`.
 
 ## Running Multiple Processes
 We have also used multiple processes to accelerate training a DQN agent on Blackjack. Multiple processes are applied in two parts. The first is generating data from the environment, the second is evaluating the performance. Our strategy is setting a class inherited from Process class, which is responsible for playing game and providing the data. And we uses an input queue to deliver instruction information like the number of tasks, the values of network variables in main process. In particular, when evaluation starts, we first copy network variables' values of main process to subprocess to update the subnetwork.  For the output, we also use a queue to receive it. The example is shown below:
@@ -411,22 +397,25 @@ INFO - Step 2199, loss: 0.75212180614471447
 ```
 
 ## Having Fun with Pretrained Leduc Model
-We have designed simple human interfaces to play against the pretrained model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](games.md#leduc-holdem). Example of playing against Leduc Hold'em NFSP model is as below:
+We have designed simple human interfaces to play against the pretrained model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](games.md#leduc-holdem). Example of playing against Leduc Hold'em CFR model is as below:
 ```python
 import rlcard
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem')
+env = rlcard.make('leduc-holdem', config={'human_mode':True})
 
-# Set it to human mode
-env.set_mode(human_mode=True)
+print(">> Leduc Hold'em pre-trained model")
 
 # Reset environment
-env.reset()
+state = env.reset()
 
 while True:
-    action = int(input(">> You choose action (integer): "))
-    env.step(action)
+    action = input('>> You choose action (integer): ')
+    while not action.isdigit() or int(action) not in state['legal_actions']:
+        print('Action illegel...')
+        action = input('>> Re-choose action (integer): ')
+         
+    state, _, _ = env.step(int(action))
 ```
 Example output is as follow:
 
@@ -470,55 +459,54 @@ We also provide a running demo of a rule-based agent for UNO. Try it by running 
 We have wrraped the environment as single agent environment by assuming that other players play with pre-trained models. The interfaces are exactly the same to OpenAI Gym. Thus, any single-agent algorithm can be connected to the environment. An example of Leduc Hold'em is as below:
 ```python
 import tensorflow as tf
+import os
 import numpy as np
 
 import rlcard
-from rlcard.agents.random_agent import RandomAgent
 from rlcard.agents.dqn_agent import DQNAgent
-from rlcard.utils.utils import set_global_seed
+from rlcard.agents.random_agent import RandomAgent
+from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
-# Make environment and enable single mode
-env = rlcard.make('leduc-holdem')
-eval_env = rlcard.make('leduc-holdem')
-env.set_mode(single_agent_mode=True)
-eval_env.set_mode(single_agent_mode=True)
+# Make environment
+env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
+eval_env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 1000
-save_plot_every = 1000
 evaluate_num = 10000
-timesteps = 1000000
+timesteps = 100000
 
-# Set the the number of steps for collecting normalization statistics
-# and intial memory size
+# The intial memory size
 memory_init_size = 1000
-norm_step = 100
+
+# Train the agent every X steps
+train_every = 1
 
 # The paths for saving the logs and learning curves
-root_path = './experiments/leduc_holdem_single_agent_dqn_result/'
-log_path = root_path + 'log.txt'
-csv_path = root_path + 'performance.csv'
-figure_path = root_path + 'figures/'
+log_dir = './experiments/leduc_holdem_single_dqn_result/'
 
 # Set a global seed
 set_global_seed(0)
 
 with tf.Session() as sess:
+
+    # Initialize a global step
     global_step = tf.Variable(0, name='global_step', trainable=False)
+
+    # Set up the agents
     agent = DQNAgent(sess,
                      scope='dqn',
                      action_num=env.action_num,
-                     replay_memory_size=int(1e5),
                      replay_memory_init_size=memory_init_size,
-                     norm_step=norm_step,
+                     train_every=train_every,
                      state_shape=env.state_shape,
-                     mlp_layers=[128, 128])
-
+                     mlp_layers=[128,128])
+    # Initialize global variables
     sess.run(tf.global_variables_initializer())
 
     # Init a Logger to plot the learning curve
-    logger = Logger(xlabel='timestep', ylabel='reward', legend='DQN on Leduc Holdem', log_path=log_path, csv_path=csv_path)
+    logger = Logger(log_dir)
 
     state = env.reset()
 
@@ -528,31 +516,28 @@ with tf.Session() as sess:
         ts = (state, action, reward, next_state, done)
         agent.feed(ts)
 
-        train_count = timestep - (memory_init_size + norm_step)
-        if train_count > 0:
-            loss = agent.train()
-            print('\rINFO - Step {}, loss: {}'.format(timestep, loss), end='')
-
         if timestep % evaluate_every == 0:
             rewards = []
             state = eval_env.reset()
             for _ in range(evaluate_num):
-                action = agent.eval_step(state)
+                action, _ = agent.eval_step(state)
                 _, reward, done = env.step(action)
                 if done:
                     rewards.append(reward)
-            logger.log('\n########## Evaluation ##########')
-            logger.log('Timestep: {} Average reward is {}'.format(timestep, np.mean(rewards)))
+            logger.log_performance(env.timestep, np.mean(rewards))
 
-            # Add point to logger
-            logger.add_point(x=env.timestep, y=float(reward)/evaluate_num)
+    # Close files in the logger
+    logger.close_files()
 
-        # Make plot
-        if timestep % save_plot_every == 0:
-            logger.make_plot(save_path=figure_path+str(timestep)+'.png')
-
-    # Make the final plot
-    logger.make_plot(save_path=figure_path+'final_'+str(timestep)+'.png')
+    # Plot the learning curve
+    logger.plot('DQN')
+    
+    # Save model
+    save_dir = 'models/leduc_holdem_single_dqn'
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+    saver = tf.train.Saver()
+    saver.save(sess, os.path.join(save_dir, 'model'))
 ```
 
 ## Training CFR on Leduc Hold'em
@@ -563,95 +548,80 @@ import numpy as np
 import rlcard
 from rlcard.agents.cfr_agent import CFRAgent
 from rlcard import models
-from rlcard.utils.utils import set_global_seed
+from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils.logger import Logger
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem', allow_step_back=True)
+env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
 eval_env = rlcard.make('leduc-holdem')
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
 save_plot_every = 1000
 evaluate_num = 10000
-episode_num = 10000000
+episode_num = 10000
 
 # The paths for saving the logs and learning curves
-root_path = './experiments/leduc_holdem_cfr_result/'
-log_path = root_path + 'log.txt'
-csv_path = root_path + 'performance.csv'
-figure_path = root_path + 'figures/'
+log_dir = './experiments/leduc_holdem_cfr_result/'
 
 # Set a global seed
 set_global_seed(0)
 
 # Initilize CFR Agent
 agent = CFRAgent(env)
+agent.load()  # If we have saved model, we first load the model
 
 # Evaluate CFR against pre-trained NFSP
 eval_env.set_agents([agent, models.load('leduc-holdem-nfsp').agents[0]])
 
 # Init a Logger to plot the learning curve
-logger = Logger(xlabel='iteration', ylabel='reward', legend='CFR on Leduc Holdem', log_path=log_path, csv_path=csv_path)
+logger = Logger(log_dir)
 
 for episode in range(episode_num):
     agent.train()
     print('\rIteration {}'.format(episode), end='')
     # Evaluate the performance. Play with NFSP agents.
     if episode % evaluate_every == 0:
-        reward = 0
-        for eval_episode in range(evaluate_num):
-            _, payoffs = eval_env.run(is_training=False)
+        agent.save() # Save model
+        logger.log_performance(env.timestep, tournament(eval_env, evaluate_num)[0])
 
-            reward += payoffs[0]
+# Close files in the logger
+logger.close_files()
 
-        logger.log('\n########## Evaluation ##########')
-        logger.log('Iteration: {} Average reward is {}'.format(episode, float(reward)/evaluate_num))
-
-        # Add point to logger
-        logger.add_point(x=env.timestep, y=float(reward)/evaluate_num)
-
-    # Make plot
-    if episode % save_plot_every == 0 and episode > 0:
-        logger.make_plot(save_path=figure_path+str(episode)+'.png')
-
-# Make the final plot
-logger.make_plot(save_path=figure_path+'final_'+str(episode)+'.png')
+# Plot the learning curve
+logger.plot('CFR')
 ```
 In the above example, the performance is measured by playing against a pre-trained NFSP model. The expected output is as below:
 ```
 Iteration 0
-########## Evaluation ##########
-Iteration: 0 Average reward is -1.0494
+----------------------------------------
+  timestep     |  192
+  reward       |  -1.3662
+----------------------------------------
 Iteration 100
-########## Evaluation ##########
-Iteration: 100 Average reward is -0.3044
+----------------------------------------
+  timestep     |  19392
+  reward       |  0.9462
+----------------------------------------
 Iteration 200
-########## Evaluation ##########
-Iteration: 200 Average reward is -0.2224
+----------------------------------------
+  timestep     |  38592
+  reward       |  0.8591
+----------------------------------------
 Iteration 300
-########## Evaluation ##########
-Iteration: 300 Average reward is 0.0053
+----------------------------------------
+  timestep     |  57792
+  reward       |  0.7861
+----------------------------------------
 Iteration 400
-########## Evaluation ##########
-Iteration: 400 Average reward is -0.0163
+----------------------------------------
+  timestep     |  76992
+  reward       |  0.7752
+----------------------------------------
 Iteration 500
-########## Evaluation ##########
-Iteration: 500 Average reward is -0.0715
-Iteration 600
-########## Evaluation ##########
-Iteration: 600 Average reward is -0.0435
-Iteration 700
-########## Evaluation ##########
-Iteration: 700 Average reward is -0.0347
-Iteration 800
-########## Evaluation ##########
-Iteration: 800 Average reward is 0.123
-Iteration 900
-########## Evaluation ##########
-Iteration: 900 Average reward is 0.0215
-Iteration 1000
-########## Evaluation ##########
-Iteration: 1000 Average reward is -0.0322
+----------------------------------------
+  timestep     |  96192
+  reward       |  0.7215
+----------------------------------------
 ```
-We observe that CFR achieves simialr performance as NFSP. However, CFR requires traversal of the game tree, which is infeasible in large environments.
+We observe that CFR achieves better performance as NFSP. However, CFR requires traversal of the game tree, which is infeasible in large environments.

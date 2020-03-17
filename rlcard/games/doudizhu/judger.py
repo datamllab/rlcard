@@ -49,7 +49,7 @@ class DoudizhuJudger(object):
         ''' Find solo attachments for trio_chain_solo_x and four_two_solo
 
         Args:
-            hands: 
+            hands:
             chain_start: the index of start card of the trio_chain or trio or four
             chain_length: the size of the sequence of the chain, 1 for trio_solo or four_two_solo
             size: count of solos for the attachments
@@ -93,14 +93,14 @@ class DoudizhuJudger(object):
         ''' Find pair attachments for trio_chain_pair_x and four_two_pair
 
         Args:
-            cards_count: 
+            cards_count:
             chain_start: the index of start card of the trio_chain or trio or four
             chain_length: the size of the sequence of the chain, 1 for trio_pair or four_two_pair
             size: count of pairs for the attachments
 
-        Returns: 
+        Returns:
             list of tuples: [attachment1, attachment2, ...]
-                            Each attachment has two elemnts, 
+                            Each attachment has two elemnts,
                             the first one contains indexes of attached cards smaller than the index of chain_start,
                             the first one contains indexes of attached cards larger than the index of chain_start
         '''
@@ -165,7 +165,7 @@ class DoudizhuJudger(object):
                 playable_cards.add(pre_attached + cards + post_attached)
 
         #solo_chain_5 -- #solo_chain_12
-        solo_chain_indexes = DoudizhuJudger.chain_indexes(non_zero_indexes)            
+        solo_chain_indexes = DoudizhuJudger.chain_indexes(non_zero_indexes)
         for (start_index, length) in solo_chain_indexes:
             s, l = start_index, length
             while(l >= 5):
@@ -260,7 +260,6 @@ class DoudizhuJudger(object):
     def __init__(self, players):
         ''' Initilize the Judger class for Dou Dizhu
         '''
-        all_cards_list = CARD_TYPE[1]
         self.playable_cards = [set() for _ in range(3)]
         self._recorded_removed_playable_cards = [[] for _ in range(3)]
         for player in players:
@@ -316,7 +315,6 @@ class DoudizhuJudger(object):
         '''
         removed_playable_cards = self._recorded_removed_playable_cards[player_id].pop()
         self.playable_cards[player_id].update(removed_playable_cards)
-            
 
     def get_playable_cards(self, player):
         ''' Provide all legal cards the player can play according to his

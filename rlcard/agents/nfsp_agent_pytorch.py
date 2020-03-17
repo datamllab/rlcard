@@ -48,21 +48,23 @@ class NFSPAgent(object):
                  state_shape=None,
                  hidden_layers_sizes=None,
                  reservoir_buffer_capacity=int(1e6),
-                 anticipatory_param=0.5,
+                 anticipatory_param=0.1,
                  batch_size=256,
-                 rl_learning_rate=0.0001,
-                 sl_learning_rate=0.00001,
+                 train_every=1,
+                 rl_learning_rate=0.1,
+                 sl_learning_rate=0.005,
                  min_buffer_size_to_learn=1000,
                  q_replay_memory_size=30000,
                  q_replay_memory_init_size=1000,
                  q_update_target_estimator_every=1000,
                  q_discount_factor=0.99,
-                 q_epsilon_start=1,
-                 q_epsilon_end=0.1,
+                 q_epsilon_start=0.06,
+                 q_epsilon_end=0,
                  q_epsilon_decay_steps=int(1e6),
                  q_batch_size=256,
-                 q_norm_step=1000,
+                 q_train_every=1,
                  q_mlp_layers=None,
+                 evaluate_with='average_policy',
                  device=None):
         ''' Initialize the NFSP agent.
 
@@ -75,6 +77,7 @@ class NFSPAgent(object):
             reservoir_buffer_capacity (int): The size of the buffer for average policy.
             anticipatory_param (float): The hyper-parameter that balances rl/avarage policy.
             batch_size (int): The batch_size for training average policy.
+            train_every (int): Train the SL policy every X steps.
             rl_learning_rate (float): The learning rate of the RL agent.
             sl_learning_rate (float): the learning rate of the average policy.
             min_buffer_size_to_learn (int): The minimum buffer size to learn for average policy.
@@ -87,15 +90,17 @@ class NFSPAgent(object):
             q_epsilon_end (float): the end epsilon of inner DQN agent.
             q_epsilon_decay_steps (int): The decay steps of inner DQN agent.
             q_batch_size (int): The batch size of inner DQN agent.
-            q_norm_step (int): The normalization steps of inner DQN agent.
+            q_train_step (int): Train the model every X steps.
             q_mlp_layers (list): The layer sizes of inner DQN agent.
             device (torch.device): Whether to use the cpu or gpu
         '''
-        self.scope = scope
+        self.use_raw = False
+        self._scope = scope
         self._action_num = action_num
         self._state_shape = state_shape
         self._layer_sizes = hidden_layers_sizes + [action_num]
         self._batch_size = batch_size
+        self._train_every = train_every
         self._sl_learning_rate = sl_learning_rate
         self._anticipatory_param = anticipatory_param
         self._min_buffer_size_to_learn = min_buffer_size_to_learn
@@ -103,19 +108,23 @@ class NFSPAgent(object):
         self._reservoir_buffer = ReservoirBuffer(reservoir_buffer_capacity)
         self._prev_timestep = None
         self._prev_action = None
+        self.evaluate_with = evaluate_with
 
         if device is None:
             self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         else:
             self.device = device
 
+        # Total timesteps
+        self.total_t = 0
+
         # Step counter to keep track of learning.
         self._step_counter = 0
 
         # Build the action-value network
-        self._rl_agent = DQNAgent('dqn', q_replay_memory_size, q_replay_memory_init_size, \
+        self._rl_agent = DQNAgent(scope+'_dqn', q_replay_memory_size, q_replay_memory_init_size, \
             q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, \
-            q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_norm_step, q_mlp_layers, \
+            q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_train_every, q_mlp_layers, \
             rl_learning_rate, device)
 
         # Build the average policy supervised model
@@ -148,6 +157,10 @@ class NFSPAgent(object):
             ts (list): A list of 5 elements that represent the transition.
         '''
         self._rl_agent.feed(ts)
+        self.total_t += 1
+        if self.total_t>0 and len(self._reservoir_buffer) >= self._min_buffer_size_to_learn and self.total_t%self._train_every == 0:
+            sl_loss  = self.train_sl()
+            print('\rINFO - Agent {}, step {}, sl-loss: {}'.format(self._scope, self.total_t, sl_loss), end='')
 
     def step(self, state):
         ''' Returns the action to be taken.
@@ -181,8 +194,17 @@ class NFSPAgent(object):
         Returns:
             action (int): An action id.
         '''
-        action = self._rl_agent.eval_step(state)
-        return action
+        if self.evaluate_with == 'best_response':
+            action, probs = self._rl_agent.eval_step(state)
+        elif self.evaluate_with == 'average_policy':
+            obs = state['obs']
+            legal_actions = state['legal_actions']
+            probs = self._act(obs)
+            probs = remove_illegal(probs, legal_actions)
+            action = np.random.choice(len(probs), p=probs)
+        else:
+            raise ValueError("'evaluate_with' should be either 'average_policy' or 'best_response'.")
+        return action, probs
 
     def sample_episode_policy(self):
         ''' Sample average/best_response policy
@@ -225,11 +247,6 @@ class NFSPAgent(object):
                 action_probs=probs)
         self._reservoir_buffer.add(transition)
 
-    def train_rl(self):
-        ''' Update the inner RL agent
-        '''
-        return self._rl_agent.train()
-
     def train_sl(self):
         ''' Compute the loss on sampled transitions and perform a avg-network update.
 
@@ -268,6 +285,24 @@ class NFSPAgent(object):
 
         return ce_loss
 
+    def get_state_dict(self):
+        ''' Get the state dict to save models
+
+        Returns:
+            (dict): A dict of model states
+        '''
+        state_dict = self._rl_agent.get_state_dict()
+        state_dict[self._scope] = self.policy_network.state_dict()
+        return state_dict
+
+    def load(self, checkpoint):
+        ''' Load model
+
+        Args:
+            checkpoint (dict): the loaded state
+        '''
+        self.policy_network.load_state_dict(checkpoint[self._scope])
+
 class AveragePolicyNetwork(nn.Module):
     '''
     Approximates the history of action probabilities
@@ -294,6 +329,7 @@ class AveragePolicyNetwork(nn.Module):
         # set up mlp w/ relu activations
         layer_dims = [np.prod(self.state_shape)] + self.mlp_layers
         mlp = [nn.Flatten()]
+        mlp.append(nn.BatchNorm1d(layer_dims[0]))
         for i in range(len(layer_dims)-1):
             mlp.append(nn.Linear(layer_dims[i], layer_dims[i+1]))
             if i != len(layer_dims) - 2: # all but final have relu

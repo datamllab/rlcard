@@ -25,7 +25,6 @@ class TestNFSP(unittest.TestCase):
 
     def test_train(self):
 
-        norm_step = 100
         memory_init_size = 20
         step_num = 1000
 
@@ -42,15 +41,14 @@ class TestNFSP(unittest.TestCase):
                          q_replay_memory_size=50,
                          q_replay_memory_init_size=memory_init_size,
                          q_batch_size=4,
-                         q_norm_step=norm_step,
                          q_mlp_layers=[10,10])
         sess.run(tf.global_variables_initializer())
 
-        predicted_action = agent.eval_step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
+        predicted_action, _ = agent.eval_step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)
 
-        for step in range(step_num):
+        for _ in range(step_num):
             agent.sample_episode_policy()
             predicted_action = agent.step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
             self.assertGreaterEqual(predicted_action, 0)
@@ -58,10 +56,7 @@ class TestNFSP(unittest.TestCase):
 
             ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, True]
             agent.feed(ts)
-            if step > norm_step + memory_init_size:
-                agent.train_rl()
 
-            agent.train_sl()
         sess.close()
         tf.reset_default_graph()
 
@@ -97,7 +92,7 @@ class TestNFSP(unittest.TestCase):
                          q_mlp_layers=[10,10],
                          evaluate_with='average_policy')
         sess.run(tf.global_variables_initializer())
-        predicted_action = agent.eval_step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
+        predicted_action, _ = agent.eval_step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)
 

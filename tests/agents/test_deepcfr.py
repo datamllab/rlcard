@@ -10,7 +10,7 @@ class TestUtilsMethos(unittest.TestCase):
     def test_init(self):
 
         sess = tf.InteractiveSession()
-        env = rlcard.make('leduc-holdem', allow_step_back=True)
+        env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
         agent = DeepCFR(session=sess,
                         env=env,
                         policy_network_layers=(4,4),
@@ -35,7 +35,7 @@ class TestUtilsMethos(unittest.TestCase):
         num_iterations = 10
 
         sess = tf.InteractiveSession()
-        env = rlcard.make('leduc-holdem', allow_step_back=True)
+        env = rlcard.make('leduc-holdem', {'allow_step_back':True})
         agent = DeepCFR(session=sess,
                         env=env,
                         policy_network_layers=(128,128),
@@ -53,7 +53,7 @@ class TestUtilsMethos(unittest.TestCase):
 
         # Test eval_step
         state = {'obs': np.random.random_sample(env.state_shape), 'legal_actions': [a for a in range(env.action_num)]}
-        action = agent.eval_step(state)
+        action, _ = agent.eval_step(state)
         self.assertIn(action, [a for a in range(env.action_num)])
 
         # Test simulate other
