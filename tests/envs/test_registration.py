@@ -19,5 +19,10 @@ class TestRegistration(unittest.TestCase):
         with self.assertRaises(ValueError):
             make('test_random_make')
 
+    def test_make_modes(self):
+        register(env_id='test_env', entry_point='rlcard.envs.blackjack:BlackjackEnv')
+        with self.assertRaises(ValueError):
+            make('test_env', config={'active_player':-1})
+
 if __name__ == '__main__':
     unittest.main()

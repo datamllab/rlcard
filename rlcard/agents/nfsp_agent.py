@@ -22,7 +22,6 @@ import collections
 import random
 import enum
 import numpy as np
-import sonnet as snt
 import tensorflow as tf
 
 from rlcard.agents.dqn_agent import DQNAgent
@@ -43,22 +42,23 @@ class NFSPAgent(object):
                  state_shape=None,
                  hidden_layers_sizes=None,
                  reservoir_buffer_capacity=int(1e6),
-                 anticipatory_param=0.5,
+                 anticipatory_param=0.1,
                  batch_size=256,
-                 rl_learning_rate=0.0001,
-                 sl_learning_rate=0.00001,
+                 train_every=1,
+                 rl_learning_rate=0.1,
+                 sl_learning_rate=0.005,
                  min_buffer_size_to_learn=1000,
                  q_replay_memory_size=30000,
                  q_replay_memory_init_size=1000,
                  q_update_target_estimator_every=1000,
                  q_discount_factor=0.99,
-                 q_epsilon_start=1,
-                 q_epsilon_end=0.1,
+                 q_epsilon_start=0.06,
+                 q_epsilon_end=0,
                  q_epsilon_decay_steps=int(1e6),
                  q_batch_size=256,
-                 q_norm_step=1000,
+                 q_train_every=1,
                  q_mlp_layers=None,
-                 evaluate_with='best_response'):
+                 evaluate_with='average_policy'):
         ''' Initialize the NFSP agent.
 
         Args:
@@ -71,6 +71,7 @@ class NFSPAgent(object):
             reservoir_buffer_capacity (int): The size of the buffer for average policy.
             anticipatory_param (float): The hyper-parameter that balances rl/avarage policy.
             batch_size (int): The batch_size for training average policy.
+            train_every (int): Train the SL policy every X steps.
             rl_learning_rate (float): The learning rate of the RL agent.
             sl_learning_rate (float): the learning rate of the average policy.
             min_buffer_size_to_learn (int): The minimum buffer size to learn for average policy.
@@ -83,16 +84,18 @@ class NFSPAgent(object):
             q_epsilon_end (float): the end epsilon of inner DQN agent.
             q_epsilon_decay_steps (int): The decay steps of inner DQN agent.
             q_batch_size (int): The batch size of inner DQN agent.
-            q_norm_step (int): The normalization steps of inner DQN agent.
+            q_train_step (int): Train the model every X steps.
             q_mlp_layers (list): The layer sizes of inner DQN agent.
             evaluate_with (string): The value can be 'best_response' or 'average_policy'
-
         '''
+        self.use_raw = False
         self._sess = sess
+        self._scope = scope
         self._action_num = action_num
         self._state_shape = state_shape
-        self._layer_sizes = hidden_layers_sizes + [action_num]
+        self._layer_sizes = hidden_layers_sizes
         self._batch_size = batch_size
+        self._train_every = train_every
         self._sl_learning_rate = sl_learning_rate
         self._anticipatory_param = anticipatory_param
         self._min_buffer_size_to_learn = min_buffer_size_to_learn
@@ -102,15 +105,19 @@ class NFSPAgent(object):
         self._prev_action = None
         self.evaluate_with = evaluate_with
 
+        # Total timesteps
+        self.total_t = 0
+
         # Step counter to keep track of learning.
         self._step_counter = 0
 
         with tf.variable_scope(scope):
             # Inner RL agent
-            self._rl_agent = DQNAgent(sess, 'dqn', q_replay_memory_size, q_replay_memory_init_size, q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_norm_step, q_mlp_layers, rl_learning_rate)
+            self._rl_agent = DQNAgent(sess, scope+'_dqn', q_replay_memory_size, q_replay_memory_init_size, q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_train_every, q_mlp_layers, rl_learning_rate)
 
-            # Build supervised model
-            self._build_model()
+            with tf.variable_scope('sl'):
+                # Build supervised model
+                self._build_model()
 
         self.sample_episode_policy()
 
@@ -126,12 +133,20 @@ class NFSPAgent(object):
 
         self._X = tf.contrib.layers.flatten(self._info_state_ph)
 
+        # Boolean to indicate whether is training or not
+        self.is_train = tf.placeholder(tf.bool, name="is_train");
+
+        # Batch Normalization
+        self._X = tf.layers.batch_normalization(self._X, training=True)
+
         self._action_probs_ph = tf.placeholder(
                 shape=[None, self._action_num], dtype=tf.float32)
 
         # Average policy network.
-        self._avg_network = snt.nets.MLP(output_sizes=self._layer_sizes)
-        self._avg_policy = self._avg_network(self._X)
+        fc = self._X
+        for dim in self._layer_sizes:
+            fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)
+        self._avg_policy = tf.contrib.layers.fully_connected(fc, self._action_num, activation_fn=None)
         self._avg_policy_probs = tf.nn.softmax(self._avg_policy)
 
         # Loss
@@ -142,8 +157,9 @@ class NFSPAgent(object):
 
         optimizer = tf.train.AdamOptimizer(learning_rate=self._sl_learning_rate, name='nfsp_adam')
 
-        self._learn_step = optimizer.minimize(self._loss)
-
+        update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS, scope=tf.get_variable_scope().name)
+        with tf.control_dependencies(update_ops):
+            self._learn_step = optimizer.minimize(self._loss)
 
     def feed(self, ts):
         ''' Feed data to inner RL agent
@@ -152,6 +168,10 @@ class NFSPAgent(object):
             ts (list): A list of 5 elements that represent the transition.
         '''
         self._rl_agent.feed(ts)
+        self.total_t += 1
+        if self.total_t>0 and len(self._reservoir_buffer) >= self._min_buffer_size_to_learn and self.total_t%self._train_every == 0:
+            sl_loss  = self.train_sl()
+            print('\rINFO - Agent {}, step {}, sl-loss: {}'.format(self._scope, self.total_t, sl_loss), end='')
 
     def step(self, state):
         ''' Returns the action to be taken.
@@ -166,7 +186,8 @@ class NFSPAgent(object):
         legal_actions = state['legal_actions']
         if self._mode == MODE.best_response:
             probs = self._rl_agent.predict(obs)
-            self._add_transition(obs, probs)
+            one_hot = np.eye(len(probs))[np.argmax(probs)]
+            self._add_transition(obs, one_hot)
 
         elif self._mode == MODE.average_policy:
             probs = self._act(obs)
@@ -184,9 +205,10 @@ class NFSPAgent(object):
 
         Returns:
             action (int): An action id.
+            probs (list): The list of action probabilies
         '''
         if self.evaluate_with == 'best_response':
-            action = self._rl_agent.eval_step(state)
+            action, probs = self._rl_agent.eval_step(state)
         elif self.evaluate_with == 'average_policy':
             obs = state['obs']
             legal_actions = state['legal_actions']
@@ -195,9 +217,7 @@ class NFSPAgent(object):
             action = np.random.choice(len(probs), p=probs)
         else:
             raise ValueError("'evaluate_with' should be either 'average_policy' or 'best_response'.")
-             
-
-        return action
+        return action, probs
 
     def sample_episode_policy(self):
         ''' Sample average/best_response policy
@@ -219,7 +239,7 @@ class NFSPAgent(object):
         info_state = np.expand_dims(info_state, axis=0)
         action_probs = self._sess.run(
                 self._avg_policy_probs,
-                feed_dict={self._info_state_ph: info_state})[0]
+                feed_dict={self._info_state_ph: info_state, self.is_train: False})[0]
 
         return action_probs
 
@@ -232,16 +252,10 @@ class NFSPAgent(object):
             state (numpy.array): The state.
             probs (numpy.array): The probabilities of each action.
         '''
-        #print(len(self._reservoir_buffer))
         transition = Transition(
                 info_state=state,
                 action_probs=probs)
         self._reservoir_buffer.add(transition)
-
-    def train_rl(self):
-        ''' Update the inner RL agent
-        '''
-        return self._rl_agent.train()
 
     def train_sl(self):
         ''' Compute the loss on sampled transitions and perform a avg-network update.
@@ -265,6 +279,7 @@ class NFSPAgent(object):
                 feed_dict={
                         self._info_state_ph: info_states,
                         self._action_probs_ph: action_probs,
+                        self.is_train: True,
                 })
 
         return loss

@@ -94,6 +94,8 @@ class UnoGame(object):
             (dict): The state of the player
         '''
         state = self.round.get_state(self.players, player_id)
+        state['player_num'] = self.get_player_num()
+        state['current_player'] = self.round.current_player 
         return state
 
     def get_payoffs(self):

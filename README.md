@@ -22,13 +22,19 @@ git clone https://github.com/datamllab/rlcard.git
 cd rlcard
 pip install -e .
 ```
-
-To try out PyTorch implementation for DQN and NFSP, please also run the following command: 
-
+or use PyPI with:
 ```
-pip install -e .[with_torch]
+pip install rlcard
 ```
-If you meet any problem with installing PyTorch using the command above, you may follow the instruction on [PyTorch official website](https://pytorch.org/get-started/locally/) to manually install PyTorch.
+To use tensorflow implementation, run:
+```
+pip install rlcard[tensorflow]
+```
+To try out PyTorch implementation for DQN and NFSP, please run: 
+```
+pip install rlcard[torch]
+```
+If you meet any problems when installing PyTorch with the command above, you may follow the instructions on [PyTorch official website](https://pytorch.org/get-started/locally/) to manually install PyTorch.
 
 ## Examples
 Please refer to [examples/](examples). A **short example** is as below.
@@ -53,7 +59,7 @@ We also recommend the following **toy examples**.
 *   [Training CFR on Leduc Hold'em](docs/toy-examples.md#training-cfr-on-leduc-holdem)
 
 ## Demo
-Run `examples/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](docs/games.md#leduc-holdem).
+With `tensorflow` installed, run `examples/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](docs/games.md#leduc-holdem).
 
 ```
 >> Leduc Hold'em pre-trained model
@@ -90,11 +96,23 @@ Agent 1: +++
 >> You choose action (integer):
 ```
 
+## Cheat sheet
+*   `rlcard.make(env_id, config={})`: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
+	*   `allow_step_back` defualt `False`. True if allowing `step_back` function to traverse backward in the tree.
+	*   `allow_raw_data`: default `False`. True if allowing raw data in the `state`.
+	*   `single_agent_mode`: default `False`. True if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
+	*   `active_player`: defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
+	*   `record_action`: Default `False`. If True, a field of `action_record` will be in the state to record the historical actions. This may be used for human-agent play.
+*   `env.step(action, raw_action=False)`: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be true if the action is raw action, i,e., string.
+*   `env.init_game()`: Initialize a game. Return the state and the first player ID.
+*   `env.run()`: Run a complete game and return trajectories and payoffs. The function can be used after the agents are set up.
+*   `state`: State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
+
 ## Documents
 Please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
 
 ## Available Environments
-We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information sets; **Avg. InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space. **Name:** the name that should be passed to `env.make` to create the game environment.
+We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information sets; **Avg. InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space. **Name:** the name that should be passed to `rlcard.make` to create the game environment.
 
 | Game                                                                                                                                                                                           | InfoSet Number  | Avg. InfoSet Size | Action Size | Name            | Status     |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------: | :---------------: | :---------: | :-------------: | :--------: |
@@ -102,6 +120,7 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 | Leduc Hold’em ([paper](http://poker.cs.ualberta.ca/publications/UAI05.pdf))                                                                                                                    | 10^2            | 10^2              | 10^0        | leduc-holdem    | Available  |
 | Limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [baike](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin))    | 10^14           | 10^3              | 10^0        | limit-holdem    | Available  |
 | Dou Dizhu ([wiki](https://en.wikipedia.org/wiki/Dou_dizhu), [baike](https://baike.baidu.com/item/%E6%96%97%E5%9C%B0%E4%B8%BB/177997?fr=aladdin))                                               | 10^53 ~ 10^83   | 10^23             | 10^4        | doudizhu        | Available  |
+| Simple Dou Dizhu ([wiki](https://en.wikipedia.org/wiki/Dou_dizhu), [baike](https://baike.baidu.com/item/%E6%96%97%E5%9C%B0%E4%B8%BB/177997?fr=aladdin))                                        | -               | -                 |             | simple-doudizhu | Available  |
 | Mahjong ([wiki](https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules), [baike](https://baike.baidu.com/item/%E9%BA%BB%E5%B0%86/215))                                                | 10^121          | 10^48             | 10^2        | mahjong         | Available  | 
 | No-limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [baike](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin)) | 10^162          | 10^3              | 10^4        | no-limit-holdem | Available  |
 | UNO ([wiki](https://en.wikipedia.org/wiki/Uno_\(card_game\)), [baike](https://baike.baidu.com/item/UNO%E7%89%8C/2249587))                                                                      |  10^163         | 10^10             | 10^1        | uno             | Available  |

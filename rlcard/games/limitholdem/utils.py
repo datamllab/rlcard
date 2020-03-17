@@ -446,7 +446,7 @@ def determine_winner(key_index, hands, all_players, potential_winner_index):
     Find out who wins in the situation of having players with same highest hand_catagory
     Args:
         key_index(int): the position of a card in a sorted handcard
-        hands(list): cards of those players with same highest hand_catagory. 
+        hands(list): cards of those players with same highest hand_catagory.
         e.g. hands = [['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7']]
         all_players(list): all the players in this round, 0 for losing and 1 for winning or draw
         potential_winner_index(list): the positions of those players with same highest hand_catagory in all_players

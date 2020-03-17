@@ -4,7 +4,8 @@ with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
 extras = {
-    'with_torch': ['torch>=1.3']
+    'torch': ['torch>=1.3'],
+    'tensorflow': ['tensorflow>=1.14,<2.0', 'tensorflow_probability==0.7.0']
 }
 
 setuptools.setup(
@@ -24,14 +25,13 @@ setuptools.setup(
     				'games/limitholdem/card2index.json',
     				'games/leducholdem/card2index.json',
     				'games/doudizhu/jsondata/*',
-				'games/uno/jsondata/*'
+				'games/uno/jsondata/*',
+                'games/simpledoudizhu/jsondata/*'
 	]},
     install_requires=[
-        'tensorflow>=1.14,<2.0',
-        'tensorflow_probability==0.7.0',
-        'dm-sonnet==1.35',
         'numpy>=1.16.3',
-        'matplotlib>=3.0'
+        'matplotlib>=3.0',
+        'termcolor',
     ],
     extras_require=extras,
     requires_python='>=3.5',

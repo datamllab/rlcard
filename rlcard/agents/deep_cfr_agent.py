@@ -38,9 +38,9 @@ import collections
 import random
 import numpy as np
 import tensorflow as tf
-import sonnet as snt
 
 from rlcard.utils.utils import remove_illegal
+
 sys.setrecursionlimit(10000000)
 
 AdvantageMemory = collections.namedtuple(
@@ -48,68 +48,6 @@ AdvantageMemory = collections.namedtuple(
 
 StrategyMemory = collections.namedtuple(
     'StrategyMemory', 'info_state iteration strategy_action_probs')
-
-class FixedSizeRingBuffer(object):
-    ''' ReplayBuffer of fixed size with a FIFO replacement policy.
-
-    Stored transitions can be sampled uniformly.
-
-    The underlying datastructure is a ring buffer, allowing 0(1) adding and
-    sampling.
-    '''
-    def __init__(self, replay_buffer_capacity):
-        ''' Initialize the buffer
-        '''
-
-        self._replay_buffer_capacity = replay_buffer_capacity
-        self._data = []
-        self._next_entry_index = 0
-
-    def add(self, element):
-        '''Adds `element` to the buffer.
-
-        If the buffer is full, the oldest element will be replaced.
-
-        Args:
-            element: data to be added to the buffer.
-        '''
-        if len(self._data) < self._replay_buffer_capacity:
-            self._data.append(element)
-        else:
-            self._next_entry_index = int(self._next_entry_index)
-            self._data[self._next_entry_index] = element
-            self._next_entry_index += 1
-            self._next_entry_index %= self._replay_buffer_capacity
-
-    def sample(self, num_samples):
-        ''' Returns `num_samples` uniformly sampled from the buffer.
-
-        Args:
-            num_samples (int): number of samples to draw.
-
-        Returns:
-            sample data (list): a list of random sampled elements of the buffer
-
-        Raises:
-            ValueError: If there are less than `num_samples` elements in the buffer
-        '''
-        if len(self._data) < num_samples:
-            raise ValueError("{} elements could not be sampled from size {}".format(
-                num_samples, len(self._data)))
-        return random.sample(self._data, num_samples)
-
-    def clear(self):
-        ''' Clear the buffer
-        '''
-        self._data = []
-        self._next_entry_index = 0
-
-    def __len__(self):
-        return len(self._data)
-
-    def __iter__(self):
-        return iter(self._data)
-
 
 class DeepCFR():
     ''' Implement the Deep CFR Algorithm.
@@ -151,6 +89,7 @@ class DeepCFR():
             memories
             memory_capacity (int): Number af samples that can be stored in memory
         '''
+        self.use_raw = False
         self._env = env
         self._session = session
         self._batch_size_advantage = batch_size_advantage
@@ -202,10 +141,10 @@ class DeepCFR():
         # Define strategy network, loss & memory.
         self._strategy_memories = FixedSizeRingBuffer(memory_capacity)
 
-        self._policy_network = snt.nets.MLP(
-            list(policy_network_layers) + [self._num_actions])
-
-        action_logits = self._policy_network(self._info_state_ph)
+        fc = self._info_state_ph
+        for dim in list(policy_network_layers):
+            fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)
+        action_logits = tf.contrib.layers.fully_connected(fc, self._num_actions, activation_fn=None)
 
         # Illegal actions are handled in the traversal code where expected payoff
         # and sampled regret is computed from the advantage networks.
@@ -221,14 +160,14 @@ class DeepCFR():
         self._advantage_memories = [
             FixedSizeRingBuffer(memory_capacity) for _ in range(self._num_players)
         ]
-        self._advantage_networks = [
-            snt.nets.MLP(list(advantage_network_layers) + [self._num_actions])
-            for _ in range(self._num_players)
-        ]
-        self._advantage_outputs = [
-            self._advantage_networks[i](self._info_state_ph)
-            for i in range(self._num_players)
-        ]
+        self._advantage_outputs = []
+        with tf.variable_scope('advantage') as vs:
+            for i in range(self._num_players):
+                fc = self._info_state_ph
+                for dim in list(advantage_network_layers):
+                    fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)
+                self._advantage_outputs.append(tf.contrib.layers.fully_connected(fc, self._num_actions, activation_fn=None))
+
         self._loss_advantages = []
         self._optimizer_advantages = []
         self._learn_step_advantages = []
@@ -281,7 +220,7 @@ class DeepCFR():
         adv_loss = [self.advantage_losses[p][-1] for p in self.advantage_losses.keys() if self.advantage_losses[p][-1] is not None]
         avg_adv_loss = sum(adv_loss) / len(adv_loss)
 
-        return self._policy_network, avg_adv_loss, policy_loss
+        return avg_adv_loss, policy_loss
 
     def eval_step(self, state):
         ''' Predict the action given state for evaluation
@@ -298,14 +237,13 @@ class DeepCFR():
         action_prob = remove_illegal(action_prob, legal_actions)
         action_prob /= action_prob.sum()
         action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
-        return action
+        return action, action_prob
 
     def reinitialize_advantage_networks(self):
         ''' Reinitialize the advantage networks
         '''
-        for p in range(self._num_players):
-            for key in self._advantage_networks[p].initializers:
-                self._advantage_networks[p].initializers[key]()
+        advantage_vars = [v for v in tf.global_variables() if 'advantage' in v.name]
+        tf.variables_initializer(var_list=advantage_vars)
 
     def action_advantage(self, state, player):
         ''' Returns action advantages for a single batch.
@@ -511,3 +449,65 @@ class DeepCFR():
                 self._iter_ph: np.array(iterations),
             })
         return loss_strategy
+
+class FixedSizeRingBuffer(object):
+    ''' ReplayBuffer of fixed size with a FIFO replacement policy.
+
+    Stored transitions can be sampled uniformly.
+
+    The underlying datastructure is a ring buffer, allowing 0(1) adding and
+    sampling.
+    '''
+    def __init__(self, replay_buffer_capacity):
+        ''' Initialize the buffer
+        '''
+
+        self._replay_buffer_capacity = replay_buffer_capacity
+        self._data = []
+        self._next_entry_index = 0
+
+    def add(self, element):
+        '''Adds `element` to the buffer.
+
+        If the buffer is full, the oldest element will be replaced.
+
+        Args:
+            element: data to be added to the buffer.
+        '''
+        if len(self._data) < self._replay_buffer_capacity:
+            self._data.append(element)
+        else:
+            self._next_entry_index = int(self._next_entry_index)
+            self._data[self._next_entry_index] = element
+            self._next_entry_index += 1
+            self._next_entry_index %= self._replay_buffer_capacity
+
+    def sample(self, num_samples):
+        ''' Returns `num_samples` uniformly sampled from the buffer.
+
+        Args:
+            num_samples (int): number of samples to draw.
+
+        Returns:
+            sample data (list): a list of random sampled elements of the buffer
+
+        Raises:
+            ValueError: If there are less than `num_samples` elements in the buffer
+        '''
+        if len(self._data) < num_samples:
+            raise ValueError("{} elements could not be sampled from size {}".format(
+                num_samples, len(self._data)))
+        return random.sample(self._data, num_samples)
+
+    def clear(self):
+        ''' Clear the buffer
+        '''
+        self._data = []
+        self._next_entry_index = 0
+
+    def __len__(self):
+        return len(self._data)
+
+    def __iter__(self):
+        return iter(self._data)
+
