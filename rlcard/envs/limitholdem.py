@@ -5,22 +5,24 @@ import numpy as np
 import rlcard
 from rlcard.envs.env import Env
 from rlcard.games.limitholdem.game import LimitholdemGame as Game
+from rlcard import models
 
 class LimitholdemEnv(Env):
     ''' Limitholdem Environment
     '''
 
-    def __init__(self, allow_step_back=False):
+    def __init__(self, config):
         ''' Initialize the Limitholdem environment
         '''
-        super().__init__(Game(allow_step_back), allow_step_back)
+        self.game = Game()
+        super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']
         self.state_shape=[72]
 
         with open(os.path.join(rlcard.__path__[0], 'games/limitholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
 
-    def get_legal_actions(self):
+    def _get_legal_actions(self):
         ''' Get all leagal actions
 
         Returns:
@@ -28,7 +30,7 @@ class LimitholdemEnv(Env):
         '''
         return self.game.get_legal_actions()
 
-    def extract_state(self, state):
+    def _extract_state(self, state):
         ''' Extract the state representation from state dictionary for agent
 
         Note: Currently the use the hand cards and the public cards. TODO: encode the states
@@ -39,10 +41,10 @@ class LimitholdemEnv(Env):
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
         '''
-        processed_state = {}
+        extracted_state = {}
 
         legal_actions = [self.actions.index(a) for a in state['legal_actions']]
-        processed_state['legal_actions'] = legal_actions
+        extracted_state['legal_actions'] = legal_actions
 
         public_cards = state['public_cards']
         hand = state['hand']
@@ -53,9 +55,14 @@ class LimitholdemEnv(Env):
         obs[idx] = 1
         for i, num in enumerate(raise_nums):
             obs[52 + i * 5 + num] = 1
-        processed_state['obs'] = obs
+        extracted_state['obs'] = obs
 
-        return processed_state
+        if self.allow_raw_data:
+            extracted_state['raw_obs'] = state
+            extracted_state['raw_legal_actions'] = [a for a in state['legal_actions']]
+        if self.record_action:
+            extracted_state['action_record'] = self.action_recorder
+        return extracted_state
 
     def get_payoffs(self):
         ''' Get the payoff of a game
@@ -65,7 +72,7 @@ class LimitholdemEnv(Env):
         '''
         return self.game.get_payoffs()
 
-    def decode_action(self, action_id):
+    def _decode_action(self, action_id):
         ''' Decode the action for applying to the game
 
         Args:
@@ -81,3 +88,11 @@ class LimitholdemEnv(Env):
             else:
                 return 'fold'
         return self.actions[action_id]
+
+    def _load_model(self):
+        ''' Load pretrained/rule model
+
+        Returns:
+            model (Model): A Model object
+        '''
+        return models.load('limit-holdem-rule-v1')

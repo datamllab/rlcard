@@ -1,83 +1,78 @@
 import matplotlib.pyplot as plt
 import os
+import csv
 
 class Logger(object):
     ''' Logger saves the running results and helps make plots from the results
     '''
 
-    def __init__(self, xlabel = '', ylabel = '', legend = '', log_path = None, csv_path = None):
+    def __init__(self, log_dir):
         ''' Initialize the labels, legend and paths of the plot and log file.
 
         Args:
-            xlabel (string): label of x axis of the plot
-            ylabel (string): label of y axis of the plot
-            legend (string): name of the curve
-            log_path (string): where to store the log file
-            csv_path (string): where to store the csv file
-
-        Note:
-            1. log_path must be provided to use the log() method. If the log file already exists, it will be deleted when Logger is initialized.
-            2. If csv_path is provided, then one record will be write to the file everytime add_point() method is called.
+            log_path (str): The path the log files
         '''
-        self.xlabel = xlabel
-        self.ylabel = ylabel
-        self.legend = legend
-        self.xs = []
-        self.ys = []
-        self.log_path = log_path
-        self.csv_path = csv_path
-        self.log_file = None
-        self.csv_file = None
-        if log_path is not None:
-            log_dir = os.path.dirname(log_path)
-            if not os.path.exists(log_dir):
-                os.makedirs(log_dir)
-            self.log_file = open(log_path, 'w')
-        if csv_path is not None:
-            csv_dir = os.path.dirname(csv_path)
-            if not os.path.exists(csv_dir):
-                os.makedirs(csv_dir)
-            self.csv_file = open(csv_path, 'w')
-            self.csv_file.write(xlabel+','+ylabel+'\n')
-            self.csv_file.flush()
+        self.log_dir = log_dir
+        self.txt_path = os.path.join(log_dir, 'log.txt')
+        self.csv_path = os.path.join(log_dir, 'performance.csv')
+        self.fig_path = os.path.join(log_dir, 'fig.png')
+
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
+        self.txt_file = open(self.txt_path, 'w')
+        self.csv_file = open(self.csv_path, 'w')
+        fieldnames = ['timestep', 'reward']
+        self.writer = csv.DictWriter(self.csv_file, fieldnames=fieldnames)
+        self.writer.writeheader()
 
     def log(self, text):
         ''' Write the text to log file then print it.
-
         Args:
             text(string): text to log
         '''
-        self.log_file.write(text+'\n')
-        self.log_file.flush()
+        self.txt_file.write(text+'\n')
+        self.txt_file.flush()
         print(text)
 
-    def add_point(self, x = None, y = None):
-        ''' Add a point to the plot
-
+    def log_performance(self, timestep, reward):
+        ''' Log a point in the curve
         Args:
-            x (Number): x coordinate value
-            y (Number): y coordinate value
+            timestep (int): the timestep of the current point
+            reward (float): the reward of the current point
         '''
-        if x is not None and y is not None:
-            self.xs.append(x)
-            self.ys.append(y)
-        else:
-            raise ValueError('x and y should not be None.')
+        self.writer.writerow({'timestep': timestep, 'reward': reward})
+        print('')
+        self.log('----------------------------------------')
+        self.log('  timestep     |  ' + str(timestep))
+        self.log('  reward       |  ' + str(reward))
+        self.log('----------------------------------------')
 
-        # If csv_path is not None then write x and y to file
+    def plot(self, algorithm):
+        plot(self.csv_path, self.fig_path, algorithm)
+
+    def close_files(self):
+        ''' Close the created file objects
+        '''
+        if self.txt_path is not None:
+            self.txt_file.close()
         if self.csv_path is not None:
-            self.csv_file.write(str(x)+','+str(y)+'\n')
-            self.csv_file.flush()
+            self.csv_file.close()
 
-    def make_plot(self, save_path = ''):
-        ''' Make plot using all stored points
-
-        Args:
-            save_path (string): where to store the plot
-        '''
+def plot(csv_path, save_path, algorithm):
+    ''' Read data from csv file and plot the results
+    '''
+    with open(csv_path) as csvfile:
+        print(csv_path)
+        reader = csv.DictReader(csvfile)
+        xs = []
+        ys = []
+        for row in reader:
+            xs.append(int(row['timestep']))
+            ys.append(float(row['reward']))
         fig, ax = plt.subplots()
-        ax.plot(self.xs, self.ys, label=self.legend)
-        ax.set(xlabel=self.xlabel, ylabel=self.ylabel)
+        ax.plot(xs, ys, label=algorithm)
+        ax.set(xlabel='timestep', ylabel='reward')
         ax.legend()
         ax.grid()
 
@@ -87,10 +82,3 @@ class Logger(object):
 
         fig.savefig(save_path)
 
-    def close_file(self):
-        ''' Close the created file objects
-        '''
-        if self.log_path is not None:
-            self.log_file.close()
-        if self.csv_path is not None:
-            self.csv_file.close()

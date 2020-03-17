@@ -11,11 +11,12 @@ class DoudizhuEnv(Env):
     ''' Doudizhu Environment
     '''
 
-    def __init__(self, allow_step_back=False):
-        super().__init__(Game(allow_step_back), allow_step_back)
+    def __init__(self, config):
+        self.game = Game()
+        super().__init__(config)
         self.state_shape = [6, 5, 15]
 
-    def extract_state(self, state):
+    def _extract_state(self, state):
         ''' Encode state
 
         Args:
@@ -39,8 +40,17 @@ class DoudizhuEnv(Env):
         if state['played_cards'] is not None:
             encode_cards(obs[5], state['played_cards'])
 
-        extrated_state = {'obs': obs, 'legal_actions': self.get_legal_actions()}
-        return extrated_state
+        extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions()}
+        if self.allow_raw_data:
+            extracted_state['raw_obs'] = state
+            # TODO: state['actions'] can be None, may have bugs
+            if state['actions'] == None:
+                extracted_state['raw_legal_actions'] = []
+            else:
+                extracted_state['raw_legal_actions'] = [a for a in state['actions']]
+        if self.record_action:
+            extracted_state['action_record'] = self.action_recorder
+        return extracted_state
 
     def get_payoffs(self):
         ''' Get the payoffs of players. Must be implemented in the child class.
@@ -50,7 +60,7 @@ class DoudizhuEnv(Env):
         '''
         return self.game.judger.judge_payoffs(self.game.round.landlord_id, self.game.winner_id)
 
-    def decode_action(self, action_id):
+    def _decode_action(self, action_id):
         ''' Action id -> the action in the game. Must be implemented in the child class.
 
         Args:
@@ -91,7 +101,7 @@ class DoudizhuEnv(Env):
                 min_index = index
         return specific_actions[min_index]
 
-    def get_legal_actions(self):
+    def _get_legal_actions(self):
         ''' Get all legal actions for current state
 
         Returns:

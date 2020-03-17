@@ -369,3 +369,23 @@ def assign_task(task_num, process_num):
     per_tasks = [task_num // process_num] * process_num
     per_tasks[0] += (task_num % process_num)
     return per_tasks
+
+def tournament(env, num):
+    ''' Evaluate he performance of the agents in the environment
+
+    Args:
+        env (Env class): The environment to be evaluated.
+        num (int): The number of games to play.
+ 
+    Returns:
+        A list of avrage payoffs for each player
+    '''
+    payoffs = [0 for _ in range(env.player_num)]
+    for _ in range(num):
+        _, _payoffs = env.run(is_training=False)
+        for i in range(len(payoffs)):
+            payoffs[i] += _payoffs[i]
+    for i in range(len(payoffs)):
+        payoffs[i] /= num
+    return payoffs
+

@@ -19,12 +19,3 @@ class Model(object):
               functioning well.
         '''
         raise NotImplementedError
-
-    @property
-    def use_raw(self):
-        ''' Indicate whether use raw state and action
-
-        Returns:
-            use_raw (boolean): True if using raw state and action
-        '''
-        raise NotImplementedError

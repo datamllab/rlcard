@@ -49,7 +49,7 @@ class DQNAgent(object):
                  batch_size=32,
                  action_num=2,
                  state_shape=None,
-                 norm_step=100,
+                 train_every=1,
                  mlp_layers=None,
                  learning_rate=0.00005):
 
@@ -63,6 +63,7 @@ class DQNAgent(object):
             replay_memory_size (int): Size of the replay memory
             replay_memory_init_size (int): Number of random experiences to sampel when initializing
               the reply memory.
+            train_every (int): Train the agent every X steps.
             update_target_estimator_every (int): Copy parameters from the Q estimator to the
               target estimator every N steps
             discount_factor (float): Gamma discount factor
@@ -74,10 +75,11 @@ class DQNAgent(object):
             evaluate_every (int): Evaluate every N steps
             action_num (int): The number of the actions
             state_space (list): The space of the state vector
-            norm_step (int): The number of the step used form noramlize state
+            train_every (int): Train the network every X steps.
             mlp_layers (list): The layer number and the dimension of each layer in MLP
             learning_rate (float): The learning rate of the DQN agent.
         '''
+        self.use_raw = False
         self.sess = sess
         self.scope = scope
         self.replay_memory_init_size = replay_memory_init_size
@@ -86,8 +88,7 @@ class DQNAgent(object):
         self.epsilon_decay_steps = epsilon_decay_steps
         self.batch_size = batch_size
         self.action_num = action_num
-        self.norm_step = norm_step
-
+        self.train_every = train_every
 
         # Total timesteps
         self.total_t = 0
@@ -99,31 +100,26 @@ class DQNAgent(object):
         self.epsilons = np.linspace(epsilon_start, epsilon_end, epsilon_decay_steps)
 
         # Create estimators
-        #with tf.variable_scope(scope):
         self.q_estimator = Estimator(scope=self.scope+"_q", action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, mlp_layers=mlp_layers)
         self.target_estimator = Estimator(scope=self.scope+"_target_q", action_num=action_num, learning_rate=learning_rate, state_shape=state_shape, mlp_layers=mlp_layers)
-
-        # Create normalizer
-        self.normalizer = Normalizer()
 
         # Create replay memory
         self.memory = Memory(replay_memory_size, batch_size)
 
     def feed(self, ts):
         ''' Store data in to replay buffer and train the agent. There are two stages.
-            In stage 1, populate the Normalizer to calculate mean and std.
-            The transition is NOT stored in the memory
-            In stage 2, the transition is stored to the memory.
+            In stage 1, populate the memory without training
+            In stage 2, train the agent every several timesteps
 
         Args:
             ts (list): a list of 5 elements that represent the transition
         '''
         (state, action, reward, next_state, done) = tuple(ts)
-        if self.total_t < self.norm_step:
-            self.feed_norm(state['obs'])
-        else:
-            self.feed_memory(state['obs'], action, reward, next_state['obs'], done)
+        self.feed_memory(state['obs'], action, reward, next_state['obs'], done)
         self.total_t += 1
+        tmp = self.total_t - self.replay_memory_init_size
+        if tmp>=0 and tmp%self.train_every == 0:
+            loss = self.train()
 
     def step(self, state):
         ''' Predict the action for genrating training data
@@ -147,11 +143,12 @@ class DQNAgent(object):
 
         Returns:
             action (int): an action id
+            probs (list): a list of probabilies
         '''
-        q_values = self.q_estimator.predict(self.sess, np.expand_dims(self.normalizer.normalize(state['obs']), 0))[0]
+        q_values = self.q_estimator.predict(self.sess, np.expand_dims(state['obs'], 0))[0]
         probs = remove_illegal(np.exp(q_values), state['legal_actions'])
         best_action = np.argmax(probs)
-        return best_action
+        return best_action, probs
 
     def predict(self, state):
         ''' Predict the action probabilities
@@ -164,7 +161,7 @@ class DQNAgent(object):
         '''
         epsilon = self.epsilons[min(self.total_t, self.epsilon_decay_steps-1)]
         A = np.ones(self.action_num, dtype=float) * epsilon / self.action_num
-        q_values = self.q_estimator.predict(self.sess, np.expand_dims(self.normalizer.normalize(state), 0))[0]
+        q_values = self.q_estimator.predict(self.sess, np.expand_dims(state, 0))[0]
         best_action = np.argmax(q_values)
         A[best_action] += (1.0 - epsilon)
         return A
@@ -185,8 +182,9 @@ class DQNAgent(object):
 
         # Perform gradient descent update
         state_batch = np.array(state_batch)
-
         loss = self.q_estimator.update(self.sess, state_batch, action_batch, target_batch)
+        print('\rINFO - Agent {}, step {}, rl-loss: {}'.format(self.scope, self.total_t, loss), end='')
+
 
         # Update the target estimator
         if self.train_t % self.update_target_estimator_every == 0:
@@ -194,15 +192,6 @@ class DQNAgent(object):
             print("\nINFO - Copied model parameters to target network.")
 
         self.train_t += 1
-        return loss
-
-    def feed_norm(self, state):
-        ''' Feed state to normalizer to collect statistics
-
-        Args:
-            state (numpy.array): the state that will be feed into normalizer
-        '''
-        self.normalizer.append(state)
 
     def feed_memory(self, state, action, reward, next_state, done):
         ''' Feed transition to memory
@@ -214,7 +203,7 @@ class DQNAgent(object):
             next_state (numpy.array): the next state after performing the action
             done (boolean): whether the episode is finished
         '''
-        self.memory.save(self.normalizer.normalize(state), action, reward, self.normalizer.normalize(next_state), done)
+        self.memory.save(state, action, reward, next_state, done)
 
     def copy_params_op(self, global_vars):
         ''' Copys the variables of two estimator to others.
@@ -228,48 +217,6 @@ class DQNAgent(object):
             op = v2.assign(v1)
             update_ops.append(op)
         self.sess.run(update_ops)
-
-
-
-class Normalizer(object):
-    ''' Normalizer class that tracks the running statistics for normlization
-    '''
-
-    def __init__(self):
-        ''' Initialize a Normalizer instance.
-        '''
-        self.mean = None
-        self.std = None
-        self.state_memory = []
-        self.max_size = 1000
-        self.length = 0
-
-    def normalize(self, s):
-        ''' Normalize the state with the running mean and std.
-
-        Args:
-            s (numpy.array): the input state
-
-        Returns:
-            a (int):  normalized state
-        '''
-        if self.length == 0:
-            return s
-        return (s - self.mean) / (self.std + 1e-8)
-
-    def append(self, s):
-        ''' Append a new state and update the running statistics
-
-        Args:
-            s (numpy.array): the input state
-        '''
-        if len(self.state_memory) > self.max_size:
-            self.state_memory.pop(0)
-        self.state_memory.append(s)
-        self.mean = np.mean(self.state_memory, axis=0)
-        self.std = np.std(self.state_memory, axis=0)
-        self.length = len(self.state_memory)
-
 
 class Estimator():
     ''' Q-Value Estimator neural network.
@@ -292,10 +239,12 @@ class Estimator():
         with tf.variable_scope(scope):
             # Build the graph
             self._build_model()
+            update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS, scope=tf.get_variable_scope().name)
         # Optimizer Parameters from original paper
         self.optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate, name='dqn_adam')
 
-        self.train_op = self.optimizer.minimize(self.loss, global_step=tf.contrib.framework.get_global_step())
+        with tf.control_dependencies(update_ops):
+            self.train_op = self.optimizer.minimize(self.loss, global_step=tf.contrib.framework.get_global_step())
 
     def _build_model(self):
         ''' Build an MLP model.
@@ -309,11 +258,16 @@ class Estimator():
         self.y_pl = tf.placeholder(shape=[None], dtype=tf.float32, name="y")
         # Integer id of which action was selected
         self.actions_pl = tf.placeholder(shape=[None], dtype=tf.int32, name="actions")
+        # Boolean to indicate whether is training or not
+        self.is_train = tf.placeholder(tf.bool, name="is_train")
 
         batch_size = tf.shape(self.X_pl)[0]
 
+        # Batch Normalization
+        X = tf.layers.batch_normalization(self.X_pl, training=self.is_train)
+
         # Fully connected layers
-        fc = tf.contrib.layers.flatten(self.X_pl)
+        fc = tf.contrib.layers.flatten(X)
         for dim in self.mlp_layers:
             fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)
         self.predictions = tf.contrib.layers.fully_connected(fc, self.action_num, activation_fn=None)
@@ -332,12 +286,13 @@ class Estimator():
         Args:
           sess (tf.Session): Tensorflow Session object
           s (numpy.array): State input of shape [batch_size, 4, 160, 160, 3]
+          is_train (boolean): True if is training
 
         Returns:
           Tensor of shape [batch_size, NUM_VALID_ACTIONS] containing the estimated
           action values.
         '''
-        return sess.run(self.predictions, { self.X_pl: s })
+        return sess.run(self.predictions, { self.X_pl: s, self.is_train:False})
 
     def update(self, sess, s, a, y):
         ''' Updates the estimator towards the given targets.
@@ -351,7 +306,7 @@ class Estimator():
         Returns:
           The calculated loss on the batch.
         '''
-        feed_dict = { self.X_pl: s, self.y_pl: y, self.actions_pl: a }
+        feed_dict = { self.X_pl: s, self.y_pl: y, self.actions_pl: a, self.is_train: True}
         _, _, loss = sess.run(
                 [tf.contrib.framework.get_global_step(), self.train_op, self.loss],
                 feed_dict)

@@ -8,15 +8,16 @@ class BlackjackEnv(Env):
     ''' Blackjack Environment
     '''
 
-    def __init__(self, allow_step_back=False):
+    def __init__(self, config):
         ''' Initialize the Blackjack environment
         '''
-        super().__init__(Game(allow_step_back), allow_step_back)
+        self.game = Game()
+        super().__init__(config)
         self.rank2score = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":10, "Q":10, "K":10}
         self.actions = ['hit', 'stand']
         self.state_shape = [2]
 
-    def get_legal_actions(self):
+    def _get_legal_actions(self):
         ''' Get all leagal actions
 
         Returns:
@@ -27,7 +28,7 @@ class BlackjackEnv(Env):
             encoded_action_list.append(i)
         return encoded_action_list
 
-    def extract_state(self, state):
+    def _extract_state(self, state):
         ''' Extract the state representation from state dictionary for agent
 
         Args:
@@ -57,7 +58,11 @@ class BlackjackEnv(Env):
 
         legal_actions = [i for i in range(len(self.actions))]
         extracted_state = {'obs': obs, 'legal_actions': legal_actions}
-
+        if self.allow_raw_data:
+            extracted_state['raw_obs'] = state
+            extracted_state['raw_legal_actions'] = [a for a in self.actions]
+        if self.record_action:
+            extracted_state['action_record'] = self.action_recorder
         return extracted_state
 
     def get_payoffs(self):
@@ -73,7 +78,7 @@ class BlackjackEnv(Env):
         elif self.game.winner['player'] == 1 and self.game.winner['dealer'] == 1:
             return [0]
 
-    def decode_action(self, action_id):
+    def _decode_action(self, action_id):
         ''' Decode the action for applying to the game
 
         Args:
