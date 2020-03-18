@@ -2,16 +2,7 @@
 '''
 
 import os
-try:
-    import tensorflow as tf
-    from rlcard.agents.nfsp_agent import NFSPAgent
-except:
-    print('WARNING: Tensorflow not installed. Run "pip install rlcard[tensorflow]" to install Tensorflow')
-try:
-    import torch
-    from rlcard.agents.nfsp_agent_pytorch import NFSPAgent as NFSPAgentPytorch
-except:
-    print('WAINING: PyTorch not installed. Run "pip install rlcard[torch]" to install PyTorch')
+
 import rlcard
 from rlcard.agents.cfr_agent import CFRAgent
 from rlcard.models.model import Model
@@ -26,6 +17,8 @@ class LeducHoldemNFSPModel(Model):
     def __init__(self):
         ''' Load pretrained model
         '''
+        import tensorflow as tf
+        from rlcard.agents.nfsp_agent import NFSPAgent
         self.graph = tf.Graph()
         self.sess = tf.Session(graph=self.graph)
 
@@ -65,6 +58,8 @@ class LeducHoldemNFSPPytorchModel(Model):
     def __init__(self):
         ''' Load pretrained model
         '''
+        import torch
+        from rlcard.agents.nfsp_agent_pytorch import NFSPAgent as NFSPAgentPytorch
         env = rlcard.make('leduc-holdem')
         self.nfsp_agents = []
         for i in range(env.player_num):
