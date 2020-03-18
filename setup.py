@@ -10,7 +10,7 @@ extras = {
 
 setuptools.setup(
     name="rlcard",
-    version="0.1.11",
+    version="0.1.12",
     author="Data Analytics at Texas A&M (DATA) Lab",
     author_email="khlai037@tamu.edu",
     description="A Toolkit for Reinforcement Learning in Card Games",
@@ -21,6 +21,8 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=('tests',)),
     package_data={
         'rlcard': ['models/pretrained/leduc_holdem_nfsp/*',
+                   'models/pretrained/leduc_holdem_cfr/*',
+                   'models/pretrained/leduc_holdem_nfsp_pytorch/*',
                    'games/uno/jsondata/action_space.json',
                    'games/limitholdem/card2index.json',
                    'games/leducholdem/card2index.json',
