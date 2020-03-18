@@ -322,17 +322,17 @@ def set_global_seed(seed):
     Note: If using other modules with randomness, they also need to be seeded
     '''
     if seed is not None:
-        # We only require Tensorflow or PyTorch, not both
-        try:
+        import subprocess
+        import sys
+
+        reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
+        installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
+        if 'tensorflow' in installed_packages:
             import tensorflow as tf
             tf.set_random_seed(seed)
-        except:
-            pass
-        try:
+        if 'torch' in installed_packages:
             import torch
             torch.manual_seed(seed)
-        except:
-            pass
         np.random.seed(seed)
         random.seed(seed)
 
