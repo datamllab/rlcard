@@ -3,8 +3,18 @@ Contribution to this project is greatly appreciated! If you find any bugs or hav
 
 ## Roadmaps
 
-*   **Human-Bot Visualization.** Develop GUI for human interactions (currently we only support terminal-based GUI)
-*   **Analysis Tools.** Develop tools to visualize the decisions of the agents.
-*   **Rule-based Agent and Pre-trained Models.** Provide more rule-based agents and pre-trained models to benchmark the evaluation (currently we only support Leduc Hold'em and UNO)
-*   **Leaderboard.** Develop a platform that enables everyone to upload his/her trained model and compete with each other worldwide.
+*   **Rule-based Agent and Pre-trained Models.** Provide more rule-based agents and pre-trained models to benchmark the evaluation. We currently have several models in `/models`.
 *   **More Games and Algorithms.** Develop more games and algorithms.
+*   **Keras Implementation** Provide Keras Implementation of the algorithms.
+*   **Hyperparameter Search** Search hyperparameters for each environment and update the best one in the example.
+
+## How to create a pull request?
+
+If this your first time to contribute to a project, kindly follow the following instructions. You may find [Creating a pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request) helpful. Mainly, you need to take the following steps to send a pull request:
+
+*   Click **Fork** in the upper-right corner of the project main page to create a new branch in your local Github.
+*   Clone the repo from your local repo in your Github.
+*   Make changes in your computer.
+*   Commit and push your local changes to your local repo.
+*   Send a pull request to merge your local branch to the branches in RLCard project.
+
