@@ -4,14 +4,15 @@
     Date created: 2/12/2020
 '''
 
-from rlcard.core import Game
-from rlcard.games.gin_rummy.player import GinRummyPlayer
-from rlcard.games.gin_rummy.round import GinRummyRound
-from rlcard.games.gin_rummy.settings import Settings, DealerForRound
-
 from typing import List
 
-from rlcard.games.gin_rummy.action_event import *
+from rlcard.core import Game
+from .player import GinRummyPlayer
+from .round import GinRummyRound
+from .judge import GinRummyJudge
+from .utils.settings import Settings, DealerForRound
+
+from .utils.action_event import *
 
 import random
 
@@ -23,10 +24,11 @@ class GinRummyGame(Game):
     def __init__(self, allow_step_back=False):
         '''Initialize the class GinRummyGame
         '''
-        self.allow_step_back: bool = allow_step_back
+        self.allow_step_back = allow_step_back
+        self.judge = GinRummyJudge(game=self)
         self.settings = Settings()
-        self.actions: List[ActionEvent] or None = None  # must reset in init_game
-        self.round: GinRummyRound or None = None  # must reset in init_game
+        self.actions = None  # type: List[ActionEvent] or None # must reset in init_game
+        self.round = None  # round: GinRummyRound or None, must reset in init_game
 
     def init_game(self):
         ''' Initialize all characters in the game and start round 1

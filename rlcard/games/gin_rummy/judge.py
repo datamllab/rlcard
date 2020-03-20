@@ -4,14 +4,18 @@
     Date created: 2/12/2020
 '''
 
-from rlcard.games.gin_rummy.action_event import *
-from rlcard.games.gin_rummy.card import Card
-from rlcard.games.gin_rummy.game import GinRummyGame
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .game import GinRummyGame
 
 from typing import List
 
-import rlcard.games.gin_rummy.melding as melding
-import rlcard.games.gin_rummy.utils as utils
+from .utils.action_event import *
+from .card import Card
+from .utils.scorers import GinRummyScorer
+
+import rlcard.games.gin_rummy.utils.melding as melding
+import rlcard.games.gin_rummy.utils.utils as utils
 
 
 class GinRummyJudge(object):
@@ -20,17 +24,18 @@ class GinRummyJudge(object):
         Judge decides legal actions for current player
     '''
 
-    def __init__(self, game: GinRummyGame):
+    def __init__(self, game: 'GinRummyGame'):
         ''' Initialize the class GinRummyJudge
         :param game: GinRummyGame
         '''
         self.game = game
+        self.scorer = GinRummyScorer()
 
     def get_legal_actions(self) -> List[ActionEvent]:
         """
         :return: List[ActionEvent] of legal actions
         """
-        legal_actions: List[ActionEvent] = []
+        legal_actions = []  # type: List[ActionEvent]
         last_action = self.game.get_last_action()
         last_action_type = type(last_action)
         if last_action is None or \
@@ -86,7 +91,7 @@ class GinRummyJudge(object):
         return legal_actions
 
 
-def can_gin(game: GinRummyGame) -> bool:
+def can_gin(game: 'GinRummyGame') -> bool:
     result = False
     last_action = game.get_last_action()
     last_action_type = type(last_action)
@@ -103,7 +108,7 @@ def can_gin(game: GinRummyGame) -> bool:
     return result
 
 
-def get_knock_cards(game: GinRummyGame) -> List[Card]:
+def get_knock_cards(game: 'GinRummyGame') -> List[Card]:
     """
     :param game: GinRummyGame
     :return: list[Card] of cards that player can knock with

@@ -4,16 +4,15 @@
     Date created: 2/16/2020
 '''
 
-from rlcard.games.gin_rummy.action_event import *
+from typing import List
+
+from rlcard.games.gin_rummy.utils.action_event import *
 from rlcard.games.gin_rummy.card import Card
 from rlcard.games.gin_rummy.player import GinRummyPlayer
 
-from typing import List
-
 
 #
-#   The following classes are not essential.
-#   They are used to keep a move_sheet history of the moves in a round.
+#   These classes are used to keep a move_sheet history of the moves in a round.
 #
 
 class GinRummyMove(object):
@@ -36,8 +35,8 @@ class DealHandMove(GinRummyMove):
         self.shuffled_deck = shuffled_deck
 
     def __str__(self):
-        shuffled_deck_text = " ".join([f"{card}" for card in self.shuffled_deck])
-        return f"{self.player_dealing} deal shuffled_deck=[{shuffled_deck_text}]"
+        shuffled_deck_text = " ".join([str(card) for card in self.shuffled_deck])
+        return "{} deal shuffled_deck=[{}]".format(self.player_dealing, shuffled_deck_text)
 
 
 class DrawCardMove(PlayerMove):
@@ -48,7 +47,7 @@ class DrawCardMove(PlayerMove):
         self.card = card
 
     def __str__(self):
-        return f"{self.player} {self.action} {self.card}"
+        return "{} {} {}".format(self.player, self.action, self.card)
 
 
 class PickupDiscardMove(PlayerMove):
@@ -59,7 +58,7 @@ class PickupDiscardMove(PlayerMove):
         self.card = card
 
     def __str__(self):
-        return f"{self.player} {self.action} {self.card}"
+        return "{} {} {}".format(self.player, self.action, self.card)
 
 
 class DeclareDeadHandMove(PlayerMove):
@@ -69,7 +68,7 @@ class DeclareDeadHandMove(PlayerMove):
         assert type(action) is DeclareDeadHandAction
 
     def __str__(self):
-        return f"{self.player} {self.action}"
+        return "{} {}".format(self.player, self.action)
 
 
 class DiscardMove(PlayerMove):
@@ -79,7 +78,7 @@ class DiscardMove(PlayerMove):
         assert type(action) is DiscardAction
 
     def __str__(self):
-        return f"{self.player} {self.action}"
+        return "{} {}".format(self.player, self.action)
 
 
 class KnockMove(PlayerMove):
@@ -89,7 +88,7 @@ class KnockMove(PlayerMove):
         assert type(action) is KnockAction
 
     def __str__(self):
-        return f"{self.player} {self.action}"
+        return "{} {}".format(self.player, self.action)
 
 
 class GinMove(PlayerMove):
@@ -99,7 +98,7 @@ class GinMove(PlayerMove):
         assert type(action) is GinAction
 
     def __str__(self):
-        return f"{self.player} {self.action}"
+        return "{} {}".format(self.player, self.action)
 
 
 class ScoreNorthMove(PlayerMove):
@@ -114,8 +113,8 @@ class ScoreNorthMove(PlayerMove):
         self.deadwood_count = deadwood_count  # for information use only
 
     def __str__(self):
-        best_meld_cluster_text = f"{[[str(card) for card in meld_pile] for meld_pile in self.best_meld_cluster]}"
-        return f"{self.player} {self.action} {self.deadwood_count} {best_meld_cluster_text}"
+        best_meld_cluster_text = "{}".format([[str(card) for card in meld_pile] for meld_pile in self.best_meld_cluster])
+        return "{} {} {} {}".format(self.player, self.action, self.deadwood_count, best_meld_cluster_text)
 
 
 class ScoreSouthMove(PlayerMove):
@@ -130,5 +129,5 @@ class ScoreSouthMove(PlayerMove):
         self.deadwood_count = deadwood_count  # for information use only
 
     def __str__(self):
-        best_meld_cluster_text = f"{[[str(card) for card in meld_pile] for meld_pile in self.best_meld_cluster]}"
-        return f"{self.player} {self.action} {self.deadwood_count} {best_meld_cluster_text}"
+        best_meld_cluster_text = "{}".format([[str(card) for card in meld_pile] for meld_pile in self.best_meld_cluster])
+        return "{} {} {} {}".format(self.player, self.action, self.deadwood_count, best_meld_cluster_text)

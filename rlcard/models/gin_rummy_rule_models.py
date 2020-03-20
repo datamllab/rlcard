@@ -1,42 +1,39 @@
 '''
-    File name: gin_rummy/agents.py
+    File name: models/gin_rummy_rule_models.py
     Author: William Hale
     Date created: 2/12/2020
+
+    Gin Rummy rule models
 '''
 
 import numpy as np
 
-from rlcard.games.gin_rummy.action_event import *
+import rlcard
+from rlcard.models.model import Model
+
+from rlcard.games.gin_rummy.utils.action_event import *
 from rlcard.games.gin_rummy.card import Card
 
-import rlcard.games.gin_rummy.utils as utils
-
-#
-#   You can choose a random agent or one of the agents below for the opponent of the agent being trained.
-#
+import rlcard.games.gin_rummy.utils.utils as utils
 
 
-class HighLowAgent(object):
-    ''' Agent always discards highest deadwood value card
+class GinRummyHighLowRuleAgent(object):
+    '''
+        Agent always discards highest deadwood value card
     '''
 
-    def __init__(self, action_num):
-        ''' Initilize the agent
-
-        Args:
-            action_num (int): the size of the output action space
-        '''
-        self.action_num = action_num
+    def __init__(self):
+        self.use_raw = False  # FIXME: should this be True ?
 
     @staticmethod
     def step(state):
-        ''' Predict the action given the current state in training data.
+        ''' Predict the action given the current state.
 
         Args:
             state (numpy.array): an numpy array that represents the current state
 
         Returns:
-            action (int): the action predicted (a card with maximum deadwood value)
+            action (int): the action predicted
         '''
         discard_action_range = range(discard_action_id, discard_action_id + 52)  # 200218 wch kludge
         legal_actions = state['legal_actions']
@@ -59,5 +56,31 @@ class HighLowAgent(object):
 
         Returns:
             action (int): the action predicted by the agent
+            probabilities (list): The list of action probabilities
         '''
-        return self.step(state)
+        probabilities = []
+        return self.step(state), probabilities
+
+
+class GinRummyHighLowRuleModel(Model):
+    ''' Gin Rummy HighLow Rule Model
+    '''
+
+    def __init__(self):
+        ''' Load pre-trained model
+        '''
+        env = rlcard.make('gin-rummy')
+        rule_agent = GinRummyHighLowRuleAgent()
+        self.rule_agents = [rule_agent for _ in range(env.player_num)]
+
+    @property
+    def agents(self):
+        ''' Get a list of agents for each position in a the game
+
+        Returns:
+            agents (list): A list of agents
+
+        Note: Each agent should be just like RL agent with step and eval_step
+              functioning well.
+        '''
+        return self.rule_agents

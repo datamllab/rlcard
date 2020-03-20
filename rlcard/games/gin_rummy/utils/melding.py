@@ -6,13 +6,12 @@
 
 from rlcard.games.gin_rummy.card import Card
 
-import rlcard.games.gin_rummy.utils as utils
+import rlcard.games.gin_rummy.utils.utils as utils
 
 from typing import List
 from typing import Set
 
 import copy
-import random
 
 """
     Terminology:
@@ -31,7 +30,7 @@ def get_meld_clusters(hand: List[Card],
                       opponent_meld_piles: List[List[Card]] = None) -> List[List[Set[Card]]]:
     # if is_going_out is true, then return only meld_piles with deadwood count <= 10
     # opponent_meld_piles are the meld_piles for the opponent who has knocked to be used for laying off cards
-    result: List[List[Set[Card]]] = []
+    result = []  # type: List[List[Set[Card]]]
     all_run_melds = [set(x) for x in _get_all_run_melds(hand)]
     all_set_melds = [set(x) for x in _get_all_set_melds(hand)]
     all_melds = all_run_melds + all_set_melds
@@ -71,7 +70,7 @@ def get_meld_clusters(hand: List[Card],
 
 
 def get_best_meld_clusters(hand: List[Card]) -> List[List[Set[Card]]]:
-    result: List[List[Set[Card]]] = []
+    result = []  # type: List[List[Set[Card]]]
     meld_clusters = get_meld_clusters(hand=hand, going_out_deadwood_count=100, is_going_out=False)
     meld_clusters_count = len(meld_clusters)
     if meld_clusters_count > 0:
@@ -130,27 +129,3 @@ def _get_all_set_melds(hand: List[Card]) -> List[List[Card]]:
             for meld_card in max_set_meld:
                 result.append([card for card in max_set_meld if card != meld_card])
     return result
-
-
-# For test
-
-def test01():
-    deck = Card.init_standard_deck()
-    print(f"deck: {[str(card) for card in deck]}")
-    hand = random.sample(deck, 20)
-    print(f"hand: {[str(card) for card in hand]}")
-    all_set_melds = _get_all_set_melds(hand)
-    print(f"all_set_melds={[[str(card) for card in meld_pile] for meld_pile in all_set_melds]}")
-    all_run_melds = _get_all_run_melds(hand)
-    print(f"all_run_melds={[[str(card) for card in run] for run in all_run_melds]}")
-    going_out_deadwood_count = 10
-    meld_clusters = get_meld_clusters(hand=hand, going_out_deadwood_count=going_out_deadwood_count, is_going_out=True)
-    for meld_cluster in meld_clusters:
-        deadwood = utils.get_deadwood(hand=hand, meld_cluster=meld_cluster)
-        meld_cluster_text = f"meld_cluster={[[str(card) for card in meld_pile] for meld_pile in meld_cluster]}"
-        deadwood_text = f"deadwood={[str(card) for card in deadwood]}"
-        print(f"{meld_cluster_text} {deadwood_text}")
-
-
-if __name__ == '__main__':
-    test01()

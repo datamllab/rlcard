@@ -33,20 +33,20 @@ class Settings(object):
 
     def print_settings(self):
         print("========== Settings ==========")
-        print(f"scorer_name={self.scorer_name}")
-        print(f"dealer_for_round={self.dealer_for_round}")
-        print(f"stockpile_dead_card_count={self.stockpile_dead_card_count}")
-        print(f"going_out_deadwood_count={self.going_out_deadwood_count}")
-        print(f"max_drawn_card_count={self.max_drawn_card_count}")
+        print("scorer_name={}".format(self.scorer_name))
+        print("dealer_for_round={}".format(self.dealer_for_round))
+        print("stockpile_dead_card_count={}".format(self.stockpile_dead_card_count))
+        print("going_out_deadwood_count={}".format(self.going_out_deadwood_count))
+        print("max_drawn_card_count={}".format(self.max_drawn_card_count))
 
-        print(f"is_allowed_knock={self.is_allowed_knock}")
-        print(f"is_allowed_gin={self.is_allowed_gin}")
-        print(f"is_allowed_pick_up_discard={self.is_allowed_pick_up_discard}")
+        print("is_allowed_knock={}".format(self.is_allowed_knock))
+        print("is_allowed_gin={}".format(self.is_allowed_gin))
+        print("is_allowed_pick_up_discard={}".format(self.is_allowed_pick_up_discard))
 
-        print(f"is_allowed_to_discard_picked_up_card={self.is_allowed_to_discard_picked_up_card}")
+        print("is_allowed_to_discard_picked_up_card={}".format(self.is_allowed_to_discard_picked_up_card))
 
-        print(f"is_always_knock={self.is_always_knock}")
-        print(f"is_south_never_knocks={self.is_south_never_knocks}")
+        print("is_always_knock={}".format(self.is_always_knock))
+        print("is_south_never_knocks={}".format(self.is_south_never_knocks))
         print("==============================")
 
     def set_high_low(self):  # speeding up training 200213

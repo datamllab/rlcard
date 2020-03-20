@@ -7,15 +7,13 @@
 from rlcard import models
 
 from rlcard.envs.env import Env
-from rlcard.games.gin_rummy.action_event import *
+from rlcard.games.gin_rummy.utils.action_event import *
 from rlcard.games.gin_rummy.game import GinRummyGame as Game
-from rlcard.games.gin_rummy.judge import GinRummyJudge
 from rlcard.games.gin_rummy.player import GinRummyPlayer
-from rlcard.games.gin_rummy.scorers import Scorer
 
 import numpy as np
-import rlcard.games.gin_rummy.scorers as scorers
-import rlcard.games.gin_rummy.utils as utils
+import rlcard.games.gin_rummy.utils.scorers as scorers
+import rlcard.games.gin_rummy.utils.utils as utils
 
 from typing import Callable
 
@@ -28,8 +26,6 @@ class GinRummyEnv(Env):
         self.game = Game()
         super().__init__(config=config)
         self.state_shape = [5, 52]
-        self.judge = GinRummyJudge(game=self.game)
-        self.scorer: Scorer = scorers.GinRummyScorer()
 
     def _extract_state(self, state):  # 200213 don't use state ???
         ''' Encode state
@@ -73,7 +69,7 @@ class GinRummyEnv(Env):
         Returns:
             payoffs (list): a list of payoffs for each player
         '''
-        payoffs = self.scorer.get_payoffs(game=self.game)
+        payoffs = self.game.judge.scorer.get_payoffs(game=self.game)
         return payoffs
 
     def _decode_action(self, action_id) -> ActionEvent:  # FIXME 200213 should return str
@@ -93,89 +89,14 @@ class GinRummyEnv(Env):
         Returns:
             legal_actions (list): a list of legal actions' id
         '''
-        legal_actions = self.judge.get_legal_actions()
+        legal_actions = self.game.judge.get_legal_actions()
         legal_actions_ids = [action_event.action_id for action_event in legal_actions]
         return legal_actions_ids
 
     def _load_model(self):
-        ''' Load pretrained/rule model
+        ''' Load pre-trained/rule model
 
         Returns:
             model (Model): A Model object
         '''
-        assert False  # FIXME: stub
-        return models.load('uno-rule-v1')  # FIXME: stub
-
-    def set_scorer(self, printing_configuration: bool = False,
-                   get_payoff: Callable[[GinRummyPlayer, Game], int or float] = None):
-        if self.game.settings.scorer_name == "GinRummyScorer":
-            self.scorer = scorers.GinRummyScorer(get_payoff=get_payoff)
-        elif self.game.settings.scorer_name == "HighLowScorer":
-            self.scorer = scorers.HighLowScorer(get_payoff=get_payoff)
-        else:
-            raise Exception("GinRummyEnv: cannot determine scorer.")
-        if printing_configuration:
-            print("")
-            print("========== Scorer ==========")
-            print(f"Scorer is {self.scorer.name}")
-            print("============================")
-
-    def print_state(self, player):  # FIXME: stub
-        ''' Print out the state of a given player
-
-        Args:
-            player (int): Player id
-        '''
-        state = self.game.get_state(player)  # FIXME: should I be using just this ???
-        dealer_id = self.game.round.dealer_id
-        current_player_id = self.game.round.current_player_id
-        stock_pile = self.game.round.dealer.stock_pile
-        discard_pile = self.game.round.dealer.discard_pile
-        #  FIXME: game needs card sort function
-        north_held_pile = sorted(self.game.round.players[0].hand, key=lambda card: card.card_id, reverse=True)
-        south_held_pile = sorted(self.game.round.players[1].hand, key=lambda card: card.card_id, reverse=True)
-        print('\n=============== Your Hand ===============')
-        print(f"{[str(card) for card in south_held_pile]}")
-        print('')
-        print('=============== Last Card ===============')
-        print('')
-        print('========== Agents Card Number ===========')
-        for i in range(self.player_num):
-            if i != self.active_player:
-                print('Agent {} has {} cards.'.format(i, len(self.game.round.players[i].hand)))
-        print('======== Actions You Can Choose =========')
-        # for i, action in enumerate(state['legal_actions']):
-        #     if i < len(state['legal_actions']) - 1:
-        #         print(', ', end='')
-        print('\n')
-        # FIXME: new version
-        lines = []
-        lines.append(f"--- New version ---")
-        #  FIXME: game needs short name for player
-        # lines.append(f"dealer: {utils.player_short_name(dealer_id)}")
-        # lines.append(f"current_player: {utils.player_short_name(current_player_id)}")
-        lines.append(f"dealer: {dealer_id}")
-        lines.append(f"current_player: {current_player_id}")
-        lines.append(f"north hand: {[str(card) for card in north_held_pile]}")
-        lines.append(f"stockpile: {[str(card) for card in stock_pile]}")
-        lines.append(f"discard pile: {[str(card) for card in discard_pile]}")
-        lines.append(f"south hand: {[str(card) for card in south_held_pile]}")
-        print("\n".join(lines))
-
-
-    def print_result(self, player):
-        ''' Print the game result when the game is over
-
-        Args:
-            player (int): The human player id
-        '''
-        print(f"GinRummyEnv print_result: player={player}")  # FIXME: stub
-
-    @staticmethod
-    def print_action(action):
-        ''' Print out an action in a nice form
-
-        Args:
-            action (str): A string a action
-        '''
-        print(f"GinRummyEnv print_action: action={action}")  # FIXME: stub
+        raise NotImplementedError

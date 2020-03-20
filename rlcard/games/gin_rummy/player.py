@@ -4,9 +4,9 @@
     Date created: 2/12/2020
 '''
 
-from rlcard.games.gin_rummy.card import Card
-
 from typing import List
+
+from .card import Card
 
 
 class GinRummyPlayer(object):
@@ -17,9 +17,9 @@ class GinRummyPlayer(object):
         Args:
             player_id (int): id for the player
         '''
-        self.player_id: int = player_id
-        self.hand: List[Card] = []
-        self.known_cards: List[Card] = []  # opponent knows cards picked up by player and not yet discarded
+        self.player_id = player_id
+        self.hand = []  # type: List[Card]
+        self.known_cards = []  # type: List[Card]  # opponent knows cards picked up by player and not yet discarded
 
     def get_player_id(self) -> int:
         ''' Return player's id
