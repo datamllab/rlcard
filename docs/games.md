@@ -233,7 +233,7 @@ In Uno environment, we encode the state into 7 feature planes. The size of each 
 | ----- | :----------------------- |
 | 0-2   | hand                     |
 | 3     | target                   |
-| 4-6   | the recent three actions |
+| 4-6   | others' hand             |
 
 We use 3 planes to represnt players' hand. Specifically, planes 0-2 represent 0 card, 1 card, 2 cards, respectively. Planes 4-6 are the same.
 
