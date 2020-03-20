@@ -227,13 +227,15 @@ In state representation, each card is represented as a string of color and trait
 
 ### State Encoding of Uno
 
-In Uno environment, we encode the state into 7 feature planes. The size of each plane is 4*15. Each entry of a plane can be either 1 or 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/uno.py](../rlcard/envs/uno.py). The example encoded planes are as below:
+In Uno environment, we encode the state into 7 feature planes. The size of each plane is 4*15. Row number 4 means four colors. Column number 15 means 10 number cards from 0 to 9 and 5 special cards—"Wild", "Wild Draw Four", "Skip", "Draw Two", and "Reverse". Each entry of a plane can be either 1 or 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/uno.py](../rlcard/envs/uno.py). The example encoded planes are as below:
 
 | Plane | Feature                  |
 | ----- | :----------------------- |
 | 0-2   | hand                     |
 | 3     | target                   |
 | 4-6   | the recent three actions |
+
+We use 3 planes to represnt players' hand. Specifically, planes 0-2 represent 0 card, 1 card, 2 cards, respectively. Planes 4-6 are the same.
 
 ### Action Encoding of Uno
 
