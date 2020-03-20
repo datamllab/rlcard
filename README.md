@@ -55,7 +55,7 @@ import rlcard
 from rlcard.agents.random_agent import RandomAgent
 
 env = rlcard.make('blackjack')
-env.set_agents([RandomAgent()])
+env.set_agents([RandomAgent(action_num=env.action_num)])
 
 trajectories, payoffs = env.run()
 ```
@@ -150,6 +150,7 @@ The purposes of the main modules are listed as below:
 *   **env.step(action, raw_action=False)**: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be `True` if the action is raw action (string).
 *   **env.step_back()**: Available only when `allow_step_back` is `True. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR. 
 *   **env.init_game()**: Initialize a game. Return the state and the first player ID.
+*   **env.get_payoffs()**: In the end of the game, return a list of payoffs for all the players.
 *   **env.run()**: Run a complete game and return trajectories and payoffs. The function can be used after the agents are set up.
 *   **State Definition**: State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
 

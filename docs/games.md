@@ -139,7 +139,7 @@ Each player will receive a reward 0 (lose) or 1 (win) in the end of the game.
 
 ## Mahjong
 Mahjong is a tile-based game developed in China, and has spread throughout the world since 20th century. It is commonly played
-but 4 players. The game is played with a set of 136 tiles. In turn players draw and discard tiles until  
+by 4 players. The game is played with a set of 136 tiles. In turn players draw and discard tiles until  
 The goal of the game is to complete the leagal hand using the 14th drawn tile to form 4 sets and a pair. 
 We revised the game into a simple version that all of the winning set are equal, and player will win as long as she complete 
 forming 4 sets and a pair. Please refer the detail on [Wikipedia](https://en.wikipedia.org/wiki/Mahjong) or  [Baike](https://baike.baidu.com/item/麻将/215).

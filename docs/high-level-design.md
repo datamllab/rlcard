@@ -4,7 +4,7 @@ This document introduces the high-level design for the environments, the games, 
 ## Environments
 We wrap each game with an `Env` class. The responsibility of `Env` is to help you generate trajectories of the games. For developing Reinforcement Learning (RL) algorithms, we recommend to use the following interfaces:
 
-*   `set_agents`: This function tells the `Env` what agents will be used to perform actions in the game. Different games may have a different number of agents. The input of the function is a list of `Agent` class. For example, `env.set_agent([RandomAgent(), RandomAgent()])` indicates that two random agents will be used to generate the trajectories.
+*   `set_agents`: This function tells the `Env` what agents will be used to perform actions in the game. Different games may have a different number of agents. The input of the function is a list of `Agent` class. For example, `env.set_agent([RandomAgent(action_num=env.action_num) for _ in range(2)])` indicates that two random agents will be used to generate the trajectories.
 *   `run`: After setting the agents, this interface will run a complete trajectory of the game, calculate the reward for each transition, and reorganize the data so that it can be directly fed into a RL algorithm.
 
 For advanced access to the environment, such as traversal of the game tree, we provide the following interfaces:
@@ -16,7 +16,6 @@ For advanced access to the environment, such as traversal of the game tree, we p
 We also support single-agent mode and human mode. Examples can be found in [examples/](../examples).
 
 *   Single agent mode: single-agent environments are developped by simulating other players with pre-trained models or rule-based models. You can enable single-agent mode by `rlcard.make(ENV_ID, config={'single_agent_mode':True})`. Then the `step` function will return `(next_state, reward, done)` just as common single-agent environments. `env.reset()` will reset the game and return the first state.
-*   Human mode: we provide interfaces to play with the trained agents. You can enable human mode by `rlcard.make(ENV_ID, config={'human_mode':True})`. Then the terminal will print out game information and we play with the agents.
 
 ## Games
 Card games usually have similar structures. We abstract some concepts in card games and follow the same design pattern. In this way, users/developers can easily dig into the code and change the rules for research purpose. Specifically, the following classes are used in all the games:
