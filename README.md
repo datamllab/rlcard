@@ -107,32 +107,6 @@ Agent 1: +++
 >> You choose action (integer):
 ```
 
-## Library Structure
-The purposes of the main modules are listed as below:
-
-*   [/examples](examples): Examples of using RLCard.
-*   [/docs](docs): Documentation of RLCard.
-*   [/tests](tests): Testing scripts for RLCard.
-*   [/rlcard/agents](rlcard/agents): Reinforcement learning algorithms and human agents.
-*   [/rlcard/envs](rlcard/envs): Environment wrappers (state representation, action encoding etc.)
-*   [/rlcard/games](rlcard/games): Various game engines.
-*   [/rlcard/models](rlcard/models): Model zoo including pre-trained models and rule models.
-*   [/rlcard/agents](rlcard/agents): Reinforcement learning algorithms and human agents.
-
-
-## API Cheat Sheet
-*   **rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
-	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
-	*   `allow_raw_data`: Default `False`. `True` if allowing raw data in the `state`.
-	*   `single_agent_mode`: Default `False`. `True` if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
-	*   `active_player`: Defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
-	*   `record_action`: Default `False`. If `True`, a field of `action_record` will be in the `state` to record the historical actions. This may be used for human-agent play.
-*   **env.step(action, raw_action=False)**: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be `True` if the action is raw action (string).
-*   **env.step_back()**: Available only when `allow_step_back` is `True. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR. 
-*   **env.init_game()**: Initialize a game. Return the state and the first player ID.
-*   **env.run()**: Run a complete game and return trajectories and payoffs. The function can be used after the agents are set up.
-*   **State Definition**: State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
-
 ## Documents
 Please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
 
@@ -154,6 +128,30 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 ## Evaluation
 The perfomance is measured by winning rates through tournaments. Example outputs are as follows:
 ![Learning Curves](http://rlcard.org/imgs/curves.png "Learning Curves")
+
+## Library Structure
+The purposes of the main modules are listed as below:
+
+*   [/examples](examples): Examples of using RLCard.
+*   [/docs](docs): Documentation of RLCard.
+*   [/tests](tests): Testing scripts for RLCard.
+*   [/rlcard/agents](rlcard/agents): Reinforcement learning algorithms and human agents.
+*   [/rlcard/envs](rlcard/envs): Environment wrappers (state representation, action encoding etc.)
+*   [/rlcard/games](rlcard/games): Various game engines.
+*   [/rlcard/models](rlcard/models): Model zoo including pre-trained models and rule models.
+
+## API Cheat Sheet
+*   **rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
+	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
+	*   `allow_raw_data`: Default `False`. `True` if allowing raw data in the `state`.
+	*   `single_agent_mode`: Default `False`. `True` if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
+	*   `active_player`: Defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
+	*   `record_action`: Default `False`. If `True`, a field of `action_record` will be in the `state` to record the historical actions. This may be used for human-agent play.
+*   **env.step(action, raw_action=False)**: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be `True` if the action is raw action (string).
+*   **env.step_back()**: Available only when `allow_step_back` is `True. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR. 
+*   **env.init_game()**: Initialize a game. Return the state and the first player ID.
+*   **env.run()**: Run a complete game and return trajectories and payoffs. The function can be used after the agents are set up.
+*   **State Definition**: State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
 
 ## Contributing
 Contribution to this project is greatly appreciated! Please create an issue for feedbacks/bugs. If you want to contribute codes, please refer to [Contributing Guide](./CONTRIBUTING.md).
