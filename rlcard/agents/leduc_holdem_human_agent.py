@@ -1,4 +1,3 @@
-import numpy as np
 from rlcard.utils.utils import print_card
 
 

@@ -5,8 +5,6 @@ from rlcard import models
 from rlcard.games.uno.game import UnoGame as Game
 from rlcard.games.uno.utils import encode_hand, encode_target
 from rlcard.games.uno.utils import ACTION_SPACE, ACTION_LIST
-from rlcard.games.uno.card import UnoCard
-
 
 class UnoEnv(Env):
 

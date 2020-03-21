@@ -16,7 +16,7 @@ class TestModel(unittest.TestCase):
         model = LeducHoldemNFSPModel()
         self.assertIsInstance(model, LeducHoldemNFSPModel)
         self.assertIsInstance(model.agents, list)
-        
+
     def test_leduc_holdem_nfsp_pytorch_model(self):
         model = LeducHoldemNFSPPytorchModel()
         self.assertIsInstance(model, LeducHoldemNFSPPytorchModel)
@@ -57,7 +57,7 @@ class TestModel(unittest.TestCase):
         action = agent.step({'raw_legal_actions':['fold', 'check', 'call'], 'raw_obs':{'hand':['K'], 'public_card':[]}})
         self.assertEqual(action, 'call')
         action = agent.step({'raw_legal_actions':['fold', 'call'], 'raw_obs':{'hand':['Q'], 'public_card':[]}})
-        self.assertEqual(action, 'fold') 
+        self.assertEqual(action, 'fold')
 
     def test_limit_holdem_rule_model_v1(self):
         model = LimitholdemRuleModelV1()

@@ -121,7 +121,7 @@ class LeducholdemGame(LimitholdemGame):
         chips = [self.players[i].in_chips for i in range(self.num_players)]
         legal_actions = self.get_legal_actions()
         state = self.players[player].get_state(self.public_card, chips, legal_actions)
-        state['current_player'] = self.game_pointer 
+        state['current_player'] = self.game_pointer
 
         return state
 

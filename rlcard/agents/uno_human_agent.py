@@ -1,4 +1,3 @@
-import numpy as np
 from rlcard.games.uno.card import UnoCard
 
 class HumanAgent(object):

@@ -103,9 +103,9 @@ class DoudizhuRound(object):
             The last greater_player's id in trace
         '''
         for i in range(len(self.trace) - 1, -1, -1):
-            id, action = self.trace[i]
+            _id, action = self.trace[i]
             if (action != 'pass'):
-                return id
+                return _id
         return None
 
     def find_last_played_cards_in_trace(self, player_id):
