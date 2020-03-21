@@ -53,6 +53,14 @@ class Card(object):
     def __hash__(self):
         return self.card_id
 
+    def get_index(self):
+        ''' Get index of a card.
+
+        Returns:
+            string: the combination of suit and rank of a card. Eg: 1S, 2H, AD, BJ, RJ...
+        '''
+        return self.suit+self.rank
+
     @classmethod
     def from_text(cls, text: str):
         assert len(text) == 2

@@ -4,18 +4,12 @@
     Date created: 2/12/2020
 '''
 
-from rlcard import models
-
 from rlcard.envs.env import Env
 from rlcard.games.gin_rummy.utils.action_event import *
 from rlcard.games.gin_rummy.game import GinRummyGame as Game
-from rlcard.games.gin_rummy.player import GinRummyPlayer
 
 import numpy as np
-import rlcard.games.gin_rummy.utils.scorers as scorers
 import rlcard.games.gin_rummy.utils.utils as utils
-
-from typing import Callable
 
 
 class GinRummyEnv(Env):
