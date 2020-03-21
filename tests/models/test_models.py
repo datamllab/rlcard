@@ -5,6 +5,10 @@ from rlcard.models.pretrained_models import LeducHoldemNFSPModel, LeducHoldemNFS
 from rlcard.models.leducholdem_rule_models import LeducHoldemRuleModelV1, LeducHoldemRuleModelV2
 
 from rlcard.models.limitholdem_rule_models import LimitholdemRuleModelV1
+
+from rlcard.models.gin_rummy_rule_models import GinRummyNoviceRuleModel
+
+
 class TestModel(unittest.TestCase):
 
     def test_model(self):
@@ -82,5 +86,12 @@ class TestModel(unittest.TestCase):
         self.assertEqual(action, 'call')
         action = agent.step({'raw_legal_actions':['raise', 'fold', 'check', 'call'], 'raw_obs':{'hand':['SK', 'HQ'], 'public_cards':['H2', 'C2', 'B4', 'B5']}})
         self.assertEqual(action, 'fold')
+
+    def test_gin_rummy_novice_model(self):
+        model = GinRummyNoviceRuleModel()
+        self.assertIsInstance(model, GinRummyNoviceRuleModel)
+        self.assertIsInstance(model.agents, list)
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -3,15 +3,17 @@
     Author: William Hale
     Date created: 2/12/2020
 
-    A toy example of playing GinRummy with random agents
+    A toy example of playing GinRummy with random agents / novice agents
 '''
 
 import rlcard
+from rlcard import models
+
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import set_global_seed
 
-from rlcard.games.gin_rummy.utils.move import *
 from rlcard.games.gin_rummy.player import GinRummyPlayer
+from rlcard.games.gin_rummy.utils.move import DealHandMove
 
 # Make environment
 env = rlcard.make('gin-rummy')
@@ -23,6 +25,7 @@ set_global_seed(0)
 
 # Set up agents
 agents = [RandomAgent(action_num=env.action_num), RandomAgent(action_num=env.action_num)]
+agents = models.load("gin-rummy-novice-rule").agents  # use novice agents rather than random agents
 env.set_agents(agents)
 
 for episode in range(episode_num):
