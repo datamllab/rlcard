@@ -65,6 +65,10 @@ class TestLimitholdemEnv(unittest.TestCase):
             total += payoff
         self.assertEqual(total, 0)
 
+    def test_get_perfect_information(self):
+        env = rlcard.make('limit-holdem')
+        _, player_id = env.init_game()
+        self.assertEqual(player_id, env.get_perfect_information()['current_player'])
 
 if __name__ == '__main__':
     unittest.main()
