@@ -14,7 +14,7 @@ from rlcard.utils.logger import Logger
 env = rlcard.make('uno')
 eval_env = rlcard.make('uno')
 
-# Set the iterations numbers and how frequently we evaluate/save plot
+# Set the iterations numbers and how frequently we evaluate the performance
 evaluate_every = 1000
 evaluate_num = 1000
 episode_num = 100000

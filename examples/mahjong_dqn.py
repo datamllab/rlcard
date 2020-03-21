@@ -14,7 +14,7 @@ from rlcard.utils.logger import Logger
 env = rlcard.make('mahjong')
 eval_env = rlcard.make('mahjong')
 
-# Set the iterations numbers and how frequently we evaluate/save plot
+# Set the iterations numbers and how frequently we evaluate the performance
 evaluate_every = 100
 evaluate_num = 1000
 episode_num = 100000

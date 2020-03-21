@@ -16,7 +16,7 @@ from rlcard.utils.logger import Logger
 env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
 eval_env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
 
-# Set the iterations numbers and how frequently we evaluate/save plot
+# Set the iterations numbers and how frequently we evaluate the performance
 evaluate_every = 1000
 evaluate_num = 10000
 timesteps = 100000
