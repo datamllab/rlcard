@@ -60,12 +60,3 @@ def get_payoff_gin_rummy_v1(player: GinRummyPlayer, game: 'GinRummyGame') -> int
         deadwood_count = utils.get_deadwood_count(hand, best_meld_cluster)
         payoff = -deadwood_count / 100
     return payoff
-
-
-def get_payoff_high_low(player: GinRummyPlayer, game: 'GinRummyGame') -> int or float:
-    # The goal is to have the agent discard his high cards first.
-    # Melds don't matter.
-    hand = player.hand
-    deadwood_count = sum([utils.get_deadwood_value(card) for card in hand])
-    payoff = - deadwood_count / 100
-    return payoff

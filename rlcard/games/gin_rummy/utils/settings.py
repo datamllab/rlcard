@@ -4,6 +4,8 @@
     Date created: 2/16/2020
 '''
 
+from typing import Dict, Any
+
 from enum import Enum
 
 
@@ -13,10 +15,70 @@ class DealerForRound(Enum):
     Random = 2
 
 
+class Setting(Enum):
+    dealer_for_round = "dealer_for_round"
+    stockpile_dead_card_count = "stockpile_dead_card_count"
+    going_out_deadwood_count = "going_out_deadwood_count"
+    max_drawn_card_count = "max_drawn_card_count"
+    is_allowed_knock = "is_allowed_knock"
+    is_allowed_gin = "is_allowed_gin"
+    is_allowed_pick_up_discard = "is_allowed_pick_up_discard"
+    is_allowed_to_discard_picked_up_card = "is_allowed_to_discard_picked_up_card"
+    is_always_knock = "is_always_knock"
+    is_south_never_knocks = "is_south_never_knocks"
+
+    @staticmethod
+    def default_setting() -> Dict['Setting', Any]:
+        return {Setting.dealer_for_round: DealerForRound.Random,
+                Setting.stockpile_dead_card_count: 2,
+                Setting.going_out_deadwood_count: 10,  # Can specify going_out_deadwood_count before running game.
+                Setting.max_drawn_card_count: 52,
+                Setting.is_allowed_knock: True,
+                Setting.is_allowed_gin: True,
+                Setting.is_allowed_pick_up_discard: True,
+                Setting.is_allowed_to_discard_picked_up_card: False,
+                Setting.is_always_knock: False,
+                Setting.is_south_never_knocks: False
+                }
+
+    @staticmethod
+    def simple_gin_rummy_setting():
+        # North should be agent being trained.
+        # North always deals.
+        # South never knocks.
+        # North always knocks when can.
+        return {Setting.dealer_for_round: DealerForRound.North,
+                Setting.stockpile_dead_card_count: 2,
+                Setting.going_out_deadwood_count: 10,  # Can specify going_out_deadwood_count before running game.
+                Setting.max_drawn_card_count: 52,
+                Setting.is_allowed_knock: True,
+                Setting.is_allowed_gin: True,
+                Setting.is_allowed_pick_up_discard: True,
+                Setting.is_allowed_to_discard_picked_up_card: False,
+                Setting.is_always_knock: True,
+                Setting.is_south_never_knocks: True
+                }
+
+    @staticmethod
+    def gin_rummy_setting():
+        # North always deals.
+        return {Setting.dealer_for_round: DealerForRound.North,
+                Setting.stockpile_dead_card_count: 2,
+                Setting.going_out_deadwood_count: 10,  # Can specify going_out_deadwood_count before running game.
+                Setting.max_drawn_card_count: 52,
+                Setting.is_allowed_knock: True,
+                Setting.is_allowed_gin: True,
+                Setting.is_allowed_pick_up_discard: True,
+                Setting.is_allowed_to_discard_picked_up_card: False,
+                Setting.is_always_knock: False,
+                Setting.is_south_never_knocks: False
+                }
+
+
 class Settings(object):
 
     def __init__(self):
-        self.scorer_name = ["GinRummyScorer", "HighLowScorer"][0]
+        self.scorer_name = "GinRummyScorer"
         self.dealer_for_round = DealerForRound.Random
         self.stockpile_dead_card_count = 2
         self.going_out_deadwood_count = 10  # Can specify going_out_deadwood_count before running game
@@ -48,21 +110,6 @@ class Settings(object):
         print("is_always_knock={}".format(self.is_always_knock))
         print("is_south_never_knocks={}".format(self.is_south_never_knocks))
         print("==============================")
-
-    def set_high_low(self):  # speeding up training 200213
-        # A very simple version: best strategy is to just discard card with highest deadwood value
-        self.scorer_name = "HighLowScorer"
-        self.dealer_for_round = DealerForRound.North
-        self.stockpile_dead_card_count = 2
-        self.going_out_deadwood_count = 10
-        # don't go through a lot of draw from stockpile (10 draws for each player)
-        self.max_drawn_card_count = 20
-        self.is_allowed_knock = False
-        self.is_allowed_gin = False
-        self.is_allowed_pick_up_discard = False
-        self.is_allowed_to_discard_picked_up_card = False
-        self.is_always_knock = False
-        self.is_south_never_knocks = True
 
     def set_simple_gin_rummy(self):  # speeding up training 200213
         self.scorer_name = "GinRummyScorer"

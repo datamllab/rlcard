@@ -17,7 +17,7 @@ from rlcard.games.gin_rummy.card import Card
 import rlcard.games.gin_rummy.utils.utils as utils
 
 
-class GinRummyHighLowRuleAgent(object):
+class GinRummyRuleAgent(object):
     '''
         Agent always discards highest deadwood value card
     '''
@@ -62,15 +62,16 @@ class GinRummyHighLowRuleAgent(object):
         return self.step(state), probabilities
 
 
-class GinRummyHighLowRuleModel(Model):
-    ''' Gin Rummy HighLow Rule Model
+class GinRummyRuleModel(Model):
+    ''' Gin Rummy Rule Model
     '''
 
     def __init__(self):
         ''' Load pre-trained model
         '''
+        super().__init__()
         env = rlcard.make('gin-rummy')
-        rule_agent = GinRummyHighLowRuleAgent()
+        rule_agent = GinRummyRuleAgent()
         self.rule_agents = [rule_agent for _ in range(env.player_num)]
 
     @property
