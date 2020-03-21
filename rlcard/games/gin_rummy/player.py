@@ -29,6 +29,10 @@ class GinRummyPlayer(object):
     def __str__(self):
         return "N" if self.player_id == 0 else "S"
 
-    @classmethod
-    def opponent_of(cls, player: 'GinRummyPlayer') -> 'GinRummyPlayer':
-        return GinRummyPlayer(player_id=(player.player_id + 1) % 2)
+    @staticmethod
+    def short_name_of(player_id: int) -> str:
+        return "N" if player_id == 0 else "S"
+
+    @staticmethod
+    def opponent_id_of(player_id: int) -> int:
+        return (player_id + 1) % 2

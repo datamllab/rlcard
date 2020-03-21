@@ -43,13 +43,16 @@ for episode in range(episode_num):
         move = move_sheet[i]
         print("{}".format(move))
         if i == 0 and type(move) is DealHandMove:
-            player_dealing = move.player_dealing
-            leading_player = GinRummyPlayer.opponent_of(player_dealing)
+            player_dealing_id = move.player_dealing.player_id
+            leading_player_id = GinRummyPlayer.opponent_id_of(player_dealing_id)
             shuffle_deck = move.shuffled_deck
             leading_player_hand_text = [str(card) for card in shuffle_deck[-11:]]
             dealing_player_hand_text = [str(card) for card in shuffle_deck[-21:-11]]
             stock_pile_text = [str(card) for card in shuffle_deck[:31]]
-            print("player_dealing is {}; leading_player is {}.".format(player_dealing, leading_player))
+            short_name_of_player_dealing = GinRummyPlayer.short_name_of(player_id=player_dealing_id)
+            short_name_of_player_leading = GinRummyPlayer.short_name_of(player_id=leading_player_id)
+            print("player_dealing is {}; leading_player is {}.".format(short_name_of_player_dealing,
+                                                                       short_name_of_player_leading))
             print("leading player hand: {}".format(leading_player_hand_text))
             print("dealing player hand: {}".format(dealing_player_hand_text))
             print("stock_pile: {}".format(stock_pile_text))
