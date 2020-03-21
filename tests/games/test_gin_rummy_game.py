@@ -118,10 +118,7 @@ class TestGinRummyGame(unittest.TestCase):
         self.assertEqual(all_run_melds_text, [[str(card) for card in meld_pile] for meld_pile in all_run_melds])
 
         # check
-        going_out_deadwood_count = 10
-        meld_clusters = get_meld_clusters(hand=hand,
-                                          going_out_deadwood_count=going_out_deadwood_count,
-                                          is_going_out=False)
+        meld_clusters = get_meld_clusters(hand=hand)
         self.assertEqual(len(meld_clusters), 36)
 
     def test_corrected_settings(self):

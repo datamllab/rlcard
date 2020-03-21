@@ -24,12 +24,8 @@ import copy
 """
 
 
-def get_meld_clusters(hand: List[Card],
-                      going_out_deadwood_count: int,
-                      is_going_out: bool = False,
-                      opponent_meld_piles: List[List[Card]] = None) -> List[List[Set[Card]]]:
-    # if is_going_out is true, then return only meld_piles with deadwood count <= 10
-    # opponent_meld_piles are the meld_piles for the opponent who has knocked to be used for laying off cards
+def get_meld_clusters(hand: List[Card], opponent_meld_piles: List[List[Card]] = None) -> List[List[Set[Card]]]:
+    # opponent_meld_piles are those of the going_out_player to be used for laying off cards
     result = []  # type: List[List[Set[Card]]]
     all_run_melds = [set(x) for x in _get_all_run_melds(hand)]
     all_set_melds = [set(x) for x in _get_all_set_melds(hand)]
@@ -38,43 +34,42 @@ def get_meld_clusters(hand: List[Card],
     for i in range(0, all_melds_count):
         first_meld = all_melds[i]
         meld_cluster_1 = [first_meld]
-        if is_going_out:
-            deadwood_count = utils.get_deadwood_count(hand=hand, meld_cluster=meld_cluster_1)
-            if deadwood_count <= going_out_deadwood_count:
-                result.append(meld_cluster_1)
-        else:
-            result.append(meld_cluster_1)
+        result.append(meld_cluster_1)
         for j in range(i + 1, all_melds_count):
             second_meld = all_melds[j]
             if not second_meld.isdisjoint(first_meld):
                 continue
             meld_cluster_2 = [first_meld, second_meld]
-            if is_going_out:
-                deadwood_count = utils.get_deadwood_count(hand=hand, meld_cluster=meld_cluster_2)
-                if deadwood_count <= going_out_deadwood_count:
-                    result.append(meld_cluster_2)
-            else:
-                result.append(meld_cluster_2)
+            result.append(meld_cluster_2)
             for k in range(j + 1, all_melds_count):
                 third_meld = all_melds[k]
                 if not third_meld.isdisjoint(first_meld) or not third_meld.isdisjoint(second_meld):
                     continue
                 meld_cluster_3 = [first_meld, second_meld, third_meld]
-                if is_going_out:
-                    deadwood_count = utils.get_deadwood_count(hand=hand, meld_cluster=meld_cluster_3)
-                    if deadwood_count <= going_out_deadwood_count:
-                        result.append(meld_cluster_3)
-                else:
-                    result.append(meld_cluster_3)
+                result.append(meld_cluster_3)
     return result
 
 
-def get_best_meld_clusters(hand: List[Card]) -> List[List[Set[Card]]]:
+def get_going_out_meld_clusters(meld_clusters: List[List[Set[Card]]],
+                                hand: List[Card],
+                                going_out_deadwood_count: int) -> List[List[Set[Card]]]:
+    # Return only meld_clusters with deadwood count <= going_out_deadwood_count
     result = []  # type: List[List[Set[Card]]]
-    meld_clusters = get_meld_clusters(hand=hand, going_out_deadwood_count=100, is_going_out=False)
+    for meld_cluster in meld_clusters:
+        deadwood_count = utils.get_deadwood_count(hand=hand, meld_cluster=meld_cluster, has_extra_card=True)
+        if deadwood_count <= going_out_deadwood_count:
+            result.append(meld_cluster)
+    return result
+
+
+def get_best_meld_clusters(hand: List[Card], has_extra_card: bool) -> List[List[Set[Card]]]:
+    result = []  # type: List[List[Set[Card]]]
+    meld_clusters = get_meld_clusters(hand=hand)
     meld_clusters_count = len(meld_clusters)
     if meld_clusters_count > 0:
-        deadwood_counts = [utils.get_deadwood_count(hand=hand, meld_cluster=meld_cluster)
+        deadwood_counts = [utils.get_deadwood_count(hand=hand,
+                                                    meld_cluster=meld_cluster,
+                                                    has_extra_card=has_extra_card)
                            for meld_cluster in meld_clusters]
         best_deadwood_count = min(deadwood_counts)
         for i in range(meld_clusters_count):

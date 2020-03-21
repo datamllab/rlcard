@@ -60,7 +60,7 @@ class GinRummyNoviceRuleAgent(object):
             actions = [x.action_id for x in knock_action_events]
         elif discard_action_events:
             discards = [x.card for x in discard_action_events]  # Note: any card in hand can be discarded
-            best_meld_clusters = melding.get_best_meld_clusters(hand=discards)
+            best_meld_clusters = melding.get_best_meld_clusters(hand=discards, has_extra_card=True)
             best_meld_cluster = [] if not best_meld_clusters else best_meld_clusters[0]
             best_meld_cards = list(itertools.chain(*best_meld_cluster))
             candidate_discards = [x for x in discards if x not in best_meld_cards]

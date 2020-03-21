@@ -99,11 +99,13 @@ def can_gin(game: 'GinRummyGame') -> bool:
         current_player = game.get_current_player()
         hand = current_player.hand
         going_out_deadwood_count = game.settings.going_out_deadwood_count
-        meld_clusters = melding.get_meld_clusters(hand=hand,
-                                                  going_out_deadwood_count=going_out_deadwood_count,
-                                                  is_going_out=True)
-        if meld_clusters:
-            deadwood_counts = [utils.get_deadwood_count(hand, meld_cluster) for meld_cluster in meld_clusters]
+        meld_clusters = melding.get_meld_clusters(hand=hand)
+        going_out_meld_clusters = melding.get_going_out_meld_clusters(meld_clusters=meld_clusters,
+                                                                      hand=hand,
+                                                                      going_out_deadwood_count=going_out_deadwood_count)
+        if going_out_meld_clusters:
+            deadwood_counts = [utils.get_deadwood_count(hand, meld_cluster, has_extra_card=True)
+                               for meld_cluster in going_out_meld_clusters]
             result = min(deadwood_counts) == 0
     return result
 
@@ -120,11 +122,12 @@ def get_knock_cards(game: 'GinRummyGame') -> List[Card]:
         current_player = game.get_current_player()
         hand = current_player.hand
         going_out_deadwood_count = game.settings.going_out_deadwood_count
-        meld_clusters = melding.get_meld_clusters(hand=hand,
-                                                  going_out_deadwood_count=going_out_deadwood_count,
-                                                  is_going_out=True)
-        deadwood_cluster = [utils.get_deadwood(hand, meld_cluster) for meld_cluster in meld_clusters]
-        for deadwood in deadwood_cluster:
+        meld_clusters = melding.get_meld_clusters(hand=hand)
+        going_out_meld_clusters = melding.get_going_out_meld_clusters(meld_clusters=meld_clusters,
+                                                                      hand=hand,
+                                                                      going_out_deadwood_count=going_out_deadwood_count)
+        for meld_cluster in going_out_meld_clusters:
+            deadwood = utils.get_deadwood(hand, meld_cluster, has_extra_card=True)
             for card in deadwood:
                 knock_cards.add(card)
     return list(knock_cards)

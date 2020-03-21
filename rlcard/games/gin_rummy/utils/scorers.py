@@ -55,8 +55,8 @@ def get_payoff_gin_rummy_v1(player: GinRummyPlayer, game: 'GinRummyGame') -> int
         payoff = 1
     else:
         hand = player.hand
-        best_meld_clusters = melding.get_best_meld_clusters(hand=hand)
+        best_meld_clusters = melding.get_best_meld_clusters(hand=hand, has_extra_card=False)
         best_meld_cluster = [] if not best_meld_clusters else best_meld_clusters[0]
-        deadwood_count = utils.get_deadwood_count(hand, best_meld_cluster)
+        deadwood_count = utils.get_deadwood_count(hand, best_meld_cluster, has_extra_card=False)
         payoff = -deadwood_count / 100
     return payoff
