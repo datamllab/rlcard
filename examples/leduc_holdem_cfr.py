@@ -12,7 +12,7 @@ from rlcard.utils.logger import Logger
 env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
 eval_env = rlcard.make('leduc-holdem')
 
-# Set the iterations numbers and how frequently we evaluate/save plot
+# Set the iterations numbers and how frequently we evaluate the performance and save model
 evaluate_every = 100
 save_plot_every = 1000
 evaluate_num = 10000

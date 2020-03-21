@@ -1,4 +1,4 @@
-''' An example of learning a Dqqp-Q Agent on Blackjack
+''' An example of learning a Deep-Q Agent on Blackjack
 '''
 
 import tensorflow as tf
@@ -13,7 +13,7 @@ from rlcard.utils.logger import Logger
 env = rlcard.make('blackjack')
 eval_env = rlcard.make('blackjack')
 
-# Set the iterations numbers and how frequently we evaluate/save plot
+# Set the iterations numbers and how frequently we evaluate performance
 evaluate_every = 100
 evaluate_num = 10000
 episode_num = 100000
@@ -49,7 +49,7 @@ with tf.Session() as sess:
     # Initialize global variables
     sess.run(tf.global_variables_initializer())
 
-    # Init a Logger to plot the learning curve
+    # Initialize a Logger to plot the learning curve
     logger = Logger(log_dir)
 
     for episode in range(episode_num):

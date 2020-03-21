@@ -14,7 +14,7 @@ from rlcard.utils.logger import Logger
 env = rlcard.make('limit-holdem')
 eval_env = rlcard.make('limit-holdem')
 
-# Set the iterations numbers and how frequently we evaluate/save plot
+# Set the iterations numbers and how frequently we evaluate the performance
 evaluate_every = 10000
 evaluate_num = 10000
 episode_num = 100000
