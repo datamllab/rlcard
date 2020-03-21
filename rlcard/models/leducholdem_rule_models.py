@@ -2,7 +2,6 @@
 '''
 import rlcard
 from rlcard.models.model import Model
-from rlcard.games.leducholdem.game import LeducholdemGame
 
 class LeducHoldemRuleAgentV1(object):
     ''' Leduc Hold 'em Rule agent version 1

@@ -2,7 +2,6 @@
 '''
 import rlcard
 from rlcard.models.model import Model
-from rlcard.games.limitholdem.game import LimitholdemGame
 
 class LimitholdemRuleAgentV1(object):
     ''' Limit Hold 'em Rule agent version 1
@@ -63,7 +62,7 @@ class LimitholdemRuleAgentV1(object):
                 elif hand[0][0] == hand[1][0]:
                     if hand[0][0] in public_cards_flush:
                         action = 'raise'
-            elif max(public_cards_ranks) in ['5', '4' ,'3', '2']: # for KQ, KJ, QJ, JT, check when having no cards higher than 5 
+            elif max(public_cards_ranks) in ['5', '4' ,'3', '2']: # for KQ, KJ, QJ, JT, check when having no cards higher than 5
                 action = 'check'
             else:
                 action = 'call'
@@ -77,7 +76,7 @@ class LimitholdemRuleAgentV1(object):
                 public_cards_ranks[_] = public_cards[_][1]
                 public_cards_flush[_] = public_cards[_][0]
             if hand[0][1] == hand [1][1]:
-            # if the player already have a pair, raise when public cards have card same as the pair 
+            # if the player already have a pair, raise when public cards have card same as the pair
                 if hand[0][1] in public_cards_ranks:
                     action = 'raise'
             elif hand[0][1] == 'A' or hand[1][1] == 'A':
@@ -89,7 +88,7 @@ class LimitholdemRuleAgentV1(object):
                 elif hand[0][0] == hand[1][0]:
                     if hand[0][0] in public_cards_flush:
                         action = 'raise'
-            elif max(public_cards_ranks) in ['5', '4', '3', '2']: # for KQ, KJ, QJ, JT, fold when having no cards higher than 5 
+            elif max(public_cards_ranks) in ['5', '4', '3', '2']: # for KQ, KJ, QJ, JT, fold when having no cards higher than 5
                 action = 'fold'
             else:
                 action = 'call'

@@ -6,7 +6,7 @@ import collections
 from itertools import combinations
 from bisect import bisect_left
 
-from rlcard.games.doudizhu.utils import CARD_TYPE, CARD_RANK_STR, CARD_RANK_STR_INDEX
+from rlcard.games.doudizhu.utils import CARD_RANK_STR, CARD_RANK_STR_INDEX
 from rlcard.games.doudizhu.utils import cards2str, contains_cards
 
 
@@ -54,9 +54,9 @@ class DoudizhuJudger(object):
             chain_length: the size of the sequence of the chain, 1 for trio_solo or four_two_solo
             size: count of solos for the attachments
 
-        Returns: 
+        Returns:
             list of tuples: [attachment1, attachment2, ...]
-                            Each attachment has two elemnts, 
+                            Each attachment has two elemnts,
                             the first one contains indexes of attached cards smaller than the index of chain_start,
                             the first one contains indexes of attached cards larger than the index of chain_start
         '''
@@ -309,7 +309,7 @@ class DoudizhuJudger(object):
 
     def restore_playable_cards(self, player_id):
         ''' restore playable_cards for judger for game.step_back().
-            
+
         Args:
             player_id: The id of the player whose playable_cards need to be restored
         '''

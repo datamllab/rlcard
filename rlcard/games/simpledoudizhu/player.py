@@ -76,7 +76,7 @@ class SimpleDoudizhuPlayer(object):
             actions = judger.get_playable_cards(self)
         else:
             actions = get_gt_cards(self, greater_player)
-        return actions 
+        return actions
 
     def play(self, action, greater_player=None):
         ''' Perfrom action

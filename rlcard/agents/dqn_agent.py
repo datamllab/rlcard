@@ -119,7 +119,7 @@ class DQNAgent(object):
         self.total_t += 1
         tmp = self.total_t - self.replay_memory_init_size
         if tmp>=0 and tmp%self.train_every == 0:
-            loss = self.train()
+            self.train()
 
     def step(self, state):
         ''' Predict the action for genrating training data

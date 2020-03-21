@@ -376,7 +376,7 @@ def tournament(env, num):
     Args:
         env (Env class): The environment to be evaluated.
         num (int): The number of games to play.
- 
+
     Returns:
         A list of avrage payoffs for each player
     '''

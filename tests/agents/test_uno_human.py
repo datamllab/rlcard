@@ -1,9 +1,6 @@
 import unittest
-import tensorflow as tf
-import numpy as np
 
 from rlcard.agents.uno_human_agent import _print_state, _print_action
-from rlcard import models
 
 class TestLeducHuman(unittest.TestCase):
 
