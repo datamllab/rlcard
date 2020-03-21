@@ -18,6 +18,7 @@ from rlcard.games.gin_rummy.utils.action_event import gin_action_id, discard_act
 from rlcard.games.gin_rummy.card import Card, get_deck
 
 from rlcard.games.gin_rummy.utils.melding import _get_all_set_melds, _get_all_run_melds, get_meld_clusters
+from rlcard.games.gin_rummy.utils.settings import Setting, Settings
 
 discard_action_ids = list(range(discard_action_id, discard_action_id + 52))
 knock_action_ids = list(range(knock_action_id, knock_action_id + 52))
@@ -122,6 +123,31 @@ class TestGinRummyGame(unittest.TestCase):
                                           going_out_deadwood_count=going_out_deadwood_count,
                                           is_going_out=False)
         self.assertEqual(len(meld_clusters), 36)
+
+    def test_corrected_settings(self):
+        default_setting = Setting.default_setting()
+        config = {Setting.max_drawn_card_count: 10,
+                  Setting.stockpile_dead_card_count: 4.5,
+                  Setting.is_allowed_pick_up_discard: 0}
+        corrected_config = Settings.get_config_with_invalid_settings_set_to_default_value(config=config)
+        self.assertEqual(corrected_config[Setting.max_drawn_card_count], 10)
+        self.assertEqual(corrected_config[Setting.stockpile_dead_card_count],
+                         default_setting[Setting.stockpile_dead_card_count])
+        self.assertEqual(corrected_config[Setting.is_allowed_pick_up_discard],
+                         default_setting[Setting.is_allowed_pick_up_discard])
+
+    def test_change_settings(self):
+        default_setting = Setting.default_setting()
+        config = {Setting.max_drawn_card_count: 10,
+                  Setting.stockpile_dead_card_count: 4.5,
+                  Setting.is_allowed_pick_up_discard: 0}
+        settings = Settings()
+        settings.change_settings(config=config)
+        self.assertEqual(settings.max_drawn_card_count, 10)
+        self.assertEqual(settings.stockpile_dead_card_count,
+                         default_setting[Setting.stockpile_dead_card_count])
+        self.assertEqual(settings.is_allowed_pick_up_discard,
+                         default_setting[Setting.is_allowed_pick_up_discard])
 
 
 if __name__ == '__main__':
