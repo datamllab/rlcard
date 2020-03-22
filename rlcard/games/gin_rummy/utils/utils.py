@@ -4,12 +4,11 @@
     Date created: 2/12/2020
 '''
 
-from rlcard.games.gin_rummy.card import Card
+from typing import List, Iterable
 
 import numpy as np
 
-from typing import List
-from typing import Iterable
+from rlcard.games.gin_rummy.card import Card
 
 
 def get_deadwood_value(card: Card) -> int:

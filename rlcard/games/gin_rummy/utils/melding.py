@@ -4,14 +4,13 @@
     Date created: 2/12/2020
 '''
 
+from typing import List, Set
+
+import copy
+
 from rlcard.games.gin_rummy.card import Card
 
 import rlcard.games.gin_rummy.utils.utils as utils
-
-from typing import List
-from typing import Set
-
-import copy
 
 """
     Terminology:
