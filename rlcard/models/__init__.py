@@ -36,3 +36,7 @@ register(
 register(
     model_id = 'limit-holdem-rule-v1',
     entry_point='rlcard.models.limitholdem_rule_models:LimitholdemRuleModelV1')
+
+register(
+    model_id='gin-rummy-novice-rule',
+    entry_point='rlcard.models.gin_rummy_rule_models:GinRummyNoviceRuleModel')
