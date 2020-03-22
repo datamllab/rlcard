@@ -4,20 +4,12 @@
     Date created: 2/12/2020
 '''
 
-from rlcard import models
-
 from rlcard.envs.env import Env
 from rlcard.games.gin_rummy.utils.action_event import *
 from rlcard.games.gin_rummy.game import GinRummyGame as Game
-from rlcard.games.gin_rummy.judge import GinRummyJudge
-from rlcard.games.gin_rummy.player import GinRummyPlayer
-from rlcard.games.gin_rummy.utils.scorers import Scorer
 
 import numpy as np
-import rlcard.games.gin_rummy.utils.scorers as scorers
 import rlcard.games.gin_rummy.utils.utils as utils
-
-from typing import Callable
 
 
 class GinRummyEnv(Env):
@@ -28,8 +20,6 @@ class GinRummyEnv(Env):
         self.game = Game()
         super().__init__(config=config)
         self.state_shape = [5, 52]
-        self.judge = GinRummyJudge(game=self.game)
-        self.scorer = scorers.GinRummyScorer()
 
     def _extract_state(self, state):  # 200213 don't use state ???
         ''' Encode state
@@ -73,7 +63,7 @@ class GinRummyEnv(Env):
         Returns:
             payoffs (list): a list of payoffs for each player
         '''
-        payoffs = self.scorer.get_payoffs(game=self.game)
+        payoffs = self.game.judge.scorer.get_payoffs(game=self.game)
         return payoffs
 
     def _decode_action(self, action_id) -> ActionEvent:  # FIXME 200213 should return str
@@ -93,28 +83,14 @@ class GinRummyEnv(Env):
         Returns:
             legal_actions (list): a list of legal actions' id
         '''
-        legal_actions = self.judge.get_legal_actions()
+        legal_actions = self.game.judge.get_legal_actions()
         legal_actions_ids = [action_event.action_id for action_event in legal_actions]
         return legal_actions_ids
 
     def _load_model(self):
-        ''' Load pretrained/rule model
+        ''' Load pre-trained/rule model
 
         Returns:
             model (Model): A Model object
         '''
-        assert False  # FIXME: stub
-        return models.load('uno-rule-v1')  # FIXME: stub
-
-    def set_scorer(self, printing_configuration: bool = False,
-                   get_payoff: Callable[[GinRummyPlayer, Game], int or float] = None):
-        if self.game.settings.scorer_name == "GinRummyScorer":
-            self.scorer = scorers.GinRummyScorer(get_payoff=get_payoff)
-        elif self.game.settings.scorer_name == "HighLowScorer":
-            self.scorer = scorers.HighLowScorer(get_payoff=get_payoff)
-        else:
-            raise Exception("GinRummyEnv: cannot determine scorer.")
-        if printing_configuration:
-            print("")
-            print("========== Scorer ==========")
-            print("Scorer is", self.scorer.name)
+        raise NotImplementedError

@@ -43,5 +43,5 @@ register(
 
 register(  # 200213
     env_id='gin-rummy',
-    entry_point='rlcard.envs.ginrummy:GinRummyEnv',
+    entry_point='rlcard.envs.gin_rummy:GinRummyEnv',
 )
