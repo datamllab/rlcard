@@ -4,9 +4,9 @@
     Date created: 2/12/2020
 '''
 
-from rlcard.games.gin_rummy.card import Card
-
 from typing import List
+
+from rlcard.core import Card
 
 
 class GinRummyPlayer(object):
@@ -18,8 +18,8 @@ class GinRummyPlayer(object):
             player_id (int): id for the player
         '''
         self.player_id = player_id
-        self.hand = []
-        self.known_cards = []  # opponent knows cards picked up by player and not yet discarded
+        self.hand = []  # type: List[Card]
+        self.known_cards = []  # type: List[Card]  # opponent knows cards picked up by player and not yet discarded
 
     def get_player_id(self) -> int:
         ''' Return player's id
@@ -29,6 +29,10 @@ class GinRummyPlayer(object):
     def __str__(self):
         return "N" if self.player_id == 0 else "S"
 
-    @classmethod
-    def opponent_of(cls, player: 'GinRummyPlayer') -> 'GinRummyPlayer':
-        return GinRummyPlayer(player_id=(player.player_id + 1) % 2)
+    @staticmethod
+    def short_name_of(player_id: int) -> str:
+        return "N" if player_id == 0 else "S"
+
+    @staticmethod
+    def opponent_id_of(player_id: int) -> int:
+        return (player_id + 1) % 2
