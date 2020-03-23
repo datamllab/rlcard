@@ -4,7 +4,9 @@
     Date created: 2/12/2020
 '''
 
-from rlcard.games.gin_rummy.card import Card, get_card
+from rlcard.core import Card
+
+from . import utils as utils
 
 ''' Action_ids:
         0 -> score_player_0_id
@@ -62,14 +64,14 @@ class ActionEvent(object):
             action_event = GinAction()
         elif action_id in range(discard_action_id, discard_action_id + 52):
             card_id = action_id - discard_action_id
-            card = get_card(card_id=card_id)
+            card = utils.get_card(card_id=card_id)
             action_event = DiscardAction(card=card)
         elif action_id in range(knock_action_id, knock_action_id + 52):
             card_id = action_id - knock_action_id
-            card = get_card(card_id=card_id)
+            card = utils.get_card(card_id=card_id)
             action_event = KnockAction(card=card)
         else:
-            raise Exception("decode_action: unknown action_id=", action_id)
+            raise Exception("decode_action: unknown action_id={}".format(action_id))
         return action_event
 
 
@@ -130,18 +132,20 @@ class GinAction(ActionEvent):
 class DiscardAction(ActionEvent):
 
     def __init__(self, card: Card):
-        super().__init__(action_id=discard_action_id + card.card_id)
+        card_id = utils.get_card_id(card)
+        super().__init__(action_id=discard_action_id + card_id)
         self.card = card
 
     def __str__(self):
-        return "discard "+str(self.card)
+        return "discard {}".format(str(self.card))
 
 
 class KnockAction(ActionEvent):
 
     def __init__(self, card: Card):
-        super().__init__(action_id=knock_action_id + card.card_id)
+        card_id = utils.get_card_id(card)
+        super().__init__(action_id=knock_action_id + card_id)
         self.card = card
 
     def __str__(self):
-        return "knock "+str(self.card)
+        return "knock {}".format(str(self.card))

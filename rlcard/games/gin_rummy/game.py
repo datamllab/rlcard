@@ -4,16 +4,18 @@
     Date created: 2/12/2020
 '''
 
-from rlcard.core import Game
-from rlcard.games.gin_rummy.player import GinRummyPlayer
-from rlcard.games.gin_rummy.round import GinRummyRound
-from rlcard.games.gin_rummy.utils.settings import Settings, DealerForRound
-
 from typing import List
 
-from rlcard.games.gin_rummy.utils.action_event import *
-
 import random
+
+from rlcard.core import Game
+
+from .player import GinRummyPlayer
+from .round import GinRummyRound
+from .judge import GinRummyJudge
+from .utils.settings import Settings, DealerForRound
+
+from .utils.action_event import *
 
 
 class GinRummyGame(Game):
@@ -24,9 +26,10 @@ class GinRummyGame(Game):
         '''Initialize the class GinRummyGame
         '''
         self.allow_step_back = allow_step_back
+        self.judge = GinRummyJudge(game=self)
         self.settings = Settings()
-        self.actions = None  # must reset in init_game
-        self.round = None  # must reset in init_game
+        self.actions = None  # type: List[ActionEvent] or None # must reset in init_game
+        self.round = None  # round: GinRummyRound or None, must reset in init_game
 
     def init_game(self):
         ''' Initialize all characters in the game and start round 1
@@ -122,14 +125,15 @@ class GinRummyGame(Game):
                 known_cards = opponent.hand
             unknown_cards = self.round.dealer.stock_pile + [card for card in opponent.hand if card not in known_cards]
             state['player_id'] = self.round.current_player_id
-            state['hand'] = self.round.players[self.round.current_player_id].hand
-            state['top_discard'] = top_discard
-            state['dead_cards'] = dead_cards
-            state['opponent_known_cards'] = known_cards
-            state['unknown_cards'] = unknown_cards
+            state['hand'] = [x.get_index() for x in self.round.players[self.round.current_player_id].hand]
+            state['top_discard'] = [x.get_index() for x in top_discard]
+            state['dead_cards'] = [x.get_index() for x in dead_cards]
+            state['opponent_known_cards'] = [x.get_index() for x in known_cards]
+            state['unknown_cards'] = [x.get_index() for x in unknown_cards]
         return state
 
-    def decode_action(self, action_id) -> ActionEvent:  # FIXME 200213 should return str
+    @staticmethod
+    def decode_action(action_id) -> ActionEvent:  # FIXME 200213 should return str
         ''' Action id -> the action_event in the game.
 
         Args:
