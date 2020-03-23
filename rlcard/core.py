@@ -25,6 +25,26 @@ class Card(object):
         self.suit = suit
         self.rank = rank
 
+    def __eq__(self, other):
+        if isinstance(other, Card):
+            return self.rank == other.rank and self.suit == other.suit
+        else:
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+
+    def __hash__(self):
+        suit_index = Card.valid_suit.index(self.suit)
+        rank_index = Card.valid_rank.index(self.rank)
+        return rank_index + 100 * suit_index
+
+    def __str__(self):
+        ''' Get string representation of a card.
+
+        Returns:
+            string: the combination of rank and suit of a card. Eg: AS, 5H, JD, 3C, ...
+        '''
+        return self.rank + self.suit
+
     def get_index(self):
         ''' Get index of a card.
 

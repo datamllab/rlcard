@@ -6,9 +6,9 @@
 
 from typing import List
 
-from rlcard.games.gin_rummy.utils.action_event import *
-from rlcard.games.gin_rummy.card import Card
-from rlcard.games.gin_rummy.player import GinRummyPlayer
+from ..player import GinRummyPlayer
+
+from .action_event import *
 
 
 #
@@ -47,7 +47,7 @@ class DrawCardMove(PlayerMove):
         self.card = card
 
     def __str__(self):
-        return "{} {} {}".format(self.player, self.action, self.card)
+        return "{} {} {}".format(self.player, self.action, str(self.card))
 
 
 class PickupDiscardMove(PlayerMove):
@@ -58,7 +58,7 @@ class PickupDiscardMove(PlayerMove):
         self.card = card
 
     def __str__(self):
-        return "{} {} {}".format(self.player, self.action, self.card)
+        return "{} {} {}".format(self.player, self.action, str(self.card))
 
 
 class DeclareDeadHandMove(PlayerMove):
@@ -113,7 +113,8 @@ class ScoreNorthMove(PlayerMove):
         self.deadwood_count = deadwood_count  # for information use only
 
     def __str__(self):
-        best_meld_cluster_text = "{}".format([[str(card) for card in meld_pile] for meld_pile in self.best_meld_cluster])
+        best_meld_cluster_str = [[str(card) for card in meld_pile] for meld_pile in self.best_meld_cluster]
+        best_meld_cluster_text = "{}".format(best_meld_cluster_str)
         return "{} {} {} {}".format(self.player, self.action, self.deadwood_count, best_meld_cluster_text)
 
 
@@ -129,5 +130,6 @@ class ScoreSouthMove(PlayerMove):
         self.deadwood_count = deadwood_count  # for information use only
 
     def __str__(self):
-        best_meld_cluster_text = "{}".format([[str(card) for card in meld_pile] for meld_pile in self.best_meld_cluster])
+        best_meld_cluster_str = [[str(card) for card in meld_pile] for meld_pile in self.best_meld_cluster]
+        best_meld_cluster_text = "{}".format(best_meld_cluster_str)
         return "{} {} {} {}".format(self.player, self.action, self.deadwood_count, best_meld_cluster_text)

@@ -343,46 +343,6 @@ The following options can be set.
 
 One can create variations that are easier to train
 by changing the options and specifying different scoring methods.
-See the HighLow variation as an example.
-
-#### HighLow variation
-
-In this variation, the goal is to discard high cards.
-A player can only draw cards, not pick up cards discarded by opponent.
-The best strategy is to discard the highest valued card.
-
-You can specify the opponent of the agent being trained to be the HighLowAgent
-so that you can see in the training runs what the average reward for perfect play would be.
-
-You can specify how the scoring is done.
-In the experimental training runs, you can set the get_payoff method of the HighLowScorer to be of your choosing.
-A simple example is:
-
-        def get_payoff_choice2(player: GinRummyPlayer, game: GinRummyGame) -> int:
-            hand = player.hand
-            max_rank_id = max([card.rank_id for card in hand])
-            payoff = 1 if max_rank_id < 11 else 0
-            return payoff
-
-The above method gives a reward of 1 if the hand has no kings or queens.
-Otherwise, a reward of 0 is given.
-The best strategy is to discard kings and queens.
-
-The settings are:
-
-| Option                                | Default value             |
-| ------------------------------------- | :-----------------------: |
-| dealer_for_round                      | DealerForRound.Random     |
-| stockpile_dead_card_count             | 2                         |
-| going_out_deadwood_count              | 10                        |
-| max_drawn_card_count                  | 20                        |
-| is_allowed_knock                      | False                     |
-| is_allowed_gin                        | False                     |
-| is_allowed_pick_up_discard            | False                     |
-| is_allowed_to_discard_picked_up_card  | False                     |
-| is_always_knock                       | False                     |
-| is_south_never_knocks                 | False                     |
-
 
 ## Sheng Ji
 (Under construction)

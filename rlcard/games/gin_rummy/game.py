@@ -9,6 +9,7 @@ from typing import List
 import random
 
 from rlcard.core import Game
+
 from .player import GinRummyPlayer
 from .round import GinRummyRound
 from .judge import GinRummyJudge

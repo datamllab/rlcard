@@ -8,8 +8,10 @@ from typing import List
 
 import random
 
-from rlcard.games.gin_rummy.card import Card, get_deck
-from rlcard.games.gin_rummy.player import GinRummyPlayer
+from rlcard.core import Card
+
+from .player import GinRummyPlayer
+from .utils import utils as utils
 
 
 class GinRummyDealer(object):
@@ -19,7 +21,7 @@ class GinRummyDealer(object):
         ''' Empty discard_pile, set shuffled_deck, set stock_pile
         '''
         self.discard_pile = []  # type: List[Card]
-        self.shuffled_deck = get_deck().copy()  # keep a copy of the shuffled cards at start of new hand
+        self.shuffled_deck = utils.get_deck()  # keep a copy of the shuffled cards at start of new hand
         random.shuffle(self.shuffled_deck)
         self.stock_pile = self.shuffled_deck.copy()  # type: List[Card]
 

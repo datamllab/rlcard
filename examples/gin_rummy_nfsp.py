@@ -10,6 +10,7 @@ import tensorflow as tf
 import os
 
 import rlcard
+
 from rlcard.agents.nfsp_agent import NFSPAgent
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import set_global_seed, tournament
@@ -67,9 +68,6 @@ with tf.Session() as sess:
 
     # Initialize global variables
     sess.run(tf.global_variables_initializer())
-
-    # Count the number of steps
-    step_counters = [0 for _ in range(env.player_num)]
 
     # Init a Logger to plot the learning curve
     logger = Logger(log_dir)

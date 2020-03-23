@@ -8,7 +8,7 @@ from typing import List, Set
 
 import copy
 
-from rlcard.games.gin_rummy.card import Card
+from rlcard.core import Card
 
 import rlcard.games.gin_rummy.utils.utils as utils
 
@@ -81,14 +81,16 @@ def get_best_meld_clusters(hand: List[Card], has_extra_card: bool) -> List[List[
 
 def _get_all_run_melds(hand: List[Card]) -> List[List[Card]]:
     card_count = len(hand)
-    hand_by_suit = sorted(hand, key=lambda x: x.card_id)
+    hand_by_suit = sorted(hand, key=lambda card: utils.get_card_id(card))
     max_run_melds_from_left = [[] for _ in hand_by_suit]
     for i in range(card_count):
         card = hand_by_suit[i]
+        card_rank_id = utils.get_card_id(card)
         max_run_melds_from_left[i].append(card)
         for j in range(i + 1, card_count):
             next_card = hand_by_suit[j]
-            if next_card.suit != card.suit or next_card.rank_id != card.rank_id + (j - i):
+            next_card_rank_id = utils.get_card_id(next_card)
+            if next_card.suit != card.suit or next_card_rank_id != card_rank_id + (j - i):
                 break
             else:
                 max_run_melds_from_left[i].append(next_card)
