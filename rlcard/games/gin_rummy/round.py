@@ -18,10 +18,10 @@ from .utils.move import DrawCardMove, PickupDiscardMove, DeclareDeadHandMove
 from .utils.move import DiscardMove, KnockMove, GinMove
 from .utils.move import ScoreNorthMove, ScoreSouthMove
 
+from .player import GinRummyPlayer
+
 import rlcard.games.gin_rummy.utils.melding as melding
 import rlcard.games.gin_rummy.utils.utils as utils
-
-from .player import GinRummyPlayer
 
 
 class GinRummyRound(object):

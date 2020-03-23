@@ -10,6 +10,7 @@ import tensorflow as tf
 import os
 
 import rlcard
+
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import set_global_seed, tournament
@@ -22,7 +23,6 @@ env.game.settings.print_settings()
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
-save_plot_every = 1000
 evaluate_num = 100  # mahjong_dqn has 1000
 episode_num = 1000  # mahjong_dqn has 100000
 
@@ -56,9 +56,6 @@ with tf.Session() as sess:
 
     env.set_agents([agent, random_agent])
     eval_env.set_agents([agent, random_agent])
-
-    # Count the number of steps
-    step_counter = 0
 
     # Init a Logger to plot the learning curve
     logger = Logger(log_dir)

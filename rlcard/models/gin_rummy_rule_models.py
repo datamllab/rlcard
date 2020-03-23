@@ -10,6 +10,7 @@ import numpy as np
 import itertools
 
 import rlcard
+
 from rlcard.models.model import Model
 
 from rlcard.games.gin_rummy.utils.action_event import *

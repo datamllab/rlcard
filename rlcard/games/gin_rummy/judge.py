@@ -11,7 +11,6 @@ if TYPE_CHECKING:
 from typing import List
 
 from .utils.action_event import *
-from .card import Card
 from .utils.scorers import GinRummyScorer
 
 import rlcard.games.gin_rummy.utils.melding as melding

@@ -7,6 +7,8 @@
 import unittest
 import numpy as np
 
+import rlcard.games.gin_rummy.utils.utils as utils
+
 from rlcard.games.gin_rummy.dealer import GinRummyDealer
 from rlcard.games.gin_rummy.game import GinRummyGame as Game
 from rlcard.games.gin_rummy.player import GinRummyPlayer
@@ -14,9 +16,6 @@ from rlcard.games.gin_rummy.utils.action_event import score_player_1_action_id
 from rlcard.games.gin_rummy.utils.action_event import draw_card_action_id, pick_up_discard_action_id
 from rlcard.games.gin_rummy.utils.action_event import declare_dead_hand_action_id
 from rlcard.games.gin_rummy.utils.action_event import gin_action_id, discard_action_id, knock_action_id
-
-from rlcard.games.gin_rummy.card import Card, get_deck
-
 from rlcard.games.gin_rummy.utils.melding import _get_all_set_melds, _get_all_run_melds, get_meld_clusters
 from rlcard.games.gin_rummy.utils.settings import Setting, Settings
 
@@ -85,8 +84,8 @@ class TestGinRummyGame(unittest.TestCase):
 
     def test_gin_rummy_dealer(self):
         dealer = GinRummyDealer()
-        current_deck = get_deck()
-        deck_card_ids = [card.card_id for card in current_deck]
+        current_deck = utils.get_deck()
+        deck_card_ids = [utils.get_card_id(card) for card in current_deck]
         self.assertEqual(deck_card_ids, list(range(52)))
         # Deal 10 cards.
         player = GinRummyPlayer(player_id=0)
@@ -94,17 +93,17 @@ class TestGinRummyGame(unittest.TestCase):
         self.assertEqual(len(dealer.shuffled_deck), 52)
         self.assertEqual(len(dealer.stock_pile), 42)
         self.assertEqual(len(current_deck), 52)
-        self.assertEqual(len(get_deck()), 52)
+        self.assertEqual(len(utils.get_deck()), 52)
         # Pop top_card from current_deck.
         top_card = current_deck.pop(-1)
         self.assertEqual(str(top_card), "KC")
         self.assertEqual(len(current_deck), 51)
-        self.assertEqual(len(get_deck()), 52)
+        self.assertEqual(len(utils.get_deck()), 52)
 
     def test_melding(self):
         hand_text = ['9H', 'AC', 'TH', '3C', '3D', '7C', 'QH', '3H', '8C', '8D',
                      '4D', '7H', '8S', '5H', '4H', 'AS', 'TD', '3S', '2S', 'AH']
-        hand = [Card.from_text(x) for x in hand_text]
+        hand = [utils.from_text(x) for x in hand_text]
 
         # check
         all_set_melds_text = [['3C', '3D', '3H', '3S'], ['8C', '8D', '8S'], ['AC', 'AS', 'AH'], ['3D', '3H', '3S'],

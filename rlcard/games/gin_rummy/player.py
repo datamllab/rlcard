@@ -6,7 +6,7 @@
 
 from typing import List
 
-from .card import Card
+from rlcard.core import Card
 
 
 class GinRummyPlayer(object):
