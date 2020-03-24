@@ -7,6 +7,7 @@
 import unittest
 import numpy as np
 
+import rlcard.games.gin_rummy.judge as judge
 import rlcard.games.gin_rummy.utils.utils as utils
 
 from rlcard.games.gin_rummy.dealer import GinRummyDealer
@@ -99,6 +100,12 @@ class TestGinRummyGame(unittest.TestCase):
         self.assertEqual(str(top_card), "KC")
         self.assertEqual(len(current_deck), 51)
         self.assertEqual(len(utils.get_deck()), 52)
+
+    def test_knocking(self):
+        hand_text = ['JS', 'JH', 'JD', '8C', '7S', '7H', '7D', '4S', '3D', '2S', 'AC']
+        hand = [utils.from_text(x) for x in hand_text]
+        knock_cards = judge.get_knock_cards(hand=hand, going_out_deadwood_count=10)
+        self.assertEqual(set(knock_cards), set([utils.from_text(x) for x in ['8C']]))
 
     def test_melding(self):
         hand_text = ['9H', 'AC', 'TH', '3C', '3D', '7C', 'QH', '3H', '8C', '8D',
