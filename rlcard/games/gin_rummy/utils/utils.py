@@ -68,23 +68,31 @@ def get_deadwood_value(card: Card) -> int:
     return deadwood_value
 
 
-def get_deadwood(hand: Iterable[Card], meld_cluster: List[Iterable[Card]], has_extra_card: bool) -> List[Card]:
+def get_deadwood(hand: Iterable[Card], meld_cluster: List[Iterable[Card]]) -> List[Card]:
+    assert len(list(hand)) == 10
     meld_cards = [card for meld_pile in meld_cluster for card in meld_pile]
     deadwood = [card for card in hand if card not in meld_cards]
-    if deadwood and has_extra_card:
-        # drop card with highest deadwood value
-        worst_card = max(deadwood, key=lambda card: get_deadwood_value(card))
-        deadwood.remove(worst_card)
     return deadwood
 
 
-def get_deadwood_count(hand: List[Card], meld_cluster: List[Iterable[Card]], has_extra_card: bool) -> int:
-    deadwood = get_deadwood(hand=hand, meld_cluster=meld_cluster, has_extra_card=has_extra_card)
+def get_deadwood_count(hand: List[Card], meld_cluster: List[Iterable[Card]]) -> int:
+    assert len(hand) == 10
+    deadwood = get_deadwood(hand=hand, meld_cluster=meld_cluster)
     deadwood_values = [get_deadwood_value(card) for card in deadwood]
     return sum(deadwood_values)
 
 
-def encode_cards(cards: List[Card]):
+def decode_cards(env_cards: np.ndarray) -> List[Card]:
+    result = []  # type: List[Card]
+    assert len(env_cards) == 52
+    for i in range(52):
+        if env_cards[i] == 1:
+            card = _deck[i]
+            result.append(card)
+    return result
+
+
+def encode_cards(cards: List[Card]) -> np.ndarray:
     plane = np.zeros(52, dtype=int)
     for card in cards:
         card_id = get_card_id(card)

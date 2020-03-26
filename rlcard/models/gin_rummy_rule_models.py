@@ -6,8 +6,13 @@
     Gin Rummy rule models
 '''
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from rlcard.core import Card
+
+from typing import List
+
 import numpy as np
-import itertools
 
 import rlcard
 
@@ -60,13 +65,8 @@ class GinRummyNoviceRuleAgent(object):
         elif knock_action_events:
             actions = [x.action_id for x in knock_action_events]
         elif discard_action_events:
-            discards = [x.card for x in discard_action_events]  # Note: any card in hand can be discarded
-            best_meld_clusters = melding.get_best_meld_clusters(hand=discards, has_extra_card=True)
-            best_meld_cluster = [] if not best_meld_clusters else best_meld_clusters[0]
-            best_meld_cards = list(itertools.chain(*best_meld_cluster))
-            candidate_discards = [x for x in discards if x not in best_meld_cards]
-            max_deadwood_value = max([utils.get_deadwood_value(card) for card in candidate_discards])
-            best_discards = [x for x in candidate_discards if utils.get_deadwood_value(x) == max_deadwood_value]
+            best_discards = GinRummyNoviceRuleAgent._get_best_discards(discard_action_events=discard_action_events,
+                                                                       state=state)
             if best_discards:
                 actions = [DiscardAction(card=card).action_id for card in best_discards]
         return np.random.choice(actions)
@@ -84,6 +84,29 @@ class GinRummyNoviceRuleAgent(object):
         '''
         probabilities = []
         return self.step(state), probabilities
+
+    @staticmethod
+    def _get_best_discards(discard_action_events, state) -> List[Card]:
+        best_discards = []  # type: List[Card]
+        final_deadwood_count = 999
+        env_hand = state['obs'][0]
+        hand = utils.decode_cards(env_cards=env_hand)
+        for discard_action_event in discard_action_events:
+            discard_card = discard_action_event.card
+            next_hand = [card for card in hand if card != discard_card]
+            meld_clusters = melding.get_meld_clusters(hand=next_hand)
+            deadwood_counts = []
+            for meld_cluster in meld_clusters:
+                deadwood_count = utils.get_deadwood_count(hand=next_hand, meld_cluster=meld_cluster)
+                deadwood_counts.append(deadwood_count)
+            best_deadwood_count = min(deadwood_counts,
+                                      default=utils.get_deadwood_count(hand=next_hand, meld_cluster=[]))
+            if best_deadwood_count < final_deadwood_count:
+                final_deadwood_count = best_deadwood_count
+                best_discards = [discard_card]
+            elif best_deadwood_count == final_deadwood_count:
+                best_discards.append(discard_card)
+        return best_discards
 
 
 class GinRummyNoviceRuleModel(Model):
