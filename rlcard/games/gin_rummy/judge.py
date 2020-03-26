@@ -12,8 +12,8 @@ from typing import List
 
 from .utils.action_event import *
 from .utils.scorers import GinRummyScorer
+from .utils import melding
 
-import rlcard.games.gin_rummy.utils.melding as melding
 import rlcard.games.gin_rummy.utils.utils as utils
 
 
@@ -42,7 +42,8 @@ class GinRummyJudge(object):
                 last_action_type is PickUpDiscardAction:
             current_player = self.game.get_current_player()
             hand = current_player.hand
-            if self.game.settings.is_allowed_gin and can_gin(self.game):
+            gin_cards = get_gin_cards(hand=hand)
+            if self.game.settings.is_allowed_gin and gin_cards:
                 legal_actions = [GinAction()]
             else:
                 cards_to_discard = [card for card in hand]
@@ -91,23 +92,29 @@ class GinRummyJudge(object):
         return legal_actions
 
 
-def can_gin(game: 'GinRummyGame') -> bool:
-    result = False
-    last_action = game.get_last_action()
-    last_action_type = type(last_action)
-    if last_action_type is DrawCardAction or last_action_type is PickUpDiscardAction:
-        current_player = game.get_current_player()
-        hand = current_player.hand
-        going_out_deadwood_count = game.settings.going_out_deadwood_count
-        meld_clusters = melding.get_meld_clusters(hand=hand)
-        going_out_meld_clusters = melding.get_going_out_meld_clusters(meld_clusters=meld_clusters,
-                                                                      hand=hand,
-                                                                      going_out_deadwood_count=going_out_deadwood_count)
-        if going_out_meld_clusters:
-            deadwood_counts = [utils.get_deadwood_count(hand, meld_cluster, has_extra_card=True)
-                               for meld_cluster in going_out_meld_clusters]
-            result = min(deadwood_counts) == 0
-    return result
+def get_gin_cards(hand: List[Card]) -> List[Card]:
+    '''
+    :param hand: List[Card] -- must have 11 cards
+    :return List[Card]: cards in hand that be ginned
+    '''
+    assert len(hand) == 11
+    gin_cards = set()
+    meld_clusters = melding.get_meld_clusters(hand=hand)
+    for meld_cluster in meld_clusters:
+        meld_cards = [card for meld_pile in meld_cluster for card in meld_pile]
+        hand_deadwood = [card for card in hand if card not in meld_cards]  # hand has 11 cards
+        if len(hand_deadwood) == 0:
+            # all 11 cards are melded;
+            # take gin_card as first card of first 4+ meld;
+            # could also take gin_card as last card of 4+ meld, but won't do this.
+            for meld_pile in meld_cluster:
+                if len(meld_pile) >= 4:
+                    gin_cards.add(meld_pile[0])
+                    break
+        elif len(hand_deadwood) == 1:
+            card = hand_deadwood[0]
+            gin_cards.add(card)
+    return list(gin_cards)
 
 
 def get_knock_cards(hand: List[Card], going_out_deadwood_count: int) -> List[Card]:
@@ -119,13 +126,15 @@ def get_knock_cards(hand: List[Card], going_out_deadwood_count: int) -> List[Car
     assert len(hand) == 11
     knock_cards = set()
     meld_clusters = melding.get_meld_clusters(hand=hand)
-    going_out_meld_clusters = melding.get_going_out_meld_clusters(meld_clusters=meld_clusters,
-                                                                  hand=hand,
-                                                                  going_out_deadwood_count=going_out_deadwood_count)
-    for meld_cluster in going_out_meld_clusters:
+    for meld_cluster in meld_clusters:
         meld_cards = [card for meld_pile in meld_cluster for card in meld_pile]
-        deadwood = utils.get_deadwood(hand, meld_cluster, has_extra_card=True)
-        for card in hand:
-            if card not in meld_cards and card not in deadwood:
-                knock_cards.add(card)
+        hand_deadwood = [card for card in hand if card not in meld_cards]  # hand has 11 cards
+        hand_deadwood_values = [utils.get_deadwood_value(card) for card in hand_deadwood]
+        hand_deadwood_count = sum(hand_deadwood_values)
+        max_hand_deadwood_value = max(hand_deadwood_values, default=0)
+        if hand_deadwood_count <= 10 + max_hand_deadwood_value:
+            for card in hand_deadwood:
+                next_deadwood_count = hand_deadwood_count - utils.get_deadwood_value(card)
+                if next_deadwood_count <= going_out_deadwood_count:
+                    knock_cards.add(card)
     return list(knock_cards)

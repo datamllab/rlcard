@@ -152,6 +152,15 @@ class TestGinRummyGame(unittest.TestCase):
         self.assertEqual(settings.is_allowed_pick_up_discard,
                          default_setting[Setting.is_allowed_pick_up_discard])
 
+    def test_decode_cards(self):
+        deck = utils.get_deck()
+        encoded_cards = utils.encode_cards(deck)
+        decoded_cards = utils.decode_cards(encoded_cards)
+        for i in range(52):
+            card = deck[i]
+            decoded_card = decoded_cards[i]
+            self.assertEqual(card, decoded_card)
+
 
 if __name__ == '__main__':
     unittest.main()
