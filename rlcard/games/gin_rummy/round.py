@@ -19,6 +19,7 @@ from .utils.move import DiscardMove, KnockMove, GinMove
 from .utils.move import ScoreNorthMove, ScoreSouthMove
 
 from .player import GinRummyPlayer
+from . import judge
 
 import rlcard.games.gin_rummy.utils.melding as melding
 import rlcard.games.gin_rummy.utils.utils as utils
@@ -131,6 +132,11 @@ class GinRummyRound(object):
         self.going_out_action = action
         self.going_out_player_id = self.current_player_id
         assert len(current_player.hand) == 11
+        gin_cards = judge.get_gin_cards(hand=current_player.hand)
+        card = gin_cards[0]
+        current_player.hand.remove(card)
+        if card in current_player.known_cards:
+            current_player.known_cards.remove(card)
         self.current_player_id = 0
 
     def score_player_0(self, action: ScoreNorthPlayerAction):
@@ -138,11 +144,9 @@ class GinRummyRound(object):
         # south becomes current player
         assert self.current_player_id == 0
         current_player = self.get_current_player()
-        best_meld_clusters = melding.get_best_meld_clusters(hand=current_player.hand, has_extra_card=False)
+        best_meld_clusters = melding.get_best_meld_clusters(hand=current_player.hand)
         best_meld_cluster = [] if not best_meld_clusters else best_meld_clusters[0]
-        deadwood_count = utils.get_deadwood_count(hand=current_player.hand,
-                                                  meld_cluster=best_meld_cluster,
-                                                  has_extra_card=False)
+        deadwood_count = utils.get_deadwood_count(hand=current_player.hand, meld_cluster=best_meld_cluster)
         self.move_sheet.append(ScoreNorthMove(player=current_player,
                                               action=action,
                                               best_meld_cluster=best_meld_cluster,
@@ -155,11 +159,9 @@ class GinRummyRound(object):
         # the round is over
         assert self.current_player_id == 1
         current_player = self.get_current_player()
-        best_meld_clusters = melding.get_best_meld_clusters(hand=current_player.hand, has_extra_card=False)
+        best_meld_clusters = melding.get_best_meld_clusters(hand=current_player.hand)
         best_meld_cluster = [] if not best_meld_clusters else best_meld_clusters[0]
-        deadwood_count = utils.get_deadwood_count(hand=current_player.hand,
-                                                  meld_cluster=best_meld_cluster,
-                                                  has_extra_card=False)
+        deadwood_count = utils.get_deadwood_count(hand=current_player.hand, meld_cluster=best_meld_cluster)
         self.move_sheet.append(ScoreSouthMove(player=current_player,
                                               action=action,
                                               best_meld_cluster=best_meld_cluster,
