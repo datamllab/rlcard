@@ -137,7 +137,7 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 ### Payoff
 Each player will receive a reward 0 (lose) or 1 (win) in the end of the game.
 
-## Dou Dizhu
+## Simple Dou Dizhu
 (Under construction)
 
 ## Mahjong
