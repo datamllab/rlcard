@@ -8,7 +8,6 @@
 *   [No-limit Texas Hold'em](games.md#no-limit-texas-holdem)
 *   [UNO](games.md#uno)
 *   [Gin Rummy](games.md#gin-rummy)
-*   [Sheng Ji](games.md#sheng-ji)
  
 ## Blackjack
 Blackjack is a globally popular banking game known as Twenty-One. The objective is to beat the dealer by reaching a higher score than the dealer without exceeding 21. In the toolkit, we implement a simple version of Blackjack. In each round, the player only has two options: "hit" which will take a card, and 'stand' which end the turn. The player will "bust" if his hands exceed 21 points. After the player completes his hands (chooses "stand" and has not busted), the dealer then reals his hidden card and "hit" until obtaining at least 17 points.
@@ -343,6 +342,3 @@ The following options can be set.
 
 One can create variations that are easier to train
 by changing the options and specifying different scoring methods.
-
-## Sheng Ji
-(Under construction)
