@@ -4,6 +4,7 @@
 *   [Leduc Hold'em](games.md#leduc-holdem)
 *   [Limit Texas Hold'em](games.md#limit-texas-holdem)
 *   [Dou Dizhu](games.md#dou-dizhu)
+*   [Simple Dou Dizhu](games.md#simple-dou-dizhu)
 *   [Mahjong](games.md#mahjong)
 *   [No-limit Texas Hold'em](games.md#no-limit-texas-holdem)
 *   [UNO](games.md#uno)
@@ -135,6 +136,9 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 
 ### Payoff
 Each player will receive a reward 0 (lose) or 1 (win) in the end of the game.
+
+## Dou Dizhu
+(Under construction)
 
 ## Mahjong
 Mahjong is a tile-based game developed in China, and has spread throughout the world since 20th century. It is commonly played
