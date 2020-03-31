@@ -233,8 +233,8 @@ class Estimator():
         self.scope = scope
         self.action_num = action_num
         self.learning_rate=learning_rate
-        self.state_shape = state_shape
-        self.mlp_layers = mlp_layers
+        self.state_shape = state_shape if isinstance(state_shape, list) else [state_shape]
+        self.mlp_layers = map(int, mlp_layers)
 
         with tf.variable_scope(scope):
             # Build the graph
