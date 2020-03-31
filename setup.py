@@ -33,6 +33,7 @@ setuptools.setup(
     install_requires=[
         'numpy>=1.16.3',
         'matplotlib>=3.0',
+        'pillow>=5.2.0',
         'termcolor',
     ],
     extras_require=extras,
