@@ -5,6 +5,22 @@
     Date created: 3/14/2020
 '''
 
+#   You need to install tkinter if it is not already installed.
+#   Tkinter is Python's defacto standard GUI (Graphical User Interface) package.
+#   It is a thin object-oriented layer on top of Tcl/Tk.
+#   Note that the name of the module is ‘tkinter’.
+#
+#   If you are using anaconda:
+#       -- I have version 8.6.8 to work with version 3.5 of Python.
+#       -- In the installed window for your environment, search for "tk".
+#       -- If it is found, make sure you have at least version 8.6.8.
+#       -- Otherwise, go to the "Not installed" window, search for "tk", select it, and apply it.
+#
+#   If you are using Ubuntu:
+#       -- You can install it with apt-get install python-tk.
+#
+#   For other cases, you can search on google to see how to install tkinter.
+
 # from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
