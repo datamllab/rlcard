@@ -9,6 +9,7 @@ import numpy as np
 from rlcard.envs.env import Env
 from rlcard.games.gin_rummy.utils.action_event import *
 from rlcard.games.gin_rummy.game import GinRummyGame as Game
+from rlcard.games.gin_rummy.utils.move import ScoreSouthMove
 
 import rlcard.games.gin_rummy.utils.utils as utils
 
@@ -64,7 +65,13 @@ class GinRummyEnv(Env):
         Returns:
             payoffs (list): a list of payoffs for each player
         '''
-        payoffs = self.game.judge.scorer.get_payoffs(game=self.game)
+        # determine whether game completed all moves
+        is_game_complete = False
+        if self.game.round:
+            move_sheet = self.game.round.move_sheet
+            if move_sheet and isinstance(move_sheet[-1], ScoreSouthMove):
+                is_game_complete = True
+        payoffs = [0, 0] if not is_game_complete else self.game.judge.scorer.get_payoffs(game=self.game)
         return payoffs
 
     def _decode_action(self, action_id) -> ActionEvent:  # FIXME 200213 should return str

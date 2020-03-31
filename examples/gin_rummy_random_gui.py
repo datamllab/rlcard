@@ -1,0 +1,33 @@
+'''
+    Project: Gui Gin Rummy
+    File name: gin_rummy_random_gui.py
+    Author: William Hale
+    Date created: 3/14/2020
+'''
+
+# from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from rlcard.envs.gin_rummy import GinRummyEnv
+
+import rlcard
+
+from rlcard.models.gin_rummy_rule_models import GinRummyNoviceRuleAgent
+from rlcard.agents.random_agent import RandomAgent
+
+from rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.game_app import GameApp
+
+from rlcard.games.gin_rummy.utils import scorers
+
+
+def make_gin_rummy_env() -> 'GinRummyEnv':
+    gin_rummy_env = rlcard.make('gin-rummy')
+    north_agent = GinRummyNoviceRuleAgent()
+    south_agent = GinRummyNoviceRuleAgent()
+    gin_rummy_env.set_agents([north_agent, south_agent])
+    gin_rummy_env.game.judge.scorer = scorers.GinRummyScorer(get_payoff=scorers.get_payoff_gin_rummy_v0)
+    return gin_rummy_env
+
+
+# Play game
+gin_rummy_app = GameApp(make_gin_rummy_env=make_gin_rummy_env)
