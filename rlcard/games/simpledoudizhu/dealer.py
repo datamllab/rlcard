@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 ''' Implement Doudizhu Dealer class
 '''
 
@@ -18,7 +18,7 @@ class SimpleDoudizhuDealer(object):
         '''Give dealer the deck
 
         Notes:
-            1. deck with 24 cards
+            1. deck with 28 cards
         '''
         super().__init__()
         self.deck = self.init_simple_doudizhu_deck()
