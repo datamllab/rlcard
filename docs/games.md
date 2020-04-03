@@ -135,7 +135,7 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 | Total            |       33676       |        309                          |                   |
 
 ### Payoff
-Each player will receive a reward 0 (lose) or 1 (win) in the end of the game. 
+If the landlord first get rid of all the cards in his hand, he will win and receive a reward 1. The two peasants will lose and receive a reward 0. Similarly, if one of the peasant first get rid of all the cards in hand, both peasants wil win and receive a reward 1. The landlord will lose and receive a reward 0.
 
 ## Simple Dou Dizhu
 Simple Dou Dizhu is a smaller version of Dou Dizhu. The deck only consists of 6 ranks from '8' to 'A' (8, 9, T, J, Q, K, A), there are four cards with different suits in each rank.  What's more, unlike landlord in Dou Dizhu, the landlord in Simple Dou Dizhu only has one more card than the  peasants.  The rules of this game is the same as the rules of Dou Dizhu. Just because each player gets fewer cards, they end the game faster.
