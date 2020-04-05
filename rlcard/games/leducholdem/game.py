@@ -14,11 +14,25 @@ class LeducholdemGame(LimitholdemGame):
         ''' Initialize the class leducholdem Game
         '''
         self.allow_step_back = allow_step_back
+        ''' No big/small blind
         # Some configarations of the game
         # These arguments are fixed in Leduc Hold'em Game
 
         # Raise amount and allowed times
         self.raise_amount = 2
+        self.allowed_raise_num = 2
+
+        self.num_players = 2
+        '''
+        # Some configarations of the game
+        # These arguments can be specified for creating new games
+
+        # Small blind and big blind
+        self.small_blind = 1
+        self.big_blind = 2 * self.small_blind
+
+        # Raise amount and allowed times
+        self.raise_amount = self.big_blind
         self.allowed_raise_num = 2
 
         self.num_players = 2
@@ -46,9 +60,14 @@ class LeducholdemGame(LimitholdemGame):
         # Prepare for the first round
         for i in range(self.num_players):
             self.players[i].hand = self.dealer.deal_card()
-            self.players[i].in_chips = 1
+        # Randomly choose a small blind and a big blind
+        s = np.random.randint(0, self.num_players)
+        b = (s + 1) % self.num_players
+        self.players[b].in_chips = self.big_blind
+        self.players[s].in_chips = self.small_blind
         self.public_card = None
-        self.game_pointer = np.random.randint(0, self.num_players)
+        # The player with small blind plays the first
+        self.game_pointer = s
 
         # Initilize a bidding round, in the first round, the big blind and the small blind needs to
         # be passed to the round for processing.
@@ -148,7 +167,7 @@ class LeducholdemGame(LimitholdemGame):
             (list): Each entry corresponds to the payoff of one player
         '''
         chips_payoffs = self.judger.judge_game(self.players, self.public_card)
-        payoffs = np.array(chips_payoffs)
+        payoffs = np.array(chips_payoffs) / (self.big_blind)
         return payoffs
 
     def step_back(self):
@@ -193,4 +212,3 @@ class LeducholdemGame(LimitholdemGame):
 #            print(game_pointer, state)
 #
 #        print(game.get_payoffs())
-
