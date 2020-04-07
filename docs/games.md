@@ -9,7 +9,7 @@
 *   [No-limit Texas Hold'em](games.md#no-limit-texas-holdem)
 *   [UNO](games.md#uno)
 *   [Gin Rummy](games.md#gin-rummy)
- 
+
 ## Blackjack
 Blackjack is a globally popular banking game known as Twenty-One. The objective is to beat the dealer by reaching a higher score than the dealer without exceeding 21. In the toolkit, we implement a simple version of Blackjack. In each round, the player only has two options: "hit" which will take a card, and 'stand' which end the turn. The player will "bust" if his hands exceed 21 points. After the player completes his hands (chooses "stand" and has not busted), the dealer then reals his hidden card and "hit" until obtaining at least 17 points.
 ### State Representation of Blackjack
@@ -116,7 +116,7 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 \*\*". When the predicted action of the agent is **not legal**, the agent will choose "**pass**.". Thus, the current environment is simple, since once the agent learns how to play legal actions, it can beat random agents. Users can also encode the actions for their own purposes (such as increasing the difficulty of the environment) by modifying `decode_action` function in [rlcard/envs/doudizhu.py](../rlcard/envs/doudizhu.py). Users are also encouraged to include rule-based agents as opponents. The abstractions in the environment are as below. The detailed  mapping of action and its ID is in [rlcard/games/doudizhu/jsondata/action_space.json](../rlcard/games/doudizhu/jsondata/action_space.json):
 
 | Type             | Number of Actions | Number of Actions after Abstraction | Action ID         |
-| ---------------- | :---------------: | :---------------------------------: | :---------------: | 
+| ---------------- | :---------------: | :---------------------------------: | :---------------: |
 | Solo             |        15         |        15                           | 0-14              |
 | pair             |        13         |        13                           | 15-27             |
 | Trio             |        13         |        13                           | 28-40             |
@@ -135,10 +135,41 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 | Total            |       33676       |        309                          |                   |
 
 ### Payoff
-Each player will receive a reward 0 (lose) or 1 (win) in the end of the game.
+If the landlord first get rid of all the cards in his hand, he will win and receive a reward 1. The two peasants will lose and receive a reward 0. Similarly, if one of the peasant first get rid of all the cards in hand, both peasants will win and receive a reward 1. The landlord will lose and receive a reward 0.
 
 ## Simple Dou Dizhu
-(Under construction)
+Simple Dou Dizhu is a smaller version of Dou Dizhu. The deck only consists of 6 ranks from '8' to 'A' (8, 9, T, J, Q, K, A), there are four cards with different suits in each rank.  What's more, unlike landlord in Dou Dizhu, the landlord in Simple Dou Dizhu only has one more card than the  peasants.  The rules of this game is the same as the rules of Dou Dizhu. Just because each player gets fewer cards, they end the game faster.
+
+### State Representation of Simple Dou Dizhu
+
+This is almost the smae as the state representation of Dou Dizhu, but the number of the 'deck' has reduced from 54 to 28, and the number of the 'seen cards' reduced from 3 to 1. The following table shows the structure of the state:
+
+| Key          | Description                                                  | Example value                                         |
+| ------------ | ------------------------------------------------------------ | ----------------------------------------------------- |
+| deck         | A string of one pack of 28 cards without Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'. | 88889999TTTTJJJJQQQQKKKKAAAA                          |
+| seen_cards   | One face-down card distributed to the landlord after bidding. Then the card will be made public to all players. | K                                                     |
+| landlord     | An integer of landlord's id                                  | 0                                                     |
+| self         | An integer of current player's id                            | 1                                                     |
+| initial_hand | All cards current player initially owned when a game starts. It will not change with playing cards. | 8TTJJQQKA                                             |
+| trace        | A list of tuples which records every actions in one game. The first entry of  the tuple is player's id, the second is corresponding player's action. | [(0, '8'), (1, 'A'), (2, 'pass'), (0, 'pass')]        |
+| played_cards | As the game progresses, the cards which have been played by the three players and sorted from low to high. | ['8', 'A']                                            |
+| others_hand  | The union of the other two player's current hand             | 889999TTJJQQKKKAAA                                    |
+| current_hand | The current hand of current player                           | 8TTJJQQK                                              |
+| actions      | The legal actions the current player could do                | ['J', 'TTJJQQ', 'TT', 'Q', 'T', 'K', 'QQ', '8', 'JJ'] |
+
+
+
+### State Encoding of Simple Dou Dizhu
+
+The state encoding is the same as Dou Dizhu game.
+
+### Action Encoding of Simple Dou Dizhu
+
+The action encoding is the same as Dou Dizhu game. Because of the reduction of deck, the actions encoded have also reduced from 309 to 131.
+
+### Payoff
+
+The payoff is the same as Dou Dizhu game.
 
 ## Mahjong
 Mahjong is a tile-based game developed in China, and has spread throughout the world since 20th century. It is commonly played
