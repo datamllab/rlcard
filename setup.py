@@ -10,7 +10,7 @@ extras = {
 
 setuptools.setup(
     name="rlcard",
-    version="0.1.13",
+    version="0.1.14",
     author="Data Analytics at Texas A&M (DATA) Lab",
     author_email="khlai037@tamu.edu",
     description="A Toolkit for Reinforcement Learning in Card Games",
