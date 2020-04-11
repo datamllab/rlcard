@@ -27,24 +27,24 @@ The player may receive a reward -1 (lose), 0 (tie), or 1 (win) in the end of the
 
 ## Leduc Hold'em
 Leduc Hold'em is a smaller version of Limit Texas Hold'em (first
-introduced in [Bayes' Bluff: Opponent Modeling in Poker](http://poker.cs.ualberta.ca/publications/UAI05.pdf)). The deck consists only two pairs of King, Queen and Jack, six cards in total. Each game is fixed with two players, two rounds, two-bet maximum and raise amounts of 2 and 4 in the first and second round. In the first round, each player puts 1 unit in the pot and is dealt one card, then starts betting. In the second round, one public card is revealed first, then the players bet again. Finally, the player whose hand has the same rank as the public card is the winner. If neither, then the one with higher rank wins. Other rules such as 'fold' can refer to Limit Texas hold'em.
+introduced in [Bayes' Bluff: Opponent Modeling in Poker](http://poker.cs.ualberta.ca/publications/UAI05.pdf)). The deck consists only two pairs of King, Queen and Jack, six cards in total. Each game is fixed with two players, two rounds, two-bet maximum and raise amounts of 2 and 4 in the first and second round. In the first round, one player is randomly choosed to put 1 unit in pot as small blind while the other puts 2 unit as big blind, and each player is dealt one card, then starts betting. The player with small blind acts first. In the second round, one public card is revealed first, then the players bet again. Finally, the player whose hand has the same rank as the public card is the winner. If neither, then the one with higher rank wins. Other rules such as 'fold' can refer to Limit Texas hold'em.
 
 ### State Representation of Leduc Hold'em
-The state is encoded as a vector of length 34. The first 3 elements correspond to hand card. The next 3 elements correspond to public card. The last 28 elements correspond the chips of the current player and the opponent (the chips could be in range 0~13) The correspondence between the index and the card is as below.
+The state is encoded as a vector of length 36. The first 3 elements correspond to hand card. The next 3 elements correspond to public card. The last 30 elements correspond the chips of the current player and the opponent (the chips could be in range 0~14) The correspondence between the index and the card is as below.
 
 | Index   | Meaning                              |
 | --------| :-----------------------------------:|
 | 0~2     | J ~ K in hand                        |
 | 3~5     | J ~ K as public card                 |
-| 6~19    | 0 ~ 13 chips for the current player  |
-| 20~33   | 0 ~ 13 chips for the opponent        |
+| 6~20    | 0 ~ 14 chips for the current player  |
+| 21~35   | 0 ~ 14 chips for the opponent        |
 
 
 ### Action Encoding of Leduc Hold'em
 The action encoding is the same as Limit Hold'em game.
 
 ### Payoff of Leduc Hold'em
-The payoff is calculated similarly with Limit Hold'em game. The only difference is that Leduc Hold'em does not has the 'big blind' concept. As both players start the first round with 1 unit in the pot, we treat the 'big blind' in calculation as 1 by default.
+The payoff is calculated similarly with Limit Hold'em game.
 
 ## Limit Texas Hold'em
 Texas Hold'em is a popular betting game. Each player is dealt two face-down cards, called hole cards. Then 5 community cards are dealt in three stages (the flop, the turn and the river). Each player seeks the five best cards among the hole cards and community cards. There are 4 betting rounds. During each round each player can choose "call", "check", "raise", or "fold".
