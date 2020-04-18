@@ -10,7 +10,7 @@ class TestLeducholdemEnv(unittest.TestCase):
     def test_init_game_and_extract_state(self):
         env = rlcard.make('leduc-holdem')
         state, _ = env.init_game()
-        self.assertEqual(state['obs'].size, 34)
+        self.assertEqual(state['obs'].size, 36)
         for action in state['legal_actions']:
             self.assertLess(action, env.action_num)
 

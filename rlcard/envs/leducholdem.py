@@ -19,7 +19,7 @@ class LeducholdemEnv(Env):
         self.game = Game()
         super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']
-        self.state_shape = [34]
+        self.state_shape = [36]
 
         with open(os.path.join(rlcard.__path__[0], 'games/leducholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
@@ -58,7 +58,7 @@ class LeducholdemEnv(Env):
 
         public_card = state['public_card']
         hand = state['hand']
-        obs = np.zeros(34)
+        obs = np.zeros(36)
         obs[self.card2index[hand]] = 1
         if public_card:
             obs[self.card2index[public_card]+3] = 1
