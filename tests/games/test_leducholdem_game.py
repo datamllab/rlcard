@@ -20,7 +20,7 @@ class TestLeducholdemMethods(unittest.TestCase):
         self.assertEqual(test_id, player_id)
         self.assertIn('raise', state['legal_actions'])
         self.assertIn('fold', state['legal_actions'])
-        self.assertIn('check', state['legal_actions'])
+        self.assertIn('call', state['legal_actions'])
 
     def test_step(self):
         game = Game()
@@ -45,7 +45,7 @@ class TestLeducholdemMethods(unittest.TestCase):
 
         # test check
         game.init_game()
-        game.step('check')
+        game.step('call')
         game.step('check')
         self.assertEqual(game.round_counter, 1)
 
@@ -95,7 +95,7 @@ class TestLeducholdemMethods(unittest.TestCase):
     def test_is_over(self):
         game = Game()
         game.init_game()
-        game.step('check')
+        game.step('call')
         game.step('check')
         game.step('check')
         game.step('check')
