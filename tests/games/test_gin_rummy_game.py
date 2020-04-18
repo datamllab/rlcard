@@ -19,6 +19,7 @@ from rlcard.games.gin_rummy.utils.action_event import declare_dead_hand_action_i
 from rlcard.games.gin_rummy.utils.action_event import gin_action_id, discard_action_id, knock_action_id
 from rlcard.games.gin_rummy.utils.melding import _get_all_set_melds, _get_all_run_melds, get_meld_clusters
 from rlcard.games.gin_rummy.utils.settings import Setting, Settings
+from rlcard.games.gin_rummy.utils.thinker import Thinker
 
 discard_action_ids = list(range(discard_action_id, discard_action_id + 52))
 knock_action_ids = list(range(knock_action_id, knock_action_id + 52))
@@ -103,14 +104,14 @@ class TestGinRummyGame(unittest.TestCase):
 
     def test_knocking(self):
         hand_text = ['JS', 'JH', 'JD', '8C', '7S', '7H', '7D', '4S', '3D', '2S', 'AC']
-        hand = [utils.from_text(x) for x in hand_text]
+        hand = [utils.card_from_text(x) for x in hand_text]
         knock_cards = judge.get_knock_cards(hand=hand, going_out_deadwood_count=10)
-        self.assertEqual(set(knock_cards), set([utils.from_text(x) for x in ['8C']]))
+        self.assertEqual(set(knock_cards), set([utils.card_from_text(x) for x in ['8C']]))
 
     def test_melding(self):
         hand_text = ['9H', 'AC', 'TH', '3C', '3D', '7C', 'QH', '3H', '8C', '8D',
                      '4D', '7H', '8S', '5H', '4H', 'AS', 'TD', '3S', '2S', 'AH']
-        hand = [utils.from_text(x) for x in hand_text]
+        hand = [utils.card_from_text(x) for x in hand_text]
 
         # check
         all_set_melds_text = [['3C', '3D', '3H', '3S'], ['8C', '8D', '8S'], ['AC', 'AS', 'AH'], ['3D', '3H', '3S'],
@@ -160,6 +161,17 @@ class TestGinRummyGame(unittest.TestCase):
             card = deck[i]
             decoded_card = decoded_cards[i]
             self.assertEqual(card, decoded_card)
+
+    def test_get_meld_piles_with_discard_card(self):
+        hand_text = ['8D', '7D', '6S', '5H', '5C', '4C', '4S', '2S', 'AC', 'AH']
+        hand = [utils.card_from_text(x) for x in hand_text]
+        discard_card = utils.card_from_text('6D')
+        thinker = Thinker(hand=hand)
+        meld_piles_with_discard_card = thinker.get_meld_piles_with_discard_card(discard_card=discard_card)
+        result_as_set = frozenset([frozenset(meld_pile) for meld_pile in meld_piles_with_discard_card])
+        correct_result = [[utils.card_from_text(x) for x in ['8D', '7D', '6D']]]
+        correct_result_as_set = frozenset([frozenset(meld_pile) for meld_pile in correct_result])
+        self.assertEqual(result_as_set, correct_result_as_set)
 
 
 if __name__ == '__main__':
