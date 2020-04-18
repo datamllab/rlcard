@@ -34,6 +34,12 @@ class ActionEvent(object):
     def __init__(self, action_id: int):
         self.action_id = action_id
 
+    def __eq__(self, other):
+        result = False
+        if isinstance(other, ActionEvent):
+            result = self.action_id == other.action_id
+        return result
+
     @staticmethod
     def get_action_num():
         ''' Return the number of possible actions in the game
