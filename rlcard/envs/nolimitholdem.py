@@ -17,7 +17,7 @@ class NolimitholdemEnv(Env):
         '''
         self.game = Game()
         super().__init__(config)
-        self.actions = list(Action)
+        self.actions = Action
         self.state_shape = [54]
         # for raise_amount in range(1, self.game.init_chips+1):
         #     self.actions.append(raise_amount)
@@ -46,7 +46,7 @@ class NolimitholdemEnv(Env):
         '''
         extracted_state = {}
 
-        legal_actions = [self.actions.index(a) for a in state['legal_actions']]
+        legal_actions = [action.value for action in state['legal_actions']]
         extracted_state['legal_actions'] = legal_actions
 
         public_cards = state['public_cards']
@@ -86,12 +86,12 @@ class NolimitholdemEnv(Env):
             action (str): action for the game
         '''
         legal_actions = self.game.get_legal_actions()
-        if self.actions[action_id] not in legal_actions:
+        if self.actions(action_id) not in legal_actions:
             if 'check' in legal_actions:
                 return 'check'
             else:
                 return 'fold'
-        return self.actions[action_id]
+        return self.actions(action_id)
 
     def get_perfect_information(self):
         ''' Get the perfect information of the current state
