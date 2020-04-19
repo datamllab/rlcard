@@ -10,10 +10,11 @@ from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.utils.utils import set_global_seed, assign_task, tournament
 from rlcard.utils.logger import Logger
 
-# Set the the number of steps for collecting normalization statistics
 # and intial memory size
 memory_init_size = 100
-norm_step = 100
+
+# Train the agent every X steps
+train_every = 1
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
@@ -22,7 +23,7 @@ evaluate_num = 10000
 episode_num = 1000000
 
 # The paths for saving the logs and learning curves
-log_dir = './experiments/blackjack_dqn_result/'
+log_dir = './experiments/blackjack_dqn_multi_result/'
 
 # Set the process class to generate trajectories for training and evaluation
 class BlackjackProcess(Process):
@@ -36,23 +37,19 @@ class BlackjackProcess(Process):
         self.output_queue = output_queue
 
     def run(self):
-        #import tensorflow as tf
+        import tensorflow as tf
         self.env = rlcard.make('blackjack')
         self.sess = tf.Session()
         agent = DQNAgent(self.sess,
                          scope='sub-dqn' + str(self.index),
                          action_num=self.env.action_num,
                          replay_memory_init_size=memory_init_size,
+                         train_every=train_every,
                          state_shape=self.env.state_shape,
                          mlp_layers=[10, 10])
         self.env.set_agents([agent])
         self.sess.run(tf.global_variables_initializer())
 
-        # normalize
-        for _ in range(norm_step):
-            trajectories, _ = self.env.run()
-            for ts in trajectories[0]:
-                agent.feed(ts)
 
         # Receive instruction to run game and generate trajectories
         while True:
@@ -73,7 +70,7 @@ class BlackjackProcess(Process):
                 else:
                     for _ in range(tasks):
                         trajectories, _ = self.env.run(is_training=train_flag)
-                        self.output_queue.put(trajectories)
+                        self.output_queue.put((trajectories, self.env.timestep))
                 self.input_queue.task_done()
             else:
                 self.input_queue.task_done()
@@ -89,7 +86,7 @@ if __name__ == '__main__':
     set_global_seed(0)
 
     # Initialize processes
-    PROCESS_NUM = 16
+    PROCESS_NUM = 8
     INPUT_QUEUE = JoinableQueue()
     OUTPUT_QUEUE = Queue()
     PROCESSES = [BlackjackProcess(index, INPUT_QUEUE, OUTPUT_QUEUE, np.random.randint(1000000))
@@ -110,14 +107,14 @@ if __name__ == '__main__':
                          action_num=env.action_num,
                          replay_memory_init_size=memory_init_size,
                          state_shape=env.state_shape,
+                         train_every=train_every,
                          mlp_layers=[10, 10])
         env.set_agents([agent])
         eval_env.set_agents([agent])
         sess.run(tf.global_variables_initializer())
 
         # Init a Logger to plot the learning curve
-        logger = Logger(xlabel='timestep', ylabel='reward',
-                        legend='DQN on Blackjack', log_path=log_path, csv_path=csv_path)
+        logger = Logger(log_dir)
 
         for episode in range(episode_num // evaluate_every):
 
@@ -126,8 +123,8 @@ if __name__ == '__main__':
             for task in tasks:
                 INPUT_QUEUE.put((task, True, None, None))
             for _ in range(evaluate_every):
-                trajectories = OUTPUT_QUEUE.get()
-
+                trajectories, timestep = OUTPUT_QUEUE.get()
+                env.timestep += timestep
                 # Feed transitions into agent memory, and train
                 for ts in trajectories[0]:
                     agent.feed(ts)
@@ -148,10 +145,10 @@ if __name__ == '__main__':
         logger.close_files()
 
         # Plot the learning curve
-        logger.plot('DQN')
+        logger.plot('DQN_multi_process')
         
         # Save model
-        save_dir = 'models/blackjack_dqn'
+        save_dir = 'models/blackjack_dqn_multi'
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         saver = tf.train.Saver()
