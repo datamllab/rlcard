@@ -95,7 +95,7 @@ class NolimitholdemGame(LimitholdemGame):
         Returns:
             (list): A list of legal actions
         '''
-        return self.round.get_nolimit_legal_actions(self.players)
+        return self.round.get_nolimit_legal_actions(players=self.players)
 
     def step(self, action):
         ''' Get the next state
@@ -178,14 +178,6 @@ class NolimitholdemGame(LimitholdemGame):
             self.round, self.game_pointer, self.round_counter, self.dealer, self.public_cards, self.players = self.history.pop()
             return True
         return False
-
-    def get_action_num(self):
-        ''' Return the number of applicable actions
-
-        Returns:
-            (int): The number of actions. There are 4 kinds actions (call, raise, check and fold). For 'raise' action, we provide all possible raise amount.
-        '''
-        return self.init_chips + 3
 
     def get_payoffs(self):
         ''' Return the payoffs of the game
