@@ -1,3 +1,5 @@
+from enum import Enum
+
 import numpy as np
 from copy import deepcopy
 from rlcard.games.limitholdem.game import LimitholdemGame
@@ -6,6 +8,17 @@ from rlcard.games.nolimitholdem.dealer import NolimitholdemDealer as Dealer
 from rlcard.games.nolimitholdem.player import NolimitholdemPlayer as Player
 from rlcard.games.nolimitholdem.judger import NolimitholdemJudger as Judger
 from rlcard.games.nolimitholdem.round import NolimitholdemRound as Round
+
+
+class Stage(Enum):
+
+    PREFLOP = 0
+    FLOP = 1
+    TURN = 2
+    RIVER = 3
+    END_HIDDEN = 4
+    SHOWDOWN = 5
+
 
 class NolimitholdemGame(LimitholdemGame):
 
@@ -48,6 +61,8 @@ class NolimitholdemGame(LimitholdemGame):
 
         # Initilize public cards
         self.public_cards = []
+        self.pot = 0
+        self.stage = Stage.PREFLOP
 
         # Randomly choose a big blind and a small blind
         s = np.random.randint(0, self.num_players)
@@ -105,17 +120,23 @@ class NolimitholdemGame(LimitholdemGame):
             self.history.append((r, b, r_c, d, p, ps))
 
         # Then we proceed to the next round
-        self.game_pointer = self.round.proceed_round(self.players, action)
+        self.pot = np.sum([player.in_chips for player in self.players])
+        self.game_pointer = self.round.proceed_round(self.players, action, self.pot)
 
         # If a round is over, we deal more public cards
         if self.round.is_over():
             # For the first round, we deal 3 cards
             if self.round_counter == 0:
+                self.stage = Stage.FLOP
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
             # For the following rounds, we deal only 1 card
-            elif self.round_counter <= 2:
+            elif self.round_counter == 1:
+                self.stage = Stage.TURN
+                self.public_cards.append(self.dealer.deal_card())
+            elif self.round_counter == 2:
+                self.stage = Stage.RIVER
                 self.public_cards.append(self.dealer.deal_card())
 
             self.round_counter += 1
@@ -139,7 +160,8 @@ class NolimitholdemGame(LimitholdemGame):
         state = self.players[player].get_state(self.public_cards, chips, legal_actions)
         state['stakes'] = [self.players[i].remained_chips for i in range(self.num_players)]
         state['current_player'] = self.game_pointer
-        # state['pot'] = self.dealer.pot
+        state['pot'] = self.pot
+        state['stage'] = self.stage
         return state
 
     def step_back(self):

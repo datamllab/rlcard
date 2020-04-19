@@ -1,6 +1,6 @@
 import unittest
 
-from rlcard.games.nolimitholdem.game import NolimitholdemGame as Game
+from rlcard.games.nolimitholdem.game import NolimitholdemGame as Game, Stage
 import numpy as np
 
 
@@ -43,6 +43,26 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game.step('check')
         self.assertEqual(game.round_counter, 1)
 
+    def test_step_2(self):
+        game = Game()
+
+        # test check
+        game.init_game()
+        self.assertEqual(Stage.PREFLOP, game.stage.PREFLOP)
+        game.step('call')
+        game.step('raise-pot')
+        game.step('call')
+
+        self.assertEqual(Stage.FLOP, game.stage.FLOP)
+        game.step('check')
+        game.step('check')
+
+        self.assertEqual(Stage.TURN, game.stage.TURN)
+        game.step('check')
+        game.step('check')
+
+        self.assertEqual(Stage.RIVER, game.stage.RIVER)
+
     def test_all_in(self):
         game = Game()
 
@@ -84,7 +104,6 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game.step('raise-pot')
         step_raised = game.round.raised[player_id]
         self.assertEqual(16, step_raised)
-        self.assertEqual(8, game.round.current_raise_amount)
 
         game.step('call')
         player_id = game.round.game_pointer
