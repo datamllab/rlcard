@@ -5,6 +5,8 @@ import numpy as np
 import rlcard
 from rlcard.envs.env import Env
 from rlcard.games.nolimitholdem.game import NolimitholdemGame as Game
+from rlcard.games.nolimitholdem.round import Action
+
 
 class NolimitholdemEnv(Env):
     ''' Limitholdem Environment
@@ -13,9 +15,9 @@ class NolimitholdemEnv(Env):
     def __init__(self, config):
         ''' Initialize the Limitholdem environment
         '''
-        self.game  =Game()
+        self.game = Game()
         super().__init__(config)
-        self.actions = ['call', 'fold', 'check', 'raise-bb', 'raise-3bb', 'raise-half-pot', 'raise-pot', 'all-in']
+        self.actions = list(Action)
         self.state_shape = [54]
         # for raise_amount in range(1, self.game.init_chips+1):
         #     self.actions.append(raise_amount)

@@ -1,9 +1,24 @@
 # -*- coding: utf-8 -*-
 ''' Implement Limit Texas Hold'em Round class
 '''
+from enum import Enum
 
 from rlcard.games.limitholdem.round import LimitholdemRound
 import numpy as np
+
+
+class Action(Enum):
+
+    FOLD = 0
+    CHECK = 1
+    CALL = 2
+    # RAISE_3BB = 3
+    RAISE_HALF_POT = 3
+    RAISE_POT = 4
+    # RAISE_2POT = 5
+    ALL_IN = 6
+    # SMALL_BLIND = 7
+    # BIG_BLIND = 8
 
 
 class NolimitholdemRound():
@@ -53,34 +68,34 @@ class NolimitholdemRound():
         Returns:
             (int): The game_pointer that indicates the next player
         '''
-        if action == 'call':
+        if action == Action.CALL:
             diff = max(self.raised) - self.raised[self.game_pointer]
             self.raised[self.game_pointer] = max(self.raised)
             players[self.game_pointer].bet(chips=diff)
             self.not_raise_num += 1
 
-        elif action == 'all-in':
+        elif action == Action.ALL_IN:
             all_in_quantity = players[self.game_pointer].remained_chips
             self.raised[self.game_pointer] = all_in_quantity + self.raised[self.game_pointer]
             players[self.game_pointer].bet(chips=all_in_quantity)
             self.not_raise_num = 1
 
-        elif action == 'raise-pot':
+        elif action == Action.RAISE_POT:
             self.raised[self.game_pointer] += pot
             players[self.game_pointer].bet(chips=pot)
             self.not_raise_num = 1
 
-        elif action == 'raise-half-pot':
+        elif action == Action.RAISE_HALF_POT:
             quantity = int(pot / 2)
             self.raised[self.game_pointer] += quantity
             players[self.game_pointer].bet(chips=quantity)
             self.not_raise_num = 1
 
-        elif action == 'fold':
+        elif action == Action.FOLD:
             players[self.game_pointer].status = 'folded'
             self.player_folded = True
 
-        elif action == 'check':
+        elif action == Action.CHECK:
             self.not_raise_num += 1
 
         self.game_pointer = (self.game_pointer + 1) % self.num_players
@@ -100,28 +115,29 @@ class NolimitholdemRound():
         Returns:
            (list):  A list of legal actions
         '''
-        full_actions = ['call', 'fold', 'check', 'raise-half-pot', 'raise-pot', 'all-in']
+        # full_actions = ['call', 'fold', 'check', 'raise-half-pot', 'raise-pot', 'all-in']
         # full_actions = ['call', 'fold', 'check', 'raise-bb', 'raise-3bb', 'raise-half-pot', 'raise-pot', 'all-in']
         # full_actions = ['call', 'fold', 'check', 'all-in']
+        full_actions = list(Action)
 
         # If the current chips are less than that of the highest one in the round, we can not check
         if self.raised[self.game_pointer] < max(self.raised):
-            full_actions.remove('check')
+            full_actions.remove(Action.CHECK)
 
         # If the current player has put in the chips that are more than others, we can not call
         if self.raised[self.game_pointer] == max(self.raised):
-            full_actions.remove('call')
+            full_actions.remove(Action.CALL)
 
         if players[self.game_pointer].in_chips + np.sum(self.raised) > players[self.game_pointer].remained_chips:
-            full_actions.remove('raise-pot')
+            full_actions.remove(Action.RAISE_POT)
 
         if players[self.game_pointer].in_chips + int(np.sum(self.raised) / 2) > players[self.game_pointer].remained_chips:
-            full_actions.remove('raise-half-pot')
+            full_actions.remove(Action.RAISE_HALF_POT)
 
         # If the current player has no more chips after call, we cannot raise
         diff = max(self.raised) - self.raised[self.game_pointer]
         if players[self.game_pointer].in_chips + diff >= players[self.game_pointer].remained_chips:
-            return ['call', 'fold']
+            return [Action.CALL, Action.FOLD]
 
         return full_actions
 
