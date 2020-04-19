@@ -6,7 +6,7 @@ from rlcard.games.limitholdem.round import LimitholdemRound
 import numpy as np
 
 
-class NolimitholdemRound(LimitholdemRound):
+class NolimitholdemRound():
     ''' Round can call other Classes' functions to keep the game running
     '''
 
@@ -38,13 +38,12 @@ class NolimitholdemRound(LimitholdemRound):
         '''
         self.game_pointer = game_pointer
         self.not_raise_num = 0
-        self.current_raise_amount = self.init_raise_amount
         if raised:
             self.raised = raised
         else:
             self.raised = [0 for _ in range(self.num_players)]
 
-    def proceed_round(self, players, action):
+    def proceed_round(self, players, action, pot):
         ''' Call other Classes's functions to keep one round running
 
         Args:
@@ -67,23 +66,15 @@ class NolimitholdemRound(LimitholdemRound):
             self.not_raise_num = 1
 
         elif action == 'raise-pot':
-            raise_pot_quantity = np.sum(self.raised)
-            self.raised[self.game_pointer] += raise_pot_quantity
-            players[self.game_pointer].bet(chips=raise_pot_quantity)
+            self.raised[self.game_pointer] += pot
+            players[self.game_pointer].bet(chips=pot)
             self.not_raise_num = 1
 
         elif action == 'raise-half-pot':
-            quantity = int(np.sum(self.raised) / 2)
+            quantity = int(pot / 2)
             self.raised[self.game_pointer] += quantity
             players[self.game_pointer].bet(chips=quantity)
             self.not_raise_num = 1
-
-
-        # elif isinstance(action, int):
-        #     self.current_raise_amount = action - (max(self.raised) - self.raised[self.game_pointer])
-        #     self.raised[self.game_pointer] += action
-        #     players[self.game_pointer].bet(chips=action)
-        #     self.not_raise_num = 1
 
         elif action == 'fold':
             players[self.game_pointer].status = 'folded'
@@ -109,7 +100,8 @@ class NolimitholdemRound(LimitholdemRound):
         Returns:
            (list):  A list of legal actions
         '''
-        full_actions = ['call', 'fold', 'check', 'raise-bb', 'raise-3bb', 'raise-half-pot', 'raise-pot', 'all-in']
+        full_actions = ['call', 'fold', 'check', 'raise-half-pot', 'raise-pot', 'all-in']
+        # full_actions = ['call', 'fold', 'check', 'raise-bb', 'raise-3bb', 'raise-half-pot', 'raise-pot', 'all-in']
         # full_actions = ['call', 'fold', 'check', 'all-in']
 
         # If the current chips are less than that of the highest one in the round, we can not check
@@ -141,3 +133,13 @@ class NolimitholdemRound(LimitholdemRound):
         #         full_actions.append(available_raise_amount)
 
         return full_actions
+
+    def is_over(self):
+        ''' Check whether the round is over
+
+        Returns:
+            (boolean): True if the current round is over
+        '''
+        if self.not_raise_num >= self.num_players:
+            return True
+        return False
