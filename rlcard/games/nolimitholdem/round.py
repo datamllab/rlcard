@@ -97,6 +97,7 @@ class NolimitholdemRound(LimitholdemRound):
         Returns:
            (list):  A list of legal actions
         '''
+        # full_actions = ['call', 'fold', 'check', 'raise-bb', 'raise-3bb', 'raise-half-pot', 'raise-pot', 'all-in']
         full_actions = ['call', 'fold', 'check', 'all-in']
 
         # If the current chips are less than that of the highest one in the round, we can not check
