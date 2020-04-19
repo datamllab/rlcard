@@ -20,7 +20,6 @@ class NolimitholdemRound(LimitholdemRound):
         self.game_pointer = None
         self.num_players = num_players
         self.init_raise_amount = init_raise_amount
-        self.current_raise_amount = self.init_raise_amount
 
         # Count the number without raise
         # If every player agree to not raise, the round is overr
@@ -63,21 +62,18 @@ class NolimitholdemRound(LimitholdemRound):
 
         elif action == 'all-in':
             all_in_quantity = players[self.game_pointer].remained_chips
-            self.current_raise_amount = self.get_current_raise_amount(all_in_quantity)
             self.raised[self.game_pointer] = all_in_quantity
             players[self.game_pointer].bet(chips=all_in_quantity)
             self.not_raise_num = 1
 
         elif action == 'raise-pot':
             raise_pot_quantity = np.sum(self.raised)
-            self.current_raise_amount = self.get_current_raise_amount(raise_pot_quantity)
             self.raised[self.game_pointer] += raise_pot_quantity
             players[self.game_pointer].bet(chips=raise_pot_quantity)
             self.not_raise_num = 1
 
         elif action == 'raise-half-pot':
             quantity = int(np.sum(self.raised) / 2)
-            self.current_raise_amount = self.get_current_raise_amount(quantity=quantity)
             self.raised[self.game_pointer] += quantity
             players[self.game_pointer].bet(chips=quantity)
             self.not_raise_num = 1
@@ -103,9 +99,6 @@ class NolimitholdemRound(LimitholdemRound):
              self.game_pointer = (self.game_pointer + 1) % self.num_players
 
         return self.game_pointer
-
-    def get_current_raise_amount(self, quantity):
-        return quantity - (max(self.raised) - self.raised[self.game_pointer])
 
     def get_nolimit_legal_actions(self, players):
         ''' Obtain the legal actions for the curent player
@@ -133,11 +126,10 @@ class NolimitholdemRound(LimitholdemRound):
         if players[self.game_pointer].in_chips + int(np.sum(self.raised) / 2) > players[self.game_pointer].remained_chips:
             full_actions.remove('raise-half-pot')
 
-
         # If the current player has no more chips after call, we cannot raise
         diff = max(self.raised) - self.raised[self.game_pointer]
         if players[self.game_pointer].in_chips + diff >= players[self.game_pointer].remained_chips:
-            return ['check']
+            return ['call']
 
         # # Append available raise amount to the action list
         # min_raise_amount = max(self.raised) - self.raised[self.game_pointer] + self.current_raise_amount

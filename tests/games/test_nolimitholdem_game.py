@@ -53,6 +53,20 @@ class TestNolimitholdemMethods(unittest.TestCase):
         self.assertEqual(100, game.players[player_id].in_chips)
         self.assertEqual(0, game.players[player_id].remained_chips)
 
+    def test_all_in_rounds(self):
+        game = Game()
+
+        game.init_game()
+        game.step('call')
+        game.step('check')
+        self.assertEqual(game.round_counter, 1)
+        game.step('check')
+        game.step('all-in')
+        game.step('call')
+        self.assertEqual(game.round_counter, 2)
+        self.assertListEqual(['call'], game.get_legal_actions())
+
+
     def test_raise_pot(self):
         game = Game()
 
@@ -72,7 +86,13 @@ class TestNolimitholdemMethods(unittest.TestCase):
         self.assertEqual(16, step_raised)
         self.assertEqual(8, game.round.current_raise_amount)
 
-    def test_raise_pot(self):
+        game.step('call')
+        player_id = game.round.game_pointer
+        game.step('raise-pot')
+        step_raised = game.round.raised[player_id]
+        self.assertEqual(32, step_raised)
+
+    def test_raise_half_pot(self):
         game = Game()
 
         _, player_id = game.init_game()
