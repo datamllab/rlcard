@@ -57,13 +57,20 @@ class NolimitholdemRound(LimitholdemRound):
         if action == 'call':
             diff = max(self.raised) - self.raised[self.game_pointer]
             self.raised[self.game_pointer] = max(self.raised)
-            players[self.game_pointer].in_chips += diff
+            players[self.game_pointer].bet(chips=diff)
             self.not_raise_num += 1
+
+        elif action == 'all-in':
+            all_in_quantity = players[self.game_pointer].remained_chips
+            self.current_raise_amount = all_in_quantity - (max(self.raised) - self.raised[self.game_pointer])
+            self.raised[self.game_pointer] = all_in_quantity
+            players[self.game_pointer].bet(chips=all_in_quantity)
+            self.not_raise_num = 1
 
         elif isinstance(action, int):
             self.current_raise_amount = action - (max(self.raised) - self.raised[self.game_pointer])
             self.raised[self.game_pointer] += action
-            players[self.game_pointer].in_chips += action
+            players[self.game_pointer].bet(chips=action)
             self.not_raise_num = 1
 
         elif action == 'fold':
@@ -90,7 +97,8 @@ class NolimitholdemRound(LimitholdemRound):
         Returns:
            (list):  A list of legal actions
         '''
-        full_actions = ['call', 'fold', 'check']
+        # full_actions = ['call', 'fold', 'check', 'raise-bb', 'raise-3bb', 'raise-half-pot', 'raise-pot', 'all-in']
+        full_actions = ['call', 'fold', 'check', 'all-in']
 
         # If the current chips are less than that of the highest one in the round, we can not check
         if self.raised[self.game_pointer] < max(self.raised):
@@ -103,16 +111,14 @@ class NolimitholdemRound(LimitholdemRound):
         # If the current player has no more chips after call, we cannot raise
         diff = max(self.raised) - self.raised[self.game_pointer]
         if players[self.game_pointer].in_chips + diff >= players[self.game_pointer].remained_chips:
-            return full_actions
+            return ['check']
 
         # Append available raise amount to the action list
         min_raise_amount = max(self.raised) - self.raised[self.game_pointer] + self.current_raise_amount
         if min_raise_amount <= 0:
             raise ValueError("Raise amount {} should not be smaller or equal to zero".format(min_raise_amount))
-        # If the player cannot provide min raise amount, he has to all-in.
-        if players[self.game_pointer].in_chips + min_raise_amount >= players[self.game_pointer].remained_chips:
-            full_actions.append(players[self.game_pointer].remained_chips - players[self.game_pointer].in_chips)
-        else:
+
+        if players[self.game_pointer].in_chips + min_raise_amount < players[self.game_pointer].remained_chips:
             for available_raise_amount in range(min_raise_amount, players[self.game_pointer].remained_chips - players[self.game_pointer].in_chips + 1):
                 full_actions.append(available_raise_amount)
 
