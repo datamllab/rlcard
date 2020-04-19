@@ -11,3 +11,7 @@ class NolimitholdemPlayer(LimitholdemPlayer):
         '''
         super(NolimitholdemPlayer, self).__init__(player_id)
         self.remained_chips = init_chips
+
+    def bet(self, chips):
+        self.in_chips += chips
+        self.remained_chips -= chips
