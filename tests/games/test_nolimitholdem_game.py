@@ -1,6 +1,8 @@
 import unittest
 
 from rlcard.games.nolimitholdem.game import NolimitholdemGame as Game
+import numpy as np
+
 
 class TestNolimitholdemMethods(unittest.TestCase):
 
@@ -47,6 +49,35 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game.step('call')
         game.step('check')
         self.assertEqual(game.round_counter, 1)
+
+    def test_all_in(self):
+        game = Game()
+
+        _, player_id = game.init_game()
+        game.step('all-in')
+        step_raised = game.round.raised[player_id]
+        self.assertEqual(100, step_raised)
+
+    def test_payoffs_1(self):
+        game = Game()
+        np.random.seed(0)
+        game.init_game()
+        game.step('call')
+        game.step(4)
+        game.step('fold')
+        self.assertTrue(game.is_over())
+        self.assertListEqual([-2.0, 2.0], game.get_payoffs())
+
+    def test_payoffs_2(self):
+        game = Game()
+        np.random.seed(0)
+        game.init_game()
+        game.step('call')
+        game.step(4)
+        game.step('all-in')
+        game.step('fold')
+        self.assertTrue(game.is_over())
+        self.assertListEqual([6.0, -6.0], game.get_payoffs())
 
 if __name__ == '__main__':
     unittest.main()

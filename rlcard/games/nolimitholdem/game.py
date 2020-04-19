@@ -52,8 +52,8 @@ class NolimitholdemGame(LimitholdemGame):
         # Randomly choose a big blind and a small blind
         s = np.random.randint(0, self.num_players)
         b = (s + 1) % self.num_players
-        self.players[b].in_chips = self.big_blind
-        self.players[s].in_chips = self.small_blind
+        self.players[b].bet(chips=self.big_blind)
+        self.players[s].bet(chips=self.small_blind)
 
         # The player next to the small blind plays the first
         self.game_pointer = (b + 1) % self.num_players
@@ -137,7 +137,7 @@ class NolimitholdemGame(LimitholdemGame):
         chips = [self.players[i].in_chips for i in range(self.num_players)]
         legal_actions = self.get_legal_actions()
         state = self.players[player].get_state(self.public_cards, chips, legal_actions)
-        state['stakes'] = [self.players[i].remained_chips-self.players[i].in_chips for i in range(self.num_players)]
+        state['stakes'] = [self.players[i].remained_chips for i in range(self.num_players)]
         state['current_player'] = self.game_pointer
 
         return state
@@ -160,6 +160,16 @@ class NolimitholdemGame(LimitholdemGame):
             (int): The number of actions. There are 4 kinds actions (call, raise, check and fold). For 'raise' action, we provide all possible raise amount.
         '''
         return self.init_chips + 3
+
+    def get_payoffs(self):
+        ''' Return the payoffs of the game
+
+        Returns:
+            (list): Each entry corresponds to the payoff of one player
+        '''
+        hands = [p.hand + self.public_cards if p.status == 'alive' else None for p in self.players]
+        chips_payoffs = self.judger.judge_game(self.players, hands)
+        return chips_payoffs
 
 
 #if __name__ == "__main__":

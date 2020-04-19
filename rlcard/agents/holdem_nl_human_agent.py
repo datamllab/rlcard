@@ -60,13 +60,12 @@ def _print_state(state, action_record):
 
     print('\n=============== Community Card ===============')
     print_card(state['public_cards'])
-    print('===============   Your Hand    ===============')
-    print_card(state['hand'])
-    print('===============     Chips      ===============')
-    print(f'Your (Player {state["current_player"]}:   {state["my_chips"]}')
-    print(f'Rest: {state["all_chips"]}')
 
-    print(f'Your stake:   {state["stakes"][state["current_player"]]}')
+    print(f'=============   Player {state["current_player"]} - Hand    =============')
+    print_card(state['hand'])
+
+    print('===============     Chips      ===============')
+    print(f'Rest: {state["all_chips"]}')
     print(f'Rest: {state["stakes"]}')
 
     print('\n=========== Actions You Can Choose ===========')
