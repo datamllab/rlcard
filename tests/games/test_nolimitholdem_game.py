@@ -16,11 +16,6 @@ class TestNolimitholdemMethods(unittest.TestCase):
         state, player_id = game.init_game()
         test_id = game.get_player_id()
         self.assertEqual(test_id, player_id)
-        self.assertIn('call', state['legal_actions'])
-        self.assertIn('fold', state['legal_actions'])
-        self.assertIn('all-in', state['legal_actions'])
-        for i in range(3, 99):
-            self.assertIn(i, state['legal_actions'])
 
     def test_step(self):
         game = Game()
@@ -69,7 +64,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
         _, player_id = game.init_game()
         game.step('all-in')
         step_raised = game.round.raised[player_id]
-        self.assertEqual(99, step_raised)
+        self.assertEqual(100, step_raised)
         self.assertEqual(100, game.players[player_id].in_chips)
         self.assertEqual(0, game.players[player_id].remained_chips)
 
@@ -80,12 +75,20 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game.step('call')
         game.step('check')
         self.assertEqual(game.round_counter, 1)
+        self.assertListEqual(['fold', 'check', 'raise-half-pot', 'raise-pot', 'all-in'], game.get_legal_actions())
+
         game.step('check')
         game.step('all-in')
+        self.assertListEqual(['call', 'fold'], game.get_legal_actions())
         game.step('call')
         self.assertEqual(game.round_counter, 2)
-        self.assertListEqual(['call'], game.get_legal_actions())
+        self.assertListEqual([], game.get_legal_actions())
 
+    def test_wrong_steps(self):
+        game = Game()
+
+        game.init_game()
+        self.assertRaises(Exception, game.step, 'check')
 
     def test_raise_pot(self):
         game = Game()
@@ -134,7 +137,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
         np.random.seed(0)
         game.init_game()
         game.step('call')
-        game.step(4)
+        game.step('raise-half-pot')
         game.step('fold')
         self.assertTrue(game.is_over())
         self.assertListEqual([-2.0, 2.0], game.get_payoffs())

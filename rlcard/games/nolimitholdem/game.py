@@ -109,6 +109,10 @@ class NolimitholdemGame(LimitholdemGame):
                 (dict): next player's state
                 (int): next plater's id
         '''
+
+        if action not in self.get_legal_actions():
+            raise Exception('Action not allowed')
+
         if self.allow_step_back:
             # First snapshot the current state
             r = deepcopy(self.round)
