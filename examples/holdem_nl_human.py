@@ -36,7 +36,7 @@ while (True):
         print('>> Player', pair[0], 'chooses', pair[1])
 
     # Let's take a look at what the agent card is
-    print('===============     Other Players    ===============')
+    print('===============     Cards all Players    ===============')
     for hands in env.get_perfect_information()['hand_cards']:
         print_card(hands)
 

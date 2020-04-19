@@ -61,7 +61,7 @@ class NolimitholdemRound():
 
         elif action == 'all-in':
             all_in_quantity = players[self.game_pointer].remained_chips
-            self.raised[self.game_pointer] = all_in_quantity
+            self.raised[self.game_pointer] = all_in_quantity + self.raised[self.game_pointer]
             players[self.game_pointer].bet(chips=all_in_quantity)
             self.not_raise_num = 1
 
@@ -87,7 +87,7 @@ class NolimitholdemRound():
 
         # Skip the folded players
         while players[self.game_pointer].status == 'folded':
-             self.game_pointer = (self.game_pointer + 1) % self.num_players
+            self.game_pointer = (self.game_pointer + 1) % self.num_players
 
         return self.game_pointer
 
@@ -121,16 +121,7 @@ class NolimitholdemRound():
         # If the current player has no more chips after call, we cannot raise
         diff = max(self.raised) - self.raised[self.game_pointer]
         if players[self.game_pointer].in_chips + diff >= players[self.game_pointer].remained_chips:
-            return ['call']
-
-        # # Append available raise amount to the action list
-        # min_raise_amount = max(self.raised) - self.raised[self.game_pointer] + self.current_raise_amount
-        # if min_raise_amount <= 0:
-        #     raise ValueError("Raise amount {} should not be smaller or equal to zero".format(min_raise_amount))
-
-        # if players[self.game_pointer].in_chips + min_raise_amount < players[self.game_pointer].remained_chips:
-        #     for available_raise_amount in range(min_raise_amount, players[self.game_pointer].remained_chips - players[self.game_pointer].in_chips + 1):
-        #         full_actions.append(available_raise_amount)
+            return ['call', 'fold']
 
         return full_actions
 
