@@ -71,3 +71,4 @@ def _print_state(state, action_record):
     print('\n=========== Actions You Can Choose ===========')
     print(', '.join([str(index) + ': ' + str(action) for index, action in enumerate(state['legal_actions'])]))
     print('')
+    print(state)

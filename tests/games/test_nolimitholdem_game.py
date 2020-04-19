@@ -25,13 +25,6 @@ class TestNolimitholdemMethods(unittest.TestCase):
     def test_step(self):
         game = Game()
 
-        # test raise
-        _, player_id = game.init_game()
-        init_raised = game.round.raised[player_id]
-        game.step(10)
-        step_raised = game.round.raised[player_id]
-        self.assertEqual(init_raised + 10, step_raised)
-
         # test call
         game.init_game()
         init_not_raise_num = game.round.not_raise_num
@@ -60,6 +53,43 @@ class TestNolimitholdemMethods(unittest.TestCase):
         self.assertEqual(100, game.players[player_id].in_chips)
         self.assertEqual(0, game.players[player_id].remained_chips)
 
+    def test_raise_pot(self):
+        game = Game()
+
+        _, player_id = game.init_game()
+        game.step('raise-pot')
+        step_raised = game.round.raised[player_id]
+        self.assertEqual(4, step_raised)
+
+        player_id = game.round.game_pointer
+        game.step('raise-pot')
+        step_raised = game.round.raised[player_id]
+        self.assertEqual(8, step_raised)
+
+        player_id = game.round.game_pointer
+        game.step('raise-pot')
+        step_raised = game.round.raised[player_id]
+        self.assertEqual(16, step_raised)
+        self.assertEqual(8, game.round.current_raise_amount)
+
+    def test_raise_pot(self):
+        game = Game()
+
+        _, player_id = game.init_game()
+        game.step('raise-half-pot')
+        step_raised = game.round.raised[player_id]
+        self.assertEqual(2, step_raised)
+
+        player_id = game.round.game_pointer
+        game.step('raise-half-pot')
+        step_raised = game.round.raised[player_id]
+        self.assertEqual(4, step_raised)
+
+        player_id = game.round.game_pointer
+        game.step('raise-half-pot')
+        step_raised = game.round.raised[player_id]
+        self.assertEqual(5, step_raised)
+
     def test_payoffs_1(self):
         game = Game()
         np.random.seed(0)
@@ -75,7 +105,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
         np.random.seed(0)
         game.init_game()
         game.step('call')
-        game.step(4)
+        game.step('raise-pot')
         game.step('all-in')
         game.step('fold')
         self.assertTrue(game.is_over())

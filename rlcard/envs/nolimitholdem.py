@@ -15,10 +15,10 @@ class NolimitholdemEnv(Env):
         '''
         self.game  =Game()
         super().__init__(config)
-        self.actions = ['call', 'fold', 'check', 'all-in']
+        self.actions = ['call', 'fold', 'check', 'raise-bb', 'raise-3bb', 'raise-half-pot', 'raise-pot', 'all-in']
         self.state_shape = [54]
-        for raise_amount in range(1, self.game.init_chips+1):
-            self.actions.append(raise_amount)
+        # for raise_amount in range(1, self.game.init_chips+1):
+        #     self.actions.append(raise_amount)
 
         with open(os.path.join(rlcard.__path__[0], 'games/limitholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
