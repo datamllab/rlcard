@@ -15,7 +15,7 @@ class NolimitholdemEnv(Env):
         '''
         self.game  =Game()
         super().__init__(config)
-        self.actions = ['call', 'fold', 'check']
+        self.actions = ['call', 'fold', 'check', 'all-in']
         self.state_shape = [54]
         for raise_amount in range(1, self.game.init_chips+1):
             self.actions.append(raise_amount)
