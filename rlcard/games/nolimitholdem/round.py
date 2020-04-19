@@ -16,7 +16,7 @@ class Action(Enum):
     RAISE_HALF_POT = 3
     RAISE_POT = 4
     # RAISE_2POT = 5
-    ALL_IN = 6
+    ALL_IN = 5
     # SMALL_BLIND = 7
     # BIG_BLIND = 8
 
@@ -115,9 +115,7 @@ class NolimitholdemRound():
         Returns:
            (list):  A list of legal actions
         '''
-        # full_actions = ['call', 'fold', 'check', 'raise-half-pot', 'raise-pot', 'all-in']
-        # full_actions = ['call', 'fold', 'check', 'raise-bb', 'raise-3bb', 'raise-half-pot', 'raise-pot', 'all-in']
-        # full_actions = ['call', 'fold', 'check', 'all-in']
+
         full_actions = list(Action)
 
         # If the current chips are less than that of the highest one in the round, we can not check

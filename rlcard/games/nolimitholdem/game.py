@@ -7,7 +7,7 @@ from rlcard.games.limitholdem.game import LimitholdemGame
 from rlcard.games.nolimitholdem.dealer import NolimitholdemDealer as Dealer
 from rlcard.games.nolimitholdem.player import NolimitholdemPlayer as Player
 from rlcard.games.nolimitholdem.judger import NolimitholdemJudger as Judger
-from rlcard.games.nolimitholdem.round import NolimitholdemRound as Round
+from rlcard.games.nolimitholdem.round import NolimitholdemRound as Round, Action
 
 
 class Stage(Enum):
@@ -188,6 +188,15 @@ class NolimitholdemGame(LimitholdemGame):
         hands = [p.hand + self.public_cards if p.status == 'alive' else None for p in self.players]
         chips_payoffs = self.judger.judge_game(self.players, hands)
         return chips_payoffs
+
+    @staticmethod
+    def get_action_num():
+        ''' Return the number of applicable actions
+
+        Returns:
+            (int): The number of actions. There are 4 actions (call, raise, check and fold)
+        '''
+        return len(Action)
 
 
 #if __name__ == "__main__":
