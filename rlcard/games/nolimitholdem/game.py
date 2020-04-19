@@ -106,7 +106,6 @@ class NolimitholdemGame(LimitholdemGame):
 
         # Then we proceed to the next round
         self.game_pointer = self.round.proceed_round(self.players, action)
-        self.dealer.pot = np.sum([player.in_chips for player in self.players])
 
         # If a round is over, we deal more public cards
         if self.round.is_over():
@@ -140,7 +139,7 @@ class NolimitholdemGame(LimitholdemGame):
         state = self.players[player].get_state(self.public_cards, chips, legal_actions)
         state['stakes'] = [self.players[i].remained_chips for i in range(self.num_players)]
         state['current_player'] = self.game_pointer
-        state['pot'] = self.dealer.pot
+        # state['pot'] = self.dealer.pot
         return state
 
     def step_back(self):
