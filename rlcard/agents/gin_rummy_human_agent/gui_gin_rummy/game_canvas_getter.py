@@ -111,8 +111,9 @@ class GameCanvasGetter(object):
         if isinstance(last_move, DealHandMove) or \
                 isinstance(last_move, DrawCardMove) or \
                 isinstance(last_move, PickupDiscardMove):
+            going_out_deadwood_count = settings.going_out_deadwood_count
             hand = self.get_held_pile_cards(player_id=player_id)
-            gin_cards = judge.get_gin_cards(hand=hand)
+            knock_cards, gin_cards = judge.get_going_out_cards(hand=hand, going_out_deadwood_count=going_out_deadwood_count)
             if settings.is_allowed_gin and gin_cards:
                 legal_actions = [GinAction()]
             else:
@@ -125,10 +126,6 @@ class GameCanvasGetter(object):
                 legal_actions = discard_actions
                 if settings.is_allowed_knock:
                     if player_id == 0 or not settings.is_south_never_knocks:
-                        going_out_deadwood_count = settings.going_out_deadwood_count
-                        hand = self.get_held_pile_cards(player_id=player_id)
-                        knock_cards = judge.get_knock_cards(hand=hand,
-                                                            going_out_deadwood_count=going_out_deadwood_count)
                         if knock_cards:
                             knock_actions = [KnockAction(card=card) for card in knock_cards]
                             if not settings.is_always_knock:
