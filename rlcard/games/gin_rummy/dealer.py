@@ -34,3 +34,4 @@ class GinRummyDealer(object):
         '''
         for _ in range(num):
             player.hand.append(self.stock_pile.pop())
+        player.did_populate_hand()
