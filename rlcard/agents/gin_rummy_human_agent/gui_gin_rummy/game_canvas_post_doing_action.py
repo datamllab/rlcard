@@ -159,7 +159,8 @@ class GameCanvasPostDoingAction(object):
         current_player_id = game_canvas.current_player_id
 
         current_hand = game_canvas.getter.get_held_pile_cards(player_id=current_player_id)
-        gin_cards = judge.get_gin_cards(hand=current_hand)
+        going_out_deadwood_count = self.game_canvas.game_canvas_updater.env.game.settings.going_out_deadwood_count
+        _, gin_cards = judge.get_going_out_cards(hand=current_hand, going_out_deadwood_count=going_out_deadwood_count)
         card = gin_cards[0]
         card_id = gin_rummy_utils.get_card_id(card=card)
         card_item = game_canvas.card_items[card_id]
