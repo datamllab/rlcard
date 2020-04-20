@@ -71,7 +71,7 @@ class GinRummyRound(object):
         assert len(current_player.hand) == 10
         card = self.dealer.stock_pile.pop()
         self.move_sheet.append(DrawCardMove(current_player, action=action, card=card))
-        current_player.hand.append(card)
+        current_player.add_card_to_hand(card=card)
 
     def pick_up_discard(self, action: PickUpDiscardAction):
         # when current_player takes PickUpDiscardAction step, the move is recorded and executed
@@ -81,7 +81,7 @@ class GinRummyRound(object):
         assert len(current_player.hand) == 10
         card = self.dealer.discard_pile.pop()
         self.move_sheet.append(PickupDiscardMove(current_player, action, card=card))
-        current_player.hand.append(card)
+        current_player.add_card_to_hand(card=card)
         current_player.known_cards.append(card)
 
     def declare_dead_hand(self, action: DeclareDeadHandAction):
@@ -102,7 +102,7 @@ class GinRummyRound(object):
         assert len(current_player.hand) == 11
         self.move_sheet.append(DiscardMove(current_player, action))
         card = action.card
-        current_player.hand.remove(card)
+        current_player.remove_card_from_hand(card=card)
         if card in current_player.known_cards:
             current_player.known_cards.remove(card)
         self.dealer.discard_pile.append(card)
@@ -118,12 +118,12 @@ class GinRummyRound(object):
         self.going_out_player_id = self.current_player_id
         assert len(current_player.hand) == 11
         card = action.card
-        current_player.hand.remove(card)
+        current_player.remove_card_from_hand(card=card)
         if card in current_player.known_cards:
             current_player.known_cards.remove(card)
         self.current_player_id = 0
 
-    def gin(self, action: GinAction):
+    def gin(self, action: GinAction, going_out_deadwood_count: int):
         # when current_player takes GinAction step, the move is recorded and executed
         # opponent knows that the card is no longer in current_player hand
         # north becomes current_player to score his hand
@@ -132,9 +132,9 @@ class GinRummyRound(object):
         self.going_out_action = action
         self.going_out_player_id = self.current_player_id
         assert len(current_player.hand) == 11
-        gin_cards = judge.get_gin_cards(hand=current_player.hand)
+        _, gin_cards = judge.get_going_out_cards(current_player.hand, going_out_deadwood_count)
         card = gin_cards[0]
-        current_player.hand.remove(card)
+        current_player.remove_card_from_hand(card=card)
         if card in current_player.known_cards:
             current_player.known_cards.remove(card)
         self.current_player_id = 0
