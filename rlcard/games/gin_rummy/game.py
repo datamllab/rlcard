@@ -63,7 +63,7 @@ class GinRummyGame(Game):
         elif type(action) is DeclareDeadHandAction:
             self.round.declare_dead_hand(action)
         elif type(action) is GinAction:
-            self.round.gin(action)
+            self.round.gin(action, going_out_deadwood_count=self.settings.going_out_deadwood_count)
         elif type(action) is DiscardAction:
             self.round.discard(action)
         elif type(action) is KnockAction:
