@@ -72,11 +72,11 @@ with tf.Session() as sess:
 
     # Plot the learning curve
     logger.plot('DQN')
-    
+
     # Save model
     save_dir = 'models/leduc_holdem_dqn'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     saver = tf.train.Saver()
     saver.save(sess, os.path.join(save_dir, 'model'))
-    
+
