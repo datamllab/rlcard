@@ -6,8 +6,6 @@
 
 from typing import List
 
-import copy
-
 from rlcard.core import Card
 
 import rlcard.games.gin_rummy.utils.utils as utils
@@ -23,11 +21,10 @@ import rlcard.games.gin_rummy.utils.utils as utils
 """
 
 
-def get_meld_clusters(hand: List[Card], opponent_meld_piles: List[List[Card]] = None) -> List[List[List[Card]]]:
-    # opponent_meld_piles are those of the going_out_player to be used for laying off cards
+def get_meld_clusters(hand: List[Card]) -> List[List[List[Card]]]:
     result = []  # type: List[List[List[Card]]]
-    all_run_melds = [set(x) for x in _get_all_run_melds(hand)]
-    all_set_melds = [set(x) for x in _get_all_set_melds(hand)]
+    all_run_melds = [frozenset(x) for x in get_all_run_melds(hand)]
+    all_set_melds = [frozenset(x) for x in get_all_set_melds(hand)]
     all_melds = all_run_melds + all_set_melds
     all_melds_count = len(all_melds)
     for i in range(0, all_melds_count):
@@ -66,35 +63,38 @@ def get_best_meld_clusters(hand: List[Card]) -> List[List[List[Card]]]:
                 result.append(meld_clusters[i])
     return result
 
-# private methods
 
-
-def _get_all_run_melds(hand: List[Card]) -> List[List[Card]]:
+def get_all_run_melds(hand: List[Card]) -> List[List[Card]]:
     card_count = len(hand)
     hand_by_suit = sorted(hand, key=lambda card: utils.get_card_id(card))
-    max_run_melds_from_left = [[] for _ in hand_by_suit]
-    for i in range(card_count):
-        card = hand_by_suit[i]
-        card_rank_id = utils.get_card_id(card)
-        max_run_melds_from_left[i].append(card)
-        for j in range(i + 1, card_count):
-            next_card = hand_by_suit[j]
-            next_card_rank_id = utils.get_card_id(next_card)
-            if next_card.suit != card.suit or next_card_rank_id != card_rank_id + (j - i):
-                break
+    max_run_melds = []
+
+    i = 0
+    while i < card_count - 2:
+        card_i = hand_by_suit[i]
+        j = i + 1
+        card_j = hand_by_suit[j]
+        while utils.get_rank_id(card_j) == utils.get_rank_id(card_i) + j - i and card_j.suit == card_i.suit:
+            j += 1
+            if j < card_count:
+                card_j = hand_by_suit[j]
             else:
-                max_run_melds_from_left[i].append(next_card)
-    max_run_melds_from_left = [run_meld for run_meld in max_run_melds_from_left if len(run_meld) >= 3]
-    result = copy.deepcopy(max_run_melds_from_left)
-    for max_run_meld in max_run_melds_from_left:
+                break
+        max_run_meld = hand_by_suit[i:j]
+        if len(max_run_meld) >= 3:
+            max_run_melds.append(max_run_meld)
+        i = j
+
+    result = []
+    for max_run_meld in max_run_melds:
         max_run_meld_count = len(max_run_meld)
-        if max_run_meld_count > 3:
-            for i in range(max_run_meld_count - 3):
-                result.append(max_run_meld[:-(i + 1)])
+        for i in range(max_run_meld_count - 2):
+            for j in range(i + 3, max_run_meld_count + 1):
+                result.append(max_run_meld[i:j])
     return result
 
 
-def _get_all_set_melds(hand: List[Card]) -> List[List[Card]]:
+def get_all_set_melds(hand: List[Card]) -> List[List[Card]]:
     max_set_melds = []
     hand_by_rank = sorted(hand, key=lambda x: x.rank)
     set_meld = []
@@ -109,9 +109,41 @@ def _get_all_set_melds(hand: List[Card]) -> List[List[Card]]:
         current_rank = card.rank
     if len(set_meld) >= 3:
         max_set_melds.append(set_meld)
-    result = copy.deepcopy(max_set_melds)
+    result = []
     for max_set_meld in max_set_melds:
+        result.append(max_set_meld)
         if len(max_set_meld) == 4:
             for meld_card in max_set_meld:
                 result.append([card for card in max_set_meld if card != meld_card])
+    return result
+
+
+def get_all_run_melds_for_suit(cards: List[Card], suit: str) -> List[List[Card]]:
+    cards_for_suit = [card for card in cards if card.suit == suit]
+    cards_for_suit_count = len(cards_for_suit)
+    cards_for_suit = sorted(cards_for_suit, key=lambda card: utils.get_card_id(card))
+    max_run_melds = []
+
+    i = 0
+    while i < cards_for_suit_count - 2:
+        card_i = cards_for_suit[i]
+        j = i + 1
+        card_j = cards_for_suit[j]
+        while utils.get_rank_id(card_j) == utils.get_rank_id(card_i) + j - i:
+            j += 1
+            if j < cards_for_suit_count:
+                card_j = cards_for_suit[j]
+            else:
+                break
+        max_run_meld = cards_for_suit[i:j]
+        if len(max_run_meld) >= 3:
+            max_run_melds.append(max_run_meld)
+        i = j
+
+    result = []
+    for max_run_meld in max_run_melds:
+        max_run_meld_count = len(max_run_meld)
+        for i in range(max_run_meld_count - 2):
+            for j in range(i + 3, max_run_meld_count + 1):
+                result.append(max_run_meld[i:j])
     return result

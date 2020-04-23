@@ -28,7 +28,7 @@ class TestNolimitholdemEnv(unittest.TestCase):
             self.assertIn(decoded, env.actions)
 
         decoded = env._decode_action(3)
-        self.assertEqual(decoded, 'fold')
+        self.assertEqual(decoded, 'all-in')
 
         env.step(0)
         decoded = env._decode_action(0)
