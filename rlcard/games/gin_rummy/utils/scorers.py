@@ -12,6 +12,7 @@ from typing import Callable
 
 from .action_event import *
 from ..player import GinRummyPlayer
+from .move import ScoreNorthMove, ScoreSouthMove
 
 import rlcard.games.gin_rummy.utils.melding as melding
 import rlcard.games.gin_rummy.utils.utils as utils
@@ -32,14 +33,31 @@ class GinRummyScorer:
         return payoffs
 
 
-def get_payoff_gin_rummy_v1(player: GinRummyPlayer, game: 'GinRummyGame') -> int or float:
+def get_payoff_gin_rummy_v0(player: GinRummyPlayer, game: 'GinRummyGame') -> int:
+    ''' Get the payoff of player: deadwood_count of player
+
+    Returns:
+        payoff (int or float): payoff for player (lower is better)
+    '''
+    moves = game.round.move_sheet
+    if player.player_id == 0:
+        score_player_move = moves[-2]
+        assert isinstance(score_player_move, ScoreNorthMove)
+    else:
+        score_player_move = moves[-1]
+        assert isinstance(score_player_move, ScoreSouthMove)
+    deadwood_count = score_player_move.deadwood_count
+    return deadwood_count
+
+
+def get_payoff_gin_rummy_v1(player: GinRummyPlayer, game: 'GinRummyGame') -> float:
     ''' Get the payoff of player:
             a) 1.0 if player gins
             b) 0.2 if player knocks
             c) -deadwood_count / 100 otherwise
 
     Returns:
-        payoff (int or float): payoff for player
+        payoff (int or float): payoff for player (higher is better)
     '''
     # payoff is 1.0 if player gins
     # payoff is 0.2 if player knocks
