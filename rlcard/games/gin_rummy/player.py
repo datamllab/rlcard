@@ -62,6 +62,7 @@ class GinRummyPlayer(object):
 
     def did_populate_hand(self):
         self.meld_kinds_by_rank_id = [[] for _ in range(13)]
+        self.meld_run_by_suit_id = [[] for _ in range(4)]
         all_set_melds = melding.get_all_set_melds(hand=self.hand)
         for set_meld in all_set_melds:
             rank_id = utils.get_rank_id(set_meld[0])
