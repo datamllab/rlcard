@@ -17,7 +17,7 @@ rank_to_deadwood_value = {"A": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7
                           "T": 10, "J": 10, "Q": 10, "K": 10}
 
 
-def from_card_id(card_id: int) -> Card:
+def card_from_card_id(card_id: int) -> Card:
     ''' Make card from its card_id
 
     Args:
@@ -32,10 +32,10 @@ def from_card_id(card_id: int) -> Card:
 
 
 # deck is always in order from AS, 2S, ..., AH, 2H, ..., AD, 2D, ..., AC, 2C, ... QC, KC
-_deck = [from_card_id(card_id) for card_id in range(52)]  # want this to be read-only
+_deck = [card_from_card_id(card_id) for card_id in range(52)]  # want this to be read-only
 
 
-def from_text(text: str) -> Card:
+def card_from_text(text: str) -> Card:
     assert len(text) == 2
     return Card(rank=text[0], suit=text[1])
 
