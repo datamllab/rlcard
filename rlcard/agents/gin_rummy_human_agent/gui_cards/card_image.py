@@ -5,9 +5,10 @@
     Date created: 3/14/2020
 '''
 
+import os
 from PIL import Image, ImageTk, ImageDraw
 
-image_dir = "../rlcard/agents/gin_rummy_human_agent/gui_cards"
+image_dir = os.path.abspath(os.path.dirname(__file__))
 
 ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
 suits = ['C', 'D', 'H', 'S']
