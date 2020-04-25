@@ -1,5 +1,6 @@
 import unittest
 
+from rlcard.games.limitholdem.player import PlayerStatus
 from rlcard.games.nolimitholdem.game import NolimitholdemGame as Game, Stage
 import numpy as np
 
@@ -25,9 +26,10 @@ class TestNolimitholdemMethods(unittest.TestCase):
         self.assertEqual(init_not_raise_num + 1, step_not_raise_num)
 
         # test fold
-        game.init_game()
+        _, player_id = game.init_game()
         game.step(Action.FOLD)
-        self.assertTrue(game.round.player_folded)
+
+        self.assertEqual(PlayerStatus.FOLDED, game.players[player_id].status)
 
         # test check
         game.init_game()
@@ -52,6 +54,16 @@ class TestNolimitholdemMethods(unittest.TestCase):
         self.assertEqual(Stage.TURN, game.stage)
         game.step(Action.CHECK)
         game.step(Action.CHECK)
+
+        self.assertEqual(Stage.RIVER, game.stage)
+
+    def test_auto_step(self):
+        game = Game()
+
+        game.init_game()
+        self.assertEqual(Stage.PREFLOP, game.stage)
+        game.step(Action.ALL_IN)
+        game.step(Action.CALL)
 
         self.assertEqual(Stage.RIVER, game.stage)
 

@@ -3,6 +3,7 @@ from enum import Enum
 import numpy as np
 from copy import deepcopy
 from rlcard.games.limitholdem.game import LimitholdemGame
+from rlcard.games.limitholdem.player import PlayerStatus
 
 from rlcard.games.nolimitholdem.dealer import NolimitholdemDealer as Dealer
 from rlcard.games.nolimitholdem.player import NolimitholdemPlayer as Player
@@ -146,6 +147,34 @@ class NolimitholdemGame(LimitholdemGame):
             self.round_counter += 1
             self.round.start_new_round(self.game_pointer)
 
+        players_in_bypass = [1 if (player.status == PlayerStatus.FOLDED or player.status == PlayerStatus.ALLIN) else 0 for player in self.players]
+
+        # if len(self.players) == np.sum(players_in_bypass):
+        #     if self.round_counter == 0:
+        #         self.stage = Stage.FLOP
+        #         self.public_cards.append(self.dealer.deal_card())
+        #         self.public_cards.append(self.dealer.deal_card())
+        #         self.public_cards.append(self.dealer.deal_card())
+        #         self.round_counter += 1
+        #         self.stage = Stage.TURN
+        #         self.public_cards.append(self.dealer.deal_card())
+        #         self.round_counter += 1
+        #         self.stage = Stage.RIVER
+        #         self.public_cards.append(self.dealer.deal_card())
+        #         self.round_counter += 1
+        #     # For the following rounds, we deal only 1 card
+        #     elif self.round_counter == 1:
+        #         self.stage = Stage.TURN
+        #         self.public_cards.append(self.dealer.deal_card())
+        #         self.round_counter += 1
+        #         self.stage = Stage.RIVER
+        #         self.public_cards.append(self.dealer.deal_card())
+        #         self.round_counter += 1
+        #     elif self.round_counter == 2:
+        #         self.stage = Stage.RIVER
+        #         self.public_cards.append(self.dealer.deal_card())
+        #         self.round_counter += 1
+
         state = self.get_state(self.game_pointer)
 
         return state, self.game_pointer
@@ -185,7 +214,7 @@ class NolimitholdemGame(LimitholdemGame):
         Returns:
             (list): Each entry corresponds to the payoff of one player
         '''
-        hands = [p.hand + self.public_cards if p.status == 'alive' else None for p in self.players]
+        hands = [p.hand + self.public_cards if p.status == PlayerStatus.ALIVE else None for p in self.players]
         chips_payoffs = self.judger.judge_game(self.players, hands)
         return chips_payoffs
 

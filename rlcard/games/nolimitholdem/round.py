@@ -3,6 +3,7 @@
 '''
 from enum import Enum
 
+from rlcard.games.limitholdem.player import PlayerStatus
 from rlcard.games.limitholdem.round import LimitholdemRound
 import numpy as np
 
@@ -68,40 +69,48 @@ class NolimitholdemRound():
         Returns:
             (int): The game_pointer that indicates the next player
         '''
+        player = players[self.game_pointer]
+
         if action == Action.CALL:
             diff = max(self.raised) - self.raised[self.game_pointer]
             self.raised[self.game_pointer] = max(self.raised)
-            players[self.game_pointer].bet(chips=diff)
+            player.bet(chips=diff)
             self.not_raise_num += 1
 
         elif action == Action.ALL_IN:
-            all_in_quantity = players[self.game_pointer].remained_chips
+            all_in_quantity = player.remained_chips
             self.raised[self.game_pointer] = all_in_quantity + self.raised[self.game_pointer]
-            players[self.game_pointer].bet(chips=all_in_quantity)
+            player.bet(chips=all_in_quantity)
+
             self.not_raise_num = 1
 
         elif action == Action.RAISE_POT:
             self.raised[self.game_pointer] += pot
-            players[self.game_pointer].bet(chips=pot)
+            player.bet(chips=pot)
             self.not_raise_num = 1
 
         elif action == Action.RAISE_HALF_POT:
             quantity = int(pot / 2)
             self.raised[self.game_pointer] += quantity
-            players[self.game_pointer].bet(chips=quantity)
+            player.bet(chips=quantity)
             self.not_raise_num = 1
 
         elif action == Action.FOLD:
-            players[self.game_pointer].status = 'folded'
-            self.player_folded = True
+            player.status = PlayerStatus.FOLDED
 
         elif action == Action.CHECK:
             self.not_raise_num += 1
 
+        if player.remained_chips < 0:
+            raise Exception("Player in negative stake")
+
+        # if player.remained_chips == 0:
+        #     player.status = PlayerStatus.ALLIN
+
         self.game_pointer = (self.game_pointer + 1) % self.num_players
 
         # Skip the folded players
-        while players[self.game_pointer].status == 'folded':
+        while players[self.game_pointer].status == PlayerStatus.FOLDED:
             self.game_pointer = (self.game_pointer + 1) % self.num_players
 
         return self.game_pointer
