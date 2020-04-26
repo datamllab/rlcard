@@ -62,7 +62,6 @@ class NolimitholdemGame(LimitholdemGame):
 
         # Initilize public cards
         self.public_cards = []
-        self.pot = 0
         self.stage = Stage.PREFLOP
 
         # Randomly choose a big blind and a small blind
@@ -125,8 +124,7 @@ class NolimitholdemGame(LimitholdemGame):
             self.history.append((r, b, r_c, d, p, ps))
 
         # Then we proceed to the next round
-        self.pot = np.sum([player.in_chips for player in self.players])
-        self.game_pointer = self.round.proceed_round(self.players, action, self.pot)
+        self.game_pointer = self.round.proceed_round(self.players, action)
 
         players_in_bypass = [1 if player.status in (PlayerStatus.FOLDED, PlayerStatus.ALLIN) else 0 for player in self.players]
 
@@ -168,7 +166,7 @@ class NolimitholdemGame(LimitholdemGame):
 
         return state, self.game_pointer
 
-    def get_state(self, player):
+    def get_state(self, player_id):
         ''' Return player's state
 
         Args:
@@ -179,10 +177,11 @@ class NolimitholdemGame(LimitholdemGame):
         '''
         chips = [self.players[i].in_chips for i in range(self.num_players)]
         legal_actions = self.get_legal_actions()
-        state = self.players[player].get_state(self.public_cards, chips, legal_actions)
+        state = self.players[player_id].get_state(self.public_cards, chips, legal_actions)
         state['stakes'] = [self.players[i].remained_chips for i in range(self.num_players)]
         state['current_player'] = self.game_pointer
-        state['pot'] = self.pot
+        self.dealer.pot = np.sum([player.in_chips for player in self.players])
+        state['pot'] = self.dealer.pot
         state['stage'] = self.stage
         print(state)
         return state
