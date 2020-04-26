@@ -128,6 +128,8 @@ class NolimitholdemGame(LimitholdemGame):
         self.pot = np.sum([player.in_chips for player in self.players])
         self.game_pointer = self.round.proceed_round(self.players, action, self.pot)
 
+        players_in_bypass = [1 if player.status in (PlayerStatus.FOLDED, PlayerStatus.ALLIN) else 0 for player in self.players]
+
         # If a round is over, we deal more public cards
         if self.round.is_over():
             # For the first round, we deal 3 cards
@@ -136,44 +138,31 @@ class NolimitholdemGame(LimitholdemGame):
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
+                if len(self.players) == np.sum(players_in_bypass):
+                    self.round_counter += 1
+                    self.stage = Stage.TURN
+                    self.public_cards.append(self.dealer.deal_card())
+                    self.round_counter += 1
+                    self.stage = Stage.RIVER
+                    self.public_cards.append(self.dealer.deal_card())
+                    self.round_counter += 1
             # For the following rounds, we deal only 1 card
             elif self.round_counter == 1:
                 self.stage = Stage.TURN
                 self.public_cards.append(self.dealer.deal_card())
+                if len(self.players) == np.sum(players_in_bypass):
+                    self.round_counter += 1
+                    self.stage = Stage.RIVER
+                    self.public_cards.append(self.dealer.deal_card())
+                    self.round_counter += 1
             elif self.round_counter == 2:
                 self.stage = Stage.RIVER
                 self.public_cards.append(self.dealer.deal_card())
+                if len(self.players) == np.sum(players_in_bypass):
+                    self.round_counter += 1
 
             self.round_counter += 1
             self.round.start_new_round(self.game_pointer)
-
-        players_in_bypass = [1 if (player.status == PlayerStatus.FOLDED or player.status == PlayerStatus.ALLIN) else 0 for player in self.players]
-
-        # if len(self.players) == np.sum(players_in_bypass):
-        #     if self.round_counter == 0:
-        #         self.stage = Stage.FLOP
-        #         self.public_cards.append(self.dealer.deal_card())
-        #         self.public_cards.append(self.dealer.deal_card())
-        #         self.public_cards.append(self.dealer.deal_card())
-        #         self.round_counter += 1
-        #         self.stage = Stage.TURN
-        #         self.public_cards.append(self.dealer.deal_card())
-        #         self.round_counter += 1
-        #         self.stage = Stage.RIVER
-        #         self.public_cards.append(self.dealer.deal_card())
-        #         self.round_counter += 1
-        #     # For the following rounds, we deal only 1 card
-        #     elif self.round_counter == 1:
-        #         self.stage = Stage.TURN
-        #         self.public_cards.append(self.dealer.deal_card())
-        #         self.round_counter += 1
-        #         self.stage = Stage.RIVER
-        #         self.public_cards.append(self.dealer.deal_card())
-        #         self.round_counter += 1
-        #     elif self.round_counter == 2:
-        #         self.stage = Stage.RIVER
-        #         self.public_cards.append(self.dealer.deal_card())
-        #         self.round_counter += 1
 
         state = self.get_state(self.game_pointer)
 
@@ -195,6 +184,7 @@ class NolimitholdemGame(LimitholdemGame):
         state['current_player'] = self.game_pointer
         state['pot'] = self.pot
         state['stage'] = self.stage
+        print(state)
         return state
 
     def step_back(self):
@@ -214,7 +204,7 @@ class NolimitholdemGame(LimitholdemGame):
         Returns:
             (list): Each entry corresponds to the payoff of one player
         '''
-        hands = [p.hand + self.public_cards if p.status == PlayerStatus.ALIVE else None for p in self.players]
+        hands = [p.hand + self.public_cards if p.status in (PlayerStatus.ALIVE, PlayerStatus.ALLIN) else None for p in self.players]
         chips_payoffs = self.judger.judge_game(self.players, hands)
         return chips_payoffs
 

@@ -90,9 +90,8 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game.step(Action.ALL_IN)
         self.assertListEqual([Action.CALL, Action.FOLD], game.get_legal_actions())
         game.step(Action.CALL)
-        self.assertEqual(game.round_counter, 2)
-        # SHOULD FINISH THE GAME, NOT WAIT FOR AN ACTION
-        # self.assertListEqual([], game.get_legal_actions())
+        self.assertEqual(game.round_counter, 4)
+        self.assertEqual(200, game.pot)
 
     def test_wrong_steps(self):
         game = Game()

@@ -104,8 +104,8 @@ class NolimitholdemRound():
         if player.remained_chips < 0:
             raise Exception("Player in negative stake")
 
-        # if player.remained_chips == 0:
-        #     player.status = PlayerStatus.ALLIN
+        if player.remained_chips == 0 and player.status != PlayerStatus.FOLDED:
+            player.status = PlayerStatus.ALLIN
 
         self.game_pointer = (self.game_pointer + 1) % self.num_players
 
@@ -135,15 +135,17 @@ class NolimitholdemRound():
         if self.raised[self.game_pointer] == max(self.raised):
             full_actions.remove(Action.CALL)
 
-        if players[self.game_pointer].in_chips + np.sum(self.raised) > players[self.game_pointer].remained_chips:
+        player = players[self.game_pointer]
+
+        if player.in_chips + np.sum(self.raised) > player.remained_chips:
             full_actions.remove(Action.RAISE_POT)
 
-        if players[self.game_pointer].in_chips + int(np.sum(self.raised) / 2) > players[self.game_pointer].remained_chips:
+        if player.in_chips + int(np.sum(self.raised) / 2) > player.remained_chips:
             full_actions.remove(Action.RAISE_HALF_POT)
 
         # If the current player has no more chips after call, we cannot raise
         diff = max(self.raised) - self.raised[self.game_pointer]
-        if players[self.game_pointer].in_chips + diff >= players[self.game_pointer].remained_chips:
+        if player.in_chips + diff >= player.remained_chips:
             return [Action.CALL, Action.FOLD]
 
         return full_actions
