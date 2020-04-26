@@ -37,6 +37,19 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game.step(Action.CHECK)
         self.assertEqual(game.round_counter, 1)
 
+    def test_bet_more_than_chips(self):
+        game = Game()
+
+        # test check
+        game.init_game()
+        player = game.players[0]
+        in_chips = player.in_chips
+        player.bet(50)
+        self.assertEqual(50+in_chips, player.in_chips)
+
+        player.bet(150)
+        self.assertEqual(100, player.in_chips)
+
     def test_step_2(self):
         game = Game()
 

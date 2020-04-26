@@ -183,7 +183,6 @@ class NolimitholdemGame(LimitholdemGame):
         self.dealer.pot = np.sum([player.in_chips for player in self.players])
         state['pot'] = self.dealer.pot
         state['stage'] = self.stage
-        print(state)
         return state
 
     def step_back(self):
