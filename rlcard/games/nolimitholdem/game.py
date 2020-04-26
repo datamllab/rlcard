@@ -111,6 +111,8 @@ class NolimitholdemGame(LimitholdemGame):
         '''
 
         if action not in self.get_legal_actions():
+            print(action, self.get_legal_actions())
+            print(self.get_state(self.game_pointer))
             raise Exception('Action not allowed')
 
         if self.allow_step_back:
