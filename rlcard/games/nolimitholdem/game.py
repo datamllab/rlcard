@@ -177,12 +177,13 @@ class NolimitholdemGame(LimitholdemGame):
         Returns:
             (dict): The state of the player
         '''
+        self.dealer.pot = np.sum([player.in_chips for player in self.players])
+
         chips = [self.players[i].in_chips for i in range(self.num_players)]
         legal_actions = self.get_legal_actions()
         state = self.players[player_id].get_state(self.public_cards, chips, legal_actions)
         state['stakes'] = [self.players[i].remained_chips for i in range(self.num_players)]
         state['current_player'] = self.game_pointer
-        self.dealer.pot = np.sum([player.in_chips for player in self.players])
         state['pot'] = self.dealer.pot
         state['stage'] = self.stage
         return state
