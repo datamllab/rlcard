@@ -190,14 +190,13 @@ class LimitholdemGame(object):
 
         return state
 
-
     def is_over(self):
         ''' Check if the game is over
 
         Returns:
             (boolean): True if the game is over
         '''
-        alive_players = [1 if p.status == PlayerStatus.ALIVE else 0 for p in self.players]
+        alive_players = [1 if p.status in (PlayerStatus.ALIVE, PlayerStatus.ALLIN) else 0 for p in self.players]
         # If only one player is alive, the game is over.
         if sum(alive_players) == 1:
             return True
