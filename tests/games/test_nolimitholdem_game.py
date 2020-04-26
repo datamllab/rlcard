@@ -91,7 +91,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
         self.assertListEqual([Action.CALL, Action.FOLD], game.get_legal_actions())
         game.step(Action.CALL)
         self.assertEqual(game.round_counter, 4)
-        self.assertEqual(200, game.pot)
+        self.assertEqual(200, game.dealer.pot)
 
     def test_wrong_steps(self):
         game = Game()

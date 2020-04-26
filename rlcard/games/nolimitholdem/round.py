@@ -59,7 +59,7 @@ class NolimitholdemRound():
         else:
             self.raised = [0 for _ in range(self.num_players)]
 
-    def proceed_round(self, players, action, pot):
+    def proceed_round(self, players, action):
         ''' Call other Classes's functions to keep one round running
 
         Args:
@@ -70,6 +70,7 @@ class NolimitholdemRound():
             (int): The game_pointer that indicates the next player
         '''
         player = players[self.game_pointer]
+        pot = np.sum([player.in_chips for player in players])
 
         if action == Action.CALL:
             diff = max(self.raised) - self.raised[self.game_pointer]
