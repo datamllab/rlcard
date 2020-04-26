@@ -138,10 +138,10 @@ class NolimitholdemRound():
 
         player = players[self.game_pointer]
 
-        if player.in_chips + self.dealer.pot > player.remained_chips:
+        if self.dealer.pot > player.remained_chips:
             full_actions.remove(Action.RAISE_POT)
 
-        if player.in_chips + int(self.dealer.pot / 2) > player.remained_chips:
+        if int(self.dealer.pot / 2) > player.remained_chips:
             full_actions.remove(Action.RAISE_HALF_POT)
 
         # If the current player has no more chips after call, we cannot raise

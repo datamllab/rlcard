@@ -90,7 +90,7 @@ class NolimitholdemEnv(Env):
             if Action.CHECK in legal_actions:
                 return Action.CHECK
             else:
-                print("Try non legal action", action_id, self.actions(action_id),legal_actions)
+                print("Tried non legal action", action_id, self.actions(action_id), legal_actions)
                 return Action.FOLD
         return self.actions(action_id)
 
