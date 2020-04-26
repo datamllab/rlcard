@@ -75,7 +75,7 @@ class NolimitholdemGame(LimitholdemGame):
 
         # Initilize a bidding round, in the first round, the big blind and the small blind needs to
         # be passed to the round for processing.
-        self.round = Round(self.num_players, self.big_blind)
+        self.round = Round(self.num_players, self.big_blind, dealer=self.dealer)
 
         self.round.start_new_round(game_pointer=self.game_pointer, raised=[p.in_chips for p in self.players])
 
