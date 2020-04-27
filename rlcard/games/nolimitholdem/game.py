@@ -214,7 +214,7 @@ class NolimitholdemGame(LimitholdemGame):
         ''' Return the number of applicable actions
 
         Returns:
-            (int): The number of actions. There are 4 actions (call, raise, check and fold)
+            (int): The number of actions. There are 6 actions (call, raise_half_pot, raise_pot, all_in, check and fold)
         '''
         return len(Action)
 
