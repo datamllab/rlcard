@@ -65,9 +65,10 @@ def _print_state(state, action_record):
     print_card(state['hand'])
 
     print('===============     Chips      ===============')
-    print(f'In Pot: {state["all_chips"]}')
+    print(f'In Pot: {state["pot"]}')
     print(f'Remaining: {state["stakes"]}')
 
     print('\n=========== Actions You Can Choose ===========')
     print(', '.join([str(index) + ': ' + str(action) for index, action in enumerate(state['legal_actions'])]))
     print('')
+    print(state)
