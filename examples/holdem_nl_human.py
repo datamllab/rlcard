@@ -13,7 +13,7 @@ env = rlcard.make('no-limit-holdem', config={'record_action': True})
 
 human_agent = HumanAgent(env.action_num)
 human_agent2 = HumanAgent(env.action_num)
-random_agent = RandomAgent(action_num=env.action_num)
+# random_agent = RandomAgent(action_num=env.action_num)
 
 env.set_agents([human_agent, human_agent2])
 
@@ -36,8 +36,9 @@ while (True):
         print('>> Player', pair[0], 'chooses', pair[1])
 
     # Let's take a look at what the agent card is
-    print('===============     Random Agent    ===============')
-    print_card(env.get_perfect_information()['hand_cards'][1])
+    print('===============     Cards all Players    ===============')
+    for hands in env.get_perfect_information()['hand_cards']:
+        print_card(hands)
 
     print('===============     Result     ===============')
     if payoffs[0] > 0:

@@ -232,14 +232,16 @@ The state representation is similar to Limit Hold'em game. The state is represen
 ### Action Encoding of No-Limit Texas Hold'em
 There are 103 actions in No-limit Texas Hold'em. They are encoded as below.
 
-<small><sup>\*</sup>Note: Starting from Action ID 3, the action means the amount player should put in the pot when chooses 'Raise'. The action ID from 3 to 102 corresponds to the bet amount from 1 to 100.<small>
+<small><sup>\*</sup>Note: Starting from Action ID 3, the action means the amount player should put in the pot when chooses 'Raise'. The action ID from 3 to 5 corresponds to the bet amount from half amount of the pot, full amount of the pot to all in.<small>
 
 | Action ID   |     Action         |
 | ----------- | :----------------- |
-| 0           | Call               |
-| 1           | Fold               |
-| 2           | Check              |
-| 3 ~ 102     | <sup>\*</sup>Raise |
+| 0           | Fold               |
+| 1           | Check              |
+| 2           | Call               |
+| 3           | Raise Half Pot     |
+| 4           | Raise Full Pot     |
+| 5           | All In             |
 
 ### Payoff of No-Limit Texas Hold'em
 The reward is calculated based on big blinds per hand. For example, a reward of 0.5 (-0.5) means that the player wins (loses) 0.5 times of the amount of big blind.

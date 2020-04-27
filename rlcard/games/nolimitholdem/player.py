@@ -1,5 +1,6 @@
 from rlcard.games.limitholdem.player import LimitholdemPlayer
 
+
 class NolimitholdemPlayer(LimitholdemPlayer):
 
     def __init__(self, player_id, init_chips):
@@ -13,5 +14,6 @@ class NolimitholdemPlayer(LimitholdemPlayer):
         self.remained_chips = init_chips
 
     def bet(self, chips):
-        self.in_chips += chips
-        self.remained_chips -= chips
+        quantity = chips if chips <= self.remained_chips else self.remained_chips
+        self.in_chips += quantity
+        self.remained_chips -= quantity
