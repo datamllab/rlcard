@@ -2,7 +2,7 @@ from copy import deepcopy, copy
 import numpy as np
 
 from rlcard.games.limitholdem.dealer import LimitholdemDealer as Dealer
-from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
+from rlcard.games.limitholdem.player import LimitholdemPlayer as Player, PlayerStatus
 from rlcard.games.limitholdem.judger import LimitholdemJudger as Judger
 from rlcard.games.limitholdem.round import LimitholdemRound as Round
 
@@ -190,14 +190,13 @@ class LimitholdemGame(object):
 
         return state
 
-
     def is_over(self):
         ''' Check if the game is over
 
         Returns:
             (boolean): True if the game is over
         '''
-        alive_players = [1 if p.status=='alive' else 0 for p in self.players]
+        alive_players = [1 if p.status in (PlayerStatus.ALIVE, PlayerStatus.ALLIN) else 0 for p in self.players]
         # If only one player is alive, the game is over.
         if sum(alive_players) == 1:
             return True
@@ -213,7 +212,7 @@ class LimitholdemGame(object):
         Returns:
             (list): Each entry corresponds to the payoff of one player
         '''
-        hands = [p.hand + self.public_cards if p.status=='alive' else None for p in self.players]
+        hands = [p.hand + self.public_cards if p.status == PlayerStatus.ALIVE else None for p in self.players]
         chips_payoffs = self.judger.judge_game(self.players, hands)
         payoffs = np.array(chips_payoffs) / (self.big_blind)
         return payoffs

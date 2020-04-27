@@ -28,7 +28,7 @@ class RandomAgent(object):
         return np.random.choice(state['legal_actions'])
 
     def eval_step(self, state):
-        ''' Predict the action given the curent state for evaluation.
+        ''' Predict the action given the current state for evaluation.
             Since the random agents are not trained. This function is equivalent to step function
 
         Args:
