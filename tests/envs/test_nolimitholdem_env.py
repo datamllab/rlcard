@@ -2,6 +2,7 @@ import unittest
 
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
+from rlcard.games.nolimitholdem.round import Action
 
 
 class TestNolimitholdemEnv(unittest.TestCase):
@@ -10,8 +11,6 @@ class TestNolimitholdemEnv(unittest.TestCase):
         env = rlcard.make('no-limit-holdem')
         state, _ = env.init_game()
         self.assertEqual(state['obs'].size, 54)
-        for action in state['legal_actions']:
-            self.assertLess(action, env.action_num)
 
     def test_get_legal_actions(self):
         env = rlcard.make('no-limit-holdem')
@@ -27,12 +26,12 @@ class TestNolimitholdemEnv(unittest.TestCase):
             decoded = env._decode_action(action)
             self.assertIn(decoded, env.actions)
 
-        decoded = env._decode_action(3)
-        self.assertEqual(decoded, 'all-in')
+        decoded = env._decode_action(Action.FOLD.value)
+        self.assertEqual(decoded, Action.FOLD)
 
         env.step(0)
-        decoded = env._decode_action(0)
-        self.assertEqual(decoded, 'check')
+        decoded = env._decode_action(1)
+        self.assertEqual(decoded, Action.CHECK)
 
     def test_step(self):
         env = rlcard.make('no-limit-holdem')

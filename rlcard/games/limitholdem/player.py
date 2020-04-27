@@ -1,3 +1,11 @@
+from enum import Enum
+
+
+class PlayerStatus(Enum):
+    ALIVE = 0
+    FOLDED = 1
+    ALLIN = 2
+
 
 class LimitholdemPlayer(object):
 
@@ -9,7 +17,7 @@ class LimitholdemPlayer(object):
         '''
         self.player_id = player_id
         self.hand = []
-        self.status = 'alive'
+        self.status = PlayerStatus.ALIVE
 
         # The chips that this player has put in until now
         self.in_chips = 0
