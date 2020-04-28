@@ -11,8 +11,8 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
 
 **News:**
-*   The action space of NoLimit Holdem has been abstracted. Thanks for the contribution of [@AdrianP-](https://github.com/AdrianP-).
-*   New game Gin Rummy available. Thanks for the contribution of [@billh0420](https://github.com/billh0420).
+*   Human interfasce of NoLimit Holdem available. The action space of NoLimit Holdem has been abstracted. Thanks for the contribution of [@AdrianP-](https://github.com/AdrianP-).
+*   New game Gin Rummy and human GUI available. Thanks for the contribution of [@billh0420](https://github.com/billh0420).
 *   PyTorch implementation available. Thanks for the contribution of [@mjudell](https://github.com/mjudell).
 *   We have just initialized a list of [Awesome-Game-AI resources](https://github.com/datamllab/awesome-game-ai). Check it out!
 
@@ -109,9 +109,6 @@ Agent 1: +++
 >> You choose action (integer):
 ```
 
-## Documents
-Please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
-
 ## Available Environments
 We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information sets; **InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space. **Name:** the name that should be passed to `rlcard.make` to create the game environment. We also provide the link to the documentation and the random example.
 
@@ -125,22 +122,7 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 | Mahjong ([wiki](https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules), [baike](https://baike.baidu.com/item/%E9%BA%BB%E5%B0%86/215))                                                | 10^121          | 10^48             | 10^2        | mahjong         | [doc](docs/games.md#mahjong), [example](examples/mahjong_random.py)                         | 
 | No-limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [baike](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin)) | 10^162          | 10^3              | 10^4        | no-limit-holdem | [doc](docs/games.md#no-limit-texas-holdem), [example](examples/nolimit_holdem_random.py)    |
 | UNO ([wiki](https://en.wikipedia.org/wiki/Uno_\(card_game\)), [baike](https://baike.baidu.com/item/UNO%E7%89%8C/2249587))                                                                      |  10^163         | 10^10             | 10^1        | uno             | [doc](docs/games.md#uno), [example](examples/uno_random.py)                                 |
-| Gin Rummy ([wiki](https://en.wikipedia.org/wiki/Gin_rummy), [baike](https://baike.baidu.com/item/%E9%87%91%E6%8B%89%E7%B1%B3/3471710))                                                         | -               | -                 | -           | gin-rummy       | [doc](docs/games.md#gin-rummy), [example](examples/gin_rummy_random.py)                     |
-
-## Evaluation
-The perfomance is measured by winning rates through tournaments. Example outputs are as follows:
-![Learning Curves](http://rlcard.org/imgs/curves.png "Learning Curves")
-
-## Library Structure
-The purposes of the main modules are listed as below:
-
-*   [/examples](examples): Examples of using RLCard.
-*   [/docs](docs): Documentation of RLCard.
-*   [/tests](tests): Testing scripts for RLCard.
-*   [/rlcard/agents](rlcard/agents): Reinforcement learning algorithms and human agents.
-*   [/rlcard/envs](rlcard/envs): Environment wrappers (state representation, action encoding etc.)
-*   [/rlcard/games](rlcard/games): Various game engines.
-*   [/rlcard/models](rlcard/models): Model zoo including pre-trained models and rule models.
+| Gin Rummy ([wiki](https://en.wikipedia.org/wiki/Gin_rummy), [baike](https://baike.baidu.com/item/%E9%87%91%E6%8B%89%E7%B1%B3/3471710))                                                         | 10^52           | -                 | -           | gin-rummy       | [doc](docs/games.md#gin-rummy), [example](examples/gin_rummy_random.py)                     |
 
 ## API Cheat Sheet
 ### How to create an environment
@@ -156,7 +138,7 @@ You can use the the following interface. You can specify some configurations wit
 State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
 
 ### Basic interfaces
-The following interfaces provide a basic usage. It is easy to use but is has assumtions on the agent. The agent must follow [agent template](docs/developping-algorithms.md). 
+The following interfaces provide a basic usage. It is easy to use but it has assumtions on the agent. The agent must follow [agent template](docs/developping-algorithms.md). 
 *   **env.set_agents(agents)**: `agents` is a list of `Agent` object. The length of the the list should equal to the number of the player in the game.
 *   **env.run(is_training=False)**: Run a complete game and return trajectories and payoffs. The function can be used after the `set_agents` is called. If `is_training` is `True`, the function will use `step` function in the agent to play the game. If `is_training` is `False`, `eval_step` will be called instead.
 
@@ -170,6 +152,24 @@ For advanced usage, the following interfaces allow flexible operations on the ga
 *	**env.get_state(player_id)**: Return the state corresponds to `player_id`.
 *   **env.get_payoffs()**: In the end of the game, return a list of payoffs for all the players.
 *   **env.get_perfect_information()**: (Currently only support some of the games) Obtain the perfect information at the current state.
+
+## Library Structure
+The purposes of the main modules are listed as below:
+
+*   [/examples](examples): Examples of using RLCard.
+*   [/docs](docs): Documentation of RLCard.
+*   [/tests](tests): Testing scripts for RLCard.
+*   [/rlcard/agents](rlcard/agents): Reinforcement learning algorithms and human agents.
+*   [/rlcard/envs](rlcard/envs): Environment wrappers (state representation, action encoding etc.)
+*   [/rlcard/games](rlcard/games): Various game engines.
+*   [/rlcard/models](rlcard/models): Model zoo including pre-trained models and rule models.
+
+## Evaluation
+The perfomance is measured by winning rates through tournaments. Example outputs are as follows:
+![Learning Curves](http://rlcard.org/imgs/curves.png "Learning Curves")
+
+## iMore Documents
+For more documentation, please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
 
 ## Contributing
 Contribution to this project is greatly appreciated! Please create an issue for feedbacks/bugs. If you want to contribute codes, please refer to [Contributing Guide](./CONTRIBUTING.md).
