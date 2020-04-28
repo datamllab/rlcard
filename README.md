@@ -143,7 +143,7 @@ The purposes of the main modules are listed as below:
 *   [/rlcard/models](rlcard/models): Model zoo including pre-trained models and rule models.
 
 ## API Cheat Sheet
-### How to create and environment
+### How to create an environment
 You can use the the following interface. You can specify some configurations with a dictionary.
 *   **rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
 	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
