@@ -14,8 +14,8 @@ from .action_event import *
 from ..player import GinRummyPlayer
 from .move import ScoreNorthMove, ScoreSouthMove
 
-import rlcard.games.gin_rummy.utils.melding as melding
-import rlcard.games.gin_rummy.utils.utils as utils
+from rlcard.games.gin_rummy.utils import melding
+from rlcard.games.gin_rummy.utils import utils
 
 
 class GinRummyScorer:

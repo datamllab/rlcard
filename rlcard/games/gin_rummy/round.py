@@ -21,13 +21,13 @@ from .utils.move import ScoreNorthMove, ScoreSouthMove
 from .player import GinRummyPlayer
 from . import judge
 
-import rlcard.games.gin_rummy.utils.melding as melding
-import rlcard.games.gin_rummy.utils.utils as utils
+from rlcard.games.gin_rummy.utils import melding
+from rlcard.games.gin_rummy.utils import utils
 
 
 class GinRummyRound(object):
 
-    def __init__(self, dealer_id: int):
+    def __init__(self, dealer_id: int, np_random):
         ''' Initialize the round class
 
             The round class maintains the following instances:
@@ -48,15 +48,16 @@ class GinRummyRound(object):
         Args:
             dealer_id: int
         '''
+        self.np_random = np_random
         self.dealer_id = dealer_id
-        self.dealer = GinRummyDealer()
-        self.players = [GinRummyPlayer(player_id=0), GinRummyPlayer(player_id=1)]
+        self.dealer = GinRummyDealer(self.np_random)
+        self.players = [GinRummyPlayer(player_id=0, np_random=self.np_random), GinRummyPlayer(player_id=1, np_random=self.np_random)]
         self.current_player_id = (dealer_id + 1) % 2
         self.is_over = False
         self.going_out_action = None  # going_out_action: int or None
         self.going_out_player_id = None  # going_out_player_id: int or None
         self.move_sheet = []  # type: List[GinRummyMove]
-        player_dealing = GinRummyPlayer(player_id=dealer_id)
+        player_dealing = GinRummyPlayer(player_id=dealer_id, np_random=self.np_random)
         shuffled_deck = self.dealer.shuffled_deck
         self.move_sheet.append(DealHandMove(player_dealing=player_dealing, shuffled_deck=shuffled_deck))
 

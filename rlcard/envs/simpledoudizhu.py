@@ -1,7 +1,7 @@
 import numpy as np
 
-from rlcard.envs.env import Env
-from rlcard.games.simpledoudizhu.game import SimpleDoudizhuGame as Game
+from rlcard.envs import Env
+from rlcard.games.simpledoudizhu import Game
 from rlcard.games.doudizhu.utils import SPECIFIC_MAP, CARD_RANK_STR
 from rlcard.games.simpledoudizhu.utils import ACTION_LIST, ACTION_SPACE
 from rlcard.games.doudizhu.utils import encode_cards

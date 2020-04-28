@@ -257,7 +257,7 @@ class DoudizhuJudger(object):
             playable_cards.add(CARD_RANK_STR[13] + CARD_RANK_STR[14])
         return playable_cards
 
-    def __init__(self, players):
+    def __init__(self, players, np_random):
         ''' Initilize the Judger class for Dou Dizhu
         '''
         self.playable_cards = [set() for _ in range(3)]

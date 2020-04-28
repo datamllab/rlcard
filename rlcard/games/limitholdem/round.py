@@ -7,7 +7,7 @@ class LimitholdemRound(object):
     ''' Round can call other Classes' functions to keep the game running
     '''
 
-    def __init__(self, raise_amount, allowed_raise_num, num_players):
+    def __init__(self, raise_amount, allowed_raise_num, num_players, np_random):
         ''' Initilize the round class
 
         Args:
@@ -15,6 +15,7 @@ class LimitholdemRound(object):
             allowed_raise_num (int): The number of allowed raise num
             num_players (int): The number of players
         '''
+        self.np_random = np_random
         self.game_pointer = None
         self.raise_amount = raise_amount
         self.allowed_raise_num = allowed_raise_num

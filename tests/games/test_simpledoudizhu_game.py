@@ -136,7 +136,7 @@ class TestSimpleDoudizhuGame(unittest.TestCase):
         probs = np.zeros(309)
         probs[-1] = 0.5
         legal_actions = ['pass', '33344', 'BR']
-        action = get_optimal_action(probs, legal_actions)
+        action = get_optimal_action(probs, legal_actions, np.random.RandomState())
         self.assertEqual(action, 'pass')
 
     def test_encode_cards(self):

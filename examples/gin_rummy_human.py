@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 
 import rlcard
 
-from rlcard.agents.random_agent import RandomAgent
+from rlcard.agents import RandomAgent
 from rlcard.models.gin_rummy_rule_models import GinRummyNoviceRuleAgent
 from rlcard.agents.gin_rummy_human_agent.gin_rummy_human_agent import HumanAgent
 

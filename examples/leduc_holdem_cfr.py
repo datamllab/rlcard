@@ -3,10 +3,10 @@
 import numpy as np
 
 import rlcard
-from rlcard.agents.cfr_agent import CFRAgent
+from rlcard.agents import CFRAgent
 from rlcard import models
-from rlcard.utils.utils import set_global_seed, tournament
-from rlcard.utils.logger import Logger
+from rlcard.utils import set_global_seed, tournament
+from rlcard.utils import Logger
 
 # Make environment and enable human mode
 env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
@@ -23,6 +23,8 @@ log_dir = './experiments/leduc_holdem_cfr_result/'
 
 # Set a global seed
 set_global_seed(0)
+env.seed(0)
+eval_env.seed(0)
 
 # Initilize CFR Agent
 agent = CFRAgent(env)

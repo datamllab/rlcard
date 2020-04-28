@@ -2,17 +2,17 @@
 ''' Implement Mahjong Judger class
 '''
 from collections import defaultdict
-from rlcard.games.mahjong.player import MahjongPlayer as Player
-from rlcard.games.mahjong.card import MahjongCard as Card
+from rlcard.games.mahjong import Player
+from rlcard.games.mahjong import Card
 
 class MahjongJudger(object):
     ''' Determine what cards a player can play
     '''
 
-    def __init__(self):
+    def __init__(self, np_random):
         ''' Initilize the Judger class for Mahjong
         '''
-        pass
+        self.np_random = np_random
 
     @staticmethod
     def judge_pong_gong(dealer, players, last_player):

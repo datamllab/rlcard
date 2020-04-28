@@ -2,8 +2,8 @@
 '''
 
 import rlcard
-from rlcard.utils.utils import set_global_seed
-from rlcard.agents.random_agent import RandomAgent
+from rlcard.utils import set_global_seed
+from rlcard.agents import RandomAgent
 
 # Make environment
 env = rlcard.make('simple-doudizhu')
@@ -11,6 +11,7 @@ episode_num = 2
 
 # Set a global seed
 set_global_seed(0)
+env.seed(0)
 
 # Set up agents
 agent = RandomAgent(action_num=env.action_num)

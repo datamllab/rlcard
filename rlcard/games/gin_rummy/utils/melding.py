@@ -8,7 +8,7 @@ from typing import List
 
 from rlcard.core import Card
 
-import rlcard.games.gin_rummy.utils.utils as utils
+from rlcard.games.gin_rummy.utils import utils
 
 """
     Terminology:

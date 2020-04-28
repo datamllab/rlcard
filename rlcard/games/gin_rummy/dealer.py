@@ -6,8 +6,6 @@
 
 from typing import List
 
-import random
-
 from rlcard.core import Card
 
 from .player import GinRummyPlayer
@@ -17,12 +15,13 @@ from .utils import utils as utils
 class GinRummyDealer(object):
     ''' Initialize a GinRummy dealer class
     '''
-    def __init__(self):
+    def __init__(self, np_random):
         ''' Empty discard_pile, set shuffled_deck, set stock_pile
         '''
+        self.np_random = np_random
         self.discard_pile = []  # type: List[Card]
         self.shuffled_deck = utils.get_deck()  # keep a copy of the shuffled cards at start of new hand
-        random.shuffle(self.shuffled_deck)
+        self.np_random.shuffle(self.shuffled_deck)
         self.stock_pile = self.shuffled_deck.copy()  # type: List[Card]
 
     def deal_cards(self, player: GinRummyPlayer, num: int):

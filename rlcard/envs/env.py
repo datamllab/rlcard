@@ -1,7 +1,4 @@
-import numpy as np
-import random
-
-from rlcard.utils.utils import *
+from rlcard.utils import *
 
 class Env(object):
     ''' The base Env class
@@ -11,7 +8,6 @@ class Env(object):
         ''' Initialize
 
         Args:
-            game (Game): The Game class
             config (dict): A config dictionary. Currently, the dictionary
                 includes
                 'allow_step_bac'k (boolean) - True if allowing
@@ -50,6 +46,14 @@ class Env(object):
                 if agent.use_raw:
                     self.allow_raw_data = True
                     break
+        
+        # Set random seed, default is None
+        self.seed()
+
+    def seed(self, seed=None):
+        self.np_random, seed = seeding.np_random(seed)
+        self.game.np_random = self.np_random
+        return [seed]
 
     def init_game(self):
         ''' Start a new game
@@ -157,14 +161,11 @@ class Env(object):
 
         return self._extract_state(state)
 
-    def run(self, is_training=False, seed=None):
+    def run(self, is_training=False):
         ''' Run a complete game, either for evaluation or training RL agent.
 
         Args:
             is_training (boolean): True if for training purpose.
-            seed (int): A seed for running the game. For single-process program,
-              the seed should be set to None. For multi-process program, the
-              seed should be asigned for reproducibility.
 
         Returns:
             (tuple) Tuple containing:
@@ -177,10 +178,6 @@ class Env(object):
         '''
         if self.single_agent_mode:
             raise ValueError('Run in single agent not allowed.')
-
-        if seed is not None:
-            np.random.seed(seed)
-            random.seed(seed)
 
         trajectories = [[] for _ in range(self.player_num)]
         state, player_id = self.init_game()
@@ -222,7 +219,7 @@ class Env(object):
 
     def run_multi(self, task_num, result, is_training=False, seed=None):
         if seed is not None:
-            np.random.seed(seed)
+            np_random.seed(seed)
         for _ in range(task_num):
             result.append(self.run(is_training=is_training))
 

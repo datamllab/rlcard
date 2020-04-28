@@ -53,7 +53,7 @@ class TestBlackjackEnv(unittest.TestCase):
         env.set_agents([RandomAgent(env.action_num)])
         trajectories, _ = env.run(is_training=False)
         self.assertEqual(len(trajectories), 1)
-        trajectories, _ = env.run(is_training=True, seed=1)
+        trajectories, _ = env.run(is_training=True)
         self.assertEqual(len(trajectories), 1)
 
 if __name__ == '__main__':

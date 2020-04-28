@@ -4,10 +4,10 @@ class LeducholdemJudger(object):
     ''' The Judger class for Leduc Hold'em
     '''
 
-    def __init__(self):
+    def __init__(self, np_random):
         ''' Initialize a judger class
         '''
-        super().__init__()
+        self.np_random = np_random
 
     @staticmethod
     def judge_game(players, public_card):
