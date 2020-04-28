@@ -11,7 +11,7 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
 
 **News:**
-*   Human interfasce of NoLimit Holdem available. The action space of NoLimit Holdem has been abstracted. Thanks for the contribution of [@AdrianP-](https://github.com/AdrianP-).
+*   Human interface of NoLimit Holdem available. The action space of NoLimit Holdem has been abstracted. Thanks for the contribution of [@AdrianP-](https://github.com/AdrianP-).
 *   New game Gin Rummy and human GUI available. Thanks for the contribution of [@billh0420](https://github.com/billh0420).
 *   PyTorch implementation available. Thanks for the contribution of [@mjudell](https://github.com/mjudell).
 *   We have just initialized a list of [Awesome-Game-AI resources](https://github.com/datamllab/awesome-game-ai). Check it out!
@@ -168,7 +168,7 @@ The purposes of the main modules are listed as below:
 The perfomance is measured by winning rates through tournaments. Example outputs are as follows:
 ![Learning Curves](http://rlcard.org/imgs/curves.png "Learning Curves")
 
-## iMore Documents
+## More Documents
 For more documentation, please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
 
 ## Contributing
