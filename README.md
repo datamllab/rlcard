@@ -143,7 +143,8 @@ The purposes of the main modules are listed as below:
 *   [/rlcard/models](rlcard/models): Model zoo including pre-trained models and rule models.
 
 ## API Cheat Sheet
-To create an environment, you can use the the following interface. You can specify some configurations with a dictionary.
+### How to create and environment
+You can use the the following interface. You can specify some configurations with a dictionary.
 *   **rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
 	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
 	*   `allow_raw_data`: Default `False`. `True` if allowing raw data in the `state`.
@@ -151,17 +152,22 @@ To create an environment, you can use the the following interface. You can speci
 	*   `active_player`: Defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
 	*   `record_action`: Default `False`. If `True`, a field of `action_record` will be in the `state` to record the historical actions. This may be used for human-agent play.
 
-The state is defined as follows.
-*   **State Definition**: State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
+### What is state in RLCard
+State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
 
-For basic usage, the following interfaces are easier to use but have assumtions on the agent. See [agent template](docs/developping-algorithms.md). 
+### Basic interfaces
+The following interfaces provide a basic usage. It is easy to use but is has assumtions on the agent. The agent must follow [agent template](docs/developping-algorithms.md). 
 *   **env.set_agents(agents)**: `agents` is a list of `Agent` object. The length of the the list should equal to the number of the player in the game.
 *   **env.run(is_training=False)**: Run a complete game and return trajectories and payoffs. The function can be used after the `set_agents` is called. If `is_training` is `True`, the function will use `step` function in the agent to play the game. If `is_training` is `False`, `eval_step` will be called instead.
 
+### Advanced interfaces
 For advanced usage, the following interfaces allow flexible operations on the game tree. These interfaces do not make any assumtions on the agent.
-*   **env.init_game()**: Initialize a game. Return the state and the first player ID.
+*   **env.reset()**: Initialize a game. Return the state and the first player ID.
 *   **env.step(action, raw_action=False)**: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be `True` if the action is raw action (string).
-*   **env.step_back()**: Available only when `allow_step_back` is `True`. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR. 
+*   **env.step_back()**: Available only when `allow_step_back` is `True`. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR.
+*	**env.is_over()**: Return `True` if the current game is over/ Return `False` otherwise.
+*	**env.get_player_id()**: Return the Player ID of the current player.
+*	**env.get_state(player_id)**: Return the state corresponds to `player_id`.
 *   **env.get_payoffs()**: In the end of the game, return a list of payoffs for all the players.
 *   **env.get_perfect_information()**: (Currently only support some of the games) Obtain the perfect information at the current state.
 
