@@ -13,22 +13,22 @@ from rlcard.agents.random_agent import RandomAgent
 
 class TestGinRummyEnv(unittest.TestCase):
 
-    def test_init_game_and_extract_state(self):
+    def test_reset_and_extract_state(self):
         env = rlcard.make('gin-rummy')
-        state, _ = env.init_game()
+        state, _ = env.reset()
         self.assertEqual(state['obs'].size, 5 * 52)
 
     def test_get_legal_actions(self):
         env = rlcard.make('gin-rummy')
         env.set_agents([RandomAgent(env.action_num) for _ in range(env.player_num)])
-        env.init_game()
+        env.reset()
         legal_actions = env._get_legal_actions()
         for legal_action in legal_actions:
             self.assertLessEqual(legal_action, env.action_num-1)
 
     def test_step(self):
         env = rlcard.make('gin-rummy')
-        state, _ = env.init_game()
+        state, _ = env.reset()
         action = np.random.choice(state['legal_actions'])
         _, player_id = env.step(action)
         current_player_id = env.game.round.get_current_player().player_id

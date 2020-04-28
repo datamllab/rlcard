@@ -100,7 +100,7 @@ class DeepCFR():
         self.traverse = []
 
         # get initial state and players
-        init_state, _ = self._env.init_game()
+        init_state, _ = self._env.reset()
 
         self._embedding_size = init_state['obs'].shape
         self._num_traversals = num_traversals
@@ -196,11 +196,11 @@ class DeepCFR():
             average advantage loss (float): players average advantage loss
             policy loss (float): policy loss
         '''
-        init_state, init_player = self._env.init_game()
+        init_state, init_player = self._env.reset()
         self._root_node = init_state
         for p in range(self._num_players):
             while init_player != p:
-                init_state, init_player = self._env.init_game()
+                init_state, init_player = self._env.reset()
                 self._root_node = init_state
             for _ in range(self._num_traversals):
                 self._traverse_game_tree(self._root_node, init_player)
