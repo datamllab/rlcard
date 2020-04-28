@@ -228,7 +228,7 @@ class DoudizhuJudger(object):
                     #trio_chain_2 to trio_chain_6
                     if (curr_length >= 2 and curr_length <= 6):
                         playable_cards.add(cards)
-                    
+
                     #trio_solo_chain_2 to trio_solo_chain_5
                     if (curr_length >= 2 and curr_length <= 5):
                         for left, right in DoudizhuJudger.solo_attachments(current_hand, s, curr_length, curr_length):

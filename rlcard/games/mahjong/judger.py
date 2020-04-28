@@ -2,8 +2,6 @@
 ''' Implement Mahjong Judger class
 '''
 from collections import defaultdict
-from rlcard.games.mahjong import Player
-from rlcard.games.mahjong import Card
 
 class MahjongJudger(object):
     ''' Determine what cards a player can play

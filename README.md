@@ -151,10 +151,12 @@ To create an environment, you can use the the following interface. You can speci
 	*   `active_player`: Defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
 	*   `record_action`: Default `False`. If `True`, a field of `action_record` will be in the `state` to record the historical actions. This may be used for human-agent play.
 
+The state is defined as follows.
+*   **State Definition**: State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
+
 For basic usage, the following interfaces are easier to use but have assumtions on the agent. See [agent template](docs/developping-algorithms.md). 
 *   **env.set_agents(agents)**: `agents` is a list of `Agent` object. The length of the the list should equal to the number of the player in the game.
 *   **env.run(is_training=False)**: Run a complete game and return trajectories and payoffs. The function can be used after the `set_agents` is called. If `is_training` is `True`, the function will use `step` function in the agent to play the game. If `is_training` is `False`, `eval_step` will be called instead.
-*   **State Definition**: State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
 
 For advanced usage, the following interfaces allow flexible operations on the game tree. These interfaces do not make any assumtions on the agent.
 *   **env.init_game()**: Initialize a game. Return the state and the first player ID.

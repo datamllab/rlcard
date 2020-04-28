@@ -162,7 +162,7 @@ class DeepCFR():
         ]
         self._advantage_outputs = []
         with tf.variable_scope('advantage'):
-            for i in range(self._num_players):
+            for _ in range(self._num_players):
                 fc = self._info_state_ph
                 for dim in list(advantage_network_layers):
                     fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)

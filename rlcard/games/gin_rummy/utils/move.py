@@ -43,7 +43,7 @@ class DrawCardMove(PlayerMove):
 
     def __init__(self, player: GinRummyPlayer, action: DrawCardAction, card: Card):
         super().__init__(player, action)
-        assert type(action) is DrawCardAction
+        assert isinstance(action, DrawCardAction)
         self.card = card
 
     def __str__(self):
@@ -54,7 +54,7 @@ class PickupDiscardMove(PlayerMove):
 
     def __init__(self, player: GinRummyPlayer, action: PickUpDiscardAction, card: Card):
         super().__init__(player, action)
-        assert type(action) is PickUpDiscardAction
+        assert isinstance(action, PickUpDiscardAction)
         self.card = card
 
     def __str__(self):
@@ -65,7 +65,7 @@ class DeclareDeadHandMove(PlayerMove):
 
     def __init__(self, player: GinRummyPlayer, action: DeclareDeadHandAction):
         super().__init__(player, action)
-        assert type(action) is DeclareDeadHandAction
+        assert isinstance(action, DeclareDeadHandAction)
 
     def __str__(self):
         return "{} {}".format(self.player, self.action)
@@ -75,7 +75,7 @@ class DiscardMove(PlayerMove):
 
     def __init__(self, player: GinRummyPlayer, action: DiscardAction):
         super().__init__(player, action)
-        assert type(action) is DiscardAction
+        assert isinstance(action, DiscardAction)
 
     def __str__(self):
         return "{} {}".format(self.player, self.action)
@@ -85,7 +85,7 @@ class KnockMove(PlayerMove):
 
     def __init__(self, player: GinRummyPlayer, action: KnockAction):
         super().__init__(player, action)
-        assert type(action) is KnockAction
+        assert isinstance(action, KnockAction)
 
     def __str__(self):
         return "{} {}".format(self.player, self.action)
@@ -95,7 +95,7 @@ class GinMove(PlayerMove):
 
     def __init__(self, player: GinRummyPlayer, action: GinAction):
         super().__init__(player, action)
-        assert type(action) is GinAction
+        assert isinstance(action, GinAction)
 
     def __str__(self):
         return "{} {}".format(self.player, self.action)
