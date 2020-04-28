@@ -48,4 +48,4 @@ class TestNFSP(unittest.TestCase):
             ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, True]
             agent.feed(ts)
         state_dict = agent.get_state_dict()
-        self.assertIsInstance(state_dict, dict) 
+        self.assertIsInstance(state_dict, dict)

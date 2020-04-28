@@ -4,15 +4,12 @@
     Date created: 2/12/2020
 '''
 
-from typing import List
-
 from rlcard.games.gin_rummy.dealer import GinRummyDealer
 
 from .utils.action_event import DrawCardAction, PickUpDiscardAction, DeclareDeadHandAction
 from .utils.action_event import DiscardAction, KnockAction, GinAction
 from .utils.action_event import ScoreNorthPlayerAction, ScoreSouthPlayerAction
 
-from .utils.move import GinRummyMove
 from .utils.move import DealHandMove
 from .utils.move import DrawCardMove, PickupDiscardMove, DeclareDeadHandMove
 from .utils.move import DiscardMove, KnockMove, GinMove

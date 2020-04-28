@@ -4,7 +4,6 @@
 import os
 import json
 from collections import OrderedDict
-import numpy as np
 import threading
 import collections
 

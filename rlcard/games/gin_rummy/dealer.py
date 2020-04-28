@@ -4,10 +4,6 @@
     Date created: 2/12/2020
 '''
 
-from typing import List
-
-from rlcard.core import Card
-
 from .player import GinRummyPlayer
 from .utils import utils as utils
 

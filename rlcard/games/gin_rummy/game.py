@@ -4,7 +4,6 @@
     Date created: 2/12/2020
 '''
 
-from typing import List
 import numpy as np
 
 from rlcard.core import Game
@@ -52,21 +51,21 @@ class GinRummyGame(Game):
     def step(self, action: ActionEvent):
         ''' Perform game action and return next player number, and the state for next player
         '''
-        if type(action) is ScoreNorthPlayerAction:
+        if isinstance(action, ScoreNorthPlayerAction):
             self.round.score_player_0(action)
-        elif type(action) is ScoreSouthPlayerAction:
+        elif isinstance(action, ScoreSouthPlayerAction):
             self.round.score_player_1(action)
-        elif type(action) is DrawCardAction:
+        elif isinstance(action, DrawCardAction):
             self.round.draw_card(action)
-        elif type(action) is PickUpDiscardAction:
+        elif isinstance(action, PickUpDiscardAction):
             self.round.pick_up_discard(action)
-        elif type(action) is DeclareDeadHandAction:
+        elif isinstance(action, DeclareDeadHandAction):
             self.round.declare_dead_hand(action)
-        elif type(action) is GinAction:
+        elif isinstance(action, GinAction):
             self.round.gin(action, going_out_deadwood_count=self.settings.going_out_deadwood_count)
-        elif type(action) is DiscardAction:
+        elif isinstance(action, DiscardAction):
             self.round.discard(action)
-        elif type(action) is KnockAction:
+        elif isinstance(action, KnockAction):
             self.round.knock(action)
         else:
             raise Exception('Unknown step action={}'.format(action))
@@ -121,7 +120,7 @@ class GinRummyGame(Game):
             opponent_id = (player_id + 1) % 2
             opponent = self.round.players[opponent_id]
             known_cards = opponent.known_cards
-            if type(last_action) is ScoreNorthPlayerAction or type(last_action) is ScoreSouthPlayerAction:
+            if isinstance(last_action, ScoreNorthPlayerAction) or isinstance(last_action, ScoreSouthPlayerAction):
                 known_cards = opponent.hand
             unknown_cards = self.round.dealer.stock_pile + [card for card in opponent.hand if card not in known_cards]
             state['player_id'] = self.round.current_player_id

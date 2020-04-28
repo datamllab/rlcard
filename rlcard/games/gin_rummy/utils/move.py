@@ -108,7 +108,7 @@ class ScoreNorthMove(PlayerMove):
                  best_meld_cluster: List[List[Card]],
                  deadwood_count: int):
         super().__init__(player, action)
-        assert type(action) is ScoreNorthPlayerAction
+        assert isinstance(action, ScoreNorthPlayerAction)
         self.best_meld_cluster = best_meld_cluster  # for information use only
         self.deadwood_count = deadwood_count  # for information use only
 
@@ -125,7 +125,7 @@ class ScoreSouthMove(PlayerMove):
                  best_meld_cluster: List[List[Card]],
                  deadwood_count: int):
         super().__init__(player, action)
-        assert type(action) is ScoreSouthPlayerAction
+        assert isinstance(action, ScoreSouthPlayerAction)
         self.best_meld_cluster = best_meld_cluster  # for information use only
         self.deadwood_count = deadwood_count  # for information use only
 

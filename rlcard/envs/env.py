@@ -46,7 +46,7 @@ class Env(object):
                 if agent.use_raw:
                     self.allow_raw_data = True
                     break
-        
+
         # Set random seed, default is None
         self.seed()
 
