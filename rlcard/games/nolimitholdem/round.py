@@ -2,7 +2,6 @@
 ''' Implement NoLimit Texas Hold'em Round class
 '''
 from enum import Enum
-import numpy as np
 
 from rlcard.games.limitholdem import PlayerStatus
 

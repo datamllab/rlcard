@@ -67,9 +67,9 @@ def get_payoff_gin_rummy_v1(player: GinRummyPlayer, game: 'GinRummyGame') -> flo
     # The payoff is scaled to lie between -1 and 1.
     going_out_action = game.round.going_out_action
     going_out_player_id = game.round.going_out_player_id
-    if going_out_player_id == player.player_id and type(going_out_action) is KnockAction:
+    if going_out_player_id == player.player_id and isinstance(going_out_action, KnockAction):
         payoff = 0.2
-    elif going_out_player_id == player.player_id and type(going_out_action) is GinAction:
+    elif going_out_player_id == player.player_id and isinstance(going_out_action, GinAction):
         payoff = 1
     else:
         hand = player.hand

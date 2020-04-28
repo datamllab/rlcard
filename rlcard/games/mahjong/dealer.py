@@ -26,9 +26,9 @@ class MahjongDealer(object):
             player.hand.append(self.deck.pop())
 
 
-# For test
-if __name__ == '__main__':
-    dealer = MahjongDealer()
-    for card in dealer.deck:
-        print(card.get_str())
-    print(len(dealer.deck))
+## For test
+#if __name__ == '__main__':
+#    dealer = MahjongDealer()
+#    for card in dealer.deck:
+#        print(card.get_str())
+#    print(len(dealer.deck))

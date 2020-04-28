@@ -161,7 +161,7 @@ class DeepCFR():
             FixedSizeRingBuffer(memory_capacity) for _ in range(self._num_players)
         ]
         self._advantage_outputs = []
-        with tf.variable_scope('advantage') as vs:
+        with tf.variable_scope('advantage'):
             for i in range(self._num_players):
                 fc = self._info_state_ph
                 for dim in list(advantage_network_layers):

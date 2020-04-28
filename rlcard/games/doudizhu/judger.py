@@ -21,7 +21,7 @@ class DoudizhuJudger(object):
         Args:
             indexes_list: the indexes of cards those have the same count, the count could be 1, 2, or 3.
 
-        Returns: 
+        Returns:
             list of tuples: [(start_index1, length1), (start_index1, length1), ...]
 
         '''
@@ -239,7 +239,7 @@ class DoudizhuJudger(object):
                             for j in right:
                                 post_attached += CARD_RANK_STR[j]
                             playable_cards.add(pre_attached + cards + post_attached)
-                    
+
                     #trio_pair_chain2 -- trio_pair_chain_4
                     if (curr_length >= 2 and curr_length <= 4):
                         for left, right in DoudizhuJudger.pair_attachments(cards_count, s, curr_length, curr_length):
