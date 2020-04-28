@@ -15,12 +15,13 @@ from .utils import melding
 
 class GinRummyPlayer(object):
 
-    def __init__(self, player_id: int):
+    def __init__(self, player_id: int, np_random):
         ''' Initialize a GinRummy player class
 
         Args:
             player_id (int): id for the player
         '''
+        self.np_random = np_random
         self.player_id = player_id
         self.hand = []  # type: List[Card]
         self.known_cards = []  # type: List[Card]  # opponent knows cards picked up by player and not yet discarded

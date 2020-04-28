@@ -1,11 +1,11 @@
-import random
 from rlcard.games.mahjong.utils import init_deck
 
 
 class MahjongDealer(object):
     ''' Initialize a mahjong dealer class
     '''
-    def __init__(self):
+    def __init__(self, np_random):
+        self.np_random = np_random
         self.deck = init_deck()
         self.shuffle()
         self.table = []
@@ -13,7 +13,7 @@ class MahjongDealer(object):
     def shuffle(self):
         ''' Shuffle the deck
         '''
-        random.shuffle(self.deck)
+        self.np_random.shuffle(self.deck)
 
     def deal_cards(self, player, num):
         ''' Deal some cards from deck to one player
@@ -26,9 +26,9 @@ class MahjongDealer(object):
             player.hand.append(self.deck.pop())
 
 
-# For test
-if __name__ == '__main__':
-    dealer = MahjongDealer()
-    for card in dealer.deck:
-        print(card.get_str())
-    print(len(dealer.deck))
+## For test
+#if __name__ == '__main__':
+#    dealer = MahjongDealer()
+#    for card in dealer.deck:
+#        print(card.get_str())
+#    print(len(dealer.deck))

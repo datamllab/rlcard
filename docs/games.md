@@ -39,7 +39,6 @@ The state is encoded as a vector of length 36. The first 3 elements correspond t
 | 6~20    | 0 ~ 14 chips for the current player  |
 | 21~35   | 0 ~ 14 chips for the opponent        |
 
-
 ### Action Encoding of Leduc Hold'em
 The action encoding is the same as Limit Hold'em game.
 
@@ -144,20 +143,18 @@ Simple Dou Dizhu is a smaller version of Dou Dizhu. The deck only consists of 6 
 
 This is almost the smae as the state representation of Dou Dizhu, but the number of the 'deck' has reduced from 54 to 28, and the number of the 'seen cards' reduced from 3 to 1. The following table shows the structure of the state:
 
-| Key          | Description                                                  | Example value                                         |
-| ------------ | ------------------------------------------------------------ | ----------------------------------------------------- |
-| deck         | A string of one pack of 28 cards without Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'. | 88889999TTTTJJJJQQQQKKKKAAAA                          |
-| seen_cards   | One face-down card distributed to the landlord after bidding. Then the card will be made public to all players. | K                                                     |
-| landlord     | An integer of landlord's id                                  | 0                                                     |
-| self         | An integer of current player's id                            | 1                                                     |
-| initial_hand | All cards current player initially owned when a game starts. It will not change with playing cards. | 8TTJJQQKA                                             |
-| trace        | A list of tuples which records every actions in one game. The first entry of  the tuple is player's id, the second is corresponding player's action. | [(0, '8'), (1, 'A'), (2, 'pass'), (0, 'pass')]        |
-| played_cards | As the game progresses, the cards which have been played by the three players and sorted from low to high. | ['8', 'A']                                            |
-| others_hand  | The union of the other two player's current hand             | 889999TTJJQQKKKAAA                                    |
-| current_hand | The current hand of current player                           | 8TTJJQQK                                              |
-| actions      | The legal actions the current player could do                | ['J', 'TTJJQQ', 'TT', 'Q', 'T', 'K', 'QQ', '8', 'JJ'] |
-
-
+| Key           | Description                                                                                                                                           | Example value                                           |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| deck          | A string of one pack of 28 cards without Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'.                | 88889999TTTTJJJJQQQQKKKKAAAA                            |
+| seen\_cards   | One face-down card distributed to the landlord after bidding. Then the card will be made public to all players.                                       | K                                                       |
+| landlord      | An integer of landlord's id                                                                                                                           | 0                                                       |
+| self          | An integer of current player's id                                                                                                                     | 1                                                       |
+| initial\_hand | All cards current player initially owned when a game starts. It will not change with playing cards.                                                   | 8TTJJQQKA                                               |
+| trace         | A list of tuples which records every actions in one game. The first entry of  the tuple is player's id, the second is corresponding player's action.  | \[(0, '8'), (1, 'A'), (2, 'pass'), (0, 'pass'\)]        |
+| played\_cards | As the game progresses, the cards which have been played by the three players and sorted from low to high.                                            | \['8', 'A'\]                                            |
+| others\_hand  | The union of the other two player's current hand                                                                                                      | 889999TTJJQQKKKAAA                                      |
+| current\_hand | The current hand of current player                                                                                                                    | 8TTJJQQK                                                |
+| actions       | The legal actions the current player could do                                                                                                         | \['J', 'TTJJQQ', 'TT', 'Q', 'T', 'K', 'QQ', '8', 'JJ'\] |
 
 ### State Encoding of Simple Dou Dizhu
 
@@ -167,7 +164,7 @@ The state encoding is the same as Dou Dizhu game.
 
 The action encoding is the same as Dou Dizhu game. Because of the reduction of deck, the actions encoded have also reduced from 309 to 131.
 
-### Payoff
+### Payoff of Simple Dou Dizhu
 
 The payoff is the same as Dou Dizhu game.
 

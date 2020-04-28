@@ -116,7 +116,7 @@ class TestLimitholdemMethods(unittest.TestCase):
             self.assertEqual(total, 0)
 
     def test_get_player_id(self):
-        player = Player(3)
+        player = Player(3, np.random.RandomState())
         self.assertEqual(player.get_player_id(), 3)
 
 

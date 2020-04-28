@@ -1,8 +1,8 @@
 import numpy as np
 
-from rlcard.envs.env import Env
+from rlcard.envs import Env
 from rlcard import models
-from rlcard.games.uno.game import UnoGame as Game
+from rlcard.games.uno import Game
 from rlcard.games.uno.utils import encode_hand, encode_target
 from rlcard.games.uno.utils import ACTION_SPACE, ACTION_LIST
 
@@ -37,7 +37,7 @@ class UnoEnv(Env):
 
     def get_payoffs(self):
 
-        return self.game.get_payoffs()
+        return np.array(self.game.get_payoffs())
 
     def _decode_action(self, action_id):
         legal_ids = self._get_legal_actions()

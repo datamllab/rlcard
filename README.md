@@ -115,8 +115,8 @@ Please refer to the [Documents](docs/README.md) for general introductions. API d
 ## Available Environments
 We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information sets; **InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space. **Name:** the name that should be passed to `rlcard.make` to create the game environment. We also provide the link to the documentation and the random example.
 
-| Game                                                                                                                                                                                           | InfoSet Number  | InfoSet Size | Action Size | Name            | Usage     |
-| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------: | :---------------: | :---------: | :-------------: | :--------: |
+| Game                                                                                                                                                                                           | InfoSet Number  | InfoSet Size      | Action Size | Name            | Usage                                                                                       |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------: | :---------------: | :---------: | :-------------: | :-----------------------------------------------------------------------------------------: |
 | Blackjack ([wiki](https://en.wikipedia.org/wiki/Blackjack), [baike](https://baike.baidu.com/item/21%E7%82%B9/5481683?fr=aladdin))                                                              | 10^3            | 10^1              | 10^0        | blackjack       | [doc](docs/games.md#blackjack), [example](examples/blackjack_random.py)                     |
 | Leduc Hold’em ([paper](http://poker.cs.ualberta.ca/publications/UAI05.pdf))                                                                                                                    | 10^2            | 10^2              | 10^0        | leduc-holdem    | [doc](docs/games.md#leduc-holdem), [example](examples/leduc_holdem_random.py)               |
 | Limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [baike](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin))    | 10^14           | 10^3              | 10^0        | limit-holdem    | [doc](docs/games.md#limit-texas-holdem), [example](examples/limit_holdem_random.py)         |
@@ -143,22 +143,33 @@ The purposes of the main modules are listed as below:
 *   [/rlcard/models](rlcard/models): Model zoo including pre-trained models and rule models.
 
 ## API Cheat Sheet
+### How to create an environment
+You can use the the following interface. You can specify some configurations with a dictionary.
 *   **rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
 	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
 	*   `allow_raw_data`: Default `False`. `True` if allowing raw data in the `state`.
 	*   `single_agent_mode`: Default `False`. `True` if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
 	*   `active_player`: Defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
 	*   `record_action`: Default `False`. If `True`, a field of `action_record` will be in the `state` to record the historical actions. This may be used for human-agent play.
-*   **env.init_game()**: Initialize a game. Return the state and the first player ID.
-*   **env.step(action, raw_action=False)**: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be `True` if the action is raw action (string).
-*   **env.step_back()**: Available only when `allow_step_back` is `True`. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR. 
-*   **env.get_payoffs()**: In the end of the game, return a list of payoffs for all the players.
-*   **env.get_perfect_information()**: (Currently only support some of the games) Obtain the perfect information at the current state. 
+
+### What is state in RLCard
+State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
+
+### Basic interfaces
+The following interfaces provide a basic usage. It is easy to use but is has assumtions on the agent. The agent must follow [agent template](docs/developping-algorithms.md). 
 *   **env.set_agents(agents)**: `agents` is a list of `Agent` object. The length of the the list should equal to the number of the player in the game.
 *   **env.run(is_training=False)**: Run a complete game and return trajectories and payoffs. The function can be used after the `set_agents` is called. If `is_training` is `True`, the function will use `step` function in the agent to play the game. If `is_training` is `False`, `eval_step` will be called instead.
-*   **State Definition**: State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
 
-For basic usage, `env.set_agents` and `env.run()` are a good chioce. For advanced useage, you may also play the game step be step with `env.init_game()` and `env.step()`.
+### Advanced interfaces
+For advanced usage, the following interfaces allow flexible operations on the game tree. These interfaces do not make any assumtions on the agent.
+*   **env.reset()**: Initialize a game. Return the state and the first player ID.
+*   **env.step(action, raw_action=False)**: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be `True` if the action is raw action (string).
+*   **env.step_back()**: Available only when `allow_step_back` is `True`. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR.
+*	**env.is_over()**: Return `True` if the current game is over/ Return `False` otherwise.
+*	**env.get_player_id()**: Return the Player ID of the current player.
+*	**env.get_state(player_id)**: Return the state corresponds to `player_id`.
+*   **env.get_payoffs()**: In the end of the game, return a list of payoffs for all the players.
+*   **env.get_perfect_information()**: (Currently only support some of the games) Obtain the perfect information at the current state.
 
 ## Contributing
 Contribution to this project is greatly appreciated! Please create an issue for feedbacks/bugs. If you want to contribute codes, please refer to [Contributing Guide](./CONTRIBUTING.md).

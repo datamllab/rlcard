@@ -1,10 +1,10 @@
-from rlcard.games.limitholdem.judger import LimitholdemJudger
+from rlcard.games.limitholdem import Judger
 
-class NolimitholdemJudger(LimitholdemJudger):
+class NolimitholdemJudger(Judger):
     ''' The Judger class for Texas Hold'em
     '''
 
-    def __init__(self):
+    def __init__(self, np_random):
         ''' Initialize a judger class
         '''
-        super(NolimitholdemJudger, self).__init__()
+        super(NolimitholdemJudger, self).__init__(np_random)

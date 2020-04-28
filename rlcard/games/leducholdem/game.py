@@ -1,14 +1,14 @@
 import numpy as np
 from copy import copy
 
-from rlcard.games.leducholdem.dealer import LeducholdemDealer as Dealer
-from rlcard.games.leducholdem.player import LeducholdemPlayer as Player
-from rlcard.games.leducholdem.judger import LeducholdemJudger as Judger
-from rlcard.games.leducholdem.round import LeducholdemRound as Round
+from rlcard.games.leducholdem import Dealer
+from rlcard.games.leducholdem import Player
+from rlcard.games.leducholdem import Judger
+from rlcard.games.leducholdem import Round
 
-from rlcard.games.limitholdem.game import LimitholdemGame
+from rlcard.games.limitholdem import Game
 
-class LeducholdemGame(LimitholdemGame):
+class LeducholdemGame(Game):
 
     def __init__(self, allow_step_back=False):
         ''' Initialize the class leducholdem Game
@@ -37,6 +37,8 @@ class LeducholdemGame(LimitholdemGame):
 
         self.num_players = 2
 
+        self.np_random = np.random.RandomState()
+
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
 
@@ -49,19 +51,19 @@ class LeducholdemGame(LimitholdemGame):
                 (int): Current player's id
         '''
         # Initilize a dealer that can deal cards
-        self.dealer = Dealer()
+        self.dealer = Dealer(self.np_random)
 
         # Initilize two players to play the game
-        self.players = [Player(i) for i in range(self.num_players)]
+        self.players = [Player(i, self.np_random) for i in range(self.num_players)]
 
         # Initialize a judger class which will decide who wins in the end
-        self.judger = Judger()
+        self.judger = Judger(self.np_random)
 
         # Prepare for the first round
         for i in range(self.num_players):
             self.players[i].hand = self.dealer.deal_card()
         # Randomly choose a small blind and a big blind
-        s = np.random.randint(0, self.num_players)
+        s = self.np_random.randint(0, self.num_players)
         b = (s + 1) % self.num_players
         self.players[b].in_chips = self.big_blind
         self.players[s].in_chips = self.small_blind
@@ -73,7 +75,8 @@ class LeducholdemGame(LimitholdemGame):
         # be passed to the round for processing.
         self.round = Round(raise_amount=self.raise_amount,
                            allowed_raise_num=self.allowed_raise_num,
-                           num_players=self.num_players)
+                           num_players=self.num_players,
+                           np_random=self.np_random)
 
         self.round.start_new_round(game_pointer=self.game_pointer, raised=[p.in_chips for p in self.players])
 

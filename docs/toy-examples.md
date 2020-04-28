@@ -12,8 +12,8 @@ In this document, we provide some toy examples for getting started. All the exam
 We have set up a random agent that can play randomly on each environment. An example of applying a random agent on Blackjack is as follow:
 ```python
 import rlcard
-from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.utils import set_global_seed
+from rlcard.agents import RandomAgent
+from rlcard.utils import set_global_seed
 
 # Make environment
 env = rlcard.make('blackjack')
@@ -21,6 +21,7 @@ episode_num = 2
 
 # Set a global seed
 set_global_seed(0)
+env.seed(0)
 
 # Set up agents
 agent_0 = RandomAgent(action_num=env.action_num)
@@ -56,9 +57,9 @@ import tensorflow as tf
 import os
 
 import rlcard
-from rlcard.agents.dqn_agent import DQNAgent
-from rlcard.utils.utils import set_global_seed, tournament
-from rlcard.utils.logger import Logger
+from rlcard.agents import DQNAgent
+from rlcard.utils import set_global_seed, tournament
+from rlcard.utils import Logger
 
 # Make environment
 env = rlcard.make('blackjack')
@@ -80,6 +81,8 @@ log_dir = './experiments/blackjack_dqn_result/'
 
 # Set a global seed
 set_global_seed(0)
+env.seed(0)
+eval_env.seed(0)
 
 with tf.Session() as sess:
 
@@ -172,10 +175,10 @@ To show how we can use `step` and `step_back` to traverse the game tree, we prov
 import numpy as np
 
 import rlcard
-from rlcard.agents.cfr_agent import CFRAgent
+from rlcard.agents import CFRAgent
 from rlcard import models
-from rlcard.utils.utils import set_global_seed, tournament
-from rlcard.utils.logger import Logger
+from rlcard.utils import set_global_seed, tournament
+from rlcard.utils import Logger
 
 # Make environment and enable human mode
 env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
@@ -192,6 +195,8 @@ log_dir = './experiments/leduc_holdem_cfr_result/'
 
 # Set a global seed
 set_global_seed(0)
+env.seed(0)
+eval_env.seed(0)
 
 # Initilize CFR Agent
 agent = CFRAgent(env)
@@ -257,8 +262,8 @@ We have designed simple human interfaces to play against the pretrained model. L
 ```python
 import rlcard
 from rlcard import models
-from rlcard.agents.leduc_holdem_human_agent import HumanAgent
-from rlcard.utils.utils import print_card
+from rlcard.agents import LeducholdemHumanAgent as HumanAgent
+from rlcard.utils import print_card
 
 # Make environment
 # Set 'record_action' to True because we need it to print results
@@ -347,10 +352,10 @@ import os
 import numpy as np
 
 import rlcard
-from rlcard.agents.dqn_agent import DQNAgent
-from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.utils import set_global_seed, tournament
-from rlcard.utils.logger import Logger
+from rlcard.agents import DQNAgent
+from rlcard.agents import RandomAgent
+from rlcard.utils import set_global_seed, tournament
+from rlcard.utils import Logger
 
 # Make environment
 env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
@@ -372,6 +377,8 @@ log_dir = './experiments/leduc_holdem_single_dqn_result/'
 
 # Set a global seed
 set_global_seed(0)
+env.seed(0)
+eval_env.seed(0)
 
 with tf.Session() as sess:
 

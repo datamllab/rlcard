@@ -2,17 +2,15 @@
 ''' Implement Mahjong Judger class
 '''
 from collections import defaultdict
-from rlcard.games.mahjong.player import MahjongPlayer as Player
-from rlcard.games.mahjong.card import MahjongCard as Card
 
 class MahjongJudger(object):
     ''' Determine what cards a player can play
     '''
 
-    def __init__(self):
+    def __init__(self, np_random):
         ''' Initilize the Judger class for Mahjong
         '''
-        pass
+        self.np_random = np_random
 
     @staticmethod
     def judge_pong_gong(dealer, players, last_player):
@@ -210,17 +208,17 @@ class MahjongJudger(object):
                                 tmp_cards.pop(tmp_cards.index(c))
         return set_count, sets
 
-if __name__ == "__main__":
-    judger = MahjongJudger()
-    player = Player(0)
-    card_info = Card.info
-    #print(card_info)
-    player.pile.append([Card(card_info['type'][0], card_info['trait'][0])]*3)
-    #player.hand.extend([Card(card_info['type'][0], card_info['trait'][0])]*2)
-    player.hand.extend([Card(card_info['type'][1], card_info['trait'][1])]*4)
-    player.hand.extend([Card(card_info['type'][2], card_info['trait'][1])]*3)
-    player.hand.extend([Card(card_info['type'][0], card_info['trait'][2])]*3)
-    player.hand.extend([Card(card_info['type'][3], card_info['trait'][9])]*2)
-    #player.hand.extend([Card(card_info['type'][2], card_info['trait'][4])]*1)
-    print([card.get_str() for card in player.hand])
-    print(judger.judge_hu(player))
+#if __name__ == "__main__":
+#    judger = MahjongJudger()
+#    player = Player(0)
+#    card_info = Card.info
+#    #print(card_info)
+#    player.pile.append([Card(card_info['type'][0], card_info['trait'][0])]*3)
+#    #player.hand.extend([Card(card_info['type'][0], card_info['trait'][0])]*2)
+#    player.hand.extend([Card(card_info['type'][1], card_info['trait'][1])]*4)
+#    player.hand.extend([Card(card_info['type'][2], card_info['trait'][1])]*3)
+#    player.hand.extend([Card(card_info['type'][0], card_info['trait'][2])]*3)
+#    player.hand.extend([Card(card_info['type'][3], card_info['trait'][9])]*2)
+#    #player.hand.extend([Card(card_info['type'][2], card_info['trait'][4])]*1)
+#    print([card.get_str() for card in player.hand])
+#    print(judger.judge_hu(player))
