@@ -354,9 +354,9 @@ The reward is calculated by the terminal state of the game.
 Note that the reward is different from that of the standard game.
 A player who gins is awarded 1 point.
 A player who knocks is awarded 0.2 points.
-The losing player is punished by the negative of their deadwood count.
+The losing player is punished by the negative of their deadwood count divided by 100.
 
-If the hand is declared dead, both players are punished by the negative of their deadwood count.
+If the hand is declared dead, both players are punished by the negative of their deadwood count divided by 100.
 
 ### Settings
 
