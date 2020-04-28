@@ -21,7 +21,7 @@ class DoudizhuJudger(object):
         Args:
             indexes_list: the indexes of cards those have the same count, the count could be 1, 2, or 3.
 
-        Returns: 
+        Returns:
             list of tuples: [(start_index1, length1), (start_index1, length1), ...]
 
         '''
@@ -228,7 +228,7 @@ class DoudizhuJudger(object):
                     #trio_chain_2 to trio_chain_6
                     if (curr_length >= 2 and curr_length <= 6):
                         playable_cards.add(cards)
-                    
+
                     #trio_solo_chain_2 to trio_solo_chain_5
                     if (curr_length >= 2 and curr_length <= 5):
                         for left, right in DoudizhuJudger.solo_attachments(current_hand, s, curr_length, curr_length):
@@ -239,7 +239,7 @@ class DoudizhuJudger(object):
                             for j in right:
                                 post_attached += CARD_RANK_STR[j]
                             playable_cards.add(pre_attached + cards + post_attached)
-                    
+
                     #trio_pair_chain2 -- trio_pair_chain_4
                     if (curr_length >= 2 and curr_length <= 4):
                         for left, right in DoudizhuJudger.pair_attachments(cards_count, s, curr_length, curr_length):
@@ -257,7 +257,7 @@ class DoudizhuJudger(object):
             playable_cards.add(CARD_RANK_STR[13] + CARD_RANK_STR[14])
         return playable_cards
 
-    def __init__(self, players):
+    def __init__(self, players, np_random):
         ''' Initilize the Judger class for Dou Dizhu
         '''
         self.playable_cards = [set() for _ in range(3)]

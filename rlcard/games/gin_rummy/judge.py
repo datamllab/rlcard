@@ -14,7 +14,7 @@ from .utils.action_event import *
 from .utils.scorers import GinRummyScorer
 from .utils import melding
 
-import rlcard.games.gin_rummy.utils.utils as utils
+from rlcard.games.gin_rummy.utils import utils
 
 
 class GinRummyJudge(object):
@@ -23,10 +23,11 @@ class GinRummyJudge(object):
         Judge decides legal actions for current player
     '''
 
-    def __init__(self, game: 'GinRummyGame'):
+    def __init__(self, game: 'GinRummyGame', np_random):
         ''' Initialize the class GinRummyJudge
         :param game: GinRummyGame
         '''
+        self.np_random = np_random
         self.game = game
         self.scorer = GinRummyScorer()
 
@@ -72,7 +73,7 @@ class GinRummyJudge(object):
         elif last_action_type is DiscardAction:
             can_draw_card = len(self.game.round.dealer.stock_pile) > self.game.settings.stockpile_dead_card_count
             if self.game.settings.max_drawn_card_count < 52:  # NOTE: this
-                drawn_card_actions = [action for action in self.game.actions if type(action) is DrawCardAction]
+                drawn_card_actions = [action for action in self.game.actions if isinstance(action, DrawCardAction)]
                 if len(drawn_card_actions) >= self.game.settings.max_drawn_card_count:
                     can_draw_card = False
             if can_draw_card:

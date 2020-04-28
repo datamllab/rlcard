@@ -7,10 +7,10 @@ import os
 import numpy as np
 
 import rlcard
-from rlcard.agents.dqn_agent import DQNAgent
-from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.utils import set_global_seed, tournament
-from rlcard.utils.logger import Logger
+from rlcard.agents import DQNAgent
+from rlcard.agents import RandomAgent
+from rlcard.utils import set_global_seed, tournament
+from rlcard.utils import Logger
 
 # Make environment
 env = rlcard.make('uno', config={'single_agent_mode':True})
@@ -32,6 +32,8 @@ log_dir = './experiments/uno_single_dqn_result/'
 
 # Set a global seed
 set_global_seed(0)
+env.seed(0)
+eval_env.seed(0)
 
 with tf.Session() as sess:
 

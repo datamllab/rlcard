@@ -2,13 +2,13 @@
 ''' Implement Leduc Hold'em Round class
 '''
 
-from rlcard.games.limitholdem.round import LimitholdemRound
+from rlcard.games.limitholdem import Round
 
-class LeducholdemRound(LimitholdemRound):
+class LeducholdemRound(Round):
     ''' Round can call other Classes' functions to keep the game running
     '''
 
-    def __init__(self, raise_amount, allowed_raise_num, num_players):
+    def __init__(self, raise_amount, allowed_raise_num, num_players, np_random):
         ''' Initilize the round class
 
         Args:
@@ -16,4 +16,4 @@ class LeducholdemRound(LimitholdemRound):
             allowed_raise_num (int): The number of allowed raise num
             num_players (int): The number of players
         '''
-        super(LeducholdemRound, self).__init__(raise_amount, allowed_raise_num, num_players)
+        super(LeducholdemRound, self).__init__(raise_amount, allowed_raise_num, num_players, np_random=np_random)

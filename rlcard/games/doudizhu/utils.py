@@ -4,7 +4,6 @@
 import os
 import json
 from collections import OrderedDict
-import numpy as np
 import threading
 import collections
 
@@ -117,7 +116,7 @@ def get_landlord_score(current_hand):
     return score
 
 
-def get_optimal_action(probs, legal_actions):
+def get_optimal_action(probs, legal_actions, np_random):
     ''' Determine the optimal action from legal actions
     according to the probabilities of abstract actions.
 
@@ -141,7 +140,7 @@ def get_optimal_action(probs, legal_actions):
     optimal_actions = [legal_actions[index] for index,
                        prob in enumerate(action_probs) if prob == optimal_prob]
     if len(optimal_actions) > 1:
-        return np.random.choice(optimal_actions)
+        return np_random.choice(optimal_actions)
     return optimal_actions[0]
 
 

@@ -29,7 +29,7 @@ if TYPE_CHECKING:
 import rlcard
 
 from rlcard.models.gin_rummy_rule_models import GinRummyNoviceRuleAgent
-from rlcard.agents.random_agent import RandomAgent
+from rlcard.agents import RandomAgent
 
 from rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.game_app import GameApp
 

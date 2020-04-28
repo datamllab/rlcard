@@ -1,7 +1,4 @@
-import numpy as np
-import random
-
-from rlcard.utils.utils import *
+from rlcard.utils import *
 
 class Env(object):
     ''' The base Env class
@@ -11,7 +8,6 @@ class Env(object):
         ''' Initialize
 
         Args:
-            game (Game): The Game class
             config (dict): A config dictionary. Currently, the dictionary
                 includes
                 'allow_step_bac'k (boolean) - True if allowing
@@ -51,19 +47,34 @@ class Env(object):
                     self.allow_raw_data = True
                     break
 
-    def init_game(self):
-        ''' Start a new game
+        # Set random seed, default is None
+        self.seed()
 
-        Returns:
-            (tuple): Tuple containing:
+    def seed(self, seed=None):
+        self.np_random, seed = seeding.np_random(seed)
+        self.game.np_random = self.np_random
+        return [seed]
 
-                (numpy.array): The begining state of the game
-                (int): The begining player
+    def reset(self):
+        ''' Reset environment in single-agent mode
+            Call _init_game if not in single agent mode
         '''
-        state, player_id = self.game.init_game()
-        if self.record_action:
-            self.action_recorder = []
-        return self._extract_state(state), player_id
+        if not self.single_agent_mode:
+            return self._init_game()
+
+        while True:
+            state, player_id = self.game.init_game()
+            while not player_id == self.active_player:
+                self.timestep += 1
+                action, _ = self.model.agents[player_id].eval_step(self._extract_state(state))
+                if not self.model.agents[player_id].use_raw:
+                    action = self._decode_action(action)
+                state, player_id = self.game.step(action)
+
+            if not self.game.is_over():
+                break
+
+        return self._extract_state(state)
 
     def step(self, action, raw_action=False):
         ''' Step forward
@@ -129,42 +140,11 @@ class Env(object):
                 self.allow_raw_data = True
                 break
 
-    def is_over(self):
-        ''' Check whether the curent game is over
-
-        Returns:
-            (boolean): True is current game is over
-        '''
-        return self.game.is_over()
-
-    def reset(self):
-        ''' Reset environment in single-agent mode
-        '''
-        if not self.single_agent_mode:
-            raise ValueError('Reset can only be used in single-agent mode')
-
-        while True:
-            state, player_id = self.game.init_game()
-            while not player_id == self.active_player:
-                self.timestep += 1
-                action, _ = self.model.agents[player_id].eval_step(self._extract_state(state))
-                if not self.model.agents[player_id].use_raw:
-                    action = self._decode_action(action)
-                state, player_id = self.game.step(action)
-
-            if not self.game.is_over():
-                break
-
-        return self._extract_state(state)
-
-    def run(self, is_training=False, seed=None):
+    def run(self, is_training=False):
         ''' Run a complete game, either for evaluation or training RL agent.
 
         Args:
             is_training (boolean): True if for training purpose.
-            seed (int): A seed for running the game. For single-process program,
-              the seed should be set to None. For multi-process program, the
-              seed should be asigned for reproducibility.
 
         Returns:
             (tuple) Tuple containing:
@@ -178,12 +158,8 @@ class Env(object):
         if self.single_agent_mode:
             raise ValueError('Run in single agent not allowed.')
 
-        if seed is not None:
-            np.random.seed(seed)
-            random.seed(seed)
-
         trajectories = [[] for _ in range(self.player_num)]
-        state, player_id = self.init_game()
+        state, player_id = self.reset()
 
         # Loop to play the game
         trajectories[player_id].append(state)
@@ -220,11 +196,13 @@ class Env(object):
 
         return trajectories, payoffs
 
-    def run_multi(self, task_num, result, is_training=False, seed=None):
-        if seed is not None:
-            np.random.seed(seed)
-        for _ in range(task_num):
-            result.append(self.run(is_training=is_training))
+    def is_over(self):
+        ''' Check whether the curent game is over
+
+        Returns:
+            (boolean): True is current game is over
+        '''
+        return self.game.is_over()
 
     def get_player_id(self):
         ''' Get the current player id
@@ -246,25 +224,6 @@ class Env(object):
         '''
         return self._extract_state(self.game.get_state(player_id))
 
-    def _load_model(self):
-        ''' Load pretrained/rule model
-
-        Returns:
-            model (Model): A Model object
-        '''
-        raise NotImplementedError
-
-    def _extract_state(self, state):
-        ''' Extract useful information from state for RL. Must be implemented in the child class.
-
-        Args:
-            state (dict): The raw state
-
-        Returns:
-            (numpy.array): The extracted state
-        '''
-        raise NotImplementedError
-
     def get_payoffs(self):
         ''' Get the payoffs of players. Must be implemented in the child class.
 
@@ -284,6 +243,40 @@ class Env(object):
         Note: Must be implemented in the child class.
         '''
         raise NotImplementedError
+
+    def _init_game(self):
+        ''' Start a new game
+
+        Returns:
+            (tuple): Tuple containing:
+
+                (numpy.array): The begining state of the game
+                (int): The begining player
+        '''
+        state, player_id = self.game.init_game()
+        if self.record_action:
+            self.action_recorder = []
+        return self._extract_state(state), player_id
+
+    def _load_model(self):
+        ''' Load pretrained/rule model
+
+        Returns:
+            model (Model): A Model object
+        '''
+        raise NotImplementedError
+
+    def _extract_state(self, state):
+        ''' Extract useful information from state for RL. Must be implemented in the child class.
+
+        Args:
+            state (dict): The raw state
+
+        Returns:
+            (numpy.array): The extracted state
+        '''
+        raise NotImplementedError
+
 
     def _decode_action(self, action_id):
         ''' Decode Action id to the action in the game.
@@ -335,3 +328,6 @@ class Env(object):
             return state, reward, done
 
         return self._extract_state(state), reward, done
+
+    def init_game(self):
+        raise ValueError('init_game is deperated. Please use env.reset()')

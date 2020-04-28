@@ -9,8 +9,8 @@
 import rlcard
 from rlcard import models
 
-from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.utils import set_global_seed
+from rlcard.agents import RandomAgent
+from rlcard.utils import set_global_seed
 
 from rlcard.games.gin_rummy.player import GinRummyPlayer
 from rlcard.games.gin_rummy.utils.move import DealHandMove
@@ -22,6 +22,7 @@ env.game.settings.print_settings()
 
 # Set a global seed
 set_global_seed(0)
+env.seed(0)
 
 # Set up agents
 agents = [RandomAgent(action_num=env.action_num), RandomAgent(action_num=env.action_num)]

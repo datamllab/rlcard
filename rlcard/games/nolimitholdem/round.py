@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-''' Implement Limit Texas Hold'em Round class
+''' Implement NoLimit Texas Hold'em Round class
 '''
 from enum import Enum
 
-from rlcard.games.limitholdem.player import PlayerStatus
-from rlcard.games.limitholdem.round import LimitholdemRound
-import numpy as np
+from rlcard.games.limitholdem import PlayerStatus
 
 
 class Action(Enum):
@@ -26,13 +24,14 @@ class NolimitholdemRound():
     ''' Round can call other Classes' functions to keep the game running
     '''
 
-    def __init__(self, num_players, init_raise_amount, dealer):
+    def __init__(self, num_players, init_raise_amount, dealer, np_random):
         ''' Initilize the round class
 
         Args:
             num_players (int): The number of players
             init_raise_amount (int): The min raise amount when every round starts
         '''
+        self.np_random = np_random
         self.game_pointer = None
         self.num_players = num_players
         self.init_raise_amount = init_raise_amount

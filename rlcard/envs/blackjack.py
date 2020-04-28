@@ -1,7 +1,7 @@
 import numpy as np
 
-from rlcard.envs.env import Env
-from rlcard.games.blackjack.game import BlackjackGame as Game
+from rlcard.envs import Env
+from rlcard.games.blackjack import Game
 
 
 class BlackjackEnv(Env):

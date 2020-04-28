@@ -23,7 +23,7 @@ class BRAgent():
             raise "Best Response only for Two-player games"
 
         # A policy is a dict state_str -> action probabilities
-        self.opponent_policy = policy 
+        self.opponent_policy = policy
         self.average_policy = collections.defaultdict(np.array)
 
         # Regret is a dict state_str -> action regrets
@@ -32,7 +32,7 @@ class BRAgent():
         self.iteration = 0
 
     def traverse_tree(self, probs, player_id):
-        ''' Traverse the game tree, get information set 
+        ''' Traverse the game tree, get information set
 
         Args:
             probs: The reach probability of the current node
@@ -72,7 +72,7 @@ class BRAgent():
         if self.env.is_over():
             print(self.env.get_payoffs())
             return self.env.get_payoffs()
-        elif this_player == curr_player: 
+        elif this_player == curr_player:
             print("Is current Player")
             self.infosets = collections.defaultdict(list)
             probs = np.ones(self.env.player_num)

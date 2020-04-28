@@ -5,9 +5,9 @@ import tensorflow as tf
 import os
 
 import rlcard
-from rlcard.agents.dqn_agent import DQNAgent
-from rlcard.utils.utils import set_global_seed, tournament
-from rlcard.utils.logger import Logger
+from rlcard.agents import DQNAgent
+from rlcard.utils import set_global_seed, tournament
+from rlcard.utils import Logger
 
 # Make environment
 env = rlcard.make('blackjack')
@@ -29,6 +29,8 @@ log_dir = './experiments/blackjack_dqn_result/'
 
 # Set a global seed
 set_global_seed(0)
+env.seed(0)
+eval_env.seed(0)
 
 with tf.Session() as sess:
 

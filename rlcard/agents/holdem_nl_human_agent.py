@@ -61,12 +61,12 @@ def _print_state(state, action_record):
     print('\n=============== Community Card ===============')
     print_card(state['public_cards'])
 
-    print(f'=============   Player {state["current_player"]} - Hand    =============')
+    print('=============   Player {state["current_player"]} - Hand    =============')
     print_card(state['hand'])
 
     print('===============     Chips      ===============')
-    print(f'In Pot: {state["pot"]}')
-    print(f'Remaining: {state["stakes"]}')
+    print('In Pot: {state["pot"]}')
+    print('Remaining: {state["stakes"]}')
 
     print('\n=========== Actions You Can Choose ===========')
     print(', '.join([str(index) + ': ' + str(action) for index, action in enumerate(state['legal_actions'])]))

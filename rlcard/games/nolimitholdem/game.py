@@ -2,13 +2,13 @@ from enum import Enum
 
 import numpy as np
 from copy import deepcopy
-from rlcard.games.limitholdem.game import LimitholdemGame
-from rlcard.games.limitholdem.player import PlayerStatus
+from rlcard.games.limitholdem import Game
+from rlcard.games.limitholdem import PlayerStatus
 
-from rlcard.games.nolimitholdem.dealer import NolimitholdemDealer as Dealer
-from rlcard.games.nolimitholdem.player import NolimitholdemPlayer as Player
-from rlcard.games.nolimitholdem.judger import NolimitholdemJudger as Judger
-from rlcard.games.nolimitholdem.round import NolimitholdemRound as Round, Action
+from rlcard.games.nolimitholdem import Dealer
+from rlcard.games.nolimitholdem import Player
+from rlcard.games.nolimitholdem import Judger
+from rlcard.games.nolimitholdem import Round, Action
 
 
 class Stage(Enum):
@@ -21,7 +21,7 @@ class Stage(Enum):
     SHOWDOWN = 5
 
 
-class NolimitholdemGame(LimitholdemGame):
+class NolimitholdemGame(Game):
 
     def __init__(self, allow_step_back=False, num_players=2):
         ''' Initialize the class nolimitholdem Game
@@ -36,6 +36,8 @@ class NolimitholdemGame(LimitholdemGame):
         self.num_players = num_players
         self.init_chips = 100
 
+        self.np_random = np.random.RandomState()
+
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
 
@@ -48,13 +50,13 @@ class NolimitholdemGame(LimitholdemGame):
                 (int): Current player's id
         '''
         # Initilize a dealer that can deal cards
-        self.dealer = Dealer()
+        self.dealer = Dealer(self.np_random)
 
         # Initilize two players to play the game
-        self.players = [Player(i, self.init_chips) for i in range(self.num_players)]
+        self.players = [Player(i, self.init_chips, self.np_random) for i in range(self.num_players)]
 
         # Initialize a judger class which will decide who wins in the end
-        self.judger = Judger()
+        self.judger = Judger(self.np_random)
 
         # Deal cards to each  player to prepare for the first round
         for i in range(2 * self.num_players):
@@ -65,7 +67,7 @@ class NolimitholdemGame(LimitholdemGame):
         self.stage = Stage.PREFLOP
 
         # Randomly choose a big blind and a small blind
-        s = np.random.randint(0, self.num_players)
+        s = self.np_random.randint(0, self.num_players)
         b = (s + 1) % self.num_players
         self.players[b].bet(chips=self.big_blind)
         self.players[s].bet(chips=self.small_blind)
@@ -75,7 +77,7 @@ class NolimitholdemGame(LimitholdemGame):
 
         # Initilize a bidding round, in the first round, the big blind and the small blind needs to
         # be passed to the round for processing.
-        self.round = Round(self.num_players, self.big_blind, dealer=self.dealer)
+        self.round = Round(self.num_players, self.big_blind, dealer=self.dealer, np_random=self.np_random)
 
         self.round.start_new_round(game_pointer=self.game_pointer, raised=[p.in_chips for p in self.players])
 

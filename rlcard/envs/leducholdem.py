@@ -3,9 +3,9 @@ import os
 import numpy as np
 
 import rlcard
-from rlcard.envs.env import Env
-from rlcard.games.leducholdem.game import LeducholdemGame as Game
-from rlcard.utils.utils import *
+from rlcard.envs import Env
+from rlcard.games.leducholdem import Game
+from rlcard.utils import *
 from rlcard import models
 
 

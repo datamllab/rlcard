@@ -1,7 +1,7 @@
 
 class MahjongRound(object):
 
-    def __init__(self, judger, dealer, num_players):
+    def __init__(self, judger, dealer, num_players, np_random):
         ''' Initialize the round class
 
         Args:
@@ -9,6 +9,7 @@ class MahjongRound(object):
             dealer (object): the object of MahjongDealer
             num_players (int): the number of players in game
         '''
+        self.np_random = np_random
         self.judger = judger
         self.dealer = dealer
         self.target = None

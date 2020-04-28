@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 ''' Implement Doudizhu Player class
 '''
+import functools
 
 from rlcard.games.doudizhu.utils import get_gt_cards
 from rlcard.games.doudizhu.utils import cards2str, doudizhu_sort_card
-import functools
 
 
 class SimpleDoudizhuPlayer(object):
@@ -13,7 +13,7 @@ class SimpleDoudizhuPlayer(object):
     and can perfrom corresponding action
     '''
 
-    def __init__(self, player_id):
+    def __init__(self, player_id, np_random):
         ''' Give the player an id in one game
 
         Args:
@@ -25,7 +25,7 @@ class SimpleDoudizhuPlayer(object):
             3. hand: Initial cards
             4. _current_hand: The rest of the cards after playing some of them
         '''
-
+        self.np_random = np_random
         self.player_id = player_id
         self.initial_hand = None
         self._current_hand = []
