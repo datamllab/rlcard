@@ -5,8 +5,7 @@
 '''
 
 from typing import List
-
-import random
+import numpy as np
 
 from rlcard.core import Game
 
@@ -26,21 +25,22 @@ class GinRummyGame(Game):
         '''Initialize the class GinRummyGame
         '''
         self.allow_step_back = allow_step_back
-        self.judge = GinRummyJudge(game=self)
         self.settings = Settings()
         self.actions = None  # type: List[ActionEvent] or None # must reset in init_game
         self.round = None  # round: GinRummyRound or None, must reset in init_game
+        self.np_random = np.random.RandomState()
 
     def init_game(self):
         ''' Initialize all characters in the game and start round 1
         '''
-        dealer_id = random.choice([0, 1])
+        self.judge = GinRummyJudge(game=self, np_random=self.np_random)
+        dealer_id = self.np_random.choice([0, 1])
         if self.settings.dealer_for_round == DealerForRound.North:
             dealer_id = 0
         elif self.settings.dealer_for_round == DealerForRound.South:
             dealer_id = 1
         self.actions = []
-        self.round = GinRummyRound(dealer_id=dealer_id)
+        self.round = GinRummyRound(dealer_id=dealer_id, np_random=self.np_random)
         for i in range(2):
             num = 11 if i == 0 else 10
             player = self.round.players[(dealer_id + 1 + i) % 2]

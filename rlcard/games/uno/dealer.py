@@ -1,4 +1,3 @@
-import random
 
 from rlcard.games.uno.utils import init_deck
 
@@ -6,14 +5,15 @@ from rlcard.games.uno.utils import init_deck
 class UnoDealer(object):
     ''' Initialize a uno dealer class
     '''
-    def __init__(self):
+    def __init__(self, np_random):
+        self.np_random = np_random
         self.deck = init_deck()
         self.shuffle()
 
     def shuffle(self):
         ''' Shuffle the deck
         '''
-        random.shuffle(self.deck)
+        self.np_random.shuffle(self.deck)
 
     def deal_cards(self, player, num):
         ''' Deal some cards from deck to one player

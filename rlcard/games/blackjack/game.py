@@ -1,8 +1,9 @@
 from copy import deepcopy
+import numpy as np
 
-from rlcard.games.blackjack.dealer import BlackjackDealer as Dealer
-from rlcard.games.blackjack.player import BlackjackPlayer as Player
-from rlcard.games.blackjack.judger import BlackjackJudger as Judger
+from rlcard.games.blackjack import Dealer
+from rlcard.games.blackjack import Player
+from rlcard.games.blackjack import Judger
 
 class BlackjackGame(object):
 
@@ -10,6 +11,7 @@ class BlackjackGame(object):
         ''' Initialize the class Blackjack Game
         '''
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
 
 
     def init_game(self):
@@ -19,9 +21,9 @@ class BlackjackGame(object):
             state (dict): the first state of the game
             player_id (int): current player's id
         '''
-        self.dealer = Dealer()
-        self.player = Player(0)
-        self.judger = Judger()
+        self.dealer = Dealer(self.np_random)
+        self.player = Player(0, self.np_random)
+        self.judger = Judger(self.np_random)
         self.dealer.deal_card(self.player)
         self.dealer.deal_card(self.dealer)
         self.dealer.deal_card(self.player)

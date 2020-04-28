@@ -1,10 +1,10 @@
 from copy import deepcopy, copy
 import numpy as np
 
-from rlcard.games.limitholdem.dealer import LimitholdemDealer as Dealer
-from rlcard.games.limitholdem.player import LimitholdemPlayer as Player, PlayerStatus
-from rlcard.games.limitholdem.judger import LimitholdemJudger as Judger
-from rlcard.games.limitholdem.round import LimitholdemRound as Round
+from rlcard.games.limitholdem import Dealer
+from rlcard.games.limitholdem import Player, PlayerStatus
+from rlcard.games.limitholdem import Judger
+from rlcard.games.limitholdem import Round
 
 class LimitholdemGame(object):
 
@@ -29,6 +29,8 @@ class LimitholdemGame(object):
         # Save betting history
         self.history_raise_nums = [0 for _ in range(4)]
 
+        self.np_random = np.random.RandomState()
+
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
 
@@ -41,13 +43,13 @@ class LimitholdemGame(object):
                 (int): Current player's id
         '''
         # Initilize a dealer that can deal cards
-        self.dealer = Dealer()
+        self.dealer = Dealer(self.np_random)
 
         # Initilize two players to play the game
-        self.players = [Player(i) for i in range(self.num_players)]
+        self.players = [Player(i, self.np_random) for i in range(self.num_players)]
 
         # Initialize a judger class which will decide who wins in the end
-        self.judger = Judger()
+        self.judger = Judger(self.np_random)
 
         # Deal cards to each  player to prepare for the first round
         for i in range(2 * self.num_players):
@@ -57,7 +59,7 @@ class LimitholdemGame(object):
         self.public_cards = []
 
         # Randomly choose a small blind and a big blind
-        s = np.random.randint(0, self.num_players)
+        s = self.np_random.randint(0, self.num_players)
         b = (s + 1) % self.num_players
         self.players[b].in_chips = self.big_blind
         self.players[s].in_chips = self.small_blind
@@ -69,7 +71,8 @@ class LimitholdemGame(object):
         # be passed to the round for processing.
         self.round = Round(raise_amount=self.raise_amount,
                            allowed_raise_num=self.allowed_raise_num,
-                           num_players=self.num_players)
+                           num_players=self.num_players,
+                           np_random=self.np_random)
 
         self.round.start_new_round(game_pointer=self.game_pointer, raised=[p.in_chips for p in self.players])
 

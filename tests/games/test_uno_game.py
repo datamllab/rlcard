@@ -106,7 +106,7 @@ class TestUnoMethods(unittest.TestCase):
         self.assertEqual(encoded_target[0][1], 1)
 
     def test_player_get_player_id(self):
-        player = Player(0)
+        player = Player(0, np.random.RandomState())
         self.assertEqual(0, player.get_player_id())
 
 if __name__ == '__main__':

@@ -3,8 +3,8 @@ import os
 import numpy as np
 
 import rlcard
-from rlcard.envs.env import Env
-from rlcard.games.nolimitholdem.game import NolimitholdemGame as Game
+from rlcard.envs import Env
+from rlcard.games.nolimitholdem import Game
 from rlcard.games.nolimitholdem.round import Action
 
 
@@ -74,7 +74,7 @@ class NolimitholdemEnv(Env):
         Returns:
            payoffs (list): list of payoffs
         '''
-        return self.game.get_payoffs()
+        return np.array(self.game.get_payoffs())
 
     def _decode_action(self, action_id):
         ''' Decode the action for applying to the game

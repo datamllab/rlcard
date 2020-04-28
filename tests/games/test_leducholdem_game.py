@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 
 from rlcard.games.leducholdem.game import LeducholdemGame as Game
 from rlcard.games.leducholdem.player import LeducholdemPlayer as Player
@@ -59,7 +60,8 @@ class TestLeducholdemMethods(unittest.TestCase):
         self.assertEqual(game.step_back(), False)
 
     def test_judge_game(self):
-        players = [Player(0), Player(1)]
+        np_random = np.random.RandomState()
+        players = [Player(0, np_random), Player(1, np_random)]
         players[0].in_chips = 10
         players[1].in_chips = 10
 
@@ -89,7 +91,7 @@ class TestLeducholdemMethods(unittest.TestCase):
         self.assertEqual(payoffs[1], 10.0)
 
     def test_player_get_player_id(self):
-        player = Player(0)
+        player = Player(0, np.random.RandomState())
         self.assertEqual(0, player.get_player_id())
 
     def test_is_over(self):

@@ -85,12 +85,12 @@ class TestGinRummyGame(unittest.TestCase):
         self.assertEqual(len(state), 6)
 
     def test_gin_rummy_dealer(self):
-        dealer = GinRummyDealer()
+        dealer = GinRummyDealer(np.random.RandomState())
         current_deck = utils.get_deck()
         deck_card_ids = [utils.get_card_id(card) for card in current_deck]
         self.assertEqual(deck_card_ids, list(range(52)))
         # Deal 10 cards.
-        player = GinRummyPlayer(player_id=0)
+        player = GinRummyPlayer(player_id=0, np_random=np.random.RandomState())
         dealer.deal_cards(player=player, num=10)
         self.assertEqual(len(dealer.shuffled_deck), 52)
         self.assertEqual(len(dealer.stock_pile), 42)
@@ -136,7 +136,7 @@ class TestGinRummyGame(unittest.TestCase):
         going_out_deadwood_count = 10
         knock_cards, gin_cards = judge.get_going_out_cards(hand=hand, going_out_deadwood_count=going_out_deadwood_count)
 
-        player = GinRummyPlayer(player_id=0)
+        player = GinRummyPlayer(player_id=0, np_random=np.random.RandomState())
         player.hand = hand
         player.did_populate_hand()
         meld_clusters = player.get_meld_clusters()
@@ -155,7 +155,7 @@ class TestGinRummyGame(unittest.TestCase):
         going_out_deadwood_count = 10
         knock_cards, gin_cards = judge.get_going_out_cards(hand=hand, going_out_deadwood_count=going_out_deadwood_count)
 
-        player = GinRummyPlayer(player_id=0)
+        player = GinRummyPlayer(player_id=0, np_random=np.random.RandomState())
         player.hand = hand
         player.did_populate_hand()
         meld_clusters = player.get_meld_clusters()

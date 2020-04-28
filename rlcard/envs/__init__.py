@@ -2,6 +2,7 @@
 '''
 
 from rlcard.envs.registration import register, make
+from rlcard.envs.env import Env
 
 register(
     env_id='blackjack',

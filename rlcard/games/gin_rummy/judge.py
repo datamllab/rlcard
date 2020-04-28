@@ -14,7 +14,7 @@ from .utils.action_event import *
 from .utils.scorers import GinRummyScorer
 from .utils import melding
 
-import rlcard.games.gin_rummy.utils.utils as utils
+from rlcard.games.gin_rummy.utils import utils
 
 
 class GinRummyJudge(object):
@@ -23,10 +23,11 @@ class GinRummyJudge(object):
         Judge decides legal actions for current player
     '''
 
-    def __init__(self, game: 'GinRummyGame'):
+    def __init__(self, game: 'GinRummyGame', np_random):
         ''' Initialize the class GinRummyJudge
         :param game: GinRummyGame
         '''
+        self.np_random = np_random
         self.game = game
         self.scorer = GinRummyScorer()
 

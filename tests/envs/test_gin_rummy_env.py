@@ -42,7 +42,7 @@ class TestGinRummyEnv(unittest.TestCase):
         for payoff in payoffs:
             self.assertLessEqual(-1, payoff)
             self.assertLessEqual(payoff, 1)
-        trajectories, payoffs = env.run(is_training=True, seed=1)
+        trajectories, payoffs = env.run(is_training=True)
         for payoff in payoffs:
             self.assertLessEqual(-1, payoff)
             self.assertLessEqual(payoff, 1)

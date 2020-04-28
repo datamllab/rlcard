@@ -1,12 +1,13 @@
 
 class BlackjackPlayer(object):
 
-    def __init__(self, player_id):
+    def __init__(self, player_id, np_random):
         ''' Initialize a Blackjack player class
 
         Args:
             player_id (int): id for the player
         '''
+        self.np_random = np_random
         self.player_id = player_id
         self.hand = []
         self.status = 'alive'

@@ -52,7 +52,7 @@ class TestUnoEnv(unittest.TestCase):
         for payoff in payoffs:
             total += payoff
         self.assertEqual(total, 0)
-        trajectories, payoffs = env.run(is_training=True, seed=1)
+        trajectories, payoffs = env.run(is_training=True)
         total = 0
         for payoff in payoffs:
             total += payoff
