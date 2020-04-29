@@ -2,6 +2,7 @@ import unittest
 
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
+from .determism_util import is_deterministic
 
 
 class TestLimitholdemEnv(unittest.TestCase):
@@ -12,6 +13,9 @@ class TestLimitholdemEnv(unittest.TestCase):
         self.assertEqual(state['obs'].size, 72)
         for action in state['legal_actions']:
             self.assertLess(action, env.action_num)
+
+    def test_is_deterministic(self):
+        self.assertTrue(is_deterministic('limit-holdem'))
 
     def test_get_legal_actions(self):
         env = rlcard.make('limit-holdem')

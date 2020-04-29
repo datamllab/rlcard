@@ -2,6 +2,7 @@ import unittest
 
 import rlcard
 from rlcard.envs.registration import register, make
+from .determism_util import is_deterministic
 
 
 class TestRegistration(unittest.TestCase):

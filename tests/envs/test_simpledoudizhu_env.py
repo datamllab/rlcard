@@ -3,6 +3,7 @@ import unittest
 import rlcard
 from rlcard.utils.utils import get_downstream_player_id
 from rlcard.agents.random_agent import RandomAgent
+from .determism_util import is_deterministic
 
 
 class TestSimpleDoudizhuEnv(unittest.TestCase):
@@ -11,6 +12,9 @@ class TestSimpleDoudizhuEnv(unittest.TestCase):
         env = rlcard.make('simple-doudizhu')
         state, _ = env.reset()
         self.assertEqual(state['obs'].size, 450)
+
+    def test_is_deterministic(self):
+        self.assertTrue(is_deterministic('simple-doudizhu'))
 
     def test_get_legal_actions(self):
         env = rlcard.make('simple-doudizhu')

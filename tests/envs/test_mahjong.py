@@ -3,6 +3,7 @@ import numpy as np
 
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
+from .determism_util import is_deterministic
 
 class TestMahjongEnv(unittest.TestCase):
 
@@ -10,6 +11,9 @@ class TestMahjongEnv(unittest.TestCase):
         env = rlcard.make('mahjong')
         state, _ = env.reset()
         self.assertEqual(state['obs'].size, 816)
+
+    def test_is_deterministic(self):
+        self.assertTrue(is_deterministic('mahjong'))
 
     def test_get_legal_actions(self):
         env = rlcard.make('mahjong')

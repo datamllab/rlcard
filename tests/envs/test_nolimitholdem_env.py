@@ -3,6 +3,7 @@ import unittest
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.games.nolimitholdem.round import Action
+from .determism_util import is_deterministic
 
 
 class TestNolimitholdemEnv(unittest.TestCase):
@@ -11,6 +12,9 @@ class TestNolimitholdemEnv(unittest.TestCase):
         env = rlcard.make('no-limit-holdem')
         state, _ = env.reset()
         self.assertEqual(state['obs'].size, 54)
+
+    def test_is_deterministic(self):
+        self.assertTrue(is_deterministic('no-limit-holdem'))
 
     def test_get_legal_actions(self):
         env = rlcard.make('no-limit-holdem')
