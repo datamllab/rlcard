@@ -1,5 +1,5 @@
 from rlcard.utils import init_standard_deck
-
+import numpy as np
 
 class BlackjackDealer(object):
 
@@ -16,7 +16,9 @@ class BlackjackDealer(object):
     def shuffle(self):
         ''' Shuffle the deck
         '''
-        self.np_random.shuffle(self.deck)
+        shuffle_deck = np.array(self.deck)
+        self.np_random.shuffle(shuffle_deck)
+        self.deck = list(shuffle_deck)
 
     def deal_card(self, player):
         ''' Distribute one card to the player
