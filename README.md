@@ -127,8 +127,8 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 
 ## API Cheat Sheet
 ### How to create an environment
-You can use the the following interface. You can specify some configurations with a dictionary.
-*   **env = rlcard.make(env_id, config={}, env_num=1)**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
+You can use the the following interface to make an environment. You can specify some configurations with a dictionary.
+*   **env = rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
 	*   `seed`: Default `None`. Set a environment local random seed for reproducing the results.
 	*   `env_num`: Default `1`. It specifies how many environments running in parallel. If the number is larger than 1, then the tasks will be assigned to multiple processes for acceleration.
 	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
