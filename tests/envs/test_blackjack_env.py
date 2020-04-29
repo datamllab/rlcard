@@ -3,7 +3,7 @@ import numpy as np
 
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
-
+from .determism_util import is_deterministic
 
 class TestBlackjackEnv(unittest.TestCase):
 
@@ -12,6 +12,9 @@ class TestBlackjackEnv(unittest.TestCase):
         state, _ = env.reset()
         for score in state['obs']:
             self.assertLessEqual(score, 30)
+
+    def test_is_deterministic(self):
+        self.assertTrue(is_deterministic('blackjack'))
 
     def test_decode_action(self):
         env = rlcard.make('blackjack')

@@ -3,6 +3,7 @@ import numpy as np
 
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
+from .determism_util import is_deterministic
 
 
 class TestLeducholdemEnv(unittest.TestCase):
@@ -13,6 +14,9 @@ class TestLeducholdemEnv(unittest.TestCase):
         self.assertEqual(state['obs'].size, 36)
         for action in state['legal_actions']:
             self.assertLess(action, env.action_num)
+
+    def test_is_deterministic(self):
+        self.assertTrue(is_deterministic('leduc-holdem'))
 
     def test_get_legal_actions(self):
         env = rlcard.make('leduc-holdem')

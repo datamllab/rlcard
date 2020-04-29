@@ -7,11 +7,11 @@ from rlcard.games.blackjack import Judger
 
 class BlackjackGame(object):
 
-    def __init__(self, allow_step_back=False):
+    def __init__(self, allow_step_back=False, seed=None):
         ''' Initialize the class Blackjack Game
         '''
         self.allow_step_back = allow_step_back
-        self.np_random = np.random.RandomState()
+        self.np_random = np.random.RandomState(seed)
 
 
     def init_game(self):
