@@ -8,6 +8,7 @@ DEFAULT_CONFIG = {
         'single_agent_mode' : False,
         'active_player' : 0,
         'record_action' : False,
+        'seed': None,
         }
 
 class EnvSpec(object):
