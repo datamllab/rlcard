@@ -8,12 +8,11 @@ from rlcard.utils import set_global_seed
 
 def main():
     # Make environment
-    env = rlcard.make('leduc-holdem', env_num=4)
+    env = rlcard.make('leduc-holdem', config={'seed': 0, 'env_num': 4})
     iterations = 1
 
     # Set a global seed
     set_global_seed(0)
-    env.seed(0)
 
     # Set up agents
     agent = RandomAgent(action_num=env.action_num)

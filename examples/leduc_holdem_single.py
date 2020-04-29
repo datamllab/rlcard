@@ -13,8 +13,8 @@ from rlcard.utils import set_global_seed, tournament
 from rlcard.utils import Logger
 
 # Make environment
-env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
-eval_env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
+env = rlcard.make('leduc-holdem', config={'seed': 0, 'single_agent_mode':True})
+eval_env = rlcard.make('leduc-holdem', config={'seed': 0, 'single_agent_mode':True})
 
 # Set the iterations numbers and how frequently we evaluate the performance
 evaluate_every = 1000
@@ -32,8 +32,6 @@ log_dir = './experiments/leduc_holdem_single_dqn_result/'
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
-eval_env.seed(0)
 
 with tf.Session() as sess:
 

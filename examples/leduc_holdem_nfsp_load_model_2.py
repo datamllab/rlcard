@@ -7,11 +7,10 @@ from rlcard.utils import set_global_seed, tournament
 from rlcard import models
 
 # Make environment
-env = rlcard.make('leduc-holdem')
+env = rlcard.make('leduc-holdem', config={'seed': 0})
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
 
 # Here we directly load NFSP models from /models module
 nfsp_agents = models.load('leduc-holdem-nfsp').agents

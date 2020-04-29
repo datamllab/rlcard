@@ -6,12 +6,11 @@ from rlcard.agents import RandomAgent
 from rlcard.utils import set_global_seed
 
 # Make environment
-env = rlcard.make('blackjack')
+env = rlcard.make('blackjack', config={'seed': 0})
 episode_num = 2
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
 
 # Set up agents
 agent_0 = RandomAgent(action_num=env.action_num)

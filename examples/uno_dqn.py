@@ -11,8 +11,8 @@ from rlcard.utils.utils import set_global_seed, tournament
 from rlcard.utils import Logger
 
 # Make environment
-env = rlcard.make('uno')
-eval_env = rlcard.make('uno')
+env = rlcard.make('uno', config={'seed': 0})
+eval_env = rlcard.make('uno', config={'seed': 0})
 
 # Set the iterations numbers and how frequently we evaluate the performance
 evaluate_every = 100
@@ -30,8 +30,6 @@ log_dir = './experiments/uno_dqn_result/'
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
-eval_env.seed(0)
 
 with tf.Session() as sess:
 

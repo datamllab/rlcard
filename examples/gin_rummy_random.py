@@ -15,13 +15,12 @@ from rlcard.games.gin_rummy.player import GinRummyPlayer
 from rlcard.games.gin_rummy.utils.move import DealHandMove
 
 # Make environment
-env = rlcard.make('gin-rummy')
+env = rlcard.make('gin-rummy', config={'seed': 0})
 episode_num = 1
 env.game.settings.print_settings()
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
 
 # Set up agents
 agents = models.load("gin-rummy-novice-rule").agents  # use novice agents rather than random agents

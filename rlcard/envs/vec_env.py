@@ -9,20 +9,18 @@ class VecEnv(object):
     ''' The wrraper for a vector of environments
     '''
 
-    def __init__(self, env_id, config, num=2):
+    def __init__(self, env_id, config):
         ''' Initialize the VecEnv class
 
         Args:
             env_id (string): The id of the environment, e.g., 'blackjack'
             config (dict): The same as the config in Env
-            num (int): The number of environments
         '''
-        self.num = num
-        #self.envs = [registry.make(env_id, config) for _ in range(num)]
+        self.num = config['env_num']
 
         # For multiprocessing
         ctx = mp.get_context('spawn')
-        self.remotes, self.work_remotes = zip(*[ctx.Pipe() for _ in range(num)])
+        self.remotes, self.work_remotes = zip(*[ctx.Pipe() for _ in range(self.num)])
         self.ps = [ctx.Process(target=worker, args=(work_remote, remote, env_id, config))
                     for (work_remote, remote) in zip(self.work_remotes, self.remotes)]
         for p in self.ps:
@@ -38,14 +36,7 @@ class VecEnv(object):
         self.remotes[0].send(('info', None))
         self.player_num, self.action_num, self.state_shape = self.remotes[0].recv()
 
-        self.seed()
-
-    def seed(self, seed=None):
-        seeds = [None for _ in range(self.num)]
-        if seed is not None:
-            commands = [('seed', seed+i*1000) for i in range(self.num)]
-            seeds = send_commands_to_all(self.remotes, commands)
-        return seeds
+        self._seed(config['seed'])
 
     def set_agents(self, agents):
         self.agents = agents
@@ -136,13 +127,14 @@ class VecEnv(object):
         for trs in ready_trajectories:
             for i in range(self.player_num):
                 trajectories[i].extend(trs[i])
-        #for ts in trajectories[0]:
-        #    print('State:', ts[0]['raw_obs'])
-        #    print('Action:', ts[1])
-        #    print('Reward:', ts[2])
-        #    print('Next State:', ts[3]['raw_obs'])
-        #    print('Done:', ts[4])
         return trajectories, payoffs
+
+    def _seed(self, seed=None):
+        seeds = [None for _ in range(self.num)]
+        if seed is not None:
+            commands = [('seed', seed+i*1000) for i in range(self.num)]
+            seeds = send_commands_to_all(self.remotes, commands)
+        return seeds
 
 def send_commands_to_all(remotes, commands):
     results = []
@@ -180,7 +172,7 @@ def worker(remote, parent_remote, env_id, config):
             elif cmd == 'step':
                 remote.send(step_env(env, data, False))
             elif cmd == 'seed':
-                remote.send(env.seed(data))
+                remote.send(env._seed(data))
             elif cmd == 'get_state':
                 remote.send(env.get_state(data))
             elif cmd == 'get_payoffs':
