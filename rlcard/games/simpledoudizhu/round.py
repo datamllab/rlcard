@@ -41,7 +41,7 @@ class SimpleDoudizhuRound(object):
 
     def cards_ndarray_to_list(self, ndarray_cards):
         result = []
-        for i in range(len(ndarray_cards)):
+        for i, _ in enumerate(ndarray_cards):
             if ndarray_cards[i] != 0:
                 result.extend([CARD_RANK_STR[i]] * ndarray_cards[i])
         return result

@@ -106,7 +106,7 @@ class DoudizhuJudger(object):
         '''
         attachments = set()
         candidates = []
-        for i in range(len(cards_count)):
+        for i, _ in enumerate(cards_count):
             if (i >= chain_start and i < chain_start + chain_length):
                 continue
             if (cards_count[i] == 2 or cards_count[i] == 3):
@@ -197,7 +197,7 @@ class DoudizhuJudger(object):
                         playable_cards.add(cards)
                 l -= 1
                 s += 1
-        
+
         #trio, trio_solo and trio_pair
         for i in more_than_2_indexes:
             playable_cards.add(CARD_RANK_STR[i[0]] * 3)
