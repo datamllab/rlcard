@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 from typing import List
 
 from rlcard.games.gin_rummy.utils.action_event import *
+from rlcard.games.gin_rummy.utils.gin_rummy_error import GinRummyProgramError
 
 import rlcard.games.gin_rummy.judge as judge
 import rlcard.games.gin_rummy.utils.utils as gin_rummy_utils
@@ -28,7 +29,6 @@ from rlcard.games.gin_rummy.utils.move import ScoreNorthMove, ScoreSouthMove
 from rlcard.games.gin_rummy.utils.settings import Settings
 
 from . import configurations
-from . import gin_rummy_error
 
 
 class GameCanvasGetter(object):
@@ -60,7 +60,8 @@ class GameCanvasGetter(object):
         mark = game_canvas.game_canvas_updater.mark
         moves = game.round.move_sheet[:mark]
         if not moves:
-            assert mark == 0
+            if not mark == 0:
+                raise GinRummyProgramError("mark={} must be 0.".format(mark))
             if game.round.move_sheet:
                 first_move = game.round.move_sheet[0]
                 if isinstance(first_move, DealHandMove):
@@ -94,7 +95,7 @@ class GameCanvasGetter(object):
             elif isinstance(last_move, ScoreSouthMove):
                 pass
             else:
-                raise gin_rummy_error.ProgramError('get_current_player_id: unknown last_move={}'.format(last_move))
+                raise GinRummyProgramError('get_current_player_id: unknown last_move={}'.format(last_move))
         return result
 
     def get_legal_actions(self, player_id: int) -> List[ActionEvent]:
@@ -158,7 +159,7 @@ class GameCanvasGetter(object):
         elif isinstance(last_move, ScoreSouthMove):
             pass
         else:
-            raise gin_rummy_error.ProgramError('get_legal_actions: unknown last_move={}'.format(last_move))
+            raise GinRummyProgramError('get_legal_actions: unknown last_move={}'.format(last_move))
         return legal_actions
 
     def get_tags(self, item_id) -> List[str]:
@@ -169,7 +170,7 @@ class GameCanvasGetter(object):
         if card_item_id in game_canvas.card_item_ids:
             card_id = game_canvas.card_item_ids.index(card_item_id)
         else:
-            assert False
+            raise GinRummyProgramError("card_item_id={} not found in card_item_ids.".format(card_item_id))
         return card_id
 
     def get_top_discard_pile_item_id(self) -> int or None:
@@ -188,7 +189,8 @@ class GameCanvasGetter(object):
         return stock_pile_item_ids
 
     def get_held_pile_item_ids(self, player_id: int) -> List[int]:
-        assert player_id is not None
+        if player_id is None:
+            raise GinRummyProgramError("player_id must not be None.")
         game_canvas = self.game_canvas
         ghost_card_item = game_canvas.held_pile_ghost_card_items[player_id]
         held_pile_tag = game_canvas.held_pile_tags[player_id]

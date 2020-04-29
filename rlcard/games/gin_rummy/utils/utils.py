@@ -10,6 +10,8 @@ import numpy as np
 
 from rlcard.core import Card
 
+from .gin_rummy_error import GinRummyProgramError
+
 valid_rank = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
 valid_suit = ['S', 'H', 'D', 'C']
 
@@ -23,7 +25,8 @@ def card_from_card_id(card_id: int) -> Card:
     Args:
         card_id: int in range(0, 52)
      '''
-    assert 0 <= card_id < 52
+    if not (0 <= card_id < 52):
+        raise GinRummyProgramError("card_id is {}: should be 0 <= card_id < 52.".format(card_id))
     rank_id = card_id % 13
     suit_id = card_id // 13
     rank = Card.valid_rank[rank_id]
@@ -36,7 +39,8 @@ _deck = [card_from_card_id(card_id) for card_id in range(52)]  # want this to be
 
 
 def card_from_text(text: str) -> Card:
-    assert len(text) == 2
+    if len(text) != 2:
+        raise GinRummyProgramError("len(text) is {}: should be 2.".format(len(text)))
     return Card(rank=text[0], suit=text[1])
 
 
@@ -69,14 +73,16 @@ def get_deadwood_value(card: Card) -> int:
 
 
 def get_deadwood(hand: Iterable[Card], meld_cluster: List[Iterable[Card]]) -> List[Card]:
-    assert len(list(hand)) == 10
+    if len(list(hand)) != 10:
+        raise GinRummyProgramError("Hand contain {} cards: should be 10 cards.".format(len(list(hand))))
     meld_cards = [card for meld_pile in meld_cluster for card in meld_pile]
     deadwood = [card for card in hand if card not in meld_cards]
     return deadwood
 
 
 def get_deadwood_count(hand: List[Card], meld_cluster: List[Iterable[Card]]) -> int:
-    assert len(hand) == 10
+    if len(hand) != 10:
+        raise GinRummyProgramError("Hand contain {} cards: should be 10 cards.".format(len(hand)))
     deadwood = get_deadwood(hand=hand, meld_cluster=meld_cluster)
     deadwood_values = [get_deadwood_value(card) for card in deadwood]
     return sum(deadwood_values)
@@ -84,7 +90,8 @@ def get_deadwood_count(hand: List[Card], meld_cluster: List[Iterable[Card]]) -> 
 
 def decode_cards(env_cards: np.ndarray) -> List[Card]:
     result = []  # type: List[Card]
-    assert len(env_cards) == 52
+    if len(env_cards) != 52:
+        raise GinRummyProgramError("len(env_cards) is {}: should be 52.".format(len(env_cards)))
     for i in range(52):
         if env_cards[i] == 1:
             card = _deck[i]

@@ -17,6 +17,8 @@ from . import info_messaging
 from . import starting_new_game
 from . import utils
 
+from rlcard.games.gin_rummy.utils.gin_rummy_error import GinRummyProgramError
+
 
 def handle_tap_discard_pile(hit_item: CanvasItem, game_canvas: 'GameCanvas'):
     player_id = game_canvas.current_player_id
@@ -58,9 +60,11 @@ def _handle_can_discard_card(hit_item: CanvasItem, game_canvas: 'GameCanvas'):  
     # The remaining held_pile_items are fanned.
     top_discard_pile_item_id = game_canvas.getter.get_top_discard_pile_item_id()
     if top_discard_pile_item_id:
-        assert hit_item == top_discard_pile_item_id
+        if not hit_item == top_discard_pile_item_id:
+            raise GinRummyProgramError("hit_item must be top card of discard_pile.")
     else:
-        assert hit_item == game_canvas.discard_pile_box_item
+        if not hit_item == game_canvas.discard_pile_box_item:
+            raise GinRummyProgramError("hit_item must be discard_pile_box_item.")
     current_player_id = game_canvas.current_player_id
     selected_held_pile_item_ids = game_canvas.getter.get_selected_held_pile_item_ids(player_id=current_player_id)
     if len(selected_held_pile_item_ids) == 1:
