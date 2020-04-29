@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from .game_canvas import GameCanvas
 
 from .player_type import PlayerType
-from .canvas_item import CanvasItem, CardItem
+from .canvas_item import CanvasItem
 
 from . import configurations
 from . import gin_rummy_error

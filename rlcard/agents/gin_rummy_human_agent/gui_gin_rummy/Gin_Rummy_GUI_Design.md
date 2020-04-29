@@ -4,15 +4,15 @@
 The Gin Rummy app is a major refactoring of the code for a chess program by Bhaskar Chaudhary.
 The chess program is explained in the video course "Tkinter GUI Application Development Projects".
 You can do a google search on "Bhaskar Chaudhary tkinter packt" for more information.
-The code for the chess program is available at https://github.com/PacktPublishing/Tkinter-GUI-Application-Development-Projects.
+The code for the chess program is available at <https://github.com/PacktPublishing/Tkinter-GUI-Application-Development-Projects>.
 
 ## GameFrame
 The GameFrame class uses the following parameters:
 
-* window_title: str
-* base_height: int
-* base_width: int
-* scale_factor_multiplier: float
+*   window_title: str
+*   base_height: int
+*   base_width: int
+*   scale_factor_multiplier: float
 
 The base_height and base_width only determine the aspect ratio for the frame size.
 The actual size of the window is calculated from these values and the 'window size factor' preference.
@@ -25,8 +25,8 @@ The program uses a value of 1.5 for the scale_factor_multiplier.
 The window is centered in the screen.
 Its origin is determined by the following;
 
-* window_x: int
-* window_y: int
+*   window_x: int
+*   window_y: int
 
 A new game is started when the GameFrame is initialized.
 
@@ -35,12 +35,12 @@ The GameCanvas class specifies and layouts the widgets and canvas items for the 
 
 The GameFrame provides the initializer of the GameCanvas with the following value:
 
-* scale_factor: float
+*   scale_factor: float
 
 The GameCanvas needs to scale the layout values of its widgets by multiplying by this value.
-For example, for a margin of 10, it would use 10 * scale_factor.
+For example, for a margin of 10, it would use 10 times scale_factor.
 It also calculate the scaled card size and uses the width and height of a card to do layout.
-For example, it specifies that the discard pile x origin to be card_width * 1.5
+For example, it specifies that the discard pile x origin to be card_width times 1.5
 away from the stock pile x origin.
 It does not need to worry about the scale_factor in this case since it is built into the card_width.
 
@@ -296,12 +296,12 @@ A new gin_rummy_env is created.
 A new env_thread is created and started.
 
 ## To Do
-* Implement drag-and-drop for cards.
-* Increase white margin space for face of cards.
-* Implement reverse fan of a card pile.
-* Implement highlighting to select cards rather than jogging them.
-* Provide preference to show/hide discard_pile_box.
-* Find a cross platform method to play a beep sound.
-* Add alerts for warning errors.
-* Add alerts for program logic errors.
-* Provide "Help" document in "Help" menu.
+*   Implement drag-and-drop for cards.
+*   Increase white margin space for face of cards.
+*   Implement reverse fan of a card pile.
+*   Implement highlighting to select cards rather than jogging them.
+*   Provide preference to show/hide discard_pile_box.
+*   Find a cross platform method to play a beep sound.
+*   Add alerts for warning errors.
+*   Add alerts for program logic errors.
+*   Provide "Help" document in "Help" menu.

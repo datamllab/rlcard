@@ -13,7 +13,6 @@ if TYPE_CHECKING:
 from .canvas_item import CanvasItem
 
 from . import configurations
-from . import gin_rummy_error
 from . import info_messaging
 from . import starting_new_game
 from . import utils
