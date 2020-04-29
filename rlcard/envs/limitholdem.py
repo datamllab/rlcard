@@ -110,4 +110,3 @@ class LimitholdemEnv(Env):
         state['current_player'] = self.game.game_pointer
         state['legal_actions'] = self.game.get_legal_actions()
         return state
-

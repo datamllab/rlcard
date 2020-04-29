@@ -4,6 +4,7 @@ import numpy as np
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
 from rlcard.games.uno.utils import ACTION_LIST
+from .determism_util import is_deterministic
 
 
 class TestUnoEnv(unittest.TestCase):
@@ -12,6 +13,9 @@ class TestUnoEnv(unittest.TestCase):
         env = rlcard.make('uno')
         state, _ = env.reset()
         self.assertEqual(state['obs'].size, 420)
+
+    def test_is_deterministic(self):
+        self.assertTrue(is_deterministic('uno'))
 
     def test_get_legal_actions(self):
         env = rlcard.make('uno')

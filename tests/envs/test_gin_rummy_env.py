@@ -9,6 +9,7 @@ import numpy as np
 
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
+from .determism_util import is_deterministic
 
 
 class TestGinRummyEnv(unittest.TestCase):
@@ -17,6 +18,9 @@ class TestGinRummyEnv(unittest.TestCase):
         env = rlcard.make('gin-rummy')
         state, _ = env.reset()
         self.assertEqual(state['obs'].size, 5 * 52)
+
+    def test_is_deterministic(self):
+        self.assertTrue(is_deterministic('gin-rummy'))
 
     def test_get_legal_actions(self):
         env = rlcard.make('gin-rummy')
