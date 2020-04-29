@@ -24,6 +24,7 @@ class GinRummyGame(Game):
         '''Initialize the class GinRummyGame
         '''
         self.allow_step_back = allow_step_back
+        self.judge = GinRummyJudge(game=self)
         self.settings = Settings()
         self.actions = None  # type: List[ActionEvent] or None # must reset in init_game
         self.round = None  # round: GinRummyRound or None, must reset in init_game
@@ -32,7 +33,6 @@ class GinRummyGame(Game):
     def init_game(self):
         ''' Initialize all characters in the game and start round 1
         '''
-        self.judge = GinRummyJudge(game=self, np_random=self.np_random)
         dealer_id = self.np_random.choice([0, 1])
         if self.settings.dealer_for_round == DealerForRound.North:
             dealer_id = 0
