@@ -184,7 +184,6 @@ class GameCanvasPostDoingAction(object):
             # show meld piles for both players
             self._show_meld_piles()
             # submit action to game_canvas_updater
-            card_id = game_canvas.card_item_ids.index(selected_held_pile_item_id)
             action = GIN_ACTION_ID
             game_canvas.after_idle(game_canvas.game_canvas_updater.did_perform_actions, [action])
 
@@ -229,8 +228,7 @@ class GameCanvasPostDoingAction(object):
         y_tab = int(card_height * 0.15)
         anchor_x = int(card_width * 0.5)  # type: int
         anchor_y = int(game_canvas.coords(player_pane.item_id)[1]) + y_tab  # type: int
-        for index in range(len(meld_cluster)):
-            meld_pile = meld_cluster[index]
+        for meld_pile in meld_cluster:
             self.put_down_meld_pile(meld_pile, anchor=(anchor_x, anchor_y), player_id=player_id)
             utils.fan_held_pile(player_id=player_id, game_canvas=game_canvas)
             anchor_x += len(meld_pile) * game_canvas.held_pile_tab
