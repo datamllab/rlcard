@@ -24,11 +24,11 @@ class GinRummyGame(Game):
         '''Initialize the class GinRummyGame
         '''
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
         self.judge = GinRummyJudge(game=self)
         self.settings = Settings()
         self.actions = None  # type: List[ActionEvent] or None # must reset in init_game
         self.round = None  # round: GinRummyRound or None, must reset in init_game
-        self.np_random = np.random.RandomState()
 
     def init_game(self):
         ''' Initialize all characters in the game and start round 1

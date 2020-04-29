@@ -17,8 +17,8 @@ from rlcard.utils import set_global_seed, tournament
 from rlcard.utils import Logger
 
 # Make environment
-env = rlcard.make('gin-rummy')
-eval_env = rlcard.make('gin-rummy')
+env = rlcard.make('gin-rummy', config={'seed': 0})
+eval_env = rlcard.make('gin-rummy', config={'seed': 0})
 env.game.settings.print_settings()
 
 # Set the iterations numbers and how frequently we evaluate/save plot
@@ -37,8 +37,6 @@ log_dir = './experiments/gin_rummy_nfsp_result/'
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
-eval_env.seed(0)
 
 with tf.Session() as sess:
     # Initialize a global step

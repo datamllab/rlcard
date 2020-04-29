@@ -6,12 +6,11 @@ from rlcard.utils import set_global_seed
 from rlcard.agents import RandomAgent
 
 # Make environment
-env = rlcard.make('simple-doudizhu')
+env = rlcard.make('simple-doudizhu', config={'seed': 0})
 episode_num = 2
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
 
 # Set up agents
 agent = RandomAgent(action_num=env.action_num)

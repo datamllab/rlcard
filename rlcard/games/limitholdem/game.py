@@ -12,6 +12,7 @@ class LimitholdemGame(object):
         ''' Initialize the class limitholdem Game
         '''
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
 
         # Some configarations of the game
         # These arguments can be specified for creating new games
@@ -28,8 +29,6 @@ class LimitholdemGame(object):
 
         # Save betting history
         self.history_raise_nums = [0 for _ in range(4)]
-
-        self.np_random = np.random.RandomState()
 
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em

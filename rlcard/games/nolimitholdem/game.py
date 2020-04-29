@@ -27,6 +27,7 @@ class NolimitholdemGame(Game):
         ''' Initialize the class nolimitholdem Game
         '''
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
 
         # small blind and big blind
         self.small_blind = 1
@@ -35,8 +36,6 @@ class NolimitholdemGame(Game):
         # config players
         self.num_players = num_players
         self.init_chips = 100
-
-        self.np_random = np.random.RandomState()
 
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em

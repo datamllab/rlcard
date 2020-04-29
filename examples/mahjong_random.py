@@ -6,12 +6,11 @@ from rlcard.agents.random_agent import RandomAgent
 from rlcard.utils.utils import set_global_seed
 
 # Make environment
-env = rlcard.make('mahjong')
+env = rlcard.make('mahjong', config={'seed': 0})
 episode_num = 2
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
 
 # Set up agents
 agent_0 = RandomAgent(action_num=env.action_num)

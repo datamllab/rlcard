@@ -48,12 +48,7 @@ class Env(object):
                     break
 
         # Set random seed, default is None
-        self.seed()
-
-    def seed(self, seed=None):
-        self.np_random, seed = seeding.np_random(seed)
-        self.game.np_random = self.np_random
-        return seed
+        self._seed(config['seed'])
 
     def reset(self):
         ''' Reset environment in single-agent mode
@@ -243,6 +238,11 @@ class Env(object):
         Note: Must be implemented in the child class.
         '''
         raise NotImplementedError
+
+    def _seed(self, seed=None):
+        self.np_random, seed = seeding.np_random(seed)
+        self.game.np_random = self.np_random
+        return seed
 
     def _init_game(self):
         ''' Start a new game

@@ -9,11 +9,10 @@ from rlcard.agents import RandomAgent
 from rlcard.utils import set_global_seed, tournament
 
 # Make environment
-env = rlcard.make('leduc-holdem')
+env = rlcard.make('leduc-holdem', config={'seed': 0})
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
 
 # Load pretrained model
 graph = tf.Graph()
