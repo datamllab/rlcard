@@ -9,7 +9,6 @@
 import rlcard
 from rlcard import models
 
-from rlcard.agents import RandomAgent
 from rlcard.utils import set_global_seed
 
 from rlcard.games.gin_rummy.player import GinRummyPlayer
@@ -25,7 +24,6 @@ set_global_seed(0)
 env.seed(0)
 
 # Set up agents
-agents = [RandomAgent(action_num=env.action_num), RandomAgent(action_num=env.action_num)]
 agents = models.load("gin-rummy-novice-rule").agents  # use novice agents rather than random agents
 env.set_agents(agents)
 
@@ -46,7 +44,7 @@ for episode in range(episode_num):
     for i in range(move_sheet_count):
         move = move_sheet[i]
         print("{}".format(move))
-        if i == 0 and type(move) is DealHandMove:
+        if i == 0 and isinstance(move, DealHandMove):
             player_dealing_id = move.player_dealing.player_id
             leading_player_id = GinRummyPlayer.opponent_id_of(player_dealing_id)
             shuffle_deck = move.shuffled_deck
