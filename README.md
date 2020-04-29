@@ -11,8 +11,9 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
 
 **News:**
-*   The action space of NoLimit Holdem has been abstracted. Thanks for the contribution of [@AdrianP-](https://github.com/AdrianP-).
-*   New game Gin Rummy available. Thanks for the contribution of [@billh0420](https://github.com/billh0420).
+*   Now support environment local seeding and multiprocessing.
+*   Human interface of NoLimit Holdem available. The action space of NoLimit Holdem has been abstracted. Thanks for the contribution of [@AdrianP-](https://github.com/AdrianP-).
+*   New game Gin Rummy and human GUI available. Thanks for the contribution of [@billh0420](https://github.com/billh0420).
 *   PyTorch implementation available. Thanks for the contribution of [@mjudell](https://github.com/mjudell).
 *   We have just initialized a list of [Awesome-Game-AI resources](https://github.com/datamllab/awesome-game-ai). Check it out!
 
@@ -66,10 +67,10 @@ We also recommend the following **toy examples**.
 
 *   [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
 *   [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
+*   [Running multiple processes](docs/toy-examples.md#running-multiple-processes)
 *   [Training CFR on Leduc Hold'em](docs/toy-examples.md#training-cfr-on-leduc-holdem)
 *   [Having fun with pretrained Leduc model](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
 *   [Leduc Hold'em as single-agent environment](docs/toy-examples.md#leduc-holdem-as-single-agent-environment)
-*   [Running multiple processes](docs/toy-examples.md#running-multiple-processes)
 
 ## Demo
 Run `examples/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](docs/games.md#leduc-holdem).
@@ -109,9 +110,6 @@ Agent 1: +++
 >> You choose action (integer):
 ```
 
-## Documents
-Please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
-
 ## Available Environments
 We provide a complexity estimation for the games on several aspects. **InfoSet Number:** the number of information sets; **InfoSet Size:** the average number of states in a single information set; **Action Size:** the size of the action space. **Name:** the name that should be passed to `rlcard.make` to create the game environment. We also provide the link to the documentation and the random example.
 
@@ -125,11 +123,44 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 | Mahjong ([wiki](https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules), [baike](https://baike.baidu.com/item/%E9%BA%BB%E5%B0%86/215))                                                | 10^121          | 10^48             | 10^2        | mahjong         | [doc](docs/games.md#mahjong), [example](examples/mahjong_random.py)                         | 
 | No-limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [baike](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin)) | 10^162          | 10^3              | 10^4        | no-limit-holdem | [doc](docs/games.md#no-limit-texas-holdem), [example](examples/nolimit_holdem_random.py)    |
 | UNO ([wiki](https://en.wikipedia.org/wiki/Uno_\(card_game\)), [baike](https://baike.baidu.com/item/UNO%E7%89%8C/2249587))                                                                      |  10^163         | 10^10             | 10^1        | uno             | [doc](docs/games.md#uno), [example](examples/uno_random.py)                                 |
-| Gin Rummy ([wiki](https://en.wikipedia.org/wiki/Gin_rummy), [baike](https://baike.baidu.com/item/%E9%87%91%E6%8B%89%E7%B1%B3/3471710))                                                         | -               | -                 | -           | gin-rummy       | [doc](docs/games.md#gin-rummy), [example](examples/gin_rummy_random.py)                     |
+| Gin Rummy ([wiki](https://en.wikipedia.org/wiki/Gin_rummy), [baike](https://baike.baidu.com/item/%E9%87%91%E6%8B%89%E7%B1%B3/3471710))                                                         | 10^52           | -                 | -           | gin-rummy       | [doc](docs/games.md#gin-rummy), [example](examples/gin_rummy_random.py)                     |
 
-## Evaluation
-The perfomance is measured by winning rates through tournaments. Example outputs are as follows:
-![Learning Curves](http://rlcard.org/imgs/curves.png "Learning Curves")
+## API Cheat Sheet
+### How to create an environment
+You can use the the following interface. You can specify some configurations with a dictionary.
+*   **rlcard.make(env_id, config={}, env_num=1)**: Make an environment. `env_id` is a string of a environment; `env_num` is specifies how many environments running in parallel. If the number is larger than 1, then the tasks will be assigned to multiple processes for acceleration. `config` is a dictionary specifying some environment configurations, which are as follows.
+	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
+	*   `allow_raw_data`: Default `False`. `True` if allowing raw data in the `state`.
+	*   `single_agent_mode`: Default `False`. `True` if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
+	*   `active_player`: Defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
+	*   `record_action`: Default `False`. If `True`, a field of `action_record` will be in the `state` to record the historical actions. This may be used for human-agent play.
+
+### What is state in RLCard
+State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
+
+### Basic interfaces
+The following interfaces provide a basic usage. It is easy to use but it has assumtions on the agent. The agent must follow [agent template](docs/developping-algorithms.md). 
+*   **env.set_agents(agents)**: `agents` is a list of `Agent` object. The length of the the list should equal to the number of the player in the game.
+*   **env.run(is_training=False)**: Run a complete game and return trajectories and payoffs. The function can be used after the `set_agents` is called. If `is_training` is `True`, the function will use `step` function in the agent to play the game. If `is_training` is `False`, `eval_step` will be called instead.
+
+### Advanced interfaces
+For advanced usage, the following interfaces allow flexible operations on the game tree. These interfaces do not make any assumtions on the agent.
+*   **env.seed(seed)**: Set a environment local random seed for reproducing the results.
+*   **env.reset()**: Initialize a game. Return the state and the first player ID.
+*   **env.step(action, raw_action=False)**: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be `True` if the action is raw action (string).
+*   **env.step_back()**: Available only when `allow_step_back` is `True`. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR.
+*	**env.is_over()**: Return `True` if the current game is over/ Return `False` otherwise.
+*	**env.get_player_id()**: Return the Player ID of the current player.
+*	**env.get_state(player_id)**: Return the state corresponds to `player_id`.
+*   **env.get_payoffs()**: In the end of the game, return a list of payoffs for all the players.
+*   **env.get_perfect_information()**: (Currently only support some of the games) Obtain the perfect information at the current state.
+*   **env.action_num**: The number of actions.
+*   **env.player_num**: The number of players.
+*   **env.state_space**: Ther state space of the observations.
+*   **env.timestep**: The number of timesteps stepped by the environment.
+
+### Running with multiple processes
+RLCard now supports acceleration with multiple processes. Simply change `env_num` when making the environment to indicate how many processes would be used. Currenly we only support `run()` function with multiple processes. An example is [DQN on blackjack](docs/toy-examples.md#running-multiple-processes)  
 
 ## Library Structure
 The purposes of the main modules are listed as below:
@@ -142,37 +173,15 @@ The purposes of the main modules are listed as below:
 *   [/rlcard/games](rlcard/games): Various game engines.
 *   [/rlcard/models](rlcard/models): Model zoo including pre-trained models and rule models.
 
-## API Cheat Sheet
-### How to create an environment
-You can use the the following interface. You can specify some configurations with a dictionary.
-*   **rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
-	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
-	*   `allow_raw_data`: Default `False`. `True` if allowing raw data in the `state`.
-	*   `single_agent_mode`: Default `False`. `True` if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
-	*   `active_player`: Defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
-	*   `record_action`: Default `False`. If `True`, a field of `action_record` will be in the `state` to record the historical actions. This may be used for human-agent play.
+## Evaluation
+The perfomance is measured by winning rates through tournaments. Example outputs are as follows:
+![Learning Curves](http://rlcard.org/imgs/curves.png "Learning Curves")
 
-### What is state in RLCard
-State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
-
-### Basic interfaces
-The following interfaces provide a basic usage. It is easy to use but is has assumtions on the agent. The agent must follow [agent template](docs/developping-algorithms.md). 
-*   **env.set_agents(agents)**: `agents` is a list of `Agent` object. The length of the the list should equal to the number of the player in the game.
-*   **env.run(is_training=False)**: Run a complete game and return trajectories and payoffs. The function can be used after the `set_agents` is called. If `is_training` is `True`, the function will use `step` function in the agent to play the game. If `is_training` is `False`, `eval_step` will be called instead.
-
-### Advanced interfaces
-For advanced usage, the following interfaces allow flexible operations on the game tree. These interfaces do not make any assumtions on the agent.
-*   **env.reset()**: Initialize a game. Return the state and the first player ID.
-*   **env.step(action, raw_action=False)**: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be `True` if the action is raw action (string).
-*   **env.step_back()**: Available only when `allow_step_back` is `True`. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR.
-*	**env.is_over()**: Return `True` if the current game is over/ Return `False` otherwise.
-*	**env.get_player_id()**: Return the Player ID of the current player.
-*	**env.get_state(player_id)**: Return the state corresponds to `player_id`.
-*   **env.get_payoffs()**: In the end of the game, return a list of payoffs for all the players.
-*   **env.get_perfect_information()**: (Currently only support some of the games) Obtain the perfect information at the current state.
+## More Documents
+For more documentation, please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
 
 ## Contributing
 Contribution to this project is greatly appreciated! Please create an issue for feedbacks/bugs. If you want to contribute codes, please refer to [Contributing Guide](./CONTRIBUTING.md).
 
 ## Acknowledgements
-We would like to thank JJ World Network Technology Co.,LTD for the generous support.
+We would like to thank JJ World Network Technology Co.,LTD for the generous support and all the contributors in the community.
