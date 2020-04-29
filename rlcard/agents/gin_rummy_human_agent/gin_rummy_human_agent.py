@@ -8,6 +8,7 @@
 import time
 
 from rlcard.games.gin_rummy.utils.action_event import ActionEvent
+from rlcard.games.gin_rummy.utils.gin_rummy_error import GinRummyProgramError
 
 
 class HumanAgent(object):
@@ -35,14 +36,18 @@ class HumanAgent(object):
         Returns:
             action (int): The action decided by human
         '''
-        assert not self.is_choosing_action_id
-        assert self.state is None
-        assert self.chosen_action_id is None
+        if self.is_choosing_action_id:
+            raise GinRummyProgramError("self.is_choosing_action_id must be False.")
+        if self.state is not None:
+            raise GinRummyProgramError("self.state must be None.")
+        if self.chosen_action_id is not None:
+            raise GinRummyProgramError("self.chosen_action_id={} must be None.".format(self.chosen_action_id))
         self.state = state
         self.is_choosing_action_id = True
         while not self.chosen_action_id:
             time.sleep(0.001)
-        assert self.chosen_action_id is not None
+        if self.chosen_action_id is None:
+            raise GinRummyProgramError("self.chosen_action_id cannot be None.")
         chosen_action_event = ActionEvent.decode_action(action_id=self.chosen_action_id)
         self.state = None
         self.is_choosing_action_id = False

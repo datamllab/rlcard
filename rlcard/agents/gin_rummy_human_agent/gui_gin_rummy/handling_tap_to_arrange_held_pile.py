@@ -16,6 +16,8 @@ from .player_type import PlayerType
 from . import handling_tap
 from . import utils
 
+from rlcard.games.gin_rummy.utils.gin_rummy_error import GinRummyProgramError
+
 
 def on_tap_to_arrange_held_pile(event):
     widget = event.widget
@@ -25,7 +27,8 @@ def on_tap_to_arrange_held_pile(event):
     hit_items_ids = widget.find_withtag("current")
     if not hit_items_ids:
         return
-    assert len(hit_items_ids) == 1
+    if not len(hit_items_ids) == 1:
+        raise GinRummyProgramError("len(hit_items_ids)={} must be 1.".format(len(hit_items_ids)))
     hit_item_id = hit_items_ids[0]
     hit_item = None
     for canvas_item in widget.canvas_items:

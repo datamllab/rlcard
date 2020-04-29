@@ -10,11 +10,12 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .game_canvas import GameCanvas
 
+from rlcard.games.gin_rummy.utils.gin_rummy_error import GinRummyProgramError
+
 from .player_type import PlayerType
 from .canvas_item import CanvasItem
 
 from . import configurations
-from . import gin_rummy_error
 from . import info_messaging
 from . import utils
 
@@ -26,7 +27,7 @@ def handle_tap_held_pile(hit_item: CanvasItem, game_canvas: 'GameCanvas'):
     elif game_canvas.held_pile_tags[1] in hit_item_tags:
         player_id = 1
     else:
-        raise gin_rummy_error.ProgramError("handle_tap_held_pile: unknown held_pile.")
+        raise GinRummyProgramError("handle_tap_held_pile: unknown held_pile.")
     player_is_human = game_canvas.player_types[player_id] is PlayerType.human_player
     can_draw_from_stock_pile = game_canvas.query.can_draw_from_stock_pile(player_id=player_id)
     can_draw_from_discard_pile = game_canvas.query.can_draw_from_discard_pile(player_id=player_id)

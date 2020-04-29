@@ -34,6 +34,7 @@ from .player_type import PlayerType
 import rlcard.games.gin_rummy.utils.utils as gin_rummy_utils
 
 from rlcard.games.gin_rummy.utils.action_event import KnockAction, GinAction
+from rlcard.games.gin_rummy.utils.gin_rummy_error import GinRummyProgramError
 
 
 class GameCanvas(tk.Canvas):
@@ -286,7 +287,8 @@ class GameCanvas(tk.Canvas):
         self.after_idle(self.game_canvas_updater.did_perform_actions, [DECLARE_DEAD_HAND_ACTION_ID])
 
     def on_going_out(self):
-        assert not self.query.is_game_over()
+        if self.query.is_game_over():
+            raise GinRummyProgramError("Cannot go out if game is over.")
         current_player_id = self.current_player_id
         selected_held_pile_item_ids = self.getter.get_selected_held_pile_item_ids(player_id=current_player_id)
         legal_actions = self.getter.get_legal_actions(player_id=current_player_id)
