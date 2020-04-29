@@ -24,11 +24,10 @@ class GinRummyJudge(object):
         Judge decides legal actions for current player
     '''
 
-    def __init__(self, game: 'GinRummyGame', np_random):
+    def __init__(self, game: 'GinRummyGame'):
         ''' Initialize the class GinRummyJudge
         :param game: GinRummyGame
         '''
-        self.np_random = np_random
         self.game = game
         self.scorer = GinRummyScorer()
 
