@@ -21,9 +21,9 @@ from rlcard.games.gin_rummy.utils.move import DealHandMove
 from rlcard.games.gin_rummy.utils.move import DrawCardMove, PickupDiscardMove, DeclareDeadHandMove
 from rlcard.games.gin_rummy.utils.move import DiscardMove, KnockMove, GinMove
 from rlcard.games.gin_rummy.utils.move import ScoreNorthMove, ScoreSouthMove
+from rlcard.games.gin_rummy.utils.gin_rummy_error import GinRummyProgramError
 
 from . import configurations
-from . import gin_rummy_error
 from . import handling_tap_discard_pile
 from . import handling_tap_held_pile
 from . import starting_new_game
@@ -95,7 +95,8 @@ class GameCanvasUpdater(object):
             move = self.moves[self.mark]
             thinking_time_in_ms = 0  # type: int
             if isinstance(move, DealHandMove):
-                assert self.mark == 0
+                if not self.mark == 0:
+                    raise GinRummyProgramError("mark={} must be 0.".format(self.mark))
                 self.busy_body_id = move.player_dealing.player_id
             elif isinstance(move, ScoreNorthMove) or isinstance(move, ScoreSouthMove):
                 self.busy_body_id = move.player.player_id
@@ -103,10 +104,12 @@ class GameCanvasUpdater(object):
                 self.busy_body_id = move.player.player_id
                 thinking_time_in_ms = 1000  # type: int  # simulate the computer thinking
             else:
-                raise gin_rummy_error.ProgramError("GameCanvasUpdater advance_mark: unknown move={move}")
+                raise GinRummyProgramError("GameCanvasUpdater advance_mark: unknown move={move}")
             if self.mark > 0:
-                assert not self.game_canvas.player_types[self.busy_body_id] == PlayerType.human_player
-            assert self.busy_body_id == self.game_canvas.getter.get_current_player_id()
+                if self.game_canvas.player_types[self.busy_body_id] == PlayerType.human_player:
+                    raise GinRummyProgramError("busy_body_id={} must not be human player.".format(self.busy_body_id))
+            if not self.busy_body_id == self.game_canvas.getter.get_current_player_id():
+                raise GinRummyProgramError("busy_body_id={} must equal current_player_id={}".format(self.busy_body_id, self.game_canvas.getter.get_current_player_id()))
             self._show_prolog_messages_on_computer_turn()
             self.game_canvas.after(thinking_time_in_ms, self._advance_mark_for_computer_player)
             return
@@ -117,22 +120,26 @@ class GameCanvasUpdater(object):
                 print("S {}".format(action_event))  # FIXME: South may not always be actor
             self.human_agent.chosen_action_id = action_id
             return
-        assert self.mark >= len(self.moves)  # FIXME: should be no pending computer moves
+        if not self.mark >= len(self.moves):  # FIXME: should be no pending computer moves
+            raise GinRummyProgramError("Should be no pending computer moves.")
         waiting_player_id = self.env_thread.get_waiting_player_id()
         if waiting_player_id is None:
             return
         # FIXME: should be no pending computer moves
         if self.human_agent.chosen_action_id is not None:
-            assert self.human_agent.chosen_action_id is None
+            raise GinRummyProgramError("self.human_agent.chosen_action_id must not be None.")
         if self.busy_body_id is not None:
-            assert self.busy_body_id is None
-        assert waiting_player_id == self.game_canvas.getter.get_current_player_id()
+            raise GinRummyProgramError("busy_body_id={} must be None.".format(self.busy_body_id))
+        if not waiting_player_id == self.game_canvas.getter.get_current_player_id():
+            raise GinRummyProgramError("waiting_player_id={} must be current_player_id.".format(waiting_player_id))
         self.busy_body_id = waiting_player_id
-        assert self.game_canvas.player_types[self.busy_body_id] == PlayerType.human_player
+        if not self.game_canvas.player_types[self.busy_body_id] == PlayerType.human_player:
+            raise GinRummyProgramError("busy_body_id={} must be human player.".format(self.busy_body_id))
         legal_actions = self.human_agent.state['legal_actions']
         if self.game_canvas.query.is_scoring(legal_actions=legal_actions):
             # 'boss' performs this, not human
-            assert len(legal_actions) == 1
+            if not len(legal_actions) == 1:
+                raise GinRummyProgramError("len(legal_actions)={} must be 1.".format(len(legal_actions)))
             action_id = legal_actions[0]
             self._perform_score_action_id(action_id=action_id)
             return
@@ -154,9 +161,11 @@ class GameCanvasUpdater(object):
     def _perform_score_action_id(self, action_id: int):
         if utils.is_debug():
             if self.busy_body_id == 0:
-                assert action_id == configurations.SCORE_PLAYER_0_ACTION_ID
+                if not action_id == configurations.SCORE_PLAYER_0_ACTION_ID:
+                    raise GinRummyProgramError("action_id={} must be SCORE_PLAYER_0_ACTION_ID".format(action_id))
             else:
-                assert action_id == configurations.SCORE_PLAYER_1_ACTION_ID
+                if not action_id == configurations.SCORE_PLAYER_1_ACTION_ID:
+                    raise GinRummyProgramError("action_id={} must be SCORE_PLAYER_1_ACTION_ID".format(action_id))
         self.game_canvas.after_idle(self.did_perform_actions, [action_id])
 
     #
@@ -180,7 +189,8 @@ class GameCanvasUpdater(object):
                                              game_canvas=self.game_canvas)
 
     def _advance_mark_for_computer_player(self):
-        assert self.mark < len(self.moves)
+        if not self.mark < len(self.moves):
+            raise GinRummyProgramError("mark={} must be less than len(moves)={}.".format(self.mark, len(self.moves)))
         move = self.moves[self.mark]
         if isinstance(move, DealHandMove):
             self._perform_deal_hand_move(move=move)
@@ -209,7 +219,8 @@ class GameCanvasUpdater(object):
         card = move.card
         source_item_id = self.game_canvas.getter.get_top_stock_pile_item_id()
         source_card_item_id = self.game_canvas.getter.get_card_id(card_item_id=source_item_id)
-        assert source_card_item_id == gin_rummy_utils.get_card_id(card=card)
+        if not source_card_item_id == gin_rummy_utils.get_card_id(card=card):
+            raise GinRummyProgramError("source_card_item_id={} doesn't match with card={}.".format(source_card_item_id, card))
         self.game_canvas.addtag_withtag(configurations.DRAWN_TAG, source_item_id)
         target_item_id = self.game_canvas.getter.get_held_pile_item_ids(player_id=player_id)[-1]
         target_item = self.game_canvas.canvas_item_by_item_id[target_item_id]
@@ -223,7 +234,8 @@ class GameCanvasUpdater(object):
         card = move.card
         source_item_id = self.game_canvas.getter.get_top_discard_pile_item_id()
         source_card_item_id = self.game_canvas.getter.get_card_id(card_item_id=source_item_id)
-        assert source_card_item_id == gin_rummy_utils.get_card_id(card=card)
+        if not source_card_item_id == gin_rummy_utils.get_card_id(card=card):
+            raise GinRummyProgramError("source_card_item_id={} doesn't match with card={}.".format(source_card_item_id, card))
         self.game_canvas.addtag_withtag(configurations.DRAWN_TAG, source_item_id)
         target_item_id = self.game_canvas.getter.get_held_pile_item_ids(player_id=player_id)[-1]
         target_item = self.game_canvas.canvas_item_by_item_id[target_item_id]
@@ -239,7 +251,8 @@ class GameCanvasUpdater(object):
         if utils.is_debug():
             print("{}".format(move))
         action_id = move.action.action_id
-        assert self.busy_body_id is not None
+        if self.busy_body_id is None:
+            raise GinRummyProgramError("busy_body_id cannot be None.")
         card_id = utils.get_action_card_id(action_id)
         source_item_id = self.game_canvas.card_item_ids[card_id]
         self.game_canvas.addtag_withtag(configurations.SELECTED_TAG, source_item_id)

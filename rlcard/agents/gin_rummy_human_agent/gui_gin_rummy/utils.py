@@ -16,6 +16,8 @@ import tkinter as tk
 
 import rlcard.games.gin_rummy.utils.utils as gin_rummy_utils
 
+from rlcard.games.gin_rummy.utils.gin_rummy_error import GinRummyProgramError
+
 from .canvas_item import CardItem, CanvasItem
 from .player_type import PlayerType
 
@@ -25,7 +27,6 @@ from .configurations import DECLARE_DEAD_HAND_ACTION_ID
 from .configurations import DISCARD_ACTION_ID, KNOCK_ACTION_ID
 
 from . import configurations
-from . import gin_rummy_error
 
 
 def is_debug() -> bool:
@@ -42,7 +43,8 @@ def move_to(item_id: int, x: int, y: int, parent: tk.Canvas):
 
 
 def translated_by(dx: float, dy: float, location):
-    assert len(location) == 2
+    if not len(location) == 2:
+        raise GinRummyProgramError("location={} must have length of 2.".format(location))
     return [location[0] + dx, location[1] + dy]
 
 
@@ -70,7 +72,7 @@ def get_action_type(action: int) -> int:
     elif action == SCORE_PLAYER_1_ACTION_ID:
         result = action
     else:
-        raise gin_rummy_error.GinRummyError("No action type for {}.".format(action))
+        raise GinRummyProgramError("No action type for {}.".format(action))
     return result
 
 
@@ -122,7 +124,8 @@ def drop_item_ids(item_ids: List[int], on_item_id: int, player_id: int, game_can
     # item_ids are inserted into held_pile of player_id after on_item_id
     held_pile_item_ids = game_canvas.getter.get_held_pile_item_ids(player_id)
     held_pile_ghost_card_item = game_canvas.held_pile_ghost_card_items[player_id]
-    assert on_item_id == held_pile_ghost_card_item or on_item_id in held_pile_item_ids
+    if not (on_item_id == held_pile_ghost_card_item or on_item_id in held_pile_item_ids):
+        raise GinRummyProgramError("on_item_id={} is invalid drop location.".format(on_item_id))
     held_pile_item_ids_count = len(held_pile_item_ids)
     held_pile_tag = game_canvas.held_pile_tags[player_id]
     on_item_index = -1 if on_item_id == held_pile_ghost_card_item else held_pile_item_ids.index(on_item_id)
@@ -147,7 +150,8 @@ def drop_item_ids(item_ids: List[int], on_item_id: int, player_id: int, game_can
                 game_canvas.dtag(item_id, configurations.DISCARD_PILE_TAG)
             elif configurations.STOCK_PILE_TAG in item_tags:
                 game_canvas.dtag(item_id, configurations.STOCK_PILE_TAG)
-            assert held_pile_tag not in item_tags
+            if held_pile_tag in item_tags:
+                raise GinRummyProgramError("item_tags should not contain held_pile_tag.")
             game_canvas.addtag_withtag(held_pile_tag, item_id)
         game_canvas.tag_raise(item_id)
     for after_item_id in after_item_ids:
@@ -180,7 +184,8 @@ def held_pile_insert(card_item_id: int, above_hit_item_id: int or None, player_i
     else:
         insertion_index = held_pile_item_ids.index(above_hit_item_id) + 1
     held_pile_tab = game_canvas.held_pile_tab
-    assert card_item_id == held_pile_item_ids[-1]  # Note: card_item_id is last and already positioned and raised
+    if not card_item_id == held_pile_item_ids[-1]:  # Note: card_item_id is last and already positioned and raised
+        raise GinRummyProgramError("card_item_id={} must be last card of hand.".format(card_item_id))
     for i in range(insertion_index, held_pile_item_ids_count - 1):
         held_pile_item_id = held_pile_item_ids[i]
         game_canvas.move(held_pile_item_id, held_pile_tab, 0)

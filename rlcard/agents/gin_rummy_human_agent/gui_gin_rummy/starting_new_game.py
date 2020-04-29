@@ -21,6 +21,7 @@ from . import utils
 from .env_thread import EnvThread
 
 import rlcard.games.gin_rummy.utils.utils as gin_rummy_utils
+from rlcard.games.gin_rummy.utils.gin_rummy_error import GinRummyProgramError
 
 
 def start_new_game(game_canvas: 'GameCanvas'):
@@ -29,7 +30,8 @@ def start_new_game(game_canvas: 'GameCanvas'):
         game_canvas.game_canvas_updater.env_thread.stop()  # FIXME: complex stopping of threads; simplify ???
         while game_canvas.game_canvas_updater.env_thread.is_alive() or not game_canvas.game_canvas_updater.is_stopped:
             game_canvas.update()  # yield time to other threads and to main thread
-        assert not game_canvas.game_canvas_updater.env_thread.is_alive()
+        if game_canvas.game_canvas_updater.env_thread.is_alive():
+            raise GinRummyProgramError("env_thread did not stop.")
     _reset_game_canvas(game_canvas=game_canvas)
     # make new gin_rummy_env
     gin_rummy_env = game_canvas.game_app.make_gin_rummy_env()
@@ -39,9 +41,12 @@ def start_new_game(game_canvas: 'GameCanvas'):
     if utils.is_debug():
         south_agent = gin_rummy_env.agents[1]
         if isinstance(south_agent, HumanAgent):
-            assert south_agent.state is None
-            assert south_agent.is_choosing_action_id is False
-            assert south_agent.chosen_action_id is None
+            if south_agent.state is not None:
+                raise GinRummyProgramError("south_agent.state must be None.")
+            if south_agent.is_choosing_action_id is True:
+                raise GinRummyProgramError("south_agent.is_choosing_action_id must be False.")
+            if south_agent.chosen_action_id is not None:
+                raise GinRummyProgramError("south_agent.chosen_action_id={} must be None.".format(south_agent.chosen_action_id))
     game_canvas.game_canvas_updater.env_thread = EnvThread(gin_rummy_env=gin_rummy_env, game_canvas=game_canvas)
     game_canvas.game_canvas_updater.env_thread.start()  # Note this: start env background thread
 
@@ -61,7 +66,8 @@ def _reset_game_canvas(game_canvas: 'GameCanvas'):
         for card_id in range(52):
             card_item_id = game_canvas.card_item_ids[card_id]
             tags = game_canvas.gettags(card_item_id)
-            assert not tags
+            if tags:
+                raise GinRummyProgramError("tags must be None.")
 
 
 def show_new_game(game_canvas: 'GameCanvas'):
@@ -74,7 +80,8 @@ def show_new_game(game_canvas: 'GameCanvas'):
         for card_id in range(52):
             card_item_id = game_canvas.card_item_ids[card_id]
             tags = game_canvas.gettags(card_item_id)
-            assert not tags
+            if tags:
+                raise GinRummyProgramError("tags must be None.")
     for i in range(2):
         player_id = (game_canvas.dealer_id + 1 + i) % 2
         anchor_x, anchor_y = game_canvas.player_held_pile_anchors[player_id]
@@ -92,7 +99,8 @@ def show_new_game(game_canvas: 'GameCanvas'):
             card_item_id = game_canvas.card_item_ids[card_id]
             if utils.is_debug() or True:
                 tags = game_canvas.gettags(card_item_id)
-                assert not tags
+                if tags:
+                    raise GinRummyProgramError("tags must be None.")
             game_canvas.tag_raise(card_item_id)  # note this
             game_canvas.itemconfig(card_item_id, tag=game_canvas.held_pile_tags[player_id])
             utils.set_card_id_face_up(card_id=card_id, face_up=face_up, game_canvas=game_canvas)
@@ -108,7 +116,8 @@ def show_new_game(game_canvas: 'GameCanvas'):
         card_item_id = game_canvas.card_item_ids[card_id]
         if utils.is_debug():
             tags = game_canvas.gettags(card_item_id)
-            assert not tags
+            if tags:
+                raise GinRummyProgramError("tags must be None.")
         game_canvas.tag_raise(card_item_id)  # note this
         game_canvas.itemconfig(card_item_id, tag=configurations.STOCK_PILE_TAG)
         utils.set_card_id_face_up(card_id=card_id, face_up=False, game_canvas=game_canvas)

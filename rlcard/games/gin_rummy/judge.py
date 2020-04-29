@@ -13,6 +13,7 @@ from typing import List, Tuple
 from .utils.action_event import *
 from .utils.scorers import GinRummyScorer
 from .utils import melding
+from .utils.gin_rummy_error import GinRummyProgramError
 
 from rlcard.games.gin_rummy.utils import utils
 
@@ -100,7 +101,8 @@ def get_going_out_cards(hand: List[Card], going_out_deadwood_count: int) -> Tupl
     :param going_out_deadwood_count: int
     :return List[Card], List[Card: cards in hand that be knocked, cards in hand that can be ginned
     '''
-    assert len(hand) == 11
+    if not len(hand) == 11:
+        raise GinRummyProgramError("len(hand) is {}: should be 11.".format(len(hand)))
     meld_clusters = melding.get_meld_clusters(hand=hand)
     knock_cards, gin_cards = _get_going_out_cards(meld_clusters=meld_clusters,
                                                   hand=hand,
@@ -121,7 +123,8 @@ def _get_going_out_cards(meld_clusters: List[List[List[Card]]],
     :param going_out_deadwood_count: int
     :return List[Card], List[Card: cards in hand that be knocked, cards in hand that can be ginned
     '''
-    assert len(hand) == 11
+    if not len(hand) == 11:
+        raise GinRummyProgramError("len(hand) is {}: should be 11.".format(len(hand)))
     knock_cards = set()
     gin_cards = set()
     for meld_cluster in meld_clusters:
