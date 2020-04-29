@@ -11,8 +11,8 @@ from rlcard.utils import set_global_seed, tournament
 from rlcard.utils import Logger
 
 # Make environment
-env = rlcard.make('mahjong')
-eval_env = rlcard.make('mahjong')
+env = rlcard.make('mahjong', config={'seed': 0})
+eval_env = rlcard.make('mahjong', config={'seed': 0})
 
 # Set the iterations numbers and how frequently we evaluate the performance
 evaluate_every = 1000
@@ -30,8 +30,6 @@ log_dir = './experiments/mahjong_nfsp_result/'
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
-eval_env.seed(0)
 
 with tf.Session() as sess:
 

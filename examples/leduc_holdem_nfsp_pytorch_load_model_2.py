@@ -7,7 +7,7 @@ from rlcard.utils.utils import set_global_seed, tournament
 from rlcard import models
 
 # Make environment
-env = rlcard.make('leduc-holdem')
+env = rlcard.make('leduc-holdem', config={'seed': 0})
 
 # Set a global seed
 set_global_seed(0)

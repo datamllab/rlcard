@@ -11,7 +11,7 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
 
 **News:**
-*   Now support environment local seeding and multiprocessing.
+*   Now RLCard supports environment local seeding and multiprocessing. Thanks for the testing scripts provided by [@weepingwillowben](https://github.com/weepingwillowben).
 *   Human interface of NoLimit Holdem available. The action space of NoLimit Holdem has been abstracted. Thanks for the contribution of [@AdrianP-](https://github.com/AdrianP-).
 *   New game Gin Rummy and human GUI available. Thanks for the contribution of [@billh0420](https://github.com/billh0420).
 *   PyTorch implementation available. Thanks for the contribution of [@mjudell](https://github.com/mjudell).
@@ -55,7 +55,7 @@ Please refer to [examples/](examples). A **short example** is as below.
 
 ```python
 import rlcard
-from rlcard.agents.random_agent import RandomAgent
+from rlcard.agents import RandomAgent
 
 env = rlcard.make('blackjack')
 env.set_agents([RandomAgent(action_num=env.action_num)])
@@ -128,15 +128,23 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 ## API Cheat Sheet
 ### How to create an environment
 You can use the the following interface. You can specify some configurations with a dictionary.
-*   **rlcard.make(env_id, config={}, env_num=1)**: Make an environment. `env_id` is a string of a environment; `env_num` is specifies how many environments running in parallel. If the number is larger than 1, then the tasks will be assigned to multiple processes for acceleration. `config` is a dictionary specifying some environment configurations, which are as follows.
+*   **env = rlcard.make(env_id, config={}, env_num=1)**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
+	*   `seed`: Default `None`. Set a environment local random seed for reproducing the results.
+	*   `env_num`: Default `1`. It specifies how many environments running in parallel. If the number is larger than 1, then the tasks will be assigned to multiple processes for acceleration.
 	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
 	*   `allow_raw_data`: Default `False`. `True` if allowing raw data in the `state`.
 	*   `single_agent_mode`: Default `False`. `True` if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
 	*   `active_player`: Defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
 	*   `record_action`: Default `False`. If `True`, a field of `action_record` will be in the `state` to record the historical actions. This may be used for human-agent play.
 
+Once the environemnt is made, we can access some information of the game.
+*   **env.action_num**: The number of actions.
+*   **env.player_num**: The number of players.
+*   **env.state_space**: Ther state space of the observations.
+*   **env.timestep**: The number of timesteps stepped by the environment.
+
 ### What is state in RLCard
-State will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
+State is a Python dictionary. It will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
 
 ### Basic interfaces
 The following interfaces provide a basic usage. It is easy to use but it has assumtions on the agent. The agent must follow [agent template](docs/developping-algorithms.md). 
@@ -145,19 +153,14 @@ The following interfaces provide a basic usage. It is easy to use but it has ass
 
 ### Advanced interfaces
 For advanced usage, the following interfaces allow flexible operations on the game tree. These interfaces do not make any assumtions on the agent.
-*   **env.seed(seed)**: Set a environment local random seed for reproducing the results.
 *   **env.reset()**: Initialize a game. Return the state and the first player ID.
 *   **env.step(action, raw_action=False)**: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be `True` if the action is raw action (string).
 *   **env.step_back()**: Available only when `allow_step_back` is `True`. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR.
-*	**env.is_over()**: Return `True` if the current game is over/ Return `False` otherwise.
-*	**env.get_player_id()**: Return the Player ID of the current player.
-*	**env.get_state(player_id)**: Return the state corresponds to `player_id`.
+*   **env.is_over()**: Return `True` if the current game is over/ Return `False` otherwise.
+*   **env.get_player_id()**: Return the Player ID of the current player.
+*   **env.get_state(player_id)**: Return the state corresponds to `player_id`.
 *   **env.get_payoffs()**: In the end of the game, return a list of payoffs for all the players.
 *   **env.get_perfect_information()**: (Currently only support some of the games) Obtain the perfect information at the current state.
-*   **env.action_num**: The number of actions.
-*   **env.player_num**: The number of players.
-*   **env.state_space**: Ther state space of the observations.
-*   **env.timestep**: The number of timesteps stepped by the environment.
 
 ### Running with multiple processes
 RLCard now supports acceleration with multiple processes. Simply change `env_num` when making the environment to indicate how many processes would be used. Currenly we only support `run()` function with multiple processes. An example is [DQN on blackjack](docs/toy-examples.md#running-multiple-processes)  

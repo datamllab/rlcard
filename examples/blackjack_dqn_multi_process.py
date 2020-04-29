@@ -12,8 +12,8 @@ from rlcard.utils import Logger
 
 def main():
     # Make environment
-    env = rlcard.make('blackjack', env_num=4)
-    eval_env = rlcard.make('blackjack', env_num=4)
+    env = rlcard.make('blackjack', config={'env_num': 4, 'seed': 0})
+    eval_env = rlcard.make('blackjack', config={'env_num': 4, 'seed': 0})
 
     # Set the iterations numbers and how frequently we evaluate performance
     evaluate_every = 100
@@ -31,8 +31,6 @@ def main():
 
     # Set a global seed
     set_global_seed(0)
-    env.seed(0)
-    eval_env.seed(0)
 
     with tf.Session() as sess:
 

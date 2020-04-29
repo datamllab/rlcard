@@ -10,8 +10,8 @@ from rlcard.utils import set_global_seed, tournament
 from rlcard.utils import Logger
 
 # Make environment
-env = rlcard.make('blackjack')
-eval_env = rlcard.make('blackjack')
+env = rlcard.make('blackjack', config={'seed': 0})
+eval_env = rlcard.make('blackjack', config={'seed': 0})
 
 # Set the iterations numbers and how frequently we evaluate performance
 evaluate_every = 100
@@ -29,8 +29,6 @@ log_dir = './experiments/blackjack_dqn_result/'
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
-eval_env.seed(0)
 
 with tf.Session() as sess:
 

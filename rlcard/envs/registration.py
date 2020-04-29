@@ -9,6 +9,7 @@ DEFAULT_CONFIG = {
         'active_player' : 0,
         'record_action' : False,
         'seed': None,
+        'env_num': 1,
         }
 
 class EnvSpec(object):
@@ -81,7 +82,7 @@ def register(env_id, entry_point):
     '''
     return registry.register(env_id, entry_point)
 
-def make(env_id, config={}, env_num=1):
+def make(env_id, config={}):
     ''' Create and environment instance
 
     Args:
@@ -96,8 +97,8 @@ def make(env_id, config={}, env_num=1):
     # Do some checkings on the modes
     if not isinstance(_config['active_player'], int) or _config['active_player'] < 0:
         raise ValueError('Active player should be a non-negative integer')
-    if env_num == 1:
+    if _config['env_num'] == 1:
         return registry.make(env_id, _config)
     else:
-        return VecEnv(env_id, _config, env_num)
+        return VecEnv(env_id, _config)
 

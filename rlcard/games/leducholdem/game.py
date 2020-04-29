@@ -14,6 +14,7 @@ class LeducholdemGame(Game):
         ''' Initialize the class leducholdem Game
         '''
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
         ''' No big/small blind
         # Some configarations of the game
         # These arguments are fixed in Leduc Hold'em Game
@@ -36,8 +37,6 @@ class LeducholdemGame(Game):
         self.allowed_raise_num = 2
 
         self.num_players = 2
-
-        self.np_random = np.random.RandomState()
 
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em

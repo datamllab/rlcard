@@ -174,7 +174,7 @@ def is_in_cards(origin_cards, check_cards):
     check_cards_pos = set()
     for check_card in check_cards:
         found = False
-        for i in range(len(origin_cards)):
+        for i, _ in enumerate(origin_cards):
             if i in check_cards_pos:
                 continue
             if check_card.rank == origin_cards[i].rank and check_card.suit == origin_cards[i].suit:
@@ -394,7 +394,7 @@ def tournament(env, num):
             for i in range(len(payoffs)):
                 payoffs[i] += _payoffs[i]
             counter += 1
-    for i in range(len(payoffs)):
+    for i, _ in enumerate(payoffs):
         payoffs[i] /= counter
     return payoffs
 

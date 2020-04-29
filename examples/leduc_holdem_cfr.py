@@ -9,8 +9,8 @@ from rlcard.utils import set_global_seed, tournament
 from rlcard.utils import Logger
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
-eval_env = rlcard.make('leduc-holdem')
+env = rlcard.make('leduc-holdem', config={'seed': 0, 'allow_step_back':True})
+eval_env = rlcard.make('leduc-holdem', config={'seed': 0})
 
 # Set the iterations numbers and how frequently we evaluate the performance and save model
 evaluate_every = 100
@@ -23,8 +23,6 @@ log_dir = './experiments/leduc_holdem_cfr_result/'
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
-eval_env.seed(0)
 
 # Initilize CFR Agent
 agent = CFRAgent(env)
