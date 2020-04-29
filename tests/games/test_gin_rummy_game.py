@@ -61,13 +61,13 @@ class TestGinRummyGame(unittest.TestCase):
         opponent_player = (current_player + 1) % 2
         action = np.random.choice(game.judge.get_legal_actions())
         self.assertIn(action.action_id, put_action_ids)  # should be a put action
-        next_state, next_player = game.step(action)
+        _, next_player = game.step(action)
         if not game.is_over():
             self.assertEqual(next_player, opponent_player)
         if not game.is_over():
             action = np.random.choice(game.judge.get_legal_actions())
             self.assertIn(action.action_id, get_action_ids)  # should be a get action
-            next_state, next_player = game.step(action)
+            _, next_player = game.step(action)
             self.assertEqual(next_player, opponent_player)  # keep turn to put card
 
     def test_proceed_game(self):
@@ -76,12 +76,12 @@ class TestGinRummyGame(unittest.TestCase):
         while not game.is_over():
             legal_actions = game.judge.get_legal_actions()
             action = np.random.choice(legal_actions)
-            state, _ = game.step(action)
+            _, _ = game.step(action)
         self.assertEqual(game.actions[-1].action_id, score_player_1_action_id)
 
     def test_get_state(self):
         game = Game()
-        state, current_player = game.init_game()
+        state, _ = game.init_game()
         self.assertEqual(len(state), 6)
 
     def test_gin_rummy_dealer(self):
@@ -143,11 +143,10 @@ class TestGinRummyGame(unittest.TestCase):
         alpha, beta = judge._get_going_out_cards(meld_clusters=meld_clusters,
                                                  hand=hand,
                                                  going_out_deadwood_count=going_out_deadwood_count)
-        assert set(alpha) == set(knock_cards)
-        assert beta == []
-
-        assert knock_cards == [utils.card_from_text('8D')]
-        assert gin_cards == []
+        self.assertEqual(set(alpha), set(knock_cards))
+        self.assertEqual(beta, [])
+        self.assertEqual(knock_cards, [utils.card_from_text('8D')])
+        self.assertEqual(gin_cards, [])
 
     def test_melding_3(self):  # 2020-Apr-19
         hand_text = ['7H', '6H', '5H', '4S', '4H', '3H', '2S', 'AS', 'AH', 'AD', 'AC']
@@ -162,12 +161,12 @@ class TestGinRummyGame(unittest.TestCase):
         alpha, beta = judge._get_going_out_cards(meld_clusters=meld_clusters,
                                                  hand=hand,
                                                  going_out_deadwood_count=going_out_deadwood_count)
-        assert set(alpha) == set(knock_cards)
-        assert beta == []
+        self.assertEqual(set(alpha), set(knock_cards))
+        self.assertEqual(beta, [])
 
         correct_knock_cards = [utils.card_from_text(x) for x in ['7H', '4S', '4H', '3H', '2S', 'AS', 'AH', 'AD', 'AC']]
-        assert set(knock_cards) == set(correct_knock_cards)
-        assert gin_cards == []
+        self.assertEqual(set(knock_cards), set(correct_knock_cards))
+        self.assertEqual(gin_cards, [])
 
     def test_corrected_settings(self):
         default_setting = Setting.default_setting()
