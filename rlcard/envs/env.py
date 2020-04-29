@@ -53,7 +53,7 @@ class Env(object):
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         self.game.np_random = self.np_random
-        return [seed]
+        return seed
 
     def reset(self):
         ''' Reset environment in single-agent mode
