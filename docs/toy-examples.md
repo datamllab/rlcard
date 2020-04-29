@@ -16,12 +16,11 @@ from rlcard.agents import RandomAgent
 from rlcard.utils import set_global_seed
 
 # Make environment
-env = rlcard.make('blackjack')
+env = rlcard.make('blackjack', config={'seed': 0})
 episode_num = 2
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
 
 # Set up agents
 agent_0 = RandomAgent(action_num=env.action_num)
@@ -62,8 +61,8 @@ from rlcard.utils import set_global_seed, tournament
 from rlcard.utils import Logger
 
 # Make environment
-env = rlcard.make('blackjack')
-eval_env = rlcard.make('blackjack')
+env = rlcard.make('blackjack', config={'seed': 0})
+eval_env = rlcard.make('blackjack', config={'seed': 0})
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
@@ -81,8 +80,6 @@ log_dir = './experiments/blackjack_dqn_result/'
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
-eval_env.seed(0)
 
 with tf.Session() as sess:
 
@@ -186,8 +183,8 @@ from rlcard.utils import Logger
 
 def main():
     # Make environment
-    env = rlcard.make('blackjack', env_num=4)
-    eval_env = rlcard.make('blackjack', env_num=4)
+    env = rlcard.make('blackjack', config={'seed': 0, 'env_num': 4})
+    eval_env = rlcard.make('blackjack', config={'seed': 0, 'env_num': 4})
 
     # Set the iterations numbers and how frequently we evaluate performance
     evaluate_every = 100
@@ -205,8 +202,6 @@ def main():
 
     # Set a global seed
     set_global_seed(0)
-    env.seed(0)
-    eval_env.seed(0)
 
     with tf.Session() as sess:
 
@@ -300,8 +295,8 @@ from rlcard.utils import set_global_seed, tournament
 from rlcard.utils import Logger
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
-eval_env = rlcard.make('leduc-holdem')
+env = rlcard.make('leduc-holdem', config={'seed': 0, 'allow_step_back':True})
+eval_env = rlcard.make('leduc-holdem', config={'seed': 0})
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 100
@@ -314,8 +309,6 @@ log_dir = './experiments/leduc_holdem_cfr_result/'
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
-eval_env.seed(0)
 
 # Initilize CFR Agent
 agent = CFRAgent(env)
@@ -477,8 +470,8 @@ from rlcard.utils import set_global_seed, tournament
 from rlcard.utils import Logger
 
 # Make environment
-env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
-eval_env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
+env = rlcard.make('leduc-holdem', config={'seed': 0, 'single_agent_mode':True})
+eval_env = rlcard.make('leduc-holdem', config={'seed': 0, 'single_agent_mode':True})
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 1000
@@ -496,8 +489,6 @@ log_dir = './experiments/leduc_holdem_single_dqn_result/'
 
 # Set a global seed
 set_global_seed(0)
-env.seed(0)
-eval_env.seed(0)
 
 with tf.Session() as sess:
 
@@ -549,4 +540,3 @@ with tf.Session() as sess:
     saver = tf.train.Saver()
     saver.save(sess, os.path.join(save_dir, 'model'))
 ```
-

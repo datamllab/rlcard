@@ -1,6 +1,5 @@
 # A wrapper for running multiple environments with multiple processes
 # Reference: https://github.com/openai/baselines/blob/master/baselines/common/vec_env/subproc_vec_env.py
-import os
 import multiprocessing as mp
 
 from rlcard.utils import reorganize
@@ -151,8 +150,6 @@ def send_command_to_all(remotes, command):
     for remote in remotes:
         results.append(remote.recv())
     return results
-    
-        
 
 def worker(remote, parent_remote, env_id, config):
     def step_env(env, action, use_raw):

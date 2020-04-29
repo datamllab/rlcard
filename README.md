@@ -55,7 +55,7 @@ Please refer to [examples/](examples). A **short example** is as below.
 
 ```python
 import rlcard
-from rlcard.agents.random_agent import RandomAgent
+from rlcard.agents import RandomAgent
 
 env = rlcard.make('blackjack')
 env.set_agents([RandomAgent(action_num=env.action_num)])
@@ -129,8 +129,8 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 ### How to create an environment
 You can use the the following interface. You can specify some configurations with a dictionary.
 *   **env = rlcard.make(env_id, config={}, env_num=1)**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
-	*	`seed`: Default `None`. Set a environment local random seed for reproducing the results.
-	* 	`env_num`: Default `1`. It specifies how many environments running in parallel. If the number is larger than 1, then the tasks will be assigned to multiple processes for acceleration.
+	*   `seed`: Default `None`. Set a environment local random seed for reproducing the results.
+	*   `env_num`: Default `1`. It specifies how many environments running in parallel. If the number is larger than 1, then the tasks will be assigned to multiple processes for acceleration.
 	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
 	*   `allow_raw_data`: Default `False`. `True` if allowing raw data in the `state`.
 	*   `single_agent_mode`: Default `False`. `True` if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
@@ -156,9 +156,9 @@ For advanced usage, the following interfaces allow flexible operations on the ga
 *   **env.reset()**: Initialize a game. Return the state and the first player ID.
 *   **env.step(action, raw_action=False)**: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be `True` if the action is raw action (string).
 *   **env.step_back()**: Available only when `allow_step_back` is `True`. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR.
-*	**env.is_over()**: Return `True` if the current game is over/ Return `False` otherwise.
-*	**env.get_player_id()**: Return the Player ID of the current player.
-*	**env.get_state(player_id)**: Return the state corresponds to `player_id`.
+*   **env.is_over()**: Return `True` if the current game is over/ Return `False` otherwise.
+*   **env.get_player_id()**: Return the Player ID of the current player.
+*   **env.get_state(player_id)**: Return the state corresponds to `player_id`.
 *   **env.get_payoffs()**: In the end of the game, return a list of payoffs for all the players.
 *   **env.get_perfect_information()**: (Currently only support some of the games) Obtain the perfect information at the current state.
 
