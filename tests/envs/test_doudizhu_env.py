@@ -70,5 +70,9 @@ class TestDoudizhuEnv(unittest.TestCase):
         decoded = env._decode_action(29)
         self.assertEqual(decoded, '444')
 
+    def test_get_perfect_information(self):
+        env = rlcard.make('doudizhu')
+        _, player_id = env.reset()
+        self.assertEqual(player_id, env.get_perfect_information()['current_player'])
 if __name__ == '__main__':
     unittest.main()

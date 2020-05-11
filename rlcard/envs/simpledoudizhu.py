@@ -124,6 +124,6 @@ class SimpleDoudizhuEnv(Env):
         state['hand_cards'] = [cards2str(player.current_hand) for player in self.game.players]
         state['landlord'] = self.game.state['landlord']
         state['trace'] = self.game.state['trace']
-        state['curent_player'] = self.game.round.current_player
+        state['current_player'] = self.game.round.current_player
         state['legal_actions'] = self.game.state['actions']
         return state
