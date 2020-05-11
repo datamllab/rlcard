@@ -38,5 +38,9 @@ register(
     entry_point='rlcard.models.limitholdem_rule_models:LimitholdemRuleModelV1')
 
 register(
+    model_id = 'doudizhu-rule-v1',
+    entry_point='rlcard.models.doudizhu_rule_models:DouDizhuRuleModelV1')
+
+register(
     model_id='gin-rummy-novice-rule',
     entry_point='rlcard.models.gin_rummy_rule_models:GinRummyNoviceRuleModel')

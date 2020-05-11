@@ -77,5 +77,9 @@ class TestUnoEnv(unittest.TestCase):
         for _ in range(100):
             state, _, _ = env.step(np.random.choice(state['legal_actions']))
 
+    def test_get_perfect_information(self):
+        env = rlcard.make('uno')
+        _, player_id = env.reset()
+        self.assertEqual(player_id, env.get_perfect_information()['current_player'])
 if __name__ == '__main__':
     unittest.main()
