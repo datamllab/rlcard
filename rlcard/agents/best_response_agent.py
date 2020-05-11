@@ -70,10 +70,10 @@ class BRAgent():
     def value(self, curr_player, state, this_player):
         """Returns the value of the specified state to the best-responder."""
         if self.env.is_over():
-            print(self.env.get_payoffs())
+            #print(self.env.get_payoffs())
             return self.env.get_payoffs()
         elif this_player == curr_player:
-            print("Is current Player")
+            #print("Is current Player")
             self.infosets = collections.defaultdict(list)
             probs = np.ones(self.env.player_num)
             self.traverse_tree(probs, this_player)
@@ -81,7 +81,7 @@ class BRAgent():
             q_val = self.get_q_value(action, [0.0, 0.0])
             return q_val[this_player]
         else:
-            print("Not current Player")
+            #print("Not current Player")
             action_probs = self.action_probs(state, self.opponent_policy)
             sum_qval = np.array([0.0, 0.0])
             for a, p in enumerate(self.action_probs(state, self.opponent_policy)):

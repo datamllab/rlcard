@@ -14,10 +14,10 @@ from rlcard.utils.logger import Logger
 
 # Make environment and enable human mode
 env = rlcard.make('leduc-holdem', config={'allow_step_back': True, 'allow_raw_data': True})
-eval_env = rlcard.make('leduc-holdem', config={'allow_step_back': True, 'allow_raw_data': True})
+eval_env = rlcard.make('leduc-holdem', config={'allow_step_back': True, 'allow_raw_data': True, 'seed':0})
 
 # Set the iterations numbers and how frequently we evaluate/save plot
-evaluate_every = 10
+evaluate_every = 100
 save_plot_every = 1000
 evaluate_num = 100
 episode_num = 10000000
@@ -46,10 +46,11 @@ logger = Logger(log_dir)
 for episode in range(episode_num):
     opponent.train()
     #agent.train()
-    print('\rIteration {}'.format(episode), end='')
+    print('\rIteration {}'.format(episode), end='\t')
     # Evaluate the performance. Play with NFSP agents.
     if episode % evaluate_every == 0:
-        exploitability(eval_env, opponent)
+        exp = exploitability(eval_env, opponent, evaluate_num)
+        print("Eploitability:", exp)
         #logger.log_performance(env.timestep, tournament(eval_env, evaluate_num)[0])
 
 # Close files in the logger
