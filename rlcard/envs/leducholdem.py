@@ -109,6 +109,7 @@ class LeducholdemEnv(Env):
         state['chips'] = [self.game.players[i].in_chips for i in range(self.player_num)]
         state['public_card'] = self.game.public_card.get_index() if self.game.public_card else None
         state['hand_cards'] = [self.game.players[i].hand.get_index() for i in range(self.player_num)]
+        state['current_round'] = self.game.round_counter
         state['current_player'] = self.game.game_pointer
         state['legal_actions'] = self.game.get_legal_actions()
         return state
