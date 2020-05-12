@@ -180,6 +180,8 @@ The purposes of the main modules are listed as below:
 The perfomance is measured by winning rates through tournaments. Example outputs are as follows:
 ![Learning Curves](http://rlcard.org/imgs/curves.png "Learning Curves")
 
+For your information, there is a nice online evaluation platform [pokerwars](https://github.com/pokerwars) that could be connected with RLCard with some modifications.
+
 ## More Documents
 For more documentation, please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
 

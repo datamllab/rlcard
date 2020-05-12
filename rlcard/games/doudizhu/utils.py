@@ -144,6 +144,17 @@ def get_optimal_action(probs, legal_actions, np_random):
     return optimal_actions[0]
 
 
+def cards2str_with_suit(cards):
+    ''' Get the corresponding string representation of cards with suit
+
+    Args:
+        cards (list): list of Card objects
+
+    Returns:
+        string: string representation of cards
+    '''
+    return ' '.join([card.suit+card.rank for card in cards])
+
 def cards2str(cards):
     ''' Get the corresponding string representation of cards
 
@@ -161,8 +172,11 @@ def cards2str(cards):
             response += card.rank
     return response
 
-_local_objs = threading.local()
-_local_objs.cached_candidate_cards = None
+class LocalObjs(threading.local):
+    def __init__(self):
+        self.cached_candidate_cards = None
+_local_objs = LocalObjs()
+
 def contains_cards(candidate, target):
     ''' Check if cards of candidate contains cards of target.
 
