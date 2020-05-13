@@ -5,12 +5,23 @@ with open("README.md", "r", encoding="utf8") as fh:
 
 extras = {
     'torch': ['torch>=1.3'],
-    'tensorflow': ['tensorflow>=1.14,<2.0', 'tensorflow_probability==0.7.0']
+    'tensorflow': ['tensorflow>=1.14,<2.0']
 }
+
+def _get_version():
+    with open('rlcard/__init__.py') as f:
+        for line in f:
+            if line.startswith('__version__'):
+                g = {}
+                exec(line, g)
+                return g['__version__']
+        raise ValueError('`__version__` not defined')
+
+VERSION = _get_version()
 
 setuptools.setup(
     name="rlcard",
-    version="0.2.1",
+    version=VERSION,
     author="Data Analytics at Texas A&M (DATA) Lab",
     author_email="khlai037@tamu.edu",
     description="A Toolkit for Reinforcement Learning in Card Games",
@@ -42,6 +53,7 @@ setuptools.setup(
     extras_require=extras,
     requires_python='>=3.5',
     classifiers=[
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
