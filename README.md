@@ -5,7 +5,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/248eb15c086748a4bcc830755f1bd798)](https://www.codacy.com/manual/daochenzha/rlcard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=datamllab/rlcard&amp;utm_campaign=Badge_Grade)
 [![Coverage Status](https://coveralls.io/repos/github/datamllab/rlcard/badge.svg)](https://coveralls.io/github/datamllab/rlcard?branch=master)
 
-RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports multiple card environments with easy-to-use interfaces. The goal of RLCard is to bridge reinforcement learning and imperfect information games, and push forward the research of reinforcement learning in domains with multiple agents, large state and action space, and sparse reward. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
+RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports multiple card environments with easy-to-use interfaces. The goal of RLCard is to bridge reinforcement learning and imperfect information games. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University.
 
 *   Official Website: [http://www.rlcard.org](http://www.rlcard.org)
 *   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
@@ -29,22 +29,22 @@ If you find this repo useful, you may cite:
 ```
 
 ## Installation
-Make sure that you have **Python 3.5+** and **pip** installed. We recommend installing `rlcard` with `pip` as follow:
+Make sure that you have **Python 3.5+** and **pip** installed. We recommend installing the latest version of `rlcard` with `pip`:
 
 ```
 git clone https://github.com/datamllab/rlcard.git
 cd rlcard
 pip install -e .
 ```
-or use PyPI with:
+Alternatively, you can install the latest stable version with:
 ```
 pip install rlcard
 ```
-To use tensorflow implementation, run:
+The default installation will only include the card environments. To use Tensorflow implementation of the example algorithms, install the supported verison of Tensorflow with:
 ```
 pip install rlcard[tensorflow]
 ```
-To try out PyTorch implementation for DQN and NFSP, please run: 
+To try PyTorch implementations, please run: 
 ```
 pip install rlcard[torch]
 ```
@@ -127,8 +127,8 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 
 ## API Cheat Sheet
 ### How to create an environment
-You can use the the following interface to make an environment. You can specify some configurations with a dictionary.
-*   **env = rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary specifying some environment configurations, which are as follows.
+You can use the the following interface to make an environment. You may otionally specify some configurations with a dictionary.
+*   **env = rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary that specifies some environment configurations, which are as follows.
 	*   `seed`: Default `None`. Set a environment local random seed for reproducing the results.
 	*   `env_num`: Default `1`. It specifies how many environments running in parallel. If the number is larger than 1, then the tasks will be assigned to multiple processes for acceleration.
 	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
@@ -144,21 +144,21 @@ Once the environemnt is made, we can access some information of the game.
 *   **env.timestep**: The number of timesteps stepped by the environment.
 
 ### What is state in RLCard
-State is a Python dictionary. It will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
+State is a Python dictionary. It will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will also have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
 
 ### Basic interfaces
 The following interfaces provide a basic usage. It is easy to use but it has assumtions on the agent. The agent must follow [agent template](docs/developping-algorithms.md). 
-*   **env.set_agents(agents)**: `agents` is a list of `Agent` object. The length of the the list should equal to the number of the player in the game.
-*   **env.run(is_training=False)**: Run a complete game and return trajectories and payoffs. The function can be used after the `set_agents` is called. If `is_training` is `True`, the function will use `step` function in the agent to play the game. If `is_training` is `False`, `eval_step` will be called instead.
+*   **env.set_agents(agents)**: `agents` is a list of `Agent` object. The length of the list should be equal to the number of the players in the game.
+*   **env.run(is_training=False)**: Run a complete game and return trajectories and payoffs. The function can be used after the `set_agents` is called. If `is_training` is `True`, the it will use `step` function in the agent to play the game. If `is_training` is `False`, `eval_step` will be called instead.
 
 ### Advanced interfaces
 For advanced usage, the following interfaces allow flexible operations on the game tree. These interfaces do not make any assumtions on the agent.
 *   **env.reset()**: Initialize a game. Return the state and the first player ID.
 *   **env.step(action, raw_action=False)**: Take one step in the environment. `action` can be raw action or integer; `raw_action` should be `True` if the action is raw action (string).
 *   **env.step_back()**: Available only when `allow_step_back` is `True`. Take one step backward. This can be used for algorithms that operate on the game tree, such as CFR.
-*   **env.is_over()**: Return `True` if the current game is over/ Return `False` otherwise.
+*   **env.is_over()**: Return `True` if the current game is over. Otherewise, return `False`.
 *   **env.get_player_id()**: Return the Player ID of the current player.
-*   **env.get_state(player_id)**: Return the state corresponds to `player_id`.
+*   **env.get_state(player_id)**: Return the state that corresponds to `player_id`.
 *   **env.get_payoffs()**: In the end of the game, return a list of payoffs for all the players.
 *   **env.get_perfect_information()**: (Currently only support some of the games) Obtain the perfect information at the current state.
 
@@ -189,4 +189,4 @@ For more documentation, please refer to the [Documents](docs/README.md) for gene
 Contribution to this project is greatly appreciated! Please create an issue for feedbacks/bugs. If you want to contribute codes, please refer to [Contributing Guide](./CONTRIBUTING.md).
 
 ## Acknowledgements
-We would like to thank JJ World Network Technology Co.,LTD for the generous support and all the contributors in the community.
+We would like to thank JJ World Network Technology Co.,LTD for the generous support and all the contributions from the community contributors.
