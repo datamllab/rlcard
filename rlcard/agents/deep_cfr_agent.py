@@ -239,7 +239,8 @@ class DeepCFR():
         action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
         return action, action_prob
 
-    def reinitialize_advantage_networks(self):
+    @staticmethod
+    def reinitialize_advantage_networks():
         ''' Reinitialize the advantage networks
         '''
         advantage_vars = [v for v in tf.global_variables() if 'advantage' in v.name]

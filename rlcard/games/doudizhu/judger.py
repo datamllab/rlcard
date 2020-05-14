@@ -180,7 +180,7 @@ class DoudizhuJudger(object):
                         playable_cards.add(cards)
                 l -= 1
                 s += 1
-        
+
         #pair_chain_3 -- #pair_chain_10
         pair_chain_indexes = DoudizhuJudger.chain_indexes(more_than_1_indexes)
         for (start_index, length) in pair_chain_indexes:

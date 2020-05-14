@@ -81,4 +81,3 @@ def plot(csv_path, save_path, algorithm):
             os.makedirs(save_dir)
 
         fig.savefig(save_path)
-
