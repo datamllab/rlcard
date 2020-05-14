@@ -391,7 +391,7 @@ def tournament(env, num):
                     payoffs[i] += _p[i]
                 counter += 1
         else:
-            for i in range(len(payoffs)):
+            for i, _ in enumerate(payoffs):
                 payoffs[i] += _payoffs[i]
             counter += 1
     for i, _ in enumerate(payoffs):

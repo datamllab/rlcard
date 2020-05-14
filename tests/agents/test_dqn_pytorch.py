@@ -32,10 +32,10 @@ class TestDQN(unittest.TestCase):
     def test_train(self):
 
         memory_init_size = 100
-        step_num = 1500
+        step_num = 500
 
         agent = DQNAgent(scope='dqn',
-                         replay_memory_size = 500,
+                         replay_memory_size = 200,
                          replay_memory_init_size=memory_init_size,
                          update_target_estimator_every=100,
                          state_shape=[2],

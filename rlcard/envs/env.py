@@ -1,25 +1,32 @@
 from rlcard.utils import *
 
 class Env(object):
-    ''' The base Env class
+    '''
+    The base Env class. For all the environments in RLCard,
+    we should base on this class and implement as many functions
+    as we can.
     '''
 
     def __init__(self, config):
-        ''' Initialize
+        ''' Initialize the environment
 
         Args:
-            config (dict): A config dictionary. Currently, the dictionary
-                includes
-                'allow_step_bac'k (boolean) - True if allowing
-                 step_back
+            config (dict): A config dictionary. All the fields are
+                optional. Currently, the dictionary includes:
+                'seed' (int) - A environment local random seed.
+                'env_num' (int) - If env_num>1, the environemnt wil be run
+                  with multiple processes. Note the implementatino is
+                  in `vec_env.py`.
+                'allow_step_back' (boolean) - True if allowing
+                 step_back.
                 'allow_raw_data' (boolean) - True if allow
                  raw obs in state['raw_obs'] and raw legal actions in
-                 state['raw_legal_actions']
+                 state['raw_legal_actions'].
                 'single_agent_mode' (boolean) - True if single agent mode,
-                 i.e., the other players are pretrained models
+                 i.e., the other players are pretrained models.
                 'active_player' (int) - If 'singe_agent_mode' is True,
                  'active_player' specifies the player that does not use
-                  pretrained models
+                  pretrained models.
         '''
         self.allow_step_back = self.game.allow_step_back = config['allow_step_back']
         self.allow_raw_data = config['allow_raw_data']
@@ -38,7 +45,7 @@ class Env(object):
         self.single_agent_mode = config['single_agent_mode']
         self.active_player = config['active_player']
 
-        # Load pre-trained models if either single_agent_mode=True
+        # Load pre-trained models if single_agent_mode=True
         if self.single_agent_mode:
             self.model = self._load_model()
             # If at least one pre-trained agent needs raw data, we set self.allow_raw_data = True
@@ -51,8 +58,9 @@ class Env(object):
         self._seed(config['seed'])
 
     def reset(self):
-        ''' Reset environment in single-agent mode
-            Call _init_game if not in single agent mode
+        '''
+        Reset environment in single-agent mode
+        Call `_init_game` if not in single agent mode
         '''
         if not self.single_agent_mode:
             return self._init_game()
@@ -120,7 +128,9 @@ class Env(object):
         return state, player_id
 
     def set_agents(self, agents):
-        ''' Set the agents that will interact with the environment
+        '''
+        Set the agents that will interact with the environment.
+        This function must be called before `run`.
 
         Args:
             agents (list): List of Agent classes
@@ -136,7 +146,8 @@ class Env(object):
                 break
 
     def run(self, is_training=False):
-        ''' Run a complete game, either for evaluation or training RL agent.
+        '''
+        Run a complete game, either for evaluation or training RL agent.
 
         Args:
             is_training (boolean): True if for training purpose.
@@ -195,7 +206,7 @@ class Env(object):
         ''' Check whether the curent game is over
 
         Returns:
-            (boolean): True is current game is over
+            (boolean): True if current game is over
         '''
         return self.game.is_over()
 
@@ -329,5 +340,8 @@ class Env(object):
 
         return self._extract_state(state), reward, done
 
-    def init_game(self):
-        raise ValueError('init_game is deperated. Please use env.reset()')
+    @staticmethod
+    def init_game():
+        ''' (This function has been replaced by `reset()`)
+        '''
+        raise ValueError('init_game is removed. Please use env.reset()')

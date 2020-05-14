@@ -61,8 +61,8 @@ def hash_seed(seed=None, max_bytes=8):
     """
     if seed is None:
         seed = create_seed(max_bytes=max_bytes)
-    hash = hashlib.sha512(str(seed).encode('utf8')).digest()
-    return _bigint_from_bytes(hash[:max_bytes])
+    _hash = hashlib.sha512(str(seed).encode('utf8')).digest()
+    return _bigint_from_bytes(_hash[:max_bytes])
 
 def create_seed(a=None, max_bytes=8):
     """Create a strong random seed. Otherwise, Python 2 would seed using
@@ -88,12 +88,12 @@ def create_seed(a=None, max_bytes=8):
     return a
 
 # TODO: don't hardcode sizeof_int here
-def _bigint_from_bytes(bytes):
+def _bigint_from_bytes(_bytes):
     sizeof_int = 4
-    padding = sizeof_int - len(bytes) % sizeof_int
-    bytes += b'\0' * padding
-    int_count = int(len(bytes) / sizeof_int)
-    unpacked = struct.unpack("{}I".format(int_count), bytes)
+    padding = sizeof_int - len(_bytes) % sizeof_int
+    _bytes += b'\0' * padding
+    int_count = int(len(_bytes) / sizeof_int)
+    unpacked = struct.unpack("{}I".format(int_count), _bytes)
     accum = 0
     for i, val in enumerate(unpacked):
         accum += 2 ** (sizeof_int * 8 * i) * val

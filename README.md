@@ -127,7 +127,7 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 
 ## API Cheat Sheet
 ### How to create an environment
-You can use the the following interface to make an environment. You may otionally specify some configurations with a dictionary.
+You can use the the following interface to make an environment. You may optionally specify some configurations with a dictionary.
 *   **env = rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary that specifies some environment configurations, which are as follows.
 	*   `seed`: Default `None`. Set a environment local random seed for reproducing the results.
 	*   `env_num`: Default `1`. It specifies how many environments running in parallel. If the number is larger than 1, then the tasks will be assigned to multiple processes for acceleration.
@@ -149,7 +149,7 @@ State is a Python dictionary. It will always have observation `state['obs']` and
 ### Basic interfaces
 The following interfaces provide a basic usage. It is easy to use but it has assumtions on the agent. The agent must follow [agent template](docs/developping-algorithms.md). 
 *   **env.set_agents(agents)**: `agents` is a list of `Agent` object. The length of the list should be equal to the number of the players in the game.
-*   **env.run(is_training=False)**: Run a complete game and return trajectories and payoffs. The function can be used after the `set_agents` is called. If `is_training` is `True`, the it will use `step` function in the agent to play the game. If `is_training` is `False`, `eval_step` will be called instead.
+*   **env.run(is_training=False)**: Run a complete game and return trajectories and payoffs. The function can be used after the `set_agents` is called. If `is_training` is `True`, it will use `step` function in the agent to play the game. If `is_training` is `False`, `eval_step` will be called instead.
 
 ### Advanced interfaces
 For advanced usage, the following interfaces allow flexible operations on the game tree. These interfaces do not make any assumtions on the agent.
