@@ -45,9 +45,9 @@ class LimitholdemRuleAgentV1(object):
         if len(public_cards) == 3:
             public_cards_ranks = ['A', 'A', 'A']
             public_cards_flush = ['S', 'S', 'S']
-            for _ in range(len(public_cards)):
-                public_cards_ranks[_] = public_cards[_][1]
-                public_cards_flush[_] = public_cards[_][0]
+            for i, _ in enumerate(public_cards):
+                public_cards_ranks[i] = public_cards[i][1]
+                public_cards_flush[i] = public_cards[i][0]
             if hand[0][1] == hand [1][1]:
             # if the player already have a pair, raise when public cards have card same as the pair
                 if hand[0][1] in public_cards_ranks:

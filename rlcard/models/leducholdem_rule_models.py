@@ -9,7 +9,8 @@ class LeducHoldemRuleAgentV1(object):
     def __init__(self):
         self.use_raw = True
 
-    def step(self, state):
+    @staticmethod
+    def step(state):
         ''' Predict the action when given raw state. A simple rule-based AI.
         Args:
             state (dict): Raw state from the game
