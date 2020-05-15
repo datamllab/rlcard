@@ -1,4 +1,4 @@
-''' A toy example of playing against pretrianed AI on Leduc Hold'em
+''' A toy example of playing against a random agent on Limit Hold'em
 '''
 
 import rlcard

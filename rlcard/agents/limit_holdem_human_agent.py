@@ -2,7 +2,7 @@ from rlcard.utils.utils import print_card
 
 
 class HumanAgent(object):
-    ''' A human agent for Leduc Holdem. It can be used to play against trained models
+    ''' A human agent for Limit Holdem. It can be used to play against trained models
     '''
 
     def __init__(self, action_num):
@@ -48,7 +48,7 @@ def _print_state(state, action_record):
 
     Args:
         state (dict): A dictionary of the raw state
-        action_record (list): A list of the historical actions
+        action_record (list): A list of the each player's historical actions
     '''
     _action_list = []
     for i in range(1, len(action_record)+1):
