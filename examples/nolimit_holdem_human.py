@@ -1,6 +1,6 @@
 ''' A toy example of playing against pretrianed AI on Leduc Hold'em
 '''
-from rlcard.agents.random_agent import RandomAgent
+from rlcard.agents import RandomAgent
 
 import rlcard
 from rlcard import models
