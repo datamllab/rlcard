@@ -61,7 +61,7 @@ def _print_state(state, action_record):
     print('\n=============== Community Card ===============')
     print_card(state['public_cards'])
 
-        print('=============  Player',state["current_player"],'- Hand   =============')
+    print('=============  Player',state["current_player"],'- Hand   =============')
     print_card(state['hand'])
 
     print('===============     Chips      ===============')
