@@ -46,7 +46,6 @@ eval_env.set_agents([agent])
 logger = Logger(log_dir)
 
 for episode in range(episode_num):
-    print("***********************Episode************************ ", episode)
     # Generate data from the environment
     trajectories, _ = env.run(is_training=True)
 
