@@ -1,11 +1,16 @@
-# A wrapper for running multiple environments with multiple processes
-# Reference: https://github.com/openai/baselines/blob/master/baselines/common/vec_env/subproc_vec_env.py
+'''
+A wrapper for running multiple environments with multiple processes
+Reference: https://github.com/openai/baselines/blob/master/baselines/common/vec_env/subproc_vec_env.py
+'''
 import multiprocessing as mp
 
 from rlcard.utils import reorganize
 
 class VecEnv(object):
-    ''' The wrraper for a vector of environments
+    '''
+    The wrraper for a vector of environments. Here, only the
+    basic interfaces of `env` are implemented. The vec environment
+    does not support going backward in the game tree.
     '''
 
     def __init__(self, env_id, config):
@@ -142,7 +147,7 @@ def send_commands_to_all(remotes, commands):
     for remote in remotes:
         results.append(remote.recv())
     return results
-    
+
 def send_command_to_all(remotes, command):
     results = []
     for remote in remotes:

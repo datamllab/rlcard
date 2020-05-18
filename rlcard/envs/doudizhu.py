@@ -5,6 +5,7 @@ from rlcard.games.doudizhu import Game
 from rlcard.games.doudizhu.utils import SPECIFIC_MAP, CARD_RANK_STR
 from rlcard.games.doudizhu.utils import ACTION_LIST, ACTION_SPACE
 from rlcard.games.doudizhu.utils import encode_cards
+from rlcard.games.doudizhu.utils import cards2str, cards2str_with_suit
 
 
 class DoudizhuEnv(Env):
@@ -116,3 +117,18 @@ class DoudizhuEnv(Env):
                     if action_id not in legal_action_id:
                         legal_action_id.append(action_id)
         return legal_action_id
+
+    def get_perfect_information(self):
+        ''' Get the perfect information of the current state
+
+        Returns:
+            (dict): A dictionary of all the perfect information of the current state
+        '''
+        state = {}
+        state['hand_cards_with_suit'] = [cards2str_with_suit(player.current_hand) for player in self.game.players]
+        state['hand_cards'] = [cards2str(player.current_hand) for player in self.game.players]
+        state['landlord'] = self.game.state['landlord']
+        state['trace'] = self.game.state['trace']
+        state['current_player'] = self.game.round.current_player
+        state['legal_actions'] = self.game.state['actions']
+        return state

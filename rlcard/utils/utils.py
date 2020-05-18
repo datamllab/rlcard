@@ -387,11 +387,11 @@ def tournament(env, num):
         _, _payoffs = env.run(is_training=False)
         if isinstance(_payoffs, list):
             for _p in _payoffs:
-                for i in range(len(payoffs)):
+                for i, _ in enumerate(payoffs):
                     payoffs[i] += _p[i]
                 counter += 1
         else:
-            for i in range(len(payoffs)):
+            for i, _ in enumerate(payoffs):
                 payoffs[i] += _payoffs[i]
             counter += 1
     for i, _ in enumerate(payoffs):

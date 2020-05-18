@@ -132,7 +132,7 @@ class DoudizhuJudger(object):
             cards_dict[card] += 1
         cards_count = np.array([cards_dict[k] for k in CARD_RANK_STR])
         playable_cards = set()
-        
+
         non_zero_indexes = np.argwhere(cards_count > 0)
         more_than_1_indexes = np.argwhere(cards_count > 1)
         more_than_2_indexes = np.argwhere(cards_count > 2)
@@ -180,7 +180,7 @@ class DoudizhuJudger(object):
                         playable_cards.add(cards)
                 l -= 1
                 s += 1
-        
+
         #pair_chain_3 -- #pair_chain_10
         pair_chain_indexes = DoudizhuJudger.chain_indexes(more_than_1_indexes)
         for (start_index, length) in pair_chain_indexes:

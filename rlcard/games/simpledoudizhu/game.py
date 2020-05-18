@@ -174,15 +174,15 @@ class SimpleDoudizhuGame(object):
             player, self.players)]
         others_hand = merge(player_up.current_hand, player_down.current_hand, key=functools.cmp_to_key(doudizhu_sort_card))
         return cards2str(others_hand)
-'''
-if __name__ == '__main__':
-    import numpy as np
-    game = SimpleDoudizhuGame()
-    state, player_id = game.init_game()
-    print(state)
-    while not game.is_over():
-        action = np.random.choice(list(state['actions']))
-        print(action)
-        state, next_player_id = game.step(action)
-        print(state)
-'''
+
+#if __name__ == '__main__':
+#    import numpy as np
+#    game = SimpleDoudizhuGame()
+#    state, player_id = game.init_game()
+#    print(state)
+#    while not game.is_over():
+#        action = np.random.choice(list(state['actions']))
+#        print(action)
+#        state, next_player_id = game.step(action)
+#        print(state)
+

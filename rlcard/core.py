@@ -55,7 +55,8 @@ class Card(object):
 
 
 class Dealer(object):
-    ''' Dealer stores a deck of playing cards, remained cards holded by dealer, and can deal cards to players
+    ''' Dealer stores a deck of playing cards, remained cards
+    holded by dealer, and can deal cards to players
 
     Note: deck variable means all the cards in a single game, and should be a list of Card objects.
     '''

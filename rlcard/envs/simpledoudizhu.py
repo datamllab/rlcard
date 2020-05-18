@@ -5,6 +5,7 @@ from rlcard.games.simpledoudizhu import Game
 from rlcard.games.doudizhu.utils import SPECIFIC_MAP, CARD_RANK_STR
 from rlcard.games.simpledoudizhu.utils import ACTION_LIST, ACTION_SPACE
 from rlcard.games.doudizhu.utils import encode_cards
+from rlcard.games.doudizhu.utils import cards2str
 
 
 class SimpleDoudizhuEnv(Env):
@@ -40,13 +41,13 @@ class SimpleDoudizhuEnv(Env):
         if state['played_cards'] is not None:
             encode_cards(obs[5], state['played_cards'])
 
-        extrated_state = {'obs': obs, 'legal_actions': self._get_legal_actions()}
+        extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions()}
         if self.allow_raw_data:
-            extracted_state_state['raw_obs'] = state
+            extracted_state['raw_obs'] = state
             extracted_state['raw_legal_actions'] = [a for a in state['actions']]
         if self.record_action:
             extracted_state['action_record'] = self.action_recorder
-        return extrated_state
+        return extracted_state
 
     def get_payoffs(self):
         ''' Get the payoffs of players. Must be implemented in the child class.
@@ -113,11 +114,16 @@ class SimpleDoudizhuEnv(Env):
                         legal_action_id.append(action_id)
         return legal_action_id
 
-'''
-if __name__ == '__main__':
-    from rlcard.agents.random_agent import RandomAgent
-    env = SimpleDoudizhuEnv()
-    env.set_agents([RandomAgent(131), RandomAgent(131), RandomAgent(131)])
-    trajectories, payoffs = env.run(is_training=False)
-    print(trajectories[0])
-'''
+    def get_perfect_information(self):
+        ''' Get the perfect information of the current state
+
+        Returns:
+            (dict): A dictionary of all the perfect information of the current state
+        '''
+        state = {}
+        state['hand_cards'] = [cards2str(player.current_hand) for player in self.game.players]
+        state['landlord'] = self.game.state['landlord']
+        state['trace'] = self.game.state['trace']
+        state['current_player'] = self.game.round.current_player
+        state['legal_actions'] = self.game.state['actions']
+        return state

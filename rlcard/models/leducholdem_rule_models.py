@@ -9,7 +9,8 @@ class LeducHoldemRuleAgentV1(object):
     def __init__(self):
         self.use_raw = True
 
-    def step(self, state):
+    @staticmethod
+    def step(state):
         ''' Predict the action when given raw state. A simple rule-based AI.
         Args:
             state (dict): Raw state from the game
@@ -39,7 +40,8 @@ class LeducHoldemRuleAgentV2(object):
     def __init__(self):
         self.use_raw = True
 
-    def step(self, state):
+    @staticmethod
+    def step(state):
         ''' Predict the action when given raw state. A simple rule-based AI.
         Args:
             state (dict): Raw state from the game
@@ -52,15 +54,13 @@ class LeducHoldemRuleAgentV2(object):
         hand = state['hand']
         public_card = state['public_card']
         action = 'fold'
-        '''
-        When having only 2 hand cards at the game start, choose fold to drop terrible cards:
-        Acceptable hand cards:
-        Pairs
-        AK, AQ, AJ, AT
-        A9s, A8s, ... A2s(s means flush)
-        KQ, KJ, QJ, JT
-        Fold all hand types except those mentioned above to save money
-        '''
+        # When having only 2 hand cards at the game start, choose fold to drop terrible cards:
+        # Acceptable hand cards:
+        # Pairs
+        # AK, AQ, AJ, AT
+        # A9s, A8s, ... A2s(s means flush)
+        # KQ, KJ, QJ, JT
+        # Fold all hand types except those mentioned above to save money
         if public_card:
             if public_card[1] == hand[1]:
                 action = 'raise'
