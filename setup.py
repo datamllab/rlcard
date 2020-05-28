@@ -49,6 +49,7 @@ setuptools.setup(
         'matplotlib>=3.0',
         'pillow>=5.2.0',
         'termcolor',
+        'packaging',
     ],
     extras_require=extras,
     requires_python='>=3.5',
