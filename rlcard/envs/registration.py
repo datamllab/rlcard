@@ -101,4 +101,3 @@ def make(env_id, config={}):
         return registry.make(env_id, _config)
     else:
         return VecEnv(env_id, _config)
-
