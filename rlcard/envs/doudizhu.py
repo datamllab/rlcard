@@ -1,11 +1,6 @@
 import numpy as np
 
 from rlcard.envs import Env
-from rlcard.games.doudizhu import Game
-from rlcard.games.doudizhu.utils import SPECIFIC_MAP, CARD_RANK_STR
-from rlcard.games.doudizhu.utils import ACTION_LIST, ACTION_SPACE
-from rlcard.games.doudizhu.utils import encode_cards
-from rlcard.games.doudizhu.utils import cards2str, cards2str_with_suit
 
 
 class DoudizhuEnv(Env):
@@ -13,6 +8,18 @@ class DoudizhuEnv(Env):
     '''
 
     def __init__(self, config):
+        from rlcard.games.doudizhu.utils import SPECIFIC_MAP, CARD_RANK_STR
+        from rlcard.games.doudizhu.utils import ACTION_LIST, ACTION_SPACE
+        from rlcard.games.doudizhu.utils import encode_cards
+        from rlcard.games.doudizhu.utils import cards2str, cards2str_with_suit
+        from rlcard.games.doudizhu import Game
+        self._encode_cards = encode_cards
+        self._cards2str = cards2str
+        self._cards2str_with_suit = cards2str_with_suit
+        self._SPECIFIC_MAP = SPECIFIC_MAP
+        self._CARD_RANK_STR = CARD_RANK_STR
+        self._ACTION_LIST = ACTION_LIST
+        self._ACTION_SPACE = ACTION_SPACE
         self.game = Game()
         super().__init__(config)
         self.state_shape = [6, 5, 15]
@@ -33,13 +40,13 @@ class DoudizhuEnv(Env):
         obs = np.zeros((6, 5, 15), dtype=int)
         for index in range(6):
             obs[index][0] = np.ones(15, dtype=int)
-        encode_cards(obs[0], state['current_hand'])
-        encode_cards(obs[1], state['others_hand'])
+        self._encode_cards(obs[0], state['current_hand'])
+        self._encode_cards(obs[1], state['others_hand'])
         for i, action in enumerate(state['trace'][-3:]):
             if action[1] != 'pass':
-                encode_cards(obs[4-i], action[1])
+                self._encode_cards(obs[4-i], action[1])
         if state['played_cards'] is not None:
-            encode_cards(obs[5], state['played_cards'])
+            self._encode_cards(obs[5], state['played_cards'])
 
         extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions()}
         if self.allow_raw_data:
@@ -70,7 +77,7 @@ class DoudizhuEnv(Env):
         Returns:
             action (string): the action that will be passed to the game engine.
         '''
-        abstract_action = ACTION_LIST[action_id]
+        abstract_action = self._ACTION_LIST[action_id]
         # without kicker
         if '*' not in abstract_action:
             return abstract_action
@@ -79,7 +86,7 @@ class DoudizhuEnv(Env):
         specific_actions = []
         kickers = []
         for legal_action in legal_actions:
-            for abstract in SPECIFIC_MAP[legal_action]:
+            for abstract in self._SPECIFIC_MAP[legal_action]:
                 main = abstract.strip('*')
                 if abstract == abstract_action:
                     specific_actions.append(legal_action)
@@ -93,7 +100,7 @@ class DoudizhuEnv(Env):
             for action in self.game.judger.playable_cards[player_id]:
                 if kicker in action:
                     score += 1
-            kicker_scores.append(score+CARD_RANK_STR.index(kicker[0]))
+            kicker_scores.append(score+self._CARD_RANK_STR.index(kicker[0]))
         min_index = 0
         min_score = kicker_scores[0]
         for index, score in enumerate(kicker_scores):
@@ -112,8 +119,8 @@ class DoudizhuEnv(Env):
         legal_actions = self.game.state['actions']
         if legal_actions:
             for action in legal_actions:
-                for abstract in SPECIFIC_MAP[action]:
-                    action_id = ACTION_SPACE[abstract]
+                for abstract in self._SPECIFIC_MAP[action]:
+                    action_id = self._ACTION_SPACE[abstract]
                     if action_id not in legal_action_id:
                         legal_action_id.append(action_id)
         return legal_action_id
@@ -125,8 +132,8 @@ class DoudizhuEnv(Env):
             (dict): A dictionary of all the perfect information of the current state
         '''
         state = {}
-        state['hand_cards_with_suit'] = [cards2str_with_suit(player.current_hand) for player in self.game.players]
-        state['hand_cards'] = [cards2str(player.current_hand) for player in self.game.players]
+        state['hand_cards_with_suit'] = [self._cards2str_with_suit(player.current_hand) for player in self.game.players]
+        state['hand_cards'] = [self._cards2str(player.current_hand) for player in self.game.players]
         state['landlord'] = self.game.state['landlord']
         state['trace'] = self.game.state['trace']
         state['current_player'] = self.game.round.current_player

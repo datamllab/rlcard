@@ -1,7 +1,6 @@
 import numpy as np
 
 from rlcard.envs import Env
-from rlcard import models
 from rlcard.games.uno import Game
 from rlcard.games.uno.utils import encode_hand, encode_target
 from rlcard.games.uno.utils import ACTION_SPACE, ACTION_LIST
@@ -21,6 +20,7 @@ class UnoEnv(Env):
         Returns:
             model (Model): A Model object
         '''
+        from rlcard import models
         return models.load('uno-rule-v1')
 
     def _extract_state(self, state):

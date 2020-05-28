@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import os
 import csv
 
@@ -62,6 +61,7 @@ class Logger(object):
 def plot(csv_path, save_path, algorithm):
     ''' Read data from csv file and plot the results
     '''
+    import matplotlib.pyplot as plt
     with open(csv_path) as csvfile:
         print(csv_path)
         reader = csv.DictReader(csvfile)
