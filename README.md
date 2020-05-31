@@ -12,7 +12,7 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Resources: [Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
 
 **News:**
-*   Thanks for the contribution of [@Clarit7](https://github.com/Clarit7) for the Limit Hold'em human interface.
+*   Thanks for the contribution of [@Clarit7](https://github.com/Clarit7) for the Blackjack and Limit Hold'em human interface.
 *   Now RLCard supports environment local seeding and multiprocessing. Thanks for the testing scripts provided by [@weepingwillowben](https://github.com/weepingwillowben).
 *   Human interface of NoLimit Holdem available. The action space of NoLimit Holdem has been abstracted. Thanks for the contribution of [@AdrianP-](https://github.com/AdrianP-).
 *   New game Gin Rummy and human GUI available. Thanks for the contribution of [@billh0420](https://github.com/billh0420).
