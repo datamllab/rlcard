@@ -20,7 +20,7 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 
 ## Cite this work
 If you find this repo useful, you may cite:
-```
+```bibtex
 @article{zha2019rlcard,
   title={RLCard: A Toolkit for Reinforcement Learning in Card Games},
   author={Zha, Daochen and Lai, Kwei-Herng and Cao, Yuanpu and Huang, Songyi and Wei, Ruzhe and Guo, Junyu and Hu, Xia},
