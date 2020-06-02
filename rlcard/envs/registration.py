@@ -10,6 +10,7 @@ DEFAULT_CONFIG = {
         'record_action' : False,
         'seed': None,
         'env_num': 1,
+        'num_players': 1,
         }
 
 class EnvSpec(object):
