@@ -5,13 +5,13 @@ import tensorflow as tf
 import os
 
 import rlcard
-from rlcard.agents.dqn_agent import DQNAgent
-from rlcard.utils.utils import set_global_seed, tournament
-from rlcard.utils.logger import Logger
+from rlcard.agents import DQNAgent
+from rlcard.utils import set_global_seed, tournament
+from rlcard.utils import Logger
 
 # Make environment
-env = rlcard.make('blackjack')
-eval_env = rlcard.make('blackjack')
+env = rlcard.make('blackjack', config={'seed': 0})
+eval_env = rlcard.make('blackjack', config={'seed': 0})
 
 # Set the iterations numbers and how frequently we evaluate performance
 evaluate_every = 100

@@ -4,16 +4,16 @@
     Date created: 2/12/2020
 '''
 
+import numpy as np
+
 from rlcard.core import Game
-from rlcard.games.gin_rummy.player import GinRummyPlayer
-from rlcard.games.gin_rummy.round import GinRummyRound
-from rlcard.games.gin_rummy.utils.settings import Settings, DealerForRound
 
-from typing import List
+from .player import GinRummyPlayer
+from .round import GinRummyRound
+from .judge import GinRummyJudge
+from .utils.settings import Settings, DealerForRound
 
-from rlcard.games.gin_rummy.utils.action_event import *
-
-import random
+from .utils.action_event import *
 
 
 class GinRummyGame(Game):
@@ -24,20 +24,22 @@ class GinRummyGame(Game):
         '''Initialize the class GinRummyGame
         '''
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
+        self.judge = GinRummyJudge(game=self)
         self.settings = Settings()
-        self.actions = None  # must reset in init_game
-        self.round = None  # must reset in init_game
+        self.actions = None  # type: List[ActionEvent] or None # must reset in init_game
+        self.round = None  # round: GinRummyRound or None, must reset in init_game
 
     def init_game(self):
         ''' Initialize all characters in the game and start round 1
         '''
-        dealer_id = random.choice([0, 1])
+        dealer_id = self.np_random.choice([0, 1])
         if self.settings.dealer_for_round == DealerForRound.North:
             dealer_id = 0
         elif self.settings.dealer_for_round == DealerForRound.South:
             dealer_id = 1
         self.actions = []
-        self.round = GinRummyRound(dealer_id=dealer_id)
+        self.round = GinRummyRound(dealer_id=dealer_id, np_random=self.np_random)
         for i in range(2):
             num = 11 if i == 0 else 10
             player = self.round.players[(dealer_id + 1 + i) % 2]
@@ -49,21 +51,21 @@ class GinRummyGame(Game):
     def step(self, action: ActionEvent):
         ''' Perform game action and return next player number, and the state for next player
         '''
-        if type(action) is ScoreNorthPlayerAction:
+        if isinstance(action, ScoreNorthPlayerAction):
             self.round.score_player_0(action)
-        elif type(action) is ScoreSouthPlayerAction:
+        elif isinstance(action, ScoreSouthPlayerAction):
             self.round.score_player_1(action)
-        elif type(action) is DrawCardAction:
+        elif isinstance(action, DrawCardAction):
             self.round.draw_card(action)
-        elif type(action) is PickUpDiscardAction:
+        elif isinstance(action, PickUpDiscardAction):
             self.round.pick_up_discard(action)
-        elif type(action) is DeclareDeadHandAction:
+        elif isinstance(action, DeclareDeadHandAction):
             self.round.declare_dead_hand(action)
-        elif type(action) is GinAction:
-            self.round.gin(action)
-        elif type(action) is DiscardAction:
+        elif isinstance(action, GinAction):
+            self.round.gin(action, going_out_deadwood_count=self.settings.going_out_deadwood_count)
+        elif isinstance(action, DiscardAction):
             self.round.discard(action)
-        elif type(action) is KnockAction:
+        elif isinstance(action, KnockAction):
             self.round.knock(action)
         else:
             raise Exception('Unknown step action={}'.format(action))
@@ -118,18 +120,19 @@ class GinRummyGame(Game):
             opponent_id = (player_id + 1) % 2
             opponent = self.round.players[opponent_id]
             known_cards = opponent.known_cards
-            if type(last_action) is ScoreNorthPlayerAction or type(last_action) is ScoreSouthPlayerAction:
+            if isinstance(last_action, ScoreNorthPlayerAction) or isinstance(last_action, ScoreSouthPlayerAction):
                 known_cards = opponent.hand
             unknown_cards = self.round.dealer.stock_pile + [card for card in opponent.hand if card not in known_cards]
             state['player_id'] = self.round.current_player_id
-            state['hand'] = self.round.players[self.round.current_player_id].hand
-            state['top_discard'] = top_discard
-            state['dead_cards'] = dead_cards
-            state['opponent_known_cards'] = known_cards
-            state['unknown_cards'] = unknown_cards
+            state['hand'] = [x.get_index() for x in self.round.players[self.round.current_player_id].hand]
+            state['top_discard'] = [x.get_index() for x in top_discard]
+            state['dead_cards'] = [x.get_index() for x in dead_cards]
+            state['opponent_known_cards'] = [x.get_index() for x in known_cards]
+            state['unknown_cards'] = [x.get_index() for x in unknown_cards]
         return state
 
-    def decode_action(self, action_id) -> ActionEvent:  # FIXME 200213 should return str
+    @staticmethod
+    def decode_action(action_id) -> ActionEvent:  # FIXME 200213 should return str
         ''' Action id -> the action_event in the game.
 
         Args:

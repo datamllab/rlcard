@@ -2,6 +2,7 @@ import unittest
 
 import rlcard
 from rlcard.envs.registration import register, make
+from .determism_util import is_deterministic
 
 
 class TestRegistration(unittest.TestCase):
@@ -14,7 +15,7 @@ class TestRegistration(unittest.TestCase):
     def test_make(self):
         register(env_id='test_make', entry_point='rlcard.envs.blackjack:BlackjackEnv')
         env = rlcard.make('test_make')
-        _, player = env.init_game()
+        _, player = env.reset()
         self.assertEqual(player, 0)
         with self.assertRaises(ValueError):
             make('test_random_make')

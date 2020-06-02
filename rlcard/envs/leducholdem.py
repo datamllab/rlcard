@@ -3,10 +3,9 @@ import os
 import numpy as np
 
 import rlcard
-from rlcard.envs.env import Env
-from rlcard.games.leducholdem.game import LeducholdemGame as Game
-from rlcard.utils.utils import *
-from rlcard import models
+from rlcard.envs import Env
+from rlcard.games.leducholdem import Game
+from rlcard.utils import *
 
 
 class LeducholdemEnv(Env):
@@ -19,7 +18,7 @@ class LeducholdemEnv(Env):
         self.game = Game()
         super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']
-        self.state_shape = [34]
+        self.state_shape = [36]
 
         with open(os.path.join(rlcard.__path__[0], 'games/leducholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
@@ -30,6 +29,7 @@ class LeducholdemEnv(Env):
         Returns:
             model (Model): A Model object
         '''
+        from rlcard import models
         return models.load('leduc-holdem-cfr')
 
     def _get_legal_actions(self):
@@ -58,7 +58,7 @@ class LeducholdemEnv(Env):
 
         public_card = state['public_card']
         hand = state['hand']
-        obs = np.zeros(34)
+        obs = np.zeros(36)
         obs[self.card2index[hand]] = 1
         if public_card:
             obs[self.card2index[public_card]+3] = 1
@@ -109,6 +109,7 @@ class LeducholdemEnv(Env):
         state['chips'] = [self.game.players[i].in_chips for i in range(self.player_num)]
         state['public_card'] = self.game.public_card.get_index() if self.game.public_card else None
         state['hand_cards'] = [self.game.players[i].hand.get_index() for i in range(self.player_num)]
+        state['current_round'] = self.game.round_counter
         state['current_player'] = self.game.game_pointer
         state['legal_actions'] = self.game.get_legal_actions()
         return state

@@ -1,4 +1,3 @@
-import random
 import numpy as np
 
 from rlcard.core import Card, Player
@@ -29,18 +28,19 @@ def init_54_deck():
     return res
 
 
-def get_random_cards(cards, num, seed=None):
+def get_random_cards(cards, num, np_random=None):
     ''' Randomly get a number of chosen cards out of a list of cards
 
     Args:
         cards (list): List of Card object
         num (int): The  number of cards to be chosen
-        seed (int): Optional, random seed
 
     Returns:
         (list): A list of chosen cards
         (list): A list of remained cards
     '''
+    if not np_random:
+        np_random = np.random.RandomState()
     if not num> 0:
         raise AssertionError('Invalid input number')
     if not num <= len(cards):
@@ -48,7 +48,7 @@ def get_random_cards(cards, num, seed=None):
     remained_cards = []
     chosen_cards = []
     remained_cards = cards.copy()
-    random.Random(seed).shuffle(remained_cards)
+    np_random.shuffle(remained_cards)
     chosen_cards = remained_cards[:num]
     remained_cards = remained_cards[num:]
     return chosen_cards, remained_cards
@@ -174,7 +174,7 @@ def is_in_cards(origin_cards, check_cards):
     check_cards_pos = set()
     for check_card in check_cards:
         found = False
-        for i in range(len(origin_cards)):
+        for i, _ in enumerate(origin_cards):
             if i in check_cards_pos:
                 continue
             if check_card.rank == origin_cards[i].rank and check_card.suit == origin_cards[i].suit:
@@ -334,6 +334,7 @@ def set_global_seed(seed):
             import torch
             torch.manual_seed(seed)
         np.random.seed(seed)
+        import random
         random.seed(seed)
 
 def remove_illegal(action_probs, legal_actions):
@@ -381,11 +382,19 @@ def tournament(env, num):
         A list of avrage payoffs for each player
     '''
     payoffs = [0 for _ in range(env.player_num)]
-    for _ in range(num):
+    counter = 0
+    while counter < num:
         _, _payoffs = env.run(is_training=False)
-        for i in range(len(payoffs)):
-            payoffs[i] += _payoffs[i]
-    for i in range(len(payoffs)):
-        payoffs[i] /= num
+        if isinstance(_payoffs, list):
+            for _p in _payoffs:
+                for i, _ in enumerate(payoffs):
+                    payoffs[i] += _p[i]
+                counter += 1
+        else:
+            for i, _ in enumerate(payoffs):
+                payoffs[i] += _payoffs[i]
+            counter += 1
+    for i, _ in enumerate(payoffs):
+        payoffs[i] /= counter
     return payoffs
 

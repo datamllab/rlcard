@@ -2,8 +2,8 @@
 '''
 
 import rlcard
-from rlcard.agents.limit_holdem_human_agent import HumanAgent
-from rlcard.agents.random_agent import RandomAgent
+from rlcard.agents import LimitholdemHumanAgent as HumanAgent
+from rlcard.agents import RandomAgent
 from rlcard.utils.utils import print_card
 
 # Make environment and enable human mode

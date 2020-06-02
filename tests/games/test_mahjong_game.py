@@ -69,7 +69,7 @@ class TestMahjongMethods(unittest.TestCase):
         self.assertEqual(success, False)
 
     def test_player_get_player_id(self):
-        player = Player(0)
+        player = Player(0, np.random.RandomState())
         self.assertEqual(0, player.get_player_id())
 
 if __name__ == '__main__':

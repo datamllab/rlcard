@@ -3,8 +3,9 @@
 '''
 
 import rlcard
-from rlcard.agents.blackjack_human_agent import HumanAgent
-from rlcard.agents.random_agent import RandomAgent
+from rlcard.agents import RandomAgent as RandomAgent
+from rlcard.agents import BlackjackHumanAgent as HumanAgent
+
 from rlcard.utils.utils import print_card
 
 # Make environment and enable human mode

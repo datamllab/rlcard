@@ -17,3 +17,7 @@ If this your first time to contribute to a project, kindly follow the following 
 *   Make changes in your computer.
 *   Commit and push your local changes to your local repo.
 *   Send a pull request to merge your local branch to the branches in RLCard project.
+
+## Testing Your Code
+
+We strongly encourage you to write the testing code in parallel with your development. We use `unittest` in RLCard. An example is [Blackjack environment testing](tests/envs/test_blackjack_env.py).

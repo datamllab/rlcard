@@ -1,4 +1,4 @@
-
+import numpy as np
 
 class Hand:
     def __init__(self, all_cards):
@@ -458,13 +458,22 @@ def determine_winner(key_index, hands, all_players, potential_winner_index):
 
     '''
     count = 0
+    losers = []
     winner = [1]*len(hands)
     for _ in key_index:
         index_winner = compare_ranks(_, hands)
+        for loser in losers:
+            index_winner.insert(loser, 0)
         for _ in enumerate(winner):
             if winner[_[0]] == 1:
                 winner[_[0]] = index_winner[_[0]]
             if winner[_[0]] == 0:
+                if _[0] not in losers:
+                    i = _[0]
+                    i = i - np.sum(list(map(lambda x: x < i, losers)))
+                    i = int(i)
+                    del hands[i]
+                    losers.append(_[0])
                 continue
         if winner.count(1) == 1:
             break

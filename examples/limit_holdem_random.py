@@ -2,11 +2,11 @@
 '''
 
 import rlcard
-from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.utils import *
+from rlcard.agents import RandomAgent
+from rlcard.utils import set_global_seed
 
 # Make environment
-env = rlcard.make('limit-holdem')
+env = rlcard.make('limit-holdem', config={'seed': 0})
 episode_num = 2
 
 # Set a global seed

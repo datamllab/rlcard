@@ -4,7 +4,6 @@
 import os
 import json
 from collections import OrderedDict
-import numpy as np
 import threading
 import collections
 
@@ -117,7 +116,7 @@ def get_landlord_score(current_hand):
     return score
 
 
-def get_optimal_action(probs, legal_actions):
+def get_optimal_action(probs, legal_actions, np_random):
     ''' Determine the optimal action from legal actions
     according to the probabilities of abstract actions.
 
@@ -141,9 +140,20 @@ def get_optimal_action(probs, legal_actions):
     optimal_actions = [legal_actions[index] for index,
                        prob in enumerate(action_probs) if prob == optimal_prob]
     if len(optimal_actions) > 1:
-        return np.random.choice(optimal_actions)
+        return np_random.choice(optimal_actions)
     return optimal_actions[0]
 
+
+def cards2str_with_suit(cards):
+    ''' Get the corresponding string representation of cards with suit
+
+    Args:
+        cards (list): list of Card objects
+
+    Returns:
+        string: string representation of cards
+    '''
+    return ' '.join([card.suit+card.rank for card in cards])
 
 def cards2str(cards):
     ''' Get the corresponding string representation of cards
@@ -162,8 +172,11 @@ def cards2str(cards):
             response += card.rank
     return response
 
-_local_objs = threading.local()
-_local_objs.cached_candidate_cards = None
+class LocalObjs(threading.local):
+    def __init__(self):
+        self.cached_candidate_cards = None
+_local_objs = LocalObjs()
+
 def contains_cards(candidate, target):
     ''' Check if cards of candidate contains cards of target.
 

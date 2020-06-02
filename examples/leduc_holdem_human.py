@@ -3,10 +3,10 @@
 
 import rlcard
 from rlcard import models
-from rlcard.agents.leduc_holdem_human_agent import HumanAgent
-from rlcard.utils.utils import print_card
+from rlcard.agents import LeducholdemHumanAgent as HumanAgent
+from rlcard.utils import print_card
 
-# Make environment and enable human mode
+# Make environment
 # Set 'record_action' to True because we need it to print results
 env = rlcard.make('leduc-holdem', config={'record_action': True})
 human_agent = HumanAgent(env.action_num)

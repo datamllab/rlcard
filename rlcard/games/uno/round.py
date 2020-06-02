@@ -1,18 +1,17 @@
-import numpy as np
-
 from rlcard.games.uno.card import UnoCard
 from rlcard.games.uno.utils import cards2list, WILD, WILD_DRAW_4
 
 
 class UnoRound(object):
 
-    def __init__(self, dealer, num_players):
+    def __init__(self, dealer, num_players, np_random):
         ''' Initialize the round class
 
         Args:
             dealer (object): the object of UnoDealer
             num_players (int): the number of players in game
         '''
+        self.np_random = np_random
         self.dealer = dealer
         self.target = None
         self.current_player = 0
@@ -31,7 +30,7 @@ class UnoRound(object):
         '''
         top = self.dealer.flip_top_card()
         if top.trait == 'wild':
-            top.color = np.random.choice(UnoCard.info['color'])
+            top.color = self.np_random.choice(UnoCard.info['color'])
         self.target = top
         self.played_cards.append(top)
         return top
@@ -103,7 +102,6 @@ class UnoRound(object):
         if target.type == 'wild':
             for card in hand:
                 if card.type == 'wild':
-                    #card.color = np.random.choice(UnoCard.info['color'])
                     if card.trait == 'wild_draw_4':
                         if wild_draw_4_flag == 0:
                             wild_draw_4_flag = 1
@@ -177,7 +175,7 @@ class UnoRound(object):
 
         # draw a wild card
         if card.type == 'wild':
-            card.color = np.random.choice(UnoCard.info['color'])
+            card.color = self.np_random.choice(UnoCard.info['color'])
             self.target = card
             self.played_cards.append(card)
             self.current_player = (self.current_player + self.direction) % self.num_players

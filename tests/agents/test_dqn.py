@@ -38,13 +38,13 @@ class TestDQN(unittest.TestCase):
     def test_train(self):
 
         memory_init_size = 100
-        step_num = 1500
+        step_num = 500
 
         sess = tf.InteractiveSession()
         tf.Variable(0, name='global_step', trainable=False)
         agent = DQNAgent(sess=sess,
                          scope='dqn',
-                         replay_memory_size = 500,
+                         replay_memory_size = 200,
                          replay_memory_init_size=memory_init_size,
                          update_target_estimator_every=100,
                          state_shape=[2],

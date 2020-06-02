@@ -4,13 +4,13 @@
 
 import functools
 from heapq import merge
+import numpy as np
 
-from rlcard.games.doudizhu.judger import cards2str
-from rlcard.games.simpledoudizhu.player import SimpleDoudizhuPlayer as Player
-from rlcard.games.simpledoudizhu.round import SimpleDoudizhuRound as Round
-from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
-from rlcard.games.doudizhu.utils import doudizhu_sort_card
-from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
+from rlcard.games.simpledoudizhu import Player
+from rlcard.games.simpledoudizhu import Round
+from rlcard.games.doudizhu import Judger
+from rlcard.games.doudizhu.utils import cards2str, doudizhu_sort_card
+from rlcard.utils import get_downstream_player_id, get_upstream_player_id
 
 
 class SimpleDoudizhuGame(object):
@@ -22,6 +22,7 @@ class SimpleDoudizhuGame(object):
 
     def __init__(self, allow_step_back=False):
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
         self.num_players = 3
 
     def init_game(self):
@@ -36,15 +37,15 @@ class SimpleDoudizhuGame(object):
         self.history = []
 
         # initialize players
-        self.players = [Player(num)
+        self.players = [Player(num, self.np_random)
                         for num in range(self.num_players)]
 
         # initialize round to deal cards and determine landlord
-        self.round = Round()
+        self.round = Round(self.np_random)
         self.round.initiate(self.players)
 
         # initialize judger
-        self.judger = Judger(self.players)
+        self.judger = Judger(self.players, self.np_random)
 
         # get state of first player
         player_id = self.round.current_player
@@ -173,15 +174,15 @@ class SimpleDoudizhuGame(object):
             player, self.players)]
         others_hand = merge(player_up.current_hand, player_down.current_hand, key=functools.cmp_to_key(doudizhu_sort_card))
         return cards2str(others_hand)
-'''
-if __name__ == '__main__':
-    import numpy as np
-    game = SimpleDoudizhuGame()
-    state, player_id = game.init_game()
-    print(state)
-    while not game.is_over():
-        action = np.random.choice(list(state['actions']))
-        print(action)
-        state, next_player_id = game.step(action)
-        print(state)
-'''
+
+#if __name__ == '__main__':
+#    import numpy as np
+#    game = SimpleDoudizhuGame()
+#    state, player_id = game.init_game()
+#    print(state)
+#    while not game.is_over():
+#        action = np.random.choice(list(state['actions']))
+#        print(action)
+#        state, next_player_id = game.step(action)
+#        print(state)
+

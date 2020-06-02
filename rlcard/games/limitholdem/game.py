@@ -1,10 +1,10 @@
 from copy import deepcopy, copy
 import numpy as np
 
-from rlcard.games.limitholdem.dealer import LimitholdemDealer as Dealer
-from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
-from rlcard.games.limitholdem.judger import LimitholdemJudger as Judger
-from rlcard.games.limitholdem.round import LimitholdemRound as Round
+from rlcard.games.limitholdem import Dealer
+from rlcard.games.limitholdem import Player, PlayerStatus
+from rlcard.games.limitholdem import Judger
+from rlcard.games.limitholdem import Round
 
 class LimitholdemGame(object):
 
@@ -12,6 +12,7 @@ class LimitholdemGame(object):
         ''' Initialize the class limitholdem Game
         '''
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
 
         # Some configarations of the game
         # These arguments can be specified for creating new games
@@ -41,13 +42,13 @@ class LimitholdemGame(object):
                 (int): Current player's id
         '''
         # Initilize a dealer that can deal cards
-        self.dealer = Dealer()
+        self.dealer = Dealer(self.np_random)
 
         # Initilize two players to play the game
-        self.players = [Player(i) for i in range(self.num_players)]
+        self.players = [Player(i, self.np_random) for i in range(self.num_players)]
 
         # Initialize a judger class which will decide who wins in the end
-        self.judger = Judger()
+        self.judger = Judger(self.np_random)
 
         # Deal cards to each  player to prepare for the first round
         for i in range(2 * self.num_players):
@@ -57,7 +58,7 @@ class LimitholdemGame(object):
         self.public_cards = []
 
         # Randomly choose a small blind and a big blind
-        s = np.random.randint(0, self.num_players)
+        s = self.np_random.randint(0, self.num_players)
         b = (s + 1) % self.num_players
         self.players[b].in_chips = self.big_blind
         self.players[s].in_chips = self.small_blind
@@ -69,7 +70,8 @@ class LimitholdemGame(object):
         # be passed to the round for processing.
         self.round = Round(raise_amount=self.raise_amount,
                            allowed_raise_num=self.allowed_raise_num,
-                           num_players=self.num_players)
+                           num_players=self.num_players,
+                           np_random=self.np_random)
 
         self.round.start_new_round(game_pointer=self.game_pointer, raised=[p.in_chips for p in self.players])
 
@@ -190,14 +192,13 @@ class LimitholdemGame(object):
 
         return state
 
-
     def is_over(self):
         ''' Check if the game is over
 
         Returns:
             (boolean): True if the game is over
         '''
-        alive_players = [1 if p.status=='alive' else 0 for p in self.players]
+        alive_players = [1 if p.status in (PlayerStatus.ALIVE, PlayerStatus.ALLIN) else 0 for p in self.players]
         # If only one player is alive, the game is over.
         if sum(alive_players) == 1:
             return True
@@ -213,7 +214,7 @@ class LimitholdemGame(object):
         Returns:
             (list): Each entry corresponds to the payoff of one player
         '''
-        hands = [p.hand + self.public_cards if p.status=='alive' else None for p in self.players]
+        hands = [p.hand + self.public_cards if p.status == PlayerStatus.ALIVE else None for p in self.players]
         chips_payoffs = self.judger.judge_game(self.players, hands)
         payoffs = np.array(chips_payoffs) / (self.big_blind)
         return payoffs

@@ -3,9 +3,8 @@ import os
 import numpy as np
 
 import rlcard
-from rlcard.envs.env import Env
-from rlcard.games.limitholdem.game import LimitholdemGame as Game
-from rlcard import models
+from rlcard.envs import Env
+from rlcard.games.limitholdem import Game
 
 class LimitholdemEnv(Env):
     ''' Limitholdem Environment
@@ -95,6 +94,7 @@ class LimitholdemEnv(Env):
         Returns:
             model (Model): A Model object
         '''
+        from rlcard import models
         return models.load('limit-holdem-rule-v1')
 
     def get_perfect_information(self):
@@ -110,4 +110,3 @@ class LimitholdemEnv(Env):
         state['current_player'] = self.game.game_pointer
         state['legal_actions'] = self.game.get_legal_actions()
         return state
-

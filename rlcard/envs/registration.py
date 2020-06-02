@@ -1,4 +1,5 @@
 import importlib
+from rlcard.envs import VecEnv
 
 # Default Config
 DEFAULT_CONFIG = {
@@ -7,6 +8,8 @@ DEFAULT_CONFIG = {
         'single_agent_mode' : False,
         'active_player' : 0,
         'record_action' : False,
+        'seed': None,
+        'env_num': 1,
         }
 
 class EnvSpec(object):
@@ -85,6 +88,7 @@ def make(env_id, config={}):
     Args:
         env_id (string): The name of the environment
         config (dict): A dictionary of the environment settings
+        env_num (int): The number of environments
     '''
     _config = DEFAULT_CONFIG.copy()
     for key in config:
@@ -93,5 +97,7 @@ def make(env_id, config={}):
     # Do some checkings on the modes
     if not isinstance(_config['active_player'], int) or _config['active_player'] < 0:
         raise ValueError('Active player should be a non-negative integer')
-
-    return registry.make(env_id, _config)
+    if _config['env_num'] == 1:
+        return registry.make(env_id, _config)
+    else:
+        return VecEnv(env_id, _config)

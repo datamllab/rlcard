@@ -3,15 +3,18 @@ import numpy as np
 
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
-
+from .determism_util import is_deterministic
 
 class TestBlackjackEnv(unittest.TestCase):
 
     def test_init_and_extract_state(self):
         env = rlcard.make('blackjack')
-        state, _ = env.init_game()
+        state, _ = env.reset()
         for score in state['obs']:
             self.assertLessEqual(score, 30)
+
+    def test_is_deterministic(self):
+        self.assertTrue(is_deterministic('blackjack'))
 
     def test_decode_action(self):
         env = rlcard.make('blackjack')
@@ -28,7 +31,7 @@ class TestBlackjackEnv(unittest.TestCase):
     def test_get_payoffs(self):
         env = rlcard.make('blackjack')
         for _ in range(100):
-            env.init_game()
+            env.reset()
             while not env.is_over():
                 action = np.random.choice([0, 1])
                 env.step(action)
@@ -38,7 +41,7 @@ class TestBlackjackEnv(unittest.TestCase):
 
     def test_step_back(self):
         env = rlcard.make('blackjack', config={'allow_step_back':True})
-        _, player_id = env.init_game()
+        _, player_id = env.reset()
         env.step(1)
         _, back_player_id = env.step_back()
         self.assertEqual(player_id, back_player_id)
@@ -53,7 +56,7 @@ class TestBlackjackEnv(unittest.TestCase):
         env.set_agents([RandomAgent(env.action_num)])
         trajectories, _ = env.run(is_training=False)
         self.assertEqual(len(trajectories), 1)
-        trajectories, _ = env.run(is_training=True, seed=1)
+        trajectories, _ = env.run(is_training=True)
         self.assertEqual(len(trajectories), 1)
 
 if __name__ == '__main__':

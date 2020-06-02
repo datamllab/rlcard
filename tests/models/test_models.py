@@ -6,6 +6,10 @@ from rlcard.models.leducholdem_rule_models import LeducHoldemRuleModelV1, LeducH
 
 from rlcard.models.limitholdem_rule_models import LimitholdemRuleModelV1
 from rlcard.models.doudizhu_rule_models import DouDizhuRuleModelV1
+
+from rlcard.models.gin_rummy_rule_models import GinRummyNoviceRuleModel
+
+
 class TestModel(unittest.TestCase):
 
     def test_model(self):
@@ -112,6 +116,12 @@ class TestModel(unittest.TestCase):
         self.assertEqual(action, '44455')
         action = agent.step({'raw_obs': {'actions': ['pass', 'TTTT', 'BR'], 'self': 2, 'landlord': 0, 'trace':[(0, '33344'), (1, '55566')]}})
         self.assertEqual(action, 'pass')
+
+    def test_gin_rummy_novice_model(self):
+        model = GinRummyNoviceRuleModel()
+        self.assertIsInstance(model, GinRummyNoviceRuleModel)
+        self.assertIsInstance(model.agents, list)
+
 
 if __name__ == '__main__':
     unittest.main()
