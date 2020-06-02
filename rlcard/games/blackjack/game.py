@@ -38,16 +38,6 @@ class BlackjackGame(object):
         for i in range(self.num_players):
             self.player[i].status, self.player[i].score = self.judger.judge_round(self.player[i])
 
-        """
-        self.dealer = Dealer(self.np_random)
-        self.player = Player(0, self.np_random)
-        self.judger = Judger(self.np_random)
-        self.dealer.deal_card(self.player)
-        self.dealer.deal_card(self.dealer)
-        self.dealer.deal_card(self.player)
-        self.dealer.deal_card(self.dealer)
-        self.player.status, self.player.score = self.judger.judge_round(self.player)
-        """
         self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
 
         self.winner = {'dealer':0}
@@ -107,11 +97,6 @@ class BlackjackGame(object):
             self.game_pointer = 0
         else:
             self.game_pointer += 1
-
-        """
-        for i in range(self.num_players):
-            self.judger.judge_round(self.player[i])
-        """
 
         return next_state, self.game_pointer
 
