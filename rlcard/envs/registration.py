@@ -10,7 +10,6 @@ DEFAULT_CONFIG = {
         'record_action' : False,
         'seed': None,
         'env_num': 1,
-        'num_players': 1,
         }
 
 class EnvSpec(object):
@@ -37,7 +36,6 @@ class EnvSpec(object):
         '''
         env = self._entry_point(config)
         return env
-
 
 class EnvRegistry(object):
     ''' Register an environment (game) by ID

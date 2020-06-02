@@ -3,6 +3,9 @@ import numpy as np
 from rlcard.envs import Env
 from rlcard.games.blackjack import Game
 
+DEFAULT_GAME_CONFIG = {
+        'game_player_num': 1,
+        }
 
 class BlackjackEnv(Env):
     ''' Blackjack Environment
@@ -11,7 +14,9 @@ class BlackjackEnv(Env):
     def __init__(self, config):
         ''' Initialize the Blackjack environment
         '''
-        self.game = Game(num_players=config['num_players'])
+        self.name = 'blackjack'
+        self.default_game_config = DEFAULT_GAME_CONFIG
+        self.game = Game()
         super().__init__(config)
         self.rank2score = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":10, "Q":10, "K":10}
         self.actions = ['hit', 'stand']
@@ -73,7 +78,7 @@ class BlackjackEnv(Env):
         '''
         payoffs = []
 
-        for i in range(self.num_players):
+        for i in range(self.player_num):
             if self.game.winner['player' + str(i)] == 2:
                 payoffs.append(1)  # Dealer bust or player get higher score than dealer
             elif self.game.winner['player' + str(i)] == 1:

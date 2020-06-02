@@ -7,12 +7,16 @@ from rlcard.games.blackjack import Judger
 
 class BlackjackGame(object):
 
-    def __init__(self, allow_step_back=False, num_players = 1):
+    def __init__(self, allow_step_back=False):
         ''' Initialize the class Blackjack Game
         '''
         self.allow_step_back = allow_step_back
         self.np_random = np.random.RandomState()
-        self.num_players = num_players
+
+    def configure(self, game_config):
+        ''' Specifiy some game specific parameters, such as player number
+        '''
+        self.player_num = game_config['game_player_num']
 
     def init_game(self):
         ''' Initialilze the game
@@ -23,24 +27,24 @@ class BlackjackGame(object):
         '''
         self.dealer = Dealer(self.np_random)
 
-        self.player = []
-        for i in range(self.num_players):
-            self.player.append(Player(i, self.np_random))
+        self.players = []
+        for i in range(self.player_num):
+            self.players.append(Player(i, self.np_random))
 
         self.judger = Judger(self.np_random)
 
         for i in range(2):
-            for j in range(self.num_players):
-                self.dealer.deal_card(self.player[j])
+            for j in range(self.player_num):
+                self.dealer.deal_card(self.players[j])
             self.dealer.deal_card(self.dealer)
 
-        for i in range(self.num_players):
-            self.player[i].status, self.player[i].score = self.judger.judge_round(self.player[i])
+        for i in range(self.player_num):
+            self.players[i].status, self.players[i].score = self.judger.judge_round(self.players[i])
 
         self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
 
         self.winner = {'dealer': 0}
-        for i in range(self.num_players):
+        for i in range(self.player_num):
             self.winner['player' + str(i)] = 0
 
         self.history = []
@@ -59,7 +63,7 @@ class BlackjackGame(object):
             int: next plater's id
         '''
         if self.allow_step_back:
-            p = deepcopy(self.player[self.game_pointer])
+            p = deepcopy(self.players[self.game_pointer])
             d = deepcopy(self.dealer)
             w = deepcopy(self.winner)
             self.history.append((d, p, w))
@@ -67,34 +71,34 @@ class BlackjackGame(object):
         next_state = {}
         # Play hit
         if action != "stand":
-            self.dealer.deal_card(self.player[self.game_pointer])
-            self.player[self.game_pointer].status, self.player[self.game_pointer].score = self.judger.judge_round(
-                self.player[self.game_pointer])
-            if self.player[self.game_pointer].status == 'bust':
+            self.dealer.deal_card(self.players[self.game_pointer])
+            self.players[self.game_pointer].status, self.players[self.game_pointer].score = self.judger.judge_round(
+                self.players[self.game_pointer])
+            if self.players[self.game_pointer].status == 'bust':
                 # game over, set up the winner, print out dealer's hand
                 self.judger.judge_game(self, self.game_pointer)
         elif action == "stand":
             while self.judger.judge_score(self.dealer.hand) < 17:
                 self.dealer.deal_card(self.dealer)
                 self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
-            self.player[self.game_pointer].status, self.player[self.game_pointer].score = self.judger.judge_round(
-                self.player[self.game_pointer])
+            self.players[self.game_pointer].status, self.players[self.game_pointer].score = self.judger.judge_round(
+                self.players[self.game_pointer])
             self.judger.judge_game(self, self.game_pointer)
 
-        hand = [card.get_index() for card in self.player[self.game_pointer].hand]
+        hand = [card.get_index() for card in self.players[self.game_pointer].hand]
 
         if self.is_over():
             dealer_hand = [card.get_index() for card in self.dealer.hand]
         else:
             dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
 
-        for i in range(self.num_players):
-            next_state['player' + str(i) + ' hand'] = [card.get_index() for card in self.player[i].hand]
+        for i in range(self.player_num):
+            next_state['player' + str(i) + ' hand'] = [card.get_index() for card in self.players[i].hand]
         next_state['dealer hand'] = dealer_hand
         next_state['actions'] = ('hit', 'stand')
         next_state['state'] = (hand, dealer_hand)
 
-        if self.game_pointer >= self.num_players - 1:
+        if self.game_pointer >= self.player_num - 1:
             self.game_pointer = 0
         else:
             self.game_pointer += 1
@@ -109,7 +113,7 @@ class BlackjackGame(object):
         '''
         #while len(self.history) > 0:
         if len(self.history) > 0:
-            self.dealer, self.player[self.game_pointer], self.winner = self.history.pop()
+            self.dealer, self.players[self.game_pointer], self.winner = self.history.pop()
             return True
         return False
 
@@ -119,7 +123,7 @@ class BlackjackGame(object):
         Returns:
             number_of_player (int): blackjack only have 1 player
         '''
-        return self.num_players
+        return self.player_num
 
     @staticmethod
     def get_action_num():
@@ -155,14 +159,14 @@ class BlackjackGame(object):
                 '''
         state = {}
         state['actions'] = ('hit', 'stand')
-        hand = [card.get_index() for card in self.player[player_id].hand]
+        hand = [card.get_index() for card in self.players[player_id].hand]
         if self.is_over():
             dealer_hand = [card.get_index() for card in self.dealer.hand]
         else:
             dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
 
-        for i in range(self.num_players):
-            state['player' + str(i) + ' hand'] = [card.get_index() for card in self.player[i].hand]
+        for i in range(self.player_num):
+            state['player' + str(i) + ' hand'] = [card.get_index() for card in self.players[i].hand]
         state['dealer hand'] = dealer_hand
         state['state'] = (hand, dealer_hand)
 
@@ -177,7 +181,7 @@ class BlackjackGame(object):
         '''
                 I should change here because judger and self.winner is changed too
                 '''
-        for i in range(self.num_players):
+        for i in range(self.player_num):
             if self.winner['player' + str(i)] == 0:
                 return False
 

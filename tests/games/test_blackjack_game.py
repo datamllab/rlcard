@@ -2,43 +2,47 @@ import unittest
 import numpy as np
 
 from rlcard.games.blackjack.game import BlackjackGame as Game
-
+from rlcard.envs.blackjack import DEFAULT_GAME_CONFIG
 
 class TestBlackjackGame(unittest.TestCase):
 
     def test_get_player_num(self):
         game = Game()
+        game.configure(DEFAULT_GAME_CONFIG)
         player_num = game.get_player_num()
         self.assertEqual(player_num, 1)
 
     def test_get_action_num(self):
         game = Game()
+        game.configure(DEFAULT_GAME_CONFIG)
         action_num = game.get_action_num()
         self.assertEqual(action_num, 2)
 
     def test_init_game(self):
         game = Game()
+        game.configure(DEFAULT_GAME_CONFIG)
         state, current_player = game.init_game()
         self.assertEqual(len(game.history), 0)
         self.assertEqual(current_player, 0)
         self.assertEqual(game.winner['dealer'], 0)
-        self.assertEqual(game.winner['player'], 0)
         self.assertEqual(len(state['state'][0]), len(state['state'][1])+1)
 
     def test_step(self):
         game = Game()
+        game.configure(DEFAULT_GAME_CONFIG)
         game.init_game()
         next_state, next_player = game.step('hit')
         self.assertEqual(next_player, 0)
-        if game.player.status != 'bust':
+        if game.players[0].status != 'bust':
             self.assertEqual(len(game.dealer.hand), len(next_state['state'][1])+1)
         else:
             self.assertEqual(len(game.dealer.hand), len(next_state['state'][1]))
         next_state, _ = game.step('stand')
-        self.assertEqual(len(next_state['state'][0]), len(game.player.hand))
+        self.assertEqual(len(next_state['state'][0]), len(game.players[0].hand))
 
     def test_proceed_game(self):
         game = Game()
+        game.configure(DEFAULT_GAME_CONFIG)
         game.init_game()
         while not game.is_over():
             action = np.random.choice(['hit', 'action'])
@@ -47,6 +51,7 @@ class TestBlackjackGame(unittest.TestCase):
 
     def test_step_back(self):
         game = Game(allow_step_back=True)
+        game.configure(DEFAULT_GAME_CONFIG)
         state, _ = game.init_game()
         init_hand = state['state'][0]
         game.step('hit')
@@ -59,6 +64,7 @@ class TestBlackjackGame(unittest.TestCase):
 
     def test_get_state(self):
         game = Game()
+        game.configure(DEFAULT_GAME_CONFIG)
         game.init_game()
         self.assertEqual(len(game.get_state(0)['state'][1]), 1)
         game.step('stand')
