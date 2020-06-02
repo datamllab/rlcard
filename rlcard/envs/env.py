@@ -57,6 +57,9 @@ class Env(object):
         # Set random seed, default is None
         self._seed(config['seed'])
 
+        # Set player number, default is 1
+        self.num_players = config['num_players']
+
     def reset(self):
         '''
         Reset environment in single-agent mode
