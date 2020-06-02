@@ -17,7 +17,7 @@ class TestUtils(unittest.TestCase):
     def test_get_random_cards(self):
         hand = init_54_deck()
         num = 10
-        chosen_cards, remained_cards = get_random_cards(hand, num)
+        chosen_cards, remained_cards = get_random_cards(hand, num, np.random.RandomState())
         self.assertEqual(len(chosen_cards), num)
         self.assertEqual(len(remained_cards), len(hand) - num)
         with self.assertRaises(AssertionError):

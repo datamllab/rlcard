@@ -1,18 +1,19 @@
 import numpy as np
 from copy import deepcopy
 
-from rlcard.games.mahjong.dealer import MahjongDealer as Dealer
-from rlcard.games.mahjong.player import MahjongPlayer as Player
-from rlcard.games.mahjong.round import MahjongRound as Round
-from rlcard.games.mahjong.judger import MahjongJudger as Judger
+from rlcard.games.mahjong import Dealer
+from rlcard.games.mahjong import Player
+from rlcard.games.mahjong import Round
+from rlcard.games.mahjong import Judger
 
 class MahjongGame(object):
 
     def __init__(self, allow_step_back=False):
         '''Initialize the class MajongGame
         '''
-        self.num_players = 4
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
+        self.num_players = 4
 
     def init_game(self):
         ''' Initialilze the game of Mahjong
@@ -26,13 +27,13 @@ class MahjongGame(object):
                 (int): Current player's id
         '''
         # Initialize a dealer that can deal cards
-        self.dealer = Dealer()
+        self.dealer = Dealer(self.np_random)
 
         # Initialize four players to play the game
-        self.players = [Player(i) for i in range(self.num_players)]
+        self.players = [Player(i, self.np_random) for i in range(self.num_players)]
 
-        self.judger = Judger()
-        self.round = Round(self.judger, self.dealer, self.num_players)
+        self.judger = Judger(self.np_random)
+        self.round = Round(self.judger, self.dealer, self.num_players, self.np_random)
 
         # Deal 13 cards to each player to prepare for the game
         for player in self.players:
@@ -145,35 +146,35 @@ class MahjongGame(object):
         #print(win, self.round.current_player, player, cards, pile, count)
         return win
 
-# For test
-if __name__ == '__main__':
-    import time
-    np.random.seed(2)
-    start = time.time()
-    game = MahjongGame()
-    for _ in range(100000):
-        #print('*****init game*****')
-        state, button = game.init_game()
-        i = 0
-        while not game.is_over():
-            i += 1
-            legal_actions = game.get_legal_actions(state)
-            action = np.random.choice(legal_actions)
-            flag=0
-            #if len(legal_actions) < 3:
-            #    flag=1
-            #    print("Before:", state)
-            #    print(game.round.current_player, action)
-            state, button = game.step(action)
-            #if action != 'stand' and flag==1:
-            #    print("After:", state)
-            #    print(state, game.round.current_player)
-            #    exit()
-            #print(button, state)
-        winner_hand = [c.get_str() for c in game.players[game.winner].hand]
-        winnder_pile = [[c.get_str() for c in s] for s in game.players[game.winner].pile]
-        print(_, len(game.dealer.deck), game.winner, winner_hand, winnder_pile)
-        if game.winner != -1:
-            exit()
-    end = time.time()
-    print(end-start)
+## For test
+#if __name__ == '__main__':
+#    import time
+#    np.random.seed(2)
+#    start = time.time()
+#    game = MahjongGame()
+#    for _ in range(100000):
+#        #print('*****init game*****')
+#        state, button = game.init_game()
+#        i = 0
+#        while not game.is_over():
+#            i += 1
+#            legal_actions = game.get_legal_actions(state)
+#            action = np.random.choice(legal_actions)
+#            flag=0
+#            #if len(legal_actions) < 3:
+#            #    flag=1
+#            #    print("Before:", state)
+#            #    print(game.round.current_player, action)
+#            state, button = game.step(action)
+#            #if action != 'stand' and flag==1:
+#            #    print("After:", state)
+#            #    print(state, game.round.current_player)
+#            #    exit()
+#            #print(button, state)
+#        winner_hand = [c.get_str() for c in game.players[game.winner].hand]
+#        winnder_pile = [[c.get_str() for c in s] for s in game.players[game.winner].pile]
+#        print(_, len(game.dealer.deck), game.winner, winner_hand, winnder_pile)
+#        if game.winner != -1:
+#            exit()
+#    end = time.time()
+#    print(end-start)

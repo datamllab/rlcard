@@ -1,24 +1,39 @@
 import numpy as np
 from copy import copy
 
-from rlcard.games.leducholdem.dealer import LeducholdemDealer as Dealer
-from rlcard.games.leducholdem.player import LeducholdemPlayer as Player
-from rlcard.games.leducholdem.judger import LeducholdemJudger as Judger
-from rlcard.games.leducholdem.round import LeducholdemRound as Round
+from rlcard.games.leducholdem import Dealer
+from rlcard.games.leducholdem import Player
+from rlcard.games.leducholdem import Judger
+from rlcard.games.leducholdem import Round
 
-from rlcard.games.limitholdem.game import LimitholdemGame
+from rlcard.games.limitholdem import Game
 
-class LeducholdemGame(LimitholdemGame):
+class LeducholdemGame(Game):
 
     def __init__(self, allow_step_back=False):
         ''' Initialize the class leducholdem Game
         '''
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
+        ''' No big/small blind
         # Some configarations of the game
         # These arguments are fixed in Leduc Hold'em Game
 
         # Raise amount and allowed times
         self.raise_amount = 2
+        self.allowed_raise_num = 2
+
+        self.num_players = 2
+        '''
+        # Some configarations of the game
+        # These arguments can be specified for creating new games
+
+        # Small blind and big blind
+        self.small_blind = 1
+        self.big_blind = 2 * self.small_blind
+
+        # Raise amount and allowed times
+        self.raise_amount = self.big_blind
         self.allowed_raise_num = 2
 
         self.num_players = 2
@@ -35,26 +50,32 @@ class LeducholdemGame(LimitholdemGame):
                 (int): Current player's id
         '''
         # Initilize a dealer that can deal cards
-        self.dealer = Dealer()
+        self.dealer = Dealer(self.np_random)
 
         # Initilize two players to play the game
-        self.players = [Player(i) for i in range(self.num_players)]
+        self.players = [Player(i, self.np_random) for i in range(self.num_players)]
 
         # Initialize a judger class which will decide who wins in the end
-        self.judger = Judger()
+        self.judger = Judger(self.np_random)
 
         # Prepare for the first round
         for i in range(self.num_players):
             self.players[i].hand = self.dealer.deal_card()
-            self.players[i].in_chips = 1
+        # Randomly choose a small blind and a big blind
+        s = self.np_random.randint(0, self.num_players)
+        b = (s + 1) % self.num_players
+        self.players[b].in_chips = self.big_blind
+        self.players[s].in_chips = self.small_blind
         self.public_card = None
-        self.game_pointer = np.random.randint(0, self.num_players)
+        # The player with small blind plays the first
+        self.game_pointer = s
 
         # Initilize a bidding round, in the first round, the big blind and the small blind needs to
         # be passed to the round for processing.
         self.round = Round(raise_amount=self.raise_amount,
                            allowed_raise_num=self.allowed_raise_num,
-                           num_players=self.num_players)
+                           num_players=self.num_players,
+                           np_random=self.np_random)
 
         self.round.start_new_round(game_pointer=self.game_pointer, raised=[p.in_chips for p in self.players])
 
@@ -148,7 +169,7 @@ class LeducholdemGame(LimitholdemGame):
             (list): Each entry corresponds to the payoff of one player
         '''
         chips_payoffs = self.judger.judge_game(self.players, self.public_card)
-        payoffs = np.array(chips_payoffs)
+        payoffs = np.array(chips_payoffs) / (self.big_blind)
         return payoffs
 
     def step_back(self):
@@ -193,4 +214,3 @@ class LeducholdemGame(LimitholdemGame):
 #            print(game_pointer, state)
 #
 #        print(game.get_payoffs())
-

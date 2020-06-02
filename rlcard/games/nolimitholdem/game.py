@@ -1,25 +1,40 @@
+from enum import Enum
+
 import numpy as np
 from copy import deepcopy
-from rlcard.games.limitholdem.game import LimitholdemGame
+from rlcard.games.limitholdem import Game
+from rlcard.games.limitholdem import PlayerStatus
 
-from rlcard.games.nolimitholdem.dealer import NolimitholdemDealer as Dealer
-from rlcard.games.nolimitholdem.player import NolimitholdemPlayer as Player
-from rlcard.games.nolimitholdem.judger import NolimitholdemJudger as Judger
-from rlcard.games.nolimitholdem.round import NolimitholdemRound as Round
+from rlcard.games.nolimitholdem import Dealer
+from rlcard.games.nolimitholdem import Player
+from rlcard.games.nolimitholdem import Judger
+from rlcard.games.nolimitholdem import Round, Action
 
-class NolimitholdemGame(LimitholdemGame):
 
-    def __init__(self, allow_step_back=False):
+class Stage(Enum):
+
+    PREFLOP = 0
+    FLOP = 1
+    TURN = 2
+    RIVER = 3
+    END_HIDDEN = 4
+    SHOWDOWN = 5
+
+
+class NolimitholdemGame(Game):
+
+    def __init__(self, allow_step_back=False, num_players=2):
         ''' Initialize the class nolimitholdem Game
         '''
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
 
         # small blind and big blind
         self.small_blind = 1
         self.big_blind = 2 * self.small_blind
 
         # config players
-        self.num_players = 2
+        self.num_players = num_players
         self.init_chips = 100
 
     def init_game(self):
@@ -34,13 +49,13 @@ class NolimitholdemGame(LimitholdemGame):
                 (int): Current player's id
         '''
         # Initilize a dealer that can deal cards
-        self.dealer = Dealer()
+        self.dealer = Dealer(self.np_random)
 
         # Initilize two players to play the game
-        self.players = [Player(i, self.init_chips) for i in range(self.num_players)]
+        self.players = [Player(i, self.init_chips, self.np_random) for i in range(self.num_players)]
 
         # Initialize a judger class which will decide who wins in the end
-        self.judger = Judger()
+        self.judger = Judger(self.np_random)
 
         # Deal cards to each  player to prepare for the first round
         for i in range(2 * self.num_players):
@@ -48,19 +63,20 @@ class NolimitholdemGame(LimitholdemGame):
 
         # Initilize public cards
         self.public_cards = []
+        self.stage = Stage.PREFLOP
 
         # Randomly choose a big blind and a small blind
-        s = np.random.randint(0, self.num_players)
+        s = self.np_random.randint(0, self.num_players)
         b = (s + 1) % self.num_players
-        self.players[b].in_chips = self.big_blind
-        self.players[s].in_chips = self.small_blind
+        self.players[b].bet(chips=self.big_blind)
+        self.players[s].bet(chips=self.small_blind)
 
         # The player next to the small blind plays the first
         self.game_pointer = (b + 1) % self.num_players
 
         # Initilize a bidding round, in the first round, the big blind and the small blind needs to
         # be passed to the round for processing.
-        self.round = Round(self.num_players, self.big_blind)
+        self.round = Round(self.num_players, self.big_blind, dealer=self.dealer, np_random=self.np_random)
 
         self.round.start_new_round(game_pointer=self.game_pointer, raised=[p.in_chips for p in self.players])
 
@@ -80,7 +96,7 @@ class NolimitholdemGame(LimitholdemGame):
         Returns:
             (list): A list of legal actions
         '''
-        return self.round.get_nolimit_legal_actions(self.players)
+        return self.round.get_nolimit_legal_actions(players=self.players)
 
     def step(self, action):
         ''' Get the next state
@@ -94,6 +110,12 @@ class NolimitholdemGame(LimitholdemGame):
                 (dict): next player's state
                 (int): next plater's id
         '''
+
+        if action not in self.get_legal_actions():
+            print(action, self.get_legal_actions())
+            print(self.get_state(self.game_pointer))
+            raise Exception('Action not allowed')
+
         if self.allow_step_back:
             # First snapshot the current state
             r = deepcopy(self.round)
@@ -107,16 +129,38 @@ class NolimitholdemGame(LimitholdemGame):
         # Then we proceed to the next round
         self.game_pointer = self.round.proceed_round(self.players, action)
 
+        players_in_bypass = [1 if player.status in (PlayerStatus.FOLDED, PlayerStatus.ALLIN) else 0 for player in self.players]
+
         # If a round is over, we deal more public cards
         if self.round.is_over():
             # For the first round, we deal 3 cards
             if self.round_counter == 0:
+                self.stage = Stage.FLOP
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
                 self.public_cards.append(self.dealer.deal_card())
+                if len(self.players) == np.sum(players_in_bypass):
+                    self.round_counter += 1
+                    self.stage = Stage.TURN
+                    self.public_cards.append(self.dealer.deal_card())
+                    self.round_counter += 1
+                    self.stage = Stage.RIVER
+                    self.public_cards.append(self.dealer.deal_card())
+                    self.round_counter += 1
             # For the following rounds, we deal only 1 card
-            elif self.round_counter <= 2:
+            elif self.round_counter == 1:
+                self.stage = Stage.TURN
                 self.public_cards.append(self.dealer.deal_card())
+                if len(self.players) == np.sum(players_in_bypass):
+                    self.round_counter += 1
+                    self.stage = Stage.RIVER
+                    self.public_cards.append(self.dealer.deal_card())
+                    self.round_counter += 1
+            elif self.round_counter == 2:
+                self.stage = Stage.RIVER
+                self.public_cards.append(self.dealer.deal_card())
+                if len(self.players) == np.sum(players_in_bypass):
+                    self.round_counter += 1
 
             self.round_counter += 1
             self.round.start_new_round(self.game_pointer)
@@ -125,7 +169,7 @@ class NolimitholdemGame(LimitholdemGame):
 
         return state, self.game_pointer
 
-    def get_state(self, player):
+    def get_state(self, player_id):
         ''' Return player's state
 
         Args:
@@ -134,10 +178,15 @@ class NolimitholdemGame(LimitholdemGame):
         Returns:
             (dict): The state of the player
         '''
+        self.dealer.pot = np.sum([player.in_chips for player in self.players])
+
         chips = [self.players[i].in_chips for i in range(self.num_players)]
         legal_actions = self.get_legal_actions()
-        state = self.players[player].get_state(self.public_cards, chips, legal_actions)
-
+        state = self.players[player_id].get_state(self.public_cards, chips, legal_actions)
+        state['stakes'] = [self.players[i].remained_chips for i in range(self.num_players)]
+        state['current_player'] = self.game_pointer
+        state['pot'] = self.dealer.pot
+        state['stage'] = self.stage
         return state
 
     def step_back(self):
@@ -151,13 +200,24 @@ class NolimitholdemGame(LimitholdemGame):
             return True
         return False
 
-    def get_action_num(self):
+    def get_payoffs(self):
+        ''' Return the payoffs of the game
+
+        Returns:
+            (list): Each entry corresponds to the payoff of one player
+        '''
+        hands = [p.hand + self.public_cards if p.status in (PlayerStatus.ALIVE, PlayerStatus.ALLIN) else None for p in self.players]
+        chips_payoffs = self.judger.judge_game(self.players, hands)
+        return chips_payoffs
+
+    @staticmethod
+    def get_action_num():
         ''' Return the number of applicable actions
 
         Returns:
-            (int): The number of actions. There are 4 kinds actions (call, raise, check and fold). For 'raise' action, we provide all possible raise amount.
+            (int): The number of actions. There are 6 actions (call, raise_half_pot, raise_pot, all_in, check and fold)
         '''
-        return self.init_chips + 3
+        return len(Action)
 
 
 #if __name__ == "__main__":

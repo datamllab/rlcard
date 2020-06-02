@@ -1,15 +1,24 @@
+from enum import Enum
+
+
+class PlayerStatus(Enum):
+    ALIVE = 0
+    FOLDED = 1
+    ALLIN = 2
+
 
 class LimitholdemPlayer(object):
 
-    def __init__(self, player_id):
+    def __init__(self, player_id, np_random):
         ''' Initilize a player.
 
         Args:
             player_id (int): The id of the player
         '''
+        self.np_random = np_random
         self.player_id = player_id
         self.hand = []
-        self.status = 'alive'
+        self.status = PlayerStatus.ALIVE
 
         # The chips that this player has put in until now
         self.in_chips = 0

@@ -33,10 +33,10 @@ class CFRAgent():
         ''' Do one iteration of CFR
         '''
         self.iteration += 1
-        # Firstly, tranvers tree to compute counterfactual regret for each player
+        # Firstly, traverse tree to compute counterfactual regret for each player
         # The regrets are recorded in traversal
         for player_id in range(self.env.player_num):
-            self.env.init_game()
+            self.env.reset()
             probs = np.ones(self.env.player_num)
             self.traverse_tree(probs, player_id)
 

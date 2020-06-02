@@ -2,11 +2,11 @@
 '''
 
 import rlcard
-from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.utils import set_global_seed
+from rlcard.agents import RandomAgent
+from rlcard.utils import set_global_seed
 
 # Make environment
-env = rlcard.make('uno')
+env = rlcard.make('uno', config={'seed': 0})
 episode_num = 2
 
 # Set a global seed

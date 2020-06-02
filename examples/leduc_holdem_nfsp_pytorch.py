@@ -4,14 +4,14 @@ import os
 import torch
 
 import rlcard
-from rlcard.agents.nfsp_agent_pytorch import NFSPAgent
-from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.utils import set_global_seed, tournament
-from rlcard.utils.logger import Logger
+from rlcard.agents import NFSPAgentPytorch as NFSPAgent
+from rlcard.agents import RandomAgent
+from rlcard.utils import set_global_seed, tournament
+from rlcard.utils import Logger
 
 # Make environment
-env = rlcard.make('leduc-holdem')
-eval_env = rlcard.make('leduc-holdem')
+env = rlcard.make('leduc-holdem', config={'seed': 0})
+eval_env = rlcard.make('leduc-holdem', config={'seed': 0})
 
 # Set the iterations numbers and how frequently we evaluate/save plot
 evaluate_every = 10000

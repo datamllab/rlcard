@@ -1,8 +1,8 @@
 import numpy as np
 
-from rlcard.envs.env import Env
-from rlcard.games.mahjong.game import MahjongGame as Game
-from rlcard.games.mahjong.card import MahjongCard as Card
+from rlcard.envs import Env
+from rlcard.games.mahjong import Game
+from rlcard.games.mahjong import Card
 from rlcard.games.mahjong.utils import card_encoding_dict, encode_cards, pile2list
 
 class MahjongEnv(Env):
@@ -60,7 +60,7 @@ class MahjongEnv(Env):
         else:
             payoffs = [-1, -1, -1, -1]
             payoffs[player] = 1
-        return payoffs
+        return np.array(payoffs)
 
     def _decode_action(self, action_id):
         ''' Action id -> the action in the game. Must be implemented in the child class.

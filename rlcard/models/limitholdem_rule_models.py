@@ -10,7 +10,8 @@ class LimitholdemRuleAgentV1(object):
     def __init__(self):
         self.use_raw = True
 
-    def step(self, state):
+    @staticmethod
+    def step(state):
         ''' Predict the action when given raw state. A simple rule-based AI.
         Args:
             state (dict): Raw state from the game
@@ -23,15 +24,13 @@ class LimitholdemRuleAgentV1(object):
         hand = state['hand']
         public_cards = state['public_cards']
         action = 'fold'
-        '''
-        When having only 2 hand cards at the game start, choose fold to drop terrible cards:
-        Acceptable hand cards:
-        Pairs
-        AK, AQ, AJ, AT
-        A9s, A8s, ... A2s(s means flush)
-        KQ, KJ, QJ, JT
-        Fold all hand types except those mentioned above to save money
-        '''
+        # When having only 2 hand cards at the game start, choose fold to drop terrible cards:
+        # Acceptable hand cards:
+        # Pairs
+        # AK, AQ, AJ, AT
+        # A9s, A8s, ... A2s(s means flush)
+        # KQ, KJ, QJ, JT
+        # Fold all hand types except those mentioned above to save money
         if len(public_cards) == 0:
             if hand[0][1] == hand [1][1]:
                 action = 'raise'
@@ -46,11 +45,11 @@ class LimitholdemRuleAgentV1(object):
         if len(public_cards) == 3:
             public_cards_ranks = ['A', 'A', 'A']
             public_cards_flush = ['S', 'S', 'S']
-            for _ in range(len(public_cards)):
-                public_cards_ranks[_] = public_cards[_][1]
-                public_cards_flush[_] = public_cards[_][0]
+            for i, _ in enumerate(public_cards):
+                public_cards_ranks[i] = public_cards[i][1]
+                public_cards_flush[i] = public_cards[i][0]
             if hand[0][1] == hand [1][1]:
-            # if the player already have a pair, raise when public cards have card same as the pair 
+            # if the player already have a pair, raise when public cards have card same as the pair
                 if hand[0][1] in public_cards_ranks:
                     action = 'raise'
             elif hand[0][1] == 'A' or hand[1][1] == 'A':
@@ -70,11 +69,11 @@ class LimitholdemRuleAgentV1(object):
         if len(public_cards) == 5 or len(public_cards) == 4 :
             public_cards_ranks = []
             public_cards_flush = []
-            for _ in range(len(public_cards)):
+            for i, _ in enumerate(public_cards):
                 public_cards_ranks.append('A')
                 public_cards_flush.append('S')
-                public_cards_ranks[_] = public_cards[_][1]
-                public_cards_flush[_] = public_cards[_][0]
+                public_cards_ranks[i] = public_cards[i][1]
+                public_cards_flush[i] = public_cards[i][0]
             if hand[0][1] == hand [1][1]:
             # if the player already have a pair, raise when public cards have card same as the pair
                 if hand[0][1] in public_cards_ranks:
@@ -109,7 +108,7 @@ class LimitholdemRuleAgentV1(object):
     def eval_step(self, state):
         ''' Step for evaluation. The same to step
         '''
-        return self.step(state)
+        return self.step(state), []
 
 class LimitholdemRuleModelV1(Model):
     ''' Limitholdem Rule Model version 1

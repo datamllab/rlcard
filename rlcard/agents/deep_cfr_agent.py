@@ -100,7 +100,7 @@ class DeepCFR():
         self.traverse = []
 
         # get initial state and players
-        init_state, _ = self._env.init_game()
+        init_state, _ = self._env.reset()
 
         self._embedding_size = init_state['obs'].shape
         self._num_traversals = num_traversals
@@ -161,8 +161,8 @@ class DeepCFR():
             FixedSizeRingBuffer(memory_capacity) for _ in range(self._num_players)
         ]
         self._advantage_outputs = []
-        with tf.variable_scope('advantage') as vs:
-            for i in range(self._num_players):
+        with tf.variable_scope('advantage'):
+            for _ in range(self._num_players):
                 fc = self._info_state_ph
                 for dim in list(advantage_network_layers):
                     fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)
@@ -196,11 +196,11 @@ class DeepCFR():
             average advantage loss (float): players average advantage loss
             policy loss (float): policy loss
         '''
-        init_state, init_player = self._env.init_game()
+        init_state, init_player = self._env.reset()
         self._root_node = init_state
         for p in range(self._num_players):
             while init_player != p:
-                init_state, init_player = self._env.init_game()
+                init_state, init_player = self._env.reset()
                 self._root_node = init_state
             for _ in range(self._num_traversals):
                 self._traverse_game_tree(self._root_node, init_player)
@@ -239,7 +239,8 @@ class DeepCFR():
         action = np.random.choice(np.arange(len(action_prob)), p=action_prob)
         return action, action_prob
 
-    def reinitialize_advantage_networks(self):
+    @staticmethod
+    def reinitialize_advantage_networks():
         ''' Reinitialize the advantage networks
         '''
         advantage_vars = [v for v in tf.global_variables() if 'advantage' in v.name]

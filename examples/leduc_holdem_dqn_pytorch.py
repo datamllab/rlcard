@@ -4,14 +4,14 @@ import torch
 import os
 
 import rlcard
-from rlcard.agents.dqn_agent_pytorch import DQNAgent
-from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.utils import set_global_seed, tournament
-from rlcard.utils.logger import Logger
+from rlcard.agents import DQNAgentPytorch as DQNAgent
+from rlcard.agents import RandomAgent
+from rlcard.utils import set_global_seed, tournament
+from rlcard.utils import Logger
 
 # Make environment
-env = rlcard.make('leduc-holdem')
-eval_env = rlcard.make('leduc-holdem')
+env = rlcard.make('leduc-holdem', config={'seed': 0})
+eval_env = rlcard.make('leduc-holdem', config={'seed': 0})
 
 # Set the iterations numbers and how frequently we evaluate the performance
 evaluate_every = 100

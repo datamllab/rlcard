@@ -1,8 +1,9 @@
 from copy import deepcopy
+import numpy as np
 
-from rlcard.games.blackjack.dealer import BlackjackDealer as Dealer
-from rlcard.games.blackjack.player import BlackjackPlayer as Player
-from rlcard.games.blackjack.judger import BlackjackJudger as Judger
+from rlcard.games.blackjack import Dealer
+from rlcard.games.blackjack import Player
+from rlcard.games.blackjack import Judger
 
 class BlackjackGame(object):
 
@@ -11,6 +12,7 @@ class BlackjackGame(object):
         '''
         self.allow_step_back = allow_step_back
         self.num_players = 2
+        self.np_random = np.random.RandomState()
 
 
     def init_game(self):
@@ -20,13 +22,13 @@ class BlackjackGame(object):
             state (dict): the first state of the game
             player_id (int): current player's id
         '''
-        self.dealer = Dealer()
+        self.dealer = Dealer(self.np_random)
 
         self.player = []
         for i in range(self.num_players):
-            self.player.append(Player(i))
+            self.player.append(Player(i, self.np_random))
 
-        self.judger = Judger()
+        self.judger = Judger(self.np_random)
 
         for i in range(2):
             for j in range(self.num_players):
@@ -36,6 +38,16 @@ class BlackjackGame(object):
         for i in range(self.num_players):
             self.player[i].status, self.player[i].score = self.judger.judge_round(self.player[i])
 
+        """
+        self.dealer = Dealer(self.np_random)
+        self.player = Player(0, self.np_random)
+        self.judger = Judger(self.np_random)
+        self.dealer.deal_card(self.player)
+        self.dealer.deal_card(self.dealer)
+        self.dealer.deal_card(self.player)
+        self.dealer.deal_card(self.dealer)
+        self.player.status, self.player.score = self.judger.judge_round(self.player)
+        """
         self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
 
         self.winner = {'dealer':0}

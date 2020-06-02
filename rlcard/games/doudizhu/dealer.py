@@ -2,25 +2,23 @@
 ''' Implement Doudizhu Dealer class
 '''
 
-import random
 import functools
 
-from rlcard.utils.utils import init_54_deck
-from rlcard.games.doudizhu.utils import doudizhu_sort_card
-from rlcard.games.doudizhu.judger import cards2str
+from rlcard.utils import init_54_deck
+from rlcard.games.doudizhu.utils import cards2str, doudizhu_sort_card
 
 
 class DoudizhuDealer(object):
     ''' Dealer will shuffle, deal cards, and determine players' roles
     '''
 
-    def __init__(self):
+    def __init__(self, np_random):
         '''Give dealer the deck
 
         Notes:
             1. deck with 54 cards including black joker and red joker
         '''
-        super().__init__()
+        self.np_random = np_random
         self.deck = init_54_deck()
         self.deck.sort(key=functools.cmp_to_key(doudizhu_sort_card))
         self.landlord = None
@@ -28,7 +26,7 @@ class DoudizhuDealer(object):
     def shuffle(self):
         ''' Randomly shuffle the deck
         '''
-        random.shuffle(self.deck)
+        self.np_random.shuffle(self.deck)
 
     def deal_cards(self, players):
         ''' Deal cards to players

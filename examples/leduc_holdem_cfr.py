@@ -3,14 +3,14 @@
 import numpy as np
 
 import rlcard
-from rlcard.agents.cfr_agent import CFRAgent
+from rlcard.agents import CFRAgent
 from rlcard import models
-from rlcard.utils.utils import set_global_seed, tournament
-from rlcard.utils.logger import Logger
+from rlcard.utils import set_global_seed, tournament
+from rlcard.utils import Logger
 
 # Make environment and enable human mode
-env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
-eval_env = rlcard.make('leduc-holdem')
+env = rlcard.make('leduc-holdem', config={'seed': 0, 'allow_step_back':True})
+eval_env = rlcard.make('leduc-holdem', config={'seed': 0})
 
 # Set the iterations numbers and how frequently we evaluate the performance and save model
 evaluate_every = 100

@@ -1,14 +1,16 @@
 from copy import deepcopy
+import numpy as np
 
-from rlcard.games.uno.dealer import UnoDealer as Dealer
-from rlcard.games.uno.player import UnoPlayer as Player
-from rlcard.games.uno.round import UnoRound as Round
+from rlcard.games.uno import Dealer
+from rlcard.games.uno import Player
+from rlcard.games.uno import Round
 
 
 class UnoGame(object):
 
     def __init__(self, allow_step_back=False):
         self.allow_step_back = allow_step_back
+        self.np_random = np.random.RandomState()
         self.num_players = 2
         self.payoffs = [0 for _ in range(self.num_players)]
 
@@ -25,17 +27,17 @@ class UnoGame(object):
         self.payoffs = [0 for _ in range(self.num_players)]
 
         # Initialize a dealer that can deal cards
-        self.dealer = Dealer()
+        self.dealer = Dealer(self.np_random)
 
         # Initialize four players to play the game
-        self.players = [Player(i) for i in range(self.num_players)]
+        self.players = [Player(i, self.np_random) for i in range(self.num_players)]
 
         # Deal 7 cards to each player to prepare for the game
         for player in self.players:
             self.dealer.deal_cards(player, 7)
 
         # Initialize a Round
-        self.round = Round(self.dealer, self.num_players)
+        self.round = Round(self.dealer, self.num_players, self.np_random)
 
         # flip and perfrom top card
         top_card = self.round.flip_top_card()

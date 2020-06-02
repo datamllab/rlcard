@@ -122,7 +122,7 @@ class DQNAgent(object):
             self.train()
 
     def step(self, state):
-        ''' Predict the action for genrating training data
+        ''' Predict the action for generating training data
 
         Args:
             state (numpy.array): current state
@@ -211,7 +211,7 @@ class DQNAgent(object):
         Args:
             global_vars (list): A list of tensor
         '''
-        self_vars = tf.contrib.slim.get_variables(scope=self.scope+'/', collection=tf.GraphKeys.TRAINABLE_VARIABLES)
+        self_vars = tf.contrib.slim.get_variables(scope=self.scope, collection=tf.GraphKeys.TRAINABLE_VARIABLES)
         update_ops = []
         for v1, v2 in zip(global_vars, self_vars):
             op = v2.assign(v1)
@@ -233,8 +233,8 @@ class Estimator():
         self.scope = scope
         self.action_num = action_num
         self.learning_rate=learning_rate
-        self.state_shape = state_shape
-        self.mlp_layers = mlp_layers
+        self.state_shape = state_shape if isinstance(state_shape, list) else [state_shape]
+        self.mlp_layers = map(int, mlp_layers)
 
         with tf.variable_scope(scope):
             # Build the graph

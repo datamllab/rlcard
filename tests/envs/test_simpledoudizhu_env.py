@@ -3,26 +3,30 @@ import unittest
 import rlcard
 from rlcard.utils.utils import get_downstream_player_id
 from rlcard.agents.random_agent import RandomAgent
+from .determism_util import is_deterministic
 
 
 class TestSimpleDoudizhuEnv(unittest.TestCase):
 
-    def test_init_game_and_extract_state(self):
+    def test_reset_and_extract_state(self):
         env = rlcard.make('simple-doudizhu')
-        state, _ = env.init_game()
+        state, _ = env.reset()
         self.assertEqual(state['obs'].size, 450)
+
+    def test_is_deterministic(self):
+        self.assertTrue(is_deterministic('simple-doudizhu'))
 
     def test_get_legal_actions(self):
         env = rlcard.make('simple-doudizhu')
         env.set_agents([RandomAgent(env.action_num) for _ in range(env.player_num)])
-        env.init_game()
+        env.reset()
         legal_actions = env._get_legal_actions()
         for legal_action in legal_actions:
             self.assertLessEqual(legal_action, 130)
 
     def test_step(self):
         env = rlcard.make('simple-doudizhu')
-        _, player_id = env.init_game()
+        _, player_id = env.reset()
         player = env.game.players[player_id]
         _, next_player_id = env.step(130)
         self.assertEqual(next_player_id, get_downstream_player_id(
@@ -30,7 +34,7 @@ class TestSimpleDoudizhuEnv(unittest.TestCase):
 
     def test_step_back(self):
         env = rlcard.make('simple-doudizhu', config={'allow_step_back':True})
-        _, player_id = env.init_game()
+        _, player_id = env.reset()
         env.step(2)
         _, back_player_id = env.step_back()
         self.assertEqual(player_id, back_player_id)
@@ -57,7 +61,7 @@ class TestSimpleDoudizhuEnv(unittest.TestCase):
 
     def test_decode_action(self):
         env = rlcard.make('simple-doudizhu')
-        env.init_game()
+        env.reset()
         env.game.state['actions'] = ['888TT', '88899']
         env.game.judger.playable_cards[0] = ['9', 'T', '99', '999', '888TT', '88899']
         decoded = env._decode_action(28)
@@ -66,5 +70,9 @@ class TestSimpleDoudizhuEnv(unittest.TestCase):
         decoded = env._decode_action(14)
         self.assertEqual(decoded, '888')
 
+    def test_get_perfect_information(self):
+        env = rlcard.make('simple-doudizhu')
+        _, player_id = env.reset()
+        self.assertEqual(player_id, env.get_perfect_information()['current_player'])
 if __name__ == '__main__':
     unittest.main()
