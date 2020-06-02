@@ -10,6 +10,7 @@ from rlcard.games.uno.utils import cards2list
 class UnoEnv(Env):
 
     def __init__(self, config):
+        self.name = 'uno'
         self.game = Game()
         super().__init__(config)
         self.state_shape = [7, 4, 15]

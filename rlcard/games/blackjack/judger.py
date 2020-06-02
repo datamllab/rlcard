@@ -39,14 +39,14 @@ class BlackjackJudger(object):
                 game.winner[playerX] = 0 => the game is still ongoing
                 '''
 
-        if game.player[game_pointer].status == 'bust':
+        if game.players[game_pointer].status == 'bust':
             game.winner['player' + str(game_pointer)] = -1
         elif game.dealer.status == 'bust':
             game.winner['player' + str(game_pointer)] = 2
         else:
-            if game.player[game_pointer].score > game.dealer.score:
+            if game.players[game_pointer].score > game.dealer.score:
                 game.winner['player' + str(game_pointer)] = 2
-            elif game.player[game_pointer].score < game.dealer.score:
+            elif game.players[game_pointer].score < game.dealer.score:
                 game.winner['player' + str(game_pointer)] = -1
             else:
                 game.winner['player' + str(game_pointer)] = 1

@@ -17,6 +17,8 @@ class GinRummyEnv(Env):
         from rlcard.games.gin_rummy import Game
         self._ScoreSouthMove = ScoreSouthMove
         self._utils = utils
+
+        self.name = 'gin-rummy'
         self.game = Game()
         super().__init__(config=config)
         self.state_shape = [5, 52]

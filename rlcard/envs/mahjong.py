@@ -10,6 +10,7 @@ class MahjongEnv(Env):
     '''
 
     def __init__(self, config):
+        self.name = 'mahjong'
         self.game = Game()
         super().__init__(config)
         self.action_id = card_encoding_dict

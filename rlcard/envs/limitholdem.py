@@ -13,6 +13,7 @@ class LimitholdemEnv(Env):
     def __init__(self, config):
         ''' Initialize the Limitholdem environment
         '''
+        self.name = 'limit-holdem'
         self.game = Game()
         super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']

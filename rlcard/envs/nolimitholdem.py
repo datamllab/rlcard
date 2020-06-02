@@ -15,6 +15,7 @@ class NolimitholdemEnv(Env):
     def __init__(self, config):
         ''' Initialize the Limitholdem environment
         '''
+        self.name = 'no-limit-holdem'
         self.game = Game()
         super().__init__(config)
         self.actions = Action
