@@ -7,11 +7,12 @@ from rlcard.games.blackjack import Judger
 
 class BlackjackGame(object):
 
-    def __init__(self, allow_step_back=False):
+    def __init__(self, allow_step_back=False, num_players = 1):
         ''' Initialize the class Blackjack Game
         '''
         self.allow_step_back = allow_step_back
         self.np_random = np.random.RandomState()
+        self.num_players = num_players
 
     def init_game(self):
         ''' Initialilze the game
@@ -21,17 +22,31 @@ class BlackjackGame(object):
             player_id (int): current player's id
         '''
         self.dealer = Dealer(self.np_random)
-        self.player = Player(0, self.np_random)
+
+        self.player = []
+        for i in range(self.num_players):
+            self.player.append(Player(i, self.np_random))
+
         self.judger = Judger(self.np_random)
-        self.dealer.deal_card(self.player)
-        self.dealer.deal_card(self.dealer)
-        self.dealer.deal_card(self.player)
-        self.dealer.deal_card(self.dealer)
-        self.player.status, self.player.score = self.judger.judge_round(self.player)
+
+        for i in range(2):
+            for j in range(self.num_players):
+                self.dealer.deal_card(self.player[j])
+            self.dealer.deal_card(self.dealer)
+
+        for i in range(self.num_players):
+            self.player[i].status, self.player[i].score = self.judger.judge_round(self.player[i])
+
         self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
-        self.winner = {'dealer':0, 'player':0}
+
+        self.winner = {'dealer': 0}
+        for i in range(self.num_players):
+            self.winner['player' + str(i)] = 0
+
         self.history = []
-        return self.get_state(self.get_player_id()), self.get_player_id()
+        self.game_pointer = 0
+
+        return self.get_state(self.game_pointer), self.game_pointer
 
     def step(self, action):
         ''' Get the next state
@@ -44,40 +59,47 @@ class BlackjackGame(object):
             int: next plater's id
         '''
         if self.allow_step_back:
-            p = deepcopy(self.player)
+            p = deepcopy(self.player[self.game_pointer])
             d = deepcopy(self.dealer)
             w = deepcopy(self.winner)
-            self.history.append((d,p,w))
+            self.history.append((d, p, w))
 
         next_state = {}
         # Play hit
         if action != "stand":
-            self.dealer.deal_card(self.player)
-            self.player.status, self.player.score = self.judger.judge_round(self.player)
-
-            if self.player.status == 'bust':
+            self.dealer.deal_card(self.player[self.game_pointer])
+            self.player[self.game_pointer].status, self.player[self.game_pointer].score = self.judger.judge_round(
+                self.player[self.game_pointer])
+            if self.player[self.game_pointer].status == 'bust':
                 # game over, set up the winner, print out dealer's hand
-                self.judger.judge_game(self)
-                dealer_hand = [card.get_index() for card in self.dealer.hand]
-            else:
-                # game continue, hide the first card of dealer's hand
-                dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
-
-            hand = [card.get_index() for card in self.player.hand]
-            next_state['state'] = (hand, dealer_hand)
-            next_state['actions'] = ('hit', 'stand')
-
+                self.judger.judge_game(self, self.game_pointer)
         elif action == "stand":
-
             while self.judger.judge_score(self.dealer.hand) < 17:
                 self.dealer.deal_card(self.dealer)
                 self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
-            self.judger.judge_game(self)
-            hand = [card.get_index() for card in self.player.hand]
-            dealer_hand = [c.get_index() for c in self.dealer.hand]
-            next_state['state'] = (hand, dealer_hand) # show all hand of dealer
-            next_state['actions'] = ('hit', 'stand')
-        return next_state, self.player.get_player_id()
+            self.player[self.game_pointer].status, self.player[self.game_pointer].score = self.judger.judge_round(
+                self.player[self.game_pointer])
+            self.judger.judge_game(self, self.game_pointer)
+
+        hand = [card.get_index() for card in self.player[self.game_pointer].hand]
+
+        if self.is_over():
+            dealer_hand = [card.get_index() for card in self.dealer.hand]
+        else:
+            dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
+
+        for i in range(self.num_players):
+            next_state['player' + str(i) + ' hand'] = [card.get_index() for card in self.player[i].hand]
+        next_state['dealer hand'] = dealer_hand
+        next_state['actions'] = ('hit', 'stand')
+        next_state['state'] = (hand, dealer_hand)
+
+        if self.game_pointer >= self.num_players - 1:
+            self.game_pointer = 0
+        else:
+            self.game_pointer += 1
+
+        return next_state, self.game_pointer
 
     def step_back(self):
         ''' Return to the previous state of the game
@@ -87,18 +109,17 @@ class BlackjackGame(object):
         '''
         #while len(self.history) > 0:
         if len(self.history) > 0:
-            self.dealer, self.player, self.winner = self.history.pop()
+            self.dealer, self.player[self.game_pointer], self.winner = self.history.pop()
             return True
         return False
 
-    @staticmethod
-    def get_player_num():
+    def get_player_num(self):
         ''' Return the number of players in blackjack
 
         Returns:
             number_of_player (int): blackjack only have 1 player
         '''
-        return 1
+        return self.num_players
 
     @staticmethod
     def get_action_num():
@@ -115,9 +136,9 @@ class BlackjackGame(object):
         Returns:
             player_id (int): current player's id
         '''
-        return self.player.get_player_id()
+        return self.game_pointer
 
-    def get_state(self, player):
+    def get_state(self, player_id):
         ''' Return player's state
 
         Args:
@@ -126,14 +147,25 @@ class BlackjackGame(object):
         Returns:
             state (dict): corresponding player's state
         '''
+        '''
+                before change state only have two keys (action, state)
+                but now have more than 4 keys (action, state, player0 hand, player1 hand, ... , dealer hand)
+                Although key 'state' have duplicated information with key 'player hand' and 'dealer hand', I couldn't remove it because of other codes
+                To remove it, we need to change dqn agent too in my opinion
+                '''
         state = {}
         state['actions'] = ('hit', 'stand')
-        hand = [card.get_index() for card in self.player.hand]
-        if self.winner['player'] == 0 and self.winner['dealer'] == 0:
-            dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
-        else:
+        hand = [card.get_index() for card in self.player[player_id].hand]
+        if self.is_over():
             dealer_hand = [card.get_index() for card in self.dealer.hand]
+        else:
+            dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
+
+        for i in range(self.num_players):
+            state['player' + str(i) + ' hand'] = [card.get_index() for card in self.player[i].hand]
+        state['dealer hand'] = dealer_hand
         state['state'] = (hand, dealer_hand)
+
         return state
 
     def is_over(self):
@@ -142,10 +174,14 @@ class BlackjackGame(object):
         Returns:
             status (bool): True/False
         '''
-        if self.player.status == 'bust'or self.dealer.status == 'bust' or (self.winner['dealer'] != 0 or self.winner['player'] != 0):
-            return True
-        else:
-            return False
+        '''
+                I should change here because judger and self.winner is changed too
+                '''
+        for i in range(self.num_players):
+            if self.winner['player' + str(i)] == 0:
+                return False
+
+        return True
 
 
 ##########################################################
