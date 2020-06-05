@@ -1,5 +1,5 @@
 # Toy Examples
-In this document, we provide some toy examples for getting started. All the examples in this document and even more examples are available in [examples/](../examples).
+In this document, we provide some toy examples for getting started. Parallel R examles are [here](toy-examples-r.md). All the examples in this document and even more examples are available in [examples/](../examples).
 
 *   [Playing with random agents](toy-examples.md#playing-with-random-agents)
 *   [Deep-Q learning on Blackjack](toy-examples.md#deep-q-learning-on-blackjack)

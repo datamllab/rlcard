@@ -12,6 +12,7 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Resources: [Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
 
 **News:**
+*   We add some examples in R to call Python insterfaces of RLCard with reticulate. See [here](docs/toy-examples-r.md)
 *   Thanks for the contribution of [@Clarit7](https://github.com/Clarit7) for supporting different number of players in Blackjack. We call for contributions for gradually making the games more configurable. See [here](CONTRIBUTING.md#making-configurable-environments) for more details.
 *   Thanks for the contribution of [@Clarit7](https://github.com/Clarit7) for the Blackjack and Limit Hold'em human interface.
 *   Now RLCard supports environment local seeding and multiprocessing. Thanks for the testing scripts provided by [@weepingwillowben](https://github.com/weepingwillowben).
@@ -65,7 +66,7 @@ env.set_agents([RandomAgent(action_num=env.action_num)])
 trajectories, payoffs = env.run()
 ```
 
-We also recommend the following **toy examples**.
+We also recommend the following **toy examples** in Python.
 
 *   [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
 *   [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
@@ -73,6 +74,8 @@ We also recommend the following **toy examples**.
 *   [Training CFR on Leduc Hold'em](docs/toy-examples.md#training-cfr-on-leduc-holdem)
 *   [Having fun with pretrained Leduc model](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
 *   [Leduc Hold'em as single-agent environment](docs/toy-examples.md#leduc-holdem-as-single-agent-environment)
+
+R examples can be found [here](docs/toy-examples-r.md).
 
 ## Demo
 Run `examples/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](docs/games.md#leduc-holdem).

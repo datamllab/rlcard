@@ -1,11 +1,11 @@
 # Toy Examples in R
-In this document, we provide some toy examples in R for getting started. All the examples in this document and even more examples are available in [r-rlcard-tutorial/](https://github.com/datamllab/rlcard-tutorial).
+In this document, we provide some toy examples in R for getting started. Parallel Python examples are [here](toy-examples.md).
 
-*   [Training DQN on Blackjack](toy_examples_r.md#deep-q-learning-on-blackjack)
-*   [Training CFR on Leduc Hold'em](toy_examples_r.md#training-cfr-on-leduc-holdem)
-*   [Leduc Hold'em as single-agent environment](toy_examples_r.md#leduc-holdem-as-single-agent-environment)
-*   [Texas Hold'em nolimit](toy_examples_r.md#having-fun-with-no-limit-leduc-model)
-*   [Running Random agent on Blackjack](toy_examples_r.md#playing-with-random-agents)
+*   [Training DQN on Blackjack](toy-examples-r.md#deep-q-learning-on-blackjack)
+*   [Training CFR on Leduc Hold'em](toy-examples-r.md#training-cfr-on-leduc-holdem)
+*   [Leduc Hold'em as single-agent environment](toy-examples-r.md#leduc-holdem-as-single-agent-environment)
+*   [Texas Hold'em nolimit](toy-examples-r.md#having-fun-with-no-limit-leduc-model)
+*   [Running Random agent on Blackjack](toy-examples-r.md#playing-with-random-agents)
 
 ## Playing with Random Agents
 We have set up a random agent that can play randomly on each environment. An example of applying a random agent on Blackjack is as follow:
