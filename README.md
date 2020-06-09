@@ -12,7 +12,9 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Resources: [Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
 
 **News:**
-*   Thanks for the contribution of [@Clarit7](https://github.com/Clarit7) for the Limit Hold'em human interface.
+*   We add some examples in R to call Python interfaces of RLCard with reticulate. See [here](docs/toy-examples-r.md)
+*   Thanks for the contribution of [@Clarit7](https://github.com/Clarit7) for supporting different number of players in Blackjack. We call for contributions for gradually making the games more configurable. See [here](CONTRIBUTING.md#making-configurable-environments) for more details.
+*   Thanks for the contribution of [@Clarit7](https://github.com/Clarit7) for the Blackjack and Limit Hold'em human interface.
 *   Now RLCard supports environment local seeding and multiprocessing. Thanks for the testing scripts provided by [@weepingwillowben](https://github.com/weepingwillowben).
 *   Human interface of NoLimit Holdem available. The action space of NoLimit Holdem has been abstracted. Thanks for the contribution of [@AdrianP-](https://github.com/AdrianP-).
 *   New game Gin Rummy and human GUI available. Thanks for the contribution of [@billh0420](https://github.com/billh0420).
@@ -20,7 +22,7 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 
 ## Cite this work
 If you find this repo useful, you may cite:
-```
+```bibtex
 @article{zha2019rlcard,
   title={RLCard: A Toolkit for Reinforcement Learning in Card Games},
   author={Zha, Daochen and Lai, Kwei-Herng and Cao, Yuanpu and Huang, Songyi and Wei, Ruzhe and Guo, Junyu and Hu, Xia},
@@ -64,7 +66,7 @@ env.set_agents([RandomAgent(action_num=env.action_num)])
 trajectories, payoffs = env.run()
 ```
 
-We also recommend the following **toy examples**.
+We also recommend the following **toy examples** in Python.
 
 *   [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
 *   [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
@@ -72,6 +74,8 @@ We also recommend the following **toy examples**.
 *   [Training CFR on Leduc Hold'em](docs/toy-examples.md#training-cfr-on-leduc-holdem)
 *   [Having fun with pretrained Leduc model](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
 *   [Leduc Hold'em as single-agent environment](docs/toy-examples.md#leduc-holdem-as-single-agent-environment)
+
+R examples can be found [here](docs/toy-examples-r.md).
 
 ## Demo
 Run `examples/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](docs/games.md#leduc-holdem).
@@ -137,6 +141,7 @@ You can use the the following interface to make an environment. You may optional
 	*   `single_agent_mode`: Default `False`. `True` if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
 	*   `active_player`: Defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
 	*   `record_action`: Default `False`. If `True`, a field of `action_record` will be in the `state` to record the historical actions. This may be used for human-agent play.
+	*   Game specific configurations: These fields start with `game_`. Currently, we only support `game_player_num` in Blackjack.
 
 Once the environemnt is made, we can access some information of the game.
 *   **env.action_num**: The number of actions.

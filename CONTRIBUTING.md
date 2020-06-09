@@ -3,6 +3,7 @@ Contribution to this project is greatly appreciated! If you find any bugs or hav
 
 ## Roadmaps
 
+*   **Game Specific Configurations.** Now we plan to gradually support game specific configurations. Currently we only support specifying the number of players in Blackjack
 *   **Rule-based Agent and Pre-trained Models.** Provide more rule-based agents and pre-trained models to benchmark the evaluation. We currently have several models in `/models`.
 *   **More Games and Algorithms.** Develop more games and algorithms.
 *   **Keras Implementation** Provide Keras Implementation of the algorithms.
@@ -21,3 +22,12 @@ If this your first time to contribute to a project, kindly follow the following 
 ## Testing Your Code
 
 We strongly encourage you to write the testing code in parallel with your development. We use `unittest` in RLCard. An example is [Blackjack environment testing](tests/envs/test_blackjack_env.py).
+
+## Making Configurable Environments
+We take Blackjack as an Example to show how we can define game specific configurations in RLCard. The key points are highlighted as follows:
+
+*   We add a `DEFAULT_GAME_CONFIG` in [Blackjack Env](rlcard/envs/blackjack.py) to define the default values of the game configurations. Each field should start with `game_`
+*   Modify the game and environment according to the configurations. For example, we need to support multiple players in Blackjack.
+*	Modify [Env](rlcard/envs/env.py) to add your game to the `supported_envs`
+*   When making the environment, we pass the newly defined fields in `config`. For example, we pass `config={'game_player_num': 2}` for Blackjack.
+

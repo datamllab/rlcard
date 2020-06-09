@@ -3,6 +3,9 @@ import numpy as np
 from rlcard.envs import Env
 from rlcard.games.blackjack import Game
 
+DEFAULT_GAME_CONFIG = {
+        'game_player_num': 1,
+        }
 
 class BlackjackEnv(Env):
     ''' Blackjack Environment
@@ -11,6 +14,8 @@ class BlackjackEnv(Env):
     def __init__(self, config):
         ''' Initialize the Blackjack environment
         '''
+        self.name = 'blackjack'
+        self.default_game_config = DEFAULT_GAME_CONFIG
         self.game = Game()
         super().__init__(config)
         self.rank2score = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":10, "Q":10, "K":10}
@@ -71,12 +76,18 @@ class BlackjackEnv(Env):
         Returns:
            payoffs (list): list of payoffs
         '''
-        if self.game.winner['player'] == 0 and self.game.winner['dealer'] == 1:
-            return np.array([-1])
-        elif self.game.winner['dealer'] == 0 and self.game.winner['player'] == 1:
-            return np.array([1])
-        elif self.game.winner['player'] == 1 and self.game.winner['dealer'] == 1:
-            return np.array([0])
+        payoffs = []
+
+        for i in range(self.player_num):
+            if self.game.winner['player' + str(i)] == 2:
+                payoffs.append(1)  # Dealer bust or player get higher score than dealer
+            elif self.game.winner['player' + str(i)] == 1:
+                payoffs.append(0)  # Dealer and player tie
+            else:
+                payoffs.append(-1)  # Player bust or Dealer get higher score than player
+
+        return np.array(payoffs)
+
 
     def _decode_action(self, action_id):
         ''' Decode the action for applying to the game

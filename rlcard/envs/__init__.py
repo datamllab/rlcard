@@ -1,6 +1,5 @@
 ''' Register new environments
 '''
-
 from rlcard.envs.env import Env
 from rlcard.envs.vec_env import VecEnv
 from rlcard.envs.registration import register, make
@@ -14,10 +13,12 @@ register(
     env_id='doudizhu',
     entry_point='rlcard.envs.doudizhu:DoudizhuEnv',
 )
+
 register(
     env_id='simple-doudizhu',
     entry_point='rlcard.envs.simpledoudizhu:SimpleDoudizhuEnv',
 )
+
 register(
     env_id='limit-holdem',
     entry_point='rlcard.envs.limitholdem:LimitholdemEnv',
@@ -43,7 +44,7 @@ register(
     entry_point='rlcard.envs.mahjong:MahjongEnv',
 )
 
-register(  # 200213
+register(
     env_id='gin-rummy',
     entry_point='rlcard.envs.gin_rummy:GinRummyEnv',
 )

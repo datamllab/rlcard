@@ -6,7 +6,6 @@ import rlcard
 from rlcard.envs import Env
 from rlcard.games.leducholdem import Game
 from rlcard.utils import *
-from rlcard import models
 
 
 class LeducholdemEnv(Env):
@@ -16,6 +15,7 @@ class LeducholdemEnv(Env):
     def __init__(self, config):
         ''' Initialize the Limitholdem environment
         '''
+        self.name = 'leduc-holdem' 
         self.game = Game()
         super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']
@@ -30,6 +30,7 @@ class LeducholdemEnv(Env):
         Returns:
             model (Model): A Model object
         '''
+        from rlcard import models
         return models.load('leduc-holdem-cfr')
 
     def _get_legal_actions(self):

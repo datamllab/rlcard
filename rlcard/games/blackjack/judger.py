@@ -22,25 +22,34 @@ class BlackjackJudger(object):
         else:
             return "bust", score
 
-    @staticmethod
-    def judge_game(game):
+    def judge_game(self, game, game_pointer):
         ''' Judge the winner of the game
 
         Args:
             game (class): target game class
         '''
-        if game.player.status == 'bust':
-            game.winner['dealer'] = 1
+        '''
+                game.winner['dealer'] doesn't need anymore if we change code like this
+
+                player bust (whether dealer bust or not) => game.winner[playerX] = -1
+                player and dealer tie => game.winner[playerX] = 1
+                dealer bust and player not bust => game.winner[playerX] = 2
+                player get higher score than dealer => game.winner[playerX] = 2
+                dealer get higher score than player => game.winner[playerX] = -1
+                game.winner[playerX] = 0 => the game is still ongoing
+                '''
+
+        if game.players[game_pointer].status == 'bust':
+            game.winner['player' + str(game_pointer)] = -1
         elif game.dealer.status == 'bust':
-            game.winner['player'] = 1
+            game.winner['player' + str(game_pointer)] = 2
         else:
-            if game.player.score > game.dealer.score:
-                game.winner['player'] = 1
-            elif game.player.score < game.dealer.score:
-                game.winner['dealer'] = 1
+            if game.players[game_pointer].score > game.dealer.score:
+                game.winner['player' + str(game_pointer)] = 2
+            elif game.players[game_pointer].score < game.dealer.score:
+                game.winner['player' + str(game_pointer)] = -1
             else:
-                game.winner['dealer'] = 1
-                game.winner['player'] = 1
+                game.winner['player' + str(game_pointer)] = 1
 
     def judge_score(self, cards):
         ''' Judge the score of a given cards set

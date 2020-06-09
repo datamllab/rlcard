@@ -5,7 +5,6 @@ import numpy as np
 import rlcard
 from rlcard.envs import Env
 from rlcard.games.limitholdem import Game
-from rlcard import models
 
 class LimitholdemEnv(Env):
     ''' Limitholdem Environment
@@ -14,6 +13,7 @@ class LimitholdemEnv(Env):
     def __init__(self, config):
         ''' Initialize the Limitholdem environment
         '''
+        self.name = 'limit-holdem'
         self.game = Game()
         super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']
@@ -95,6 +95,7 @@ class LimitholdemEnv(Env):
         Returns:
             model (Model): A Model object
         '''
+        from rlcard import models
         return models.load('limit-holdem-rule-v1')
 
     def get_perfect_information(self):

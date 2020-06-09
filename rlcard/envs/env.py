@@ -27,12 +27,31 @@ class Env(object):
                 'active_player' (int) - If 'singe_agent_mode' is True,
                  'active_player' specifies the player that does not use
                   pretrained models.
+                There can be some game specific configurations, e.g., the
+                number of players in the game. These fields should start with
+                'game_', e.g., 'game_player_num' we specify the number of
+                players in the game. Since these configurations may be game-specific,
+                The default settings shpuld be put in the Env class. For example,
+                the default game configurations for Blackjack should be in
+                'rlcard/envs/blackjack.py'
+                TODO: Support more game configurations in the future.
         '''
         self.allow_step_back = self.game.allow_step_back = config['allow_step_back']
         self.allow_raw_data = config['allow_raw_data']
         self.record_action = config['record_action']
         if self.record_action:
             self.action_recorder = []
+
+        # Game specific configurations
+        # Currently only support blackjack
+        # TODO support game configurations for all the games
+        supported_envs = ['blackjack']
+        if self.name in supported_envs:
+            _game_config = self.default_game_config.copy()
+            for key in config:
+                if key in _game_config:
+                    _game_config[key] = config[key]
+            self.game.configure(_game_config)
 
         # Get the number of players/actions in this game
         self.player_num = self.game.get_player_num()
@@ -56,6 +75,7 @@ class Env(object):
 
         # Set random seed, default is None
         self._seed(config['seed'])
+
 
     def reset(self):
         '''
