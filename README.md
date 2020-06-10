@@ -53,6 +53,14 @@ pip install rlcard[torch]
 ```
 If you meet any problems when installing PyTorch with the command above, you may follow the instructions on [PyTorch official website](https://pytorch.org/get-started/locally/) to manually install PyTorch.
 
+We also provide [**conda** installation method](https://anaconda.org/toubun/rlcard):
+
+```
+conda install -c toubun rlcard
+```
+
+Conda installation only provides the card environments, you need to manually install Tensorflow or Pytorch on your demands.
+
 ## Examples
 Please refer to [examples/](examples). A **short example** is as below.
 
