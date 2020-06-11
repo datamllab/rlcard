@@ -8,11 +8,12 @@
 RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports multiple card environments with easy-to-use interfaces. The goal of RLCard is to bridge reinforcement learning and imperfect information games. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University and community contributors.
 
 *   Official Website: [http://www.rlcard.org](http://www.rlcard.org)
+*   Tutorial in Jupyter Notebook: [https://github.com/datamllab/rlcard-tutorial](https://github.com/datamllab/rlcard-tutorial)
 *   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
 *   Resources: [Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
 
 **News:**
-*   We add some examples in R to call Python interfaces of RLCard with reticulate. See [here](docs/toy-examples-r.md)
+*   Jupyter Notebook tutorial available! We add some examples in R to call Python interfaces of RLCard with reticulate. See [here](docs/toy-examples-r.md)
 *   Thanks for the contribution of [@Clarit7](https://github.com/Clarit7) for supporting different number of players in Blackjack. We call for contributions for gradually making the games more configurable. See [here](CONTRIBUTING.md#making-configurable-environments) for more details.
 *   Thanks for the contribution of [@Clarit7](https://github.com/Clarit7) for the Blackjack and Limit Hold'em human interface.
 *   Now RLCard supports environment local seeding and multiprocessing. Thanks for the testing scripts provided by [@weepingwillowben](https://github.com/weepingwillowben).
