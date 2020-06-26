@@ -65,6 +65,7 @@ class DeepCFR():
 
     def __init__(self,
              session,
+             scope,
              env,
              policy_network_layers=(32, 32),
              advantage_network_layers=(32, 32),
@@ -90,6 +91,7 @@ class DeepCFR():
             memory_capacity (int): Number af samples that can be stored in memory
         '''
         self.use_raw = False
+        self._scope = scope
         self._env = env
         self._session = session
         self._batch_size_advantage = batch_size_advantage
@@ -161,11 +163,13 @@ class DeepCFR():
             FixedSizeRingBuffer(memory_capacity) for _ in range(self._num_players)
         ]
         self._advantage_outputs = []
-        with tf.variable_scope('advantage'):
+        with tf.variable_scope(scope+'_advantage'):
             for _ in range(self._num_players):
                 fc = self._info_state_ph
+                i = 0
                 for dim in list(advantage_network_layers):
-                    fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh)
+                    fc = tf.contrib.layers.fully_connected(fc, dim, activation_fn=tf.tanh, reuse=False)
+                    i += 1
                 self._advantage_outputs.append(tf.contrib.layers.fully_connected(fc, self._num_actions, activation_fn=None))
 
         self._loss_advantages = []
