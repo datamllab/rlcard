@@ -1,4 +1,4 @@
-''' An example of learning a NFSP Agent on No-Limit Texas Holdem
+''' An example of learning a DeepCFR Agent on No-Limit Texas Holdem
 '''
 
 import tensorflow as tf
@@ -64,7 +64,7 @@ with tf.Session() as sess:
     logger.close_files()
 
     # Plot the learning curve
-    logger.plot('NFSP')
+    logger.plot('DeepCFR')
     
     # Save model
     save_dir = 'models/nolimit_holdem_deepcfr'
