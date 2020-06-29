@@ -12,6 +12,7 @@ class TestUtilsMethos(unittest.TestCase):
         sess = tf.InteractiveSession()
         env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
         agent = DeepCFR(session=sess,
+                        scope='deepcfr',
                         env=env,
                         policy_network_layers=(4,4),
                         advantage_network_layers=(4,4),
@@ -37,6 +38,7 @@ class TestUtilsMethos(unittest.TestCase):
         sess = tf.InteractiveSession()
         env = rlcard.make('leduc-holdem', {'allow_step_back':True})
         agent = DeepCFR(session=sess,
+                        scope='deepcfr',
                         env=env,
                         policy_network_layers=(128,128),
                         advantage_network_layers=(128,128),
