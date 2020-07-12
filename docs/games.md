@@ -124,14 +124,14 @@ The size of the action space of Dou Dizhu is 33676. This number is too large for
 | Chain of solo    |       36          |        36                           | 67-102            |
 | Chain of pair    |       52          |        52                           | 103-154           |
 | Chain of trio    |        45         |        45                           | 155-199           |
-| Plane with solo  |        24721      |        38                           | 200-237           |
-| Plane with pair  |        6552       |        30                           | 238-267           |
-| Quad with solo   |       1339        |        13                           | 268-280           |
-| Quad with pair   |       1014        |        13                           | 281-293           |
+| Plane with solo  |        21822      |        38                           | 200-237           |
+| Plane with pair  |        2939       |        30                           | 238-267           |
+| Quad with solo   |       1326        |        13                           | 268-280           |
+| Quad with pair   |       858        |        13                           | 281-293           |
 | Bomb             |        13         |        13                           | 294-306           |
 | Rocket           |         1         |         1                           | 307               |
 | Pass             |         1         |         1                           | 308               |
-| Total            |       33676       |        309                          |                   |
+| Total            |       27472       |        309                          |                   |
 
 ### Payoff
 If the landlord first get rid of all the cards in his hand, he will win and receive a reward 1. The two peasants will lose and receive a reward 0. Similarly, if one of the peasant first get rid of all the cards in hand, both peasants will win and receive a reward 1. The landlord will lose and receive a reward 0.
