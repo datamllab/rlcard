@@ -332,6 +332,7 @@ def set_global_seed(seed):
             tf.set_random_seed(seed)
         if 'torch' in installed_packages:
             import torch
+            torch.backends.cudnn.deterministic = True
             torch.manual_seed(seed)
         np.random.seed(seed)
         import random
