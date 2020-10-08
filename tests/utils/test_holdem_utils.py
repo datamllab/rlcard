@@ -244,5 +244,15 @@ class TestHoldemUtils(unittest.TestCase):
         self.assertEqual(winner, [1, 1])
         winner = compare_hands([['C5', 'S9', 'S6', 'C2', 'CT', 'C7', 'H5'], ['S7', 'SJ', 'S6', 'C2', 'CT', 'C7', 'H5'], None, None, ['H7', 'DJ', 'S6', 'C2', 'CT', 'C7', 'H5'], None])
         self.assertEqual(winner, [0, 1, 0, 0, 1, 0])
+
+        winner = compare_hands([['H3', 'D5', 'S6', 'H9', 'CA', 'HA', 'SA'],   # three of a kind
+                                ['H2', 'H3', 'C4', 'D5', 'C6', 'S6', 'ST']])  # straight
+        self.assertEqual(winner, [0, 1])
+
+        winner = compare_hands([['H3', 'D5', 'S6', 'H9', 'CA', 'HA', 'SA'],   # three of a kind
+                                ['H2', 'H3', 'C4', 'D5', 'CQ', 'SK', 'SA']])  # straight beginning with A
+        self.assertEqual(winner, [0, 1])
+
+
 if __name__ == '__main__':
     unittest.main()
