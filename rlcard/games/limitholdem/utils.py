@@ -15,6 +15,7 @@ class Hand:
         #cards’ type indicator
         self.RANK_TO_STRING = {2: "2", 3: "3", 4: "4", 5: "5", 6: "6",
                                7: "7", 8: "8", 9: "9", 10: "T", 11: "J", 12: "Q", 13: "K", 14: "A"}
+        self.STRING_TO_RANK = {v:k for k, v in self.RANK_TO_STRING.items()}
         self.RANK_LOOKUP = "23456789TJQKA"
         self.SUIT_LOOKUP = "SCDH"
 
@@ -168,19 +169,41 @@ class Hand:
         Returns:
             (list): the straight cards
         '''
+        ranks = [self.STRING_TO_RANK[c[1]] for c in Cards]
+
         highest_card = Cards[-1]
         if highest_card[1] == 'A':
             Cards.insert(0, highest_card)
+            ranks.insert(0, 1)
 
-        i = len(Cards)
-        while (i - 5 >= 0):
-            hand_to_check = ''.join(card[1] for card in Cards[i-5:i])
-            is_straight = self.RANK_LOOKUP.find(hand_to_check)
-            if is_straight > 0:
-                five_cards = [card for card in Cards[i-5:i]]
-                return five_cards
-            i -= 1
+        for i_last in range(len(ranks) - 1, 3, -1):
+            if ranks[i_last-4] + 4 == ranks[i_last]:  # works because ranks are unique and sorted in ascending order
+                return Cards[i_last-4:i_last+1]
         return []
+
+    # previous implementation with bugs (see the 2 lines of comment '1st bug' and '2nd bug')
+    # def _get_straight_cards(self, Cards):
+    #     # bug : returns [] incorrectly for input ['H2', 'H3', 'C4', 'D5', 'C6', 'S6', 'ST']
+    #     '''
+    #     Pick straight cards
+    #     Returns:
+    #         (list): the straight cards
+    #     '''
+    #     highest_card = Cards[-1]
+    #     if highest_card[1] == 'A':
+    #         Cards.insert(0, highest_card)
+    #
+    #     i = len(Cards)
+    #     while (i - 5 >= 0):
+    #         hand_to_check = ''.join(card[1] for card in Cards[i-5:i])
+    #         is_straight = self.RANK_LOOKUP.find(hand_to_check)
+    #         # 1st bug : RANK_LOOKUP always begins at 2 so the straight 1,2,3,4,5 can never be found
+    #         if is_straight > 0:
+    #             # 2nd bug : if is_straight == 0 we do have a straight so it should be 'if is_straight >= 0'
+    #             five_cards = [card for card in Cards[i-5:i]]
+    #             return five_cards
+    #         i -= 1
+    #     return []
 
     def _getcards_by_rank(self, all_cards):
         '''
