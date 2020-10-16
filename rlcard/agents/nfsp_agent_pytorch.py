@@ -227,7 +227,7 @@ class NFSPAgent(object):
         info_state = torch.from_numpy(info_state).float().to(self.device)
 
         with torch.no_grad():
-            log_action_probs = self.policy_network(info_state).numpy()
+            log_action_probs = self.policy_network(info_state).cpu().numpy()
 
         action_probs = np.exp(log_action_probs)[0]
 
