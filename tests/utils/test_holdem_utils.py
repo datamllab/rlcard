@@ -253,6 +253,27 @@ class TestHoldemUtils(unittest.TestCase):
                                 ['H2', 'H3', 'C4', 'D5', 'CQ', 'SK', 'SA']])  # straight beginning with A
         self.assertEqual(winner, [0, 1])
 
+        winner = compare_hands([['H5', 'HQ', 'C2', 'D3', 'S4', 'S5', 'HT'],   # pair
+                                ['D5', 'ST', 'C2', 'D3', 'S4', 'S5', 'HA'],   # A,2,3,4,5
+                                ['H6', 'HQ', 'C2', 'D3', 'S4', 'S5', 'HT'],   # 2,3,4,5,6
+                                ['H4', 'HQ', 'C2', 'D3', 'S4', 'S5', 'HT'],   # pair
+                                ])
+        self.assertEqual(winner, [0, 0, 1, 0])
+
+        winner = compare_hands([['D5', 'ST', 'C2', 'D3', 'S4', 'S5', 'HA'],   # A,2,3,4,5
+                                ['H6', 'H7', 'CK', 'DQ', 'SJ', 'ST', 'HA'],   # T,J,Q,K,A
+                                ['HA', 'HT', 'CK', 'DQ', 'SJ', 'ST', 'DT'],   # T,J,Q,K,A
+                                ['H2', 'H3', 'C4', 'D2', 'CQ', 'S2', 'SA'],   # three of a kind
+                                ])
+        self.assertEqual(winner, [0, 1, 1, 0])
+
+        winner = compare_hands([['H5', 'HQ', 'C2', 'D3', 'S4', 'S5', 'HT'],   # pair
+                                ['D5', 'ST', 'S2', 'S3', 'S4', 'S5', 'SA'],   # A,2,3,4,5 suited
+                                ['C6', 'HQ', 'C2', 'C3', 'C4', 'C5', 'HT'],   # 2,3,4,5,6 suited
+                                ['H7', 'H6', 'C9', 'C3', 'C4', 'C5', 'HT'],   # 3,4,5,6,7 not suited
+                                ])
+        self.assertEqual(winner, [0, 0, 1, 0])
+     
         winner = compare_hands([['S2', 'D8', 'H8', 'S7', 'S8', 'C8', 'D3'],  # 8-four of a kind, kicker 7
                                 ['S2', 'D8', 'H8', 'S9', 'S8', 'C8', 'D3'],  # 8-four of a kind, kicker 9
                                 ['H3', 'C3', 'HT', 'S3', 'ST', 'CT', 'D3'],  # 3-four of a kind, kicker T

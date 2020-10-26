@@ -506,6 +506,30 @@ def determine_winner(key_index, hands, all_players, potential_winner_index):
         count+=1
     return all_players
 
+def determine_winner_straight(hands, all_players, potential_winner_index):
+    '''
+    Find out who wins in the situation of having players all having a straight or straight flush
+    Args:
+        key_index(int): the position of a card in a sorted handcard
+        hands(list): cards of those players which all have a straight or straight flush
+        all_players(list): all the players in this round, 0 for losing and 1 for winning or draw
+        potential_winner_index(list): the positions of those players with same highest hand_catagory in all_players
+    Returns:
+        [0, 1, 0]: player1 wins
+        [1, 0, 0]: player0 wins
+        [1, 1, 1]: draw
+        [1, 1, 0]: player1 and player0 draws
+    '''
+    highest_ranks = []
+    for hand in hands:
+        highest_rank = hand.STRING_TO_RANK[hand.best_five[-1][1]]  # cards are sorted in ascending order
+        highest_ranks.append(highest_rank)
+    max_highest_rank = max(highest_ranks)
+    for i_player in range(len(highest_ranks)):
+        if highest_ranks[i_player] == max_highest_rank:
+            all_players[potential_winner_index[i_player]] = 1
+    return all_players
+
 def determine_winner_four_of_a_kind(hands, all_players, potential_winner_index):
     '''
     Find out who wins in the situation of having players which all have a four of a kind
@@ -520,7 +544,6 @@ def determine_winner_four_of_a_kind(hands, all_players, potential_winner_index):
         [1, 0, 0]: player0 wins
         [1, 1, 1]: draw
         [1, 1, 0]: player1 and player0 draws
-
     '''
     ranks = []
     for hand in hands:
@@ -605,7 +628,7 @@ def final_compare(hands, potential_winner_index, all_players):
         equal_hands = []
         for _ in potential_winner_index:
             equal_hands.append(hands[_])
-        if hands[potential_winner_index[0]].category == 9 or hands[potential_winner_index[0]].category == 5 or hands[potential_winner_index[0]].category == 8:
+        if hands[potential_winner_index[0]].category == 8:
             return determine_winner_four_of_a_kind(equal_hands, all_players, potential_winner_index)
         if hands[potential_winner_index[0]].category == 7:
             return determine_winner([2, 0], equal_hands, all_players, potential_winner_index)
@@ -617,3 +640,5 @@ def final_compare(hands, potential_winner_index, all_players):
             return determine_winner([4, 2, 1, 0], equal_hands, all_players, potential_winner_index)
         if hands[potential_winner_index[0]].category == 1 or hands[potential_winner_index[0]].category == 6:
             return determine_winner([4, 3, 2, 1, 0], equal_hands, all_players, potential_winner_index)
+        if hands[potential_winner_index[0]].category in [5, 9]:
+            return determine_winner_straight(equal_hands, all_players, potential_winner_index)
