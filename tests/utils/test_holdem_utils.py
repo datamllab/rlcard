@@ -273,6 +273,12 @@ class TestHoldemUtils(unittest.TestCase):
                                 ['H7', 'H6', 'C9', 'C3', 'C4', 'C5', 'HT'],   # 3,4,5,6,7 not suited
                                 ])
         self.assertEqual(winner, [0, 0, 1, 0])
+     
+        winner = compare_hands([['S2', 'D8', 'H8', 'S7', 'S8', 'C8', 'D3'],  # 8-four of a kind, kicker 7
+                                ['S2', 'D8', 'H8', 'S9', 'S8', 'C8', 'D3'],  # 8-four of a kind, kicker 9
+                                ['H3', 'C3', 'HT', 'S3', 'ST', 'CT', 'D3'],  # 3-four of a kind, kicker T
+                                ])
+        self.assertEqual(winner, [0, 1, 0])
 
 
 if __name__ == '__main__':
