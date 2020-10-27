@@ -181,30 +181,6 @@ class Hand:
                 return Cards[i_last-4:i_last+1]
         return []
 
-    # previous implementation with bugs (see the 2 lines of comment '1st bug' and '2nd bug')
-    # def _get_straight_cards(self, Cards):
-    #     # bug : returns [] incorrectly for input ['H2', 'H3', 'C4', 'D5', 'C6', 'S6', 'ST']
-    #     '''
-    #     Pick straight cards
-    #     Returns:
-    #         (list): the straight cards
-    #     '''
-    #     highest_card = Cards[-1]
-    #     if highest_card[1] == 'A':
-    #         Cards.insert(0, highest_card)
-    #
-    #     i = len(Cards)
-    #     while (i - 5 >= 0):
-    #         hand_to_check = ''.join(card[1] for card in Cards[i-5:i])
-    #         is_straight = self.RANK_LOOKUP.find(hand_to_check)
-    #         # 1st bug : RANK_LOOKUP always begins at 2 so the straight 1,2,3,4,5 can never be found
-    #         if is_straight > 0:
-    #             # 2nd bug : if is_straight == 0 we do have a straight so it should be 'if is_straight >= 0'
-    #             five_cards = [card for card in Cards[i-5:i]]
-    #             return five_cards
-    #         i -= 1
-    #     return []
-
     def _getcards_by_rank(self, all_cards):
         '''
         Get cards by rank
@@ -430,39 +406,45 @@ class Hand:
         High_cards = self.all_cards[2:7]
         return High_cards
 
-def compare_ranks(position, hands):
+def compare_ranks(position, hands, winner):
     '''
     Compare cards in same position of plays' five handcards
     Args:
         position(int): the position of a card in a sorted handcard
         hands(list): cards of those players.
         e.g. hands = [['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CJ', 'SJ', 'H9', 'B9', 'C2', 'C8', 'C7'], ['CT', 'ST', 'H9', 'B9', 'C2', 'C8', 'C7']]
+        winner: array of same length than hands with 1 if the hand is among winners and 0 among losers
     Returns:
+        new updated winner array
         [0, 1, 0]: player1 wins
         [1, 0, 0]: player0 wins
         [1, 1, 1]: draw
         [1, 1, 0]: player1 and player0 draws
 
     '''
+    assert len(hands) == len(winner)
     RANKS = '23456789TJQKA'
-    winner = [0]*len(hands)
-    figure = [['1', 'J']]*len(hands) #cards without suit
-    for _ in enumerate(hands):
-        i = hands[_[0]].get_hand_five_cards()
-        if len(i[0]) != 1:# remove suit
-            for p in range(5):
-                i[p] = i[p][1:]
-        figure[_[0]] = i
+    cards_figure_all_players = [None]*len(hands)  #cards without suit
+    for i, hand in enumerate(hands):
+        if winner[i]:
+            cards = hands[i].get_hand_five_cards()
+            if len(cards[0]) != 1:# remove suit
+                for p in range(5):
+                    cards[p] = cards[p][1:]
+            cards_figure_all_players[i] = cards
 
-    rival_figures = [] # figures in the same position, to be compared
     rival_ranks = [] # ranks of rival_figures
-    for _ in enumerate(figure):
-        rival_figures.append(figure[_[0]][position])
-        rival_ranks.append(RANKS.index(rival_figures[_[0]]))
-    high_ranks = [q for q, j in enumerate(rival_ranks) if j == max(rival_ranks)]
-    for _ in high_ranks:
-        winner[_] = 1
-    return winner
+    for i, cards_figure in enumerate(cards_figure_all_players):
+        if winner[i]:
+            rank = cards_figure_all_players[i][position]
+            rival_ranks.append(RANKS.index(rank))
+        else:
+            rival_ranks.append(-1)  # player has already lost
+    new_winner = list(winner)
+    for i, rival_rank in enumerate(rival_ranks):
+        if rival_rank != max(rival_ranks):
+            new_winner[i] = 0
+    return new_winner
 
 def determine_winner(key_index, hands, all_players, potential_winner_index):
     '''
@@ -480,30 +462,15 @@ def determine_winner(key_index, hands, all_players, potential_winner_index):
         [1, 1, 0]: player1 and player0 draws
 
     '''
-    count = 0
-    losers = []
     winner = [1]*len(hands)
-    for _ in key_index:
-        index_winner = compare_ranks(_, hands)
-        for loser in losers:
-            index_winner.insert(loser, 0)
-        for _ in enumerate(winner):
-            if winner[_[0]] == 1:
-                winner[_[0]] = index_winner[_[0]]
-            if winner[_[0]] == 0:
-                if _[0] not in losers:
-                    i = _[0]
-                    i = i - np.sum(list(map(lambda x: x < i, losers)))
-                    i = int(i)
-                    del hands[i]
-                    losers.append(_[0])
-                continue
-        if winner.count(1) == 1:
-            break
-    for _ in winner:
-        if _ == 1:
-            all_players[potential_winner_index[count]] = 1
-        count+=1
+    i_index = 0
+    while i_index < len(key_index) and sum(winner) > 1:
+        index_break_tie = key_index[i_index]
+        winner = compare_ranks(index_break_tie, hands, winner)
+        i_index += 1
+    for i in range(len(potential_winner_index)):
+        if winner[i]:
+            all_players[potential_winner_index[i]] = 1
     return all_players
 
 def determine_winner_straight(hands, all_players, potential_winner_index):
