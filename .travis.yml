@@ -2,9 +2,10 @@ language: python
 python:
   - "3.6"
   - "3.7"
+  - "3.8"
+  - "3.9"
 install: 
-  - pip install -e .[torch]
-  - pip install -e .[tensorflow]
+  - pip install -e .
 before_script:
   - pip install python-coveralls
   - pip install pytest-cover
