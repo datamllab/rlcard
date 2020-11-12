@@ -54,6 +54,7 @@ setuptools.setup(
     extras_require=extras,
     requires_python='>=3.5',
     classifiers=[
+        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",
