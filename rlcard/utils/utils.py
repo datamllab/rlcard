@@ -224,7 +224,10 @@ def print_card(cards):
             lines[7].append('│░░░░░░░░░│')
             lines[8].append('└─────────┘')
         else:
-            elegent_card = elegent_form(card)
+            if isinstance(card, Card):
+                elegent_card = elegent_form(card.suit + card.rank)
+            else:
+                elegent_card = elegent_form(card)
             suit = elegent_card[0]
             rank = elegent_card[1]
             if len(elegent_card) == 3:
