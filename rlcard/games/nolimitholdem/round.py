@@ -146,7 +146,7 @@ class NolimitholdemRound():
         # If the current player has no more chips after call, we cannot raise
         diff = max(self.raised) - self.raised[self.game_pointer]
         if diff > 0 and player.in_chips + diff >= player.remained_chips:
-            return [Action.FOLD, Action.CALL]
+            return [Action.CALL, Action.FOLD]
 
         return full_actions
 
