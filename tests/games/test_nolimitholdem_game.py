@@ -102,7 +102,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
 
         game.step(Action.CHECK)
         game.step(Action.ALL_IN)
-        self.assertListEqual([Action.CALL, Action.FOLD], game.get_legal_actions())
+        self.assertListEqual([Action.FOLD, Action.CALL], game.get_legal_actions())
         game.step(Action.CALL)
         self.assertEqual(game.round_counter, 4)
         self.assertEqual(200, game.dealer.pot)
