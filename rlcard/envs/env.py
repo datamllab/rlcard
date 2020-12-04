@@ -14,8 +14,8 @@ class Env(object):
             config (dict): A config dictionary. All the fields are
                 optional. Currently, the dictionary includes:
                 'seed' (int) - A environment local random seed.
-                'env_num' (int) - If env_num>1, the environemnt wil be run
-                  with multiple processes. Note the implementatino is
+                'env_num' (int) - If env_num>1, the environment wil be run
+                  with multiple processes. Note the implementation is
                   in `vec_env.py`.
                 'allow_step_back' (boolean) - True if allowing
                  step_back.
