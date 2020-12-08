@@ -6,6 +6,10 @@ import rlcard
 from rlcard.envs import Env
 from rlcard.games.limitholdem import Game
 
+DEFAULT_GAME_CONFIG = {
+        'game_player_num': 2,
+        }
+
 class LimitholdemEnv(Env):
     ''' Limitholdem Environment
     '''
@@ -14,6 +18,7 @@ class LimitholdemEnv(Env):
         ''' Initialize the Limitholdem environment
         '''
         self.name = 'limit-holdem'
+        self.default_game_config = DEFAULT_GAME_CONFIG
         self.game = Game()
         super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']
