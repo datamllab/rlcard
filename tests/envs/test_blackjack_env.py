@@ -51,6 +51,11 @@ class TestBlackjackEnv(unittest.TestCase):
         with self.assertRaises(Exception):
             env.step_back()
 
+    def test_multiplayers(self):
+        env = rlcard.make('blackjack', config={'game_player_num':5})
+        player_num = env.game.get_player_num()
+        self.assertEqual(player_num, 5)
+
     def test_run(self):
         env = rlcard.make('blackjack')
         env.set_agents([RandomAgent(env.action_num)])

@@ -74,5 +74,10 @@ class TestLimitholdemEnv(unittest.TestCase):
         _, player_id = env.reset()
         self.assertEqual(player_id, env.get_perfect_information()['current_player'])
 
+    def test_multiplayers(self):
+        env = rlcard.make('limit-holdem', config={'game_player_num':5})
+        player_num = env.game.get_player_num()
+        self.assertEqual(player_num, 5)
+
 if __name__ == '__main__':
     unittest.main()
