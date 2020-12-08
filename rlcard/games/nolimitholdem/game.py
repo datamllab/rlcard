@@ -37,6 +37,11 @@ class NolimitholdemGame(Game):
         self.num_players = num_players
         self.init_chips = 100
 
+    def configure(self, game_config):
+        ''' Specifiy some game specific parameters, such as player number
+        '''
+        self.num_players = game_config['game_player_num']
+
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
 
@@ -199,6 +204,14 @@ class NolimitholdemGame(Game):
             self.round, self.game_pointer, self.round_counter, self.dealer, self.public_cards, self.players = self.history.pop()
             return True
         return False
+
+    def get_player_num(self):
+        ''' Return the number of players in No Limit Texas Hold'em
+
+        Returns:
+            (int): The number of players in the game
+        '''
+        return self.num_players
 
     def get_payoffs(self):
         ''' Return the payoffs of the game

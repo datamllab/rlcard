@@ -29,9 +29,9 @@ class Env(object):
                   pretrained models.
                 There can be some game specific configurations, e.g., the
                 number of players in the game. These fields should start with
-                'game_', e.g., 'game_player_num' we specify the number of
+                'game_', e.g., 'game_player_num' which specify the number of
                 players in the game. Since these configurations may be game-specific,
-                The default settings shpuld be put in the Env class. For example,
+                The default settings should be put in the Env class. For example,
                 the default game configurations for Blackjack should be in
                 'rlcard/envs/blackjack.py'
                 TODO: Support more game configurations in the future.
@@ -45,7 +45,7 @@ class Env(object):
         # Game specific configurations
         # Currently only support blackjack
         # TODO support game configurations for all the games
-        supported_envs = ['blackjack']
+        supported_envs = ['blackjack', 'limit-holdem', 'no-limit-holdem']
         if self.name in supported_envs:
             _game_config = self.default_game_config.copy()
             for key in config:

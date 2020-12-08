@@ -8,7 +8,7 @@ from rlcard.games.limitholdem import Round
 
 class LimitholdemGame(object):
 
-    def __init__(self, allow_step_back=False):
+    def __init__(self, allow_step_back=False, num_players=2):
         ''' Initialize the class limitholdem Game
         '''
         self.allow_step_back = allow_step_back
@@ -25,10 +25,15 @@ class LimitholdemGame(object):
         self.raise_amount = self.big_blind
         self.allowed_raise_num = 4
 
-        self.num_players = 2
+        self.num_players = num_players
 
         # Save betting history
         self.history_raise_nums = [0 for _ in range(4)]
+
+    def configure(self, game_config):
+        ''' Specifiy some game specific parameters, such as player number
+        '''
+        self.num_players = game_config['game_player_num']
 
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
