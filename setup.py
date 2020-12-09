@@ -52,7 +52,7 @@ setuptools.setup(
         'packaging',
     ],
     extras_require=extras,
-    requires_python='>=3.5',
+    requires_python='>=3.6',
     classifiers=[
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.7",
