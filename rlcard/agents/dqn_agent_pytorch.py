@@ -66,7 +66,7 @@ class DQNAgent(object):
         Args:
             scope (str): The name of the DQN agent
             replay_memory_size (int): Size of the replay memory
-            replay_memory_init_size (int): Number of random experiences to sampel when initializing
+            replay_memory_init_size (int): Number of random experiences to sample when initializing
               the reply memory.
             update_target_estimator_every (int): Copy parameters from the Q estimator to the
               target estimator every N steps
