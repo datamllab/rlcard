@@ -61,15 +61,15 @@ class DQNAgent(object):
             sess (tf.Session): Tensorflow Session object.
             scope (string): The name scope of the DQN agent.
             replay_memory_size (int): Size of the replay memory
-            replay_memory_init_size (int): Number of random experiences to sampel when initializing
+            replay_memory_init_size (int): Number of random experiences to sample from when initializing
               the reply memory.
             train_every (int): Train the agent every X steps.
             update_target_estimator_every (int): Copy parameters from the Q estimator to the
               target estimator every N steps
             discount_factor (float): Gamma discount factor
-            epsilon_start (int): Chance to sample a random action when taking an action.
+            epsilon_start (float): Chance to sample a random action when taking an action.
               Epsilon is decayed over time and this is the start value
-            epsilon_end (int): The final minimum value of epsilon after decaying is done
+            epsilon_end (float): The final minimum value of epsilon after decaying is done
             epsilon_decay_steps (int): Number of steps to decay epsilon over
             batch_size (int): Size of batches to sample from the replay memory
             evaluate_every (int): Evaluate every N steps
