@@ -4,15 +4,15 @@
 from rlcard.models.registration import register, load
 import subprocess
 import sys
-from packaging import version
+from distutils.version import LooseVersion
 
 reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
 installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
 
 if 'tensorflow' in installed_packages:
     import tensorflow as tf
-    if version.parse(tf.__version__) < version.parse('1.14.0') \
-            or version.parse(tf.__version__) >= version.parse('2.0.0'):
+    if LooseVersion(tf.__version__) < LooseVersion('1.14.0') \
+            or LooseVersion(tf.__version__) >= LooseVersion('2.0.0'):
         print('WAINING - RLCard supports Tensorflow >=1.14 and <2.0\nThe detected version is {} \nIf the models can not be loaded, please install Tensorflow via\n$ pip install rlcard[tensorflow]\n'.format(tf.__version__))
     register(
         model_id = 'leduc-holdem-nfsp',

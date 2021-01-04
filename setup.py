@@ -4,8 +4,8 @@ with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
 extras = {
-    'torch': ['torch>=1.3'],
-    'tensorflow': ['tensorflow>=1.14,<2.0']
+    'torch': ['torch>=1.3', 'matplotlib>=3.0'],
+    'tensorflow': ['tensorflow>=1.14,<2.0', 'matplotlib>=3.0']
 }
 
 def _get_version():
@@ -46,10 +46,7 @@ setuptools.setup(
                    ]},
     install_requires=[
         'numpy>=1.16.3',
-        'matplotlib>=3.0',
-        'pillow>=5.2.0',
-        'termcolor',
-        'packaging',
+        'termcolor'
     ],
     extras_require=extras,
     requires_python='>=3.6',
