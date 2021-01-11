@@ -35,12 +35,15 @@ class NolimitholdemGame(Game):
 
         # config players
         self.num_players = num_players
-        self.init_chips = 100
+        self.init_chips = [100] * num_players
 
     def configure(self, game_config):
-        ''' Specifiy some game specific parameters, such as player number
+        ''' Specifiy some game specific parameters, such as player number and initial chips
         '''
         self.num_players = game_config['game_player_num']
+        self.init_chips = game_config['init_chips']
+        if isinstance(self.init_chips, int):
+            self.init_chips = [self.init_chips] * self.num_players
 
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
@@ -57,7 +60,7 @@ class NolimitholdemGame(Game):
         self.dealer = Dealer(self.np_random)
 
         # Initilize two players to play the game
-        self.players = [Player(i, self.init_chips, self.np_random) for i in range(self.num_players)]
+        self.players = [Player(i, self.init_chips[i], self.np_random) for i in range(self.num_players)]
 
         # Initialize a judger class which will decide who wins in the end
         self.judger = Judger(self.np_random)
