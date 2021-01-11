@@ -71,6 +71,30 @@ class TestNolimitholdemMethods(unittest.TestCase):
 
         self.assertEqual(Stage.RIVER, game.stage)
 
+    def test_step_3_players(self):
+        game = Game(num_players=3)
+
+        # test check
+        game.init_game()
+        self.assertEqual(Stage.PREFLOP, game.stage)
+        game.step(Action.CALL)
+        game.step(Action.CALL)
+        game.step(Action.RAISE_POT)
+        game.step(Action.FOLD)
+        game.step(Action.CALL)
+
+        self.assertEqual(Stage.FLOP, game.stage)
+        game.step(Action.CHECK)
+        game.step(Action.CHECK)
+        game.step(Action.CHECK)
+
+        self.assertEqual(Stage.TURN, game.stage)
+        game.step(Action.CHECK)
+        game.step(Action.CHECK)
+        game.step(Action.CHECK)
+
+        self.assertEqual(Stage.RIVER, game.stage)
+
     def test_auto_step(self):
         game = Game()
 
