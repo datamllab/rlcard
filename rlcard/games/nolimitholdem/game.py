@@ -214,9 +214,6 @@ class NolimitholdemGame(Game):
         '''
         return self.num_players
 
-    def get_players(self):
-        return self.players
-
     def get_payoffs(self):
         ''' Return the payoffs of the game
 
