@@ -141,6 +141,11 @@ class NolimitholdemGame(Game):
         self.game_pointer = self.round.proceed_round(self.players, action)
 
         players_in_bypass = [1 if player.status in (PlayerStatus.FOLDED, PlayerStatus.ALLIN) else 0 for player in self.players]
+        if self.num_players - sum(players_in_bypass) == 1:
+            last_player = players_in_bypass.index(0)
+            if self.round.raised[last_player] >= max(self.round.raised):
+                # If the last player has put enough chips, he is also bypassed
+                players_in_bypass[last_player] = 1
 
         # If a round is over, we deal more public cards
         if self.round.is_over():

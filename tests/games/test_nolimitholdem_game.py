@@ -203,6 +203,16 @@ class TestNolimitholdemMethods(unittest.TestCase):
         self.assertEqual(2, len(game.get_payoffs()))
         #self.assertListEqual([6.0, -6.0], game.get_payoffs())
 
+    def test_all_in_to_call(self):
+        game = Game()
+        game.init_chips = [50, 100]
+        game.dealer_id = 0
+        game.init_game()
+        game.step(Action.CALL)
+        game.step(Action.ALL_IN)
+        game.step(Action.CALL)
+        self.assertTrue(game.is_over())
+
 
 if __name__ == '__main__':
     unittest.main()
