@@ -153,7 +153,8 @@ class NolimitholdemRound():
             full_actions.remove(Action.RAISE_HALF_POT)
 
         # Can't raise if the raise is smaller than pot
-        if int(self.dealer.pot / 2) + player.in_chips <= max(self.raised):
+        if Action.RAISE_HALF_POT in full_actions and \
+                int(self.dealer.pot / 2) + player.in_chips <= max(self.raised):
             full_actions.remove(Action.RAISE_HALF_POT)
 
         # If the current player has no more chips after call, we cannot raise
