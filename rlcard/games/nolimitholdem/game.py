@@ -35,12 +35,13 @@ class NolimitholdemGame(Game):
 
         # config players
         self.num_players = num_players
-        self.init_chips = 100
+        self.init_chips = [100]*2
 
     def configure(self, game_config):
         ''' Specifiy some game specific parameters, such as player number
         '''
         self.num_players = game_config['game_player_num']
+        self.init_chips = game_config['chips_for_each']
 
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
@@ -56,8 +57,8 @@ class NolimitholdemGame(Game):
         # Initilize a dealer that can deal cards
         self.dealer = Dealer(self.np_random)
 
-        # Initilize two players to play the game
-        self.players = [Player(i, self.init_chips, self.np_random) for i in range(self.num_players)]
+        # Initilize players to play the game
+        self.players = [Player(i, self.init_chips[i], self.np_random) for i in range(self.num_players)]
 
         # Initialize a judger class which will decide who wins in the end
         self.judger = Judger(self.np_random)
@@ -212,6 +213,9 @@ class NolimitholdemGame(Game):
             (int): The number of players in the game
         '''
         return self.num_players
+
+    def get_players(self):
+        return self.players
 
     def get_payoffs(self):
         ''' Return the payoffs of the game
