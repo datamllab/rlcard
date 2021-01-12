@@ -75,7 +75,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game = Game(num_players=3)
 
         # test check
-        game.init_game()
+        _, first_player_id = game.init_game()
         self.assertEqual(Stage.PREFLOP, game.stage)
         game.step(Action.CALL)
         game.step(Action.CALL)
@@ -84,12 +84,13 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game.step(Action.CALL)
 
         self.assertEqual(Stage.FLOP, game.stage)
+        self.assertEqual((first_player_id - 2) % 3, game.round.game_pointer)
         game.step(Action.CHECK)
-        game.step(Action.CHECK)
-        game.step(Action.CHECK)
+        game.step(Action.RAISE_POT)
+        game.step(Action.CALL)
 
         self.assertEqual(Stage.TURN, game.stage)
-        game.step(Action.CHECK)
+        self.assertEqual((first_player_id - 2) % 3, game.round.game_pointer)
         game.step(Action.CHECK)
         game.step(Action.CHECK)
 
