@@ -37,11 +37,16 @@ class NolimitholdemGame(Game):
         self.num_players = num_players
         self.init_chips = [100] * num_players
 
+        # Randomly choose a dealer
+        self.dealer_id = self.np_random.randint(0, self.num_players)
+
     def configure(self, game_config):
         ''' Specifiy some game specific parameters, such as player number and initial chips
         '''
         self.num_players = game_config['game_player_num']
         self.init_chips = game_config['chips_for_each']
+        self.dealer_id = game_config['dealer_id'] if game_config['dealer_id'] is not None else \
+            self.np_random.randint(0, self.num_players)
 
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
@@ -70,9 +75,6 @@ class NolimitholdemGame(Game):
         # Initilize public cards
         self.public_cards = []
         self.stage = Stage.PREFLOP
-
-        # Randomly choose a dealer
-        self.dealer_id = self.np_random.randint(0, self.num_players)
 
         # Big blind and small blind
         s = (self.dealer_id + 1) % self.num_players
