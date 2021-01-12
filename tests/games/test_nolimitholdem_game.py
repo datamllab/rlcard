@@ -166,7 +166,8 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game = Game()
 
         _, player_id = game.init_game()
-        game.step(Action.RAISE_HALF_POT)
+        self.assertNotIn(Action.RAISE_HALF_POT, game.get_legal_actions()) # Half pot equals call
+        game.step(Action.CALL)
         step_raised = game.round.raised[player_id]
         self.assertEqual(2, step_raised)
 
