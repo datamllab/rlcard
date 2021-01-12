@@ -73,9 +73,12 @@ class NolimitholdemGame(Game):
         self.public_cards = []
         self.stage = Stage.PREFLOP
 
-        # Randomly choose a big blind and a small blind
-        s = self.np_random.randint(0, self.num_players)
-        b = (s + 1) % self.num_players
+        # Randomly choose a dealer
+        self.dealer_id = self.np_random.randint(0, self.num_players)
+
+        # Big blind and small blind
+        s = (self.dealer_id + 1) % self.num_players
+        b = (self.dealer_id + 2) % self.num_players
         self.players[b].bet(chips=self.big_blind)
         self.players[s].bet(chips=self.small_blind)
 
@@ -141,6 +144,12 @@ class NolimitholdemGame(Game):
 
         # If a round is over, we deal more public cards
         if self.round.is_over():
+            # Game pointer goes to the first player not in bypass after the dealer, if there is one
+            self.game_pointer = (self.dealer_id + 1) % self.num_players
+            if sum(players_in_bypass) < self.num_players:
+                while players_in_bypass[self.game_pointer]:
+                    self.game_pointer = (self.game_pointer + 1) % self.num_players
+
             # For the first round, we deal 3 cards
             if self.round_counter == 0:
                 self.stage = Stage.FLOP
