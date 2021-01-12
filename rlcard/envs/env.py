@@ -43,7 +43,7 @@ class Env(object):
             self.action_recorder = []
 
         # Game specific configurations
-        # Currently only support blackjack
+        # Currently only support blackjack、limit-holdem、no-limit-holdem
         # TODO support game configurations for all the games
         supported_envs = ['blackjack', 'limit-holdem', 'no-limit-holdem']
         if self.name in supported_envs:
