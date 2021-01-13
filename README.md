@@ -206,6 +206,13 @@ For your information, there is a nice online evaluation platform [pokerwars](htt
 ## More Documents
 For more documentation, please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
 
+## Community
+**Slack**:
+Discuss in our [#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-l4qbarxs-mtBrjBRpYIMq4Re4jvYpWQ) slack channel.
+
+**QQ Group**:
+Join our QQ group 665647450. Password: rlcardqqgroup
+
 ## Contributing
 Contribution to this project is greatly appreciated! Please create an issue for feedbacks/bugs. If you want to contribute codes, please refer to [Contributing Guide](./CONTRIBUTING.md).
 
