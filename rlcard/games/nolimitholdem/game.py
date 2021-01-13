@@ -163,22 +163,13 @@ class NolimitholdemGame(Game):
                 self.public_cards.append(self.dealer.deal_card())
                 if len(self.players) == np.sum(players_in_bypass):
                     self.round_counter += 1
-                    self.stage = Stage.TURN
-                    self.public_cards.append(self.dealer.deal_card())
-                    self.round_counter += 1
-                    self.stage = Stage.RIVER
-                    self.public_cards.append(self.dealer.deal_card())
-                    self.round_counter += 1
             # For the following rounds, we deal only 1 card
-            elif self.round_counter == 1:
+            if self.round_counter == 1:
                 self.stage = Stage.TURN
                 self.public_cards.append(self.dealer.deal_card())
                 if len(self.players) == np.sum(players_in_bypass):
                     self.round_counter += 1
-                    self.stage = Stage.RIVER
-                    self.public_cards.append(self.dealer.deal_card())
-                    self.round_counter += 1
-            elif self.round_counter == 2:
+            if self.round_counter == 2:
                 self.stage = Stage.RIVER
                 self.public_cards.append(self.dealer.deal_card())
                 if len(self.players) == np.sum(players_in_bypass):
