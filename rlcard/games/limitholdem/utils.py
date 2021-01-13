@@ -594,8 +594,10 @@ def final_compare(hands, potential_winner_index, all_players):
         # compare when having equal max categories
         equal_hands = []
         for _ in potential_winner_index:
-            equal_hands.append(hands[_])
-        hand = Hand(hands[potential_winner_index[0]])
+            hand = Hand(hands[_])
+            hand.evaluateHand()
+            equal_hands.append(hand)
+        hand = equal_hands[0]
         if hand.category == 8:
             return determine_winner_four_of_a_kind(equal_hands, all_players, potential_winner_index)
         if hand.category == 7:
