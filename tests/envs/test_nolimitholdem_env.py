@@ -78,5 +78,14 @@ class TestNolimitholdemEnv(unittest.TestCase):
         player_num = env.game.get_player_num()
         self.assertEqual(player_num, 5)
 
+    def test_config_chips(self):
+        env = rlcard.make('no-limit-holdem', config={'game_player_num':5, 'chips_for_each':[100, 200, 400, 600, 900]})
+        env.game.init_game()
+        players = env.game.players
+        chips = []
+        for i in range(5):
+            chips.append(players[i].remained_chips + players[i].in_chips)
+        self.assertEqual(chips, [100, 200, 400, 600, 900])
+
 if __name__ == '__main__':
     unittest.main()

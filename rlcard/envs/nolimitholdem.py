@@ -9,6 +9,7 @@ from rlcard.games.nolimitholdem.round import Action
 
 DEFAULT_GAME_CONFIG = {
         'game_player_num': 2,
+        'chips_for_each': [100]*2,
         }
 
 class NolimitholdemEnv(Env):
