@@ -22,10 +22,8 @@ class LimitholdemJudger(object):
             (list): Each entry of the list corresponds to one entry of the
         '''
         # Convert the hands into card indexes
-        for i, hand in enumerate(hands):
-            if hands[i] is not None:
-                h = [card.get_index() for card in hand]
-                hands[i] = h
+        hands = [[card.get_index() for card in hand] if hand is not None else None
+                 for hand in hands]
 
         winners = compare_hands(hands)
 
