@@ -5,7 +5,8 @@ with open("README.md", "r", encoding="utf8") as fh:
 
 extras = {
     'torch': ['torch>=1.3', 'matplotlib>=3.0'],
-    'tensorflow': ['tensorflow>=1.14,<2.0', 'matplotlib>=3.0']
+    'tensorflow': ['tensorflow>=1.14,<2.0', 'matplotlib>=3.0'],
+    'tensorflow-gpu': ['tensorflow-gpu>=1.14,<2.0', 'matplotlib>=3.0'],
 }
 
 def _get_version():
