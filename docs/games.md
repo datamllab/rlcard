@@ -217,14 +217,14 @@ No-limit Texas Hold'em has similar rule with Limit Texas Hold'em. But unlike in 
 ## State Representation of No-Limit Texas Hold'em
 The state representation is similar to Limit Hold'em game. The state is represented as 52 cards and 2 elements of the chips of the players as below:
 
-| Index   | Meaning                 |
-| ------- | :---------------------- |
-| 0~12    | Spade A ~ Spade K       |
-| 13~25   | Heart A ~ Heart K       |
-| 26~38   | Diamond A ~ Diamond K   |
-| 39~51   | Club A ~ Club K         |
-| 52      | Chips of player 1       |
-| 53      | Chips of player 2       |
+| Index   | Meaning                            |
+| ------- | :--------------------------------- |
+| 0~12    | Spade A ~ Spade K                  |
+| 13~25   | Heart A ~ Heart K                  |
+| 26~38   | Diamond A ~ Diamond K              |
+| 39~51   | Club A ~ Club K                    |
+| 52      | Chips of player 1                  |
+| 53      | Chips that all players have put in |
 
 ### Action Encoding of No-Limit Texas Hold'em
 There are 103 actions in No-limit Texas Hold'em. They are encoded as below.
