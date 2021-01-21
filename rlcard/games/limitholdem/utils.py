@@ -554,16 +554,16 @@ def compare_hands(hands):
         else:
             for _ in enumerate(hands):
                 if hands[_[0]] is not None:
-                    hands[_[0]] = Hand(hands[_[0]])
-                    hands[_[0]].evaluateHand()
-                    hand_category.append(hands[_[0]].category)
+                    hand = Hand(hands[_[0]])
+                    hand.evaluateHand()
+                    hand_category.append(hand.category)
                 elif hands[_[0]] is None:
                     hand_category.append(0)
     else:
             for i in enumerate(hands):
-                hands[i[0]] = Hand(hands[i[0]])
-                hands[i[0]].evaluateHand()
-                hand_category.append(hands[i[0]].category)
+                hand = Hand(hands[i[0]])
+                hand.evaluateHand()
+                hand_category.append(hand.category)
     potential_winner_index = [i for i, j in enumerate(hand_category) if j == max(hand_category)]# potential winner are those with same max card_catagory
 
     return final_compare(hands, potential_winner_index, all_players)
@@ -594,18 +594,21 @@ def final_compare(hands, potential_winner_index, all_players):
         # compare when having equal max categories
         equal_hands = []
         for _ in potential_winner_index:
-            equal_hands.append(hands[_])
-        if hands[potential_winner_index[0]].category == 8:
+            hand = Hand(hands[_])
+            hand.evaluateHand()
+            equal_hands.append(hand)
+        hand = equal_hands[0]
+        if hand.category == 8:
             return determine_winner_four_of_a_kind(equal_hands, all_players, potential_winner_index)
-        if hands[potential_winner_index[0]].category == 7:
+        if hand.category == 7:
             return determine_winner([2, 0], equal_hands, all_players, potential_winner_index)
-        if hands[potential_winner_index[0]].category == 4:
+        if hand.category == 4:
             return determine_winner([2, 1, 0], equal_hands, all_players, potential_winner_index)
-        if hands[potential_winner_index[0]].category == 3:
+        if hand.category == 3:
             return determine_winner([4, 2, 0], equal_hands, all_players, potential_winner_index)
-        if hands[potential_winner_index[0]].category == 2:
+        if hand.category == 2:
             return determine_winner([4, 2, 1, 0], equal_hands, all_players, potential_winner_index)
-        if hands[potential_winner_index[0]].category == 1 or hands[potential_winner_index[0]].category == 6:
+        if hand.category == 1 or hand.category == 6:
             return determine_winner([4, 3, 2, 1, 0], equal_hands, all_players, potential_winner_index)
-        if hands[potential_winner_index[0]].category in [5, 9]:
+        if hand.category in [5, 9]:
             return determine_winner_straight(equal_hands, all_players, potential_winner_index)
