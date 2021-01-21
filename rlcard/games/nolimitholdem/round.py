@@ -42,6 +42,9 @@ class NolimitholdemRound():
         # If every player agree to not raise, the round is overr
         self.not_raise_num = 0
 
+        # Count players that are not playing anymore (folded or all-in)
+        self.not_playing_num = 0
+
         # Raised amount for each player
         self.raised = [0 for _ in range(self.num_players)]
 
@@ -110,6 +113,12 @@ class NolimitholdemRound():
 
         self.game_pointer = (self.game_pointer + 1) % self.num_players
 
+        if player.status == PlayerStatus.ALLIN:
+            self.not_playing_num += 1
+            self.not_raise_num -= 1  # Because already counted in not_playing_num
+        if player.status == PlayerStatus.FOLDED:
+            self.not_playing_num += 1
+
         # Skip the folded players
         while players[self.game_pointer].status == PlayerStatus.FOLDED:
             self.game_pointer = (self.game_pointer + 1) % self.num_players
@@ -143,6 +152,11 @@ class NolimitholdemRound():
         if int(self.dealer.pot / 2) > player.remained_chips:
             full_actions.remove(Action.RAISE_HALF_POT)
 
+        # Can't raise if the raise is smaller than pot
+        if Action.RAISE_HALF_POT in full_actions and \
+                int(self.dealer.pot / 2) + player.in_chips <= max(self.raised):
+            full_actions.remove(Action.RAISE_HALF_POT)
+
         # If the current player has no more chips after call, we cannot raise
         diff = max(self.raised) - self.raised[self.game_pointer]
         if diff > 0 and player.in_chips + diff >= player.remained_chips:
@@ -156,6 +170,6 @@ class NolimitholdemRound():
         Returns:
             (boolean): True if the current round is over
         '''
-        if self.not_raise_num >= self.num_players:
+        if self.not_raise_num + self.not_playing_num >= self.num_players:
             return True
         return False

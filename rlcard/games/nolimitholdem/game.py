@@ -35,13 +35,18 @@ class NolimitholdemGame(Game):
 
         # config players
         self.num_players = num_players
-        self.init_chips = [100]*2
+        self.init_chips = [100] * num_players
+
+        # If None, the dealer will be randomly chosen
+        self.dealer_id = None
 
     def configure(self, game_config):
-        ''' Specifiy some game specific parameters, such as player number
+        ''' Specifiy some game specific parameters, such as player number, initial chips, and dealer id.
+        If dealer_id is None, he will be randomly chosen
         '''
         self.num_players = game_config['game_player_num']
         self.init_chips = game_config['chips_for_each']
+        self.dealer_id = game_config['dealer_id']
 
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
@@ -54,6 +59,9 @@ class NolimitholdemGame(Game):
                 (dict): The first state of the game
                 (int): Current player's id
         '''
+        if self.dealer_id is None:
+            self.dealer_id = self.np_random.randint(0, self.num_players)
+
         # Initilize a dealer that can deal cards
         self.dealer = Dealer(self.np_random)
 
@@ -71,9 +79,9 @@ class NolimitholdemGame(Game):
         self.public_cards = []
         self.stage = Stage.PREFLOP
 
-        # Randomly choose a big blind and a small blind
-        s = self.np_random.randint(0, self.num_players)
-        b = (s + 1) % self.num_players
+        # Big blind and small blind
+        s = (self.dealer_id + 1) % self.num_players
+        b = (self.dealer_id + 2) % self.num_players
         self.players[b].bet(chips=self.big_blind)
         self.players[s].bet(chips=self.small_blind)
 
@@ -136,9 +144,20 @@ class NolimitholdemGame(Game):
         self.game_pointer = self.round.proceed_round(self.players, action)
 
         players_in_bypass = [1 if player.status in (PlayerStatus.FOLDED, PlayerStatus.ALLIN) else 0 for player in self.players]
+        if self.num_players - sum(players_in_bypass) == 1:
+            last_player = players_in_bypass.index(0)
+            if self.round.raised[last_player] >= max(self.round.raised):
+                # If the last player has put enough chips, he is also bypassed
+                players_in_bypass[last_player] = 1
 
         # If a round is over, we deal more public cards
         if self.round.is_over():
+            # Game pointer goes to the first player not in bypass after the dealer, if there is one
+            self.game_pointer = (self.dealer_id + 1) % self.num_players
+            if sum(players_in_bypass) < self.num_players:
+                while players_in_bypass[self.game_pointer]:
+                    self.game_pointer = (self.game_pointer + 1) % self.num_players
+
             # For the first round, we deal 3 cards
             if self.round_counter == 0:
                 self.stage = Stage.FLOP
@@ -147,22 +166,13 @@ class NolimitholdemGame(Game):
                 self.public_cards.append(self.dealer.deal_card())
                 if len(self.players) == np.sum(players_in_bypass):
                     self.round_counter += 1
-                    self.stage = Stage.TURN
-                    self.public_cards.append(self.dealer.deal_card())
-                    self.round_counter += 1
-                    self.stage = Stage.RIVER
-                    self.public_cards.append(self.dealer.deal_card())
-                    self.round_counter += 1
             # For the following rounds, we deal only 1 card
-            elif self.round_counter == 1:
+            if self.round_counter == 1:
                 self.stage = Stage.TURN
                 self.public_cards.append(self.dealer.deal_card())
                 if len(self.players) == np.sum(players_in_bypass):
                     self.round_counter += 1
-                    self.stage = Stage.RIVER
-                    self.public_cards.append(self.dealer.deal_card())
-                    self.round_counter += 1
-            elif self.round_counter == 2:
+            if self.round_counter == 2:
                 self.stage = Stage.RIVER
                 self.public_cards.append(self.dealer.deal_card())
                 if len(self.players) == np.sum(players_in_bypass):
