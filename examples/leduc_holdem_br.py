@@ -1,4 +1,4 @@
-''' An example of solve Leduc Hold'em with CFR
+''' An example of solve Leduc Hold'em with CFR (chance sampling)
 '''
 import numpy as np
 
