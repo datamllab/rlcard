@@ -7,7 +7,7 @@ import pickle
 from rlcard.utils.utils import *
 
 class BRAgent():
-    ''' Implement CFR algorithm
+    ''' Implement CFR (chance sampling) algorithm
     '''
 
     def __init__(self, env, policy):

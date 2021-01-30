@@ -2,7 +2,7 @@
 In this document, we provide some toy examples in R for getting started. Parallel Python examples are [here](toy-examples.md).
 
 *   [Training DQN on Blackjack](toy-examples-r.md#deep-q-learning-on-blackjack)
-*   [Training CFR on Leduc Hold'em](toy-examples-r.md#training-cfr-on-leduc-holdem)
+*   [Training CFR (chance sampling) on Leduc Hold'em](toy-examples-r.md#training-cfr-on-leduc-holdem)
 *   [Leduc Hold'em as single-agent environment](toy-examples-r.md#leduc-holdem-as-single-agent-environment)
 *   [Texas Hold'em nolimit](toy-examples-r.md#having-fun-with-no-limit-leduc-model)
 *   [Running Random agent on Blackjack](toy-examples-r.md#playing-with-random-agents)
@@ -191,8 +191,8 @@ INFO - Agent dqn, step 681, rl-loss: 0.61789089441299444
 
 In Blackjack, the player will get a payoff at the end of the game: 1 if the player wins, -1 if the player loses, and 0 if it is a tie. The performance is measured by the average payoff the player obtains by playing 10000 episodes. The above example shows that the agent achieves better and better performance during training. The logs and learning curves are saved in `./experiments/blackjack_dqn_result/`.
 
-## Training CFR on Leduc Hold'em
-To show how we can use `step` and `step_back` to traverse the game tree, we provide an example of solving Leduc Hold'em with CFR:
+## Training CFR (chance sampling) on Leduc Hold'em
+To show how we can use `step` and `step_back` to traverse the game tree, we provide an example of solving Leduc Hold'em with CFR (chance sampling):
 ```R
 # Install packages
 py_install('rlcard', pip=TRUE)
@@ -292,10 +292,10 @@ Iteration 500
   reward       |  0.7215
 ----------------------------------------
 ```
-We observe that CFR achieves better performance as NFSP. However, CFR requires traversal of the game tree, which is infeasible in large environments.
+We observe that CFR (chance sampling) achieves better performance as NFSP. However, CFR (chance sampling) requires traversal of the game tree, which is infeasible in large environments.
 
 ## Having Fun with no-limit Leduc Model
-Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](games.md#leduc-holdem). Example of playing against Leduc Hold'em CFR model is as below:
+Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](games.md#leduc-holdem). Example of playing against Leduc Hold'em CFR (chance sampling) model is as below:
 ```R
 # Install packages
 py_install('rlcard', pip=TRUE)

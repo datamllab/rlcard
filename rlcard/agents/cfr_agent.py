@@ -7,7 +7,7 @@ import pickle
 from rlcard.utils.utils import *
 
 class CFRAgent():
-    ''' Implement CFR algorithm
+    ''' Implement CFR (chance sampling) algorithm
     '''
 
     def __init__(self, env, model_path='./cfr_model'):

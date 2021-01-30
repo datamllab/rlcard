@@ -89,7 +89,7 @@ class LeducHoldemNFSPPytorchModel(Model):
         return self.nfsp_agents
 
 class LeducHoldemCFRModel(Model):
-    ''' A pretrained model on Leduc Holdem with CFR
+    ''' A pretrained model on Leduc Holdem with CFR (chance sampling)
     '''
 
     def __init__(self):
