@@ -25,13 +25,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 
+import random
 import numpy as np
 import torch
 import torch.nn as nn
 from collections import namedtuple
 from copy import deepcopy
 
-from rlcard.agents.dqn_agent import Memory
 from rlcard.utils.utils import remove_illegal
 
 Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state', 'done'])
@@ -377,3 +377,65 @@ class EstimatorNetwork(nn.Module):
             s  (Tensor): (batch, state_shape)
         '''
         return self.fc_layers(s)
+
+class Memory(object):
+    ''' Memory for saving transitions
+    '''
+
+    def __init__(self, memory_size, batch_size):
+        ''' Initialize
+        Args:
+            memory_size (int): the size of the memroy buffer
+        '''
+        self.memory_size = memory_size
+        self.batch_size = batch_size
+        self.memory = []
+
+    def save(self, state, action, reward, next_state, done):
+        ''' Save transition into memory
+
+        Args:
+            state (numpy.array): the current state
+            action (int): the performed action ID
+            reward (float): the reward received
+            next_state (numpy.array): the next state after performing the action
+            done (boolean): whether the episode is finished
+        '''
+        if len(self.memory) == self.memory_size:
+            self.memory.pop(0)
+        transition = Transition(state, action, reward, next_state, done)
+        self.memory.append(transition)
+
+    def sample(self):
+        ''' Sample a minibatch from the replay memory
+
+        Returns:
+            state_batch (list): a batch of states
+            action_batch (list): a batch of actions
+            reward_batch (list): a batch of rewards
+            next_state_batch (list): a batch of states
+            done_batch (list): a batch of dones
+        '''
+        samples = random.sample(self.memory, self.batch_size)
+        return map(np.array, zip(*samples))
+
+def copy_model_parameters(sess, estimator1, estimator2):
+    ''' Copys the model parameters of one estimator to another.
+
+    Args:
+        sess (tf.Session): Tensorflow Session object
+        estimator1 (Estimator): Estimator to copy the paramters from
+        estimator2 (Estimator): Estimator to copy the parameters to
+    '''
+    e1_params = [t for t in tf.trainable_variables() if t.name.startswith(estimator1.scope)]
+    e1_params = sorted(e1_params, key=lambda v: v.name)
+    e2_params = [t for t in tf.trainable_variables() if t.name.startswith(estimator2.scope)]
+    e2_params = sorted(e2_params, key=lambda v: v.name)
+
+    update_ops = []
+    for e1_v, e2_v in zip(e1_params, e2_params):
+        op = e2_v.assign(e1_v)
+        update_ops.append(op)
+
+    sess.run(update_ops)
+
