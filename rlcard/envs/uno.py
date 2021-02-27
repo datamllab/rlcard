@@ -13,7 +13,7 @@ class UnoEnv(Env):
         self.name = 'uno'
         self.game = Game()
         super().__init__(config)
-        self.state_shape = [7, 4, 15]
+        self.state_shape = [4, 4, 15]
 
     def _load_model(self):
         ''' Load pretrained/rule model
@@ -25,10 +25,9 @@ class UnoEnv(Env):
         return models.load('uno-rule-v1')
 
     def _extract_state(self, state):
-        obs = np.zeros((7, 4, 15), dtype=int)
+        obs = np.zeros((4, 4, 15), dtype=int)
         encode_hand(obs[:3], state['hand'])
         encode_target(obs[3], state['target'])
-        encode_hand(obs[4:], state['others_hand'])
         legal_action_id = self._get_legal_actions()
         extracted_state = {'obs': obs, 'legal_actions': legal_action_id}
         if self.allow_raw_data:
