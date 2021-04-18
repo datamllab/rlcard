@@ -52,7 +52,7 @@ class BlackjackGame(object):
 
         return self.get_state(self.game_pointer), self.game_pointer
 
-     def step(self, action):
+    def step(self, action):
         ''' Get the next state
 
         Args:
