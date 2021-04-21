@@ -75,15 +75,34 @@ class BlackjackGame(object):
             self.players[self.game_pointer].status, self.players[self.game_pointer].score = self.judger.judge_round(
                 self.players[self.game_pointer])
             if self.players[self.game_pointer].status == 'bust':
-                # game over, set up the winner, print out dealer's hand
-                self.judger.judge_game(self, self.game_pointer)
-        elif action == "stand":
-            while self.judger.judge_score(self.dealer.hand) < 17:
-                self.dealer.deal_card(self.dealer)
-                self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
+                # game over, set up the winner, print out dealer's hand # If bust, pass the game pointer
+                if self.game_pointer >= self.player_num - 1:
+                    while self.judger.judge_score(self.dealer.hand) < 17:
+                        self.dealer.deal_card(self.dealer)
+                    self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
+                    for i in range(self.player_num):
+                        self.judger.judge_game(self, i) 
+                    self.game_pointer = 0
+                else:
+                    self.game_pointer += 1
+
+                
+        elif action == "stand": # If stand, first try to pass the pointer, if it's the last player, dealer deal for himself, then judge game for everyone using a loop
             self.players[self.game_pointer].status, self.players[self.game_pointer].score = self.judger.judge_round(
                 self.players[self.game_pointer])
-            self.judger.judge_game(self, self.game_pointer)
+            if self.game_pointer >= self.player_num - 1:
+                while self.judger.judge_score(self.dealer.hand) < 17:
+                    self.dealer.deal_card(self.dealer)
+                self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
+                for i in range(self.player_num):
+                    self.judger.judge_game(self, i) 
+                self.game_pointer = 0
+            else:
+                self.game_pointer += 1
+
+
+            
+            
 
         hand = [card.get_index() for card in self.players[self.game_pointer].hand]
 
@@ -98,10 +117,7 @@ class BlackjackGame(object):
         next_state['actions'] = ('hit', 'stand')
         next_state['state'] = (hand, dealer_hand)
 
-        if self.game_pointer >= self.player_num - 1:
-            self.game_pointer = 0
-        else:
-            self.game_pointer += 1
+        
 
         return next_state, self.game_pointer
 
