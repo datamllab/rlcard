@@ -12,7 +12,7 @@ class TestUnoEnv(unittest.TestCase):
     def test_reset_and_extract_state(self):
         env = rlcard.make('uno')
         state, _ = env.reset()
-        self.assertEqual(state['obs'].size, 420)
+        self.assertEqual(state['obs'].size, 240)
 
     def test_is_deterministic(self):
         self.assertTrue(is_deterministic('uno'))
