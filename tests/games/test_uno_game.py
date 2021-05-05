@@ -21,8 +21,6 @@ class TestUnoMethods(unittest.TestCase):
     def test_init_game(self):
         game = Game()
         state, _ = game.init_game()
-        total_cards = list(state['hand'] + state['others_hand'])
-        self.assertGreaterEqual(len(total_cards), 14)
 
     def test_get_player_id(self):
         game = Game()
@@ -54,8 +52,6 @@ class TestUnoMethods(unittest.TestCase):
             actions = game.get_legal_actions()
             action = np.random.choice(actions)
             state, _ = game.step(action)
-            total_cards = len(state['hand']) + len(state['others_hand']) + len(state['played_cards']) + len(game.round.dealer.deck)
-            self.assertEqual(total_cards, 108)
         payoffs = game.get_payoffs()
         total = 0
         for payoff in payoffs:
