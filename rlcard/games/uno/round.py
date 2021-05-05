@@ -145,11 +145,6 @@ class UnoRound(object):
         state['hand'] = cards2list(player.hand)
         state['target'] = self.target.str
         state['played_cards'] = cards2list(self.played_cards)
-        others_hand = []
-        for player in players:
-            if player.player_id != player_id:
-                others_hand.extend(player.hand)
-        state['others_hand'] = cards2list(others_hand)
         state['legal_actions'] = self.get_legal_actions(players, player_id)
         state['card_num'] = []
         for player in players:
