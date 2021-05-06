@@ -20,7 +20,7 @@ class Action(Enum):
     # BIG_BLIND = 8
 
 
-class NolimitholdemRound():
+class NolimitholdemRound:
     ''' Round can call other Classes' functions to keep the game running
     '''
 

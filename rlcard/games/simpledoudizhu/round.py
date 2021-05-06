@@ -10,7 +10,7 @@ from rlcard.games.doudizhu.utils import cards2str, doudizhu_sort_card
 from rlcard.games.doudizhu.utils import CARD_RANK_STR, CARD_RANK_STR_INDEX
 
 
-class SimpleDoudizhuRound(object):
+class SimpleDoudizhuRound:
     ''' Round can call other Classes' functions to keep the game running
     '''
 

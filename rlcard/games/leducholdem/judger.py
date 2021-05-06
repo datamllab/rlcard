@@ -1,9 +1,8 @@
 from rlcard.utils.utils import rank2int
 
-class LeducholdemJudger(object):
+class LeducholdemJudger:
     ''' The Judger class for Leduc Hold'em
     '''
-
     def __init__(self, np_random):
         ''' Initialize a judger class
         '''

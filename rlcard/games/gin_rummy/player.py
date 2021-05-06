@@ -6,14 +6,14 @@
 
 from typing import List
 
-from rlcard.core import Card
+from rlcard.games.base import Card
 
 from .utils import utils
 
 from .utils import melding
 
 
-class GinRummyPlayer(object):
+class GinRummyPlayer:
 
     def __init__(self, player_id: int, np_random):
         ''' Initialize a GinRummy player class

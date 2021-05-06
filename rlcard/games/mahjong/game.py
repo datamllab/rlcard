@@ -6,7 +6,7 @@ from rlcard.games.mahjong import Player
 from rlcard.games.mahjong import Round
 from rlcard.games.mahjong import Judger
 
-class MahjongGame(object):
+class MahjongGame:
 
     def __init__(self, allow_step_back=False):
         '''Initialize the class MajongGame

@@ -6,7 +6,7 @@
 
 from typing import List
 
-from rlcard.core import Card
+from rlcard.games.base import Card
 
 from rlcard.games.gin_rummy.utils import utils
 from rlcard.games.gin_rummy.utils.gin_rummy_error import GinRummyProgramError

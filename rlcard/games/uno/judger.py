@@ -1,5 +1,5 @@
 
-class UnoJudger(object):
+class UnoJudger:
 
     @staticmethod
     def judge_winner(players, np_random):

@@ -6,7 +6,7 @@ from rlcard.games.uno import Player
 from rlcard.games.uno import Round
 
 
-class UnoGame(object):
+class UnoGame:
 
     def __init__(self, allow_step_back=False):
         self.allow_step_back = allow_step_back

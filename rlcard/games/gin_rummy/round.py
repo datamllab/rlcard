@@ -3,7 +3,6 @@
     Author: William Hale
     Date created: 2/12/2020
 '''
-
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .utils.move import GinRummyMove
@@ -30,7 +29,7 @@ from rlcard.games.gin_rummy.utils import melding
 from rlcard.games.gin_rummy.utils import utils
 
 
-class GinRummyRound(object):
+class GinRummyRound:
 
     def __init__(self, dealer_id: int, np_random):
         ''' Initialize the round class

@@ -8,7 +8,7 @@ from .player import GinRummyPlayer
 from .utils import utils as utils
 
 
-class GinRummyDealer(object):
+class GinRummyDealer:
     ''' Initialize a GinRummy dealer class
     '''
     def __init__(self, np_random):

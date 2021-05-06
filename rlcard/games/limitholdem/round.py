@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Implement Limit Texas Hold'em Round class
 '''
-
-
-class LimitholdemRound(object):
+class LimitholdemRound:
     ''' Round can call other Classes' functions to keep the game running
     '''
 

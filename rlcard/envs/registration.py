@@ -1,15 +1,11 @@
 import importlib
-from rlcard.envs import VecEnv
 
 # Default Config
 DEFAULT_CONFIG = {
         'allow_step_back': False,
         'allow_raw_data': False,
-        'single_agent_mode' : False,
-        'active_player' : 0,
         'record_action' : False,
         'seed': None,
-        'env_num': 1,
         }
 
 class EnvSpec(object):
@@ -71,7 +67,6 @@ class EnvRegistry(object):
 # Have a global registry
 registry = EnvRegistry()
 
-
 def register(env_id, entry_point):
     ''' Register an environment
 
@@ -93,10 +88,4 @@ def make(env_id, config={}):
     for key in config:
         _config[key] = config[key]
 
-    # Do some checkings on the modes
-    if not isinstance(_config['active_player'], int) or _config['active_player'] < 0:
-        raise ValueError('Active player should be a non-negative integer')
-    if _config['env_num'] == 1:
-        return registry.make(env_id, _config)
-    else:
-        return VecEnv(env_id, _config)
+    return registry.make(env_id, _config)

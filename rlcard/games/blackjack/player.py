@@ -1,5 +1,5 @@
 
-class BlackjackPlayer(object):
+class BlackjackPlayer:
 
     def __init__(self, player_id, np_random):
         ''' Initialize a Blackjack player class

@@ -1,7 +1,6 @@
 import unittest
 
 import rlcard
-from rlcard.utils.utils import get_downstream_player_id
 from rlcard.agents.random_agent import RandomAgent
 from .determism_util import is_deterministic
 
@@ -29,8 +28,7 @@ class TestDoudizhuEnv(unittest.TestCase):
         _, player_id = env.reset()
         player = env.game.players[player_id]
         _, next_player_id = env.step(env.action_num-1)
-        self.assertEqual(next_player_id, get_downstream_player_id(
-            player, env.game.players))
+        self.assertEqual(next_player_id, (player.player_id+1)%len(env.game.players))
 
     def test_step_back(self):
         env = rlcard.make('doudizhu', config={'allow_step_back':True})

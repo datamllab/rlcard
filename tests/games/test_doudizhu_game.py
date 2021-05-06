@@ -2,7 +2,6 @@ import unittest
 import numpy as np
 import functools
 
-from rlcard.utils.utils import get_downstream_player_id, get_upstream_player_id
 from rlcard.games.doudizhu.game import DoudizhuGame as Game
 from rlcard.games.doudizhu.utils import get_landlord_score, encode_cards
 from rlcard.games.doudizhu.utils import get_optimal_action, doudizhu_sort_str
@@ -39,7 +38,7 @@ class TestDoudizhuGame(unittest.TestCase):
         action = state['actions'][0]
         state, next_player_id = game.step(action)
         next_player = game.players[next_player_id]
-        player_id = get_upstream_player_id(next_player, game.players)
+        player_id = (next_player.player_id-1)%len(game.players)
         self.assertEqual(state['trace'][0][0], player_id)
         self.assertEqual(state['trace'][0][1], action)
 
@@ -56,8 +55,7 @@ class TestDoudizhuGame(unittest.TestCase):
             action = np.random.choice(list(state['actions']))
             state, next_player_id = game.step(action)
             player = game.players[player_id]
-            self.assertEqual(get_downstream_player_id(
-                player, game.players), next_player_id)
+            self.assertEqual((player.player_id+1)%len(game.players), next_player_id)
             player_id = next_player_id
             if not game.is_over():
                 self.assertIsNotNone(state['actions'])

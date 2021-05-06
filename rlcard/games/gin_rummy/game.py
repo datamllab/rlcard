@@ -6,8 +6,6 @@
 
 import numpy as np
 
-from rlcard.core import Game
-
 from .player import GinRummyPlayer
 from .round import GinRummyRound
 from .judge import GinRummyJudge
@@ -16,7 +14,7 @@ from .utils.settings import Settings, DealerForRound
 from .utils.action_event import *
 
 
-class GinRummyGame(Game):
+class GinRummyGame:
     ''' Game class. This class will interact with outer environment.
     '''
 

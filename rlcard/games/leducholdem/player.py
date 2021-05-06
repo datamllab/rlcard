@@ -1,4 +1,4 @@
-class LeducholdemPlayer(object):
+class LeducholdemPlayer:
 
     def __init__(self, player_id, np_random):
         ''' Initilize a player.

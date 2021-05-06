@@ -5,7 +5,7 @@ from rlcard.games.blackjack import Dealer
 from rlcard.games.blackjack import Player
 from rlcard.games.blackjack import Judger
 
-class BlackjackGame(object):
+class BlackjackGame:
 
     def __init__(self, allow_step_back=False):
         ''' Initialize the class Blackjack Game

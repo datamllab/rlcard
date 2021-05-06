@@ -70,13 +70,6 @@ class TestUnoEnv(unittest.TestCase):
             decoded = env._decode_action(legal_action)
             self.assertLessEqual(decoded, ACTION_LIST[legal_action])
 
-    def test_single_agent_mode(self):
-        env = rlcard.make('uno', config={'single_agent_mode':True})
-        state = env.reset()
-        self.assertIsInstance(state, dict)
-        for _ in range(100):
-            state, _, _ = env.step(np.random.choice(state['legal_actions']))
-
     def test_get_perfect_information(self):
         env = rlcard.make('uno')
         _, player_id = env.reset()

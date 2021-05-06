@@ -13,7 +13,6 @@ from rlcard.games.doudizhu.utils import CARD_RANK_STR, CARD_RANK_STR_INDEX
 class DoudizhuRound(object):
     ''' Round can call other Classes' functions to keep the game running
     '''
-
     def __init__(self, np_random):
         self.np_random = np_random
         self.trace = []

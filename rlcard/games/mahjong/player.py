@@ -1,5 +1,5 @@
 
-class MahjongPlayer(object):
+class MahjongPlayer:
 
     def __init__(self, player_id, np_random):
         ''' Initilize a player.

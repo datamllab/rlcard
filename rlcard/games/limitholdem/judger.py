@@ -1,11 +1,9 @@
 from rlcard.games.limitholdem.utils import compare_hands
 import numpy as np
 
-
-class LimitholdemJudger(object):
+class LimitholdemJudger:
     ''' The Judger class for Texas Hold'em
     '''
-
     def __init__(self, np_random):
         ''' Initialize a judger class
         '''
