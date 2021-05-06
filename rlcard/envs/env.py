@@ -15,9 +15,6 @@ class Env(object):
                 'seed' (int) - A environment local random seed.
                 'allow_step_back' (boolean) - True if allowing
                  step_back.
-                'allow_raw_data' (boolean) - True if allow
-                 raw obs in state['raw_obs'] and raw legal actions in
-                 state['raw_legal_actions'].
                 There can be some game specific configurations, e.g., the
                 number of players in the game. These fields should start with
                 'game_', e.g., 'game_player_num' which specify the number of
@@ -28,10 +25,7 @@ class Env(object):
                 TODO: Support more game configurations in the future.
         '''
         self.allow_step_back = self.game.allow_step_back = config['allow_step_back']
-        self.allow_raw_data = config['allow_raw_data']
-        self.record_action = config['record_action']
-        if self.record_action:
-            self.action_recorder = []
+        self.action_recorder = []
 
         # Game specific configurations
         # Currently only support blackjack、limit-holdem、no-limit-holdem
@@ -65,8 +59,7 @@ class Env(object):
                 (int): The begining player
         '''
         state, player_id = self.game.init_game()
-        if self.record_action:
-            self.action_recorder = []
+        self.action_recorder = []
         return self._extract_state(state), player_id
 
     def step(self, action, raw_action=False):
@@ -87,8 +80,7 @@ class Env(object):
 
         self.timestep += 1
         # Record the action for human interface
-        if self.record_action:
-            self.action_recorder.append([self.get_player_id(), action])
+        self.action_recorder.append([self.get_player_id(), action])
         next_state, player_id = self.game.step(action)
 
         return self._extract_state(next_state), player_id
@@ -124,11 +116,6 @@ class Env(object):
             agents (list): List of Agent classes
         '''
         self.agents = agents
-        # If at least one agent needs raw data, we set self.allow_raw_data = True
-        for agent in self.agents:
-            if agent.use_raw:
-                self.allow_raw_data = True
-                break
 
     def run(self, is_training=False):
         '''

@@ -3,8 +3,6 @@ import importlib
 # Default Config
 DEFAULT_CONFIG = {
         'allow_step_back': False,
-        'allow_raw_data': False,
-        'record_action' : False,
         'seed': None,
         }
 

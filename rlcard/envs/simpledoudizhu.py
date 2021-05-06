@@ -49,11 +49,10 @@ class SimpleDoudizhuEnv(Env):
             self._encode_cards(obs[5], state['played_cards'])
 
         extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions()}
-        if self.allow_raw_data:
-            extracted_state['raw_obs'] = state
-            extracted_state['raw_legal_actions'] = [a for a in state['actions']]
-        if self.record_action:
-            extracted_state['action_record'] = self.action_recorder
+        extracted_state['raw_obs'] = state
+        extracted_state['raw_legal_actions'] = [a for a in state['actions']]
+        extracted_state['action_record'] = self.action_recorder
+
         return extracted_state
 
     def get_payoffs(self):

@@ -56,11 +56,9 @@ class TestSimpleDoudizhuGame(unittest.TestCase):
             player = game.players[player_id]
             self.assertEqual((player.player_id+1)%len(game.players), next_player_id)
             player_id = next_player_id
-            if not game.is_over():
-                self.assertIsNotNone(state['actions'])
         for player_id in range(3):
             state = game.get_state(player_id)
-            self.assertIsNone(state['actions'])
+            self.assertEqual(state['actions'], [])
 
     def test_step_back(self):
         #case 1: action, stepback
