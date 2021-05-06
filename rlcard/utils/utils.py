@@ -149,28 +149,6 @@ def reorganize(trajectories, payoffs):
             new_trajectories[player].append(transition)
     return new_trajectories
 
-def set_global_seed(seed):
-    ''' Set the global see for reproducing results
-
-    Args:
-        seed (int): The seed
-
-    Note: If using other modules with randomness, they also need to be seeded
-    '''
-    if seed is not None:
-        import subprocess
-        import sys
-
-        reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
-        installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
-        if 'torch' in installed_packages:
-            import torch
-            torch.backends.cudnn.deterministic = True
-            torch.manual_seed(seed)
-        np.random.seed(seed)
-        import random
-        random.seed(seed)
-
 def remove_illegal(action_probs, legal_actions):
     ''' Remove illegal actions and normalize the
         probability vector

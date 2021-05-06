@@ -136,7 +136,7 @@ class DoudizhuGame:
         player = self.players[player_id]
         others_hands = self._get_others_current_hand(player)
         if self.is_over():
-            actions = None
+            actions = []
         else:
             actions = list(player.available_actions(self.round.greater_player, self.judger))
         state = player.get_state(self.round.public, others_hands, actions)

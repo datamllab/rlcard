@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from rlcard.utils.utils import init_54_deck, init_standard_deck, rank2int, print_card, elegent_form, reorganize, set_global_seed, tournament
+from rlcard.utils.utils import init_54_deck, init_standard_deck, rank2int, print_card, elegent_form, reorganize, tournament
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
 
@@ -35,17 +35,11 @@ class TestUtils(unittest.TestCase):
         trajectories = reorganize([[[1,2],1,[4,5]]], [1])
         self.assertEqual(np.array(trajectories).shape, (1, 1, 5))
 
-    def test_set_global_seed(self):
-        set_global_seed(0)
-        self.assertEqual(np.random.get_state()[1][0], 0)
-
     def test_tournament(self):
         env = rlcard.make('leduc-holdem')
         env.set_agents([RandomAgent(env.action_num), RandomAgent(env.action_num)])
         payoffs = tournament(env,1000)
         self.assertEqual(len(payoffs), 2)
-
-
 
 if __name__ == '__main__':
     unittest.main()
