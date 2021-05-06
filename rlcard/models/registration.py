@@ -3,7 +3,6 @@ import importlib
 class ModelSpec(object):
     ''' A specification for a particular Model.
     '''
-
     def __init__(self, model_id, entry_point=None):
         ''' Initilize
 
