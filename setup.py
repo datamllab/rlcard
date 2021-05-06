@@ -3,12 +3,6 @@ import setuptools
 with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
-extras = {
-    'torch': ['torch>=1.3', 'matplotlib>=3.0'],
-    'tensorflow': ['tensorflow>=1.14,<2.0', 'matplotlib>=3.0'],
-    'tensorflow-gpu': ['tensorflow-gpu>=1.14,<2.0', 'matplotlib>=3.0'],
-}
-
 def _get_version():
     with open('rlcard/__init__.py') as f:
         for line in f:
@@ -49,7 +43,6 @@ setuptools.setup(
         'numpy>=1.16.3',
         'termcolor'
     ],
-    extras_require=extras,
     requires_python='>=3.6',
     classifiers=[
         "Programming Language :: Python :: 3.9",
