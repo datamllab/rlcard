@@ -1,7 +1,7 @@
 from rlcard.games.mahjong.utils import init_deck
 
 
-class MahjongDealer(object):
+class MahjongDealer:
     ''' Initialize a mahjong dealer class
     '''
     def __init__(self, np_random):

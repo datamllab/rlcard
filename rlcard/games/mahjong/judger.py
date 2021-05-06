@@ -3,7 +3,7 @@
 '''
 from collections import defaultdict
 
-class MahjongJudger(object):
+class MahjongJudger:
     ''' Determine what cards a player can play
     '''
 

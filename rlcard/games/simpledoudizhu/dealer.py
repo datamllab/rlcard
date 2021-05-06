@@ -4,12 +4,12 @@
 
 import functools
 
-from rlcard.core import Card
+from rlcard.games.base import Card
 from rlcard.games.doudizhu.utils import doudizhu_sort_card
 from rlcard.games.doudizhu.judger import cards2str
 
 
-class SimpleDoudizhuDealer(object):
+class SimpleDoudizhuDealer:
     ''' Dealer will shuffle, deal cards, and determine players' roles
     '''
 

@@ -1,5 +1,5 @@
 
-class MahjongRound(object):
+class MahjongRound:
 
     def __init__(self, judger, dealer, num_players, np_random):
         ''' Initialize the round class

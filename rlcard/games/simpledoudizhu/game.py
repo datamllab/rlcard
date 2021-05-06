@@ -10,10 +10,8 @@ from rlcard.games.simpledoudizhu import Player
 from rlcard.games.simpledoudizhu import Round
 from rlcard.games.doudizhu import Judger
 from rlcard.games.doudizhu.utils import cards2str, doudizhu_sort_card
-from rlcard.utils import get_downstream_player_id, get_upstream_player_id
 
-
-class SimpleDoudizhuGame(object):
+class SimpleDoudizhuGame:
     ''' Provide game APIs for env to run simple doudizhu and get corresponding state
     information.
 
@@ -78,7 +76,7 @@ class SimpleDoudizhuGame(object):
             self.judger.calc_playable_cards(player)
         if self.judger.judge_game(self.players, self.round.current_player):
             self.winner_id = self.round.current_player
-        next_id = get_downstream_player_id(player, self.players)
+        next_id = (player.player_id+1) % len(self.players)
         self.round.current_player = next_id
 
         # get next state
@@ -169,20 +167,7 @@ class SimpleDoudizhuGame(object):
         return True
 
     def _get_others_current_hand(self, player):
-        player_up = self.players[get_upstream_player_id(player, self.players)]
-        player_down = self.players[get_downstream_player_id(
-            player, self.players)]
+        player_up = self.players[(player.player_id-1) % len(self.players)]
+        player_down = self.players[(player.player_id+1) % len(self.players)]
         others_hand = merge(player_up.current_hand, player_down.current_hand, key=functools.cmp_to_key(doudizhu_sort_card))
         return cards2str(others_hand)
-
-#if __name__ == '__main__':
-#    import numpy as np
-#    game = SimpleDoudizhuGame()
-#    state, player_id = game.init_game()
-#    print(state)
-#    while not game.is_over():
-#        action = np.random.choice(list(state['actions']))
-#        print(action)
-#        state, next_player_id = game.step(action)
-#        print(state)
-

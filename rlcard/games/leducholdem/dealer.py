@@ -1,4 +1,4 @@
-from rlcard.core import Card
+from rlcard.games.base import Card
 from rlcard.games.limitholdem import Dealer
 
 class LeducholdemDealer(Dealer):

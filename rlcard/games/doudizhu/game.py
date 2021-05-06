@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 ''' Implement Doudizhu Game class
 '''
-
 import functools
 from heapq import merge
 import numpy as np
 
-from rlcard.utils import get_downstream_player_id, get_upstream_player_id
 from rlcard.games.doudizhu.utils import cards2str, doudizhu_sort_card
 from rlcard.games.doudizhu import Player
 from rlcard.games.doudizhu import Round
 from rlcard.games.doudizhu import Judger
 
 
-class DoudizhuGame(object):
+class DoudizhuGame:
     ''' Provide game APIs for env to run doudizhu and get corresponding state
     information.
 
@@ -32,7 +30,6 @@ class DoudizhuGame(object):
              'actions': ['pass', 'K', 'A', 'B']
             }
     '''
-
     def __init__(self, allow_step_back=False):
         self.allow_step_back = allow_step_back
         self.np_random = np.random.RandomState()
@@ -91,7 +88,7 @@ class DoudizhuGame(object):
             self.judger.calc_playable_cards(player)
         if self.judger.judge_game(self.players, self.round.current_player):
             self.winner_id = self.round.current_player
-        next_id = get_downstream_player_id(player, self.players)
+        next_id = (player.player_id+1) % len(self.players)
         self.round.current_player = next_id
 
         # get next state
@@ -182,14 +179,7 @@ class DoudizhuGame(object):
         return True
 
     def _get_others_current_hand(self, player):
-        player_up = self.players[get_upstream_player_id(player, self.players)]
-        player_down = self.players[get_downstream_player_id(
-            player, self.players)]
+        player_up = self.players[(player.player_id+1) % len(self.players)]
+        player_down = self.players[(player.player_id-1) % len(self.players)]
         others_hand = merge(player_up.current_hand, player_down.current_hand, key=functools.cmp_to_key(doudizhu_sort_card))
         return cards2str(others_hand)
-
-#if __name__ == '__main__':
-
-    # test init game
-    #game = DoudizhuGame()
-    #game.init_game()

@@ -4,7 +4,7 @@
     Date created: 2/12/2020
 '''
 
-from rlcard.core import Card
+from rlcard.games.base import Card
 
 from . import utils as utils
 

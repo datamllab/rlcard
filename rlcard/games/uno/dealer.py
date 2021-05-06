@@ -2,7 +2,7 @@
 from rlcard.games.uno.utils import init_deck
 
 
-class UnoDealer(object):
+class UnoDealer:
     ''' Initialize a uno dealer class
     '''
     def __init__(self, np_random):

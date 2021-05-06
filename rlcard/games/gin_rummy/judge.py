@@ -18,7 +18,7 @@ from .utils.gin_rummy_error import GinRummyProgramError
 from rlcard.games.gin_rummy.utils import utils
 
 
-class GinRummyJudge(object):
+class GinRummyJudge:
 
     '''
         Judge decides legal actions for current player

@@ -63,19 +63,6 @@ class TestLeducholdemEnv(unittest.TestCase):
             total += payoff
         self.assertEqual(total, 0)
 
-    def test_single_agent_mode(self):
-        env = rlcard.make('leduc-holdem', config={'single_agent_mode':True})
-        with self.assertRaises(ValueError):
-            env.set_agents([])
-
-        with self.assertRaises(ValueError):
-            env.run()
-
-        state = env.reset()
-        self.assertIsInstance(state, dict)
-        for _ in range(100):
-            state, _, _ = env.step(np.random.choice(state['legal_actions']))
-
     def test_get_perfect_information(self):
         env = rlcard.make('leduc-holdem')
         _, player_id = env.reset()

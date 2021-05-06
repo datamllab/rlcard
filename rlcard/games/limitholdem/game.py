@@ -6,7 +6,7 @@ from rlcard.games.limitholdem import Player, PlayerStatus
 from rlcard.games.limitholdem import Judger
 from rlcard.games.limitholdem import Round
 
-class LimitholdemGame(object):
+class LimitholdemGame:
 
     def __init__(self, allow_step_back=False, num_players=2):
         ''' Initialize the class limitholdem Game

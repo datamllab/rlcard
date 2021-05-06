@@ -11,7 +11,7 @@ from rlcard.games.doudizhu.utils import cards2str, contains_cards
 
 
 
-class DoudizhuJudger(object):
+class DoudizhuJudger:
     ''' Determine what cards a player can play
     '''
     @staticmethod

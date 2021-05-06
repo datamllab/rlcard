@@ -1,17 +1,14 @@
 # -*- coding: utf-8 -*-
 ''' Implement Doudizhu Dealer class
 '''
-
 import functools
 
 from rlcard.utils import init_54_deck
 from rlcard.games.doudizhu.utils import cards2str, doudizhu_sort_card
 
-
-class DoudizhuDealer(object):
+class DoudizhuDealer:
     ''' Dealer will shuffle, deal cards, and determine players' roles
     '''
-
     def __init__(self, np_random):
         '''Give dealer the deck
 

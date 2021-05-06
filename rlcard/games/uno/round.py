@@ -2,7 +2,7 @@ from rlcard.games.uno.card import UnoCard
 from rlcard.games.uno.utils import cards2list, WILD, WILD_DRAW_4
 
 
-class UnoRound(object):
+class UnoRound:
 
     def __init__(self, dealer, num_players, np_random):
         ''' Initialize the round class

@@ -7,12 +7,11 @@ from rlcard.games.doudizhu.utils import get_gt_cards
 from rlcard.games.doudizhu.utils import cards2str, doudizhu_sort_card
 
 
-class DoudizhuPlayer(object):
+class DoudizhuPlayer:
     ''' Player can store cards in the player's hand and the role,
     determine the actions can be made according to the rules,
     and can perfrom corresponding action
     '''
-
     def __init__(self, player_id, np_random):
         ''' Give the player an id in one game
 

@@ -1,7 +1,7 @@
 from rlcard.utils import init_standard_deck
 import numpy as np
 
-class BlackjackDealer(object):
+class BlackjackDealer:
 
     def __init__(self, np_random):
         ''' Initialize a Blackjack dealer class
