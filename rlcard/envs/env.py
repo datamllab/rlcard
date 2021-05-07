@@ -80,7 +80,7 @@ class Env(object):
 
         self.timestep += 1
         # Record the action for human interface
-        self.action_recorder.append([self.get_player_id(), action])
+        self.action_recorder.append((self.get_player_id(), action))
         next_state, player_id = self.game.step(action)
 
         return self._extract_state(next_state), player_id
@@ -165,9 +165,6 @@ class Env(object):
 
         # Payoffs
         payoffs = self.get_payoffs()
-
-        # Reorganize the trajectories
-        trajectories = reorganize(trajectories, payoffs)
 
         return trajectories, payoffs
 
