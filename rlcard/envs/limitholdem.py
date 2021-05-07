@@ -48,7 +48,7 @@ class LimitholdemEnv(Env):
         '''
         extracted_state = {}
 
-        legal_actions = [self.actions.index(a) for a in state['legal_actions']]
+        legal_actions = {self.actions.index(a): None for a in state['legal_actions']}
         extracted_state['legal_actions'] = legal_actions
 
         public_cards = state['public_cards']

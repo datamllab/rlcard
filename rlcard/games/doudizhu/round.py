@@ -91,8 +91,8 @@ class DoudizhuRound:
         if (cards != 'pass'):
             for card in cards:
                 # self.played_cards.remove(card)
-                self.played_cards[CARD_RANK_STR_INDEX[card]] -= 1
-            self.public['played_cards'] = self.cards_ndarray_to_list(self.played_cards)
+                self.played_cards[player_id][CARD_RANK_STR_INDEX[card]] -= 1
+            self.public['played_cards'] = self.cards_ndarray_to_str(self.played_cards)
         greater_player_id = self.find_last_greater_player_id_in_trace()
         if (greater_player_id is not None):
             self.greater_player = players[greater_player_id]

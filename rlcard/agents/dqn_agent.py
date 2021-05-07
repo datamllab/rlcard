@@ -144,7 +144,7 @@ class DQNAgent(object):
             action (int): an action id
         '''
         A = self.predict(state['obs'])
-        A = remove_illegal(A, state['legal_actions'])
+        A = remove_illegal(A, list(state['legal_actions'].keys()))
         action = np.random.choice(np.arange(len(A)), p=A)
         return action
 
@@ -158,7 +158,7 @@ class DQNAgent(object):
             action (int): an action id
         '''
         q_values = self.q_estimator.predict_nograd(np.expand_dims(state['obs'], 0))[0]
-        probs = remove_illegal(np.exp(q_values), state['legal_actions'])
+        probs = remove_illegal(np.exp(q_values), list(state['legal_actions'].keys()))
         best_action = np.argmax(probs)
         return best_action, probs
 

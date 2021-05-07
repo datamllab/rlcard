@@ -116,35 +116,6 @@ def get_landlord_score(current_hand):
         i += 1
     return score
 
-
-def get_optimal_action(probs, legal_actions, np_random):
-    ''' Determine the optimal action from legal actions
-    according to the probabilities of abstract actions.
-
-    Args:
-        probs (list): list of probabilities of abstract actions
-        legal_actions (list): list of legal actions
-
-    Returns:
-        str: optimal legal action
-    '''
-    abstract_actions = [SPECIFIC_MAP[action] for action in legal_actions]
-    action_probs = []
-    for actions in abstract_actions:
-        max_prob = -1
-        for action in actions:
-            prob = probs[ACTION_SPACE[action]]
-            if prob > max_prob:
-                max_prob = prob
-        action_probs.append(max_prob)
-    optimal_prob = max(action_probs)
-    optimal_actions = [legal_actions[index] for index,
-                       prob in enumerate(action_probs) if prob == optimal_prob]
-    if len(optimal_actions) > 1:
-        return np_random.choice(optimal_actions)
-    return optimal_actions[0]
-
-
 def cards2str_with_suit(cards):
     ''' Get the corresponding string representation of cards with suit
 

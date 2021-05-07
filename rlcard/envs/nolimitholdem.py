@@ -53,7 +53,7 @@ class NolimitholdemEnv(Env):
         '''
         extracted_state = {}
 
-        legal_actions = [action.value for action in state['legal_actions']]
+        legal_actions = {action.value: None for action in state['legal_actions']}
         extracted_state['legal_actions'] = legal_actions
 
         public_cards = state['public_cards']

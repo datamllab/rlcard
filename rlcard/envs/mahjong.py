@@ -90,14 +90,14 @@ class MahjongEnv(Env):
             print(legal_actions)
             legal_actions (list): a list of legal actions' id
         '''
-        legal_action_id = []
+        legal_action_id = {}
         legal_actions = self.game.get_legal_actions(self.game.get_state(self.game.round.current_player))
         if legal_actions:
             for action in legal_actions:
                 if isinstance(action, Card):
                     action = action.get_str()
                 action_id = self.action_id[action]
-                legal_action_id.append(action_id)
+                legal_action_id[action_id] = None
         else:
             print("##########################")
             print("No Legal Actions")

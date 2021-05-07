@@ -92,7 +92,7 @@ class GinRummyEnv(Env):
             legal_actions (list): a list of legal actions' id
         '''
         legal_actions = self.game.judge.get_legal_actions()
-        legal_actions_ids = [action_event.action_id for action_event in legal_actions]
+        legal_actions_ids = {action_event.action_id: None for action_event in legal_actions}
         return legal_actions_ids
 
     def _load_model(self):

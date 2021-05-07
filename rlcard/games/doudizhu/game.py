@@ -134,7 +134,7 @@ class DoudizhuGame:
         Returns:
             int: the total number of abstract actions of doudizhu
         '''
-        return 309
+        return 27472
 
     def get_player_id(self):
         ''' Return current player's id

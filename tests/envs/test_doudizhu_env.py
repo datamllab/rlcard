@@ -10,7 +10,7 @@ class TestDoudizhuEnv(unittest.TestCase):
     def test_reset_and_extract_state(self):
         env = rlcard.make('doudizhu')
         state, _ = env.reset()
-        self.assertEqual(state['obs'].size, 450)
+        self.assertEqual(state['obs'].size, 790)
 
     def test_is_deterministic(self):
         self.assertTrue(is_deterministic('doudizhu'))
@@ -27,7 +27,7 @@ class TestDoudizhuEnv(unittest.TestCase):
         env = rlcard.make('doudizhu')
         _, player_id = env.reset()
         player = env.game.players[player_id]
-        _, next_player_id = env.step(env.action_num-1)
+        _, next_player_id = env.step(env.action_num-2)
         self.assertEqual(next_player_id, (player.player_id+1)%len(env.game.players))
 
     def test_step_back(self):
@@ -62,8 +62,8 @@ class TestDoudizhuEnv(unittest.TestCase):
         env.reset()
         env.game.state['actions'] = ['33366', '33355']
         env.game.judger.playable_cards[0] = ['5', '6', '55', '555', '33366', '33355']
-        decoded = env._decode_action(54)
-        self.assertEqual(decoded, '33366')
+        decoded = env._decode_action(3)
+        self.assertEqual(decoded, '6')
         env.game.state['actions'] = ['444', '44466', '44455']
         decoded = env._decode_action(29)
         self.assertEqual(decoded, '444')

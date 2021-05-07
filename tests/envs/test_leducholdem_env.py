@@ -36,7 +36,7 @@ class TestLeducholdemEnv(unittest.TestCase):
         env = rlcard.make('leduc-holdem')
         state, player_id = env.reset()
         self.assertEqual(player_id, env.get_player_id())
-        action = state['legal_actions'][0]
+        action = list(state['legal_actions'].keys())[0]
         _, player_id = env.step(action)
         self.assertEqual(player_id, env.get_player_id())
 

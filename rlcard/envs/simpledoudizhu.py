@@ -110,14 +110,14 @@ class SimpleDoudizhuEnv(Env):
         Returns:
             legal_actions (list): a list of legal actions' id
         '''
-        legal_action_id = []
+        legal_action_id = {}
         legal_actions = self.game.state['actions']
         if legal_actions:
             for action in legal_actions:
                 for abstract in self._SPECIFIC_MAP[action]:
                     action_id = self._ACTION_SPACE[abstract]
                     if action_id not in legal_action_id:
-                        legal_action_id.append(action_id)
+                        legal_action_id[action_id] = None
         return legal_action_id
 
     def get_perfect_information(self):

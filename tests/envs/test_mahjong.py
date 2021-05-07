@@ -26,21 +26,21 @@ class TestMahjongEnv(unittest.TestCase):
     def test_step(self):
         env = rlcard.make('mahjong')
         state, _ = env.reset()
-        action = np.random.choice(state['legal_actions'])
+        action = np.random.choice(list(state['legal_actions'].keys()))
         _, player_id = env.step(action)
         self.assertEqual(player_id, env.game.round.current_player)
 
     def test_step_back(self):
         env = rlcard.make('mahjong', config={'allow_step_back':True})
         state, player_id = env.reset()
-        action = np.random.choice(state['legal_actions'])
+        action = np.random.choice(list(state['legal_actions'].keys()))
         env.step(action)
         env.step_back()
         self.assertEqual(env.game.round.current_player, player_id)
 
         env = rlcard.make('mahjong', config={'allow_step_back':False})
         state, player_id = env.reset()
-        action = np.random.choice(state['legal_actions'])
+        action = np.random.choice(list(state['legal_actions'].keys()))
         env.step(action)
         # env.step_back()
         self.assertRaises(Exception, env.step_back)
