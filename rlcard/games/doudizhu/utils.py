@@ -11,23 +11,25 @@ import rlcard
 # Read required docs
 ROOT_PATH = rlcard.__path__[0]
 
-# a map of action to abstract action
-with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/specific_map.json'), 'r') as file:
-    SPECIFIC_MAP = json.load(file, object_pairs_hook=OrderedDict)
+# Action space
+with open(os.path.join(ROOT_PATH, 'games/doudizhu/action_space.txt'), 'r') as f:
+    ID_2_ACTION = f.readline().strip().split()
+    ACTION_2_ID = {}
+    for i, action in enumerate(ID_2_ACTION):
+        ACTION_2_ID[action] = i
 
-# a map of abstract action to its index and a list of abstract action
-with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/action_space.json'), 'r') as file:
-    ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
-    ACTION_LIST = list(ACTION_SPACE.keys())
+# a map of action to abstract action
+with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/specific_map.json'), 'r') as f:
+    SPECIFIC_MAP = json.load(f, object_pairs_hook=OrderedDict)
 
 # a map of card to its type. Also return both dict and list to accelerate
-with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/card_type.json'), 'r') as file:
-    data = json.load(file, object_pairs_hook=OrderedDict)
+with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/card_type.json'), 'r') as f:
+    data = json.load(f, object_pairs_hook=OrderedDict)
     CARD_TYPE = (data, list(data), set(data))
 
 # a map of type to its cards
-with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/type_card.json'), 'r') as file:
-    TYPE_CARD = json.load(file, object_pairs_hook=OrderedDict)
+with open(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/type_card.json'), 'r') as f:
+    TYPE_CARD = json.load(f, object_pairs_hook=OrderedDict)
 
 # rank list of solo character of cards
 CARD_RANK_STR = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K',

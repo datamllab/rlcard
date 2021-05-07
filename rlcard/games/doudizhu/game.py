@@ -5,7 +5,7 @@ import functools
 from heapq import merge
 import numpy as np
 
-from rlcard.games.doudizhu.utils import cards2str, doudizhu_sort_card
+from rlcard.games.doudizhu.utils import cards2str, doudizhu_sort_card, CARD_RANK_STR
 from rlcard.games.doudizhu import Player
 from rlcard.games.doudizhu import Round
 from rlcard.games.doudizhu import Judger
@@ -14,21 +14,6 @@ from rlcard.games.doudizhu import Judger
 class DoudizhuGame:
     ''' Provide game APIs for env to run doudizhu and get corresponding state
     information.
-
-    An example of state during runtime:
-            {
-             'deck': '3333444455556666777788889999TTTTJJJJQQQQKKKKAAAA2222BR',
-             'seen_cards': 'TQA',
-             'landlord': 0,
-             'self': 2,
-             'initial_hand': '3456677799TJQKAAB',
-             'trace': [(0, '8222'), (1, 'pass'), (2, 'pass'), (0, '6KKK'),
-                       (1, 'pass'), (2, 'pass'), (0, '8'), (1, 'Q')],
-             'played_cards': ['6', '8', '8', 'Q', 'K', 'K', 'K', '2', '2', '2'],
-             'others_hand': '333444555678899TTTJJJQQAA2R',
-             'current_hand': '3456677799TJQKAAB',
-             'actions': ['pass', 'K', 'A', 'B']
-            }
     '''
     def __init__(self, allow_step_back=False):
         self.allow_step_back = allow_step_back
@@ -51,7 +36,9 @@ class DoudizhuGame:
                         for num in range(self.num_players)]
 
         # initialize round to deal cards and determine landlord
-        self.round = Round(self.np_random)
+        self.played_cards = [np.zeros((len(CARD_RANK_STR), ), dtype=np.int)
+                                for _ in range(self.num_players)]
+        self.round = Round(self.np_random, self.played_cards)
         self.round.initiate(self.players)
 
         # initialize judger
@@ -59,13 +46,9 @@ class DoudizhuGame:
 
         # get state of first player
         player_id = self.round.current_player
-        player = self.players[player_id]
-        others_hands = self._get_others_current_hand(player)
-        actions = list(self.judger.playable_cards[player_id])
-        state = player.get_state(self.round.public, others_hands, actions)
-        self.state = state
+        self.state = self.get_state(player_id)
 
-        return state, player_id
+        return self.state, player_id
 
     def step(self, action):
         ''' Perform one draw of the game
@@ -135,11 +118,12 @@ class DoudizhuGame:
         '''
         player = self.players[player_id]
         others_hands = self._get_others_current_hand(player)
+        num_cards_left = [len(self.players[i].current_hand) for i in range(self.num_players)]
         if self.is_over():
             actions = []
         else:
             actions = list(player.available_actions(self.round.greater_player, self.judger))
-        state = player.get_state(self.round.public, others_hands, actions)
+        state = player.get_state(self.round.public, others_hands, num_cards_left, actions)
 
         return state
 

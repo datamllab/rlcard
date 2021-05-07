@@ -1,3 +1,4 @@
+from collections import Counter
 import numpy as np
 
 from rlcard.envs import Env
@@ -8,23 +9,18 @@ class DoudizhuEnv(Env):
     '''
 
     def __init__(self, config):
-        from rlcard.games.doudizhu.utils import SPECIFIC_MAP, CARD_RANK_STR
-        from rlcard.games.doudizhu.utils import ACTION_LIST, ACTION_SPACE
-        from rlcard.games.doudizhu.utils import encode_cards
+        from rlcard.games.doudizhu.utils import ACTION_2_ID, ID_2_ACTION
         from rlcard.games.doudizhu.utils import cards2str, cards2str_with_suit
         from rlcard.games.doudizhu import Game
-        self._encode_cards = encode_cards
         self._cards2str = cards2str
         self._cards2str_with_suit = cards2str_with_suit
-        self._SPECIFIC_MAP = SPECIFIC_MAP
-        self._CARD_RANK_STR = CARD_RANK_STR
-        self._ACTION_LIST = ACTION_LIST
-        self._ACTION_SPACE = ACTION_SPACE
+        self._ACTION_2_ID = ACTION_2_ID
+        self._ID_2_ACTION = ID_2_ACTION
         
         self.name = 'doudizhu'
         self.game = Game()
         super().__init__(config)
-        self.state_shape = [6, 5, 15]
+        self.state_shape = [790]
 
     def _extract_state(self, state):
         ''' Encode state
@@ -39,23 +35,65 @@ class DoudizhuEnv(Env):
                              the recent three actions
                              the union of all played cards
         '''
-        obs = np.zeros((6, 5, 15), dtype=int)
-        for index in range(6):
-            obs[index][0] = np.ones(15, dtype=int)
-        self._encode_cards(obs[0], state['current_hand'])
-        self._encode_cards(obs[1], state['others_hand'])
-        for i, action in enumerate(state['trace'][-3:]):
-            if action[1] != 'pass':
-                self._encode_cards(obs[4-i], action[1])
-        if state['played_cards'] is not None:
-            self._encode_cards(obs[5], state['played_cards'])
+        current_hand = _cards2array(state['current_hand'])
+        others_hand = _cards2array(state['others_hand'])
+
+        last_action = ''
+        if len(state['trace']) != 0:
+            if state['trace'][-1][1] == 'pass':
+                last_action = state['trace'][-2][1]
+            else:
+                last_action = state['trace'][-1][1]
+        last_action = _cards2array(last_action)
+
+        last_9_actions = _action_seq2array(_process_action_seq(state['trace']))
+
+        if state['self'] == 0: # landlord
+            landlord_up_played_cards = _cards2array(state['played_cards'][2])
+            landlord_down_played_cards = _cards2array(state['played_cards'][1])
+            landlord_up_num_cards_left = _get_one_hot_array(state['num_cards_left'][2], 17) 
+            landlord_down_num_cards_left = _get_one_hot_array(state['num_cards_left'][1], 17)
+            obs = np.concatenate((current_hand,
+                                  others_hand,
+                                  last_action,
+                                  last_9_actions,
+                                  landlord_up_played_cards,
+                                  landlord_down_played_cards,
+                                  landlord_up_num_cards_left,
+                                  landlord_down_num_cards_left))
+        else:
+            landlord_played_cards = _cards2array(state['played_cards'][0])
+            for i, action in reversed(state['trace']):
+                if i == 0:
+                    last_landlord_action = action
+            last_landlord_action = _cards2array(last_landlord_action)
+            landlord_num_cards_left = _get_one_hot_array(state['num_cards_left'][0], 20)
+
+            teammate_id = 3 - state['self']
+            teammate_played_cards = _cards2array(state['played_cards'][teammate_id])
+            last_teammate_action = 'pass'
+            for i, action in reversed(state['trace']):
+                if i == teammate_id:
+                    last_teammate_action = action
+            last_teammate_action = _cards2array(last_teammate_action)
+            teammate_num_cards_left = _get_one_hot_array(state['num_cards_left'][teammate_id], 17)
+            obs = np.concatenate((current_hand,
+                                  others_hand,
+                                  last_action,
+                                  last_9_actions,
+                                  landlord_played_cards,
+                                  teammate_played_cards,
+                                  last_landlord_action,
+                                  last_teammate_action,
+                                  landlord_num_cards_left,
+                                  teammate_num_cards_left))
 
         extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions()}
         extracted_state['raw_obs'] = state
         extracted_state['raw_legal_actions'] = [a for a in state['actions']]
         extracted_state['action_record'] = self.action_recorder
         return extracted_state
-
+            
     def get_payoffs(self):
         ''' Get the payoffs of players. Must be implemented in the child class.
 
@@ -73,37 +111,7 @@ class DoudizhuEnv(Env):
         Returns:
             action (string): the action that will be passed to the game engine.
         '''
-        abstract_action = self._ACTION_LIST[action_id]
-        # without kicker
-        if '*' not in abstract_action:
-            return abstract_action
-        # with kicker
-        legal_actions = self.game.state['actions']
-        specific_actions = []
-        kickers = []
-        for legal_action in legal_actions:
-            for abstract in self._SPECIFIC_MAP[legal_action]:
-                main = abstract.strip('*')
-                if abstract == abstract_action:
-                    specific_actions.append(legal_action)
-                    kickers.append(legal_action.replace(main, '', 1))
-                    break
-        # choose kicker with minimum score
-        player_id = self.game.get_player_id()
-        kicker_scores = []
-        for kicker in kickers:
-            score = 0
-            for action in self.game.judger.playable_cards[player_id]:
-                if kicker in action:
-                    score += 1
-            kicker_scores.append(score+self._CARD_RANK_STR.index(kicker[0]))
-        min_index = 0
-        min_score = kicker_scores[0]
-        for index, score in enumerate(kicker_scores):
-            if score < min_score:
-                min_score = score
-                min_index = index
-        return specific_actions[min_index]
+        return self._ID_2_ACTION[action_id]
 
     def _get_legal_actions(self):
         ''' Get all legal actions for current state
@@ -111,15 +119,9 @@ class DoudizhuEnv(Env):
         Returns:
             legal_actions (list): a list of legal actions' id
         '''
-        legal_action_id = []
         legal_actions = self.game.state['actions']
-        if legal_actions:
-            for action in legal_actions:
-                for abstract in self._SPECIFIC_MAP[action]:
-                    action_id = self._ACTION_SPACE[abstract]
-                    if action_id not in legal_action_id:
-                        legal_action_id.append(action_id)
-        return legal_action_id
+        legal_actions = {self._ACTION_2_ID[action]: _cards2array(action) for action in legal_actions}
+        return legal_actions
 
     def get_perfect_information(self):
         ''' Get the perfect information of the current state
@@ -130,8 +132,53 @@ class DoudizhuEnv(Env):
         state = {}
         state['hand_cards_with_suit'] = [self._cards2str_with_suit(player.current_hand) for player in self.game.players]
         state['hand_cards'] = [self._cards2str(player.current_hand) for player in self.game.players]
-        state['landlord'] = self.game.state['landlord']
         state['trace'] = self.game.state['trace']
         state['current_player'] = self.game.round.current_player
         state['legal_actions'] = self.game.state['actions']
         return state
+
+Card2Column = {'3': 0, '4': 1, '5': 2, '6': 3, '7': 4, '8': 5, '9': 6, 'T': 7,
+               'J': 8, 'Q': 9, 'K': 10, 'A': 11, '2': 12}
+
+NumOnes2Array = {0: np.array([0, 0, 0, 0]),
+                 1: np.array([1, 0, 0, 0]),
+                 2: np.array([1, 1, 0, 0]),
+                 3: np.array([1, 1, 1, 0]),
+                 4: np.array([1, 1, 1, 1])}
+
+def _cards2array(cards):
+    if cards == 'pass':
+        return np.zeros(54, dtype=np.int8)
+
+    matrix = np.zeros([4, 13], dtype=np.int8)
+    jokers = np.zeros(2, dtype=np.int8)
+    counter = Counter(cards)
+    for card, num_times in counter.items():
+        if card == 'B':
+            jokers[0] = 1
+        elif card == 'R':
+            jokers[1] = 1
+        else:
+            matrix[:, Card2Column[card]] = NumOnes2Array[num_times]
+    return np.concatenate((matrix.flatten('F'), jokers))
+
+def _get_one_hot_array(num_left_cards, max_num_cards):
+    one_hot = np.zeros(max_num_cards)
+    one_hot[num_left_cards - 1] = 1
+
+    return one_hot
+
+def _action_seq2array(action_seq_list):
+    action_seq_array = np.zeros((len(action_seq_list), 54))
+    for row, cards in enumerate(action_seq_list):
+        action_seq_array[row, :] = _cards2array(cards)
+    action_seq_array = action_seq_array.flatten()
+    return action_seq_array
+
+def _process_action_seq(sequence, length=9):
+    sequence = [action[1] for action in sequence[-length:]]
+    if len(sequence) < length:
+        empty_sequence = ['' for _ in range(length - len(sequence))]
+        empty_sequence.extend(sequence)
+        sequence = empty_sequence
+    return sequence

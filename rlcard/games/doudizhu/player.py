@@ -43,17 +43,15 @@ class DoudizhuPlayer:
     def set_current_hand(self, value):
         self._current_hand = value
 
-    def get_state(self, public, others_hands, actions):
+    def get_state(self, public, others_hands, num_cards_left, actions):
         state = {}
-        state['deck'] = public['deck']
         state['seen_cards'] = public['seen_cards']
-        state['landlord'] = public['landlord']
         state['trace'] = public['trace'].copy()
-        state['played_cards'] = public['played_cards'].copy()
+        state['played_cards'] = public['played_cards']
         state['self'] = self.player_id
-        state['initial_hand'] = self.initial_hand
         state['current_hand'] = cards2str(self._current_hand)
         state['others_hand'] = others_hands
+        state['num_cards_left'] = num_cards_left
         state['actions'] = actions
 
         return state
@@ -69,7 +67,6 @@ class DoudizhuPlayer:
         Returns:
             list: list of string of actions. Eg: ['pass', '8', '9', 'T', 'J']
         '''
-
         actions = []
         if greater_player is None or greater_player.player_id == self.player_id:
             actions = judger.get_playable_cards(self)
@@ -87,7 +84,6 @@ class DoudizhuPlayer:
         Returns:
             object of DoudizhuPlayer: If there is a new greater_player, return it, if not, return None
         '''
-
         trans = {'B': 'BJ', 'R': 'RJ'}
         if action == 'pass':
             self._recorded_played_cards.append([])
