@@ -49,7 +49,7 @@ class UnoEnv(Env):
 
     def _get_legal_actions(self):
         legal_actions = self.game.get_legal_actions()
-        legal_ids = [ACTION_SPACE[action] for action in legal_actions]
+        legal_ids = {ACTION_SPACE[action]: None for action in legal_actions}
         return legal_ids
 
     def get_perfect_information(self):

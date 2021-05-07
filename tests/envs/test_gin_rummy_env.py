@@ -33,7 +33,7 @@ class TestGinRummyEnv(unittest.TestCase):
     def test_step(self):
         env = rlcard.make('gin-rummy')
         state, _ = env.reset()
-        action = np.random.choice(state['legal_actions'])
+        action = np.random.choice(list(state['legal_actions'].keys()))
         _, player_id = env.step(action)
         current_player_id = env.game.round.get_current_player().player_id
         self.assertEqual(player_id, current_player_id)

@@ -4,7 +4,7 @@ import functools
 
 from rlcard.games.simpledoudizhu.game import SimpleDoudizhuGame as Game
 from rlcard.games.doudizhu.utils import get_landlord_score, encode_cards
-from rlcard.games.doudizhu.utils import get_optimal_action, doudizhu_sort_str
+from rlcard.games.doudizhu.utils import doudizhu_sort_str
 from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
 
 class TestSimpleDoudizhuGame(unittest.TestCase):
@@ -127,13 +127,6 @@ class TestSimpleDoudizhuGame(unittest.TestCase):
     def test_get_landlord_score(self):
         score_1 = get_landlord_score('56888TTQKKKAA222R')
         self.assertEqual(score_1, 12)
-
-    def test_get_optimal_action(self):
-        probs = np.zeros(309)
-        probs[-1] = 0.5
-        legal_actions = ['pass', '33344', 'BR']
-        action = get_optimal_action(probs, legal_actions, np.random.RandomState())
-        self.assertEqual(action, 'pass')
 
     def test_encode_cards(self):
         plane = np.zeros((5, 15), dtype=int)

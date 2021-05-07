@@ -152,7 +152,7 @@ class CFRAgent():
         Returns:
             action (int): Predicted action
         '''
-        probs = self.action_probs(state['obs'].tostring(), state['legal_actions'], self.average_policy)
+        probs = self.action_probs(state['obs'].tostring(), list(state['legal_actions'].keys()), self.average_policy)
         action = np.random.choice(len(probs), p=probs)
         return action, probs
 
@@ -168,7 +168,7 @@ class CFRAgent():
                 legal_actions (list): Indices of legal actions
         '''
         state = self.env.get_state(player_id)
-        return state['obs'].tostring(), state['legal_actions']
+        return state['obs'].tostring(), list(state['legal_actions'].keys())
 
     def save(self):
         ''' Save model

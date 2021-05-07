@@ -42,16 +42,16 @@ class TestDQN(unittest.TestCase):
                          mlp_layers=[10,10],
                          device=torch.device('cpu'))
 
-        predicted_action, _ = agent.eval_step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
+        predicted_action, _ = agent.eval_step({'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}})
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)
 
         for _ in range(step_num):
-            ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]}, True]
+            ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}}, np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}}, True]
             agent.feed(ts)
         state_dict = agent.get_state_dict()
         self.assertIsInstance(state_dict, dict)
 
-        predicted_action = agent.step({'obs': np.random.random_sample((2,)), 'legal_actions': [0, 1]})
+        predicted_action = agent.step({'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}})
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)

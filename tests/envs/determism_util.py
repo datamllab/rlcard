@@ -29,7 +29,7 @@ def gather_observations(env, actions, num_rand_steps):
     while not env.is_over() and action_idx < len(actions):
         # Agent plays
         rand_iter(num_rand_steps)
-        legals = state['legal_actions']
+        legals = list(state['legal_actions'].keys())
         action = legals[actions[action_idx]%len(legals)]
         # Environment steps
         next_state, next_player_id = env.step(action)
