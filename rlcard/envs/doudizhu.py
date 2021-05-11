@@ -39,7 +39,6 @@ class DoudizhuEnv(Env):
         others_hand = _cards2array(state['others_hand'])
 
         last_action = ''
-        print(state)
         if len(state['trace']) != 0:
             if state['trace'][-1][1] == 'pass':
                 last_action = state['trace'][-2][1]
