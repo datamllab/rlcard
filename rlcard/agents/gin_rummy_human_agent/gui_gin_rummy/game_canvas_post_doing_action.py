@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 from typing import List, Tuple
 
-from rlcard.core import Card
+from rlcard.games.base import Card
 
 import rlcard.games.gin_rummy.judge as judge
 import rlcard.games.gin_rummy.utils.utils as gin_rummy_utils

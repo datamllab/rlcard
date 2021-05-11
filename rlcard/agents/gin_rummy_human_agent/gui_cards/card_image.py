@@ -9,6 +9,32 @@ import os
 from PIL import Image, ImageTk, ImageDraw
 
 image_dir = os.path.abspath(os.path.dirname(__file__))
+if not os.path.isdir(os.path.join(image_dir, 'cards_png')):
+    print('Downloading images...')
+    import time
+    import urllib.request
+    import sys
+    import zipfile
+    def reporthook(count, block_size, total_size):
+        global start_time
+        if count == 0:
+            start_time = time.time()
+            return
+        duration = time.time() - start_time
+        progress_size = int(count * block_size)
+        speed = int(progress_size / (1024 * duration))
+        percent = int(count * block_size * 100 / total_size)
+        sys.stdout.write("\r...%d%%, %d KB, %d KB/s, %d seconds passed" %
+                        (percent, progress_size / (1024), speed, duration))
+        sys.stdout.flush()
+    zipurl = 'https://dczha.com/files/rlcard/cards_png.zip'
+    filehandle, _ = urllib.request.urlretrieve(zipurl, reporthook=reporthook)
+
+    with zipfile.ZipFile(filehandle,"r") as zip_ref:
+        zip_ref.extractall(image_dir)
+
+    print()
+    print('Done')
 
 ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
 suits = ['C', 'D', 'H', 'S']
@@ -38,7 +64,7 @@ def get_card_filename(rank: str, suit: str) -> str:
 
 
 def get_card_back_image(scale_factor: float):
-    card_filename = "{}/back@2x.png".format(image_dir)
+    card_filename = "{}/cards_png/back.jpg".format(image_dir)
     image = Image.open(card_filename)
     image_width, image_height = image.size
     card_scale_factor = 0.25 * scale_factor * 0.666
