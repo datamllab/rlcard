@@ -18,3 +18,4 @@ newtest/
 dist/
 cfr_model/
 rlcard/games/doudizhu/jsondata/
+rlcard/agents/gin_rummy_human_agent/gui_cards/cards_png
