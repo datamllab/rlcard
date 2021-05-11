@@ -69,6 +69,8 @@ class GinRummyNoviceRuleAgent(object):
                                                                        state=state)
             if best_discards:
                 actions = [DiscardAction(card=card).action_id for card in best_discards]
+        if type(actions) == dict:
+            actions = list(actions.keys())
         return np.random.choice(actions)
 
     def eval_step(self, state):
