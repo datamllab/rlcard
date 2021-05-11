@@ -1,5 +1,5 @@
 # RLCard: A Toolkit for Reinforcement Learning in Card Games
-<img width="500" src="./docs/imgs/logo.jpg" alt="Logo" />
+<img width="500" src="https://dczha.com/files/rlcard/logo.jpg" alt="Logo" />
 
 [![Build Status](https://travis-ci.org/datamllab/RLCard.svg?branch=master)](https://travis-ci.org/datamllab/RLCard)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/248eb15c086748a4bcc830755f1bd798)](https://www.codacy.com/manual/daochenzha/rlcard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=datamllab/rlcard&amp;utm_campaign=Badge_Grade)
@@ -204,15 +204,8 @@ The purposes of the main modules are listed as below:
 *   [/rlcard/games](rlcard/games): Various game engines.
 *   [/rlcard/models](rlcard/models): Model zoo including pre-trained models and rule models.
 
-## Evaluation
-The perfomance is measured by winning rates through tournaments. Example outputs are as follows:
-![Learning Curves](http://rlcard.org/imgs/curves.png "Learning Curves")
-
-For your information, there is a nice online evaluation platform [pokerwars](https://github.com/pokerwars) that could be connected with RLCard with some modifications.
-
 ## More Documents
 For more documentation, please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
-
 
 ## Contributing
 Contribution to this project is greatly appreciated! Please create an issue for feedbacks/bugs. If you want to contribute codes, please refer to [Contributing Guide](./CONTRIBUTING.md).
