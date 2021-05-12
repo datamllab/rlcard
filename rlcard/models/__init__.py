@@ -1,18 +1,6 @@
 ''' Register rule-based models or pre-trianed models
 '''
-
 from rlcard.models.registration import register, load
-import subprocess
-import sys
-from distutils.version import LooseVersion
-
-reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
-installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
-
-if 'torch' in installed_packages:
-    register(
-        model_id = 'leduc-holdem-nfsp',
-        entry_point='rlcard.models.pretrained_models:LeducHoldemNFSPModel')
 
 register(
     model_id = 'leduc-holdem-cfr',

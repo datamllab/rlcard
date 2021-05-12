@@ -32,8 +32,6 @@ from rlcard.utils.utils import remove_illegal
 
 Transition = collections.namedtuple('Transition', 'info_state action_probs')
 
-MODE = enum.Enum('mode', 'best_response average_policy')
-
 class NFSPAgent(object):
     ''' An approximate clone of rlcard.agents.nfsp_agent that uses
     pytorch instead of tensorflow.  Note that this implementation
@@ -43,25 +41,24 @@ class NFSPAgent(object):
     '''
 
     def __init__(self,
-                 scope,
                  action_num=4,
                  state_shape=None,
                  hidden_layers_sizes=None,
-                 reservoir_buffer_capacity=int(1e6),
+                 reservoir_buffer_capacity=20000,
                  anticipatory_param=0.1,
                  batch_size=256,
                  train_every=1,
                  rl_learning_rate=0.1,
                  sl_learning_rate=0.005,
-                 min_buffer_size_to_learn=1000,
-                 q_replay_memory_size=30000,
-                 q_replay_memory_init_size=1000,
+                 min_buffer_size_to_learn=100,
+                 q_replay_memory_size=20000,
+                 q_replay_memory_init_size=100,
                  q_update_target_estimator_every=1000,
                  q_discount_factor=0.99,
                  q_epsilon_start=0.06,
                  q_epsilon_end=0,
                  q_epsilon_decay_steps=int(1e6),
-                 q_batch_size=256,
+                 q_batch_size=32,
                  q_train_every=1,
                  q_mlp_layers=None,
                  evaluate_with='average_policy',
@@ -69,7 +66,6 @@ class NFSPAgent(object):
         ''' Initialize the NFSP agent.
 
         Args:
-            scope (string): The name scope of NFSPAgent.
             action_num (int): The number of actions.
             state_shape (list): The shape of the state space.
             hidden_layers_sizes (list): The hidden layers sizes for the layers of
@@ -95,7 +91,6 @@ class NFSPAgent(object):
             device (torch.device): Whether to use the cpu or gpu
         '''
         self.use_raw = False
-        self._scope = scope
         self._action_num = action_num
         self._state_shape = state_shape
         self._layer_sizes = hidden_layers_sizes + [action_num]
@@ -122,7 +117,7 @@ class NFSPAgent(object):
         self._step_counter = 0
 
         # Build the action-value network
-        self._rl_agent = DQNAgent(scope+'_dqn', q_replay_memory_size, q_replay_memory_init_size, \
+        self._rl_agent = DQNAgent(q_replay_memory_size, q_replay_memory_init_size, \
             q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, \
             q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_train_every, q_mlp_layers, \
             rl_learning_rate, device)
@@ -160,7 +155,7 @@ class NFSPAgent(object):
         self.total_t += 1
         if self.total_t>0 and len(self._reservoir_buffer) >= self._min_buffer_size_to_learn and self.total_t%self._train_every == 0:
             sl_loss  = self.train_sl()
-            print('\rINFO - Agent {}, step {}, sl-loss: {}'.format(self._scope, self.total_t, sl_loss), end='')
+            print('\rINFO - Step {}, sl-loss: {}'.format(self.total_t, sl_loss), end='')
 
     def step(self, state):
         ''' Returns the action to be taken.
@@ -173,11 +168,11 @@ class NFSPAgent(object):
         '''
         obs = state['obs']
         legal_actions = list(state['legal_actions'].keys())
-        if self._mode == MODE.best_response:
+        if self._mode == 'best_response':
             probs = self._rl_agent.predict(obs)
             self._add_transition(obs, probs)
 
-        elif self._mode == MODE.average_policy:
+        elif self._mode == 'average_policy':
             probs = self._act(obs)
 
         probs = remove_illegal(probs, legal_actions)
@@ -210,9 +205,9 @@ class NFSPAgent(object):
         ''' Sample average/best_response policy
         '''
         if np.random.rand() < self._anticipatory_param:
-            self._mode = MODE.best_response
+            self._mode = 'best_response'
         else:
-            self._mode = MODE.average_policy
+            self._mode = 'average_policy'
 
     def _act(self, info_state):
         ''' Predict action probability givin the observation and legal actions
@@ -285,23 +280,9 @@ class NFSPAgent(object):
 
         return ce_loss
 
-    def get_state_dict(self):
-        ''' Get the state dict to save models
-
-        Returns:
-            (dict): A dict of model states
-        '''
-        state_dict = self._rl_agent.get_state_dict()
-        state_dict[self._scope] = self.policy_network.state_dict()
-        return state_dict
-
-    def load(self, checkpoint):
-        ''' Load model
-
-        Args:
-            checkpoint (dict): the loaded state
-        '''
-        self.policy_network.load_state_dict(checkpoint[self._scope])
+    def set_device(self, device):
+        self.device = device
+        self._rl_agent.set_device(device)
 
 class AveragePolicyNetwork(nn.Module):
     '''

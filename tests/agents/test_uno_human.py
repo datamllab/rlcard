@@ -1,6 +1,6 @@
 import unittest
 
-from rlcard.agents.uno_human_agent import _print_state, _print_action
+from rlcard.agents.human_agents.uno_human_agent import _print_state, _print_action
 
 class TestLeducHuman(unittest.TestCase):
 

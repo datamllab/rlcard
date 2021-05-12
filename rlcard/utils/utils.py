@@ -2,6 +2,32 @@ import numpy as np
 
 from rlcard.games.base import Card
 
+def set_seed(seed):
+    if seed is not None:
+        import subprocess
+        import sys
+
+        reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
+        installed_packages = [r.decode().split('==')[0] for r in reqs.split()]
+        if 'torch' in installed_packages:
+            import torch
+            torch.backends.cudnn.deterministic = True
+            torch.manual_seed(seed)
+        np.random.seed(seed)
+        import random
+        random.seed(seed)
+
+def get_device():
+    import torch
+    if torch.cuda.is_available():
+        device = torch.device("cuda:0")
+        print("--> Running on the GPU")
+    else:
+        device = torch.device("cpu")
+        print("--> Running on the CPU")
+
+    return device    
+
 def init_standard_deck():
     ''' Initialize a standard deck of 52 cards
 

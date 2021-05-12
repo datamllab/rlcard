@@ -43,7 +43,6 @@ class DQNAgent(object):
     that depends on PyTorch instead of Tensorflow
     '''
     def __init__(self,
-                 scope,
                  replay_memory_size=20000,
                  replay_memory_init_size=100,
                  update_target_estimator_every=1000,
@@ -64,7 +63,6 @@ class DQNAgent(object):
         Finds the optimal greedy policy while following an epsilon-greedy policy.
 
         Args:
-            scope (str): The name of the DQN agent
             replay_memory_size (int): Size of the replay memory
             replay_memory_init_size (int): Number of random experiences to sample when initializing
               the reply memory.
@@ -85,7 +83,6 @@ class DQNAgent(object):
             device (torch.device): whether to use the cpu or gpu
         '''
         self.use_raw = False
-        self.scope = scope
         self.replay_memory_init_size = replay_memory_init_size
         self.update_target_estimator_every = update_target_estimator_every
         self.discount_factor = discount_factor
@@ -200,7 +197,7 @@ class DQNAgent(object):
         state_batch = np.array(state_batch)
 
         loss = self.q_estimator.update(state_batch, action_batch, target_batch)
-        print('\rINFO - Agent {}, step {}, rl-loss: {}'.format(self.scope, self.total_t, loss), end='')
+        print('\rINFO - Step {}, rl-loss: {}'.format(self.total_t, loss), end='')
 
         # Update the target estimator
         if self.train_t % self.update_target_estimator_every == 0:
@@ -221,28 +218,10 @@ class DQNAgent(object):
         '''
         self.memory.save(state, action, reward, next_state, done)
 
-    def get_state_dict(self):
-        ''' Get the state dict to save models
-
-        Returns:
-            (dict): A dict of model states
-        '''
-        q_key = self.scope + '_q_estimator'
-        q_value = self.q_estimator.qnet.state_dict()
-        target_key = self.scope + '_target_estimator'
-        target_value = self.target_estimator.qnet.state_dict()
-        return {q_key: q_value, target_key: target_value}
-
-    def load(self, checkpoint):
-        ''' Load model
-
-        Args:
-            checkpoint (dict): the loaded state
-        '''
-        q_key = self.scope + '_q_estimator'
-        self.q_estimator.qnet.load_state_dict(checkpoint[q_key])
-        target_key = self.scope + '_target_estimator'
-        self.target_estimator.qnet.load_state_dict(checkpoint[target_key])
+    def set_device(self, device):
+        self.device = device
+        self.q_estimator.device = device
+        self.target_estimator.device = device
 
 class Estimator(object):
     '''
