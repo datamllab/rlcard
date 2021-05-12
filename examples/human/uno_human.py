@@ -3,7 +3,7 @@
 
 import rlcard
 from rlcard import models
-from rlcard.agents.uno_human_agent import HumanAgent, _print_action
+from rlcard.agents.human_agents.uno_human_agent import HumanAgent, _print_action
 
 # Make environment and enable human mode
 # Set 'record_action' to True because we need it to print results

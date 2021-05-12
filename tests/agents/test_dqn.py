@@ -8,8 +8,7 @@ class TestDQN(unittest.TestCase):
 
     def test_init(self):
 
-        agent = DQNAgent(scope='dqn',
-                         replay_memory_size=0,
+        agent = DQNAgent(replay_memory_size=0,
                          replay_memory_init_size=0,
                          update_target_estimator_every=0,
                          discount_factor=0,
@@ -34,8 +33,7 @@ class TestDQN(unittest.TestCase):
         memory_init_size = 100
         step_num = 500
 
-        agent = DQNAgent(scope='dqn',
-                         replay_memory_size = 200,
+        agent = DQNAgent(replay_memory_size = 200,
                          replay_memory_init_size=memory_init_size,
                          update_target_estimator_every=100,
                          state_shape=[2],
@@ -49,8 +47,6 @@ class TestDQN(unittest.TestCase):
         for _ in range(step_num):
             ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}}, np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}}, True]
             agent.feed(ts)
-        state_dict = agent.get_state_dict()
-        self.assertIsInstance(state_dict, dict)
 
         predicted_action = agent.step({'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}})
         self.assertGreaterEqual(predicted_action, 0)
