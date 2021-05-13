@@ -31,7 +31,7 @@ while (True):
         _action_list = []
 
         for i in range(player_num):
-            final_state.append(trajectories[i][-1][-2])
+            final_state.append(trajectories[i][-1])
             state.append(final_state[i]['raw_obs'])
 
         action_record.append(final_state[i]['action_record'])
