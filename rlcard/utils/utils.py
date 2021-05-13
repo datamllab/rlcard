@@ -194,21 +194,6 @@ def remove_illegal(action_probs, legal_actions):
         probs /= sum(probs)
     return probs
 
-
-def assign_task(task_num, process_num):
-    ''' Assign the number of tasks according to the number of processes
-
-    Args:
-        task_num (int): An integer of assignments of tasks
-        process_num (int): An integer of the number of processes
-
-    Returns:
-        per_stasks (list): An list of the numbers of tasks assigned to processes
-    '''
-    per_tasks = [task_num // process_num] * process_num
-    per_tasks[0] += (task_num % process_num)
-    return per_tasks
-
 def tournament(env, num):
     ''' Evaluate he performance of the agents in the environment
 
