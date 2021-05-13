@@ -21,7 +21,7 @@ while (True):
     trajectories, payoffs = env.run(is_training=False)
     # If the human does not take the final action, we need to
     # print other players action
-    final_state = trajectories[0][-1][-2]
+    final_state = trajectories[0][-1]
     action_record = final_state['action_record']
     state = final_state['raw_obs']
     _action_list = []

@@ -30,9 +30,9 @@ import rlcard
 
 from rlcard.agents import RandomAgent
 from rlcard.models.gin_rummy_rule_models import GinRummyNoviceRuleAgent
-from rlcard.agents.gin_rummy_human_agent.gin_rummy_human_agent import HumanAgent
+from rlcard.agents.human_agents.gin_rummy_human_agent.gin_rummy_human_agent import HumanAgent
 
-from rlcard.agents.gin_rummy_human_agent.gui_gin_rummy.game_app import GameApp
+from rlcard.agents.human_agents.gin_rummy_human_agent.gui_gin_rummy.game_app import GameApp
 
 from rlcard.games.gin_rummy.utils import scorers
 
