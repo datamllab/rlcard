@@ -11,7 +11,7 @@ def run(args):
     env = rlcard.make(args.env, config={'seed': 42})
     episode_num = 1
 
-    # Seed nmupy, torch, random
+    # Seed numpy, torch, random
     set_seed(42)
 
     # Set agents

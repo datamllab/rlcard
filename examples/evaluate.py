@@ -30,7 +30,7 @@ def evaluate(args):
     # Check whether gpu is available
     device = get_device()
         
-    # Seed nmupy, torch, random
+    # Seed numpy, torch, random
     set_seed(args.seed)
 
     # Make the environment with seed

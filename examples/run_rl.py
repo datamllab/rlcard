@@ -1,4 +1,4 @@
-''' An example of learning a Deep-Q Agent on the environments in RLCard
+''' An example of training a reinforcement learning agent on the environments in RLCard
 '''
 import os
 import argparse
@@ -14,7 +14,7 @@ def train(args):
     # Check whether gpu is available
     device = get_device()
         
-    # Seed nmupy, torch, random
+    # Seed numpy, torch, random
     set_seed(args.seed)
 
     # Make the environment with seed
@@ -25,13 +25,15 @@ def train(args):
         from rlcard.agents import DQNAgent
         agent = DQNAgent(action_num=env.action_num,
                          state_shape=env.state_shape,
-                         mlp_layers=[64,64])
+                         mlp_layers=[64,64],
+                         device=device)
     elif args.algorithm == 'nfsp':
         from rlcard.agents import NFSPAgent
         agent = NFSPAgent(action_num=env.action_num,
                           state_shape=env.state_shape,
                           hidden_layers_sizes=[64,64],
-                          q_mlp_layers=[64,64])
+                          q_mlp_layers=[64,64],
+                          device=device)
     agents = [agent]
     for _ in range(env.player_num):
         agents.append(RandomAgent(action_num=env.action_num))

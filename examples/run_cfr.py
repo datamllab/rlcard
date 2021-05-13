@@ -12,7 +12,7 @@ def train(args):
     env = rlcard.make('leduc-holdem', config={'seed': 0, 'allow_step_back':True})
     eval_env = rlcard.make('leduc-holdem', config={'seed': 0})
 
-    # Seed nmupy, torch, random
+    # Seed numpy, torch, random
     set_seed(args.seed)
 
     # Initilize CFR Agent
