@@ -94,15 +94,6 @@ class LimitholdemEnv(Env):
                 return 'fold'
         return self.actions[action_id]
 
-    def _load_model(self):
-        ''' Load pretrained/rule model
-
-        Returns:
-            model (Model): A Model object
-        '''
-        from rlcard import models
-        return models.load('limit-holdem-rule-v1')
-
     def get_perfect_information(self):
         ''' Get the perfect information of the current state
 

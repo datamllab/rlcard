@@ -46,7 +46,7 @@ class Env(object):
         self.timestep = 0
 
         # Set random seed, default is None
-        self._seed(config['seed'])
+        self.seed(config['seed'])
 
 
     def reset(self):
@@ -216,18 +216,10 @@ class Env(object):
         '''
         raise NotImplementedError
 
-    def _seed(self, seed=None):
+    def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         self.game.np_random = self.np_random
         return seed
-
-    def _load_model(self):
-        ''' Load pretrained/rule model
-
-        Returns:
-            model (Model): A Model object
-        '''
-        raise NotImplementedError
 
     def _extract_state(self, state):
         ''' Extract useful information from state for RL. Must be implemented in the child class.
@@ -262,9 +254,3 @@ class Env(object):
         Note: Must be implemented in the child class.
         '''
         raise NotImplementedError
-
-    @staticmethod
-    def init_game():
-        ''' (This function has been replaced by `reset()`)
-        '''
-        raise ValueError('init_game is removed. Please use env.reset()')

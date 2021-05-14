@@ -25,15 +25,6 @@ class LeducholdemEnv(Env):
         with open(os.path.join(rlcard.__path__[0], 'games/leducholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
 
-    def _load_model(self):
-        ''' Load pretrained/rule model
-
-        Returns:
-            model (Model): A Model object
-        '''
-        from rlcard import models
-        return models.load('leduc-holdem-cfr')
-
     def _get_legal_actions(self):
         ''' Get all leagal actions
 
