@@ -96,7 +96,7 @@ class UnoGame:
             (dict): The state of the player
         '''
         state = self.round.get_state(self.players, player_id)
-        state['player_num'] = self.get_player_num()
+        state['num_players'] = self.get_num_players()
         state['current_player'] = self.round.current_player
         return state
 
@@ -121,7 +121,7 @@ class UnoGame:
 
         return self.round.get_legal_actions(self.players, self.round.current_player)
 
-    def get_player_num(self):
+    def get_num_players(self):
         ''' Return the number of players in Limit Texas Hold'em
 
         Returns:
@@ -130,7 +130,7 @@ class UnoGame:
         return self.num_players
 
     @staticmethod
-    def get_action_num():
+    def get_num_actions():
         ''' Return the number of applicable actions
 
         Returns:
@@ -153,26 +153,3 @@ class UnoGame:
             (boolean): True if the game is over
         '''
         return self.round.is_over
-
-
-## For test
-#if __name__ == '__main__':
-#    #import time
-#    #random.seed(0)
-#    #start = time.time()
-#    game = UnoGame()
-#    for _ in range(1):
-#        state, button = game.init_game()
-#        print(button, state)
-#        i = 0
-#        while not game.is_over():
-#            i += 1
-#            legal_actions = game.get_legal_actions()
-#            print('legal_actions', legal_actions)
-#            action = np.random.choice(legal_actions)
-#            print('action', action)
-#            print()
-#            state, button = game.step(action)
-#            print(button, state)
-#        print(game.get_payoffs())
-#    print('step', i)

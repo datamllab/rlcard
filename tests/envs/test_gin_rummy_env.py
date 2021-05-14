@@ -24,11 +24,11 @@ class TestGinRummyEnv(unittest.TestCase):
 
     def test_get_legal_actions(self):
         env = rlcard.make('gin-rummy')
-        env.set_agents([RandomAgent(env.action_num) for _ in range(env.player_num)])
+        env.set_agents([RandomAgent(env.num_actions) for _ in range(env.num_players)])
         env.reset()
         legal_actions = env._get_legal_actions()
         for legal_action in legal_actions:
-            self.assertLessEqual(legal_action, env.action_num-1)
+            self.assertLessEqual(legal_action, env.num_actions-1)
 
     def test_step(self):
         env = rlcard.make('gin-rummy')
@@ -40,7 +40,7 @@ class TestGinRummyEnv(unittest.TestCase):
 
     def test_run(self):
         env = rlcard.make('gin-rummy')
-        env.set_agents([RandomAgent(env.action_num) for _ in range(env.player_num)])
+        env.set_agents([RandomAgent(env.num_actions) for _ in range(env.num_players)])
         trajectories, payoffs = env.run(is_training=False)
         self.assertEqual(len(trajectories), 2)
         for payoff in payoffs:

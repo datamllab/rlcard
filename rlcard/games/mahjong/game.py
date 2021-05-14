@@ -107,7 +107,7 @@ class MahjongGame:
             return state['valid_act']
 
     @staticmethod
-    def get_action_num():
+    def get_num_actions():
         ''' Return the number of applicable actions
 
         Returns:
@@ -115,7 +115,7 @@ class MahjongGame:
         '''
         return 38
 
-    def get_player_num(self):
+    def get_num_players(self):
         ''' return the number of players in Mahjong
 
         returns:
@@ -145,36 +145,3 @@ class MahjongGame:
         #print(win, player, players_val)
         #print(win, self.round.current_player, player, cards, pile, count)
         return win
-
-## For test
-#if __name__ == '__main__':
-#    import time
-#    np.random.seed(2)
-#    start = time.time()
-#    game = MahjongGame()
-#    for _ in range(100000):
-#        #print('*****init game*****')
-#        state, button = game.init_game()
-#        i = 0
-#        while not game.is_over():
-#            i += 1
-#            legal_actions = game.get_legal_actions(state)
-#            action = np.random.choice(legal_actions)
-#            flag=0
-#            #if len(legal_actions) < 3:
-#            #    flag=1
-#            #    print("Before:", state)
-#            #    print(game.round.current_player, action)
-#            state, button = game.step(action)
-#            #if action != 'stand' and flag==1:
-#            #    print("After:", state)
-#            #    print(state, game.round.current_player)
-#            #    exit()
-#            #print(button, state)
-#        winner_hand = [c.get_str() for c in game.players[game.winner].hand]
-#        winnder_pile = [[c.get_str() for c in s] for s in game.players[game.winner].pile]
-#        print(_, len(game.dealer.deck), game.winner, winner_hand, winnder_pile)
-#        if game.winner != -1:
-#            exit()
-#    end = time.time()
-#    print(end-start)

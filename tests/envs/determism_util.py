@@ -49,7 +49,7 @@ def is_deterministic(env_name):
 
     NUM_STEPS = 25
 
-    actions = [random.randrange(env.game.get_action_num()) for _ in range(NUM_STEPS)]
+    actions = [random.randrange(env.game.get_num_actions()) for _ in range(NUM_STEPS)]
     base_seed = 12941
     hashes = []
     for rand_iters in range(2):

@@ -6,15 +6,15 @@ from rlcard.games.mahjong.player import MahjongPlayer as Player
 
 class TestMahjongMethods(unittest.TestCase):
 
-    def test_get_player_num(self):
+    def test_get_num_players(self):
         game = Game()
-        num_player = game.get_player_num()
-        self.assertEqual(num_player, 4)
+        num_players = game.get_num_players()
+        self.assertEqual(num_players, 4)
 
-    def test_get_action_num(self):
+    def test_get_num_actions(self):
         game = Game()
-        action_num = game.get_action_num()
-        self.assertEqual(action_num, 38)
+        num_actions = game.get_num_actions()
+        self.assertEqual(num_actions, 38)
 
     def test_init_game(self):
         game = Game()

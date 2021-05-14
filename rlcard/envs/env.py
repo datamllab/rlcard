@@ -39,8 +39,8 @@ class Env(object):
             self.game.configure(_game_config)
 
         # Get the number of players/actions in this game
-        self.player_num = self.game.get_player_num()
-        self.action_num = self.game.get_action_num()
+        self.num_players = self.game.get_num_players()
+        self.num_actions = self.game.get_num_actions()
 
         # A counter for the timesteps
         self.timestep = 0
@@ -133,7 +133,7 @@ class Env(object):
         Note: The trajectories are 3-dimension list. The first dimension is for different players.
               The second dimension is for different transitions. The third dimension is for the contents of each transiton
         '''
-        trajectories = [[] for _ in range(self.player_num)]
+        trajectories = [[] for _ in range(self.num_players)]
         state, player_id = self.reset()
 
         # Loop to play the game
@@ -159,7 +159,7 @@ class Env(object):
                 trajectories[player_id].append(state)
 
         # Add a final state to all the players
-        for player_id in range(self.player_num):
+        for player_id in range(self.num_players):
             state = self.get_state(player_id)
             trajectories[player_id].append(state)
 

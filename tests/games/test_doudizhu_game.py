@@ -12,13 +12,13 @@ class TestDoudizhuGame(unittest.TestCase):
 
     def test_get_player_num(self):
         game = Game()
-        player_num = game.get_player_num()
-        self.assertEqual(player_num, 3)
+        num_players = game.get_num_players()
+        self.assertEqual(num_players, 3)
 
-    def test_get_action_num(self):
+    def test_get_num_actions(self):
         game = Game()
-        action_num = game.get_action_num()
-        self.assertEqual(action_num, 27472)
+        num_actions = game.get_num_actions()
+        self.assertEqual(num_actions, 27472)
 
     def test_init_game(self):
         game = Game()

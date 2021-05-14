@@ -52,13 +52,13 @@ class TestBlackjackEnv(unittest.TestCase):
             env.step_back()
 
     def test_multiplayers(self):
-        env = rlcard.make('blackjack', config={'game_player_num':5})
-        player_num = env.game.get_player_num()
-        self.assertEqual(player_num, 5)
+        env = rlcard.make('blackjack', config={'game_num_players':5})
+        num_players = env.game.get_num_players()
+        self.assertEqual(num_players, 5)
 
     def test_run(self):
         env = rlcard.make('blackjack')
-        env.set_agents([RandomAgent(env.action_num)])
+        env.set_agents([RandomAgent(env.num_actions)])
         trajectories, _ = env.run(is_training=False)
         self.assertEqual(len(trajectories), 1)
         trajectories, _ = env.run(is_training=True)

@@ -18,7 +18,7 @@ def load_model(model_path, env=None, position=None, device=None):
         agent.load()
     elif model_path == 'random':  # Random model
         from rlcard.agents import RandomAgent
-        agent = RandomAgent(action_num=env.action_num)
+        agent = RandomAgent(num_actions=env.num_actions)
     else:  # A model in the model zoo
         from rlcard import models
         agent = models.load(model_path).agents[position]
@@ -43,7 +43,7 @@ def evaluate(args):
     env.set_agents(agents)
 
     # Evaluate
-    rewards = tournament(env, args.evaluate_num)
+    rewards = tournament(env, args.num_games)
     for position, reward in enumerate(rewards):
         print(position, args.models[position], reward)
 
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     parser.add_argument('--models', nargs='*', default=['experiments/leduc_holdem_dqn_result/model.pth', 'random'])
     parser.add_argument('--cuda', type=str, default='')
     parser.add_argument('--seed', type=int, default=42)
-    parser.add_argument('--evaluate_num', type=int, default=10000)
+    parser.add_argument('--num_games', type=int, default=10000)
 
     args = parser.parse_args()
 

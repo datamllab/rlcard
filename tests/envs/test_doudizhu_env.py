@@ -17,17 +17,17 @@ class TestDoudizhuEnv(unittest.TestCase):
 
     def test_get_legal_actions(self):
         env = rlcard.make('doudizhu')
-        env.set_agents([RandomAgent(env.action_num) for _ in range(env.player_num)])
+        env.set_agents([RandomAgent(env.num_actions) for _ in range(env.num_actions)])
         env.reset()
         legal_actions = env._get_legal_actions()
         for legal_action in legal_actions:
-            self.assertLessEqual(legal_action, env.action_num-1)
+            self.assertLessEqual(legal_action, env.num_actions-1)
 
     def test_step(self):
         env = rlcard.make('doudizhu')
         _, player_id = env.reset()
         player = env.game.players[player_id]
-        _, next_player_id = env.step(env.action_num-2)
+        _, next_player_id = env.step(env.num_actions-2)
         self.assertEqual(next_player_id, (player.player_id+1)%len(env.game.players))
 
     def test_step_back(self):
@@ -44,7 +44,7 @@ class TestDoudizhuEnv(unittest.TestCase):
 
     def test_run(self):
         env = rlcard.make('doudizhu')
-        env.set_agents([RandomAgent(env.action_num) for _ in range(env.player_num)])
+        env.set_agents([RandomAgent(env.num_actions) for _ in range(env.num_players)])
         trajectories, payoffs = env.run(is_training=False)
         self.assertEqual(len(trajectories), 3)
         win = []

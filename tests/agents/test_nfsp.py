@@ -8,20 +8,20 @@ class TestNFSP(unittest.TestCase):
 
     def test_init(self):
 
-        agent = NFSPAgent(action_num=10,
+        agent = NFSPAgent(num_actions=10,
                           state_shape=[10],
                           hidden_layers_sizes=[10,10],
                           q_mlp_layers=[10,10],
                           device=torch.device('cpu'))
 
-        self.assertEqual(agent._action_num, 10)
+        self.assertEqual(agent._num_actions, 10)
 
     def test_train(self):
 
         memory_init_size = 20
-        step_num = 1000
+        num_steps = 1000
 
-        agent = NFSPAgent(action_num=2,
+        agent = NFSPAgent(num_actions=2,
                           state_shape=[2],
                           hidden_layers_sizes=[10,10],
                           reservoir_buffer_capacity=50,
@@ -37,7 +37,7 @@ class TestNFSP(unittest.TestCase):
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)
 
-        for _ in range(step_num):
+        for _ in range(num_steps):
             agent.sample_episode_policy()
             predicted_action = agent.step({'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}})
             self.assertGreaterEqual(predicted_action, 0)

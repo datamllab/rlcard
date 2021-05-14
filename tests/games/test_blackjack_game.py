@@ -6,17 +6,17 @@ from rlcard.envs.blackjack import DEFAULT_GAME_CONFIG
 
 class TestBlackjackGame(unittest.TestCase):
 
-    def test_get_player_num(self):
+    def test_get_num_players(self):
         game = Game()
         game.configure(DEFAULT_GAME_CONFIG)
-        player_num = game.get_player_num()
-        self.assertEqual(player_num, 1)
+        num_players = game.get_num_players()
+        self.assertEqual(num_players, 1)
 
-    def test_get_action_num(self):
+    def test_get_num_actions(self):
         game = Game()
         game.configure(DEFAULT_GAME_CONFIG)
-        action_num = game.get_action_num()
-        self.assertEqual(action_num, 2)
+        num_actions = game.get_num_actions()
+        self.assertEqual(num_actions, 2)
 
     def test_init_game(self):
         game = Game()

@@ -12,7 +12,7 @@ class TestLimitholdemEnv(unittest.TestCase):
         state, _ = env.reset()
         self.assertEqual(state['obs'].size, 72)
         for action in state['legal_actions']:
-            self.assertLess(action, env.action_num)
+            self.assertLess(action, env.num_actions)
 
     def test_is_deterministic(self):
         self.assertTrue(is_deterministic('limit-holdem'))
@@ -60,7 +60,7 @@ class TestLimitholdemEnv(unittest.TestCase):
 
     def test_run(self):
         env = rlcard.make('limit-holdem')
-        agents = [RandomAgent(env.action_num) for _ in range(env.player_num)]
+        agents = [RandomAgent(env.num_actions) for _ in range(env.num_players)]
         env.set_agents(agents)
         trajectories, payoffs = env.run(is_training=False)
         self.assertEqual(len(trajectories), 2)
@@ -75,9 +75,9 @@ class TestLimitholdemEnv(unittest.TestCase):
         self.assertEqual(player_id, env.get_perfect_information()['current_player'])
 
     def test_multiplayers(self):
-        env = rlcard.make('limit-holdem', config={'game_player_num':5})
-        player_num = env.game.get_player_num()
-        self.assertEqual(player_num, 5)
+        env = rlcard.make('limit-holdem', config={'game_num_players':5})
+        num_players = env.game.get_num_players()
+        self.assertEqual(num_players, 5)
 
 if __name__ == '__main__':
     unittest.main()

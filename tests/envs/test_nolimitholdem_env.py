@@ -59,7 +59,7 @@ class TestNolimitholdemEnv(unittest.TestCase):
 
     def test_run(self):
         env = rlcard.make('no-limit-holdem')
-        agents = [RandomAgent(env.action_num) for _ in range(env.player_num)]
+        agents = [RandomAgent(env.num_actions) for _ in range(env.num_players)]
         env.set_agents(agents)
         trajectories, payoffs = env.run(is_training=False)
         self.assertEqual(len(trajectories), 2)
@@ -74,12 +74,12 @@ class TestNolimitholdemEnv(unittest.TestCase):
         self.assertEqual(player_id, env.get_perfect_information()['current_player'])
 
     def test_multiplayers(self):
-        env = rlcard.make('no-limit-holdem', config={'game_player_num':5})
-        player_num = env.game.get_player_num()
-        self.assertEqual(player_num, 5)
+        env = rlcard.make('no-limit-holdem', config={'game_num_players':5})
+        num_players = env.game.get_num_players()
+        self.assertEqual(num_players, 5)
 
     def test_config_chips(self):
-        env = rlcard.make('no-limit-holdem', config={'game_player_num':5, 'chips_for_each':[100, 200, 400, 600, 900]})
+        env = rlcard.make('no-limit-holdem', config={'game_num_players':5, 'chips_for_each':[100, 200, 400, 600, 900]})
         env.game.init_game()
         players = env.game.players
         chips = []

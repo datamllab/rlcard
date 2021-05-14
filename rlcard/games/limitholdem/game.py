@@ -33,7 +33,7 @@ class LimitholdemGame:
     def configure(self, game_config):
         ''' Specifiy some game specific parameters, such as player number
         '''
-        self.num_players = game_config['game_player_num']
+        self.num_players = game_config['game_num_players']
 
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
@@ -156,7 +156,7 @@ class LimitholdemGame:
             return True
         return False
 
-    def get_player_num(self):
+    def get_num_players(self):
         ''' Return the number of players in Limit Texas Hold'em
 
         Returns:
@@ -165,7 +165,7 @@ class LimitholdemGame:
         return self.num_players
 
     @staticmethod
-    def get_action_num():
+    def get_num_actions():
         ''' Return the number of applicable actions
 
         Returns:
@@ -231,30 +231,3 @@ class LimitholdemGame:
             (list): A list of legal actions
         '''
         return self.round.get_legal_actions()
-
-# Test the game
-
-#if __name__ == "__main__":
-#    game = LimitholdemGame()
-#    while True:
-#        print('New Game')
-#        state, game_pointer = game.init_game()
-#        print(game_pointer, state)
-#        i = 1
-#        while not game.is_over():
-#            i += 1
-#            legal_actions = game.get_legal_actions()
-#            if i == 3:
-#                print('Step back')
-#                print(game.step_back())
-#                game_pointer = game.get_player_id()
-#                print(game_pointer)
-#                legal_actions = game.get_legal_actions()
-#
-#            action = np.random.choice(legal_actions)
-#            print(game_pointer, action, legal_actions)
-#            state, game_pointer = game.step(action)
-#            print(game_pointer, state)
-#
-#        print(game.get_payoffs())
-

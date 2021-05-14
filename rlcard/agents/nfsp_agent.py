@@ -41,7 +41,7 @@ class NFSPAgent(object):
     '''
 
     def __init__(self,
-                 action_num=4,
+                 num_actions=4,
                  state_shape=None,
                  hidden_layers_sizes=None,
                  reservoir_buffer_capacity=20000,
@@ -66,7 +66,7 @@ class NFSPAgent(object):
         ''' Initialize the NFSP agent.
 
         Args:
-            action_num (int): The number of actions.
+            num_actions (int): The number of actions.
             state_shape (list): The shape of the state space.
             hidden_layers_sizes (list): The hidden layers sizes for the layers of
               the average policy.
@@ -91,9 +91,9 @@ class NFSPAgent(object):
             device (torch.device): Whether to use the cpu or gpu
         '''
         self.use_raw = False
-        self._action_num = action_num
+        self._num_actions = num_actions
         self._state_shape = state_shape
-        self._layer_sizes = hidden_layers_sizes + [action_num]
+        self._layer_sizes = hidden_layers_sizes + [num_actions]
         self._batch_size = batch_size
         self._train_every = train_every
         self._sl_learning_rate = sl_learning_rate
@@ -119,7 +119,7 @@ class NFSPAgent(object):
         # Build the action-value network
         self._rl_agent = DQNAgent(q_replay_memory_size, q_replay_memory_init_size, \
             q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, \
-            q_epsilon_decay_steps, q_batch_size, action_num, state_shape, q_train_every, q_mlp_layers, \
+            q_epsilon_decay_steps, q_batch_size, num_actions, state_shape, q_train_every, q_mlp_layers, \
             rl_learning_rate, device)
 
         # Build the average policy supervised model
@@ -132,7 +132,7 @@ class NFSPAgent(object):
         '''
 
         # configure the average policy network
-        policy_network = AveragePolicyNetwork(self._action_num, self._state_shape, self._layer_sizes)
+        policy_network = AveragePolicyNetwork(self._num_actions, self._state_shape, self._layer_sizes)
         policy_network = policy_network.to(self.device)
         self.policy_network = policy_network
         self.policy_network.eval()
@@ -291,19 +291,19 @@ class AveragePolicyNetwork(nn.Module):
     log probabilities of actions.
     '''
 
-    def __init__(self, action_num=2, state_shape=None, mlp_layers=None):
+    def __init__(self, num_actions=2, state_shape=None, mlp_layers=None):
         ''' Initialize the policy network.  It's just a bunch of ReLU
         layers with no activation on the final one, initialized with
         Xavier (sonnet.nets.MLP and tensorflow defaults)
 
         Args:
-            action_num (int): number of output actions
+            num_actions (int): number of output actions
             state_shape (list): shape of state tensor for each sample
             mlp_laters (list): output size of each mlp layer including final
         '''
         super(AveragePolicyNetwork, self).__init__()
 
-        self.action_num = action_num
+        self.num_actions = num_actions
         self.state_shape = state_shape
         self.mlp_layers = mlp_layers
 
@@ -324,7 +324,7 @@ class AveragePolicyNetwork(nn.Module):
             s (Tensor): (batch, state_shape) state tensor
 
         Returns:
-            log_action_probs (Tensor): (batch, action_num)
+            log_action_probs (Tensor): (batch, num_actions)
         '''
         logits = self.mlp(s)
         log_action_probs = F.log_softmax(logits, dim=-1)

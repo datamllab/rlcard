@@ -121,7 +121,7 @@ class GinRummyNoviceRuleModel(Model):
         super().__init__()
         env = rlcard.make('gin-rummy')
         rule_agent = GinRummyNoviceRuleAgent()
-        self.rule_agents = [rule_agent for _ in range(env.player_num)]
+        self.rule_agents = [rule_agent for _ in range(env.num_players)]
 
     @property
     def agents(self):

@@ -15,14 +15,14 @@ class HumanAgent(object):
     ''' A human agent for Gin Rummy. It can be used to play against trained models.
     '''
 
-    def __init__(self, action_num):
+    def __init__(self, num_actions):
         ''' Initialize the human agent
 
         Args:
-            action_num (int): the size of the output action space
+            num_actions (int): the size of the output action space
         '''
         self.use_raw = True
-        self.action_num = action_num
+        self.num_actions = num_actions
         self.is_choosing_action_id = False
         self.chosen_action_id = None  # type: int or None
         self.state = None

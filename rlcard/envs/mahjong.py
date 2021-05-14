@@ -15,8 +15,8 @@ class MahjongEnv(Env):
         super().__init__(config)
         self.action_id = card_encoding_dict
         self.de_action_id = {self.action_id[key]: key for key in self.action_id.keys()}
-        self.state_shape = [[6, 34, 4] for _ in range(self.player_num)]
-        self.action_shape = [None for _ in range(self.player_num)]
+        self.state_shape = [[6, 34, 4] for _ in range(self.num_players)]
+        self.action_shape = [None for _ in range(self.num_players)]
 
     def _extract_state(self, state):
         ''' Encode state

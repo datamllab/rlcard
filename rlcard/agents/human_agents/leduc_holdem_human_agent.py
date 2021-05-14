@@ -5,14 +5,14 @@ class HumanAgent(object):
     ''' A human agent for Leduc Holdem. It can be used to play against trained models
     '''
 
-    def __init__(self, action_num):
+    def __init__(self, num_actions):
         ''' Initilize the human agent
 
         Args:
-            action_num (int): the size of the ouput action space
+            num_actions (int): the size of the ouput action space
         '''
         self.use_raw = True
-        self.action_num = action_num
+        self.num_actions = num_actions
 
     @staticmethod
     def step(state):

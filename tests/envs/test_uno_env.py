@@ -19,7 +19,7 @@ class TestUnoEnv(unittest.TestCase):
 
     def test_get_legal_actions(self):
         env = rlcard.make('uno')
-        env.set_agents([RandomAgent(env.action_num) for _ in range(env.player_num)])
+        env.set_agents([RandomAgent(env.num_actions) for _ in range(env.num_players)])
         env.reset()
         legal_actions = env._get_legal_actions()
         for legal_action in legal_actions:
@@ -49,7 +49,7 @@ class TestUnoEnv(unittest.TestCase):
 
     def test_run(self):
         env = rlcard.make('uno')
-        env.set_agents([RandomAgent(env.action_num) for _ in range(env.player_num)])
+        env.set_agents([RandomAgent(env.num_actions) for _ in range(env.num_players)])
         trajectories, payoffs = env.run(is_training=False)
         self.assertEqual(len(trajectories), 2)
         total = 0
