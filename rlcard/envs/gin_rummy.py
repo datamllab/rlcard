@@ -10,7 +10,6 @@ from rlcard.envs import Env
 class GinRummyEnv(Env):
     ''' GinRummy Environment
     '''
-
     def __init__(self, config):
         from rlcard.games.gin_rummy.utils.move import ScoreSouthMove
         from rlcard.games.gin_rummy.utils import utils
@@ -95,11 +94,3 @@ class GinRummyEnv(Env):
         legal_actions = self.game.judge.get_legal_actions()
         legal_actions_ids = {action_event.action_id: None for action_event in legal_actions}
         return legal_actions_ids
-
-    def _load_model(self):
-        ''' Load pre-trained/rule model
-
-        Returns:
-            model (Model): A Model object
-        '''
-        raise NotImplementedError

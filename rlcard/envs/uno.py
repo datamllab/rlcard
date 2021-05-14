@@ -16,15 +16,6 @@ class UnoEnv(Env):
         self.state_shape = [[4, 4, 15] for _ in range(self.num_players)]
         self.action_shape = [None for _ in range(self.num_players)]
 
-    def _load_model(self):
-        ''' Load pretrained/rule model
-
-        Returns:
-            model (Model): A Model object
-        '''
-        from rlcard import models
-        return models.load('uno-rule-v1')
-
     def _extract_state(self, state):
         obs = np.zeros((4, 4, 15), dtype=int)
         encode_hand(obs[:3], state['hand'])
