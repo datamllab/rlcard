@@ -13,7 +13,8 @@ class UnoEnv(Env):
         self.name = 'uno'
         self.game = Game()
         super().__init__(config)
-        self.state_shape = [4, 4, 15]
+        self.state_shape = [[4, 4, 15] for _ in range(self.player_num)]
+        self.action_shape = [None for _ in range(self.player_num)]
 
     def _load_model(self):
         ''' Load pretrained/rule model
