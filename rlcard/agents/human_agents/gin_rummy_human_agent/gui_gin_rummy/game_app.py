@@ -37,7 +37,7 @@ class GameApp(object):
     @staticmethod
     def _make_gin_rummy_env() -> 'GinRummyEnv':
         gin_rummy_env = rlcard.make('gin-rummy')
-        north_agent = RandomAgent(action_num=gin_rummy_env.action_num)
-        south_agent = HumanAgent(gin_rummy_env.action_num)
+        north_agent = RandomAgent(num_actions=gin_rummy_env.num_actions)
+        south_agent = HumanAgent(gin_rummy_env.num_actions)
         gin_rummy_env.set_agents([north_agent, south_agent])
         return gin_rummy_env

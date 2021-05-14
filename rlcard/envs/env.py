@@ -17,7 +17,7 @@ class Env(object):
                  step_back.
                 There can be some game specific configurations, e.g., the
                 number of players in the game. These fields should start with
-                'game_', e.g., 'game_player_num' which specify the number of
+                'game_', e.g., 'game_num_players' which specify the number of
                 players in the game. Since these configurations may be game-specific,
                 The default settings should be put in the Env class. For example,
                 the default game configurations for Blackjack should be in

@@ -10,7 +10,7 @@ from rlcard.games.doudizhu.judger import DoudizhuJudger as Judger
 
 class TestDoudizhuGame(unittest.TestCase):
 
-    def test_get_player_num(self):
+    def test_get_num_players(self):
         game = Game()
         num_players = game.get_num_players()
         self.assertEqual(num_players, 3)

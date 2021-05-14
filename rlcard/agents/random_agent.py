@@ -9,7 +9,7 @@ class RandomAgent(object):
         ''' Initilize the random agent
 
         Args:
-            action_num (int): The size of the ouput action space
+            num_actions (int): The size of the ouput action space
         '''
         self.use_raw = False
         self.num_actions = num_actions

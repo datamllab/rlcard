@@ -9,10 +9,10 @@ from rlcard.utils.utils import print_card
 
 # Make environment and enable human mode
 # Set 'record_action' to True because we need it to print results
-player_num = 2
-env = rlcard.make('blackjack', config={'record_action': True, 'game_player_num': player_num})
-human_agent = HumanAgent(env.action_num)
-random_agent = RandomAgent(env.action_num)
+num_players = 2
+env = rlcard.make('blackjack', config={'record_action': True, 'game_num_players': num_players})
+human_agent = HumanAgent(env.num_actions)
+random_agent = RandomAgent(env.num_actions)
 env.set_agents([human_agent, random_agent])
 
 print(">> Blackjack human agent")
@@ -30,7 +30,7 @@ while (True):
         state = []
         _action_list = []
 
-        for i in range(player_num):
+        for i in range(num_players):
             final_state.append(trajectories[i][-1])
             state.append(final_state[i]['raw_obs'])
 
@@ -45,12 +45,12 @@ while (True):
     print('===============   Dealer hand   ===============')
     print_card(state[0]['state'][1])
 
-    for i in range(player_num):
+    for i in range(num_players):
         print('===============   Player {} Hand   ==============='.format(i))
         print_card(state[i]['state'][0])
 
     print('===============     Result     ===============')
-    for i in range(player_num):
+    for i in range(num_players):
         if payoffs[i] == 1:
             print('Player {} win {} chip!'.format(i, payoffs[i]))
         elif payoffs[i] == 0:

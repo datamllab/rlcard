@@ -265,10 +265,10 @@ class NFSPAgent(object):
         # (batch, state_size)
         info_states = torch.from_numpy(np.array(info_states)).float().to(self.device)
 
-        # (batch, action_num)
+        # (batch, num_actions)
         eval_action_probs = torch.from_numpy(np.array(action_probs)).float().to(self.device)
 
-        # (batch, action_num)
+        # (batch, num_actions)
         log_forecast_action_probs = self.policy_network(info_states)
 
         ce_loss = - (eval_action_probs * log_forecast_action_probs).sum(dim=-1).mean()
