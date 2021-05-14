@@ -13,8 +13,8 @@ class UnoEnv(Env):
         self.name = 'uno'
         self.game = Game()
         super().__init__(config)
-        self.state_shape = [[4, 4, 15] for _ in range(self.player_num)]
-        self.action_shape = [None for _ in range(self.player_num)]
+        self.state_shape = [[4, 4, 15] for _ in range(self.num_players)]
+        self.action_shape = [None for _ in range(self.num_players)]
 
     def _load_model(self):
         ''' Load pretrained/rule model
@@ -60,7 +60,7 @@ class UnoEnv(Env):
             (dict): A dictionary of all the perfect information of the current state
         '''
         state = {}
-        state['player_num'] = self.game.get_player_num()
+        state['num_players'] = self.num_players
         state['hand_cards'] = [cards2list(player.hand)
                                for player in self.game.players]
         state['played_cards'] = cards2list(self.game.round.played_cards)

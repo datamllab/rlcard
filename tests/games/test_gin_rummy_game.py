@@ -29,15 +29,15 @@ get_action_ids = [draw_card_action_id, pick_up_discard_action_id, declare_dead_h
 
 class TestGinRummyGame(unittest.TestCase):
 
-    def test_get_player_num(self):
+    def test_get_num_players(self):
         game = Game()
-        player_num = game.get_player_num()
-        self.assertEqual(player_num, 2)
+        num_players = game.get_num_players()
+        self.assertEqual(num_players, 2)
 
-    def test_get_action_num(self):
+    def test_get_num_actions(self):
         game = Game()
-        action_num = game.get_action_num()
-        self.assertEqual(action_num, 110)
+        num_actions = game.get_num_actions()
+        self.assertEqual(num_actions, 110)
 
     def test_init_game(self):
         game = Game()

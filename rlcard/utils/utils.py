@@ -158,10 +158,10 @@ def reorganize(trajectories, payoffs):
         (list): A new trajectories that can be fed into RL algorithms.
 
     '''
-    player_num = len(trajectories)
-    new_trajectories = [[] for _ in range(player_num)]
+    num_players = len(trajectories)
+    new_trajectories = [[] for _ in range(num_players)]
 
-    for player in range(player_num):
+    for player in range(num_players):
         for i in range(0, len(trajectories[player])-2, 2):
             if i ==len(trajectories[player])-3:
                 reward = payoffs[player]
@@ -204,7 +204,7 @@ def tournament(env, num):
     Returns:
         A list of avrage payoffs for each player
     '''
-    payoffs = [0 for _ in range(env.player_num)]
+    payoffs = [0 for _ in range(env.num_players)]
     counter = 0
     while counter < num:
         _, _payoffs = env.run(is_training=False)

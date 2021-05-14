@@ -44,7 +44,7 @@ class NolimitholdemGame(Game):
         ''' Specifiy some game specific parameters, such as player number, initial chips, and dealer id.
         If dealer_id is None, he will be randomly chosen
         '''
-        self.num_players = game_config['game_player_num']
+        self.num_players = game_config['game_num_players']
         self.init_chips = game_config['chips_for_each']
         self.dealer_id = game_config['dealer_id']
 
@@ -216,7 +216,7 @@ class NolimitholdemGame(Game):
             return True
         return False
 
-    def get_player_num(self):
+    def get_num_players(self):
         ''' Return the number of players in No Limit Texas Hold'em
 
         Returns:
@@ -235,39 +235,10 @@ class NolimitholdemGame(Game):
         return chips_payoffs
 
     @staticmethod
-    def get_action_num():
+    def get_num_actions():
         ''' Return the number of applicable actions
 
         Returns:
             (int): The number of actions. There are 6 actions (call, raise_half_pot, raise_pot, all_in, check and fold)
         '''
         return len(Action)
-
-
-#if __name__ == "__main__":
-#    game = NolimitholdemGame()
-#
-#    while True:
-#        print('New Game')
-#        state, game_pointer = game.init_game()
-#        print(game_pointer, state)
-#        i = 1
-#        while not game.is_over():
-#            i += 1
-#            legal_actions = game.get_legal_actions()
-#            # if i == 3:
-#            #     print('Step back')
-#            #     print(game.step_back())
-#            #     game_pointer = game.get_player_id()
-#            #     print(game_pointer)
-#            #     legal_actions = game.get_legal_actions()
-#
-#            action = np.random.choice(legal_actions)
-#            # action = input()
-#            # if action != 'call' and action != 'fold' and action != 'check':
-#            #     action = int(action)
-#            print(game_pointer, action, legal_actions)
-#            state, game_pointer = game.step(action)
-#            print(game_pointer, state)
-#
-#        print(game.get_payoffs())

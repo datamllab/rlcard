@@ -5,14 +5,14 @@ class HumanAgent(object):
     ''' A human agent for Blackjack. It can be used to play alone for understand how the blackjack code runs
     '''
 
-    def __init__(self, action_num):
+    def __init__(self, num_actions):
         ''' Initilize the human agent
 
         Args:
-            action_num (int): the size of the output action space
+            num_actions (int): the size of the output action space
         '''
         self.use_raw = True
-        self.action_num = action_num
+        self.num_actions = num_actions
 
     @staticmethod
     def step(state):
@@ -59,9 +59,9 @@ def _print_state(state, raw_legal_actions, action_record):
     print('\n=============   Dealer Hand   ===============')
     print_card(state['dealer hand'])
 
-    num_player = len(state) - 3
+    num_players = len(state) - 3
 
-    for i in range(num_player):
+    for i in range(num_players):
         print('===============   Player {} Hand   ==============='.format(i))
         print_card(state['player' + str(i) + ' hand'])
 

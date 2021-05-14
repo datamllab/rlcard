@@ -23,25 +23,25 @@ def train(args):
     # Initialize the agent and use random agents as opponents
     if args.algorithm == 'dqn':
         from rlcard.agents import DQNAgent
-        agent = DQNAgent(action_num=env.action_num,
+        agent = DQNAgent(num_actions=env.num_actions,
                          state_shape=env.state_shape[0],
                          mlp_layers=[64,64],
                          device=device)
     elif args.algorithm == 'nfsp':
         from rlcard.agents import NFSPAgent
-        agent = NFSPAgent(action_num=env.action_num,
+        agent = NFSPAgent(num_actions=env.num_actions,
                           state_shape=env.state_shape[0],
                           hidden_layers_sizes=[64,64],
                           q_mlp_layers=[64,64],
                           device=device)
     agents = [agent]
-    for _ in range(env.player_num):
-        agents.append(RandomAgent(action_num=env.action_num))
+    for _ in range(env.num_players):
+        agents.append(RandomAgent(num_actions=env.num_actions))
     env.set_agents(agents)
 
     # Start training
     with Logger(args.log_dir) as logger:
-        for episode in range(args.episode_num):
+        for episode in range(args.num_episodes):
 
             if args.algorithm == 'nfsp':
                 agents[0].sample_episode_policy()
@@ -60,7 +60,7 @@ def train(args):
 
             # Evaluate the performance. Play with random agents.
             if episode % args.evaluate_every == 0:
-                logger.log_performance(env.timestep, tournament(env, args.evaluate_num)[0])
+                logger.log_performance(env.timestep, tournament(env, args.num_games)[0])
 
         # Plot the learning curve
         logger.plot(args.algorithm)
@@ -76,8 +76,8 @@ if __name__ == '__main__':
     parser.add_argument('--algorithm', type=str, default='dqn', choices=['dqn', 'nfsp'])
     parser.add_argument('--cuda', type=str, default='')
     parser.add_argument('--seed', type=int, default=42)
-    parser.add_argument('--episode_num', type=int, default=5000)
-    parser.add_argument('--evaluate_num', type=int, default=2000)
+    parser.add_argument('--num_episodes', type=int, default=5000)
+    parser.add_argument('--num_games', type=int, default=2000)
     parser.add_argument('--evaluate_every', type=int, default=100)
     parser.add_argument('--log_dir', type=str, default='experiments/leduc_holdem_dqn_result/')
 

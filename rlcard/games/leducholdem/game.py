@@ -186,31 +186,3 @@ class LeducholdemGame(Game):
                 self.players[i].hand = hand
             return True
         return False
-
-
-# Test the game
-
-#if __name__ == "__main__":
-#    game = LeducholdemGame(allow_step_back=True)
-#    while True:
-#        print('New Game')
-#        state, game_pointer = game.init_game()
-#        print(game_pointer, state)
-#        i = 1
-#        while not game.is_over():
-#            i += 1
-#            legal_actions = game.get_legal_actions()
-#            if i == 4:
-#                print('Step back')
-#                print(game.step_back())
-#                game_pointer = game.get_player_id()
-#                print(game_pointer)
-#                state = game.get_state(game_pointer)
-#                legal_actions = game.get_legal_actions()
-#            # action = input()
-#            action = np.random.choice(legal_actions)
-#            print(game_pointer, action, legal_actions, state)
-#            state, game_pointer = game.step(action)
-#            print(game_pointer, state)
-#
-#        print(game.get_payoffs())

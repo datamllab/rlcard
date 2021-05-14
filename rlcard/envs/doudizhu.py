@@ -21,7 +21,7 @@ class DoudizhuEnv(Env):
         self.game = Game()
         super().__init__(config)
         self.state_shape = [[790], [901], [901]]
-        self.action_shape = [[54] for _ in range(self.player_num)]
+        self.action_shape = [[54] for _ in range(self.num_players)]
 
     def _extract_state(self, state):
         ''' Encode state

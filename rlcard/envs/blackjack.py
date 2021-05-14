@@ -4,7 +4,7 @@ from rlcard.envs import Env
 from rlcard.games.blackjack import Game
 
 DEFAULT_GAME_CONFIG = {
-        'game_player_num': 1,
+        'game_num_players': 1,
         }
 
 class BlackjackEnv(Env):
@@ -20,8 +20,8 @@ class BlackjackEnv(Env):
         super().__init__(config)
         self.rank2score = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":10, "Q":10, "K":10}
         self.actions = ['hit', 'stand']
-        self.state_shape = [[2] for _ in range(self.player_num)]
-        self.action_shape = [None for _ in range(self.player_num)]
+        self.state_shape = [[2] for _ in range(self.num_players)]
+        self.action_shape = [None for _ in range(self.num_players)]
 
     def _get_legal_actions(self):
         ''' Get all leagal actions
@@ -77,7 +77,7 @@ class BlackjackEnv(Env):
         '''
         payoffs = []
 
-        for i in range(self.player_num):
+        for i in range(self.num_players):
             if self.game.winner['player' + str(i)] == 2:
                 payoffs.append(1)  # Dealer bust or player get higher score than dealer
             elif self.game.winner['player' + str(i)] == 1:

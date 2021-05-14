@@ -77,15 +77,15 @@ class GinRummyGame:
         '''
         raise NotImplementedError
 
-    def get_player_num(self):
+    def get_num_players(self):
         ''' Return the number of players in the game
         '''
         return 2
 
-    def get_action_num(self):
+    def get_num_actions(self):
         ''' Return the number of possible actions in the game
         '''
-        return ActionEvent.get_action_num()
+        return ActionEvent.get_num_actions()
 
     def get_player_id(self):
         ''' Return the current player that will take actions soon

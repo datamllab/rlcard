@@ -4,14 +4,14 @@ class HumanAgent(object):
     ''' A human agent for Leduc Holdem. It can be used to play against trained models
     '''
 
-    def __init__(self, action_num):
+    def __init__(self, num_actions):
         ''' Initilize the human agent
 
         Args:
-            action_num (int): the size of the ouput action space
+            num_actions (int): the size of the ouput action space
         '''
         self.use_raw = True
-        self.action_num = action_num
+        self.num_actions = num_actions
 
     @staticmethod
     def step(state):
@@ -66,9 +66,9 @@ def _print_state(state, action_record):
     UnoCard.print_cards(state['target'], wild_color=True)
     print('')
     print('========== Players Card Number ===========')
-    for i in range(state['player_num']):
+    for i in range(state['num_players']):
         if i != state['current_player']:
-            print('Player {} has {} cards.'.format(i, state['card_num'][i]))
+            print('Player {} has {} cards.'.format(i, state['num_cards'][i]))
     print('======== Actions You Can Choose =========')
     for i, action in enumerate(state['legal_actions']):
         print(str(i)+': ', end='')

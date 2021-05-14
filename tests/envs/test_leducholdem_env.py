@@ -13,7 +13,7 @@ class TestLeducholdemEnv(unittest.TestCase):
         state, _ = env.reset()
         self.assertEqual(state['obs'].size, 36)
         for action in state['legal_actions']:
-            self.assertLess(action, env.action_num)
+            self.assertLess(action, env.num_actions)
 
     def test_is_deterministic(self):
         self.assertTrue(is_deterministic('leduc-holdem'))
@@ -54,7 +54,7 @@ class TestLeducholdemEnv(unittest.TestCase):
 
     def test_run(self):
         env = rlcard.make('leduc-holdem')
-        agents = [RandomAgent(env.action_num) for _ in range(env.player_num)]
+        agents = [RandomAgent(env.num_actions) for _ in range(env.num_players)]
         env.set_agents(agents)
         trajectories, payoffs = env.run(is_training=False)
         self.assertEqual(len(trajectories), 2)

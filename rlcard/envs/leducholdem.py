@@ -19,8 +19,8 @@ class LeducholdemEnv(Env):
         self.game = Game()
         super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']
-        self.state_shape = [[36] for _ in range(self.player_num)]
-        self.action_shape = [None for _ in range(self.player_num)]
+        self.state_shape = [[36] for _ in range(self.num_players)]
+        self.action_shape = [None for _ in range(self.num_players)]
 
         with open(os.path.join(rlcard.__path__[0], 'games/leducholdem/card2index.json'), 'r') as file:
             self.card2index = json.load(file)
@@ -106,9 +106,9 @@ class LeducholdemEnv(Env):
             (dict): A dictionary of all the perfect information of the current state
         '''
         state = {}
-        state['chips'] = [self.game.players[i].in_chips for i in range(self.player_num)]
+        state['chips'] = [self.game.players[i].in_chips for i in range(self.num_players)]
         state['public_card'] = self.game.public_card.get_index() if self.game.public_card else None
-        state['hand_cards'] = [self.game.players[i].hand.get_index() for i in range(self.player_num)]
+        state['hand_cards'] = [self.game.players[i].hand.get_index() for i in range(self.num_players)]
         state['current_round'] = self.game.round_counter
         state['current_player'] = self.game.game_pointer
         state['legal_actions'] = self.game.get_legal_actions()

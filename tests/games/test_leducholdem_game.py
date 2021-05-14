@@ -8,10 +8,10 @@ from rlcard.games.base import Card
 
 class TestLeducholdemMethods(unittest.TestCase):
 
-    def test_get_action_num(self):
+    def test_get_num_actions(self):
         game = Game()
-        action_num = game.get_action_num()
-        self.assertEqual(action_num, 4)
+        num_actions = game.get_num_actions()
+        self.assertEqual(num_actions, 4)
 
     def test_init_game(self):
 

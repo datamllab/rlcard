@@ -146,9 +146,9 @@ class UnoRound:
         state['target'] = self.target.str
         state['played_cards'] = cards2list(self.played_cards)
         state['legal_actions'] = self.get_legal_actions(players, player_id)
-        state['card_num'] = []
+        state['num_cards'] = []
         for player in players:
-            state['card_num'].append(len(player.hand))
+            state['num_cards'].append(len(player.hand))
         return state
 
     def replace_deck(self):

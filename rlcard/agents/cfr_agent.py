@@ -35,9 +35,9 @@ class CFRAgent():
         self.iteration += 1
         # Firstly, traverse tree to compute counterfactual regret for each player
         # The regrets are recorded in traversal
-        for player_id in range(self.env.player_num):
+        for player_id in range(self.env.num_players):
             self.env.reset()
-            probs = np.ones(self.env.player_num)
+            probs = np.ones(self.env.num_players)
             self.traverse_tree(probs, player_id)
 
         # Update policy
@@ -59,7 +59,7 @@ class CFRAgent():
         current_player = self.env.get_player_id()
 
         action_utilities = {}
-        state_utility = np.zeros(self.env.player_num)
+        state_utility = np.zeros(self.env.num_players)
         obs, legal_actions = self.get_state(current_player)
         action_probs = self.action_probs(obs, legal_actions, self.policy)
 
@@ -86,9 +86,9 @@ class CFRAgent():
         player_state_utility = state_utility[current_player]
 
         if obs not in self.regrets:
-            self.regrets[obs] = np.zeros(self.env.action_num)
+            self.regrets[obs] = np.zeros(self.env.num_actions)
         if obs not in self.average_policy:
-            self.average_policy[obs] = np.zeros(self.env.action_num)
+            self.average_policy[obs] = np.zeros(self.env.num_actions)
         for action in legal_actions:
             action_prob = action_probs[action]
             regret = counterfactual_prob * (action_utilities[action][current_player]
@@ -112,13 +112,13 @@ class CFRAgent():
         regret = self.regrets[obs]
         positive_regret_sum = sum([r for r in regret if r > 0])
 
-        action_probs = np.zeros(self.env.action_num)
+        action_probs = np.zeros(self.env.num_actions)
         if positive_regret_sum > 0:
-            for action in range(self.env.action_num):
+            for action in range(self.env.num_actions):
                 action_probs[action] = max(0.0, regret[action] / positive_regret_sum)
         else:
-            for action in range(self.env.action_num):
-                action_probs[action] = 1.0 / self.env.action_num
+            for action in range(self.env.num_actions):
+                action_probs[action] = 1.0 / self.env.num_actions
         return action_probs
 
     def action_probs(self, obs, legal_actions, policy):
@@ -136,7 +136,7 @@ class CFRAgent():
                 legal_actions (list): Indices of legal actions
         '''
         if obs not in policy.keys():
-            action_probs = np.array([1.0/self.env.action_num for _ in range(self.env.action_num)])
+            action_probs = np.array([1.0/self.env.num_actions for _ in range(self.env.num_actions)])
             self.policy[obs] = action_probs
         else:
             action_probs = policy[obs]

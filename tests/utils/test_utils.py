@@ -37,7 +37,7 @@ class TestUtils(unittest.TestCase):
 
     def test_tournament(self):
         env = rlcard.make('leduc-holdem')
-        env.set_agents([RandomAgent(env.action_num), RandomAgent(env.action_num)])
+        env.set_agents([RandomAgent(env.num_actions), RandomAgent(env.num_actions)])
         payoffs = tournament(env,1000)
         self.assertEqual(len(payoffs), 2)
 

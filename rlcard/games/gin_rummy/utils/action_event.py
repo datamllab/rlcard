@@ -42,7 +42,7 @@ class ActionEvent(object):
         return result
 
     @staticmethod
-    def get_action_num():
+    def get_num_actions():
         ''' Return the number of possible actions in the game
         '''
         return knock_action_id + 52  # FIXME: sensitive to code changes 200213

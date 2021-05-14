@@ -165,7 +165,7 @@ class DouDizhuRuleModelV1(Model):
         env = rlcard.make('doudizhu')
 
         rule_agent = DouDizhuRuleAgentV1()
-        self.rule_agents = [rule_agent for _ in range(env.player_num)]
+        self.rule_agents = [rule_agent for _ in range(env.num_players)]
 
     @property
     def agents(self):

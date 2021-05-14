@@ -128,7 +128,7 @@ class DoudizhuGame:
         return state
 
     @staticmethod
-    def get_action_num():
+    def get_num_actions():
         ''' Return the total number of abstract acitons
 
         Returns:
@@ -144,7 +144,7 @@ class DoudizhuGame:
         '''
         return self.round.current_player
 
-    def get_player_num(self):
+    def get_num_players(self):
         ''' Return the number of players in doudizhu
 
         Returns:

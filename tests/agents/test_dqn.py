@@ -16,7 +16,7 @@ class TestDQN(unittest.TestCase):
                          epsilon_end=0,
                          epsilon_decay_steps=0,
                          batch_size=0,
-                         action_num=2,
+                         num_actions=2,
                          state_shape=[1],
                          mlp_layers=[10,10],
                          device=torch.device('cpu'))
@@ -26,12 +26,12 @@ class TestDQN(unittest.TestCase):
         self.assertEqual(agent.discount_factor, 0)
         self.assertEqual(agent.epsilon_decay_steps, 0)
         self.assertEqual(agent.batch_size, 0)
-        self.assertEqual(agent.action_num, 2)
+        self.assertEqual(agent.num_actions, 2)
 
     def test_train(self):
 
         memory_init_size = 100
-        step_num = 500
+        num_steps = 500
 
         agent = DQNAgent(replay_memory_size = 200,
                          replay_memory_init_size=memory_init_size,
@@ -44,7 +44,7 @@ class TestDQN(unittest.TestCase):
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)
 
-        for _ in range(step_num):
+        for _ in range(num_steps):
             ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}}, np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}}, True]
             agent.feed(ts)
 

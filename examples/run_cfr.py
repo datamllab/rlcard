@@ -20,17 +20,17 @@ def train(args):
     agent.load()  # If we have saved model, we first load the model
 
     # Evaluate CFR against random
-    eval_env.set_agents([agent, RandomAgent(action_num=env.action_num)])
+    eval_env.set_agents([agent, RandomAgent(num_actions=env.num_actions)])
 
     # Start training
     with Logger(args.log_dir) as logger:
-        for episode in range(args.episode_num):
+        for episode in range(args.num_episodes):
             agent.train()
             print('\rIteration {}'.format(episode), end='')
             # Evaluate the performance. Play with Random agents.
             if episode % args.evaluate_every == 0:
                 agent.save() # Save model
-                logger.log_performance(env.timestep, tournament(eval_env, args.evaluate_num)[0])
+                logger.log_performance(env.timestep, tournament(eval_env, args.num_games)[0])
 
         # Plot the learning curve
         logger.plot('CFR')
@@ -38,8 +38,8 @@ def train(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("DQN example in RLCard")
     parser.add_argument('--seed', type=int, default=42)
-    parser.add_argument('--episode_num', type=int, default=5000)
-    parser.add_argument('--evaluate_num', type=int, default=2000)
+    parser.add_argument('--num_episodes', type=int, default=5000)
+    parser.add_argument('--num_games', type=int, default=2000)
     parser.add_argument('--evaluate_every', type=int, default=100)
     parser.add_argument('--log_dir', type=str, default='experiments/leduc_holdem_cfr_result/')
 
