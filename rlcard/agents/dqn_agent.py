@@ -236,7 +236,7 @@ class Estimator(object):
         ''' Initilalize an Estimator object.
 
         Args:
-            action_num (int): the number output actions
+            num_actions (int): the number output actions
             state_shape (list): the shape of the state space
             mlp_layers (list): size of outputs of mlp layers
             device (torch.device): whether to use cpu or gpu
@@ -303,10 +303,10 @@ class Estimator(object):
         a = torch.from_numpy(a).long().to(self.device)
         y = torch.from_numpy(y).float().to(self.device)
 
-        # (batch, state_shape) -> (batch, action_num)
+        # (batch, state_shape) -> (batch, num_actions)
         q_as = self.qnet(s)
 
-        # (batch, action_num) -> (batch, )
+        # (batch, num_actions) -> (batch, )
         Q = torch.gather(q_as, dim=-1, index=a.unsqueeze(-1)).squeeze(-1)
 
         # update model

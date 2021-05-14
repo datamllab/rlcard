@@ -8,7 +8,7 @@ from rlcard.agents.human_agents.uno_human_agent import HumanAgent, _print_action
 # Make environment and enable human mode
 # Set 'record_action' to True because we need it to print results
 env = rlcard.make('uno', config={'record_action': True})
-human_agent = HumanAgent(env.action_num)
+human_agent = HumanAgent(env.num_actions)
 cfr_agent = models.load('uno-rule-v1').agents[0]
 env.set_agents([human_agent, cfr_agent])
 

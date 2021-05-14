@@ -39,9 +39,9 @@ from rlcard.games.gin_rummy.utils import scorers
 
 def make_gin_rummy_env() -> 'GinRummyEnv':
     gin_rummy_env = rlcard.make('gin-rummy')
-    # north_agent = RandomAgent(action_num=gin_rummy_env.action_num)
+    # north_agent = RandomAgent(num_actions=gin_rummy_env.num_actions)
     north_agent = GinRummyNoviceRuleAgent()
-    south_agent = HumanAgent(gin_rummy_env.action_num)
+    south_agent = HumanAgent(gin_rummy_env.num_actions)
     gin_rummy_env.set_agents([north_agent, south_agent])
     gin_rummy_env.game.judge.scorer = scorers.GinRummyScorer(get_payoff=scorers.get_payoff_gin_rummy_v0)
     return gin_rummy_env

@@ -9,8 +9,8 @@ from rlcard.utils.utils import print_card
 # Make environment and enable human mode
 # Set 'record_action' to True because we need it to print results
 env = rlcard.make('limit-holdem', config={'record_action': True})
-human_agent = HumanAgent(env.action_num)
-agent_0 = RandomAgent(action_num=env.action_num)
+human_agent = HumanAgent(env.num_actions)
+agent_0 = RandomAgent(num_actions=env.num_actions)
 env.set_agents([human_agent, agent_0])
 
 print(">> Limit Hold'em random agent")

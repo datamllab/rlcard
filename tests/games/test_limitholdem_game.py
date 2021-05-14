@@ -10,7 +10,7 @@ class TestLimitholdemMethods(unittest.TestCase):
     def test_get_num_actions(self):
         game = Game()
         num_players = game.get_num_players()
-        self.assertEqual(player_num, 2)
+        self.assertEqual(num_players, 2)
 
     def test_get_num_actions(self):
         game = Game()

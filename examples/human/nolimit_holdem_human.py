@@ -11,9 +11,9 @@ from rlcard.utils import print_card
 # Set 'record_action' to True because we need it to print results
 env = rlcard.make('no-limit-holdem', config={'record_action': True})
 
-human_agent = HumanAgent(env.action_num)
-human_agent2 = HumanAgent(env.action_num)
-# random_agent = RandomAgent(action_num=env.action_num)
+human_agent = HumanAgent(env.num_actions)
+human_agent2 = HumanAgent(env.num_actions)
+# random_agent = RandomAgent(num_actions=env.num_actions)
 
 env.set_agents([human_agent, human_agent2])
 
