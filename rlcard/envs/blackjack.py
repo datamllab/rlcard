@@ -20,7 +20,8 @@ class BlackjackEnv(Env):
         super().__init__(config)
         self.rank2score = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":10, "Q":10, "K":10}
         self.actions = ['hit', 'stand']
-        self.state_shape = [2]
+        self.state_shape = [[2] for _ in range(self.player_num)]
+        self.action_shape = [None for _ in range(self.player_num)]
 
     def _get_legal_actions(self):
         ''' Get all leagal actions

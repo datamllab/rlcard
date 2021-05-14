@@ -24,13 +24,13 @@ def train(args):
     if args.algorithm == 'dqn':
         from rlcard.agents import DQNAgent
         agent = DQNAgent(action_num=env.action_num,
-                         state_shape=env.state_shape,
+                         state_shape=env.state_shape[0],
                          mlp_layers=[64,64],
                          device=device)
     elif args.algorithm == 'nfsp':
         from rlcard.agents import NFSPAgent
         agent = NFSPAgent(action_num=env.action_num,
-                          state_shape=env.state_shape,
+                          state_shape=env.state_shape[0],
                           hidden_layers_sizes=[64,64],
                           q_mlp_layers=[64,64],
                           device=device)
@@ -68,7 +68,6 @@ def train(args):
     # Save model
     save_path = os.path.join(args.log_dir, 'model.pth')
     torch.save(agent, save_path)
-    #agent.save(save_path)
     print('Model saved in', save_path)
 
 if __name__ == '__main__':

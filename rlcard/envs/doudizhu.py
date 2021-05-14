@@ -20,20 +20,14 @@ class DoudizhuEnv(Env):
         self.name = 'doudizhu'
         self.game = Game()
         super().__init__(config)
-        self.state_shape = [790]
+        self.state_shape = [[790], [901], [901]]
+        self.action_shape = [[54] for _ in range(self.player_num)]
 
     def _extract_state(self, state):
         ''' Encode state
 
         Args:
             state (dict): dict of original state
-
-        Returns:
-            numpy array: 6*5*15 array
-                         6 : current hand
-                             the union of the other two players' hand
-                             the recent three actions
-                             the union of all played cards
         '''
         current_hand = _cards2array(state['current_hand'])
         others_hand = _cards2array(state['others_hand'])
