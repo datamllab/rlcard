@@ -220,7 +220,10 @@ class Env(object):
         Returns:
             (numpy.array): The action features
         '''
-        raise NotImplementedError
+        # By default we use one-hot encoding
+        feature = np.zeros(self.num_actions, dtype=np.int8)
+        feature[action] = 1
+        return feature
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
