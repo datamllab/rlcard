@@ -211,8 +211,14 @@ class Env(object):
 
         Returns:
             (dict): A dictionary of all the perfect information of the current state
+        '''
+        raise NotImplementedError
 
-        Note: Must be implemented in the child class.
+    def get_action_feature(self, action):
+        ''' For some environments such as DouDizhu, we can have action features
+
+        Returns:
+            (numpy.array): The action features
         '''
         raise NotImplementedError
 
