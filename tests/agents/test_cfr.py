@@ -9,7 +9,7 @@ class TestNFSP(unittest.TestCase):
     def test_train(self):
 
         env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
-        agent = CFRAgent(env)
+        agent = CFRAgent(env, model_path='experiments/cfr_model')
 
         for _ in range(100):
             agent.train()
@@ -21,14 +21,14 @@ class TestNFSP(unittest.TestCase):
 
     def test_save_and_load(self):
         env = rlcard.make('leduc-holdem', config={'allow_step_back':True})
-        agent = CFRAgent(env)
+        agent = CFRAgent(env, model_path='experiments/cfr_model')
 
         for _ in range(100):
             agent.train()
 
         agent.save()
 
-        new_agent = CFRAgent(env)
+        new_agent = CFRAgent(env, model_path='experiments/cfr_model')
         new_agent.load()
         self.assertEqual(len(agent.policy), len(new_agent.policy))
         self.assertEqual(len(agent.average_policy), len(new_agent.average_policy))

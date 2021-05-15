@@ -7,7 +7,7 @@ from rlcard.utils.logger import Logger
 class TestLogger(unittest.TestCase):
 
     def test_log(self):
-        log_dir = "./newtest/test_log.txt"
+        log_dir = "experiments/newtest/test_log.txt"
         if os.path.exists(log_dir):
             shutil.rmtree(log_dir)
         with Logger(log_dir) as logger:
