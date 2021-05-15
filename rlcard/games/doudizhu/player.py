@@ -46,6 +46,7 @@ class DoudizhuPlayer:
     def get_state(self, public, others_hands, num_cards_left, actions):
         state = {}
         state['seen_cards'] = public['seen_cards']
+        state['landlord'] = public['landlord']
         state['trace'] = public['trace'].copy()
         state['played_cards'] = public['played_cards']
         state['self'] = self.player_id

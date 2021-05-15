@@ -131,6 +131,14 @@ class DoudizhuEnv(Env):
         state['legal_actions'] = self.game.state['actions']
         return state
 
+    def get_action_feature(self, action):
+        ''' For some environments such as DouDizhu, we can have action features
+
+        Returns:
+            (numpy.array): The action features
+        '''
+        return _cards2array(self._decode_action(action))
+
 Card2Column = {'3': 0, '4': 1, '5': 2, '6': 3, '7': 4, '8': 5, '9': 6, 'T': 7,
                'J': 8, 'Q': 9, 'K': 10, 'A': 11, '2': 12}
 
@@ -157,13 +165,13 @@ def _cards2array(cards):
     return np.concatenate((matrix.flatten('F'), jokers))
 
 def _get_one_hot_array(num_left_cards, max_num_cards):
-    one_hot = np.zeros(max_num_cards)
+    one_hot = np.zeros(max_num_cards, dtype=np.int8)
     one_hot[num_left_cards - 1] = 1
 
     return one_hot
 
 def _action_seq2array(action_seq_list):
-    action_seq_array = np.zeros((len(action_seq_list), 54))
+    action_seq_array = np.zeros((len(action_seq_list), 54), np.int8)
     for row, cards in enumerate(action_seq_list):
         action_seq_array[row, :] = _cards2array(cards)
     action_seq_array = action_seq_array.flatten()
