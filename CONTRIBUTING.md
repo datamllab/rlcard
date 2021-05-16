@@ -6,7 +6,6 @@ Contribution to this project is greatly appreciated! If you find any bugs or hav
 *   **Game Specific Configurations.** Now we plan to gradually support game specific configurations. Currently we only support specifying the number of players in Blackjack
 *   **Rule-based Agent and Pre-trained Models.** Provide more rule-based agents and pre-trained models to benchmark the evaluation. We currently have several models in `/models`.
 *   **More Games and Algorithms.** Develop more games and algorithms.
-*   **Keras Implementation** Provide Keras Implementation of the algorithms.
 *   **Hyperparameter Search** Search hyperparameters for each environment and update the best one in the example.
 
 ## How to Create a Pull Request

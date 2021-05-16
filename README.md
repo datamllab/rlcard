@@ -7,9 +7,9 @@
 [![Downloads](https://pepy.tech/badge/rlcard)](https://pepy.tech/project/rlcard)
 [![Downloads](https://pepy.tech/badge/rlcard/month)](https://pepy.tech/project/rlcard)
 
-RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports multiple card environments with easy-to-use interfaces. The goal of RLCard is to bridge reinforcement learning and imperfect information games. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University and community contributors.
+RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports multiple card environments with easy-to-use interfaces for implementing various reinforcement learning and searching algorithms. The goal of RLCard is to bridge reinforcement learning and imperfect information games. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University and community contributors.
 
-*   Official Website: [http://www.rlcard.org](http://www.rlcard.org)
+*   Official Website: [https://www.rlcard.org](https://www.rlcard.org)
 *   Tutorial in Jupyter Notebook: [https://github.com/datamllab/rlcard-tutorial](https://github.com/datamllab/rlcard-tutorial)
 *   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
 *   GUI: [RLCard-Showdown](https://github.com/datamllab/rlcard-showdown)
@@ -32,36 +32,45 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 
 ## Cite this work
 If you find this repo useful, you may cite:
+
+Zha, Daochen, et al. "RLCard: A Platform for Reinforcement Learning in Card Games." IJCAI. 2020.
+
 ```bibtex
-@article{zha2019rlcard,
-  title={RLCard: A Toolkit for Reinforcement Learning in Card Games},
-  author={Zha, Daochen and Lai, Kwei-Herng and Cao, Yuanpu and Huang, Songyi and Wei, Ruzhe and Guo, Junyu and Hu, Xia},
-  journal={arXiv preprint arXiv:1910.04376},
-  year={2019}
+@inproceedings{DBLP:conf/ijcai/ZhaLHCRVNWGH20,
+  author    = {Daochen Zha and
+               Kwei{-}Herng Lai and
+               Songyi Huang and
+               Yuanpu Cao and
+               Keerthana Reddy and
+               Juan Vargas and
+               Alex Nguyen and
+               Ruzhe Wei and
+               Junyu Guo and
+               Xia Hu},
+  title     = {RLCard: {A} Platform for Reinforcement Learning in Card Games},
+  booktitle = {{IJCAI}},
+  pages     = {5264--5266},
+  publisher = {ijcai.org},
+  year      = {2020}
 }
 ```
 
 ## Installation
-Make sure that you have **Python 3.5+** and **pip** installed. We recommend installing the latest version of `rlcard` with `pip`:
+Make sure that you have **Python 3.6+** and **pip** installed. We recommend installing the stable version of `rlcard` with `pip`:
 
+```
+pip3 install rlcard
+```
+Alternatively, you can install the latest version with:
 ```
 git clone https://github.com/datamllab/rlcard.git
 cd rlcard
-pip install -e .
+pip3 install -e .
 ```
-Alternatively, you can install the latest stable version with:
+The default installation will only include the card environments. To use PyTorch implementation of the training algorithms, run
 ```
-pip install rlcard
+pip3 install rlcard[training]
 ```
-The default installation will only include the card environments. To use Tensorflow implementation of the example algorithms, install the supported verison of Tensorflow with:
-```
-pip install rlcard[tensorflow]
-```
-To try PyTorch implementations, please run: 
-```
-pip install rlcard[torch]
-```
-If you meet any problems when installing PyTorch with the command above, you may follow the instructions on [PyTorch official website](https://pytorch.org/get-started/locally/) to manually install PyTorch.
 
 We also provide [**conda** installation method](https://anaconda.org/toubun/rlcard):
 
@@ -69,34 +78,36 @@ We also provide [**conda** installation method](https://anaconda.org/toubun/rlca
 conda install -c toubun rlcard
 ```
 
-Conda installation only provides the card environments, you need to manually install Tensorflow or Pytorch on your demands.
+Conda installation only provides the card environments, you need to manually install Pytorch on your demands.
 
 ## Examples
-Please refer to [examples/](examples). A **short example** is as below.
+A **short example** is as below.
 
 ```python
 import rlcard
 from rlcard.agents import RandomAgent
 
+print(env.num_actions) # 2
+print(env.num_players) # 1
+print(env.state_shape) # [[2]]
+print(env.action_shape) # [None]
+
 env = rlcard.make('blackjack')
-env.set_agents([RandomAgent(action_num=env.action_num)])
+env.set_agents([RandomAgent(num_actions=env.num_actions)])
 
 trajectories, payoffs = env.run()
 ```
 
-We also recommend the following **toy examples** in Python.
+RLCard can be flexibly connected to various algorithms. See the following examples:
 
 *   [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
 *   [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
-*   [Running multiple processes](docs/toy-examples.md#running-multiple-processes)
 *   [Training CFR (chance sampling) on Leduc Hold'em](docs/toy-examples.md#training-cfr-on-leduc-holdem)
 *   [Having fun with pretrained Leduc model](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
-*   [Leduc Hold'em as single-agent environment](docs/toy-examples.md#leduc-holdem-as-single-agent-environment)
-
-R examples can be found [here](docs/toy-examples-r.md).
+*   [Training DMC on Dou Dizhu](docs/toy-examples.md#training-dmc-on-dou-dizhu)
 
 ## Demo
-Run `examples/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](docs/games.md#leduc-holdem).
+Run `examples/human/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](docs/games.md#leduc-holdem).
 
 ```
 >> Leduc Hold'em pre-trained model
@@ -146,33 +157,48 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 | Leduc Hold’em ([paper](http://poker.cs.ualberta.ca/publications/UAI05.pdf))                                                                                                                    | 10^2            | 10^2              | 10^0        | leduc-holdem    | [doc](docs/games.md#leduc-holdem), [example](examples/leduc_holdem_random.py)               |
 | Limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [baike](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin))    | 10^14           | 10^3              | 10^0        | limit-holdem    | [doc](docs/games.md#limit-texas-holdem), [example](examples/limit_holdem_random.py)         |
 | Dou Dizhu ([wiki](https://en.wikipedia.org/wiki/Dou_dizhu), [baike](https://baike.baidu.com/item/%E6%96%97%E5%9C%B0%E4%B8%BB/177997?fr=aladdin))                                               | 10^53 ~ 10^83   | 10^23             | 10^4        | doudizhu        | [doc](docs/games.md#dou-dizhu), [example](examples/doudizhu_random.py)                      |
-| Simple Dou Dizhu ([wiki](https://en.wikipedia.org/wiki/Dou_dizhu), [baike](https://baike.baidu.com/item/%E6%96%97%E5%9C%B0%E4%B8%BB/177997?fr=aladdin))                                        | -               | -                 | -           | simple-doudizhu | [doc](docs/games.md#simple-dou-dizhu), [example](examples/simple_doudizhu_random.py)        |
 | Mahjong ([wiki](https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules), [baike](https://baike.baidu.com/item/%E9%BA%BB%E5%B0%86/215))                                                | 10^121          | 10^48             | 10^2        | mahjong         | [doc](docs/games.md#mahjong), [example](examples/mahjong_random.py)                         | 
 | No-limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [baike](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin)) | 10^162          | 10^3              | 10^4        | no-limit-holdem | [doc](docs/games.md#no-limit-texas-holdem), [example](examples/nolimit_holdem_random.py)    |
 | UNO ([wiki](https://en.wikipedia.org/wiki/Uno_\(card_game\)), [baike](https://baike.baidu.com/item/UNO%E7%89%8C/2249587))                                                                      |  10^163         | 10^10             | 10^1        | uno             | [doc](docs/games.md#uno), [example](examples/uno_random.py)                                 |
 | Gin Rummy ([wiki](https://en.wikipedia.org/wiki/Gin_rummy), [baike](https://baike.baidu.com/item/%E9%87%91%E6%8B%89%E7%B1%B3/3471710))                                                         | 10^52           | -                 | -           | gin-rummy       | [doc](docs/games.md#gin-rummy), [example](examples/gin_rummy_random.py)                     |
+
+## Supported Algorithms
+| Algorithm | example | reference |
+| :--------------------------------------: | :-----------------------------------------: | :------------------------------------------------------------------------------------------------------: |
+| Deep Monte-Carlo (DMC)                   | [examples/run\_dmc.py](examples/run_dmc.py) |                                                                                                          |
+| Deep Q-Learning (DQN)                    | [examples/run\_rl.py](examples/run_rl.py)   | [[paper]](https://arxiv.org/abs/1312.5602)                                                               |
+| Neural Fictitious Self-Play (NFSP)       | [examples/run\_rl.py](examples/run_rl.py)   | [[paper]](https://arxiv.org/abs/1603.01121)                                                              |
+| Counterfactual Regret Minimization (CFR) | [examples/run\_cfr.py](examples/run_cfr.py) | [[paper]](http://papers.nips.cc/paper/3306-regret-minimization-in-games-with-incomplete-information.pdf) |
+
+## Pre-trained and Rule-based Models
+We provide a [model zoo](rlcard/models) to serve as the baselines.
+
+| Model                                    | Explanation                                              |
+| :--------------------------------------: | :------------------------------------------------------: |
+| leduc-holdem-cfr                         | Pre-trained CFR (chance sampling) model on Leduc Hold'em |
+| leduc-holdem-rule-v1                     | Rule-based model for Leduc Hold'em, v1                   |
+| leduc-holdem-rule-v2                     | Rule-based model for Leduc Hold'em, v2                   |
+| uno-rule-v1                              | Rule-based model for UNO, v1                             |
+| limit-holdem-rule-v1                     | Rule-based model for Limit Texas Hold'em, v1             |
+| doudizhu-rule-v1                         | Rule-based model for Dou Dizhu, v1                       |
+| gin-rummy-novice-rule                    | Gin Rummy novice rule model                              |
 
 ## API Cheat Sheet
 ### How to create an environment
 You can use the the following interface to make an environment. You may optionally specify some configurations with a dictionary.
 *   **env = rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary that specifies some environment configurations, which are as follows.
 	*   `seed`: Default `None`. Set a environment local random seed for reproducing the results.
-	*   `env_num`: Default `1`. It specifies how many environments running in parallel. If the number is larger than 1, then the tasks will be assigned to multiple processes for acceleration.
 	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
-	*   `allow_raw_data`: Default `False`. `True` if allowing raw data in the `state`.
-	*   `single_agent_mode`: Default `False`. `True` if using single agent mode, i.e., Gym style interface with other players as pretrained/rule models.
-	*   `active_player`: Defualt `0`. If `single_agent_mode` is `True`, `active_player` will specify operating on which player in single agent mode.
-	*   `record_action`: Default `False`. If `True`, a field of `action_record` will be in the `state` to record the historical actions. This may be used for human-agent play.
-	*   Game specific configurations: These fields start with `game_`. Currently, we only support `game_player_num` in Blackjack.
+	*   Game specific configurations: These fields start with `game_`. Currently, we only support `game_num_players` in Blackjack, .
 
 Once the environemnt is made, we can access some information of the game.
-*   **env.action_num**: The number of actions.
-*   **env.player_num**: The number of players.
-*   **env.state_space**: Ther state space of the observations.
-*   **env.timestep**: The number of timesteps stepped by the environment.
+*   **env.num_actions**: The number of actions.
+*   **env.num_players**: The number of players.
+*   **env.state_shape**: The shape of the state space of the observations.
+*   **env.action_shape**: The shape of the action features (Dou Dizhu's action can encoded as features)
 
 ### What is state in RLCard
-State is a Python dictionary. It will always have observation `state['obs']` and legal actions `state['legal_actions']`. If `allow_raw_data` is `True`, state will also have raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
+State is a Python dictionary. It consists of observation `state['obs']`, legal actions `state['legal_actions']`, raw observation `state['raw_obs']` and raw legal actions `state['raw_legal_actions']`.
 
 ### Basic interfaces
 The following interfaces provide a basic usage. It is easy to use but it has assumtions on the agent. The agent must follow [agent template](docs/developping-algorithms.md). 
@@ -190,9 +216,6 @@ For advanced usage, the following interfaces allow flexible operations on the ga
 *   **env.get_payoffs()**: In the end of the game, return a list of payoffs for all the players.
 *   **env.get_perfect_information()**: (Currently only support some of the games) Obtain the perfect information at the current state.
 
-### Running with multiple processes
-RLCard now supports acceleration with multiple processes. Simply change `env_num` when making the environment to indicate how many processes would be used. Currenly we only support `run()` function with multiple processes. An example is [DQN on blackjack](docs/toy-examples.md#running-multiple-processes)  
-
 ## Library Structure
 The purposes of the main modules are listed as below:
 
@@ -208,7 +231,7 @@ The purposes of the main modules are listed as below:
 For more documentation, please refer to the [Documents](docs/README.md) for general introductions. API documents are available at our [website](http://www.rlcard.org).
 
 ## Contributing
-Contribution to this project is greatly appreciated! Please create an issue for feedbacks/bugs. If you want to contribute codes, please refer to [Contributing Guide](./CONTRIBUTING.md).
+Contribution to this project is greatly appreciated! Please create an issue for feedbacks/bugs. If you want to contribute codes, please refer to [Contributing Guide](./CONTRIBUTING.md). If you have any questions, please contact [Daochen Zha](https://github.com/daochenzha) with [daochen.zha@tamu.edu](mailto:daochen.zha@tamu.edu).
 
 ## Acknowledgements
 We would like to thank JJ World Network Technology Co.,LTD for the generous support and all the contributions from the community contributors.

@@ -4,7 +4,6 @@
 *   [Leduc Hold'em](games.md#leduc-holdem)
 *   [Limit Texas Hold'em](games.md#limit-texas-holdem)
 *   [Dou Dizhu](games.md#dou-dizhu)
-*   [Simple Dou Dizhu](games.md#simple-dou-dizhu)
 *   [Mahjong](games.md#mahjong)
 *   [No-limit Texas Hold'em](games.md#no-limit-texas-holdem)
 *   [UNO](games.md#uno)
@@ -88,11 +87,9 @@ At each decision point of the game, the corresponding player will be able to obs
 
 | Key           | Description                                                                                                                                          | Example value                                                                                       |
 | ------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| deck          | A string of one pack of 54 cards with Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'.                  | 3333444455556666<br/>777788889999TTTTJJJJ<br/>QQQQKKKKAAAA2222BR                                    |
 | seen\_cards   | Three face-down cards distributed to the landlord after bidding. Then these cards will be made public to all players.                                | TQA                                                                                                 |
 | landlord      | An integer of landlord's id                                                                                                                          | 0                                                                                                   |
 | self          | An integer of current player's id                                                                                                                    | 2                                                                                                   |
-| initial\_hand | All cards current player initially owned when a game starts. It will not change with playing cards.                                                  | 3456677799TJQKAAB                                                                                   |
 | trace         | A list of tuples which records every actions in one game. The first entry of  the tuple is player's id, the second is corresponding player's action. | \[(0, '8222'), (1, 'pass'), (2, 'pass'), (0 '6KKK'), (1, 'pass'), (2, 'pass'), (0, '8'), (1, 'Q')\] |
 | played\_cards | As the game progresses, the cards which have been played by the three players and sorted from low to high.                                           | \['6', '8', '8', 'Q', 'K', 'K', 'K', '2', '2', '2'\]                                                |
 | others\_hand  | The union of the other two player's current hand                                                                                                     | 333444555678899TTTJJJQQAA2R                                                                         |
@@ -100,19 +97,14 @@ At each decision point of the game, the corresponding player will be able to obs
 | actions       | The legal actions the current player could do                                                                                                        | \['pass', 'K', 'A', 'B'\]                                                                           |
 
 ### State Encoding of Dou Dizhu
-In Dou Dizhu environment, we encode the state into 6 feature planes. The size of each plane is 5*15. Each entry of a plane can be either 1 or 0. The 5 rows represent 0, 1, 2, 3, 4 corresonding cards, respectively. The 15 columns start from "3" to "RJ" (Black Jack). For example, if we have a "3", then the entry (1, 0) would be 1, and the rest of column 0 would be 0. If we have a pair of "4", then the entry (2, 1) would be 1, and the rest of column 1 would be 0. Note that the current encoding method is just an example to show how the feature can be encoded. Users are encouraged to encode the state for their own purposes by modifying `extract_state` function in [rlcard/envs/doudizhu.py](../rlcard/envs/doudizhu.py). The example encoded planes are as below:
+Any given combination of cards, e.g., 55 or 3JJJ, is encoded as a 54-dimensional one-hot vector as follows. First, we construct a 4*15 matrix, where each column represents the rank (and two jokers), and each row represents the number of cards. We use one-hot encoding to construct such a matrix. Second, we remove the six entries that are always zero (i.e., the six entries in the columns of the jokers since there are only two jokers in the deck). Finally, we flatten the matrix, which leads to a 54-dimensional one-hot vector.
+For the landlord, we encode the following features: current hand, the union of the others' hands, the most recent action, the most recent nine actions (9 is arbitrarily chosen), the union of all the cards played by the landlord up (i.e., the player acts before the landlord), the union of all the cards played by landlord down (i.e., the player acts after the landlord). We also use one-hot encoding to represent the number of cards left for the two peasants player.
+For the peasant players, we similarly encode the following features: current hand, the union of the others' hands, the most recent action, the most recent nine actions, the union of all the cards played by the landlord, the union of all the cards played by the teammate, the most recent action performed by the landlord, the most recent action performed by the teammate. We also use one-hot encoding to represent the number of cards left for the other two players.
 
-| Plane          |                            Feature       |
-| -------------- | :--------------------------------------- |
-| 0              | the current hand                         |
-| 1              | the union of the other two players' hand |
-| 2-4            | the recent three actions                 |
-| 5              | the union of all played cards            |
+### Action Encoding of Dou Dizhu
 
-### Action Abstraction of Dou Dizhu
-
-The size of the action space of Dou Dizhu is 27472. This number is too large for learning algorithms. Thus, we make abstractions to the original action space and obtain 309 actions. We note that some recent studies also use similar abstraction techniques. The main idea of the abstraction is to make the kicker fuzzy and only focus on the major part of the combination. For example, "33344" is abstracted as "333
-\*\*". When the predicted action of the agent is **not legal**, the agent will choose "**pass**.". Thus, the current environment is simple, since once the agent learns how to play legal actions, it can beat random agents. Users can also encode the actions for their own purposes (such as increasing the difficulty of the environment) by modifying `decode_action` function in [rlcard/envs/doudizhu.py](../rlcard/envs/doudizhu.py). Users are also encouraged to include rule-based agents as opponents. The abstractions in the environment are as below. The detailed  mapping of action and its ID is in [rlcard/games/doudizhu/jsondata/action_space.json](../rlcard/games/doudizhu/jsondata/action_space.json):
+The size of the action space of Dou Dizhu is 27472 summarized in the following table. In older version of RLCard, we abstract the action space. Specifically, we make abstractions to the original action space and obtain 309 actions. We note that some recent studies also use similar abstraction techniques. The main idea of the abstraction is to make the kicker fuzzy and only focus on the major part of the combination. For example, "33344" is abstracted as "333
+\*\*".
 
 | Type             | Number of Actions | Number of Actions after Abstraction | Action ID         |
 | ---------------- | :---------------: | :---------------------------------: | :---------------: |
@@ -133,40 +125,10 @@ The size of the action space of Dou Dizhu is 27472. This number is too large for
 | Pass             |         1         |         1                           | 308               |
 | Total            |       27472       |        309                          |                   |
 
+In the new version of RLCard, we realize the actions do not need to be abstracted. Instead, we can extract action features and make the action feature as input. In this way, the agent can effectively reason about the large action space. Similar to the state encoding, each action is encodes into a 54 dimensional one-hot vector.
+
 ### Payoff
 If the landlord first get rid of all the cards in his hand, he will win and receive a reward 1. The two peasants will lose and receive a reward 0. Similarly, if one of the peasant first get rid of all the cards in hand, both peasants will win and receive a reward 1. The landlord will lose and receive a reward 0.
-
-## Simple Dou Dizhu
-Simple Dou Dizhu is a smaller version of Dou Dizhu. The deck only consists of 6 ranks from '8' to 'A' (8, 9, T, J, Q, K, A), there are four cards with different suits in each rank.  What's more, unlike landlord in Dou Dizhu, the landlord in Simple Dou Dizhu only has one more card than the  peasants.  The rules of this game is the same as the rules of Dou Dizhu. Just because each player gets fewer cards, they end the game faster.
-
-### State Representation of Simple Dou Dizhu
-
-This is almost the smae as the state representation of Dou Dizhu, but the number of the 'deck' has reduced from 54 to 28, and the number of the 'seen cards' reduced from 3 to 1. The following table shows the structure of the state:
-
-| Key           | Description                                                                                                                                           | Example value                                           |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| deck          | A string of one pack of 28 cards without Black Joker and Red Joker. Each character means a card. For conciseness, we use 'T' for '10'.                | 88889999TTTTJJJJQQQQKKKKAAAA                            |
-| seen\_cards   | One face-down card distributed to the landlord after bidding. Then the card will be made public to all players.                                       | K                                                       |
-| landlord      | An integer of landlord's id                                                                                                                           | 0                                                       |
-| self          | An integer of current player's id                                                                                                                     | 1                                                       |
-| initial\_hand | All cards current player initially owned when a game starts. It will not change with playing cards.                                                   | 8TTJJQQKA                                               |
-| trace         | A list of tuples which records every actions in one game. The first entry of  the tuple is player's id, the second is corresponding player's action.  | \[(0, '8'), (1, 'A'), (2, 'pass'), (0, 'pass'\)]        |
-| played\_cards | As the game progresses, the cards which have been played by the three players and sorted from low to high.                                            | \['8', 'A'\]                                            |
-| others\_hand  | The union of the other two player's current hand                                                                                                      | 889999TTJJQQKKKAAA                                      |
-| current\_hand | The current hand of current player                                                                                                                    | 8TTJJQQK                                                |
-| actions       | The legal actions the current player could do                                                                                                         | \['J', 'TTJJQQ', 'TT', 'Q', 'T', 'K', 'QQ', '8', 'JJ'\] |
-
-### State Encoding of Simple Dou Dizhu
-
-The state encoding is the same as Dou Dizhu game.
-
-### Action Encoding of Simple Dou Dizhu
-
-The action encoding is the same as Dou Dizhu game. Because of the reduction of deck, the actions encoded have also reduced from 309 to 131.
-
-### Payoff of Simple Dou Dizhu
-
-The payoff is the same as Dou Dizhu game.
 
 ## Mahjong
 Mahjong is a tile-based game developed in China, and has spread throughout the world since 20th century. It is commonly played
@@ -256,7 +218,6 @@ In state representation, each card is represented as a string of color and trait
 | hand         | A list of  the player's current hand.                                   | \['g-wild', 'b-0', 'g-draw_2', 'y-skip', 'r-draw_2', 'y-3', 'y-wild'\] |
 | target       | The top card in the Discard pile                                        | 'g-wild'                                                               |
 | played_cards | As the game progresses, the cards which have been played by the players | \['g-3', 'g-wild'\]                                                    |
-| others_hand  | The union of the other player's current hand                            | \['b-0', 'g-draw_2', 'y-skip', 'r-draw_2', 'y-3', 'r-wild'\]           |
 
 ### State Encoding of Uno
 
