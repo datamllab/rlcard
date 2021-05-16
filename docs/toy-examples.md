@@ -6,6 +6,7 @@ In this document, we provide some toy examples for getting started. All the exam
 *   [Training CFR (chance sampling) on Leduc Hold'em](toy-examples.md#training-cfr-on-leduc-holdem)
 *   [Having fun with pretrained Leduc model](toy-examples.md#having-fun-with-pretrained-leduc-model)
 *   [Training DMC on Dou Dizhu](toy-examples.md#training-dmc-on-dou-dizhu)
+*   [Evaluating Agents](toy-examples.md#evaluating-agents)
 
 ## Playing with Random Agents
 We provide a random agent that can play randomly on each environment. Example code is as follows. You can also find the code in [examples/run\_random.py](../examples/run_random.py)
@@ -451,5 +452,76 @@ Updated log fields: ['_tick', '_time', 'frames', 'mean_episode_return_0', 'loss_
  'mean_episode_return_2': 0.6357409954071045}
 ```
 
+## Evaluating Agents
+We also provide an example to compare agents. You can find the code in [examples/evaluate.py](examples/evaluate.py)
+```python
+import os
+import argparse
 
+import rlcard
+from rlcard.agents import DQNAgent, RandomAgent
+from rlcard.utils import get_device, set_seed, tournament, reorganize, Logger
 
+def load_model(model_path, env=None, position=None, device=None):
+    if os.path.isfile(model_path):  # Torch model
+        import torch
+        agent = torch.load(model_path, map_location=device)
+        agent.set_device(device)
+    elif os.path.isdir(model_path):  # CFR model
+        from rlcard.agents import CFRAgent
+        agent = CFRAgent(env, model_path)
+        agent.load()
+    elif model_path == 'random':  # Random model
+        from rlcard.agents import RandomAgent
+        agent = RandomAgent(num_actions=env.num_actions)
+    else:  # A model in the model zoo
+        from rlcard import models
+        agent = models.load(model_path).agents[position]
+    
+    return agent
+
+def evaluate(args):
+
+    # Check whether gpu is available
+    device = get_device()
+        
+    # Seed numpy, torch, random
+    set_seed(args.seed)
+
+    # Make the environment with seed
+    env = rlcard.make(args.env, config={'seed': args.seed})
+
+    # Load models
+    agents = []
+    for position, model_path in enumerate(args.models):
+        agents.append(load_model(model_path, env, position, device))
+    env.set_agents(agents)
+
+    # Evaluate
+    rewards = tournament(env, args.num_games)
+    for position, reward in enumerate(rewards):
+        print(position, args.models[position], reward)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser("Evaluation example in RLCard")
+    parser.add_argument('--env', type=str, default='leduc-holdem')
+    parser.add_argument('--models', nargs='*', default=['experiments/leduc_holdem_dqn_result/model.pth', 'random'])
+    parser.add_argument('--cuda', type=str, default='')
+    parser.add_argument('--seed', type=int, default=42)
+    parser.add_argument('--num_games', type=int, default=10000)
+
+    args = parser.parse_args()
+
+    os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda
+    evaluate(args)
+```
+We assume that you have already trained a DQN agent on Leduc Hold'em. Run the following command to compare the agent with random agent:
+```
+python3 examples/evaluate.py
+```
+The expected output is as below:
+```
+--> Running on the CPU
+0 experiments/leduc_holdem_dqn_result/model.pth 1.21185
+1 random -1.21185
+```
