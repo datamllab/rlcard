@@ -169,14 +169,15 @@ class NFSPAgent(object):
         obs = state['obs']
         legal_actions = list(state['legal_actions'].keys())
         if self._mode == 'best_response':
-            probs = self._rl_agent.predict(obs)
-            self._add_transition(obs, probs)
+            action = self._rl_agent.step(state)
+            one_hot = np.zeros(self._num_actions)
+            one_hot[action] = 1
+            self._add_transition(obs, one_hot)
 
         elif self._mode == 'average_policy':
             probs = self._act(obs)
-
-        probs = remove_illegal(probs, legal_actions)
-        action = np.random.choice(len(probs), p=probs)
+            probs = remove_illegal(probs, legal_actions)
+            action = np.random.choice(len(probs), p=probs)
 
         return action
 
