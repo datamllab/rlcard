@@ -140,10 +140,15 @@ class DQNAgent(object):
         Returns:
             action (int): an action id
         '''
-        A = self.predict(state['obs'])
-        A = remove_illegal(A, list(state['legal_actions'].keys()))
-        action = np.random.choice(np.arange(len(A)), p=A)
-        return action
+        q_values = self.predict(state)
+        epsilon = self.epsilons[min(self.total_t, self.epsilon_decay_steps-1)]
+        legal_actions = list(state['legal_actions'].keys())
+        probs = np.ones(len(legal_actions), dtype=float) * epsilon / len(legal_actions)
+        best_action_idx = legal_actions.index(np.argmax(q_values))
+        probs[best_action_idx] += (1.0 - epsilon)
+        action_idx = np.random.choice(np.arange(len(probs)), p=probs)
+
+        return legal_actions[action_idx]
 
     def eval_step(self, state):
         ''' Predict the action for evaluation purpose.
@@ -154,14 +159,13 @@ class DQNAgent(object):
         Returns:
             action (int): an action id
         '''
-        q_values = self.q_estimator.predict_nograd(np.expand_dims(state['obs'], 0))[0]
-        probs = remove_illegal(np.exp(q_values), list(state['legal_actions'].keys()))
-        best_action = np.argmax(probs)
-        return best_action, probs
+        q_values = self.predict(state)
+        best_action = np.argmax(q_values)
+
+        return best_action, None
 
     def predict(self, state):
-        ''' Predict the action probabilities but have them
-            disconnected from the computation graph
+        ''' Predict the masked Q-values
 
         Args:
             state (numpy.array): current state
@@ -169,12 +173,13 @@ class DQNAgent(object):
         Returns:
             q_values (numpy.array): a 1-d array where each entry represents a Q value
         '''
-        epsilon = self.epsilons[min(self.total_t, self.epsilon_decay_steps-1)]
-        A = np.ones(self.num_actions, dtype=float) * epsilon / self.num_actions
-        q_values = self.q_estimator.predict_nograd(np.expand_dims(state, 0))[0]
-        best_action = np.argmax(q_values)
-        A[best_action] += (1.0 - epsilon)
-        return A
+        
+        q_values = self.q_estimator.predict_nograd(np.expand_dims(state['obs'], 0))[0]
+        masked_q_values = -np.inf * np.ones(self.num_actions, dtype=float)
+        legal_actions = list(state['legal_actions'].keys())
+        masked_q_values[legal_actions] = q_values[legal_actions]
+
+        return masked_q_values
 
     def train(self):
         ''' Train the network

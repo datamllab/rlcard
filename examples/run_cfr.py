@@ -30,7 +30,7 @@ def train(args):
             # Evaluate the performance. Play with Random agents.
             if episode % args.evaluate_every == 0:
                 agent.save() # Save model
-                logger.log_performance(env.timestep, tournament(eval_env, args.num_games)[0])
+                logger.log_performance(env.timestep, tournament(eval_env, args.num_eval_games)[0])
 
         # Plot the learning curve
         logger.plot('CFR')
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser("DQN example in RLCard")
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--num_episodes', type=int, default=5000)
-    parser.add_argument('--num_games', type=int, default=2000)
+    parser.add_argument('--num_eval_games', type=int, default=2000)
     parser.add_argument('--evaluate_every', type=int, default=100)
     parser.add_argument('--log_dir', type=str, default='experiments/leduc_holdem_cfr_result/')
 
