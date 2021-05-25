@@ -34,7 +34,7 @@ from copy import deepcopy
 
 from rlcard.utils.utils import remove_illegal
 
-Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state', 'done'])
+Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state', 'legal_actions', 'done'])
 
 
 class DQNAgent(object):
@@ -124,7 +124,7 @@ class DQNAgent(object):
             ts (list): a list of 5 elements that represent the transition
         '''
         (state, action, reward, next_state, done) = tuple(ts)
-        self.feed_memory(state['obs'], action, reward, next_state['obs'], done)
+        self.feed_memory(state['obs'], action, reward, next_state['obs'], list(state['legal_actions'].keys()), done)
         self.total_t += 1
         tmp = self.total_t - self.replay_memory_init_size
         if tmp>=0 and tmp%self.train_every == 0:
@@ -187,11 +187,17 @@ class DQNAgent(object):
         Returns:
             loss (float): The loss of the current batch.
         '''
-        state_batch, action_batch, reward_batch, next_state_batch, done_batch = self.memory.sample()
+        state_batch, action_batch, reward_batch, next_state_batch, legal_actions_batch, done_batch = self.memory.sample()
 
         # Calculate best next actions using Q-network (Double DQN)
         q_values_next = self.q_estimator.predict_nograd(next_state_batch)
-        best_actions = np.argmax(q_values_next, axis=1)
+        legal_actions = []
+        for b in range(self.batch_size):
+            legal_actions.extend([i + b * self.num_actions for i in legal_actions_batch[b]])
+        masked_q_values = -np.inf * np.ones(self.num_actions * self.batch_size, dtype=float)
+        masked_q_values[legal_actions] = q_values_next.flatten()[legal_actions]
+        masked_q_values = masked_q_values.reshape((self.batch_size, self.num_actions))
+        best_actions = np.argmax(masked_q_values, axis=1)
 
         # Evaluate best next actions using Target-network (Double DQN)
         q_values_next_target = self.target_estimator.predict_nograd(next_state_batch)
@@ -211,7 +217,7 @@ class DQNAgent(object):
 
         self.train_t += 1
 
-    def feed_memory(self, state, action, reward, next_state, done):
+    def feed_memory(self, state, action, reward, next_state, legal_actions, done):
         ''' Feed transition to memory
 
         Args:
@@ -219,9 +225,10 @@ class DQNAgent(object):
             action (int): the performed action ID
             reward (float): the reward received
             next_state (numpy.array): the next state after performing the action
+            legal_actions (list): the legal actions of the next state
             done (boolean): whether the episode is finished
         '''
-        self.memory.save(state, action, reward, next_state, done)
+        self.memory.save(state, action, reward, next_state, legal_actions, done)
 
     def set_device(self, device):
         self.device = device
@@ -375,7 +382,7 @@ class Memory(object):
         self.batch_size = batch_size
         self.memory = []
 
-    def save(self, state, action, reward, next_state, done):
+    def save(self, state, action, reward, next_state, legal_actions, done):
         ''' Save transition into memory
 
         Args:
@@ -383,11 +390,12 @@ class Memory(object):
             action (int): the performed action ID
             reward (float): the reward received
             next_state (numpy.array): the next state after performing the action
+            legal_actions (list): the legal actions of the next state
             done (boolean): whether the episode is finished
         '''
         if len(self.memory) == self.memory_size:
             self.memory.pop(0)
-        transition = Transition(state, action, reward, next_state, done)
+        transition = Transition(state, action, reward, next_state, legal_actions, done)
         self.memory.append(transition)
 
     def sample(self):

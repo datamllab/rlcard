@@ -33,25 +33,14 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 ## Cite this work
 If you find this repo useful, you may cite:
 
-Zha, Daochen, et al. "RLCard: A Platform for Reinforcement Learning in Card Games." IJCAI. 2020.
+Zha, Daochen, Kwei-Herng Lai, Songyi Huang, Yuanpu Cao, Keerthana Reddy, Juan Vargas, Alex Nguyen, Ruzhe Wei, Junyu Guo, and Xia Hu. "RLCard: A Platform for Reinforcement Learning in Card Games." In IJCAI. 2020.
 
 ```bibtex
-@inproceedings{DBLP:conf/ijcai/ZhaLHCRVNWGH20,
-  author    = {Daochen Zha and
-               Kwei{-}Herng Lai and
-               Songyi Huang and
-               Yuanpu Cao and
-               Keerthana Reddy and
-               Juan Vargas and
-               Alex Nguyen and
-               Ruzhe Wei and
-               Junyu Guo and
-               Xia Hu},
-  title     = {RLCard: {A} Platform for Reinforcement Learning in Card Games},
-  booktitle = {{IJCAI}},
-  pages     = {5264--5266},
-  publisher = {ijcai.org},
-  year      = {2020}
+@inproceedings{zha2020rlcard,
+  title={RLCard: A Platform for Reinforcement Learning in Card Games},
+  author={Zha, Daochen and Lai, Kwei-Herng and Huang, Songyi and Cao, Yuanpu and Reddy, Keerthana and Vargas, Juan and Nguyen, Alex and Wei, Ruzhe and Guo, Junyu and Hu, Xia},
+  booktitle={IJCAI},
+  year={2020}
 }
 ```
 
