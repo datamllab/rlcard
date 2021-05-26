@@ -451,6 +451,7 @@ Updated log fields: ['_tick', '_time', 'frames', 'mean_episode_return_0', 'loss_
  'mean_episode_return_1': 0.6348323225975037,
  'mean_episode_return_2': 0.6357409954071045}
 ```
+The models will by defult be saved in `experiments/dmc_result/doudizhu`. To evaluate the performance, see [here](toy-examples.md#evaluating-dmc-on-dou-dizhu).
 
 ## Evaluating Agents
 We also provide an example to compare agents. You can find the code in [examples/evaluate.py](examples/evaluate.py)
@@ -524,4 +525,14 @@ The expected output is as below:
 --> Running on the CPU
 0 experiments/leduc_holdem_dqn_result/model.pth 1.21185
 1 random -1.21185
+```
+
+### Evaluating DMC on Dou Dizhu
+DMC models can be similarly loaded with the evaluation script. To achieve this, you need to first specify which checkpoint you would like to load. Then you can eveluate DMC by similarly passing the model paths to the script. For example, you may evaluate DMC landlord against rule peasants with (the exact timestep could differ):
+```
+python3 examples/evaluate.py --env doudizhu --models experiments/dmc_result/doudizhu/0_432758400.pth doudizhu-rule-v1 doudizhu-rule-v1 --cuda 0 --num_games 1000
+```
+You may also do it reversely by running
+```
+python3 examples/evaluate.py --env doudizhu --models doudizhu-rule-v1 experiments/dmc_result/doudizhu/1_432758400.pth experiments/dmc_result/doudizhu/2_432758400.pth --cuda 0 --num_games 1000
 ```
