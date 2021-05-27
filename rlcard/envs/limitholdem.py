@@ -1,6 +1,7 @@
 import json
 import os
 import numpy as np
+from collections import OrderedDict
 
 import rlcard
 from rlcard.envs import Env
@@ -49,7 +50,7 @@ class LimitholdemEnv(Env):
         '''
         extracted_state = {}
 
-        legal_actions = {self.actions.index(a): None for a in state['legal_actions']}
+        legal_actions = OrderedDict({self.actions.index(a): None for a in state['legal_actions']})
         extracted_state['legal_actions'] = legal_actions
 
         public_cards = state['public_cards']

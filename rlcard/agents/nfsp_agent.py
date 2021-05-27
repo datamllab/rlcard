@@ -189,18 +189,21 @@ class NFSPAgent(object):
 
         Returns:
             action (int): An action id.
+            info (dict): A dictionary containing information
         '''
         if self.evaluate_with == 'best_response':
-            action, probs = self._rl_agent.eval_step(state)
+            action, info = self._rl_agent.eval_step(state)
         elif self.evaluate_with == 'average_policy':
             obs = state['obs']
             legal_actions = list(state['legal_actions'].keys())
             probs = self._act(obs)
             probs = remove_illegal(probs, legal_actions)
             action = np.random.choice(len(probs), p=probs)
+            info = {}
+            info['probs'] = {state['raw_legal_actions'][i]: probs[list(state['legal_actions'].keys())[i]] for i in range(len(state['legal_actions']))}
         else:
             raise ValueError("'evaluate_with' should be either 'average_policy' or 'best_response'.")
-        return action, probs
+        return action, info
 
     def sample_episode_policy(self):
         ''' Sample average/best_response policy

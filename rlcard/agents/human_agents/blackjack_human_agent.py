@@ -39,9 +39,8 @@ class HumanAgent(object):
 
         Returns:
             action (int): the action predicted (randomly chosen) by the random agent
-            probs (list): The list of action probabilities
         '''
-        return self.step(state), []
+        return self.step(state), {}
 
 def _print_state(state, raw_legal_actions, action_record):
     ''' Print out the state

@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import Counter, OrderedDict
 import numpy as np
 
 from rlcard.envs import Env
@@ -82,7 +82,7 @@ class DoudizhuEnv(Env):
                                   landlord_num_cards_left,
                                   teammate_num_cards_left))
 
-        extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions()}
+        extracted_state = OrderedDict({'obs': obs, 'legal_actions': self._get_legal_actions()})
         extracted_state['raw_obs'] = state
         extracted_state['raw_legal_actions'] = [a for a in state['actions']]
         extracted_state['action_record'] = self.action_recorder

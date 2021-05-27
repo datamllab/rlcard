@@ -158,11 +158,15 @@ class DQNAgent(object):
 
         Returns:
             action (int): an action id
+            info (dict): A dictionary containing information
         '''
         q_values = self.predict(state)
         best_action = np.argmax(q_values)
 
-        return best_action, None
+        info = {}
+        info['values'] = {state['raw_legal_actions'][i]: q_values[list(state['legal_actions'].keys())[i]] for i in range(len(state['legal_actions']))}
+
+        return best_action, info
 
     def predict(self, state):
         ''' Predict the masked Q-values

@@ -1,4 +1,5 @@
 import numpy as np
+from collections import OrderedDict
 
 from rlcard.envs import Env
 from rlcard.games.uno import Game
@@ -42,7 +43,7 @@ class UnoEnv(Env):
     def _get_legal_actions(self):
         legal_actions = self.game.get_legal_actions()
         legal_ids = {ACTION_SPACE[action]: None for action in legal_actions}
-        return legal_ids
+        return OrderedDict(legal_ids)
 
     def get_perfect_information(self):
         ''' Get the perfect information of the current state

@@ -33,7 +33,7 @@ class TestNFSP(unittest.TestCase):
                           q_mlp_layers=[10,10],
                           device=torch.device('cpu'))
 
-        predicted_action, _ = agent.eval_step({'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}})
+        predicted_action, _ = agent.eval_step({'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}, 'raw_legal_actions': ['call', 'raise']})
         self.assertGreaterEqual(predicted_action, 0)
         self.assertLessEqual(predicted_action, 1)
 
@@ -43,5 +43,5 @@ class TestNFSP(unittest.TestCase):
             self.assertGreaterEqual(predicted_action, 0)
             self.assertLessEqual(predicted_action, 1)
 
-            ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}}, np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}}, True]
+            ts = [{'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}}, np.random.randint(2), 0, {'obs': np.random.random_sample((2,)), 'legal_actions': {0: None, 1: None}, 'raw_legal_actions': ['call', 'raise']}, True]
             agent.feed(ts)

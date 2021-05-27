@@ -151,10 +151,15 @@ class CFRAgent():
 
         Returns:
             action (int): Predicted action
+            info (dict): A dictionary containing information
         '''
         probs = self.action_probs(state['obs'].tostring(), list(state['legal_actions'].keys()), self.average_policy)
         action = np.random.choice(len(probs), p=probs)
-        return action, probs
+
+        info = {}
+        info['probs'] = {state['raw_legal_actions'][i]: probs[list(state['legal_actions'].keys())[i]] for i in range(len(state['legal_actions']))}
+
+        return action, info
 
     def get_state(self, player_id):
         ''' Get state_str of the player
