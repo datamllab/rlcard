@@ -10,7 +10,7 @@ from rlcard.games.limitholdem import Game
 
 class LeducholdemGame(Game):
 
-    def __init__(self, allow_step_back=False):
+    def __init__(self, num_players=2, allow_step_back=False):
         ''' Initialize the class leducholdem Game
         '''
         self.allow_step_back = allow_step_back
@@ -36,7 +36,7 @@ class LeducholdemGame(Game):
         self.raise_amount = self.big_blind
         self.allowed_raise_num = 2
 
-        self.num_players = 2
+        self.num_players = num_players
 
     def init_game(self):
         ''' Initialilze the game of Limit Texas Hold'em
