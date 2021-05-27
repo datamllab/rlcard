@@ -44,4 +44,4 @@ class RandomAgent(object):
         info = {}
         info['probs'] = {state['raw_legal_actions'][i]: probs[list(state['legal_actions'].keys())[i]] for i in range(len(state['legal_actions']))}
 
-        return self.step(state), probs
+        return self.step(state), info
