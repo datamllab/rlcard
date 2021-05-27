@@ -4,6 +4,7 @@
     Date created: 2/12/2020
 '''
 import numpy as np
+from collections import OrderedDict
 
 from rlcard.envs import Env
 
@@ -56,7 +57,7 @@ class GinRummyEnv(Env):
             unknown_cards_rep = self._utils.encode_cards(unknown_cards)
             rep = [hand_rep, top_discard_rep, dead_cards_rep, known_cards_rep, unknown_cards_rep]
             obs = np.array(rep)
-            extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions()}
+            extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions(), 'raw_legal_actions': list(self._get_legal_actions().keys())}
         return extracted_state
 
     def get_payoffs(self):
@@ -93,4 +94,4 @@ class GinRummyEnv(Env):
         '''
         legal_actions = self.game.judge.get_legal_actions()
         legal_actions_ids = {action_event.action_id: None for action_event in legal_actions}
-        return legal_actions_ids
+        return OrderedDict(legal_actions_ids)

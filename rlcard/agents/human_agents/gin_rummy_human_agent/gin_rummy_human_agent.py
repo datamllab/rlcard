@@ -62,6 +62,5 @@ class HumanAgent(object):
 
         Returns:
             action (int): the action predicted (randomly chosen) by the random agent
-            probabilities (list): The list of action probabilities
         '''
-        return self.step(state), []
+        return self.step(state), {}

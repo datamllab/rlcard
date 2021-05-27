@@ -14,7 +14,7 @@ class TestNFSP(unittest.TestCase):
         for _ in range(100):
             agent.train()
 
-        state = {'obs': np.array([1., 1., 0., 0., 0., 0.]), 'legal_actions': {0: None,2: None}}
+        state = {'obs': np.array([1., 1., 0., 0., 0., 0.]), 'legal_actions': {0: None,2: None}, 'raw_legal_actions': ['call', 'fold']}
         action, _ = agent.eval_step(state)
 
         self.assertIn(action, [0, 2])

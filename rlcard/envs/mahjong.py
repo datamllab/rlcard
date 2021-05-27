@@ -1,4 +1,5 @@
 import numpy as np
+from collections import OrderedDict
 
 from rlcard.envs import Env
 from rlcard.games.mahjong import Game
@@ -107,4 +108,4 @@ class MahjongEnv(Env):
             print([len(p.pile) for p in self.game.players])
             #print(self.game.get_state(self.game.round.current_player))
             #exit()
-        return legal_action_id
+        return OrderedDict(legal_action_id)

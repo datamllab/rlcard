@@ -1,6 +1,7 @@
 import json
 import os
 import numpy as np
+from collections import OrderedDict
 
 import rlcard
 from rlcard.envs import Env
@@ -54,7 +55,7 @@ class NolimitholdemEnv(Env):
         '''
         extracted_state = {}
 
-        legal_actions = {action.value: None for action in state['legal_actions']}
+        legal_actions = OrderedDict({action.value: None for action in state['legal_actions']})
         extracted_state['legal_actions'] = legal_actions
 
         public_cards = state['public_cards']
