@@ -164,7 +164,7 @@ class DQNAgent(object):
         best_action = np.argmax(q_values)
 
         info = {}
-        info['values'] = {state['raw_legal_actions'][i]: q_values[list(state['legal_actions'].keys())[i]] for i in range(len(state['legal_actions']))}
+        info['values'] = {state['raw_legal_actions'][i]: float(q_values[list(state['legal_actions'].keys())[i]]) for i in range(len(state['legal_actions']))}
 
         return best_action, info
 
