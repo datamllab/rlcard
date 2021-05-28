@@ -56,7 +56,7 @@ class DMCAgent:
         action = action_keys[action_idx]
 
         info = {}
-        info['values'] = {state['raw_legal_actions'][i]: values[i] for i in range(len(action_keys))}
+        info['values'] = {state['raw_legal_actions'][i]: float(values[i]) for i in range(len(action_keys))}
 
         return action, info
 

@@ -157,7 +157,7 @@ class CFRAgent():
         action = np.random.choice(len(probs), p=probs)
 
         info = {}
-        info['probs'] = {state['raw_legal_actions'][i]: probs[list(state['legal_actions'].keys())[i]] for i in range(len(state['legal_actions']))}
+        info['probs'] = {state['raw_legal_actions'][i]: float(probs[list(state['legal_actions'].keys())[i]]) for i in range(len(state['legal_actions']))}
 
         return action, info
 
