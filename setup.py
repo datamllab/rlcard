@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
 extras = {
-    'training': ['torch==1.6', 'GitPython==3.0.5', 'gitdb2==2.0.6', 'matplotlib'],
+    'torch': ['torch==1.6', 'GitPython==3.0.5', 'gitdb2==2.0.6', 'matplotlib'],
 }
 
 def _get_version():
