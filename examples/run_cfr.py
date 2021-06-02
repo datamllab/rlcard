@@ -36,7 +36,7 @@ def train(args):
         logger.plot('CFR')
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser("DQN example in RLCard")
+    parser = argparse.ArgumentParser("CFR example in RLCard")
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--num_episodes', type=int, default=5000)
     parser.add_argument('--num_eval_games', type=int, default=2000)
