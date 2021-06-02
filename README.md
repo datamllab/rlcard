@@ -50,9 +50,16 @@ Make sure that you have **Python 3.6+** and **pip** installed. We recommend inst
 ```
 pip3 install rlcard
 ```
-Alternatively, you can install the latest version with:
+Alternatively, you can clone the latest version with:
 ```
 git clone https://github.com/datamllab/rlcard.git
+```
+or only clone one branch to make it faster:
+```
+git clone -b master --single-branch --depth=1 https://github.com/datamllab/rlcard.git
+```
+Then install with
+```
 cd rlcard
 pip3 install -e .
 ```

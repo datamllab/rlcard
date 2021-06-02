@@ -1,5 +1,4 @@
 ''' A toy example of self playing for Blackjack
-    Maybe it is used to play against multiple trained agents if someone can rebuild a game code :)
 '''
 
 import rlcard
@@ -7,10 +6,9 @@ from rlcard.agents import RandomAgent as RandomAgent
 from rlcard.agents import BlackjackHumanAgent as HumanAgent
 from rlcard.utils.utils import print_card
 
-# Make environment and enable human mode
-# Set 'record_action' to True because we need it to print results
+# Make environment
 num_players = 2
-env = rlcard.make('blackjack', config={'record_action': True, 'game_num_players': num_players})
+env = rlcard.make('blackjack', config={'game_num_players': num_players})
 human_agent = HumanAgent(env.num_actions)
 random_agent = RandomAgent(env.num_actions)
 env.set_agents([human_agent, random_agent])

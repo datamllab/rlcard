@@ -8,8 +8,7 @@ from rlcard.agents import NolimitholdemHumanAgent as HumanAgent
 from rlcard.utils import print_card
 
 # Make environment
-# Set 'record_action' to True because we need it to print results
-env = rlcard.make('no-limit-holdem', config={'record_action': True})
+env = rlcard.make('no-limit-holdem')
 
 human_agent = HumanAgent(env.num_actions)
 human_agent2 = HumanAgent(env.num_actions)
