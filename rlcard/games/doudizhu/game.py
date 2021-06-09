@@ -15,10 +15,10 @@ class DoudizhuGame:
     ''' Provide game APIs for env to run doudizhu and get corresponding state
     information.
     '''
-    def __init__(self, allow_step_back=False):
+    def __init__(self, allow_step_back=False, num_players=3):
         self.allow_step_back = allow_step_back
         self.np_random = np.random.RandomState()
-        self.num_players = 3
+        self.num_players = num_players
 
     def init_game(self):
         ''' Initialize players and state.

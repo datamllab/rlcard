@@ -8,12 +8,12 @@ from rlcard.games.mahjong import Judger
 
 class MahjongGame:
 
-    def __init__(self, allow_step_back=False):
+    def __init__(self, allow_step_back=False, num_players=4):
         '''Initialize the class MajongGame
         '''
         self.allow_step_back = allow_step_back
         self.np_random = np.random.RandomState()
-        self.num_players = 4
+        self.num_players = num_players
 
     def init_game(self):
         ''' Initialilze the game of Mahjong
