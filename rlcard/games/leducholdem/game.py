@@ -10,7 +10,7 @@ from rlcard.games.limitholdem import Game
 
 class LeducholdemGame(Game):
 
-    def __init__(self, allow_step_back=False):
+    def __init__(self, allow_step_back=False, num_players=2):
         ''' Initialize the class leducholdem Game
         '''
         self.allow_step_back = allow_step_back
@@ -23,7 +23,7 @@ class LeducholdemGame(Game):
         self.raise_amount = 2
         self.allowed_raise_num = 2
 
-        self.num_players = 2
+        self.num_players = num_players
         '''
         # Some configarations of the game
         # These arguments can be specified for creating new games
