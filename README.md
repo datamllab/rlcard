@@ -14,12 +14,14 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
 *   GUI: [RLCard-Showdown](https://github.com/datamllab/rlcard-showdown)
 *   Resources: [Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
+*   Related Project: [DouZero Project](https://github.com/kwai/DouZero)
 
 **Community:**
 *  **Slack**: Discuss in our [#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-l4qbarxs-mtBrjBRpYIMq4Re4jvYpWQ) slack channel.
 *  **QQ Group**: Join our QQ group 665647450. Password: rlcardqqgroup
 
 **News:**
+*   Please checkout and follow [DouZero](https://github.com/PettingZoo-Team/PettingZoo), a strong Dou Dizhu AI and the ICML 2021 paper. It is also integrated in RLCard. See [Training DMC on Dou Dizhu](docs/toy-examples.md#training-dmc-on-dou-dizhu).
 *   Our package is used in [PettingZoo](https://github.com/PettingZoo-Team/PettingZoo). Please check it out!
 *   We have released RLCard-Showdown, GUI demo for RLCard. Please check out [here](https://github.com/datamllab/rlcard-showdown)!
 *   Jupyter Notebook tutorial available! We add some examples in R to call Python interfaces of RLCard with reticulate. See [here](docs/toy-examples-r.md)
