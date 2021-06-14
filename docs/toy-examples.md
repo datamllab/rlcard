@@ -366,7 +366,7 @@ Agent 1: +++
 ```
 
 ## Training DMC on Dou Dizhu
-Finally, we provide an example to traing Deep Monte-Carlo (DMC) on the large-scale game Dou Dizhu. You can also find the code in [examples/run_dmc/py](examples/run_dmc.py).
+Finally, we provide an example to traing Deep Monte-Carlo (DMC) on the large-scale game Dou Dizhu. You can also find the code in [examples/run\_dmc.py](../examples/run_dmc.py).
 ```python
 import os
 import argparse
@@ -451,7 +451,7 @@ Updated log fields: ['_tick', '_time', 'frames', 'mean_episode_return_0', 'loss_
  'mean_episode_return_1': 0.6348323225975037,
  'mean_episode_return_2': 0.6357409954071045}
 ```
-The models will by defult be saved in `experiments/dmc_result/doudizhu`. To evaluate the performance, see [here](toy-examples.md#evaluating-dmc-on-dou-dizhu).
+The models will by defult be saved in `experiments/dmc_result/doudizhu`. I have provide some scripts to run DMC in single/multiple GPUs in [examples/scripts/](../examples/scripts/). To evaluate the performance, see [here](toy-examples.md#evaluating-dmc-on-dou-dizhu).
 
 ## Evaluating Agents
 We also provide an example to compare agents. You can find the code in [examples/evaluate.py](examples/evaluate.py)

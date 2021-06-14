@@ -21,7 +21,7 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *  **QQ Group**: Join our QQ group 665647450. Password: rlcardqqgroup
 
 **News:**
-*   Please checkout and follow [DouZero](https://github.com/kwai/DouZero), a strong Dou Dizhu AI and the [ICML 2021 paper](https://arxiv.org/abs/2106.06135). The algorithm is also integrated in RLCard. See [Training DMC on Dou Dizhu](docs/toy-examples.md#training-dmc-on-dou-dizhu).
+*   Please follow [DouZero](https://github.com/kwai/DouZero), a strong Dou Dizhu AI and the [ICML 2021 paper](https://arxiv.org/abs/2106.06135). The algorithm is also integrated in RLCard. See [Training DMC on Dou Dizhu](docs/toy-examples.md#training-dmc-on-dou-dizhu).
 *   Our package is used in [PettingZoo](https://github.com/PettingZoo-Team/PettingZoo). Please check it out!
 *   We have released RLCard-Showdown, GUI demo for RLCard. Please check out [here](https://github.com/datamllab/rlcard-showdown)!
 *   Jupyter Notebook tutorial available! We add some examples in R to call Python interfaces of RLCard with reticulate. See [here](docs/toy-examples-r.md)
@@ -67,7 +67,7 @@ pip3 install -e .
 ```
 The default installation will only include the card environments. To use PyTorch implementation of the training algorithms, run
 ```
-pip3 install rlcard[training]
+pip3 install rlcard[torch]
 ```
 
 We also provide [**conda** installation method](https://anaconda.org/toubun/rlcard):
@@ -164,7 +164,7 @@ We provide a complexity estimation for the games on several aspects. **InfoSet N
 ## Supported Algorithms
 | Algorithm | example | reference |
 | :--------------------------------------: | :-----------------------------------------: | :------------------------------------------------------------------------------------------------------: |
-| Deep Monte-Carlo (DMC)                   | [examples/run\_dmc.py](examples/run_dmc.py) |                                                                                                          |
+| Deep Monte-Carlo (DMC)                   | [examples/run\_dmc.py](examples/run_dmc.py) | [[paper]](https://arxiv.org/abs/2106.06135)                                                              |
 | Deep Q-Learning (DQN)                    | [examples/run\_rl.py](examples/run_rl.py)   | [[paper]](https://arxiv.org/abs/1312.5602)                                                               |
 | Neural Fictitious Self-Play (NFSP)       | [examples/run\_rl.py](examples/run_rl.py)   | [[paper]](https://arxiv.org/abs/1603.01121)                                                              |
 | Counterfactual Regret Minimization (CFR) | [examples/run\_cfr.py](examples/run_cfr.py) | [[paper]](http://papers.nips.cc/paper/3306-regret-minimization-in-games-with-incomplete-information.pdf) |
