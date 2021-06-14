@@ -12,8 +12,8 @@ import rlcard
 ROOT_PATH = rlcard.__path__[0]
 
 if not os.path.isfile(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/action_space.txt')) \
-        or os.path.isfile(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/card_type.json')) \
-        or os.path.isfile(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/type_card.json')):
+        or not os.path.isfile(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/card_type.json')) \
+        or not os.path.isfile(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/type_card.json')):
     import zipfile
     with zipfile.ZipFile(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata.zip'),"r") as zip_ref:
         zip_ref.extractall(os.path.join(ROOT_PATH, 'games/doudizhu/'))
