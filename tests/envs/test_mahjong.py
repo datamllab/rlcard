@@ -49,16 +49,7 @@ class TestMahjongEnv(unittest.TestCase):
         env = rlcard.make('mahjong')
         env.set_agents([RandomAgent(env.num_actions) for _ in range(env.num_players)])
         trajectories, payoffs = env.run(is_training=False)
-        self.assertEqual(len(trajectories), 4)
-        total = 0
-        for payoff in payoffs:
-            total += payoff
-        self.assertEqual(total, 0)
         trajectories, payoffs = env.run(is_training=True)
-        total = 0
-        for payoff in payoffs:
-            total += payoff
-        self.assertEqual(total, 0)
 
 if __name__ == '__main__':
     unittest.main()
