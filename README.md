@@ -51,6 +51,10 @@ Make sure that you have **Python 3.6+** and **pip** installed. We recommend inst
 ```
 pip3 install rlcard
 ```
+The default installation will only include the card environments. To use PyTorch implementation of the training algorithms, run
+```
+pip3 install rlcard[torch]
+```
 Alternatively, you can clone the latest version with:
 ```
 git clone https://github.com/datamllab/rlcard.git
@@ -63,10 +67,7 @@ Then install with
 ```
 cd rlcard
 pip3 install -e .
-```
-The default installation will only include the card environments. To use PyTorch implementation of the training algorithms, run
-```
-pip3 install rlcard[torch]
+pip3 install -e .[torch]
 ```
 
 We also provide [**conda** installation method](https://anaconda.org/toubun/rlcard):
