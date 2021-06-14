@@ -14,7 +14,7 @@ class BlackjackGame:
         self.np_random = np.random.RandomState()
 
     def configure(self, game_config):
-        ''' Specifiy some game specific parameters, such as player number
+        ''' Specifiy some game specific parameters, such as number of players
         '''
         self.num_players = game_config['game_num_players']
 
