@@ -8,6 +8,9 @@ from rlcard.envs import Env
 from rlcard.games.leducholdem import Game
 from rlcard.utils import *
 
+DEFAULT_GAME_CONFIG = {
+        'game_num_players': 2,
+        }
 
 class LeducholdemEnv(Env):
     ''' Leduc Hold'em Environment
@@ -17,6 +20,7 @@ class LeducholdemEnv(Env):
         ''' Initialize the Limitholdem environment
         '''
         self.name = 'leduc-holdem' 
+        self.default_game_config = DEFAULT_GAME_CONFIG
         self.game = Game()
         super().__init__(config)
         self.actions = ['call', 'raise', 'fold', 'check']

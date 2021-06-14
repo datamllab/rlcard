@@ -8,11 +8,16 @@ from rlcard.games.uno import Round
 
 class UnoGame:
 
-    def __init__(self, allow_step_back=False):
+    def __init__(self, allow_step_back=False, num_players=2):
         self.allow_step_back = allow_step_back
         self.np_random = np.random.RandomState()
-        self.num_players = 2
+        self.num_players = num_players
         self.payoffs = [0 for _ in range(self.num_players)]
+
+    def configure(self, game_config):
+        ''' Specifiy some game specific parameters, such as number of players
+        '''
+        self.num_players = game_config['game_num_players']
 
     def init_game(self):
         ''' Initialize players and state

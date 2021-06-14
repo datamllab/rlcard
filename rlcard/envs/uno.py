@@ -7,11 +7,15 @@ from rlcard.games.uno.utils import encode_hand, encode_target
 from rlcard.games.uno.utils import ACTION_SPACE, ACTION_LIST
 from rlcard.games.uno.utils import cards2list
 
+DEFAULT_GAME_CONFIG = {
+        'game_num_players': 2,
+        }
 
 class UnoEnv(Env):
 
     def __init__(self, config):
         self.name = 'uno'
+        self.default_game_config = DEFAULT_GAME_CONFIG
         self.game = Game()
         super().__init__(config)
         self.state_shape = [[4, 4, 15] for _ in range(self.num_players)]

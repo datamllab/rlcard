@@ -31,7 +31,7 @@ class LimitholdemGame:
         self.history_raise_nums = [0 for _ in range(4)]
 
     def configure(self, game_config):
-        ''' Specifiy some game specific parameters, such as player number
+        ''' Specifiy some game specific parameters, such as number of players
         '''
         self.num_players = game_config['game_num_players']
 

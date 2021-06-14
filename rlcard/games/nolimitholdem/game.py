@@ -41,7 +41,7 @@ class NolimitholdemGame(Game):
         self.dealer_id = None
 
     def configure(self, game_config):
-        ''' Specifiy some game specific parameters, such as player number, initial chips, and dealer id.
+        ''' Specifiy some game specific parameters, such as number of players, initial chips, and dealer id.
         If dealer_id is None, he will be randomly chosen
         '''
         self.num_players = game_config['game_num_players']
