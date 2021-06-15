@@ -17,7 +17,7 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Related Project: [DouZero Project](https://github.com/kwai/DouZero)
 
 **Community:**
-*  **Slack**: Discuss in our [#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-l4qbarxs-mtBrjBRpYIMq4Re4jvYpWQ) slack channel.
+*  **Slack**: Discuss in our [#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-rkvktsaq-xkMwz8BfKupCM6zGhO01xg) slack channel.
 *  **QQ Group**: Join our QQ group 665647450. Password: rlcardqqgroup
 
 **News:**
