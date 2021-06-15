@@ -7,6 +7,8 @@
 '''
 
 from typing import TYPE_CHECKING
+from collections import OrderedDict
+
 if TYPE_CHECKING:
     from rlcard.core import Card
 
@@ -69,7 +71,8 @@ class GinRummyNoviceRuleAgent(object):
                                                                        state=state)
             if best_discards:
                 actions = [DiscardAction(card=card).action_id for card in best_discards]
-        if type(actions) == dict:
+
+        if type(actions) == OrderedDict:
             actions = list(actions.keys())
         return np.random.choice(actions)
 
