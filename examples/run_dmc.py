@@ -34,7 +34,7 @@ if __name__ == '__main__':
     parser.add_argument('--load_model', action='store_true',
                     help='Load an existing model')
     parser.add_argument('--xpid', default='doudizhu',
-                        help='Experiment id (default: douzero)')
+                        help='Experiment id (default: doudizhu)')
     parser.add_argument('--savedir', default='experiments/dmc_result',
                         help='Root dir where experiment data will be saved')
     parser.add_argument('--save_interval', default=30, type=int,
