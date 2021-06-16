@@ -13,6 +13,7 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Tutorial in Jupyter Notebook: [https://github.com/datamllab/rlcard-tutorial](https://github.com/datamllab/rlcard-tutorial)
 *   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
 *   GUI: [RLCard-Showdown](https://github.com/datamllab/rlcard-showdown)
+*   Dou Dizhu Demo: [Demo](https://douzero.org/)
 *   Resources: [Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
 *   Related Project: [DouZero Project](https://github.com/kwai/DouZero)
 
