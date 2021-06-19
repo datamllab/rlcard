@@ -27,6 +27,7 @@ class GinRummyGame:
         self.settings = Settings()
         self.actions = None  # type: List[ActionEvent] or None # must reset in init_game
         self.round = None  # round: GinRummyRound or None, must reset in init_game
+        self.num_players = 2
 
     def init_game(self):
         ''' Initialize all characters in the game and start round 1
