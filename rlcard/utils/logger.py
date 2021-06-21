@@ -51,9 +51,6 @@ class Logger(object):
         self.log('  reward       |  ' + str(reward))
         self.log('----------------------------------------')
 
-    def plot(self, algorithm):
-        plot(self.csv_path, self.fig_path, algorithm)
-
     def __exit__(self, type, value, traceback):
         if self.txt_path is not None:
             self.txt_file.close()
@@ -61,7 +58,7 @@ class Logger(object):
             self.csv_file.close()
         print('\nLogs saved in', self.log_dir)
 
-def plot(csv_path, save_path, algorithm):
+def plot_curve(csv_path, save_path, algorithm):
     ''' Read data from csv file and plot the results
     '''
     import matplotlib.pyplot as plt

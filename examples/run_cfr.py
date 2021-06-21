@@ -5,7 +5,7 @@ import argparse
 
 import rlcard
 from rlcard.agents import CFRAgent, RandomAgent
-from rlcard.utils import set_seed, tournament, Logger
+from rlcard.utils import set_seed, tournament, Logger, plot_curve
 
 def train(args):
     # Make environments, CFR only supports Leduc Holdem
@@ -32,8 +32,10 @@ def train(args):
                 agent.save() # Save model
                 logger.log_performance(env.timestep, tournament(eval_env, args.num_eval_games)[0])
 
-        # Plot the learning curve
-        logger.plot('CFR')
+        # Get the paths
+        csv_path, fig_path = logger.csv_path, logger.fig_path
+    # Plot the learning curve
+    plot_curve(csv_path, fig_path, 'cfr')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("CFR example in RLCard")

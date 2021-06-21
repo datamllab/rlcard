@@ -7,7 +7,7 @@ import torch
 
 import rlcard
 from rlcard.agents import RandomAgent
-from rlcard.utils import get_device, set_seed, tournament, reorganize, Logger
+from rlcard.utils import get_device, set_seed, tournament, reorganize, Logger, plot_curve
 
 def train(args):
 
@@ -62,8 +62,11 @@ def train(args):
             if episode % args.evaluate_every == 0:
                 logger.log_performance(env.timestep, tournament(env, args.num_eval_games)[0])
 
-        # Plot the learning curve
-        logger.plot(args.algorithm)
+        # Get the paths
+        csv_path, fig_path = logger.csv_path, logger.fig_path
+
+    # Plot the learning curve
+    plot_curve(csv_path, fig_path, args.algorithm)
 
     # Save model
     save_path = os.path.join(args.log_dir, 'model.pth')

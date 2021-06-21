@@ -5,7 +5,7 @@ import argparse
 
 import rlcard
 from rlcard.agents import DQNAgent, RandomAgent
-from rlcard.utils import get_device, set_seed, tournament, reorganize, Logger
+from rlcard.utils import get_device, set_seed, tournament
 
 def load_model(model_path, env=None, position=None, device=None):
     if os.path.isfile(model_path):  # Torch model
