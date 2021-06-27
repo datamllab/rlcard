@@ -58,7 +58,11 @@ pip3 install rlcard
 ```
 pip3 install rlcard[torch]
 ```
-或者，您可以克隆最新版本：
+如果您访问较慢，国内用户可以通过清华镜像源安装：
+```
+pip3 install rlcard -i https://pypi.tuna.tsinghua.edu.cn/simple
+```
+或者，您可以克隆最新版本（如果您访问Github较慢，国内用户可以使用[Gitee镜像](https://gitee.com/daochenzha/rlcard)）：
 ```
 git clone https://github.com/datamllab/rlcard.git
 ```
