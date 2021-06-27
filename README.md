@@ -190,7 +190,7 @@ We provide a [model zoo](rlcard/models) to serve as the baselines.
 You can use the the following interface to make an environment. You may optionally specify some configurations with a dictionary.
 *   **env = rlcard.make(env_id, config={})**: Make an environment. `env_id` is a string of a environment; `config` is a dictionary that specifies some environment configurations, which are as follows.
 	*   `seed`: Default `None`. Set a environment local random seed for reproducing the results.
-	*   `allow_step_back`: Defualt `False`. `True` if allowing `step_back` function to traverse backward in the tree.
+	*   `allow_step_back`: Default `False`. `True` if allowing `step_back` function to traverse backward in the tree.
 	*   Game specific configurations: These fields start with `game_`. Currently, we only support `game_num_players` in Blackjack, .
 
 Once the environemnt is made, we can access some information of the game.
