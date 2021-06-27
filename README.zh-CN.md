@@ -1,4 +1,4 @@
-# RLCard: A Toolkit for Reinforcement Learning in Card Games
+# RLCard: 卡牌游戏强化学习工具包
 <img width="500" src="https://dczha.com/files/rlcard/logo.jpg" alt="Logo" />
 
 [![Build Status](https://travis-ci.org/datamllab/RLCard.svg?branch=master)](https://travis-ci.org/datamllab/RLCard)
@@ -7,36 +7,36 @@
 [![Downloads](https://pepy.tech/badge/rlcard)](https://pepy.tech/project/rlcard)
 [![Downloads](https://pepy.tech/badge/rlcard/month)](https://pepy.tech/project/rlcard)
 
-[中文文档](README.zh-CN.md)
+[English README](README.md)
 
-RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports multiple card environments with easy-to-use interfaces for implementing various reinforcement learning and searching algorithms. The goal of RLCard is to bridge reinforcement learning and imperfect information games. RLCard is developed by [DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University and community contributors.
+RLCard是一款卡牌游戏强化学习 (Reinforcement Learning, RL) 的工具包。 它支持多种卡牌游戏环境，具有易于使用的接口，以用于实现各种强化学习和搜索算法。 RLCard的目标是架起强化学习和非完全信息游戏之间的桥梁。 RLCard由[DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University以及社区贡献者共同开发.
 
-*   Official Website: [https://www.rlcard.org](https://www.rlcard.org)
-*   Tutorial in Jupyter Notebook: [https://github.com/datamllab/rlcard-tutorial](https://github.com/datamllab/rlcard-tutorial)
-*   Paper: [https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
-*   GUI: [RLCard-Showdown](https://github.com/datamllab/rlcard-showdown)
-*   Dou Dizhu Demo: [Demo](https://douzero.org/)
-*   Resources: [Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
-*   Related Project: [DouZero Project](https://github.com/kwai/DouZero)
+*   官方网站：[https://www.rlcard.org](https://www.rlcard.org)
+*   Jupyter Notebook教程：[https://github.com/datamllab/rlcard-tutorial](https://github.com/datamllab/rlcard-tutorial)
+*   论文：[https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
+*   图形化界面：[RLCard-Showdown](https://github.com/datamllab/rlcard-showdown)
+*   斗地主演示：[Demo](https://douzero.org/)
+*   资源：[Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
+*   相关项目：[DouZero项目](https://github.com/kwai/DouZero)
 
-**Community:**
-*  **Slack**: Discuss in our [#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-rkvktsaq-xkMwz8BfKupCM6zGhO01xg) slack channel.
-*  **QQ Group**: Join our QQ group 665647450. Password: rlcardqqgroup
+**社区:**
+*  **Slack**: 在我们的[#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-rkvktsaq-xkMwz8BfKupCM6zGhO01xg) slack频道参与讨论.
+*  **QQ群**: 加入我们的QQ群665647450. 密码：rlcardqqgroup
 
-**News:**
-*   Please follow [DouZero](https://github.com/kwai/DouZero), a strong Dou Dizhu AI and the [ICML 2021 paper](https://arxiv.org/abs/2106.06135). An online demo is available [here](https://douzero.org/). The algorithm is also integrated in RLCard. See [Training DMC on Dou Dizhu](docs/toy-examples.md#training-dmc-on-dou-dizhu).
-*   Our package is used in [PettingZoo](https://github.com/PettingZoo-Team/PettingZoo). Please check it out!
-*   We have released RLCard-Showdown, GUI demo for RLCard. Please check out [here](https://github.com/datamllab/rlcard-showdown)!
-*   Jupyter Notebook tutorial available! We add some examples in R to call Python interfaces of RLCard with reticulate. See [here](docs/toy-examples-r.md)
-*   Thanks for the contribution of [@Clarit7](https://github.com/Clarit7) for supporting different number of players in Blackjack. We call for contributions for gradually making the games more configurable. See [here](CONTRIBUTING.md#making-configurable-environments) for more details.
-*   Thanks for the contribution of [@Clarit7](https://github.com/Clarit7) for the Blackjack and Limit Hold'em human interface.
-*   Now RLCard supports environment local seeding and multiprocessing. Thanks for the testing scripts provided by [@weepingwillowben](https://github.com/weepingwillowben).
-*   Human interface of NoLimit Holdem available. The action space of NoLimit Holdem has been abstracted. Thanks for the contribution of [@AdrianP-](https://github.com/AdrianP-).
-*   New game Gin Rummy and human GUI available. Thanks for the contribution of [@billh0420](https://github.com/billh0420).
-*   PyTorch implementation available. Thanks for the contribution of [@mjudell](https://github.com/mjudell).
+**新闻:**
+*   请关注[DouZero](https://github.com/kwai/DouZero), 一个强大的斗地主AI，以及[ICML 2021论文](https://arxiv.org/abs/2106.06135)。点击[这里]进入在线演示(https://douzero.org/)。该算法同样集成到了RLCard中，详见[在斗地主中训练DMC](docs/toy-examples.md#training-dmc-on-dou-dizhu)。
+*   我们的项目被用在[PettingZoo](https://github.com/PettingZoo-Team/PettingZoo)中，去看看吧!
+*   我们发布了RLCard的可视化演示项目：RLCard-Showdown。请点击[这里]查看详情(https://github.com/datamllab/rlcard-showdown)！
+*   Jupyter Notebook教程发布了！我们添加了一些R语言的例子，包括用reticulate调用RLCard的Python接口。[点击](docs/toy-examples-r.md)查看详情。
+*   感谢[@Clarit7](https://github.com/Clarit7)为支持不同人数的Blackjack做出的贡献。我们欢迎更多的贡献，使得RLCard中的游戏配置更加多样化。点击[这里](CONTRIBUTING.md#making-configurable-environments)查看详情。
+*   感谢[@Clarit7](https://github.com/Clarit7)为Blackjack和限注德州扑克的人机界面做出的贡献。
+*   现在RLCard支持本地随机环境种子和多进程。感谢[@weepingwillowben](https://github.com/weepingwillowben)提供的测试脚本。
+*   无限注德州扑克人机界面现已可用。无限注德州扑克的动作空间已被抽象化。感谢[@AdrianP-](https://github.com/AdrianP-)做出的贡献。
+*   新游戏Gin Rummy以及其可视化人机界面现已可用，感谢[@billh0420](https://github.com/billh0420)做出的贡献。
+*   PyTorch实现现已可用，感谢[@mjudell](https://github.com/mjudell)做出的恭喜。
 
-## Cite this work
-If you find this repo useful, you may cite:
+## 引用
+如果本项目对您有帮助，请添加引用：
 
 Zha, Daochen, et al. "RLCard: A Platform for Reinforcement Learning in Card Games." IJCAI. 2020.
 ```bibtex
@@ -48,41 +48,41 @@ Zha, Daochen, et al. "RLCard: A Platform for Reinforcement Learning in Card Game
 }
 ```
 
-## Installation
-Make sure that you have **Python 3.6+** and **pip** installed. We recommend installing the stable version of `rlcard` with `pip`:
+## 安装
+确保您已安装**Python 3.6+**和**pip**。我们推荐您使用`pip`安装稳定版本`rlcard`：
 
 ```
 pip3 install rlcard
 ```
-The default installation will only include the card environments. To use PyTorch implementation of the training algorithms, run
+默认安装方式只包括卡牌环境。如果想使用PyTorch实现的训练算法，运行
 ```
 pip3 install rlcard[torch]
 ```
-Alternatively, you can clone the latest version with:
+或者，您可以克隆最新版本：
 ```
 git clone https://github.com/datamllab/rlcard.git
 ```
-or only clone one branch to make it faster:
+或使只克隆一个分支以使其更快
 ```
 git clone -b master --single-branch --depth=1 https://github.com/datamllab/rlcard.git
 ```
-Then install with
+然后运行以下命令进行安装
 ```
 cd rlcard
 pip3 install -e .
 pip3 install -e .[torch]
 ```
 
-We also provide [**conda** installation method](https://anaconda.org/toubun/rlcard):
+我们也提供[**conda**安装方法](https://anaconda.org/toubun/rlcard):
 
 ```
 conda install -c toubun rlcard
 ```
 
-Conda installation only provides the card environments, you need to manually install Pytorch on your demands.
+Conda安装只包含卡牌环境，您需要按照您的需求手动安装PyTorch。
 
-## Examples
-A **short example** is as below.
+## 释例
+以下是一个**小例子**
 
 ```python
 import rlcard
@@ -99,17 +99,18 @@ env.set_agents([RandomAgent(num_actions=env.num_actions)])
 trajectories, payoffs = env.run()
 ```
 
-RLCard can be flexibly connected to various algorithms. See the following examples:
+RLCard可以灵活地连接到各种算法中，参考以下例子：
 
-*   [Playing with random agents](docs/toy-examples.md#playing-with-random-agents)
-*   [Deep-Q learning on Blackjack](docs/toy-examples.md#deep-q-learning-on-blackjack)
-*   [Training CFR (chance sampling) on Leduc Hold'em](docs/toy-examples.md#training-cfr-on-leduc-holdem)
-*   [Having fun with pretrained Leduc model](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
-*   [Training DMC on Dou Dizhu](docs/toy-examples.md#training-dmc-on-dou-dizhu)
-*   [Evaluating Agents](docs/toy-examples.md#evaluating-agents)
+*   [小试随机智能体](docs/toy-examples.md#playing-with-random-agents)
+*   [Blackjack上的Deep-Q学习](docs/toy-examples.md#deep-q-learning-on-blackjack)
+*   [在Leduc Hold'em上训练CFR(机会抽样)](docs/toy-examples.md#training-cfr-on-leduc-holdem)
+*   [与预训练Leduc模型游玩](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
+*   [在斗地主上训练DMC](docs/toy-examples.md#training-dmc-on-dou-dizhu)
+*   [评估智能体](docs/toy-examples.md#evaluating-agents)
 
-## Demo
-Run `examples/human/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](docs/games.md#leduc-holdem).
+## 演示
+
+运行`examples/human/leduc_holdem_human.py`来游玩预训练的Leduc Hold'em模型。Leduc Hold'em是简化版的德州扑克，具体规则可以参考[这里](docs/games.md#leduc-holdem)。
 
 ```
 >> Leduc Hold'em pre-trained model
