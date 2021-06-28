@@ -2,6 +2,7 @@
 ''' Implement Mahjong Judger class
 '''
 from collections import defaultdict
+import numpy as np
 
 class MahjongJudger:
     ''' Determine what cards a player can play
@@ -46,46 +47,48 @@ class MahjongJudger:
             players (list): List of all players
             last_player (int): The player id of last player
         '''
+
         last_card = dealer.table[-1]
         last_card_str = last_card.get_str()
-        last_card_value = last_card_str.split("-")[-1]
         last_card_type = last_card_str.split("-")[0]
+        last_card_index = last_card.index_num
         for player in players:
-            hand = [card.get_str() for card in player.hand]
-            hand_dict = defaultdict(list)
-            for card in hand:
-                hand_dict[card.split("-")[0]].append(card.split("-")[1])
-            #pile = player.pile
-            # check chow
             if last_card_type != "dragons" and last_card_type != "winds" and last_player == player.get_player_id() - 1:
-                #flag = False
-                type_values = hand_dict[last_card_type]
-                type_values.append(last_card_value)
-                test_value_list = sorted(type_values)
-                if len(test_value_list) < 3:
-                    continue
-                test_card_index = test_value_list.index(last_card_value)
+                # Create 9 dimensional vector where each dimension represent a specific card with the type same as last_card_type
+                # Numbers in each dimension represent how many of that card the player has it in hand
+                # If the last_card_type is 'characters' for example, and the player has cards: characters_3, characters_6, characters_3,
+                # The hand_list vector looks like: [0,0,2,0,0,1,0,0,0]
+                hand_list = np.zeros(9)
+
+                for card in player.hand:
+                    if card.get_str().split("-")[0] == last_card_type:
+                        hand_list[card.index_num] = hand_list[card.index_num]+1
+
+                #pile = player.pile
+                #check chow
                 test_cases = []
-                if test_card_index == 0:
-                    test_cases.append([test_value_list[test_card_index], test_value_list[test_card_index+1], test_value_list[test_card_index+2]])
-                elif test_card_index < len(test_value_list):
-                    test_cases.append([test_value_list[test_card_index-2], test_value_list[test_card_index-1], test_value_list[test_card_index]])
+                if last_card_index == 0:
+                    if hand_list[last_card_index+1] > 0 and hand_list[last_card_index+2] > 0:
+                        test_cases.append([last_card_index+1, last_card_index+2])
+                elif last_card_index < 9:
+                    if hand_list[last_card_index-2] > 0 and hand_list[last_card_index-1] > 0:
+                        test_cases.append([last_card_index-2, last_card_index-1])
                 else:
-                    test_cases.append([test_value_list[test_card_index-1], test_value_list[test_card_index], test_value_list[test_card_index+1]])
+                    if hand_list[last_card_index-1] > 0 and hand_list[last_card_index+1] > 0:
+                        test_cases.append([last_card_index-1, last_card_index+1])
+
+                if not test_cases:
+                    continue        
 
                 for l in test_cases:
-                    if self.check_consecutive(l):
-                        suit = last_card_type
-                        cards_str= [suit+"-"+i for i in l]
-                        cards = []
+                    cards = []
+                    for i in l:
                         for card in player.hand:
-                            if card.get_str() in cards_str and card.get_str() != last_card_str:
+                            if card.index_num == i and card.get_str().split("-")[0] == last_card_type:
                                 cards.append(card)
-                                cards_str.pop(cards_str.index(card.get_str()))
-                            if len(cards_str) == 1:
-                                cards.append(last_card)
                                 break
-                        return 'chow', player, cards
+                    cards.append(last_card)
+                    return 'chow', player, cards
         return False, None, None
 
     def judge_game(self, game):

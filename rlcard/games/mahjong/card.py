@@ -14,6 +14,7 @@ class MahjongCard:
         '''
         self.type = card_type
         self.trait = trait
+        self.index_num = 0
 
     def get_str(self):
         ''' Get the string representation of card
@@ -22,3 +23,9 @@ class MahjongCard:
             (str): The string of card's color and trait
         '''
         return self.type+ '-'+ self.trait
+
+    def set_index_num(self, index_num):
+
+        self.index_num = index_num
+        
+
