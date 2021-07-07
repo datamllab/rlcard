@@ -213,6 +213,7 @@ class NolimitholdemGame(Game):
         '''
         if len(self.history) > 0:
             self.round, self.game_pointer, self.round_counter, self.dealer, self.public_cards, self.players = self.history.pop()
+            self.stage = Stage(self.round_counter)
             return True
         return False
 
