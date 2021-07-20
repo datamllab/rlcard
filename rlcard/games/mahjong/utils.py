@@ -29,17 +29,24 @@ def init_deck():
     deck = []
     info = Card.info
     for _type in info['type']:
+        index_num = 0
         if _type != 'dragons' and _type != 'winds':
             for _trait in info['trait'][:9]:
                 card = Card(_type, _trait)
+                card.set_index_num(index_num)
+                index_num = index_num + 1
                 deck.append(card)
         elif _type == 'dragons':
             for _trait in info['trait'][9:12]:
                 card = Card(_type, _trait)
+                card.set_index_num(index_num)
+                index_num = index_num + 1
                 deck.append(card)
         else:
             for _trait in info['trait'][12:]:
                 card = Card(_type, _trait)
+                card.set_index_num(index_num)
+                index_num = index_num + 1
                 deck.append(card)
     deck = deck * 4
     return deck
