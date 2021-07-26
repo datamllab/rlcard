@@ -22,6 +22,8 @@ class NolimitholdemEnv(Env):
         ''' Initialize the Limitholdem environment
         '''
         self.name = 'no-limit-holdem'
+        # 'chips_for_each' must have num_players length
+        DEFAULT_GAME_CONFIG['chips_for_each'] = [100] * config['game_num_players']
         self.default_game_config = DEFAULT_GAME_CONFIG
         self.game = Game()
         super().__init__(config)
