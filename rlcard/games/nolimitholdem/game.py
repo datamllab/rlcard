@@ -45,7 +45,8 @@ class NolimitholdemGame(Game):
         If dealer_id is None, he will be randomly chosen
         '''
         self.num_players = game_config['game_num_players']
-        self.init_chips = game_config['chips_for_each']
+        # must have num_players length
+        self.init_chips = [game_config['chips_for_each']] * game_config["game_num_players"]
         self.dealer_id = game_config['dealer_id']
 
     def init_game(self):
