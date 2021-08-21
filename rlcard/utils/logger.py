@@ -57,26 +57,3 @@ class Logger(object):
         if self.csv_path is not None:
             self.csv_file.close()
         print('\nLogs saved in', self.log_dir)
-
-def plot_curve(csv_path, save_path, algorithm):
-    ''' Read data from csv file and plot the results
-    '''
-    import matplotlib.pyplot as plt
-    with open(csv_path) as csvfile:
-        reader = csv.DictReader(csvfile)
-        xs = []
-        ys = []
-        for row in reader:
-            xs.append(int(row['timestep']))
-            ys.append(float(row['reward']))
-        fig, ax = plt.subplots()
-        ax.plot(xs, ys, label=algorithm)
-        ax.set(xlabel='timestep', ylabel='reward')
-        ax.legend()
-        ax.grid()
-
-        save_dir = os.path.dirname(save_path)
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir)
-
-        fig.savefig(save_path)
