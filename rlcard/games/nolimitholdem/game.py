@@ -23,7 +23,8 @@ class Stage(Enum):
 class NolimitholdemGame(Game):
     def __init__(self, allow_step_back=False, num_players=2):
         """Initialize the class no limit holdem Game"""
-        self.allow_step_back = allow_step_back
+        super().__init__(allow_step_back, num_players)
+
         self.np_random = np.random.RandomState()
 
         # small blind and big blind
@@ -31,7 +32,6 @@ class NolimitholdemGame(Game):
         self.big_blind = 2 * self.small_blind
 
         # config players
-        self.num_players = num_players
         self.init_chips = [100] * num_players
 
         # If None, the dealer will be randomly chosen
