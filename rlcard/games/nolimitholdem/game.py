@@ -12,7 +12,6 @@ from rlcard.games.nolimitholdem import Round, Action
 
 
 class Stage(Enum):
-
     PREFLOP = 0
     FLOP = 1
     TURN = 2
@@ -22,11 +21,10 @@ class Stage(Enum):
 
 
 class NolimitholdemGame(Game):
-
     def __init__(self, allow_step_back=False, num_players=2):
-        ''' Initialize the class nolimitholdem Game
-        '''
-        self.allow_step_back = allow_step_back
+        """Initialize the class no limit holdem Game"""
+        super().__init__(allow_step_back, num_players)
+
         self.np_random = np.random.RandomState()
 
         # small blind and big blind
@@ -34,39 +32,40 @@ class NolimitholdemGame(Game):
         self.big_blind = 2 * self.small_blind
 
         # config players
-        self.num_players = num_players
         self.init_chips = [100] * num_players
 
         # If None, the dealer will be randomly chosen
         self.dealer_id = None
 
     def configure(self, game_config):
-        ''' Specifiy some game specific parameters, such as number of players, initial chips, and dealer id.
+        """
+        Specify some game specific parameters, such as number of players, initial chips, and dealer id.
         If dealer_id is None, he will be randomly chosen
-        '''
+        """
         self.num_players = game_config['game_num_players']
         # must have num_players length
         self.init_chips = [game_config['chips_for_each']] * game_config["game_num_players"]
         self.dealer_id = game_config['dealer_id']
 
     def init_game(self):
-        ''' Initialilze the game of Limit Texas Hold'em
+        """
+        Initialize the game of not limit holdem
 
-        This version supports two-player limit texas hold'em
+        This version supports two-player no limit texas holdem
 
         Returns:
             (tuple): Tuple containing:
 
                 (dict): The first state of the game
                 (int): Current player's id
-        '''
+        """
         if self.dealer_id is None:
             self.dealer_id = self.np_random.randint(0, self.num_players)
 
-        # Initilize a dealer that can deal cards
+        # Initialize a dealer that can deal cards
         self.dealer = Dealer(self.np_random)
 
-        # Initilize players to play the game
+        # Initialize players to play the game
         self.players = [Player(i, self.init_chips[i], self.np_random) for i in range(self.num_players)]
 
         # Initialize a judger class which will decide who wins in the end
@@ -76,7 +75,7 @@ class NolimitholdemGame(Game):
         for i in range(2 * self.num_players):
             self.players[i % self.num_players].hand.append(self.dealer.deal_card())
 
-        # Initilize public cards
+        # Initialize public cards
         self.public_cards = []
         self.stage = Stage.PREFLOP
 
@@ -89,7 +88,7 @@ class NolimitholdemGame(Game):
         # The player next to the small blind plays the first
         self.game_pointer = (b + 1) % self.num_players
 
-        # Initilize a bidding round, in the first round, the big blind and the small blind needs to
+        # Initialize a bidding round, in the first round, the big blind and the small blind needs to
         # be passed to the round for processing.
         self.round = Round(self.num_players, self.big_blind, dealer=self.dealer, np_random=self.np_random)
 
@@ -98,7 +97,7 @@ class NolimitholdemGame(Game):
         # Count the round. There are 4 rounds in each game.
         self.round_counter = 0
 
-        # Save the hisory for stepping back to the last state.
+        # Save the history for stepping back to the last state.
         self.history = []
 
         state = self.get_state(self.game_pointer)
@@ -106,15 +105,17 @@ class NolimitholdemGame(Game):
         return state, self.game_pointer
 
     def get_legal_actions(self):
-        ''' Return the legal actions for current player
+        """
+        Return the legal actions for current player
 
         Returns:
             (list): A list of legal actions
-        '''
+        """
         return self.round.get_nolimit_legal_actions(players=self.players)
 
     def step(self, action):
-        ''' Get the next state
+        """
+        Get the next state
 
         Args:
             action (str): a specific action. (call, raise, fold, or check)
@@ -123,8 +124,8 @@ class NolimitholdemGame(Game):
             (tuple): Tuple containing:
 
                 (dict): next player's state
-                (int): next plater's id
-        '''
+                (int): next player id
+        """
 
         if action not in self.get_legal_actions():
             print(action, self.get_legal_actions())
@@ -187,14 +188,15 @@ class NolimitholdemGame(Game):
         return state, self.game_pointer
 
     def get_state(self, player_id):
-        ''' Return player's state
+        """
+        Return player's state
 
         Args:
             player_id (int): player id
 
         Returns:
             (dict): The state of the player
-        '''
+        """
         self.dealer.pot = np.sum([player.in_chips for player in self.players])
 
         chips = [self.players[i].in_chips for i in range(self.num_players)]
@@ -207,11 +209,12 @@ class NolimitholdemGame(Game):
         return state
 
     def step_back(self):
-        ''' Return to the previous state of the game
+        """
+        Return to the previous state of the game
 
         Returns:
             (bool): True if the game steps back successfully
-        '''
+        """
         if len(self.history) > 0:
             self.round, self.game_pointer, self.round_counter, self.dealer, self.public_cards, self.players = self.history.pop()
             self.stage = Stage(self.round_counter)
@@ -219,28 +222,31 @@ class NolimitholdemGame(Game):
         return False
 
     def get_num_players(self):
-        ''' Return the number of players in No Limit Texas Hold'em
+        """
+        Return the number of players in no limit texas holdem
 
         Returns:
             (int): The number of players in the game
-        '''
+        """
         return self.num_players
 
     def get_payoffs(self):
-        ''' Return the payoffs of the game
+        """
+        Return the payoffs of the game
 
         Returns:
             (list): Each entry corresponds to the payoff of one player
-        '''
+        """
         hands = [p.hand + self.public_cards if p.status in (PlayerStatus.ALIVE, PlayerStatus.ALLIN) else None for p in self.players]
         chips_payoffs = self.judger.judge_game(self.players, hands)
         return chips_payoffs
 
     @staticmethod
     def get_num_actions():
-        ''' Return the number of applicable actions
+        """
+        Return the number of applicable actions
 
         Returns:
             (int): The number of actions. There are 6 actions (call, raise_half_pot, raise_pot, all_in, check and fold)
-        '''
+        """
         return len(Action)

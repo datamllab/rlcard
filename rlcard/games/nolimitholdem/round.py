@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-''' Implement NoLimit Texas Hold'em Round class
-'''
+"""Implement no limit texas holdem Round class"""
 from enum import Enum
 
 from rlcard.games.limitholdem import PlayerStatus
 
 
 class Action(Enum):
-
     FOLD = 0
     CHECK = 1
     CALL = 2
@@ -21,16 +19,16 @@ class Action(Enum):
 
 
 class NolimitholdemRound:
-    ''' Round can call other Classes' functions to keep the game running
-    '''
+    """Round can call functions from other classes to keep the game running"""
 
     def __init__(self, num_players, init_raise_amount, dealer, np_random):
-        ''' Initilize the round class
+        """
+        Initialize the round class
 
         Args:
             num_players (int): The number of players
             init_raise_amount (int): The min raise amount when every round starts
-        '''
+        """
         self.np_random = np_random
         self.game_pointer = None
         self.num_players = num_players
@@ -39,7 +37,7 @@ class NolimitholdemRound:
         self.dealer = dealer
 
         # Count the number without raise
-        # If every player agree to not raise, the round is overr
+        # If every player agree to not raise, the round is over
         self.not_raise_num = 0
 
         # Count players that are not playing anymore (folded or all-in)
@@ -49,13 +47,15 @@ class NolimitholdemRound:
         self.raised = [0 for _ in range(self.num_players)]
 
     def start_new_round(self, game_pointer, raised=None):
-        ''' Start a new bidding round
+        """
+        Start a new bidding round
 
         Args:
+            game_pointer (int): The game_pointer that indicates the next player
             raised (list): Initialize the chips for each player
 
         Note: For the first round of the game, we need to setup the big/small blind
-        '''
+        """
         self.game_pointer = game_pointer
         self.not_raise_num = 0
         if raised:
@@ -64,7 +64,8 @@ class NolimitholdemRound:
             self.raised = [0 for _ in range(self.num_players)]
 
     def proceed_round(self, players, action):
-        ''' Call other Classes's functions to keep one round running
+        """
+        Call functions from other classes to keep one round running
 
         Args:
             players (list): The list of players that play the game
@@ -72,7 +73,7 @@ class NolimitholdemRound:
 
         Returns:
             (int): The game_pointer that indicates the next player
-        '''
+        """
         player = players[self.game_pointer]
 
         if action == Action.CALL:
@@ -126,14 +127,15 @@ class NolimitholdemRound:
         return self.game_pointer
 
     def get_nolimit_legal_actions(self, players):
-        ''' Obtain the legal actions for the curent player
+        """
+        Obtain the legal actions for the current player
 
         Args:
             players (list): The players in the game
 
         Returns:
            (list):  A list of legal actions
-        '''
+        """
 
         full_actions = list(Action)
         # If the current chips are less than that of the highest one in the round, we can not check
@@ -165,11 +167,12 @@ class NolimitholdemRound:
         return full_actions
 
     def is_over(self):
-        ''' Check whether the round is over
+        """
+        Check whether the round is over
 
         Returns:
             (boolean): True if the current round is over
-        '''
+        """
         if self.not_raise_num + self.not_playing_num >= self.num_players:
             return True
         return False
