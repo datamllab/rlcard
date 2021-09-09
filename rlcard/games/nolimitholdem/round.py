@@ -51,6 +51,7 @@ class NolimitholdemRound:
         Start a new bidding round
 
         Args:
+            game_pointer (int): The game_pointer that indicates the next player
             raised (list): Initialize the chips for each player
 
         Note: For the first round of the game, we need to setup the big/small blind
