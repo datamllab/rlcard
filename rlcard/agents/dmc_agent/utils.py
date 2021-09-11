@@ -110,7 +110,7 @@ def act(i, device, T, free_queue, full_queue, model, buffers, env):
                         state_buf[p].append(torch.from_numpy(state))
                         action_buf[p].append(torch.from_numpy(action))
                 
-                if size[p] > T:
+                while size[p] > T:
                     index = free_queue[p].get()
                     if index is None:
                         break
