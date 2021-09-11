@@ -7,7 +7,7 @@ from rlcard.games.limitholdem.player import LimitholdemPlayer as Player
 
 class TestLimitHoldemMethods(unittest.TestCase):
 
-    def test_get_num_actions(self):
+    def test_get_num_players(self):
         game = Game()
         num_players = game.get_num_players()
         self.assertEqual(num_players, 2)
@@ -77,7 +77,6 @@ class TestLimitHoldemMethods(unittest.TestCase):
 
         legal_actions = game.get_legal_actions()
         self.assertNotIn('raise', legal_actions)
-
 
     def test_step_back(self):
         game = Game(allow_step_back=True)
