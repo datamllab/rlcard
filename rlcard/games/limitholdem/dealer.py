@@ -3,7 +3,7 @@ from rlcard.utils.utils import init_standard_deck
 
 class LimitHoldemDealer:
     def __init__(self, np_random):
-        """ Initialize a limit holdem dealer class"""
+        """Initialize a limit holdem dealer class"""
         self.np_random = np_random
         self.deck = init_standard_deck()
         self.shuffle()
@@ -21,4 +21,3 @@ class LimitHoldemDealer:
             (Card): The drawn card from the deck
         """
         return self.deck.pop()
-    
