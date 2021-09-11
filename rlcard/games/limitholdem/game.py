@@ -29,6 +29,16 @@ class LimitHoldemGame:
         # Save betting history
         self.history_raise_nums = [0 for _ in range(4)]
 
+        self.dealer = None
+        self.players = None
+        self.judger = None
+        self.public_cards = None
+        self.game_pointer = None
+        self.round = None
+        self.round_counter = None
+        self.history = None
+        self.history_raises_nums = None
+
     def configure(self, game_config):
         """Specify some game specific parameters, such as number of players"""
         self.num_players = game_config['game_num_players']
