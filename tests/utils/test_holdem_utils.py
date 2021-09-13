@@ -1,7 +1,7 @@
 import itertools
 import unittest
 
-from rlcard.games.limitholdem.judger import LimitholdemJudger
+from rlcard.games.limitholdem.judger import LimitHoldemJudger
 from rlcard.games.limitholdem.utils import compare_hands
 from rlcard.games.limitholdem.utils import Hand as Hand
 import numpy as np
@@ -292,7 +292,7 @@ class TestHoldemUtils(unittest.TestCase):
         self.assertEqual(winner, [0, 0, 1, 1])
 
     def test_split_pots_among_players(self):
-        j = LimitholdemJudger(np.random.RandomState(seed=7))
+        j = LimitHoldemJudger(np.random.RandomState(seed=7))
 
         # simple cases where all players bet same amount of chips
         self.assertEqual(j.split_pots_among_players([2, 2], [0, 1]), [0, 4])
@@ -336,7 +336,7 @@ class TestHoldemUtils(unittest.TestCase):
                     # because there is at least one winner so a loser who bet must lose at least one chip
 
         randstate = np.random.RandomState(seed=7)
-        j = LimitholdemJudger(randstate)
+        j = LimitHoldemJudger(randstate)
 
         # test many random cases from 2 to 6 players with all winners combinations
         nb_cases = 0
