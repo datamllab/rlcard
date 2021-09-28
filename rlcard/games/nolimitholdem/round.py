@@ -7,13 +7,13 @@ from rlcard.games.limitholdem import PlayerStatus
 
 class Action(Enum):
     FOLD = 0
-    CHECK = 1
-    CALL = 2
+    CHECK_CALL = 1
+    #CALL = 2
     # RAISE_3BB = 3
-    RAISE_HALF_POT = 3
-    RAISE_POT = 4
+    RAISE_HALF_POT = 2
+    RAISE_POT = 3
     # RAISE_2POT = 5
-    ALL_IN = 5
+    ALL_IN = 4
     # SMALL_BLIND = 7
     # BIG_BLIND = 8
 
@@ -76,7 +76,7 @@ class NolimitholdemRound:
         """
         player = players[self.game_pointer]
 
-        if action == Action.CALL:
+        if action == Action.CHECK_CALL:
             diff = max(self.raised) - self.raised[self.game_pointer]
             self.raised[self.game_pointer] = max(self.raised)
             player.bet(chips=diff)
@@ -102,9 +102,6 @@ class NolimitholdemRound:
 
         elif action == Action.FOLD:
             player.status = PlayerStatus.FOLDED
-
-        elif action == Action.CHECK:
-            self.not_raise_num += 1
 
         if player.remained_chips < 0:
             raise Exception("Player in negative stake")
@@ -138,31 +135,29 @@ class NolimitholdemRound:
         """
 
         full_actions = list(Action)
-        # If the current chips are less than that of the highest one in the round, we can not check
-        if self.raised[self.game_pointer] < max(self.raised):
-            full_actions.remove(Action.CHECK)
 
-        # If the current player has put in the chips that are more than others, we can not call
-        if self.raised[self.game_pointer] == max(self.raised):
-            full_actions.remove(Action.CALL)
-
+        # The player can always check or call
         player = players[self.game_pointer]
 
-        if self.dealer.pot > player.remained_chips:
-            full_actions.remove(Action.RAISE_POT)
-
-        if int(self.dealer.pot / 2) > player.remained_chips:
-            full_actions.remove(Action.RAISE_HALF_POT)
-
-        # Can't raise if the raise is smaller than pot
-        if Action.RAISE_HALF_POT in full_actions and \
-                int(self.dealer.pot / 2) + player.in_chips <= max(self.raised):
-            full_actions.remove(Action.RAISE_HALF_POT)
-
-        # If the current player has no more chips after call, we cannot raise
         diff = max(self.raised) - self.raised[self.game_pointer]
-        if diff > 0 and player.in_chips + diff >= player.remained_chips:
-            return [Action.FOLD, Action.CALL]
+        # If the current player has no more chips after call, we cannot raise
+        if diff > 0 and diff >= player.remained_chips:
+            full_actions.remove(Action.RAISE_HALF_POT)
+            full_actions.remove(Action.RAISE_POT)
+            full_actions.remove(Action.ALL_IN)
+        # Even if we can raise, we have to check remained chips
+        else:
+            if self.dealer.pot > player.remained_chips:
+                full_actions.remove(Action.RAISE_POT)
+
+            if int(self.dealer.pot / 2) > player.remained_chips:
+                full_actions.remove(Action.RAISE_HALF_POT)
+
+            # Can't raise if the total raise amount is leq than the max raise amount of this round
+            # If raise by pot, there is no such concern
+            if Action.RAISE_HALF_POT in full_actions and \
+                int(self.dealer.pot / 2) + self.raised[self.game_pointer] <= max(self.raised):
+                full_actions.remove(Action.RAISE_HALF_POT)
 
         return full_actions
 

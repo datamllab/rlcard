@@ -85,7 +85,7 @@ class NolimitholdemGame(Game):
         self.players[b].bet(chips=self.big_blind)
         self.players[s].bet(chips=self.small_blind)
 
-        # The player next to the small blind plays the first
+        # The player next to the big blind plays the first
         self.game_pointer = (b + 1) % self.num_players
 
         # Initialize a bidding round, in the first round, the big blind and the small blind needs to
