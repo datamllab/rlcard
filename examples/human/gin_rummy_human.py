@@ -11,9 +11,9 @@
 #   Note that the name of the module is ‘tkinter’.
 #
 #   If you are using anaconda:
-#       -- I have version 8.6.8 to work with version 3.5 of Python.
+#       -- I have version 8.6.11 to work with version 3.6 of Python.
 #       -- In the installed window for your environment, search for "tk".
-#       -- If it is found, make sure you have at least version 8.6.8.
+#       -- If it is found, make sure you have at least version 8.6.11.
 #       -- Otherwise, go to the "Not installed" window, search for "tk", select it, and apply it.
 #
 #   If you are using Ubuntu:

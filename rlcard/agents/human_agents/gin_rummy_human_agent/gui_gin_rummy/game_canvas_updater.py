@@ -135,12 +135,12 @@ class GameCanvasUpdater(object):
         self.busy_body_id = waiting_player_id
         if not self.game_canvas.player_types[self.busy_body_id] == PlayerType.human_player:
             raise GinRummyProgramError("busy_body_id={} must be human player.".format(self.busy_body_id))
-        legal_actions = self.human_agent.state['legal_actions']
-        if self.game_canvas.query.is_scoring(legal_actions=legal_actions):
+        raw_legal_actions = self.human_agent.state['raw_legal_actions']
+        if self.game_canvas.query.is_scoring(legal_actions=raw_legal_actions):
             # 'boss' performs this, not human
-            if not len(legal_actions) == 1:
-                raise GinRummyProgramError("len(legal_actions)={} must be 1.".format(len(legal_actions)))
-            action_id = legal_actions[0]
+            if not len(raw_legal_actions) == 1:
+                raise GinRummyProgramError("len(legal_actions)={} must be 1.".format(len(raw_legal_actions)))
+            action_id = raw_legal_actions[0]
             self._perform_score_action_id(action_id=action_id)
             return
         self._show_prolog_messages_on_human_turn()
