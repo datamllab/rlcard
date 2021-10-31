@@ -6,6 +6,23 @@ The chess program is explained in the video course "Tkinter GUI Application Deve
 You can do a google search on "Bhaskar Chaudhary tkinter packt" for more information.
 The code for the chess program is available at <https://github.com/PacktPublishing/Tkinter-GUI-Application-Development-Projects>.
 
+## Requirements
+You need to install tkinter if it is not already installed.
+Tkinter is Python's defacto standard GUI (Graphical User Interface) package.
+It is a thin object-oriented layer on top of Tcl/Tk.
+Note that the name of the module is ‘tkinter’.
+
+If you are using anaconda:
+* I have version 8.6.11 to work with version 3.6 of Python.
+* In the installed window for your environment, search for "tk".
+* If it is found, make sure you have at least version 8.6.11.
+* Otherwise, go to the "Not installed" window, search for "tk", select it, and apply it.
+
+If you are using Ubuntu:
+* You can install it with apt-get install python-tk.
+
+For other cases, you can search on google to see how to install tkinter.
+
 ## GameFrame
 The GameFrame class uses the following parameters:
 

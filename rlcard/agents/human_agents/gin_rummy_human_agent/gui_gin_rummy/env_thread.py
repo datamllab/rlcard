@@ -71,9 +71,9 @@ class EnvThread(threading.Thread):
         south_agent = self.gin_rummy_env.agents[1]
         if isinstance(south_agent, HumanAgent):
             if south_agent.is_choosing_action_id:
-                legal_actions = south_agent.state['legal_actions']
-                if legal_actions:
-                    south_agent.chosen_action_id = legal_actions[0]
+                raw_legal_actions = south_agent.state['raw_legal_actions']
+                if raw_legal_actions:
+                    south_agent.chosen_action_id = raw_legal_actions[0]
             self.gin_rummy_env.game.round.is_over = True
 
     def run(self) -> None:
