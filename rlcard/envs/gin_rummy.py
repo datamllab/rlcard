@@ -41,6 +41,8 @@ class GinRummyEnv(Env):
         if self.game.is_over():
             obs = np.array([self._utils.encode_cards([]) for _ in range(5)])
             extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions()}
+            extracted_state['raw_legal_actions'] = list(self._get_legal_actions().keys())
+            extracted_state['raw_obs'] = obs
         else:
             discard_pile = self.game.round.dealer.discard_pile
             stock_pile = self.game.round.dealer.stock_pile
@@ -58,6 +60,7 @@ class GinRummyEnv(Env):
             rep = [hand_rep, top_discard_rep, dead_cards_rep, known_cards_rep, unknown_cards_rep]
             obs = np.array(rep)
             extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions(), 'raw_legal_actions': list(self._get_legal_actions().keys())}
+            extracted_state['raw_obs'] = obs
         return extracted_state
 
     def get_payoffs(self):
