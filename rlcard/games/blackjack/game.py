@@ -17,6 +17,7 @@ class BlackjackGame:
         ''' Specifiy some game specific parameters, such as number of players
         '''
         self.num_players = game_config['game_num_players']
+        self.num_decks = game_config['game_num_decks']
 
     def init_game(self):
         ''' Initialilze the game
@@ -25,7 +26,7 @@ class BlackjackGame:
             state (dict): the first state of the game
             player_id (int): current player's id
         '''
-        self.dealer = Dealer(self.np_random)
+        self.dealer = Dealer(self.np_random, self.num_decks)
 
         self.players = []
         for i in range(self.num_players):
