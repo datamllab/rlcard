@@ -325,12 +325,15 @@ The following options can be set.
 | stockpile_dead_card_count             | 2                         |
 | going_out_deadwood_count              | 10                        |
 | max_drawn_card_count                  | 52                        |
+| max_move_count                        | 200                       |
 | is_allowed_knock                      | True                      |
 | is_allowed_gin                        | True                      |
 | is_allowed_pick_up_discard            | True                      |
 | is_allowed_to_discard_picked_up_card  | False                     |
 | is_always_knock                       | False                     |
 | is_south_never_knocks                 | False                     |
+
+Note: max_move_count prevents an unlimited number of moves in a game.
 
 ### Variations
 

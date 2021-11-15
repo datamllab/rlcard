@@ -75,7 +75,10 @@ class GinRummyJudge:
                 drawn_card_actions = [action for action in self.game.actions if isinstance(action, DrawCardAction)]
                 if len(drawn_card_actions) >= self.game.settings.max_drawn_card_count:
                     can_draw_card = False
-            if can_draw_card:
+            move_count = len(self.game.round.move_sheet)
+            if move_count >= self.game.settings.max_move_count:
+                legal_actions = [DeclareDeadHandAction()]  # prevent unlimited number of moves in a game
+            elif can_draw_card:
                 legal_actions = [DrawCardAction()]
                 if self.game.settings.is_allowed_pick_up_discard:
                     legal_actions.append(PickUpDiscardAction())
