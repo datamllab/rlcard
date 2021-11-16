@@ -6,6 +6,7 @@ from rlcard.games.blackjack import Game
 
 DEFAULT_GAME_CONFIG = {
         'game_num_players': 1,
+        'game_num_decks': 1
         }
 
 class BlackjackEnv(Env):
