@@ -20,6 +20,7 @@ class Setting(Enum):
     stockpile_dead_card_count = "stockpile_dead_card_count"
     going_out_deadwood_count = "going_out_deadwood_count"
     max_drawn_card_count = "max_drawn_card_count"
+    max_move_count = "max_move_count"
     is_allowed_knock = "is_allowed_knock"
     is_allowed_gin = "is_allowed_gin"
     is_allowed_pick_up_discard = "is_allowed_pick_up_discard"
@@ -33,6 +34,7 @@ class Setting(Enum):
                 Setting.stockpile_dead_card_count: 2,
                 Setting.going_out_deadwood_count: 10,  # Can specify going_out_deadwood_count before running game.
                 Setting.max_drawn_card_count: 52,
+                Setting.max_move_count: 200,  # prevent unlimited number of moves in a game
                 Setting.is_allowed_knock: True,
                 Setting.is_allowed_gin: True,
                 Setting.is_allowed_pick_up_discard: True,
@@ -51,6 +53,7 @@ class Setting(Enum):
                 Setting.stockpile_dead_card_count: 2,
                 Setting.going_out_deadwood_count: 10,  # Can specify going_out_deadwood_count before running game.
                 Setting.max_drawn_card_count: 52,
+                Setting.max_move_count: 200,  # prevent unlimited number of moves in a game
                 Setting.is_allowed_knock: True,
                 Setting.is_allowed_gin: True,
                 Setting.is_allowed_pick_up_discard: True,
@@ -64,6 +67,7 @@ dealer_for_round = Setting.dealer_for_round
 stockpile_dead_card_count = Setting.stockpile_dead_card_count
 going_out_deadwood_count = Setting.going_out_deadwood_count
 max_drawn_card_count = Setting.max_drawn_card_count
+max_move_count = Setting.max_move_count
 is_allowed_knock = Setting.is_allowed_knock
 is_allowed_gin = Setting.is_allowed_gin
 is_allowed_pick_up_discard = Setting.is_allowed_pick_up_discard
@@ -81,6 +85,7 @@ class Settings(object):
         self.stockpile_dead_card_count = default_setting[Setting.stockpile_dead_card_count]
         self.going_out_deadwood_count = default_setting[Setting.going_out_deadwood_count]
         self.max_drawn_card_count = default_setting[Setting.max_drawn_card_count]
+        self.max_move_count = default_setting[Setting.max_move_count]
         self.is_allowed_knock = default_setting[Setting.is_allowed_knock]
         self.is_allowed_gin = default_setting[Setting.is_allowed_gin]
         self.is_allowed_pick_up_discard = default_setting[Setting.is_allowed_pick_up_discard]
@@ -99,6 +104,8 @@ class Settings(object):
                 self.going_out_deadwood_count = value
             elif key == Setting.max_drawn_card_count:
                 self.max_drawn_card_count = value
+            elif key == Setting.max_move_count:
+                self.max_move_count = value
             elif key == Setting.is_allowed_knock:
                 self.is_allowed_knock = value
             elif key == Setting.is_allowed_gin:
@@ -119,6 +126,7 @@ class Settings(object):
         print("stockpile_dead_card_count={}".format(self.stockpile_dead_card_count))
         print("going_out_deadwood_count={}".format(self.going_out_deadwood_count))
         print("max_drawn_card_count={}".format(self.max_drawn_card_count))
+        print("max_move_count={}".format(self.max_move_count))
 
         print("is_allowed_knock={}".format(self.is_allowed_knock))
         print("is_allowed_gin={}".format(self.is_allowed_gin))
@@ -144,6 +152,8 @@ class Settings(object):
                 result[going_out_deadwood_count] = default_setting[going_out_deadwood_count]
             elif key == max_drawn_card_count and not isinstance(value, int):
                 result[max_drawn_card_count] = default_setting[max_drawn_card_count]
+            elif key == max_move_count and not isinstance(value, int):
+                result[max_move_count] = default_setting[max_move_count]
             elif key == is_allowed_knock and not isinstance(value, bool):
                 result[is_allowed_knock] = default_setting[is_allowed_knock]
             elif key == is_allowed_gin and not isinstance(value, bool):
