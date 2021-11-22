@@ -42,12 +42,12 @@ setuptools.setup(
         'termcolor'
     ],
     extras_require=extras,
-    requires_python='>=3.6',
+    requires_python='>=3.7',
     classifiers=[
+        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
