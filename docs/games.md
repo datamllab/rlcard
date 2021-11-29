@@ -191,7 +191,7 @@ The state representation is similar to Limit Hold'em game. The state is represen
 ### Action Encoding of No-Limit Texas Hold'em
 There are 103 actions in No-limit Texas Hold'em. They are encoded as below.
 
-<small><sup>\*</sup>Note: Starting from Action ID 3, the action means the amount player should put in the pot when chooses 'Raise'. The action ID from 3 to 5 corresponds to the bet amount from half amount of the pot, full amount of the pot to all in.<small>
+<small><sup>*</sup>Note: Starting from Action ID 3, the action means the amount player should put in the pot when chooses 'Raise'. The action ID from 3 to 5 corresponds to the bet amount from half amount of the pot, full amount of the pot to all in.</small>
 
 | Action ID   |     Action         |
 | ----------- | :----------------- |
@@ -264,7 +264,7 @@ The dealer deals 11 cards to his opponent and 10 cards to himself.
 Each player tries to form melds of 3+ cards of the same rank or 3+ cards of the same suit in sequence.
 If the deadwood count of the non-melded cards is 10 or less, the player can knock.
 If all cards can be melded, the player can gin.
-Please refer the detail on [Wikipedia](https://en.wikipedia.org/wiki/Gin_rummy).
+Please refer to the details on [Wikipedia](https://en.wikipedia.org/wiki/Gin_rummy).
 
 If a player knocks or gins, the hand ends, each player put down their melds, and their scores are determined.
 If a player knocks, the opponent can layoff some of his deadwood cards if they extend melds of the knocker.
@@ -339,3 +339,78 @@ Note: max_move_count prevents an unlimited number of moves in a game.
 
 One can create variations that are easier to train
 by changing the options and specifying different scoring methods.
+
+## Bridge
+Bridge is a popular four-person card game using a regular 52 card deck (ace being high).
+The North and South players are partners against the partnership of the East and West players.
+The dealer deals 13 cards to all four players.
+There is a round of bidding to determine the contract for the amount of tricks to win by the declarer
+with a specified trump suit (or no trump).
+After the bidding concludes, 13 tricks are played to see if the contract is made.
+During the trick playing, the dummy (the partner of the declarer) exposes his hand for all to see.
+The declarer plays the cards from the dummy hand.
+
+Please refer to the details on [Wikipedia](https://en.wikipedia.org/wiki/Contract_bridge).
+
+I prefer the Chicago variation rather than Rubber Bridge.
+Please refer to the details on [Pagat site](https://www.pagat.com/auctionwhist/bridge.html).
+
+### State Representation of Bridge 
+The state representation of Bridge is encoded as follows:
+
+|   Key              | Size   |              Description                                                     |
+| :------------:     | :---:  | ---------------------------------------------------------------------------- |
+| hands_rep          | 4 * 52 | 1 if rep_index is card_id in hand and visible else 0 (for held card of player_id)                                         
+| trick_rep          | 4 * 52 | 1 if rep_index is card_id in trick_pile else 0 (for trick card of player_id)                                    
+| hidden_cards_rep   | 52     | 1 if rep_index is card_id of hidden card else 0 
+| vul_rep            | 4      | 1 if rep_index is player_id of vulnerable player else 0
+| dealer_rep         | 4      | 1 if rep_index is dealer_id else 0
+| current_player_rep | 4      | 1 if rep_index is current_player_id else 0
+| is_bidding_rep     | 1      | 1 if bidding else 0
+| bidding_rep        | 40     | list of action_id of call actions in order (up to a max of 40)
+| last_bid_rep       | 39     | 1 if rep_index is index of last call action else 0
+| bid_amount_rep     | 8      | 1 if rep_index is bid_amount else 0
+| trump_suit_rep     | 5      | 1 if rep_index is trump_suit_id else 0 (NT has id of 4)
+
+Examples:
+* vul_rep = [0 1 0 1] means E-W are vulnerable.
+* dealer_rep = [0 0 0 1] means West is the dealer and bids first.
+* current_player_rep = [0 0 1 0] means South is the current player.
+* is_bidding_rep = [1] means the current player must make a call (bidding phase).
+* bidding_rep = [0 0 0 36 13 36 34 0 0 0 ...] means West pass, North bids 3H, East pass, South bids 7S.
+* last_bid_rep = [0 0 0 1 0 0 0 ...] means the last bid is 1H.
+* bid_amount_rep = [0 0 0 0 1 0 0 0] means the bid amount is 4.
+* trump_suit_rep = [0 0 0 1 0] means the trump suit is Spades.
+
+### Action Space of Bridge
+There are 91 actions in Bridge.
+
+| Action ID     |     Action                 |
+| :-----------: | -------------------------- |
+| 0             | no_bid_action
+| 1 - 35        | bid_action (bid amount by suit or NT)
+| 36            | pass_action
+| 37            | dbl_action
+| 38            | rdbl_action
+| 39 - 90       | play_card_action (card_id + 39)
+
+Note: The no_bid_action is never presented as an option to a player.
+It is used to allow the bidding_rep to always have North as the first bidder
+(where no_bid_actions are taken until the dealer is reached, who then makes the first real call).
+
+### Payoff of Bridge 
+The payoff is calculated by the terminal state of the game.
+Note that the payoff is different from that of the standard game.
+
+The payoff for the defender side is the number of tricks taken by the defender side.
+
+The payoff for the declarer side depends upon whether the bid amount of the contract is made or not.
+If the contract is made (ignoring over tricks),
+the payoff for the declarer side is the bid amount + 6 + a bonus for making the contract (defaults to 2).
+If the contract is set, the payoff for the declarer side is the number of under tricks by the declarer side.
+
+This payoff for the defender side encourages them to make as many tricks as possible.
+Thus, the declarer side will be more likely to be set.
+
+This payoff for the declarer side encourages them to bid as high as possible
+and to choose the best trump suit or to pass when they have poor hands.
