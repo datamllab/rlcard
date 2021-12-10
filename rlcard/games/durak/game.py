@@ -13,32 +13,33 @@ class DurakGame:
         '''
         self.np_random = np.random.RandomState()
 
-    def configure(self, game_config):
+    def configure(self):
         ''' Specifiy some game specific parameters, such as number of players
         '''
         self.num_players = 2
     
-    def get_first_attacker(self, players):
-        ''' 
-        Specifiy some game specific parameters, such as number of players
+    def is_super_suite(self, card):
+        ''' Determine if card is super suite
+        Args:
+            card (object): card to check
+            dealer (object): Durak dealer instance
+        Returns:/
+            bool: if card is super suite
         '''
-        attacker, defender = None, None
-        temp_player, lowest_card = None, None
-        
-        # shuffle self.players so that if two players have 2s, one is randomly chosen
-        temp_players = players.copy()
-        self.np_random.shuffle(temp_players)
+        return card.suite == self.dealer.super_suite
 
-        for p in temp_players:
-            p_lowest = p.get_lowest_card()
-            if lowest_card is None or (lowest_card.uber and not p_lowest.uber):
-                lowest_card = p_lowest
-                temp_player = p
-            elif lowest_card.uber == p_lowest.uber and p_lowest.rank < lowest_card.rank:
-                lowest_card = p_lowest
-                temp_player = p
-        print(f"{temp_player.get_player_id()} is the attacker because of {lowest_card}")
-        return attacker, defender
+    def get_first_attacker(self):
+        ''' 
+            Determine which player is attacking first
+        '''
+        # Player with the lowest card attcks first
+        attacker_id = min([0, 1], key= lambda i: "234567891JQKA".index(self.players[i].get_lowest_card().rank) )
+        defender_id = 0 if attacker_id == 1 else 1
+        
+        
+
+        print(f"Player {attacker_id} is the attacker }")
+        return self.players[attacker_id], self.players[defender_id]
     
     
     def init_game(self):
@@ -47,7 +48,7 @@ class DurakGame:
             state (dict): the first state of the game
             player_id (int): current player's id
         '''
-
+        self.configure()
         # Initialize a dealer that can deal cards
         self.dealer = Dealer(self.np_random)
 
@@ -56,152 +57,113 @@ class DurakGame:
 
         # Deal 6 cards to each player to prepare for the game
         for player in self.players:
-            self.dealer.deal_cards(player, 6)
+            self.dealer.deal_cards(player)
         
-        attacker = self.players[0]
-        defender = self.players[1]
+        attacker, defender = self.get_first_attacker()
 
         # Initialize a Round
         self.round = Round(self.dealer, attacker, defender, self.np_random)
 
     def step(self, action):
         ''' Get the next state
+
         Args:
-            action (str): a specific action of blackjack. (Hit or Stand)
-        Returns:/
-            dict: next player's state
-            int: next plater's id
+            action (str): A specific action
+
+        Returns:
+            (tuple): Tuple containing:
+
+                (dict): next player's state
+                (int): next plater's id
         '''
+
         if self.allow_step_back:
-            p = deepcopy(self.players[self.game_pointer])
-            d = deepcopy(self.dealer)
-            w = deepcopy(self.winner)
-            self.history.append((d, p, w))
+            # First snapshot the current state
+            his_dealer = deepcopy(self.dealer)
+            his_round = deepcopy(self.round)
+            his_players = deepcopy(self.players)
+            self.history.append((his_dealer, his_players, his_round))
 
-        next_state = {}
-        # Play hit
-        if action != "stand":
-            self.dealer.deal_card(self.players[self.game_pointer])
-            self.players[self.game_pointer].status, self.players[self.game_pointer].score = self.judger.judge_round(
-                self.players[self.game_pointer])
-            if self.players[self.game_pointer].status == 'bust':
-                # game over, set up the winner, print out dealer's hand # If bust, pass the game pointer
-                if self.game_pointer >= self.num_players - 1:
-                    while self.judger.judge_score(self.dealer.hand) < 17:
-                        self.dealer.deal_card(self.dealer)
-                    self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
-                    for i in range(self.num_players):
-                        self.judger.judge_game(self, i) 
-                    self.game_pointer = 0
-                else:
-                    self.game_pointer += 1
-
-                
-        elif action == "stand": # If stand, first try to pass the pointer, if it's the last player, dealer deal for himself, then judge game for everyone using a loop
-            self.players[self.game_pointer].status, self.players[self.game_pointer].score = self.judger.judge_round(
-                self.players[self.game_pointer])
-            if self.game_pointer >= self.num_players - 1:
-                while self.judger.judge_score(self.dealer.hand) < 17:
-                    self.dealer.deal_card(self.dealer)
-                self.dealer.status, self.dealer.score = self.judger.judge_round(self.dealer)
-                for i in range(self.num_players):
-                    self.judger.judge_game(self, i) 
-                self.game_pointer = 0
-            else:
-                self.game_pointer += 1
-
-
-            
-            
-
-        hand = [card.get_index() for card in self.players[self.game_pointer].hand]
-
-        if self.is_over():
-            dealer_hand = [card.get_index() for card in self.dealer.hand]
-        else:
-            dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
-
-        for i in range(self.num_players):
-            next_state['player' + str(i) + ' hand'] = [card.get_index() for card in self.players[i].hand]
-        next_state['dealer hand'] = dealer_hand
-        next_state['actions'] = ('hit', 'stand')
-        next_state['state'] = (hand, dealer_hand)
-
-        
-
-        return next_state, self.game_pointer
+        self.round.proceed_round(self.players, action)
+        player_id = self.round.current_player
+        state = self.get_state(player_id)
+        return state, player_id
 
     def step_back(self):
         ''' Return to the previous state of the game
+
         Returns:
-            Status (bool): check if the step back is success or not
+            (bool): True if the game steps back successfully
         '''
-        #while len(self.history) > 0:
-        if len(self.history) > 0:
-            self.dealer, self.players[self.game_pointer], self.winner = self.history.pop()
-            return True
-        return False
+        if not self.history:
+            return False
+        self.dealer, self.players, self.round = self.history.pop()
+        return True
+
+    def get_state(self, player_id):
+        ''' Return player's state
+
+        Args:
+            player_id (int): player id
+
+        Returns:
+            (dict): The state of the player
+        '''
+        state = self.round.get_state(self.players, player_id)
+        state['num_players'] = self.get_num_players()
+        state['current_player'] = self.round.current_player
+        return state
+
+    def get_payoffs(self):
+        ''' Return the payoffs of the game
+
+        Returns:
+            (list): Each entry corresponds to the payoff of one player
+        '''
+        winner = self.round.winner
+        if winner is not None and len(winner) == 1:
+            self.payoffs[winner[0]] = 1
+            self.payoffs[1 - winner[0]] = -1
+        return self.payoffs
+
+    def get_legal_actions(self):
+        ''' Return the legal actions for current player
+
+        Returns:
+            (list): A list of legal actions
+        '''
+
+        return self.round.get_legal_actions(self.players, self.round.current_player)
 
     def get_num_players(self):
-        ''' Return the number of players in blackjack
+        ''' Return the number of players in Limit Texas Hold'em
+
         Returns:
-            number_of_player (int): blackjack only have 1 player
+            (int): The number of players in the game
         '''
         return self.num_players
 
     @staticmethod
     def get_num_actions():
         ''' Return the number of applicable actions
+
         Returns:
-            number_of_actions (int): there are only two actions (hit and stand)
+            (int): The number of actions. There are 61 actions
         '''
-        return 2
+        return 61
 
     def get_player_id(self):
         ''' Return the current player's id
+
         Returns:
-            player_id (int): current player's id
+            (int): current player's id
         '''
-        return self.game_pointer
-
-    def get_state(self, player_id):
-        ''' Return player's state
-        Args:
-            player_id (int): player id
-        Returns:
-            state (dict): corresponding player's state
-        '''
-        '''
-                before change state only have two keys (action, state)
-                but now have more than 4 keys (action, state, player0 hand, player1 hand, ... , dealer hand)
-                Although key 'state' have duplicated information with key 'player hand' and 'dealer hand', I couldn't remove it because of other codes
-                To remove it, we need to change dqn agent too in my opinion
-                '''
-        state = {}
-        state['actions'] = ('hit', 'stand')
-        hand = [card.get_index() for card in self.players[player_id].hand]
-        if self.is_over():
-            dealer_hand = [card.get_index() for card in self.dealer.hand]
-        else:
-            dealer_hand = [card.get_index() for card in self.dealer.hand[1:]]
-
-        for i in range(self.num_players):
-            state['player' + str(i) + ' hand'] = [card.get_index() for card in self.players[i].hand]
-        state['dealer hand'] = dealer_hand
-        state['state'] = (hand, dealer_hand)
-
-        return state
+        return self.round.current_player
 
     def is_over(self):
         ''' Check if the game is over
-        Returns:
-            status (bool): True/False
-        '''
-        '''
-                I should change here because judger and self.winner is changed too
-                '''
-        for i in range(self.num_players):
-            if self.winner['player' + str(i)] == 0:
-                return False
 
-        return True
+        Returns:
+            (boolean): True if the game is over
+        '''
+        return self.round.is_over

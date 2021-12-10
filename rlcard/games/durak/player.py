@@ -16,5 +16,9 @@ class DurakPlayer:
         '''
         return self.player_id
     
-    def cards_needed(self):
+    def get_lowest_card(self):
+        sorted_hand = sorted(self.hand,key=lambda x:"234567891JQKA".index(x.rank))
+        return sorted_hand[0]
+    
+    def missing_cards(self):
         return max(6 - len(self.hand), 0)
