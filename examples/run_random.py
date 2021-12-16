@@ -31,7 +31,7 @@ def run(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("Random example in RLCard")
     parser.add_argument('--env', type=str, default='leduc-holdem',
-            choices=['blackjack', 'leduc-holdem', 'limit-holdem', 'doudizhu', 'mahjong', 'no-limit-holdem', 'uno', 'gin-rummy'])
+            choices=['blackjack', 'leduc-holdem', 'limit-holdem', 'doudizhu', 'mahjong', 'no-limit-holdem', 'uno', 'gin-rummy', 'bridge'])
 
     args = parser.parse_args()
 
