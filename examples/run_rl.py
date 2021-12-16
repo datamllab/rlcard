@@ -35,7 +35,7 @@ def train(args):
                           q_mlp_layers=[64,64],
                           device=device)
     agents = [agent]
-    for _ in range(env.num_players):
+    for _ in range(1, env.num_players):
         agents.append(RandomAgent(num_actions=env.num_actions))
     env.set_agents(agents)
 
