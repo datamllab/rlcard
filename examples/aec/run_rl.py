@@ -2,7 +2,6 @@
 '''
 import os
 import argparse
-from collections import defaultdict
 
 import torch
 
@@ -114,28 +113,3 @@ if __name__ == '__main__':
 
     os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda
     train(args)
-
-
-def old_inner_loop(env, agents):
-    env.reset()
-    trajectories = defaultdict(list)
-    obs = None
-    for agent_name in env.agent_iter():
-        if obs is None:
-            obs, _, done, _ = env.last()
-
-        if done:
-            action = None
-        else:
-            action = agents[agent_name].step(obs)
-
-        env.step(action)
-        timestep += 1
-
-        if not env.agents: # all agents are done
-            break
-
-        next_obs, rew, done, _ = env.last()
-        trajectories[agent_name].append((obs, action, rew, next_obs, done))
-            
-        obs = next_obs
