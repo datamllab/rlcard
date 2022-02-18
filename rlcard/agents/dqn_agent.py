@@ -124,31 +124,28 @@ class DQNAgent(object):
             ts (list): a list of 5 elements that represent the transition
         '''
         (state, action, reward, next_state, done) = tuple(ts)
-        self.feed_memory(state['obs'], action, reward, next_state['obs'], list(next_state['legal_actions'].keys()), done)
+        self.feed_memory(state['observation'], action, reward, next_state['observation'], np.flatnonzero(next_state["action_mask"]), done)
         self.total_t += 1
         tmp = self.total_t - self.replay_memory_init_size
         if tmp>=0 and tmp%self.train_every == 0:
             self.train()
 
     def step(self, state):
-        ''' Predict the action for genrating training data but
+        ''' Predict the action for generating training data but
             have the predictions disconnected from the computation graph
 
         Args:
-            state (numpy.array): current state
+            state (list): current state
 
         Returns:
             action (int): an action id
         '''
         q_values = self.predict(state)
         epsilon = self.epsilons[min(self.total_t, self.epsilon_decay_steps-1)]
-        legal_actions = list(state['legal_actions'].keys())
-        probs = np.ones(len(legal_actions), dtype=float) * epsilon / len(legal_actions)
-        best_action_idx = legal_actions.index(np.argmax(q_values))
-        probs[best_action_idx] += (1.0 - epsilon)
+        probs = state['action_mask'] * epsilon / state['action_mask'].sum()
+        probs[np.argmax(q_values)] += (1.0 - epsilon)
         action_idx = np.random.choice(np.arange(len(probs)), p=probs)
-
-        return legal_actions[action_idx]
+        return action_idx
 
     def eval_step(self, state):
         ''' Predict the action for evaluation purpose.
@@ -164,23 +161,23 @@ class DQNAgent(object):
         best_action = np.argmax(q_values)
 
         info = {}
-        info['values'] = {state['raw_legal_actions'][i]: float(q_values[list(state['legal_actions'].keys())[i]]) for i in range(len(state['legal_actions']))}
+        info["values"] = {i: q_values[i] for i in np.flatnonzero(state["action_mask"])}
 
         return best_action, info
 
-    def predict(self, state):
+    def predict(self, obs):
         ''' Predict the masked Q-values
 
         Args:
-            state (numpy.array): current state
+            obs (list): current state
 
         Returns:
             q_values (numpy.array): a 1-d array where each entry represents a Q value
         '''
         
-        q_values = self.q_estimator.predict_nograd(np.expand_dims(state['obs'], 0))[0]
+        q_values = self.q_estimator.predict_nograd(np.expand_dims(obs['observation'], 0))[0]
         masked_q_values = -np.inf * np.ones(self.num_actions, dtype=float)
-        legal_actions = list(state['legal_actions'].keys())
+        legal_actions = np.where(obs["action_mask"] > 0)
         masked_q_values[legal_actions] = q_values[legal_actions]
 
         return masked_q_values

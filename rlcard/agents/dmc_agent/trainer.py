@@ -297,4 +297,4 @@ class DMCTrainer:
             log.info('Learning finished after %d frames.', frames)
 
         checkpoint(frames)
-        plogger.close()
+        self.plogger.close()

@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 
 class RandomAgent(object):
@@ -24,7 +25,7 @@ class RandomAgent(object):
         Returns:
             action (int): The action predicted (randomly chosen) by the random agent
         '''
-        return np.random.choice(list(state['legal_actions'].keys()))
+        return random.choice(np.flatnonzero(obs['action_mask']))
 
     def eval_step(self, state):
         ''' Predict the action given the current state for evaluation.
@@ -37,11 +38,9 @@ class RandomAgent(object):
             action (int): The action predicted (randomly chosen) by the random agent
             probs (list): The list of action probabilities
         '''
-        probs = [0 for _ in range(self.num_actions)]
-        for i in state['legal_actions']:
-            probs[i] = 1/len(state['legal_actions'])
+        probs = state['action_mask'] / state['action_mask'].sum()
 
         info = {}
-        info['probs'] = {state['raw_legal_actions'][i]: probs[list(state['legal_actions'].keys())[i]] for i in range(len(state['legal_actions']))}
+        info["probs"] = {i: probs[i] for i in np.flatnonzero(state["action_mask"])}
 
         return self.step(state), info
