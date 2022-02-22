@@ -25,7 +25,7 @@ class RandomAgent(object):
         Returns:
             action (int): The action predicted (randomly chosen) by the random agent
         '''
-        return random.choice(np.flatnonzero(obs['action_mask']))
+        return random.choice(np.flatnonzero(state['action_mask']))
 
     def eval_step(self, state):
         ''' Predict the action given the current state for evaluation.

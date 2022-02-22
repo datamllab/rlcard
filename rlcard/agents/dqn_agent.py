@@ -165,19 +165,19 @@ class DQNAgent(object):
 
         return best_action, info
 
-    def predict(self, obs):
+    def predict(self, state):
         ''' Predict the masked Q-values
 
         Args:
-            obs (list): current state
+            state (list): current state
 
         Returns:
             q_values (numpy.array): a 1-d array where each entry represents a Q value
         '''
         
-        q_values = self.q_estimator.predict_nograd(np.expand_dims(obs['observation'], 0))[0]
+        q_values = self.q_estimator.predict_nograd(np.expand_dims(state['observation'], 0))[0]
         masked_q_values = -np.inf * np.ones(self.num_actions, dtype=float)
-        legal_actions = np.where(obs["action_mask"] > 0)
+        legal_actions = np.where(state["action_mask"] > 0)
         masked_q_values[legal_actions] = q_values[legal_actions]
 
         return masked_q_values
