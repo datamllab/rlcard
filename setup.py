@@ -5,6 +5,7 @@ with open("README.md", "r", encoding="utf8") as fh:
 
 extras = {
     'torch': ['torch', 'GitPython', 'gitdb2', 'matplotlib'],
+    'pettingzoo': ['pettingzoo'],
 }
 
 def _get_version():
