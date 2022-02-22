@@ -14,7 +14,7 @@ from pettingzoo.classic import (
     uno_v4,
     gin_rummy_v4,
 )
-from rlcard.agents import RandomAgent
+from rlcard.agents.aec_agents import AECRandomAgent
 from rlcard.utils import (
     get_device, set_seed, Logger, plot_curve, 
     aec_run_game, aec_reorganize, aec_tournament
@@ -48,14 +48,14 @@ def train(args):
     # Initialize the agent and use random agents as opponents
     learning_agent_name = env.agents[0]
     if args.algorithm == 'dqn':
-        from rlcard.agents import DQNAgent
-        agent = DQNAgent(num_actions=env.action_space(learning_agent_name).n,
+        from rlcard.agents.aec_agents import AECDQNAgent
+        agent = AECDQNAgent(num_actions=env.action_space(learning_agent_name).n,
                          state_shape=env.observation_space(learning_agent_name)["observation"].shape,
                          mlp_layers=[64,64],
                          device=device)
     elif args.algorithm == 'nfsp':
-        from rlcard.agents import NFSPAgent
-        agent = NFSPAgent(num_actions=env.action_space(learning_agent_name).n,
+        from rlcard.agents.aec_agents import AECNFSPAgent
+        agent = AECNFSPAgent(num_actions=env.action_space(learning_agent_name).n,
                           state_shape=env.observation_space(learning_agent_name)["observation"].shape,
                           hidden_layers_sizes=[64,64],
                           q_mlp_layers=[64,64],
@@ -63,7 +63,7 @@ def train(args):
 
     agents = {learning_agent_name: agent}
     for i in range(1, env.num_agents):
-        agents[env.agents[i]] = RandomAgent(num_actions=env.action_space(env.agents[i]).n)
+        agents[env.agents[i]] = AECRandomAgent(num_actions=env.action_space(env.agents[i]).n)
 
     # Start training
     num_timesteps = 0
