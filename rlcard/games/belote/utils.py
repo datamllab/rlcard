@@ -3,6 +3,13 @@ import numpy as np
 from rlcard.games.base import Card
 
 
+
+NormalCardsPoints = {'7': 0, '8': 0, '9': 0, 'J': 2, 'Q': 3, 'K': 4, 'T': 10, 'A': 11}
+TrumpCardsPoints = {'7': 0, '8': 0, 'Q': 3, 'K': 4, 'T': 10, 'A': 11, '9': 14, 'J': 20}
+
+RANK_ORDER = {'J':1, 'Q':2, 'K':3, 'A':4}
+
+
 def set_seed(seed):
     if seed is not None:
         import subprocess
@@ -78,7 +85,7 @@ def init_8_deck():
         (list): A list of Card objects
     '''
     suit_list = ['S', 'H']
-    rank_list = ['T', 'J', 'Q', 'K', 'A']
+    rank_list = ['J', 'Q', 'K', 'A']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
     return res
 
