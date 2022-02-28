@@ -52,6 +52,17 @@ def init_54_deck():
     res.append(Card('RJ', ''))
     return res
 
+def init_32_deck():
+    ''' Initialize a normal 32 cards deck : from 7 to Ace
+
+    Returns:
+        (list): A list of Card objects
+    '''
+    suit_list = ['S', 'H', 'D', 'C']
+    rank_list = ['7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
+    res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
+    return res
+
 def rank2int(rank):
     ''' Get the coresponding number of a rank.
 
