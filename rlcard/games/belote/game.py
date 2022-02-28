@@ -6,10 +6,6 @@ from rlcard.games.belote import Dealer
 from rlcard.games.belote import Judger
 
 
-NormalCardsPoints = {'7': 0, '8': 0, '9': 0, 'J': 2, 'Q': 3, 'K': 4, 'T': 10, 'A': 11}
-TrumpCardsPoints = {'7': 0, '8': 0, 'Q': 3, 'K': 4, 'T': 10, 'A': 11, '9': 14, 'J': 20}
-
-
 class BeloteGame:
     def __init__(self, allow_step_back=False):
         ''' Initialize the Belote game class
