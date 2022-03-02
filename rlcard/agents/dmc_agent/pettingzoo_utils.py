@@ -32,7 +32,7 @@ def _get_action_feature(action, action_space):
     out[action] = 1
     return out
 
-def aec_act(i, device, T, free_queue, full_queue, model, buffers, env):
+def act_pettingzoo(i, device, T, free_queue, full_queue, model, buffers, env):
     log.info('Device %i Actor %i started.', device, i)
     try:
         done_buf = [[] for _ in range(env.num_agents)]

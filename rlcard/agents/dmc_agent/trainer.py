@@ -28,7 +28,7 @@ from .file_writer import FileWriter
 from .model import DMCModel
 from .pettingzoo_model import DMCModelPettingZoo
 from .utils import get_batch, create_buffers, create_optimizers, act, log
-from .pettingzoo_utils import create_buffers_pettingzoo, aec_act
+from .pettingzoo_utils import create_buffers_pettingzoo, act_pettingzoo
 
 def compute_loss(logits, targets):
     loss = ((logits - targets)**2).mean()
@@ -239,7 +239,7 @@ class DMCTrainer:
             num_actors = self.num_actors
             for i in range(self.num_actors):
                 actor = ctx.Process(
-                    target=aec_act if self.is_pettingzoo_env else act,
+                    target=act_pettingzoo if self.is_pettingzoo_env else act,
                     args=(i, device, self.T, free_queue[device], full_queue[device], models[device], buffers[device], self.env))
                 actor.start()
                 actor_processes.append(actor)
