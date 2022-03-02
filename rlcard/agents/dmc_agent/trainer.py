@@ -26,9 +26,9 @@ from torch import nn
 
 from .file_writer import FileWriter
 from .model import DMCModel
-from .pettingzoo_model import AECDMCModel
+from .pettingzoo_model import DMCModelPettingZoo
 from .utils import get_batch, create_buffers, create_optimizers, act, log
-from .aec_utils import aec_create_buffers, aec_act
+from .pettingzoo_utils import create_buffers_pettingzoo, aec_act
 
 def compute_loss(logits, targets):
     loss = ((logits - targets)**2).mean()
@@ -161,7 +161,7 @@ class DMCTrainer:
             self.num_players = self.env.num_agents
 
             def model_func(device):
-                return AECDMCModel(self.env,
+                return DMCModelPettingZoo(self.env,
                                    exp_epsilon=self.exp_epsilon,
                                    device=device)
         self.model_func = model_func
@@ -186,7 +186,7 @@ class DMCTrainer:
                                      self.env.state_shape,
                                      self.action_shape)
         else:
-            buffers = aec_create_buffers(self.T,
+            buffers = create_buffers_pettingzoo(self.T,
                                          self.num_buffers,
                                          self.env)
 

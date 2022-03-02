@@ -14,10 +14,10 @@ from pettingzoo.classic import (
     uno_v4,
     gin_rummy_v4,
 )
-from rlcard.agents.aec_agents import AECRandomAgent
+from rlcard.agents.aec_agents import RandomAgentPettingZoo
 from rlcard.utils import (
     get_device, set_seed, Logger, plot_curve, 
-    aec_run_game, aec_reorganize, aec_tournament
+    run_game_pettingzoo, reorganize_pettingzoo, tournament_pettingzoo
 )
 
 env_name_to_env_func = {
@@ -48,22 +48,26 @@ def train(args):
     # Initialize the agent and use random agents as opponents
     learning_agent_name = env.agents[0]
     if args.algorithm == 'dqn':
-        from rlcard.agents.aec_agents import AECDQNAgent
-        agent = AECDQNAgent(num_actions=env.action_space(learning_agent_name).n,
-                         state_shape=env.observation_space(learning_agent_name)["observation"].shape,
-                         mlp_layers=[64,64],
-                         device=device)
+        from rlcard.agents.aec_agents import DQNAgentPettingZoo
+        agent = DQNAgentPettingZoo(
+            num_actions=env.action_space(learning_agent_name).n,
+            state_shape=env.observation_space(learning_agent_name)["observation"].shape,
+            mlp_layers=[64,64],
+            device=device
+        )
     elif args.algorithm == 'nfsp':
-        from rlcard.agents.aec_agents import AECNFSPAgent
-        agent = AECNFSPAgent(num_actions=env.action_space(learning_agent_name).n,
-                          state_shape=env.observation_space(learning_agent_name)["observation"].shape,
-                          hidden_layers_sizes=[64,64],
-                          q_mlp_layers=[64,64],
-                          device=device)
+        from rlcard.agents.aec_agents import NFSPAgentPettingZoo
+        agent = NFSPAgentPettingZoo(
+            num_actions=env.action_space(learning_agent_name).n,
+            state_shape=env.observation_space(learning_agent_name)["observation"].shape,
+            hidden_layers_sizes=[64,64],
+            q_mlp_layers=[64,64],
+            device=device
+        )
 
     agents = {learning_agent_name: agent}
     for i in range(1, env.num_agents):
-        agents[env.agents[i]] = AECRandomAgent(num_actions=env.action_space(env.agents[i]).n)
+        agents[env.agents[i]] = RandomAgentPettingZoo(num_actions=env.action_space(env.agents[i]).n)
 
     # Start training
     num_timesteps = 0
@@ -74,8 +78,8 @@ def train(args):
                 agent.sample_episode_policy()
 
             # Generate data from the environment
-            trajectories = aec_run_game(env, agents, is_training=True)
-            trajectories = aec_reorganize(trajectories)
+            trajectories = run_game_pettingzoo(env, agents, is_training=True)
+            trajectories = reorganize_pettingzoo(trajectories)
             num_timesteps += sum([len(t) for t in trajectories.values()])
 
             for ts in trajectories[learning_agent_name]:
@@ -83,7 +87,7 @@ def train(args):
 
             # Evaluate the performance. Play with random agents.
             if episode % args.evaluate_every == 0:
-                average_rewards = aec_tournament(env, agents, args.num_eval_games)
+                average_rewards = tournament_pettingzoo(env, agents, args.num_eval_games)
                 logger.log_performance(num_timesteps, average_rewards[learning_agent_name])
 
         # Get the paths

@@ -4,9 +4,9 @@ import numpy as np
 import torch
 
 from .utils import log
-from rlcard.utils import aec_run_game
+from rlcard.utils import run_game_pettingzoo
 
-def aec_create_buffers(T, num_buffers, env):
+def create_buffers_pettingzoo(T, num_buffers, env):
     buffers = []
     for device in range(torch.cuda.device_count()):
         buffers.append([])
@@ -27,7 +27,7 @@ def aec_create_buffers(T, num_buffers, env):
             buffers[device].append(_buffers)
     return buffers
 
-def aec_get_action_feature(action, action_space):
+def _get_action_feature(action, action_space):
     out = np.zeros(action_space)
     out[action] = 1
     return out
@@ -43,7 +43,7 @@ def aec_act(i, device, T, free_queue, full_queue, model, buffers, env):
         size = [0 for _ in range(env.num_agents)]
 
         while True:
-            trajectories = aec_run_game(env, model.agents, is_training=True)
+            trajectories = run_game_pettingzoo(env, model.agents, is_training=True)
             for agent_id, agent_name in enumerate(env.possible_agents):
                 traj_size = len(trajectories[agent_name]) // 2
                 if traj_size > 0:
@@ -52,7 +52,7 @@ def aec_act(i, device, T, free_queue, full_queue, model, buffers, env):
                     target_buf[agent_id].extend([target_return for _ in range(traj_size)])
                     for i in range(0, len(trajectories[agent_name]), 2):
                         state = trajectories[agent_name][i][0]['observation']
-                        action = aec_get_action_feature(
+                        action = _get_action_feature(
                             trajectories[agent_name][i+1], model.agents[agent_name].action_shape
                         )
                         episode_return = trajectories[agent_name][i][1]

@@ -1,10 +1,10 @@
 from collections import OrderedDict
 
 from .model import DMCAgent
-from rlcard.utils.aec_utils import wrap_state
+from rlcard.utils.pettingzoo_utils import wrap_state
 
 
-class AECDMCAgent(DMCAgent):
+class DMCAgentPettingZoo(DMCAgent):
     def step(self, state):
         return super().step(wrap_state(state))
 
@@ -19,7 +19,7 @@ class AECDMCAgent(DMCAgent):
         return super().feed(ts)
 
 
-class AECDMCModel:
+class DMCModelPettingZoo:
     def __init__(self,
                  env,
                  mlp_layers=[512,512,512,512,512],
@@ -27,11 +27,13 @@ class AECDMCModel:
                  device=0):
         self.agents = OrderedDict()
         for agent_name in env.agents:
-            agent = AECDMCAgent(env.observation_space(agent_name)["observation"].shape,
-                                (env.action_space(agent_name).n,),
-                                mlp_layers,
-                                exp_epsilon,
-                                device)
+            agent = DMCAgentPettingZoo(
+                env.observation_space(agent_name)["observation"].shape,
+                (env.action_space(agent_name).n,),
+                mlp_layers,
+                exp_epsilon,
+                device,
+            )
             self.agents[agent_name] = agent
 
     def share_memory(self):

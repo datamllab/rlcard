@@ -42,7 +42,9 @@ def train(args):
                          save_interval=args.save_interval,
                          num_actor_devices=args.num_actor_devices,
                          num_actors=args.num_actors,
-                         training_device=args.training_device)
+                         training_device=args.training_device,
+                         total_frames=args.total_frames,
+                         )
 
     # Train DMC Agents
     trainer.start()
@@ -64,6 +66,8 @@ if __name__ == '__main__':
                         help='The number of devices used for simulation')
     parser.add_argument('--num_actors', default=5, type=int,
                         help='The number of actors for each simulation device')
+    parser.add_argument('--total_frames', default=1e11, type=int,
+                        help='The total number of frames to train for')
     parser.add_argument('--training_device', default=0, type=int,
                         help='The index of the GPU used for training models')
 

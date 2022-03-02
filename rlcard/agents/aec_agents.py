@@ -1,10 +1,10 @@
 from rlcard.agents.nfsp_agent import NFSPAgent
 from rlcard.agents.dqn_agent import DQNAgent
 from rlcard.agents.random_agent import RandomAgent
-from rlcard.utils.aec_utils import wrap_state
+from rlcard.utils.pettingzoo_utils import wrap_state
 
 
-class AECNFSPAgent(NFSPAgent):
+class NFSPAgentPettingZoo(NFSPAgent):
     def step(self, state):
         return super().step(wrap_state(state))
 
@@ -19,7 +19,7 @@ class AECNFSPAgent(NFSPAgent):
         return super().feed(ts)
 
 
-class AECDQNAgent(DQNAgent):
+class DQNAgentPettingZoo(DQNAgent):
     def step(self, state):
         return super().step(wrap_state(state))
 
@@ -34,7 +34,7 @@ class AECDQNAgent(DQNAgent):
         return super().feed(ts)
 
 
-class AECRandomAgent(RandomAgent):
+class RandomAgentPettingZoo(RandomAgent):
     def step(self, state):
         return super().step(wrap_state(state))
 

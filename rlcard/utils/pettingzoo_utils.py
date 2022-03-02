@@ -1,4 +1,5 @@
 from collections import defaultdict
+import numpy as np
 
 
 def wrap_state(state):
@@ -16,7 +17,7 @@ def wrap_state(state):
     return wrapped_state
 
 
-def aec_run_game(env, agents, is_training=False):
+def run_game_pettingzoo(env, agents, is_training=False):
     env.reset()
     trajectories = defaultdict(list)
     for agent_name in env.agent_iter():
@@ -36,7 +37,7 @@ def aec_run_game(env, agents, is_training=False):
     return trajectories
 
 
-def aec_reorganize(trajectories):
+def reorganize_pettingzoo(trajectories):
     ''' Reorganize the trajectory to make it RL friendly
 
     Args:
@@ -60,11 +61,11 @@ def aec_reorganize(trajectories):
     return new_trajectories
 
 
-def aec_tournament(env, agents, num_episodes):
+def tournament_pettingzoo(env, agents, num_episodes):
     total_rewards = defaultdict(float)
     for _ in range(num_episodes):
-        trajectories = aec_run_game(env, agents)
-        trajectories = aec_reorganize(trajectories)
+        trajectories = run_game_pettingzoo(env, agents)
+        trajectories = reorganize_pettingzoo(trajectories)
         for agent_name, trajectory in trajectories.items():
             reward = sum([t[2] for t in trajectory])
             total_rewards[agent_name] += reward
