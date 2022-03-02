@@ -41,7 +41,7 @@ def train(args):
 
     # Make the environment with seed
     env_func = env_name_to_env_func[args.env]
-    env = env_func.env(opponents_hand_visible=True)
+    env = env_func.env()
     env.seed(args.seed)
     env.reset()
 

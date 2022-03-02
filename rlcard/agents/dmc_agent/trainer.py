@@ -26,7 +26,9 @@ from torch import nn
 
 from .file_writer import FileWriter
 from .model import DMCModel
+from .pettingzoo_model import AECDMCModel
 from .utils import get_batch, create_buffers, create_optimizers, act, log
+from .aec_utils import aec_create_buffers, aec_act
 
 def compute_loss(logits, targets):
     loss = ((logits - targets)**2).mean()
@@ -70,11 +72,12 @@ def learn(position,
 class DMCTrainer:    
     def __init__(self,
                  env,
+                 is_pettingzoo_env=False,
                  load_model=False,
                  xpid='dmc',
                  save_interval=30,
                  num_actor_devices=1,
-                 num_actors = 5,
+                 num_actors=5,
                  training_device=0,
                  savedir='experiments/dmc_result',
                  total_frames=100000000000,
@@ -142,29 +145,50 @@ class DMCTrainer:
         self.momentum = momentum
         self.epsilon = epsilon
 
-        self.action_shape = self.env.action_shape
-        if self.action_shape[0] == None:  # One-hot encoding
-            self.action_shape = [[self.env.num_actions] for _ in range(self.env.num_players)]
+        self.is_pettingzoo_env = is_pettingzoo_env
+        if not self.is_pettingzoo_env:
+            self.num_players = self.env.num_players
+            self.action_shape = self.env.action_shape
+            if self.action_shape[0] == None:  # One-hot encoding
+                self.action_shape = [[self.env.num_actions] for _ in range(self.num_players)]
 
-        self.mean_episode_return_buf = [deque(maxlen=100) for _ in range(self.env.num_players)]
+            def model_func(device):
+                return DMCModel(self.env.state_shape,
+                                self.action_shape,
+                                exp_epsilon=self.exp_epsilon,
+                                device=device)
+        else:
+            self.num_players = self.env.num_agents
+
+            def model_func(device):
+                return AECDMCModel(self.env,
+                                   exp_epsilon=self.exp_epsilon,
+                                   device=device)
+        self.model_func = model_func
+
+        self.mean_episode_return_buf = [deque(maxlen=100) for _ in range(self.num_players)]
+
+
 
     def start(self):
         # Initialize actor models
         models = []
         for device in range(self.num_actor_devices):
-            model = DMCModel(self.env.state_shape,
-                             self.action_shape,
-                             exp_epsilon=self.exp_epsilon,
-                             device=device)
+            model = self.model_func(device)
             model.share_memory()
             model.eval()
             models.append(model)
 
         # Initialize buffers
-        buffers = create_buffers(self.T,
-                                 self.num_buffers,
-                                 self.env.state_shape,
-                                 self.action_shape)
+        if not self.is_pettingzoo_env:
+            buffers = create_buffers(self.T,
+                                     self.num_buffers,
+                                     self.env.state_shape,
+                                     self.action_shape)
+        else:
+            buffers = aec_create_buffers(self.T,
+                                         self.num_buffers,
+                                         self.env)
 
         # Initialize queues
         actor_processes = []
@@ -172,18 +196,16 @@ class DMCTrainer:
         free_queue = []
         full_queue = []
         for device in range(self.num_actor_devices):
-            _free_queue = [ctx.SimpleQueue() for _ in range(self.env.num_players)]
-            _full_queue = [ctx.SimpleQueue() for _ in range(self.env.num_players)]
+            _free_queue = [ctx.SimpleQueue() for _ in range(self.num_players)]
+            _full_queue = [ctx.SimpleQueue() for _ in range(self.num_players)]
             free_queue.append(_free_queue)
             full_queue.append(_full_queue)
 
         # Learner model for training
-        learner_model = DMCModel(self.env.state_shape,
-                                 self.action_shape,
-                                 device=self.training_device)
+        learner_model = self.model_func(self.training_device)
 
         # Create optimizers
-        optimizers = create_optimizers(self.env.num_players,
+        optimizers = create_optimizers(self.num_players,
                                        self.learning_rate,
                                        self.momentum,
                                        self.epsilon,
@@ -192,7 +214,7 @@ class DMCTrainer:
 
         # Stat Keys
         stat_keys = []
-        for p in range(self.env.num_players):
+        for p in range(self.num_players):
             stat_keys.append('mean_episode_return_'+str(p))
             stat_keys.append('loss_'+str(p))
         frames, stats = 0, {k: 0 for k in stat_keys}
@@ -202,7 +224,7 @@ class DMCTrainer:
             checkpoint_states = torch.load(
                     self.checkpointpath, map_location="cuda:"+str(self.training_device)
             )
-            for p in range(self.env.num_players):
+            for p in range(self.num_players):
                 learner_model.get_agent(p).load_state_dict(checkpoint_states["model_state_dict"][p])
                 optimizers[p].load_state_dict(checkpoint_states["optimizer_state_dict"][p])
                 for device in range(self.num_actor_devices):
@@ -217,7 +239,7 @@ class DMCTrainer:
             num_actors = self.num_actors
             for i in range(self.num_actors):
                 actor = ctx.Process(
-                    target=act,
+                    target=aec_act if self.is_pettingzoo_env else act,
                     args=(i, device, self.T, free_queue[device], full_queue[device], models[device], buffers[device], self.env))
                 actor.start()
                 actor_processes.append(actor)
@@ -240,16 +262,16 @@ class DMCTrainer:
 
         for device in range(self.num_actor_devices):
             for m in range(self.num_buffers):
-                for p in range(self.env.num_players):
+                for p in range(self.num_players):
                     free_queue[device][p].put(m)
 
         threads = []
-        locks = [[threading.Lock() for _ in range(self.env.num_players)] for _ in range(self.num_actor_devices)]
-        position_locks = [threading.Lock() for _ in range(self.env.num_players)]
+        locks = [[threading.Lock() for _ in range(self.num_players)] for _ in range(self.num_actor_devices)]
+        position_locks = [threading.Lock() for _ in range(self.num_players)]
 
         for device in range(self.num_actor_devices):
             for i in range(self.num_threads):
-                for position in range(self.env.num_players):
+                for position in range(self.num_players):
                     thread = threading.Thread(
                         target=batch_and_learn, name='batch-and-learn-%d' % i, args=(i,device,position,locks[device][position],position_locks[position]))
                     thread.start()
@@ -266,7 +288,7 @@ class DMCTrainer:
             }, self.checkpointpath)
 
             # Save the weights for evaluation purpose
-            for position in range(self.env.num_players):
+            for position in range(self.num_players):
                 model_weights_dir = os.path.expandvars(os.path.expanduser(
                     '%s/%s/%s' % (self.savedir, self.xpid, str(position)+'_'+str(frames)+'.pth')))
                 torch.save(learner_model.get_agent(position), model_weights_dir)

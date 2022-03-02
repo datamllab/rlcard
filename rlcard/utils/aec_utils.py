@@ -1,5 +1,21 @@
 from collections import defaultdict
 
+
+def wrap_state(state):
+    # check if obs is already wrapped
+    if "obs" in state and "legal_actions" in state and "raw_legal_actions" in state:
+        return state
+
+    wrapped_state = {}
+    wrapped_state["obs"] = state["observation"]
+    legal_actions = np.flatnonzero(state["action_mask"])
+    # the values of legal_actions isn't available so setting them to None
+    wrapped_state["legal_actions"] = {l: None for l in legal_actions}
+    # raw_legal_actions isn't available so setting it to legal actions
+    wrapped_state["raw_legal_actions"] = list(wrapped_state["legal_actions"].keys())
+    return wrapped_state
+
+
 def aec_run_game(env, agents, is_training=False):
     env.reset()
     trajectories = defaultdict(list)
