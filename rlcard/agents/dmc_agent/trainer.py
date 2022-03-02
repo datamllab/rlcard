@@ -187,8 +187,8 @@ class DMCTrainer:
                                      self.action_shape)
         else:
             buffers = create_buffers_pettingzoo(self.T,
-                                         self.num_buffers,
-                                         self.env)
+                                                self.num_buffers,
+                                                self.env)
 
         # Initialize queues
         actor_processes = []
