@@ -24,6 +24,8 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *  **QQ Group**: Join our QQ group 665647450. Password: rlcardqqgroup
 
 **News:**
+*   All the algorithms can suppport [PettingZoo](https://github.com/PettingZoo-Team/PettingZoo) now. Please check [here](examples/pettingzoo). Thanks the contribtuion from [
+Yifei Cheng](https://github.com/ycheng517).
 *   Please follow [DouZero](https://github.com/kwai/DouZero), a strong Dou Dizhu AI and the [ICML 2021 paper](https://arxiv.org/abs/2106.06135). An online demo is available [here](https://douzero.org/). The algorithm is also integrated in RLCard. See [Training DMC on Dou Dizhu](docs/toy-examples.md#training-dmc-on-dou-dizhu).
 *   Our package is used in [PettingZoo](https://github.com/PettingZoo-Team/PettingZoo). Please check it out!
 *   We have released RLCard-Showdown, GUI demo for RLCard. Please check out [here](https://github.com/datamllab/rlcard-showdown)!
@@ -111,6 +113,7 @@ RLCard can be flexibly connected to various algorithms. See the following exampl
 *   [Having fun with pretrained Leduc model](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
 *   [Training DMC on Dou Dizhu](docs/toy-examples.md#training-dmc-on-dou-dizhu)
 *   [Evaluating Agents](docs/toy-examples.md#evaluating-agents)
+*   [Training Agents on PettingZoo](examples/pettingzoo)
 
 ## Demo
 Run `examples/human/leduc_holdem_human.py` to play with the pre-trained Leduc Hold'em model. Leduc Hold'em is a simplified version of Texas Hold'em. Rules can be found [here](docs/games.md#leduc-holdem).
