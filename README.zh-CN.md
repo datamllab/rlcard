@@ -10,7 +10,7 @@
 
 [English README](README.md)
 
-RLCard是一款卡牌游戏强化学习 (Reinforcement Learning, RL) 的工具包。 它支持多种卡牌游戏环境，具有易于使用的接口，以用于实现各种强化学习和搜索算法。 RLCard的目标是架起强化学习和非完全信息游戏之间的桥梁。 RLCard由[DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University以及社区贡献者共同开发.
+RLCard是一款卡牌游戏强化学习 (Reinforcement Learning, RL) 的工具包。 它支持多种卡牌游戏环境，具有易于使用的接口，以用于实现各种强化学习和搜索算法。 RLCard的目标是架起强化学习和非完全信息游戏之间的桥梁。 RLCard由[DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Rice and Texas A&M University以及社区贡献者共同开发.
 
 *   官方网站：[https://www.rlcard.org](https://www.rlcard.org)
 *   Jupyter Notebook教程：[https://github.com/datamllab/rlcard-tutorial](https://github.com/datamllab/rlcard-tutorial)
