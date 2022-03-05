@@ -29,7 +29,7 @@ class BlackjackDealer:
         Args:
             player_id (int): the target player's id
         '''
-        idx = np.random.choice(len(self.deck))
+        idx = self.np_random.choice(len(self.deck))
         card = self.deck[idx]
         if self.num_decks != 0:  # If infinite decks, do not pop card from deck
             self.deck.pop(idx)

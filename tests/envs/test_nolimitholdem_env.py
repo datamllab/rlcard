@@ -35,7 +35,7 @@ class TestNolimitholdemEnv(unittest.TestCase):
 
         env.step(0)
         decoded = env._decode_action(1)
-        self.assertEqual(decoded, Action.CHECK)
+        self.assertEqual(decoded, Action.CHECK_CALL)
 
     def test_step(self):
         env = rlcard.make('no-limit-holdem')
@@ -79,13 +79,13 @@ class TestNolimitholdemEnv(unittest.TestCase):
         self.assertEqual(num_players, 5)
 
     def test_config_chips(self):
-        env = rlcard.make('no-limit-holdem', config={'game_num_players':5, 'chips_for_each':[100, 200, 400, 600, 900]})
+        env = rlcard.make('no-limit-holdem', config={'game_num_players':5, 'chips_for_each':100})
         env.game.init_game()
         players = env.game.players
         chips = []
         for i in range(5):
             chips.append(players[i].remained_chips + players[i].in_chips)
-        self.assertEqual(chips, [100, 200, 400, 600, 900])
+        self.assertEqual(chips, [100, 100, 100, 100, 100])
 
 if __name__ == '__main__':
     unittest.main()

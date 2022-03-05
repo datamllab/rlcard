@@ -1,11 +1,12 @@
 # RLCard: 卡牌游戏强化学习工具包
 <img width="500" src="https://dczha.com/files/rlcard/logo.jpg" alt="Logo" />
 
-[![Build Status](https://travis-ci.org/datamllab/RLCard.svg?branch=master)](https://travis-ci.org/datamllab/RLCard)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/248eb15c086748a4bcc830755f1bd798)](https://www.codacy.com/manual/daochenzha/rlcard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=datamllab/rlcard&amp;utm_campaign=Badge_Grade)
+[![Testing](https://github.com/datamllab/rlcard/actions/workflows/python-package.yml/badge.svg)](https://github.com/datamllab/rlcard/actions/workflows/python-package.yml)
+[![PyPI version](https://badge.fury.io/py/rlcard.svg)](https://badge.fury.io/py/rlcard)
 [![Coverage Status](https://coveralls.io/repos/github/datamllab/rlcard/badge.svg)](https://coveralls.io/github/datamllab/rlcard?branch=master)
 [![Downloads](https://pepy.tech/badge/rlcard)](https://pepy.tech/project/rlcard)
 [![Downloads](https://pepy.tech/badge/rlcard/month)](https://pepy.tech/project/rlcard)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [English README](README.md)
 
@@ -24,6 +25,7 @@ RLCard是一款卡牌游戏强化学习 (Reinforcement Learning, RL) 的工具�
 *  **QQ群**: 加入我们的QQ群665647450. 密码：rlcardqqgroup
 
 **新闻:**
+*   所有的算法都已支持[PettingZoo](https://github.com/PettingZoo-Team/PettingZoo)接口. 请点击[这里](examples/pettingzoo). 感谢[Yifei Cheng](https://github.com/ycheng517)的贡献。
 *   请关注[DouZero](https://github.com/kwai/DouZero), 一个强大的斗地主AI，以及[ICML 2021论文](https://arxiv.org/abs/2106.06135)。点击[此处](https://douzero.org/)进入在线演示。该算法同样集成到了RLCard中，详见[在斗地主中训练DMC](docs/toy-examples.md#training-dmc-on-dou-dizhu)。
 *   我们的项目被用在[PettingZoo](https://github.com/PettingZoo-Team/PettingZoo)中，去看看吧！
 *   我们发布了RLCard的可视化演示项目：RLCard-Showdown。请点击[此处](https://github.com/datamllab/rlcard-showdown)查看详情！
@@ -111,6 +113,7 @@ RLCard可以灵活地连接各种算法，参考以下例子：
 *   [与预训练Leduc模型游玩](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
 *   [在斗地主上训练DMC](docs/toy-examples.md#training-dmc-on-dou-dizhu)
 *   [评估智能体](docs/toy-examples.md#evaluating-agents)
+*   [在PettingZoo上训练](examples/pettingzoo)
 
 ## 演示
 
