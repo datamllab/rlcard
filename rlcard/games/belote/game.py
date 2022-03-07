@@ -4,6 +4,8 @@ from rlcard.games.belote import Player
 from rlcard.games.belote import Round
 from rlcard.games.belote import Dealer
 from rlcard.games.belote import Judger
+import dealer
+import player
 
 
 class BeloteGame:
@@ -23,7 +25,11 @@ class BeloteGame:
         '''
         # initialize dealer
         self.dealer = Dealer(self.np_random)
+        
+        # initialize game pointer
 
+        self.game_pointer = 0
+        
         # initialize players
         self.players = [Player(i, self.np_random)
                         for i in range(self.num_players)]
@@ -33,6 +39,11 @@ class BeloteGame:
 
         self.round = Round()
         self.state = self.get_state()
+
+        # initialize cards
+        for i in range(self.num_players):
+            self.dealer.deal_cards(self.players[i], 0)
+
 
     def step(self, action):
         player = self.players[self.round.current_player]
