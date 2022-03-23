@@ -19,10 +19,12 @@ import torch
 from torch import nn
 
 class DMCNet(nn.Module):
-    def __init__(self,
-                 state_shape,
-                 action_shape,
-                 mlp_layers=[512,512,512,512,512]):
+    def __init__(
+        self,
+        state_shape,
+        action_shape,
+        mlp_layers=[512,512,512,512,512]
+    ):
         super().__init__()
         input_dim = np.prod(state_shape) + np.prod(action_shape)
         layer_dims = [input_dim] + mlp_layers
@@ -41,14 +43,16 @@ class DMCNet(nn.Module):
         return values
 
 class DMCAgent:
-    def __init__(self,
-                 state_shape,
-                 action_shape,
-                 mlp_layers=[512,512,512,512,512],
-                 exp_epsilon=0.01,
-                 device=0):
+    def __init__(
+        self,
+        state_shape,
+        action_shape,
+        mlp_layers=[512,512,512,512,512],
+        exp_epsilon=0.01,
+        device="0",
+    ):
         self.use_raw = False
-        self.device = torch.device('cuda:'+str(device))
+        self.device = 'cuda:'+device if device != "cpu" else "cpu"
         self.net = DMCNet(state_shape, action_shape, mlp_layers).to(self.device)
         self.exp_epsilon = exp_epsilon
         self.action_shape = action_shape
@@ -118,19 +122,23 @@ class DMCAgent:
         self.device = device
 
 class DMCModel:
-    def __init__(self,
-                 state_shape,
-                 action_shape,
-                 mlp_layers=[512,512,512,512,512],
-                 exp_epsilon=0.01,
-                 device=0):
+    def __init__(
+        self,
+        state_shape,
+        action_shape,
+        mlp_layers=[512,512,512,512,512],
+        exp_epsilon=0.01,
+        device=0
+    ):
         self.agents = []
         for player_id in range(len(state_shape)):
-            agent = DMCAgent(state_shape[player_id],
-                             action_shape[player_id],
-                             mlp_layers,
-                             exp_epsilon,
-                             device)
+            agent = DMCAgent(
+                state_shape[player_id],
+                action_shape[player_id],
+                mlp_layers,
+                exp_epsilon,
+                device,
+            )
             self.agents.append(agent)
 
     def share_memory(self):

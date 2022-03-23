@@ -6,10 +6,15 @@ import torch
 from .utils import log
 from rlcard.utils import run_game_pettingzoo
 
-def create_buffers_pettingzoo(T, num_buffers, env):
-    buffers = []
-    for device in range(torch.cuda.device_count()):
-        buffers.append([])
+def create_buffers_pettingzoo(
+    T,
+    num_buffers,
+    env,
+    device_iterator,
+):
+    buffers = {}
+    for device in device_iterator:
+        buffers[device] = []
         for agent_name in env.agents:
             state_shape = env.observation_space(agent_name)["observation"].shape
             specs = dict(
@@ -22,7 +27,10 @@ def create_buffers_pettingzoo(T, num_buffers, env):
             _buffers = {key: [] for key in specs}
             for _ in range(num_buffers):
                 for key in _buffers:
-                    _buffer = torch.empty(**specs[key]).to(torch.device('cuda:'+str(device))).share_memory_()
+                    if device == "cpu":
+                        _buffer = torch.empty(**specs[key]).to('cpu').share_memory_()
+                    else:
+                        _buffer = torch.empty(**specs[key]).to('cuda:'+str(device)).share_memory_()
                     _buffers[key].append(_buffer)
             buffers[device].append(_buffers)
     return buffers
@@ -32,8 +40,17 @@ def _get_action_feature(action, action_space):
     out[action] = 1
     return out
 
-def act_pettingzoo(i, device, T, free_queue, full_queue, model, buffers, env):
-    log.info('Device %i Actor %i started.', device, i)
+def act_pettingzoo(
+    i,
+    device,
+    T,
+    free_queue,
+    full_queue,
+    model,
+    buffers,
+    env
+):
+    log.info('Device %s Actor %i started.', str(device), i)
     try:
         done_buf = [[] for _ in range(env.num_agents)]
         episode_return_buf = [[] for _ in range(env.num_agents)]

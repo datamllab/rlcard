@@ -29,11 +29,13 @@ log.propagate = False
 log.addHandler(shandle)
 log.setLevel(logging.INFO)
 
-def get_batch(free_queue,
-              full_queue,
-              buffers,
-              batch_size,
-              lock):
+def get_batch(
+    free_queue,
+    full_queue,
+    buffers,
+    batch_size,
+    lock
+):
     with lock:
         indices = [full_queue.get() for _ in range(batch_size)]
     batch = {
@@ -44,10 +46,16 @@ def get_batch(free_queue,
         free_queue.put(m)
     return batch
 
-def create_buffers(T, num_buffers, state_shape, action_shape):
-    buffers = []
-    for device in range(torch.cuda.device_count()):
-        buffers.append([])
+def create_buffers(
+    T,
+    num_buffers,
+    state_shape,
+    action_shape,
+    device_iterator,
+):
+    buffers = {}
+    for device in device_iterator:
+        buffers[device] = []
         for player_id in range(len(state_shape)):
             specs = dict(
                 done=dict(size=(T,), dtype=torch.bool),
@@ -59,12 +67,22 @@ def create_buffers(T, num_buffers, state_shape, action_shape):
             _buffers = {key: [] for key in specs}
             for _ in range(num_buffers):
                 for key in _buffers:
-                    _buffer = torch.empty(**specs[key]).to(torch.device('cuda:'+str(device))).share_memory_()
+                    if device == "cpu":
+                        _buffer = torch.empty(**specs[key]).to('cpu').share_memory_()
+                    else:
+                        _buffer = torch.empty(**specs[key]).to('cuda:'+str(device)).share_memory_()
                     _buffers[key].append(_buffer)
             buffers[device].append(_buffers)
     return buffers
 
-def create_optimizers(num_players, learning_rate, momentum, epsilon, alpha, learner_model):
+def create_optimizers(
+    num_players,
+    learning_rate,
+    momentum,
+    epsilon,
+    alpha,
+    learner_model
+):
     optimizers = []
     for player_id in range(num_players):
         optimizer = torch.optim.RMSprop(
@@ -76,10 +94,18 @@ def create_optimizers(num_players, learning_rate, momentum, epsilon, alpha, lear
         optimizers.append(optimizer)
     return optimizers
 
-def act(i, device, T, free_queue, full_queue, model, buffers, env):
+def act(
+    i,
+    device,
+    T,
+    free_queue,
+    full_queue,
+    model,
+    buffers,
+    env
+):
     try:
-        log.info('Device %i Actor %i started.', device, i)
-        torch_device = torch.device('cuda:'+str(device))
+        log.info('Device %s Actor %i started.', str(device), i)
 
         # Configure environment
         env.seed(i)

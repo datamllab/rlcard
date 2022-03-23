@@ -12,6 +12,7 @@ In this document, we provide some toy examples for getting started. All the exam
 We provide a random agent that can play randomly on each environment. Example code is as follows. You can also find the code in [examples/run\_random.py](../examples/run_random.py)
 ```python
 import argparse
+import pprint
 
 import rlcard
 from rlcard.agents import RandomAgent
@@ -19,8 +20,12 @@ from rlcard.utils import set_seed
 
 def run(args):
     # Make environment
-    env = rlcard.make(args.env, config={'seed': 42})
-    num_episodes = 1
+    env = rlcard.make(
+        args.env,
+        config={
+            'seed': 42,
+        }
+    )
 
     # Seed numpy, torch, random
     set_seed(42)
@@ -29,17 +34,34 @@ def run(args):
     agent = RandomAgent(num_actions=env.num_actions)
     env.set_agents([agent for _ in range(env.num_players)])
 
-    for episode in range(num_episodes):
-
-        # Generate data from the environment
-        trajectories, player_wins = env.run(is_training=False)
-        # Print out the trajectories
-        print('\nEpisode {}'.format(episode))
-        print(trajectories)
+    # Generate data from the environment
+    trajectories, player_wins = env.run(is_training=False)
+    # Print out the trajectories
+    print('\nTrajectories:')
+    print(trajectories)
+    print('\nSample raw observation:')
+    pprint.pprint(trajectories[0][0]['raw_obs'])
+    print('\nSample raw legal_actions:')
+    pprint.pprint(trajectories[0][0]['raw_legal_actions'])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("Random example in RLCard")
-    parser.add_argument('--env', type=str, default='leduc-holdem')
+    parser.add_argument(
+        '--env',
+        type=str,
+        default='leduc-holdem',
+        choices=[
+            'blackjack',
+            'leduc-holdem',
+            'limit-holdem',
+            'doudizhu',
+            'mahjong',
+            'no-limit-holdem',
+            'uno',
+            'gin-rummy',
+            'bridge',
+        ],
+    )
 
     args = parser.parse_args()
 
@@ -52,13 +74,12 @@ python3 examples/run_random.py --env leduc-holdem
 The expected output should look like something as follows:
 
 ```
-
 Trajectories:
-[[{'legal_actions': {1: None, 2: None, 3: None}, 'obs': array([0., 1., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.,
+[[{'legal_actions': OrderedDict([(1, None), (2, None), (3, None)]), 'obs': array([0., 1., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 0.]), 'raw_obs': {'hand': 'HQ', 'public_card': None, 'all_chips': [2, 1], 'my_chips': 2, 'legal_actions': ['raise', 'fold', 'check'], 'current_player': 0}, 'raw_legal_actions': ['raise', 'fold', 'check'], 'action_record': [(1, 'fold')]}], [{'legal_actions': {0: None, 1: None, 2: None}, 'obs': array([1., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+       0., 0.]), 'raw_obs': {'hand': 'HQ', 'public_card': None, 'all_chips': [2, 1], 'my_chips': 2, 'legal_actions': ['raise', 'fold', 'check'], 'current_player': 0}, 'raw_legal_actions': ['raise', 'fold', 'check'], 'action_record': [(1, 'fold')]}], [{'legal_actions': OrderedDict([(0, None), (1, None), (2, None)]), 'obs': array([1., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
-       0., 0.]), 'raw_obs': {'hand': 'HJ', 'public_card': None, 'all_chips': [2, 1], 'my_chips': 1, 'legal_actions': ['call', 'raise', 'fold'], 'current_player': 1}, 'raw_legal_actions': ['call', 'raise', 'fold'], 'action_record': [(1, 'fold')]}, 2, {'legal_actions': {1: None, 2: None, 3: None}, 'obs': array([1., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
+       0., 0.]), 'raw_obs': {'hand': 'HJ', 'public_card': None, 'all_chips': [2, 1], 'my_chips': 1, 'legal_actions': ['call', 'raise', 'fold'], 'current_player': 1}, 'raw_legal_actions': ['call', 'raise', 'fold'], 'action_record': [(1, 'fold')]}, 2, {'legal_actions': OrderedDict([(1, None), (2, None), (3, None)]), 'obs': array([1., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.,
        0., 0.]), 'raw_obs': {'hand': 'HJ', 'public_card': None, 'all_chips': [2, 1], 'my_chips': 1, 'legal_actions': ['raise', 'fold', 'check'], 'current_player': 0}, 'raw_legal_actions': ['raise', 'fold', 'check'], 'action_record': [(1, 'fold')]}]]
 
@@ -84,7 +105,14 @@ import torch
 
 import rlcard
 from rlcard.agents import RandomAgent
-from rlcard.utils import get_device, set_seed, tournament, reorganize, Logger
+from rlcard.utils import (
+    get_device,
+    set_seed,
+    tournament,
+    reorganize,
+    Logger,
+    plot_curve,
+)
 
 def train(args):
 
@@ -95,24 +123,33 @@ def train(args):
     set_seed(args.seed)
 
     # Make the environment with seed
-    env = rlcard.make(args.env, config={'seed': args.seed})
+    env = rlcard.make(
+        args.env,
+        config={
+            'seed': args.seed,
+        }
+    )
 
     # Initialize the agent and use random agents as opponents
     if args.algorithm == 'dqn':
         from rlcard.agents import DQNAgent
-        agent = DQNAgent(num_actions=env.num_actions,
-                         state_shape=env.state_shape[0],
-                         mlp_layers=[64,64],
-                         device=device)
+        agent = DQNAgent(
+            num_actions=env.num_actions,
+            state_shape=env.state_shape[0],
+            mlp_layers=[64,64],
+            device=device,
+        )
     elif args.algorithm == 'nfsp':
         from rlcard.agents import NFSPAgent
-        agent = NFSPAgent(num_actions=env.num_actions,
-                          state_shape=env.state_shape[0],
-                          hidden_layers_sizes=[64,64],
-                          q_mlp_layers=[64,64],
-                          device=device)
+        agent = NFSPAgent(
+            num_actions=env.num_actions,
+            state_shape=env.state_shape[0],
+            hidden_layers_sizes=[64,64],
+            q_mlp_layers=[64,64],
+            device=device,
+        )
     agents = [agent]
-    for _ in range(env.num_players):
+    for _ in range(1, env.num_players):
         agents.append(RandomAgent(num_actions=env.num_actions))
     env.set_agents(agents)
 
@@ -137,10 +174,19 @@ def train(args):
 
             # Evaluate the performance. Play with random agents.
             if episode % args.evaluate_every == 0:
-                logger.log_performance(env.timestep, tournament(env, args.num_games)[0])
+                logger.log_performance(
+                    env.timestep,
+                    tournament(
+                        env,
+                        args.num_eval_games,
+                    )[0]
+                )
 
-        # Plot the learning curve
-        logger.plot(args.algorithm)
+        # Get the paths
+        csv_path, fig_path = logger.csv_path, logger.fig_path
+
+    # Plot the learning curve
+    plot_curve(csv_path, fig_path, args.algorithm)
 
     # Save model
     save_path = os.path.join(args.log_dir, 'model.pth')
@@ -148,15 +194,62 @@ def train(args):
     print('Model saved in', save_path)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser("DQN example in RLCard")
-    parser.add_argument('--env', type=str, default='leduc-holdem')
-    parser.add_argument('--algorithm', type=str, default='dqn', choices=['dqn', 'nfsp'])
-    parser.add_argument('--cuda', type=str, default='')
-    parser.add_argument('--seed', type=int, default=42)
-    parser.add_argument('--num_episodes', type=int, default=5000)
-    parser.add_argument('--num_games', type=int, default=2000)
-    parser.add_argument('--evaluate_every', type=int, default=100)
-    parser.add_argument('--log_dir', type=str, default='experiments/leduc_holdem_dqn_result/')
+    parser = argparse.ArgumentParser("DQN/NFSP example in RLCard")
+    parser.add_argument(
+        '--env',
+        type=str,
+        default='leduc-holdem',
+        choices=[
+            'blackjack',
+            'leduc-holdem',
+            'limit-holdem',
+            'doudizhu',
+            'mahjong',
+            'no-limit-holdem',
+            'uno',
+            'gin-rummy',
+            'bridge',
+        ],
+    )
+    parser.add_argument(
+        '--algorithm',
+        type=str,
+        default='dqn',
+        choices=[
+            'dqn',
+            'nfsp',
+        ],
+    )
+    parser.add_argument(
+        '--cuda',
+        type=str,
+        default='',
+    )
+    parser.add_argument(
+        '--seed',
+        type=int,
+        default=42,
+    )
+    parser.add_argument(
+        '--num_episodes',
+        type=int,
+        default=5000,
+    )
+    parser.add_argument(
+        '--num_eval_games',
+        type=int,
+        default=2000,
+    )
+    parser.add_argument(
+        '--evaluate_every',
+        type=int,
+        default=100,
+    )
+    parser.add_argument(
+        '--log_dir',
+        type=str,
+        default='experiments/leduc_holdem_dqn_result/',
+    )
 
     args = parser.parse_args()
 
@@ -208,23 +301,51 @@ import os
 import argparse
 
 import rlcard
-from rlcard.agents import CFRAgent, RandomAgent
-from rlcard.utils import set_seed, tournament, Logger
+from rlcard.agents import (
+    CFRAgent,
+    RandomAgent,
+)
+from rlcard.utils import (
+    set_seed,
+    tournament,
+    Logger,
+    plot_curve,
+)
 
 def train(args):
     # Make environments, CFR only supports Leduc Holdem
-    env = rlcard.make('leduc-holdem', config={'seed': 0, 'allow_step_back':True})
-    eval_env = rlcard.make('leduc-holdem', config={'seed': 0})
+    env = rlcard.make(
+        'leduc-holdem',
+        config={
+            'seed': 0,
+            'allow_step_back': True,
+        }
+    )
+    eval_env = rlcard.make(
+        'leduc-holdem',
+        config={
+            'seed': 0,
+        }
+    )
 
     # Seed numpy, torch, random
     set_seed(args.seed)
 
     # Initilize CFR Agent
-    agent = CFRAgent(env, os.path.join(args.log_dir, 'cfr_model'))
+    agent = CFRAgent(
+        env,
+        os.path.join(
+            args.log_dir,
+            'cfr_model',
+        ),
+    )
     agent.load()  # If we have saved model, we first load the model
 
     # Evaluate CFR against random
-    eval_env.set_agents([agent, RandomAgent(num_actions=env.num_actions)])
+    eval_env.set_agents([
+        agent,
+        RandomAgent(num_actions=env.num_actions),
+    ])
 
     # Start training
     with Logger(args.log_dir) as logger:
@@ -234,18 +355,46 @@ def train(args):
             # Evaluate the performance. Play with Random agents.
             if episode % args.evaluate_every == 0:
                 agent.save() # Save model
-                logger.log_performance(env.timestep, tournament(eval_env, args.num_games)[0])
+                logger.log_performance(
+                    env.timestep,
+                    tournament(
+                        eval_env,
+                        args.num_eval_games
+                    )[0]
+                )
 
-        # Plot the learning curve
-        logger.plot('CFR')
+        # Get the paths
+        csv_path, fig_path = logger.csv_path, logger.fig_path
+    # Plot the learning curve
+    plot_curve(csv_path, fig_path, 'cfr')
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser("DQN example in RLCard")
-    parser.add_argument('--seed', type=int, default=42)
-    parser.add_argument('--num_episodes', type=int, default=5000)
-    parser.add_argument('--num_games', type=int, default=2000)
-    parser.add_argument('--evaluate_every', type=int, default=100)
-    parser.add_argument('--log_dir', type=str, default='experiments/leduc_holdem_cfr_result/')
+    parser = argparse.ArgumentParser("CFR example in RLCard")
+    parser.add_argument(
+        '--seed',
+        type=int,
+        default=42,
+    )
+    parser.add_argument(
+        '--num_episodes',
+        type=int,
+        default=5000,
+    )
+    parser.add_argument(
+        '--num_eval_games',
+        type=int,
+        default=2000,
+    )
+    parser.add_argument(
+        '--evaluate_every',
+        type=int,
+        default=100,
+    )
+    parser.add_argument(
+        '--log_dir',
+        type=str,
+        default='experiments/leduc_holdem_cfr_result/',
+    )
 
     args = parser.parse_args()
 
@@ -288,11 +437,13 @@ from rlcard.agents import LeducholdemHumanAgent as HumanAgent
 from rlcard.utils import print_card
 
 # Make environment
-# Set 'record_action' to True because we need it to print results
-env = rlcard.make('leduc-holdem', config={'record_action': True})
+env = rlcard.make('leduc-holdem')
 human_agent = HumanAgent(env.num_actions)
 cfr_agent = models.load('leduc-holdem-cfr').agents[0]
-env.set_agents([human_agent, cfr_agent])
+env.set_agents([
+    human_agent,
+    cfr_agent,
+])
 
 print(">> Leduc Hold'em pre-trained model")
 
@@ -382,45 +533,91 @@ def train(args):
     env = rlcard.make(args.env)
 
     # Initialize the DMC trainer
-    trainer = DMCTrainer(env,
-                         load_model=args.load_model,
-                         xpid=args.xpid,
-                         savedir=args.savedir,
-                         save_interval=args.save_interval,
-                         num_actor_devices=args.num_actor_devices,
-                         num_actors=args.num_actors,
-                         training_device=args.training_device)
+    trainer = DMCTrainer(
+        env,
+        cuda=args.cuda,
+        load_model=args.load_model,
+        xpid=args.xpid,
+        savedir=args.savedir,
+        save_interval=args.save_interval,
+        num_actor_devices=args.num_actor_devices,
+        num_actors=args.num_actors,
+        training_device=args.training_device,
+    )
 
     # Train DMC Agents
     trainer.start()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser("DQN example in RLCard")
-    parser.add_argument('--env', type=str, default='doudizhu')
-    parser.add_argument('--cuda', type=str, default='1')
-    parser.add_argument('--load_model', action='store_true',
-                    help='Load an existing model')
-    parser.add_argument('--xpid', default='doudizhu',
-                        help='Experiment id (default: doudizhu)')
-    parser.add_argument('--savedir', default='experiments/dmc_result',
-                        help='Root dir where experiment data will be saved')
-    parser.add_argument('--save_interval', default=30, type=int,
-                        help='Time interval (in minutes) at which to save the model')
-    parser.add_argument('--num_actor_devices', default=1, type=int,
-                        help='The number of devices used for simulation')
-    parser.add_argument('--num_actors', default=5, type=int,
-                        help='The number of actors for each simulation device')
-    parser.add_argument('--training_device', default=0, type=int,
-                        help='The index of the GPU used for training models')
+    parser = argparse.ArgumentParser("DMC example in RLCard")
+    parser.add_argument(
+        '--env',
+        type=str,
+        default='leduc-holdem',
+        choices=[
+            'blackjack',
+            'leduc-holdem',
+            'limit-holdem',
+            'doudizhu',
+            'mahjong',
+            'no-limit-holdem',
+            'uno',
+            'gin-rummy'
+        ],
+    )
+    parser.add_argument(
+        '--cuda',
+        type=str,
+        default='',
+    )
+    parser.add_argument(
+        '--load_model',
+        action='store_true',
+        help='Load an existing model',
+    )
+    parser.add_argument(
+        '--xpid',
+        default='leduc_holdem',
+        help='Experiment id (default: leduc_holdem)',
+    )
+    parser.add_argument(
+        '--savedir',
+        default='experiments/dmc_result',
+        help='Root dir where experiment data will be saved'
+    )
+    parser.add_argument(
+        '--save_interval',
+        default=30,
+        type=int,
+        help='Time interval (in minutes) at which to save the model',
+    )
+    parser.add_argument(
+        '--num_actor_devices',
+        default=1,
+        type=int,
+        help='The number of devices used for simulation',
+    )
+    parser.add_argument(
+        '--num_actors',
+        default=5,
+        type=int,
+        help='The number of actors for each simulation device',
+    )
+    parser.add_argument(
+        '--training_device',
+        default="0",
+        type=str,
+        help='The index of the GPU used for training models',
+    )
 
     args = parser.parse_args()
 
     os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda
     train(args)
 ```
-Run DMC with
+Run DMC on CPU with
 ```
-python3 examples/run_dmc.py
+python3 examples/run_dmc.py --env doudizhu --xpid doudizhu
 ```
 The expected output is as below:
 ```
@@ -429,29 +626,29 @@ Saving arguments to experiments/dmc_result/doudizhu/meta.json
 Saving messages to experiments/dmc_result/doudizhu/out.log
 Saving logs data to experiments/dmc_result/doudizhu/logs.csv
 Saving logs' fields to experiments/dmc_result/doudizhu/fields.csv
-[INFO:8880 utils:66 2021-05-15 20:41:21,447] Device 0 Actor 0 started.
-[INFO:8957 utils:66 2021-05-15 20:41:25,990] Device 0 Actor 1 started.
-[INFO:9033 utils:66 2021-05-15 20:41:30,504] Device 0 Actor 2 started.
-[INFO:9111 utils:66 2021-05-15 20:41:34,976] Device 0 Actor 3 started.
-[INFO:9185 utils:66 2021-05-15 20:41:39,535] Device 0 Actor 4 started.
+[INFO:77533 utils:108 2022-03-23 14:31:30,859] Device cpu Actor 0 started.
+[INFO:77544 utils:108 2022-03-23 14:31:32,631] Device cpu Actor 1 started.
+[INFO:77554 utils:108 2022-03-23 14:31:34,505] Device cpu Actor 2 started.
+[INFO:77564 utils:108 2022-03-23 14:31:36,183] Device cpu Actor 3 started.
+[INFO:77574 utils:108 2022-03-23 14:31:37,967] Device cpu Actor 4 started.
 Updated log fields: ['_tick', '_time', 'frames', 'mean_episode_return_0', 'loss_0', 'mean_episode_return_1', 'loss_1', 'mean_episode_return_2', 'loss_2']
-[INFO:8802 trainer:244 2021-05-15 20:41:44,550] Saving checkpoint to experiments/dmc_result/doudizhu/model.tar
-[INFO:8802 trainer:276 2021-05-15 20:41:44,668] After 9600 frames: @ 1873.8 fps Stats:
-{'loss_0': 0.27473658323287964,
- 'loss_1': 0.8208091259002686,
- 'loss_2': 0.7109626531600952,
- 'mean_episode_return_0': 0.24358974397182465,
- 'mean_episode_return_1': 0.7515923976898193,
- 'mean_episode_return_2': 0.762499988079071}
-[INFO:8802 trainer:276 2021-05-15 20:41:49,674] After 19200 frames: @ 1918.0 fps Stats:
-{'loss_0': 0.4458627700805664,
- 'loss_1': 0.5232920050621033,
- 'loss_2': 0.43021461367607117,
- 'mean_episode_return_0': 0.3717948794364929,
- 'mean_episode_return_1': 0.6348323225975037,
- 'mean_episode_return_2': 0.6357409954071045}
+[INFO:77516 trainer:335 2022-03-23 14:31:42,972] Saving checkpoint to experiments/dmc_result/doudizhu/model.tar
+[INFO:77516 trainer:367 2022-03-23 14:31:43,065] After 9600 frames: @ 1884.4 fps Stats:
+{'loss_0': 0.2543543875217438,
+ 'loss_1': 0.8054689764976501,
+ 'loss_2': 0.7721042633056641,
+ 'mean_episode_return_0': 0.2532467544078827,
+ 'mean_episode_return_1': 0.7515923380851746,
+ 'mean_episode_return_2': 0.753164529800415}
+[INFO:77516 trainer:367 2022-03-23 14:31:48,070] After 19200 frames: @ 1918.3 fps Stats:
+{'loss_0': 0.39971283078193665,
+ 'loss_1': 0.5237217545509338,
+ 'loss_2': 0.49323707818984985,
+ 'mean_episode_return_0': 0.3434908390045166,
+ 'mean_episode_return_1': 0.6602272987365723,
+ 'mean_episode_return_2': 0.6572840213775635}
 ```
-The models will by defult be saved in `experiments/dmc_result/doudizhu`. I have provide some scripts to run DMC in single/multiple GPUs in [examples/scripts/](../examples/scripts/). To evaluate the performance, see [here](toy-examples.md#evaluating-dmc-on-dou-dizhu).
+The models will by default be saved in `experiments/dmc_result/doudizhu`. We have provided some scripts to run DMC in single/multiple GPUs in [examples/scripts/](../examples/scripts/). To evaluate the performance, see [here](toy-examples.md#evaluating-dmc-on-dou-dizhu).
 
 ## Evaluating Agents
 We also provide an example to compare agents. You can find the code in [examples/evaluate.py](examples/evaluate.py)
@@ -460,8 +657,15 @@ import os
 import argparse
 
 import rlcard
-from rlcard.agents import DQNAgent, RandomAgent
-from rlcard.utils import get_device, set_seed, tournament, reorganize, Logger
+from rlcard.agents import (
+    DQNAgent,
+    RandomAgent,
+)
+from rlcard.utils import (
+    get_device,
+    set_seed,
+    tournament,
+)
 
 def load_model(model_path, env=None, position=None, device=None):
     if os.path.isfile(model_path):  # Torch model
@@ -505,11 +709,44 @@ def evaluate(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("Evaluation example in RLCard")
-    parser.add_argument('--env', type=str, default='leduc-holdem')
-    parser.add_argument('--models', nargs='*', default=['experiments/leduc_holdem_dqn_result/model.pth', 'random'])
-    parser.add_argument('--cuda', type=str, default='')
-    parser.add_argument('--seed', type=int, default=42)
-    parser.add_argument('--num_games', type=int, default=10000)
+    parser.add_argument(
+        '--env',
+        type=str,
+        default='leduc-holdem',
+        choices=[
+            'blackjack',
+            'leduc-holdem',
+            'limit-holdem',
+            'doudizhu',
+            'mahjong',
+            'no-limit-holdem',
+            'uno',
+            'gin-rummy',
+        ],
+    )
+    parser.add_argument(
+        '--models',
+        nargs='*',
+        default=[
+            'experiments/leduc_holdem_dqn_result/model.pth',
+            'random',
+        ],
+    )
+    parser.add_argument(
+        '--cuda',
+        type=str,
+        default='',
+    )
+    parser.add_argument(
+        '--seed',
+        type=int,
+        default=42,
+    )
+    parser.add_argument(
+        '--num_games',
+        type=int,
+        default=10000,
+    )
 
     args = parser.parse_args()
 
