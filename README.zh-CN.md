@@ -22,7 +22,9 @@ RLCard是一款卡牌游戏强化学习 (Reinforcement Learning, RL) 的工具�
 
 **社区:**
 *  **Slack**: 在我们的[#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-rkvktsaq-xkMwz8BfKupCM6zGhO01xg) slack频道参与讨论.
-*  **QQ群**: 加入我们的QQ群665647450. 密码：rlcardqqgroup
+*  **QQ群**: 加入我们的QQ群讨论。密码：rlcardqqgroup
+    *  一群：665647450
+    *  二群：117349516
 
 **新闻:**
 *   所有的算法都已支持[PettingZoo](https://github.com/PettingZoo-Team/PettingZoo)接口. 请点击[这里](examples/pettingzoo). 感谢[Yifei Cheng](https://github.com/ycheng517)的贡献。

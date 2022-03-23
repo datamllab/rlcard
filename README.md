@@ -22,7 +22,9 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 
 **Community:**
 *  **Slack**: Discuss in our [#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-rkvktsaq-xkMwz8BfKupCM6zGhO01xg) slack channel.
-*  **QQ Group**: Join our QQ group 665647450. Password: rlcardqqgroup
+*  **QQ Group**: Join our QQ group to discuss. Password: rlcardqqgroup
+	*  Group 1: 665647450
+	*  Group 2: 117349516
 
 **News:**
 *   All the algorithms can suppport [PettingZoo](https://github.com/PettingZoo-Team/PettingZoo) now. Please check [here](examples/pettingzoo). Thanks the contribtuion from [Yifei Cheng](https://github.com/ycheng517).
