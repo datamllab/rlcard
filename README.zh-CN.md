@@ -27,6 +27,7 @@ RLCard是一款卡牌游戏强化学习 (Reinforcement Learning, RL) 的工具�
     *  二群：117349516
 
 **新闻:**
+*   我们更新Jupyter Notebook的教程帮助您快速了解RLCard！请看 [RLCard 教程](https://github.com/datamllab/rlcard-tutorial).
 *   所有的算法都已支持[PettingZoo](https://github.com/PettingZoo-Team/PettingZoo)接口. 请点击[这里](examples/pettingzoo). 感谢[Yifei Cheng](https://github.com/ycheng517)的贡献。
 *   请关注[DouZero](https://github.com/kwai/DouZero), 一个强大的斗地主AI，以及[ICML 2021论文](https://arxiv.org/abs/2106.06135)。点击[此处](https://douzero.org/)进入在线演示。该算法同样集成到了RLCard中，详见[在斗地主中训练DMC](docs/toy-examples.md#training-dmc-on-dou-dizhu)。
 *   我们的项目被用在[PettingZoo](https://github.com/PettingZoo-Team/PettingZoo)中，去看看吧！
