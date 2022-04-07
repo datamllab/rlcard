@@ -1,22 +1,43 @@
-''' An example of training a Deep Monte-Carlo (DMC) Agent on the environments in RLCard
+''' An example of training a Deep Monte-Carlo (DMC) Agent on PettingZoo environments
+wrapping RLCard
 '''
 import os
 import argparse
 
-import torch
+from pettingzoo.classic import (
+    leduc_holdem_v4,
+    texas_holdem_v4,
+    dou_dizhu_v4,
+    mahjong_v4,
+    texas_holdem_no_limit_v6,
+    uno_v4,
+    gin_rummy_v4,
+)
 
-import rlcard
 from rlcard.agents.dmc_agent import DMCTrainer
 
-def train(args):
 
+env_name_to_env_func = {
+    "leduc-holdem": leduc_holdem_v4,
+    "limit-holdem": texas_holdem_v4,
+    "doudizhu": dou_dizhu_v4,
+    "mahjong": mahjong_v4,
+    "no-limit-holdem": texas_holdem_no_limit_v6,
+    "uno": uno_v4,
+    "gin-rummy": gin_rummy_v4,
+}
+
+
+def train(args):
     # Make the environment
-    env = rlcard.make(args.env)
+    env_func = env_name_to_env_func[args.env]
+    env = env_func.env()
+    env.reset()
 
     # Initialize the DMC trainer
     trainer = DMCTrainer(
         env,
-        cuda=args.cuda,
+        is_pettingzoo_env=True,
         load_model=args.load_model,
         xpid=args.xpid,
         savedir=args.savedir,
@@ -24,6 +45,7 @@ def train(args):
         num_actor_devices=args.num_actor_devices,
         num_actors=args.num_actors,
         training_device=args.training_device,
+        total_frames=args.total_frames,
     )
 
     # Train DMC Agents
@@ -42,9 +64,9 @@ if __name__ == '__main__':
             'doudizhu',
             'mahjong',
             'no-limit-holdem',
-            'uno',
-            'gin-rummy'
-        ],
+            'uno', 
+            'gin-rummy',
+        ]
     )
     parser.add_argument(
         '--cuda',
@@ -64,7 +86,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--savedir',
         default='experiments/dmc_result',
-        help='Root dir where experiment data will be saved'
+        help='Root dir where experiment data will be saved',
     )
     parser.add_argument(
         '--save_interval',
@@ -85,9 +107,15 @@ if __name__ == '__main__':
         help='The number of actors for each simulation device',
     )
     parser.add_argument(
+        '--total_frames',
+        default=1e11,
+        type=int,
+        help='The total number of frames to train for',
+    )
+    parser.add_argument(
         '--training_device',
-        default="0",
-        type=str,
+        default=0,
+        type=int,
         help='The index of the GPU used for training models',
     )
 

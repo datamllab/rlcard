@@ -1,15 +1,16 @@
 # RLCard: 卡牌游戏强化学习工具包
 <img width="500" src="https://dczha.com/files/rlcard/logo.jpg" alt="Logo" />
 
-[![Build Status](https://travis-ci.org/datamllab/RLCard.svg?branch=master)](https://travis-ci.org/datamllab/RLCard)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/248eb15c086748a4bcc830755f1bd798)](https://www.codacy.com/manual/daochenzha/rlcard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=datamllab/rlcard&amp;utm_campaign=Badge_Grade)
+[![Testing](https://github.com/datamllab/rlcard/actions/workflows/python-package.yml/badge.svg)](https://github.com/datamllab/rlcard/actions/workflows/python-package.yml)
+[![PyPI version](https://badge.fury.io/py/rlcard.svg)](https://badge.fury.io/py/rlcard)
 [![Coverage Status](https://coveralls.io/repos/github/datamllab/rlcard/badge.svg)](https://coveralls.io/github/datamllab/rlcard?branch=master)
 [![Downloads](https://pepy.tech/badge/rlcard)](https://pepy.tech/project/rlcard)
 [![Downloads](https://pepy.tech/badge/rlcard/month)](https://pepy.tech/project/rlcard)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [English README](README.md)
 
-RLCard是一款卡牌游戏强化学习 (Reinforcement Learning, RL) 的工具包。 它支持多种卡牌游戏环境，具有易于使用的接口，以用于实现各种强化学习和搜索算法。 RLCard的目标是架起强化学习和非完全信息游戏之间的桥梁。 RLCard由[DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Texas A&M University以及社区贡献者共同开发.
+RLCard是一款卡牌游戏强化学习 (Reinforcement Learning, RL) 的工具包。 它支持多种卡牌游戏环境，具有易于使用的接口，以用于实现各种强化学习和搜索算法。 RLCard的目标是架起强化学习和非完全信息游戏之间的桥梁。 RLCard由[DATA Lab](http://faculty.cs.tamu.edu/xiahu/) at Rice and Texas A&M University以及社区贡献者共同开发.
 
 *   官方网站：[https://www.rlcard.org](https://www.rlcard.org)
 *   Jupyter Notebook教程：[https://github.com/datamllab/rlcard-tutorial](https://github.com/datamllab/rlcard-tutorial)
@@ -21,9 +22,12 @@ RLCard是一款卡牌游戏强化学习 (Reinforcement Learning, RL) 的工具�
 
 **社区:**
 *  **Slack**: 在我们的[#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-rkvktsaq-xkMwz8BfKupCM6zGhO01xg) slack频道参与讨论.
-*  **QQ群**: 加入我们的QQ群665647450. 密码：rlcardqqgroup
+*  **QQ群**: 加入我们的QQ群讨论。密码：rlcardqqgroup
+    *  一群：665647450
+    *  二群：117349516
 
 **新闻:**
+*   所有的算法都已支持[PettingZoo](https://github.com/PettingZoo-Team/PettingZoo)接口. 请点击[这里](examples/pettingzoo). 感谢[Yifei Cheng](https://github.com/ycheng517)的贡献。
 *   请关注[DouZero](https://github.com/kwai/DouZero), 一个强大的斗地主AI，以及[ICML 2021论文](https://arxiv.org/abs/2106.06135)。点击[此处](https://douzero.org/)进入在线演示。该算法同样集成到了RLCard中，详见[在斗地主中训练DMC](docs/toy-examples.md#training-dmc-on-dou-dizhu)。
 *   我们的项目被用在[PettingZoo](https://github.com/PettingZoo-Team/PettingZoo)中，去看看吧！
 *   我们发布了RLCard的可视化演示项目：RLCard-Showdown。请点击[此处](https://github.com/datamllab/rlcard-showdown)查看详情！
@@ -111,6 +115,7 @@ RLCard可以灵活地连接各种算法，参考以下例子：
 *   [与预训练Leduc模型游玩](docs/toy-examples.md#having-fun-with-pretrained-leduc-model)
 *   [在斗地主上训练DMC](docs/toy-examples.md#training-dmc-on-dou-dizhu)
 *   [评估智能体](docs/toy-examples.md#evaluating-agents)
+*   [在PettingZoo上训练](examples/pettingzoo)
 
 ## 演示
 
@@ -159,37 +164,38 @@ Agent 1: +++
 我们从不同角度提供每种游戏的估算复杂度。
 **InfoSet数量：** 信息集数量；**InfoSet尺寸：** 单个信息集的平均状态数量；**状态尺寸：** 状态空间的尺寸；**环境名：** 应该传入`rlcard.make`以创建新游戏环境的名称。除此之外，我们也提供每种环境的文档链接和随机智能体释例。
 
-| 游戏                                                                                                                                                                                           | InfoSet数量  | InfoSet尺寸      | 状态尺寸 | 环境名            | 用法                                                                                       |
-| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------: | :---------------: | :---------: | :-------------: | :-----------------------------------------------------------------------------------------: |
-| 二十一点 Blackjack ([wiki](https://en.wikipedia.org/wiki/Blackjack), [百科](https://baike.baidu.com/item/21%E7%82%B9/5481683?fr=aladdin))                                                              | 10^3            | 10^1              | 10^0        | blackjack       | [文档](docs/games.md#blackjack), [释例]](examples/blackjack_random.py)                     |
-| Leduc Hold’em ([论文](http://poker.cs.ualberta.ca/publications/UAI05.pdf))                                                                                                                    | 10^2            | 10^2              | 10^0        | leduc-holdem    | [文档](docs/games.md#leduc-holdem), [释例](examples/leduc_holdem_random.py)               |
-| 限注德州扑克 Limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [百科](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin))    | 10^14           | 10^3              | 10^0        | limit-holdem    | [文档](docs/games.md#limit-texas-holdem), [释例](examples/limit_holdem_random.py)         |
-| 斗地主 Dou Dizhu ([wiki](https://en.wikipedia.org/wiki/Dou_dizhu), [百科](https://baike.baidu.com/item/%E6%96%97%E5%9C%B0%E4%B8%BB/177997?fr=aladdin))                                               | 10^53 ~ 10^83   | 10^23             | 10^4        | doudizhu        | [文档](docs/games.md#dou-dizhu), [释例](examples/doudizhu_random.py)                      |
-| 麻将 Mahjong ([wiki](https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules), [百科](https://baike.baidu.com/item/%E9%BA%BB%E5%B0%86/215))                                                | 10^121          | 10^48             | 10^2        | mahjong         | [文档](docs/games.md#mahjong), [释例](examples/mahjong_random.py)                         | 
-| 无限注德州扑克 No-limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [百科](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin)) | 10^162          | 10^3              | 10^4        | no-limit-holdem | [文档](docs/games.md#no-limit-texas-holdem), [释例](examples/nolimit_holdem_random.py)    |
-| UNO ([wiki](https://en.wikipedia.org/wiki/Uno_\(card_game\)), [百科](https://baike.baidu.com/item/UNO%E7%89%8C/2249587))                                                                      |  10^163         | 10^10             | 10^1        | uno             | [文档](docs/games.md#uno), [释例](examples/uno_random.py)                                 |
-| Gin Rummy ([wiki](https://en.wikipedia.org/wiki/Gin_rummy), [百科](https://baike.baidu.com/item/%E9%87%91%E6%8B%89%E7%B1%B3/3471710))                                                         | 10^52           | -                 | -           | gin-rummy       | [文档](docs/games.md#gin-rummy), [释例](examples/gin_rummy_random.py)                     |
+| 游戏                                                                                                                                                                                                         | InfoSet数量     | InfoSet尺寸       | 状态尺寸    | 环境名          | 用法                                                                                       |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------: | :---------------: | :---------: | :-------------: | :--------------------------------------------------------------------------------------------------: |
+| 二十一点 Blackjack ([wiki](https://en.wikipedia.org/wiki/Blackjack), [百科](https://baike.baidu.com/item/21%E7%82%B9/5481683?fr=aladdin))                                                                    | 10^3            | 10^1              | 10^0        | blackjack       | [文档](docs/games.md#blackjack), [释例]](examples/run_random.py)                                     |
+| Leduc Hold’em ([论文](http://poker.cs.ualberta.ca/publications/UAI05.pdf))                                                                                                                                   | 10^2            | 10^2              | 10^0        | leduc-holdem    | [文档](docs/games.md#leduc-holdem), [释例](examples/run_random.py)                                   |
+| 限注德州扑克 Limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [百科](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin))      | 10^14           | 10^3              | 10^0        | limit-holdem    | [文档](docs/games.md#limit-texas-holdem), [释例](examples/run_random.py)                             |
+| 斗地主 Dou Dizhu ([wiki](https://en.wikipedia.org/wiki/Dou_dizhu), [百科](https://baike.baidu.com/item/%E6%96%97%E5%9C%B0%E4%B8%BB/177997?fr=aladdin))                                                       | 10^53 ~ 10^83   | 10^23             | 10^4        | doudizhu        | [文档](docs/games.md#dou-dizhu), [释例](examples/run_random.py)                                      |
+| 麻将 Mahjong ([wiki](https://en.wikipedia.org/wiki/Competition_Mahjong_scoring_rules), [百科](https://baike.baidu.com/item/%E9%BA%BB%E5%B0%86/215))                                                          | 10^121          | 10^48             | 10^2        | mahjong         | [文档](docs/games.md#mahjong), [释例](examples/run_random.py)                                        | 
+| 无限注德州扑克 No-limit Texas Hold'em ([wiki](https://en.wikipedia.org/wiki/Texas_hold_%27em), [百科](https://baike.baidu.com/item/%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF%E6%89%91%E5%85%8B/83440?fr=aladdin)) | 10^162          | 10^3              | 10^4        | no-limit-holdem | [文档](docs/games.md#no-limit-texas-holdem), [释例](examples/run_random.py)                          |
+| UNO ([wiki](https://en.wikipedia.org/wiki/Uno_\(card_game\)), [百科](https://baike.baidu.com/item/UNO%E7%89%8C/2249587))                                                                                     |  10^163         | 10^10             | 10^1        | uno             | [文档](docs/games.md#uno), [释例](examples/run_random.py)                                            |
+| Gin Rummy ([wiki](https://en.wikipedia.org/wiki/Gin_rummy), [百科](https://baike.baidu.com/item/%E9%87%91%E6%8B%89%E7%B1%B3/3471710))                                                                        | 10^52           | -                 | -           | gin-rummy       | [文档](docs/games.md#gin-rummy), [释例](examples/run_random.py)                                      |
+| 桥牌 ([wiki](https://en.wikipedia.org/wiki/Bridge), [baike](https://baike.baidu.com/item/%E6%A1%A5%E7%89%8C/332030))                                                                                         |                 | -                 | -           | bridge          | [文档](docs/games.md#bridge), [释例](examples/run_random.py)                                         |
 
 ## 支持算法
-| 算法 | 释例 | 参考 |
-| :--------------------------------------: | :-----------------------------------------: | :------------------------------------------------------------------------------------------------------: |
-| 深度蒙特卡洛（Deep Monte-Carlo，DMC）                   | [examples/run\_dmc.py](examples/run_dmc.py) | [[论文]](https://arxiv.org/abs/2106.06135)                                                              |
-| 深度Q学习 （Deep Q Learning, DQN）                    | [examples/run\_rl.py](examples/run_rl.py)   | [[论文]](https://arxiv.org/abs/1312.5602)                                                               |
-| 虚拟自我对局 （Neural Fictitious Self-Play，NFSP）       | [examples/run\_rl.py](examples/run_rl.py)   | [[论文]](https://arxiv.org/abs/1603.01121)                                                              |
+| 算法                                                          | 释例                                        | 参考                                                                                                    |
+| :-----------------------------------------------------------: | :-----------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+| 深度蒙特卡洛（Deep Monte-Carlo，DMC）                         | [examples/run\_dmc.py](examples/run_dmc.py) | [[论文]](https://arxiv.org/abs/2106.06135)                                                              |
+| 深度Q学习 （Deep Q Learning, DQN）                            | [examples/run\_rl.py](examples/run_rl.py)   | [[论文]](https://arxiv.org/abs/1312.5602)                                                               |
+| 虚拟自我对局 （Neural Fictitious Self-Play，NFSP）            | [examples/run\_rl.py](examples/run_rl.py)     | [[论文]](https://arxiv.org/abs/1603.01121)                                                            |
 | 虚拟遗憾最小化算法（Counterfactual Regret Minimization，CFR） | [examples/run\_cfr.py](examples/run_cfr.py) | [[论文]](http://papers.nips.cc/paper/3306-regret-minimization-in-games-with-incomplete-information.pdf) |
 
 ## 预训练和基于规则的模型
 我们提供了一个[模型集合](rlcard/models)作为基准线。
 
-| 模型                                    | 解释                                              |
-| :--------------------------------------: | :------------------------------------------------------: |
-| leduc-holdem-cfr                         | Leduc Hold'em上的预训练CFR（机会抽样）模型 |
-| leduc-holdem-rule-v1                     | 基于规则的Leduc Hold'em模型， v1                   |
-| leduc-holdem-rule-v2                     | 基于规则的Leduc Hold'em模型， v2                   |
+| 模型                                     | 解释                                              |
+| :--------------------------------------: | :-----------------------------------------------: |
+| leduc-holdem-cfr                         | Leduc Hold'em上的预训练CFR（机会抽样）模型        |
+| leduc-holdem-rule-v1                     | 基于规则的Leduc Hold'em模型，v1                   |
+| leduc-holdem-rule-v2                     | 基于规则的Leduc Hold'em模型，v2                   |
 | uno-rule-v1                              | 基于规则的UNO模型，v1                             |
-| limit-holdem-rule-v1                     | 基于规则的限注德州扑克模型，v1             |
-| doudizhu-rule-v1                         | 基于规则的斗地主模型，v1                       |
-| gin-rummy-novice-rule                    | Gin Rummy新手规则模型                              |
+| limit-holdem-rule-v1                     | 基于规则的限注德州扑克模型，v1                    |
+| doudizhu-rule-v1                         | 基于规则的斗地主模型，v1                          |
+| gin-rummy-novice-rule                    | Gin Rummy新手规则模型                             |
 
 ## API小抄
 ### 如何创建新的环境
@@ -239,7 +245,7 @@ Agent 1: +++
 请参考[这里](docs/README.md)查阅更多文档[Documents](docs/README.md)。API文档在我们的[网站](http://www.rlcard.org)中。
 
 ## 贡献
-我们非常感谢对本项目的贡献！请为反馈或漏洞创建Issue。如果您想恭喜代码，请参考[贡献指引](./CONTRIBUTING.md)。如果您有任何问题，请联系通过[daochen.zha@tamu.edu](mailto:daochen.zha@tamu.edu)联系[Daochen Zha](https://github.com/daochenzha)
+我们非常感谢对本项目的贡献！请为反馈或漏洞创建Issue。如果您想恭喜代码，请参考[贡献指引](./CONTRIBUTING.md)。如果您有任何问题，请联系通过[daochen.zha@rice.edu](mailto:daochen.zha@rice.edu)联系[Daochen Zha](https://github.com/daochenzha)
 
 ## 致谢
 我们诚挚的感谢竞技世界网络技术有限公司（JJ World Network Technology Co.,LTD）为本项目提供的大力支持，以及所有来自社区成员的贡献。

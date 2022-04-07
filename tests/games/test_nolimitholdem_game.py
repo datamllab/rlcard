@@ -22,7 +22,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
         # test call
         game.init_game()
         init_not_raise_num = game.round.not_raise_num
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
         step_not_raise_num = game.round.not_raise_num
         self.assertEqual(init_not_raise_num + 1, step_not_raise_num)
 
@@ -34,9 +34,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
 
         # test check
         game.init_game()
-        game.step(Action.CALL)
-        game.step(Action.CHECK)
-        self.assertEqual(game.round_counter, 1)
+        game.step(Action.CHECK_CALL)
 
     def test_bet_more_than_chips(self):
         game = Game()
@@ -57,17 +55,17 @@ class TestNolimitholdemMethods(unittest.TestCase):
         # test check
         game.init_game()
         self.assertEqual(Stage.PREFLOP, game.stage)
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
         game.step(Action.RAISE_POT)
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
 
         self.assertEqual(Stage.FLOP, game.stage)
-        game.step(Action.CHECK)
-        game.step(Action.CHECK)
+        game.step(Action.CHECK_CALL)
+        game.step(Action.CHECK_CALL)
 
         self.assertEqual(Stage.TURN, game.stage)
-        game.step(Action.CHECK)
-        game.step(Action.CHECK)
+        game.step(Action.CHECK_CALL)
+        game.step(Action.CHECK_CALL)
 
         self.assertEqual(Stage.RIVER, game.stage)
 
@@ -77,22 +75,22 @@ class TestNolimitholdemMethods(unittest.TestCase):
         # test check
         _, first_player_id = game.init_game()
         self.assertEqual(Stage.PREFLOP, game.stage)
-        game.step(Action.CALL)
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
+        game.step(Action.CHECK_CALL)
         game.step(Action.RAISE_POT)
         game.step(Action.FOLD)
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
 
         self.assertEqual(Stage.FLOP, game.stage)
         self.assertEqual((first_player_id - 2) % 3, game.round.game_pointer)
-        game.step(Action.CHECK)
+        game.step(Action.CHECK_CALL)
         game.step(Action.RAISE_POT)
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
 
         self.assertEqual(Stage.TURN, game.stage)
         self.assertEqual((first_player_id - 2) % 3, game.round.game_pointer)
-        game.step(Action.CHECK)
-        game.step(Action.CHECK)
+        game.step(Action.CHECK_CALL)
+        game.step(Action.CHECK_CALL)
 
         self.assertEqual(Stage.RIVER, game.stage)
 
@@ -102,7 +100,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game.init_game()
         self.assertEqual(Stage.PREFLOP, game.stage)
         game.step(Action.ALL_IN)
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
 
         self.assertEqual(Stage.RIVER, game.stage)
 
@@ -120,23 +118,16 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game = Game()
 
         game.init_game()
-        game.step(Action.CALL)
-        game.step(Action.CHECK)
+        game.step(Action.CHECK_CALL)
+        game.step(Action.CHECK_CALL)
         self.assertEqual(game.round_counter, 1)
-        self.assertTrue(Action.CALL not in game.get_legal_actions())
 
-        game.step(Action.CHECK)
+        game.step(Action.CHECK_CALL)
         game.step(Action.ALL_IN)
-        self.assertListEqual([Action.FOLD, Action.CALL], game.get_legal_actions())
-        game.step(Action.CALL)
+        self.assertListEqual([Action.FOLD, Action.CHECK_CALL], game.get_legal_actions())
+        game.step(Action.CHECK_CALL)
         self.assertEqual(game.round_counter, 4)
         self.assertEqual(200, game.dealer.pot)
-
-    def test_wrong_steps(self):
-        game = Game()
-
-        game.init_game()
-        self.assertRaises(Exception, game.step, Action.CHECK)
 
     def test_raise_pot(self):
         game = Game()
@@ -156,7 +147,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
         step_raised = game.round.raised[player_id]
         self.assertEqual(16, step_raised)
 
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
         player_id = game.round.game_pointer
         game.step(Action.RAISE_POT)
         step_raised = game.round.raised[player_id]
@@ -167,7 +158,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
 
         _, player_id = game.init_game()
         self.assertNotIn(Action.RAISE_HALF_POT, game.get_legal_actions()) # Half pot equals call
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
         step_raised = game.round.raised[player_id]
         self.assertEqual(2, step_raised)
 
@@ -184,7 +175,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
     def test_payoffs_1(self):
         game = Game()
         game.init_game()
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
         game.step(Action.RAISE_HALF_POT)
         game.step(Action.FOLD)
         self.assertTrue(game.is_over())
@@ -195,7 +186,7 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game = Game()
         np.random.seed(0)
         game.init_game()
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
         game.step(Action.RAISE_POT)
         game.step(Action.ALL_IN)
         game.step(Action.FOLD)
@@ -208,9 +199,9 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game.init_chips = [50, 100]
         game.dealer_id = 0
         game.init_game()
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
         game.step(Action.ALL_IN)
-        game.step(Action.CALL)
+        game.step(Action.CHECK_CALL)
         self.assertTrue(game.is_over())
 
 

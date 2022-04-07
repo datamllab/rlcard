@@ -10,7 +10,10 @@ from rlcard.utils.utils import print_card
 env = rlcard.make('limit-holdem')
 human_agent = HumanAgent(env.num_actions)
 agent_0 = RandomAgent(num_actions=env.num_actions)
-env.set_agents([human_agent, agent_0])
+env.set_agents([
+    human_agent,
+    agent_0,
+])
 
 print(">> Limit Hold'em random agent")
 

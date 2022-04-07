@@ -10,7 +10,10 @@ from rlcard.utils import print_card
 env = rlcard.make('leduc-holdem')
 human_agent = HumanAgent(env.num_actions)
 cfr_agent = models.load('leduc-holdem-cfr').agents[0]
-env.set_agents([human_agent, cfr_agent])
+env.set_agents([
+    human_agent,
+    cfr_agent,
+])
 
 print(">> Leduc Hold'em pre-trained model")
 

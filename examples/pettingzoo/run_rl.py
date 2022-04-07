@@ -1,20 +1,41 @@
-''' An example of training a reinforcement learning agent on the environments in RLCard
+''' An example of training a reinforcement learning agent on the PettingZoo 
+environments that wrap RLCard
 '''
 import os
 import argparse
 
 import torch
 
-import rlcard
-from rlcard.agents import RandomAgent
+from pettingzoo.classic import (
+    leduc_holdem_v4,
+    texas_holdem_v4,
+    dou_dizhu_v4,
+    mahjong_v4,
+    texas_holdem_no_limit_v6,
+    uno_v4,
+    gin_rummy_v4,
+)
+from rlcard.agents.pettingzoo_agents import RandomAgentPettingZoo
 from rlcard.utils import (
     get_device,
     set_seed,
-    tournament,
-    reorganize,
     Logger,
-    plot_curve,
+    plot_curve, 
+    run_game_pettingzoo,
+    reorganize_pettingzoo,
+    tournament_pettingzoo,
 )
+
+env_name_to_env_func = {
+    "leduc-holdem": leduc_holdem_v4,
+    "limit-holdem": texas_holdem_v4,
+    "doudizhu": dou_dizhu_v4,
+    "mahjong": mahjong_v4,
+    "no-limit-holdem": texas_holdem_no_limit_v6,
+    "uno": uno_v4,
+    "gin-rummy": gin_rummy_v4,
+}
+
 
 def train(args):
 
@@ -25,64 +46,55 @@ def train(args):
     set_seed(args.seed)
 
     # Make the environment with seed
-    env = rlcard.make(
-        args.env,
-        config={
-            'seed': args.seed,
-        }
-    )
+    env_func = env_name_to_env_func[args.env]
+    env = env_func.env()
+    env.seed(args.seed)
+    env.reset()
 
     # Initialize the agent and use random agents as opponents
+    learning_agent_name = env.agents[0]
     if args.algorithm == 'dqn':
-        from rlcard.agents import DQNAgent
-        agent = DQNAgent(
-            num_actions=env.num_actions,
-            state_shape=env.state_shape[0],
+        from rlcard.agents.pettingzoo_agents import DQNAgentPettingZoo
+        agent = DQNAgentPettingZoo(
+            num_actions=env.action_space(learning_agent_name).n,
+            state_shape=env.observation_space(learning_agent_name)["observation"].shape,
             mlp_layers=[64,64],
-            device=device,
+            device=device
         )
     elif args.algorithm == 'nfsp':
-        from rlcard.agents import NFSPAgent
-        agent = NFSPAgent(
-            num_actions=env.num_actions,
-            state_shape=env.state_shape[0],
+        from rlcard.agents.pettingzoo_agents import NFSPAgentPettingZoo
+        agent = NFSPAgentPettingZoo(
+            num_actions=env.action_space(learning_agent_name).n,
+            state_shape=env.observation_space(learning_agent_name)["observation"].shape,
             hidden_layers_sizes=[64,64],
             q_mlp_layers=[64,64],
-            device=device,
+            device=device
         )
-    agents = [agent]
-    for _ in range(1, env.num_players):
-        agents.append(RandomAgent(num_actions=env.num_actions))
-    env.set_agents(agents)
+
+    agents = {learning_agent_name: agent}
+    for i in range(1, env.num_agents):
+        agents[env.agents[i]] = RandomAgentPettingZoo(num_actions=env.action_space(env.agents[i]).n)
 
     # Start training
+    num_timesteps = 0
     with Logger(args.log_dir) as logger:
         for episode in range(args.num_episodes):
 
             if args.algorithm == 'nfsp':
-                agents[0].sample_episode_policy()
+                agent.sample_episode_policy()
 
             # Generate data from the environment
-            trajectories, payoffs = env.run(is_training=True)
+            trajectories = run_game_pettingzoo(env, agents, is_training=True)
+            trajectories = reorganize_pettingzoo(trajectories)
+            num_timesteps += sum([len(t) for t in trajectories.values()])
 
-            # Reorganaize the data to be state, action, reward, next_state, done
-            trajectories = reorganize(trajectories, payoffs)
-
-            # Feed transitions into agent memory, and train the agent
-            # Here, we assume that DQN always plays the first position
-            # and the other players play randomly (if any)
-            for ts in trajectories[0]:
+            for ts in trajectories[learning_agent_name]:
                 agent.feed(ts)
 
             # Evaluate the performance. Play with random agents.
             if episode % args.evaluate_every == 0:
-                logger.log_performance(
-                    env.timestep,
-                    tournament(
-                        env,
-                        args.num_eval_games,
-                    )[0]
-                )
+                average_rewards = tournament_pettingzoo(env, agents, args.num_eval_games)
+                logger.log_performance(num_timesteps, average_rewards[learning_agent_name])
 
         # Get the paths
         csv_path, fig_path = logger.csv_path, logger.fig_path
@@ -102,7 +114,6 @@ if __name__ == '__main__':
         type=str,
         default='leduc-holdem',
         choices=[
-            'blackjack',
             'leduc-holdem',
             'limit-holdem',
             'doudizhu',
@@ -110,7 +121,6 @@ if __name__ == '__main__':
             'no-limit-holdem',
             'uno',
             'gin-rummy',
-            'bridge',
         ],
     )
     parser.add_argument(
@@ -157,4 +167,3 @@ if __name__ == '__main__':
 
     os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda
     train(args)
-
