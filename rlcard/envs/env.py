@@ -163,6 +163,8 @@ class Env(object):
             state = self.get_state(player_id)
             trajectories[player_id].append(state)
 
+        print(trajectories[0])
+
         # Payoffs
         payoffs = self.get_payoffs()
 
