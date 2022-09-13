@@ -61,15 +61,13 @@ class BlackjackJudger:
             score (int): the score of the given cards set
         '''
         score = 0
-        has_A = 0
+        count_a = 0
         for card in cards:
             card_score = self.rank2score[card.rank]
             score += card_score
             if card.rank == 'A':
-                has_A += 1
-        if score > 21 and has_A > 0:
-            for _ in range(has_A):
-                score -= 10
-                if score < 21:
-                    break
+                count_a += 1
+        while score > 21 and count_a > 0:
+            count_a -= 1
+            score -= 10
         return score

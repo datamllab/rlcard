@@ -20,7 +20,6 @@ class BlackjackEnv(Env):
         self.default_game_config = DEFAULT_GAME_CONFIG
         self.game = Game()
         super().__init__(config)
-        self.rank2score = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":10, "Q":10, "K":10}
         self.actions = ['hit', 'stand']
         self.state_shape = [[2] for _ in range(self.num_players)]
         self.action_shape = [None for _ in range(self.num_players)]
@@ -49,19 +48,8 @@ class BlackjackEnv(Env):
         my_cards = cards[0]
         dealer_cards = cards[1]
 
-        def get_scores_and_A(hand):
-            score = 0
-            has_a = 0
-            for card in hand:
-                score += self.rank2score[card[1:]]
-                if card[1] == 'A':
-                    has_a = 1
-            if score > 21 and has_a == 1:
-                score -= 10
-            return score, has_a
-
-        my_score, _ = get_scores_and_A(my_cards)
-        dealer_score, _ = get_scores_and_A(dealer_cards)
+        my_score = get_score(my_cards)
+        dealer_score = get_score(dealer_cards)
         obs = np.array([my_score, dealer_score])
 
         legal_actions = OrderedDict({i: None for i in range(len(self.actions))})
@@ -100,3 +88,16 @@ class BlackjackEnv(Env):
             action (str): action for the game
         '''
         return self.actions[action_id]
+
+rank2score = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":10, "Q":10, "K":10}
+def get_score(hand):
+    score = 0
+    count_a = 0
+    for card in hand:
+        score += rank2score[card[1:]]
+        if card[1] == 'A':
+            count_a += 1
+    while score > 21 and count_a > 0:
+        count_a -= 1
+        score -= 10
+    return score
