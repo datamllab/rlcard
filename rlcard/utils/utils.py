@@ -232,11 +232,11 @@ def plot_curve(csv_path, save_path, algorithm):
         xs = []
         ys = []
         for row in reader:
-            xs.append(int(row['timestep']))
+            xs.append(int(row['episode']))
             ys.append(float(row['reward']))
         fig, ax = plt.subplots()
         ax.plot(xs, ys, label=algorithm)
-        ax.set(xlabel='timestep', ylabel='reward')
+        ax.set(xlabel='episode', ylabel='reward')
         ax.legend()
         ax.grid()
 

@@ -94,7 +94,7 @@ def train(args):
             # Evaluate the performance. Play with random agents.
             if episode % args.evaluate_every == 0:
                 average_rewards = tournament_pettingzoo(env, agents, args.num_eval_games)
-                logger.log_performance(num_timesteps, average_rewards[learning_agent_name])
+                logger.log_performance(episode, average_rewards[learning_agent_name])
 
         # Get the paths
         csv_path, fig_path = logger.csv_path, logger.fig_path

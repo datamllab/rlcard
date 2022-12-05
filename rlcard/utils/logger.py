@@ -23,7 +23,7 @@ class Logger(object):
 
         self.txt_file = open(self.txt_path, 'w')
         self.csv_file = open(self.csv_path, 'w')
-        fieldnames = ['timestep', 'reward']
+        fieldnames = ['episode', 'reward']
         self.writer = csv.DictWriter(self.csv_file, fieldnames=fieldnames)
         self.writer.writeheader()
 
@@ -38,16 +38,16 @@ class Logger(object):
         self.txt_file.flush()
         print(text)
 
-    def log_performance(self, timestep, reward):
+    def log_performance(self, episode, reward):
         ''' Log a point in the curve
         Args:
-            timestep (int): the timestep of the current point
+            episode (int): the episode of the current point
             reward (float): the reward of the current point
         '''
-        self.writer.writerow({'timestep': timestep, 'reward': reward})
+        self.writer.writerow({'episode': episode, 'reward': reward})
         print('')
         self.log('----------------------------------------')
-        self.log('  timestep     |  ' + str(timestep))
+        self.log('  episode      |  ' + str(episode))
         self.log('  reward       |  ' + str(reward))
         self.log('----------------------------------------')
 
