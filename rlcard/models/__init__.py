@@ -23,6 +23,10 @@ register(
     entry_point='rlcard.models.limitholdem_rule_models:LimitholdemRuleModelV1')
 
 register(
+    model_id = 'limit-holdem-custom',
+    entry_point='rlcard.models.pretrained_models:LimitHoldemCFRModel')
+
+register(
     model_id = 'doudizhu-rule-v1',
     entry_point='rlcard.models.doudizhu_rule_models:DouDizhuRuleModelV1')
 

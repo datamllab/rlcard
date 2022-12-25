@@ -30,3 +30,11 @@ class LeducHoldemCFRModel(Model):
         '''
         return [self.agent, self.agent]
 
+class LimitHoldemCFRModel(Model):
+    def __init__(self):
+        env = rlcard.make('limit-holdem')
+        self.agent = CFRAgent(env, model_path=os.path.join(ROOT_PATH, 'limit_holdem_nfsp'))
+        self.agent.load()
+    @property
+    def agents(self):
+        return [self.agent, self.agent]

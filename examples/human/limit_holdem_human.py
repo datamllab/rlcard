@@ -5,19 +5,30 @@ import rlcard
 from rlcard.agents import LimitholdemHumanAgent as HumanAgent
 from rlcard.agents import RandomAgent
 from rlcard.utils.utils import print_card
+from rlcard import models
+import matplotlib.pyplot as plt
 
 # Make environment
 env = rlcard.make('limit-holdem')
 human_agent = HumanAgent(env.num_actions)
 agent_0 = RandomAgent(num_actions=env.num_actions)
+cfr_agent = models.load("limit-holdem-custom").agents[0]
 env.set_agents([
-    human_agent,
+    # human_agent,
+    cfr_agent,
     agent_0,
 ])
 
+revenue = 0
+hist_ = []
+index = 0
+
 print(">> Limit Hold'em random agent")
 
-while (True):
+while (revenue < 5):
+# for i in range(100):
+    print("Game", index)
+    index += 1
     print(">> Start a new game")
 
     trajectories, payoffs = env.run(is_training=False)
@@ -44,10 +55,15 @@ while (True):
     print('===============     Result     ===============')
     if payoffs[0] > 0:
         print('You win {} chips!'.format(payoffs[0]))
+        revenue += payoffs[0]
     elif payoffs[0] == 0:
         print('It is a tie.')
     else:
         print('You lose {} chips!'.format(-payoffs[0]))
+        revenue += payoffs[0]
     print('')
-
-    input("Press any key to continue...")
+    print("Revenue is", revenue)
+    hist_.append(revenue)
+    # input("Press any key to continue...")
+plt.plot(hist_)
+plt.show()
