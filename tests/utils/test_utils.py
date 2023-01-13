@@ -33,7 +33,9 @@ class TestUtils(unittest.TestCase):
 
     def test_reorganize(self):
         trajectories = reorganize([[[1,2],1,[4,5]]], [1])
-        self.assertEqual(np.array(trajectories).shape, (1, 1, 5))
+        self.assertEqual(len(trajectories), 1)
+        self.assertEqual(len(trajectories[0]), 1)
+        self.assertEqual(len(trajectories[0][0]), 5)
 
     def test_tournament(self):
         env = rlcard.make('leduc-holdem')
