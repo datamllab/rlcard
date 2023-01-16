@@ -21,7 +21,7 @@ def run_game_pettingzoo(env, agents, is_training=False):
     env.reset()
     trajectories = defaultdict(list)
     for agent_name in env.agent_iter():
-        obs, reward, done, _ = env.last()
+        obs, reward, done, _, _ = env.last()
         trajectories[agent_name].append((obs, reward, done))
 
         if done:

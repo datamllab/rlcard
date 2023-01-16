@@ -9,10 +9,7 @@ import torch
 from pettingzoo.classic import (
     leduc_holdem_v4,
     texas_holdem_v4,
-    dou_dizhu_v4,
-    mahjong_v4,
     texas_holdem_no_limit_v6,
-    uno_v4,
     gin_rummy_v4,
 )
 from rlcard.agents.pettingzoo_agents import RandomAgentPettingZoo
@@ -29,10 +26,7 @@ from rlcard.utils import (
 env_name_to_env_func = {
     "leduc-holdem": leduc_holdem_v4,
     "limit-holdem": texas_holdem_v4,
-    "doudizhu": dou_dizhu_v4,
-    "mahjong": mahjong_v4,
     "no-limit-holdem": texas_holdem_no_limit_v6,
-    "uno": uno_v4,
     "gin-rummy": gin_rummy_v4,
 }
 
@@ -48,8 +42,7 @@ def train(args):
     # Make the environment with seed
     env_func = env_name_to_env_func[args.env]
     env = env_func.env()
-    env.seed(args.seed)
-    env.reset()
+    env.reset(seed=args.seed)
 
     # Initialize the agent and use random agents as opponents
     learning_agent_name = env.agents[0]
