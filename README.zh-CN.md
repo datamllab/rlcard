@@ -20,6 +20,7 @@ RLCard是一款卡牌游戏强化学习 (Reinforcement Learning, RL) 的工具�
 *   资源：[Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
 *   相关项目：[DouZero项目](https://github.com/kwai/DouZero)
 *   知乎：[https://zhuanlan.zhihu.com/p/526723604](https://zhuanlan.zhihu.com/p/526723604)
+*   杂项资源：您听说过以数据为中心的人工智能吗？请查看我们的 [data-centric AI survey](https://arxiv.org/abs/2303.10158) 和 [awesome data-centric AI resources](https://github.com/daochenzha/data-centric-AI)!
 
 **社区:**
 *  **Slack**: 在我们的[#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-rkvktsaq-xkMwz8BfKupCM6zGhO01xg) slack频道参与讨论.
