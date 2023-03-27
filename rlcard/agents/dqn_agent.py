@@ -34,7 +34,7 @@ from copy import deepcopy
 
 from rlcard.utils.utils import remove_illegal
 
-Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state', 'legal_actions', 'done'])
+Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state', 'done', 'legal_actions'])
 
 
 class DQNAgent(object):
@@ -191,7 +191,7 @@ class DQNAgent(object):
         Returns:
             loss (float): The loss of the current batch.
         '''
-        state_batch, action_batch, reward_batch, next_state_batch, legal_actions_batch, done_batch = self.memory.sample()
+        state_batch, action_batch, reward_batch, next_state_batch, done_batch, legal_actions_batch = self.memory.sample()
 
         # Calculate best next actions using Q-network (Double DQN)
         q_values_next = self.q_estimator.predict_nograd(next_state_batch)
@@ -399,7 +399,7 @@ class Memory(object):
         '''
         if len(self.memory) == self.memory_size:
             self.memory.pop(0)
-        transition = Transition(state, action, reward, next_state, legal_actions, done)
+        transition = Transition(state, action, reward, next_state, done, legal_actions)
         self.memory.append(transition)
 
     def sample(self):
@@ -413,4 +413,5 @@ class Memory(object):
             done_batch (list): a batch of dones
         '''
         samples = random.sample(self.memory, self.batch_size)
-        return map(np.array, zip(*samples))
+        samples = tuple(zip(*samples))
+        return tuple(map(np.array, samples[:-1])) + (samples[-1],)

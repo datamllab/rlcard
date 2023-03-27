@@ -175,7 +175,7 @@ def train(args):
             # Evaluate the performance. Play with random agents.
             if episode % args.evaluate_every == 0:
                 logger.log_performance(
-                    env.timestep,
+                    episode,
                     tournament(
                         env,
                         args.num_eval_games,
@@ -258,7 +258,7 @@ if __name__ == '__main__':
 ```
 Train DQN on Blackjack with
 ```
-python3 examples/run_rl.py --env blackjack --algorithm dqn
+python3 examples/run_rl.py --env blackjack --algorithm dqn --log_dir experiments/blackjack_dqn_result/
 ```
 The expected output is something like below:
 
@@ -266,27 +266,35 @@ The expected output is something like below:
 --> Running on the CPU
 
 ----------------------------------------
-  timestep     |  2
-  reward       |  -0.213
+  episode      |  0
+  reward       |  -0.1985
 ----------------------------------------
-INFO - Step 100, rl-loss: 1.2863489389419556
+INFO - Step 100, rl-loss: 1.3018044233322144
 INFO - Copied model parameters to target network.
-INFO - Step 153, rl-loss: 0.68201494216918955
+INFO - Step 141, rl-loss: 0.6624548435211182
 ----------------------------------------
-  timestep     |  2153
-  reward       |  -0.2855
+  episode      |  100
+  reward       |  -0.4365
 ----------------------------------------
-INFO - Step 274, rl-loss: 0.48299887776374817
+INFO - Step 281, rl-loss: 0.53533869981765755
 ----------------------------------------
-  timestep     |  5133
-  reward       |  -0.105
+  episode      |  200
+  reward       |  -0.103
 ----------------------------------------
-INFO - Step 412, rl-loss: 0.41647660732269287
+INFO - Step 418, rl-loss: 0.70432752370834356
 ----------------------------------------
-  timestep     |  7615
-  reward       |  -0.1375
+  episode      |  300
+  reward       |  -0.1175
 ----------------------------------------
-INFO - Step 545, rl-loss: 0.48143920302391055
+INFO - Step 552, rl-loss: 0.40242588520050056
+----------------------------------------
+  episode      |  400
+  reward       |  -0.101
+----------------------------------------
+INFO - Step 693, rl-loss: 0.62362509965896616
+----------------------------------------
+  episode      |  500
+  reward       |  -0.0835
 ----------------------------------------
 ```
 
@@ -356,7 +364,7 @@ def train(args):
             if episode % args.evaluate_every == 0:
                 agent.save() # Save model
                 logger.log_performance(
-                    env.timestep,
+                    episode,
                     tournament(
                         eval_env,
                         args.num_eval_games
@@ -408,23 +416,23 @@ The expected output is as below:
 ```
 Iteration 0
 ----------------------------------------
-  timestep     |  192
-  reward       |  0.80175
+  episode      |  0
+  reward       |  0.648
 ----------------------------------------
 Iteration 100
 ----------------------------------------
-  timestep     |  19392
-  reward       |  0.75675
+  episode      |  100
+  reward       |  0.73575
 ----------------------------------------
 Iteration 200
 ----------------------------------------
-  timestep     |  38592
-  reward       |  0.8145
+  episode      |  200
+  reward       |  0.64825
 ----------------------------------------
 Iteration 300
 ----------------------------------------
-  timestep     |  57792
-  reward       |  0.66375
+  episode      |  300
+  reward       |  0.75925
 ----------------------------------------
 ```
 

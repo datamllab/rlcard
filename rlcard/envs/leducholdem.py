@@ -61,7 +61,7 @@ class LeducholdemEnv(Env):
         if public_card:
             obs[self.card2index[public_card]+3] = 1
         obs[state['my_chips']+6] = 1
-        obs[state['all_chips'][1]+20] = 1
+        obs[sum(state['all_chips'])-state['my_chips']+21] = 1
         extracted_state['obs'] = obs
 
         extracted_state['raw_obs'] = state

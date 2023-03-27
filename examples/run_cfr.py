@@ -59,7 +59,7 @@ def train(args):
             if episode % args.evaluate_every == 0:
                 agent.save() # Save model
                 logger.log_performance(
-                    env.timestep,
+                    episode,
                     tournament(
                         eval_env,
                         args.num_eval_games

@@ -19,6 +19,8 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Dou Dizhu Demo: [Demo](https://douzero.org/)
 *   Resources: [Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
 *   Related Project: [DouZero Project](https://github.com/kwai/DouZero)
+*   Zhihu: https://zhuanlan.zhihu.com/p/526723604
+*   Miscellaneous Resources: Have you heard of data-centric AI? Please check out our [data-centric AI survey](https://arxiv.org/abs/2303.10158) and [awesome data-centric AI resources](https://github.com/daochenzha/data-centric-AI)!
 
 **Community:**
 *  **Slack**: Discuss in our [#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-rkvktsaq-xkMwz8BfKupCM6zGhO01xg) slack channel.
@@ -27,6 +29,7 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 	*  Group 2: 117349516
 
 **News:**
+*   We have updated the tutorials in Jupyter Notebook to help you walk through RLCard! Please check [RLCard Tutorial](https://github.com/datamllab/rlcard-tutorial).
 *   All the algorithms can suppport [PettingZoo](https://github.com/PettingZoo-Team/PettingZoo) now. Please check [here](examples/pettingzoo). Thanks the contribtuion from [Yifei Cheng](https://github.com/ycheng517).
 *   Please follow [DouZero](https://github.com/kwai/DouZero), a strong Dou Dizhu AI and the [ICML 2021 paper](https://arxiv.org/abs/2106.06135). An online demo is available [here](https://douzero.org/). The algorithm is also integrated in RLCard. See [Training DMC on Dou Dizhu](docs/toy-examples.md#training-dmc-on-dou-dizhu).
 *   Our package is used in [PettingZoo](https://github.com/PettingZoo-Team/PettingZoo). Please check it out!

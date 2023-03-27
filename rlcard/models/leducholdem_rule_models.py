@@ -87,6 +87,11 @@ class LeducHoldemRuleAgentV2(object):
             else:
                 return action
 
+    def eval_step(self, state):
+        ''' Step for evaluation. The same to step
+        '''
+        return self.step(state), []
+
 class LeducHoldemRuleModelV1(Model):
     ''' Leduc holdem Rule Model version 1
     '''
