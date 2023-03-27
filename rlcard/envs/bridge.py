@@ -234,9 +234,9 @@ class DefaultBridgeStateExtractor(BridgeStateExtractor):
             if game.round.is_bidding_over():
                 declarer = game.round.get_declarer()
                 if current_player_id % 2 == declarer.player_id % 2:
-                    hidden_player_ids = [(current_player_id + 1) % 2, (current_player_id + 3) % 2]
+                    hidden_player_ids = [(current_player_id + 1) % 4, (current_player_id + 3) % 4]
                 else:
-                    hidden_player_ids = [declarer.player_id, (current_player_id + 2) % 2]
+                    hidden_player_ids = [declarer.player_id, (current_player_id + 2) % 4]
                 for hidden_player_id in hidden_player_ids:
                     for card in game.round.players[hidden_player_id].hand:
                         hidden_cards_rep[card.card_id] = 1
