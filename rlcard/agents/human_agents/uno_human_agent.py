@@ -27,7 +27,7 @@ class HumanAgent(object):
         _print_state(state['raw_obs'], state['action_record'])
         action = int(input('>> You choose action (integer): '))
         while action < 0 or action >= len(state['legal_actions']):
-            print('Action illegel...')
+            print('Action illegal...')
             action = int(input('>> Re-choose action (integer): '))
         return state['raw_legal_actions'][action]
 
