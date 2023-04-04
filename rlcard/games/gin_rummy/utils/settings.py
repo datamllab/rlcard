@@ -9,13 +9,13 @@ from typing import Dict, Any
 from enum import Enum
 
 
-class DealerForRound(Enum):
+class DealerForRound(int, Enum):
     North = 0
     South = 1
     Random = 2
 
 
-class Setting(Enum):
+class Setting(str, Enum):
     dealer_for_round = "dealer_for_round"
     stockpile_dead_card_count = "stockpile_dead_card_count"
     going_out_deadwood_count = "going_out_deadwood_count"
