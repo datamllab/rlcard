@@ -15,6 +15,7 @@ RLCard是一款卡牌游戏强化学习 (Reinforcement Learning, RL) 的工具�
 *   官方网站：[https://www.rlcard.org](https://www.rlcard.org)
 *   Jupyter Notebook教程：[https://github.com/datamllab/rlcard-tutorial](https://github.com/datamllab/rlcard-tutorial)
 *   论文：[https://arxiv.org/abs/1910.04376](https://arxiv.org/abs/1910.04376)
+*   视频：[YouTube](https://youtu.be/krK2jmSdKZc)
 *   图形化界面：[RLCard-Showdown](https://github.com/datamllab/rlcard-showdown)
 *   斗地主演示：[Demo](https://douzero.org/)
 *   资源：[Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
