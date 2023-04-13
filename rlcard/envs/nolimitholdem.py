@@ -9,7 +9,7 @@ from rlcard.games.nolimitholdem import Game
 from rlcard.games.nolimitholdem.round import Action
 
 DEFAULT_GAME_CONFIG = {
-        'game_num_players': 2,
+        'game_num_players': 4,
         'chips_for_each': 100,
         'dealer_id': None,
         }
@@ -69,10 +69,10 @@ class NolimitholdemEnv(Env):
         obs[52] = float(my_chips)
         obs[53] = float(max(all_chips))
         extracted_state['obs'] = obs
-
         extracted_state['raw_obs'] = state
         extracted_state['raw_legal_actions'] = [a for a in state['legal_actions']]
         extracted_state['action_record'] = self.action_recorder
+        extracted_state['last_raise'] = state['last_raise']
 
         return extracted_state
 
@@ -114,6 +114,7 @@ class NolimitholdemEnv(Env):
         state['hand_cards'] = [[c.get_index() for c in self.game.players[i].hand] for i in range(self.num_players)]
         state['current_player'] = self.game.game_pointer
         state['legal_actions'] = self.game.get_legal_actions()
+        state['last_raise'] = self.game.round.last_raise
         return state
 
 

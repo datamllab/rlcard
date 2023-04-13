@@ -8,12 +8,13 @@ from rlcard.games.limitholdem import PlayerStatus
 class Action(Enum):
     FOLD = 0
     CHECK_CALL = 1
-    #CALL = 2
+    RAISE = 2
+    # CALL = 2
     # RAISE_3BB = 3
-    RAISE_HALF_POT = 2
-    RAISE_POT = 3
-    # RAISE_2POT = 5
-    ALL_IN = 4
+    # RAISE_HALF_POT = 2
+    # RAISE_POT = 3
+    # # RAISE_2POT = 5
+    # ALL_IN = 4
     # SMALL_BLIND = 7
     # BIG_BLIND = 8
 
@@ -45,6 +46,7 @@ class NolimitholdemRound:
 
         # Raised amount for each player
         self.raised = [0 for _ in range(self.num_players)]
+        self.last_raise = 0
 
     def start_new_round(self, game_pointer, raised=None):
         """
@@ -58,12 +60,13 @@ class NolimitholdemRound:
         """
         self.game_pointer = game_pointer
         self.not_raise_num = 0
+        self.last_raise = 0
         if raised:
             self.raised = raised
         else:
             self.raised = [0 for _ in range(self.num_players)]
 
-    def proceed_round(self, players, action):
+    def proceed_round(self, players, action_tp):
         """
         Call functions from other classes to keep one round running
 
@@ -76,29 +79,38 @@ class NolimitholdemRound:
         """
         player = players[self.game_pointer]
 
+        action = action_tp[0]
         if action == Action.CHECK_CALL:
             diff = max(self.raised) - self.raised[self.game_pointer]
             self.raised[self.game_pointer] = max(self.raised)
             player.bet(chips=diff)
             self.not_raise_num += 1
-
-        elif action == Action.ALL_IN:
-            all_in_quantity = player.remained_chips
-            self.raised[self.game_pointer] = all_in_quantity + self.raised[self.game_pointer]
-            player.bet(chips=all_in_quantity)
-
+        
+        elif action == Action.RAISE:
+            raise_amt = action_tp[1]
+            self.last_raise = raise_amt
+            self.raised[self.game_pointer] += raise_amt
+            player.bet(chips=raise_amt)
             self.not_raise_num = 1
 
-        elif action == Action.RAISE_POT:
-            self.raised[self.game_pointer] += self.dealer.pot
-            player.bet(chips=self.dealer.pot)
-            self.not_raise_num = 1
 
-        elif action == Action.RAISE_HALF_POT:
-            quantity = int(self.dealer.pot / 2)
-            self.raised[self.game_pointer] += quantity
-            player.bet(chips=quantity)
-            self.not_raise_num = 1
+        # elif action == Action.ALL_IN:
+        #     all_in_quantity = player.remained_chips
+        #     self.raised[self.game_pointer] = all_in_quantity + self.raised[self.game_pointer]
+        #     player.bet(chips=all_in_quantity)
+
+        #     self.not_raise_num = 1
+
+        # elif action == Action.RAISE_POT:
+        #     self.raised[self.game_pointer] += self.dealer.pot
+        #     player.bet(chips=self.dealer.pot)
+        #     self.not_raise_num = 1
+
+        # elif action == Action.RAISE_HALF_POT:
+        #     quantity = int(self.dealer.pot / 2)
+        #     self.raised[self.game_pointer] += quantity
+        #     player.bet(chips=quantity)
+        #     self.not_raise_num = 1
 
         elif action == Action.FOLD:
             player.status = PlayerStatus.FOLDED
@@ -142,22 +154,25 @@ class NolimitholdemRound:
         diff = max(self.raised) - self.raised[self.game_pointer]
         # If the current player has no more chips after call, we cannot raise
         if diff > 0 and diff >= player.remained_chips:
-            full_actions.remove(Action.RAISE_HALF_POT)
-            full_actions.remove(Action.RAISE_POT)
+            # full_actions.remove(Action.RAISE_HALF_POT)
+            # full_actions.remove(Action.RAISE_POT)
             full_actions.remove(Action.ALL_IN)
+            full_actions.remove(Action.RAISE)
         # Even if we can raise, we have to check remained chips
         else:
-            if self.dealer.pot > player.remained_chips:
-                full_actions.remove(Action.RAISE_POT)
+            if player.remained_chips < self.last_raise:
+                full_actions.remove(Action.RAISE)
+            # if self.dealer.pot > player.remained_chips:
+            #     full_actions.remove(Action.RAISE_POT)
 
-            if int(self.dealer.pot / 2) > player.remained_chips:
-                full_actions.remove(Action.RAISE_HALF_POT)
+            # if int(self.dealer.pot / 2) > player.remained_chips:
+            #     full_actions.remove(Action.RAISE_HALF_POT)
 
             # Can't raise if the total raise amount is leq than the max raise amount of this round
             # If raise by pot, there is no such concern
-            if Action.RAISE_HALF_POT in full_actions and \
-                int(self.dealer.pot / 2) + self.raised[self.game_pointer] <= max(self.raised):
-                full_actions.remove(Action.RAISE_HALF_POT)
+            # if Action.RAISE_HALF_POT in full_actions and \
+            #     int(self.dealer.pot / 2) + self.raised[self.game_pointer] <= max(self.raised):
+            #     full_actions.remove(Action.RAISE_HALF_POT)
 
         return full_actions
 

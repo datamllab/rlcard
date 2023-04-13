@@ -1,5 +1,5 @@
 from rlcard.utils.utils import print_card
-
+from rlcard.games.nolimitholdem.round import Action
 
 class HumanAgent(object):
     ''' A human agent for No Limit Holdem. It can be used to play against trained models
@@ -26,10 +26,16 @@ class HumanAgent(object):
         '''
         _print_state(state['raw_obs'], state['action_record'])
         action = int(input('>> You choose action (integer): '))
-        while action < 0 or action >= len(state['legal_actions']):
+        amt = 0
+        if state['raw_legal_actions'][action] == Action.RAISE:
+            amt = int(input('>> Choose your raise amount: '))
+        while action < 0 or action >= len(state['legal_actions']) or\
+            (state['raw_legal_actions'][action] == Action.RAISE and amt < state['last_raise'] * 2):
             print('Action illegel...')
             action = int(input('>> Re-choose action (integer): '))
-        return state['raw_legal_actions'][action]
+            if state['raw_legal_actions'][action] == Action.RAISE:
+                amt = int(input('>> Choose your raise amount: '))
+        return state['raw_legal_actions'][action], amt
 
     def eval_step(self, state):
         ''' Predict the action given the curent state for evaluation. The same to step here.
@@ -70,4 +76,3 @@ def _print_state(state, action_record):
     print('\n=========== Actions You Can Choose ===========')
     print(', '.join([str(index) + ': ' + str(action) for index, action in enumerate(state['legal_actions'])]))
     print('')
-    print(state)

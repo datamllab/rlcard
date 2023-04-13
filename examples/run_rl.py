@@ -125,7 +125,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--cuda',
         type=str,
-        default='',
+        default='0',
     )
     parser.add_argument(
         '--seed',
