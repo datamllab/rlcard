@@ -43,6 +43,43 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   New game Gin Rummy and human GUI available. Thanks for the contribution of [@billh0420](https://github.com/billh0420).
 *   PyTorch implementation available. Thanks for the contribution of [@mjudell](https://github.com/mjudell).
 
+## Contributors
+The following games are mainly developed and maintained by community contributors. Thank you!
+*   Gin Rummy: [@billh0420](https://github.com/billh0420)
+*   Bridge: [@billh0420](https://github.com/billh0420)
+
+Thank all the contributors!
+
+<a href="https://github.com/daochenzha"><img src="https://github.com/daochenzha.png" width="40px" alt="daochenzha" /></a>&nbsp;&nbsp;
+<a href="https://github.com/hsywhu"><img src="https://github.com/hsywhu.png" width="40px" alt="hsywhu" /></a>&nbsp;&nbsp;
+<a href="https://github.com/CaoYuanpu"><img src="https://github.com/CaoYuanpu.png" width="40px" alt="CaoYuanpu" /></a>&nbsp;&nbsp;
+<a href="https://github.com/billh0420"><img src="https://github.com/billh0420.png" width="40px" alt="billh0420" /></a>&nbsp;&nbsp;
+<a href="https://github.com/ruzhwei"><img src="https://github.com/ruzhwei.png" width="40px" alt="ruzhwei" /></a>&nbsp;&nbsp;
+<a href="https://github.com/adrianpgob"><img src="https://github.com/adrianpgob.png" width="40px" alt="adrianpgob" /></a>&nbsp;&nbsp;
+<a href="https://github.com/Zhigal"><img src="https://github.com/Zhigal.png" width="40px" alt="Zhigal" /></a>&nbsp;&nbsp;
+<a href="https://github.com/aypee19"><img src="https://github.com/aypee19.png" width="40px" alt="aypee19" /></a>&nbsp;&nbsp;
+<a href="https://github.com/Clarit7"><img src="https://github.com/Clarit7.png" width="40px" alt="Clarit7" /></a>&nbsp;&nbsp;
+<a href="https://github.com/lhenry15"><img src="https://github.com/lhenry15.png" width="40px" alt="lhenry15" /></a>&nbsp;&nbsp;
+<a href="https://github.com/ismael-elatifi"><img src="https://github.com/ismael-elatifi.png" width="40px" alt="ismael-elatifi" /></a>&nbsp;&nbsp;
+<a href="https://github.com/mjudell"><img src="https://github.com/mjudell.png" width="40px" alt="mjudell" /></a>&nbsp;&nbsp;
+<a href="https://github.com/jkterry1"><img src="https://github.com/jkterry1.png" width="40px" alt="jkterry1" /></a>&nbsp;&nbsp;
+<a href="https://github.com/kaanozdogru"><img src="https://github.com/kaanozdogru.png" width="40px" alt="kaanozdogru" /></a>&nbsp;&nbsp;
+<a href="https://github.com/junyuGuo"><img src="https://github.com/junyuGuo.png" width="40px" alt="junyuGuo" /></a>&nbsp;&nbsp;
+<a href="https://github.com/Xixo99"><img src="https://github.com/Xixo99.png" width="40px" alt="Xixo99" /></a>&nbsp;&nbsp;
+<a href="https://github.com/rodrigodelazcano"><img src="https://github.com/rodrigodelazcano.png" width="40px" alt="rodrigodelazcano" /></a>&nbsp;&nbsp;
+<a href="https://github.com/Michael1015198808"><img src="https://github.com/Michael1015198808.png" width="40px" alt="Michael1015198808" /></a>&nbsp;&nbsp;
+<a href="https://github.com/mia1996"><img src="https://github.com/mia1996.png" width="40px" alt="mia1996" /></a>&nbsp;&nbsp;
+<a href="https://github.com/kaiks"><img src="https://github.com/kaiks.png" width="40px" alt="kaiks" /></a>&nbsp;&nbsp;
+<a href="https://github.com/claude9493"><img src="https://github.com/claude9493.png" width="40px" alt="claude9493" /></a>&nbsp;&nbsp;
+<a href="https://github.com/SonSang"><img src="https://github.com/SonSang.png" width="40px" alt="SonSang" /></a>&nbsp;&nbsp;
+<a href="https://github.com/rishabhvarshney14"><img src="https://github.com/rishabhvarshney14.png" width="40px" alt="rishabhvarshney14" /></a>&nbsp;&nbsp;
+<a href="https://github.com/aetheryang"><img src="https://github.com/aetheryang.png" width="40px" alt="aetheryang" /></a>&nbsp;&nbsp;
+<a href="https://github.com/rxng8"><img src="https://github.com/rxng8.png" width="40px" alt="rxng8" /></a>&nbsp;&nbsp;
+<a href="https://github.com/nondecidibile"><img src="https://github.com/nondecidibile.png" width="40px" alt="nondecidibile" /></a>&nbsp;&nbsp;
+<a href="https://github.com/benblack769"><img src="https://github.com/benblack769.png" width="40px" alt="benblack769" /></a>&nbsp;&nbsp;
+<a href="https://github.com/zhengsx"><img src="https://github.com/zhengsx.png" width="40px" alt="zhengsx" /></a>&nbsp;&nbsp;
+<a href="https://github.com/andrewnc"><img src="https://github.com/andrewnc.png" width="40px" alt="andrewnc" /></a>&nbsp;&nbsp;
+
 ## Cite this work
 If you find this repo useful, you may cite:
 
