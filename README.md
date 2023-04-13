@@ -65,6 +65,7 @@ Thank all the contributors!
 <a href="https://github.com/jkterry1"><img src="https://github.com/jkterry1.png" width="40px" alt="jkterry1" /></a>&nbsp;&nbsp;
 <a href="https://github.com/kaanozdogru"><img src="https://github.com/kaanozdogru.png" width="40px" alt="kaanozdogru" /></a>&nbsp;&nbsp;
 <a href="https://github.com/junyuGuo"><img src="https://github.com/junyuGuo.png" width="40px" alt="junyuGuo" /></a>&nbsp;&nbsp;
+<br />
 <a href="https://github.com/Xixo99"><img src="https://github.com/Xixo99.png" width="40px" alt="Xixo99" /></a>&nbsp;&nbsp;
 <a href="https://github.com/rodrigodelazcano"><img src="https://github.com/rodrigodelazcano.png" width="40px" alt="rodrigodelazcano" /></a>&nbsp;&nbsp;
 <a href="https://github.com/Michael1015198808"><img src="https://github.com/Michael1015198808.png" width="40px" alt="Michael1015198808" /></a>&nbsp;&nbsp;
