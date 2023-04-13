@@ -102,7 +102,7 @@ class GinRummyGame:
         return self.round.get_current_player()
 
     def get_last_action(self) -> ActionEvent or None:
-        return None if len(self.actions) == 0 else self.actions[-1]
+        return self.actions[-1] if self.actions and len(self.actions) > 0 else None
 
     def get_state(self, player_id: int):
         ''' Get player's state
