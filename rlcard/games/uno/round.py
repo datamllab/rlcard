@@ -52,7 +52,7 @@ class UnoRound:
             self.dealer.deal_cards(player, 2)
 
     def proceed_round(self, players, action):
-        ''' Call other Classes's functions to keep one round running
+        ''' Call other Classes' functions to keep one round running
 
         Args:
             player (object): object of UnoPlayer
@@ -65,11 +65,12 @@ class UnoRound:
         card_info = action.split('-')
         color = card_info[0]
         trait = card_info[1]
-        # remove correspongding card
+        # remove corresponding card
         remove_index = None
         if trait == 'wild' or trait == 'wild_draw_4':
             for index, card in enumerate(player.hand):
                 if trait == card.trait:
+                    card.color = color # update the color of wild card to match the action
                     remove_index = index
                     break
         else:
