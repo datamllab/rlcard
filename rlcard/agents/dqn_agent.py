@@ -58,7 +58,7 @@ class DQNAgent(object):
                  learning_rate=0.00005,
                  device=None,
                  save_path=None,
-                 save_every=-1):
+                 save_every=float('inf'),):
 
         '''
         Q-Learning algorithm for off-policy TD control using Function Approximation.

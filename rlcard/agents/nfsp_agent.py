@@ -64,7 +64,7 @@ class NFSPAgent(object):
                  evaluate_with='average_policy',
                  device=None,
                  save_path=None,
-                 save_every=-1):
+                 save_every=float('inf')):
         ''' Initialize the NFSP agent.
 
         Args:
