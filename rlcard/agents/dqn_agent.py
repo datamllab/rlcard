@@ -109,7 +109,7 @@ class DQNAgent(object):
 
         # The epsilon decay scheduler
         self.epsilons = np.linspace(epsilon_start, epsilon_end, epsilon_decay_steps)
-        
+
         # Create estimators
         self.q_estimator = Estimator(num_actions=num_actions, learning_rate=learning_rate, state_shape=state_shape, \
             mlp_layers=mlp_layers, device=self.device)
@@ -226,7 +226,7 @@ class DQNAgent(object):
         if self.train_t % self.update_target_estimator_every == 0:
             self.target_estimator = deepcopy(self.q_estimator)
             print("\nINFO - Copied model parameters to target network.")
-            
+
         self.train_t += 1
 
         if self.save_path and self.train_t % self.save_every == 0:
@@ -312,17 +312,7 @@ class DQNAgent(object):
         
         
         return agent_instance
-             
-        
-
-    def save(self, path):
-        ''' Save the model (q_estimator weights only)
-
-        Args:
-            path (str): the path to save the model
-        '''
-        torch.save(self.q_estimator.model.state_dict(), path)
-        
+                     
     def save_checkpoint(self, path, filename='checkpoint_dqn.pt'):
         ''' Save the model checkpoint (all attributes)
 

@@ -114,7 +114,7 @@ class NFSPAgent(object):
 
         # Total timesteps
         self.total_t = 0
-        
+
         # Total training step
         self.train_t = 0
 
