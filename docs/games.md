@@ -60,7 +60,7 @@ The state is encoded as a vector of length 72. The first 52 elements represent c
 | 26~38   | Diamond A ~ Diamond K   |
 | 39~51   | Club A ~ Club K         |
 | 52~56   | Raise number in round 1 |
-| 37~61   | Raise number in round 2 |
+| 57~61   | Raise number in round 2 |
 | 62~66   | Raise number in round 3 |
 | 67~71   | Raise number in round 4 |
 
