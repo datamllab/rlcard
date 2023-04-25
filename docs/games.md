@@ -75,7 +75,7 @@ There 4 actions in Limit Texas Hold'em. They are encoded as below.
 | 3           | Check         |
 
 ### Payoff of Limit Texas Hold'em
-The stardard unit used in the leterature is milli big blinds per hand (mbb/h). In the toolkit, the reward is calculated based on big blinds per hand. For example, a reward of 0.5 (-0.5) means that the player wins (loses) 0.5 times of the amount of big blind.
+The stardard unit used in the literature is milli big blinds per hand (mbb/h). In the toolkit, the reward is calculated based on big blinds per hand. For example, a reward of 0.5 (-0.5) means that the player wins (loses) 0.5 times of the amount of big blind.
 
 ## Dou Dizhu
 
