@@ -60,7 +60,7 @@ The state is encoded as a vector of length 72. The first 52 elements represent c
 | 26~38   | Diamond A ~ Diamond K   |
 | 39~51   | Club A ~ Club K         |
 | 52~56   | Raise number in round 1 |
-| 37~61   | Raise number in round 2 |
+| 57~61   | Raise number in round 2 |
 | 62~66   | Raise number in round 3 |
 | 67~71   | Raise number in round 4 |
 
@@ -75,7 +75,7 @@ There 4 actions in Limit Texas Hold'em. They are encoded as below.
 | 3           | Check         |
 
 ### Payoff of Limit Texas Hold'em
-The stardard unit used in the leterature is milli big blinds per hand (mbb/h). In the toolkit, the reward is calculated based on big blinds per hand. For example, a reward of 0.5 (-0.5) means that the player wins (loses) 0.5 times of the amount of big blind.
+The stardard unit used in the literature is milli big blinds per hand (mbb/h). In the toolkit, the reward is calculated based on big blinds per hand. For example, a reward of 0.5 (-0.5) means that the player wins (loses) 0.5 times of the amount of big blind.
 
 ## Dou Dizhu
 
@@ -175,7 +175,7 @@ The reward is calculated by the terminal state of the game, where winning player
 And if no one win the game, then all players' reward will be 0.
 
 ## No-limit Texas Hold'em
-No-limit Texas Hold'em has similar rule with Limit Texas Hold'em. But unlike in Limit Texas Hold'em game in which each player can only choose a fixed amount of raise and the number of raises is limited. In No-limit Texas Hold'em, The player may raise with at least the same amount as previous raised amount in the same round (or the minimum raise amount set before the game if none has raised), and up to the player's remaining stack. The number of raises is also unlimited.
+No-limit Texas Hold'em has similar rule with Limit Texas Hold'em. But unlike in Limit Texas Hold'em game in which each player can only choose a fixed amount of raise and the number of raises is limited. In No-limit Texas Hold'em, the player may raise with at least the same amount as previous raised amount in the same round (or the minimum raise amount set before the game if none has raised), and up to the player's remaining stack. The number of raises is also unlimited.
 
 ## State Representation of No-Limit Texas Hold'em
 The state representation is similar to Limit Hold'em game. The state is represented as 52 cards and 2 elements of the chips of the players as below:
