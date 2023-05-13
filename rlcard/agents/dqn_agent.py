@@ -25,6 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 
+import os
 import random
 import numpy as np
 import torch
@@ -319,7 +320,7 @@ class DQNAgent(object):
         Args:
             path (str): the path to save the model
         '''
-        torch.save(self.checkpoint_attributes(), path + '/' + filename)
+        torch.save(self.checkpoint_attributes(), os.path.join(path, filename))
         
 class Estimator(object):
     '''
