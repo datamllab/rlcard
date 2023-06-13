@@ -60,6 +60,7 @@ class DoudizhuEnv(Env):
             for i, action in reversed(state['trace']):
                 if i == 0:
                     last_landlord_action = action
+                    break
             last_landlord_action = _cards2array(last_landlord_action)
             landlord_num_cards_left = _get_one_hot_array(state['num_cards_left'][0], 20)
 
@@ -69,6 +70,7 @@ class DoudizhuEnv(Env):
             for i, action in reversed(state['trace']):
                 if i == teammate_id:
                     last_teammate_action = action
+                    break
             last_teammate_action = _cards2array(last_teammate_action)
             teammate_num_cards_left = _get_one_hot_array(state['num_cards_left'][teammate_id], 17)
             obs = np.concatenate((current_hand,
