@@ -19,6 +19,7 @@
 See the paper https://arxiv.org/abs/1603.01121 for more details.
 '''
 
+import os
 import random
 import collections
 import enum
@@ -370,7 +371,7 @@ class NFSPAgent(object):
         Args:
             path (str): the path to save the model
         '''
-        torch.save(self.checkpoint_attributes(), path + '/' + filename)
+        torch.save(self.checkpoint_attributes(), os.path.join(path, filename))
         
 
 class AveragePolicyNetwork(nn.Module):
