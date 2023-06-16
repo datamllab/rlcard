@@ -19,7 +19,16 @@ class Tractor():
         self.lordDecor = -1  # 主牌花色
         self.sumSc = 0  # 闲家得分
         self.underCards = []
-        self.nowDealCardPlayer = 0  # 当前到发牌的玩家
+        self.game_stage="bid"#bid,ambush,play,分别代表发牌，扣牌，出牌
+
+        '''
+        如果game_stage=="bid"，则currentPlayer代表当前收到牌的玩家
+        如果game_stage=="ambush"，则currentPlayer代表当前扣牌的玩家
+        如果game_stage=="play"，则currentPlayer代表当前出牌的玩家
+        '''
+        self.currentPlayer = 0
+
+        self.isTer=False#游戏是否结束，它在step里会改变
         self.round_i = 0  # 轮数
         self.deck = [i%CARDS_CNT2+1 for i in range(CARDS_CNT)]
         self.useCards_i=0#放回deck
@@ -176,7 +185,9 @@ class Tractor():
                 self.deck[i]=beginDeckList[i]
         # print(self.deck.tolist())
         self.deck_i = 0
-        self.nowDealCardPlayer = 0
+        self.currentPlayer=0
+        if self.dealer != -1:
+            self.currentPlayer = (self.dealer + 1) % 4
         for i in range(4):
             self.players[i].initCards()
         #bidFun(env,round,allActList)
@@ -218,7 +229,7 @@ class Tractor():
 
     def __dealCard(self,bidFun):#发牌
         card=self.deck[self.deck_i]
-        p=self.players[self.nowDealCardPlayer]
+        p=self.players[self.currentPlayer]
         p.addCard(getKind(card,4,self.lordNum),card)#级牌放入无主里
         allActList=[[]]#空列表代表不叫牌
         for i in range(4):
@@ -239,19 +250,21 @@ class Tractor():
         act_id = bidFun(self,p,self.deck_i//4,allActList)
         act=allActList[act_id]
         self.deck_i += 1
-            # self.snatchLord_v0(self.nowDealCardPlayer)  # 抢主
+            # self.snatchLord_v0(self.currentPlayer)  # 抢主
 
         #self.printAllCards()
         if len(act) > 0 :
-            # print("玩家"+str(self.nowDealCardPlayer)+"叫了：",end=" ")
+            # print("玩家"+str(self.currentPlayer)+"叫了：",end=" ")
             dfsPrintActList(act)
             self.bidAns=act
-            self.bidPlayer=self.nowDealCardPlayer
-        self.nowDealCardPlayer=(self.nowDealCardPlayer+1)%4
+            self.bidPlayer=self.currentPlayer
+        self.currentPlayer=(self.currentPlayer+1)%4
 
     def setUnderCards(self,discardFun):#换牌，
         p = self.players[self.dealer]
         self.underCards=[]
+        self.game_stage = "ambush"
+        self.currentPlayer = self.dealer
         for a in self.deck[-8:]:
             p.addCard(getKind(a,self.lordDecor,self.lordNum),a)
         self.sortPlayerHand(p)
@@ -268,6 +281,7 @@ class Tractor():
 
         for i in range(4):
             self.players[i].initCards_orderCards_cnt(self)
+        self.game_stage = "play"
         # for i in range(5):
         #     env.printCardsList(p.cards_decorList[i], p.cards_decorLen[i])
         # print("")
@@ -575,6 +589,7 @@ class Tractor():
         return False,True
 
     def firstPolicy(self,firstPlayerId,firstPolicyFun):#第一个人出牌，policyFun是一个回调，代表如果有甩牌，甩牌的出牌策略
+        self.currentPlayer =firstPlayerId
         p=self.players[firstPlayerId]
         allActList=self.getFirstAllAction(p)
         act_id=firstPolicyFun(self,p,Action([],[],playerId=p.id),allActList)
@@ -763,6 +778,7 @@ class Tractor():
                 usedAct.setDou(doulasti, usedList.copy())  # 设置牌
         return act_ans
     def otherPolicy(self,act4,firstPlayerID,nowPlayerId,otherPolicyFun):
+        self.currentPlayer = nowPlayerId
         # 第一个人出牌，otherPolicyFun是一个回调，代表如果跟牌太多，
         p = self.players[nowPlayerId]
         firstAct=act4[firstPlayerID]
@@ -811,7 +827,8 @@ class Tractor():
             if self.players[playerId].dealerTag>1:#不是庄家赢
                 self.sumSc += sc_under*rate
             self.undeck+=self.underCards
-            return playerId, sc,True,sc_under*rate
+            self.isTer =True
+            return playerId, sc,self.isTer,sc_under*rate
         return playerId,sc,False,0#返回赢得玩家id，本轮得分，是否结束游戏，结算信息
     def getGrade(self,sc):
         if sc<80:
