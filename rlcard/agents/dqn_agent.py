@@ -87,6 +87,7 @@ class DQNAgent(object):
             save_path (str): The path to save the model checkpoints
             save_every (int): Save the model every X training steps
         '''
+        self.use_raw = False
         self.replay_memory_init_size = replay_memory_init_size
         self.update_target_estimator_every = update_target_estimator_every
         self.discount_factor = discount_factor
