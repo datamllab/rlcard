@@ -1,9 +1,9 @@
-'''
+"""
     Project: Gui Gin Rummy
     File name: player_type.py
     Author: William Hale
     Date created: 3/14/2020
-'''
+"""
 
 import enum
 

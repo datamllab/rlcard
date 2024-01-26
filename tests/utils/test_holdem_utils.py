@@ -23,7 +23,7 @@ class TestHoldemUtils(unittest.TestCase):
 
         hand = Hand(['CJ', 'CT', 'CQ', 'CK', 'C9', 'C8'])
         with self.assertRaises(Exception):
-            hand.evaluateHand()
+            hand.evaluate_hand()
 
     def test_has_high_card_false(self):
 

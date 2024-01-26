@@ -12,12 +12,12 @@ DEFAULT_GAME_CONFIG = {
         }
 
 class LimitholdemEnv(Env):
-    ''' Limitholdem Environment
-    '''
+    """Limitholdem Environment
+    """
 
     def __init__(self, config):
-        ''' Initialize the Limitholdem environment
-        '''
+        """Initialize the Limitholdem environment
+        """
         self.name = 'limit-holdem'
         self.default_game_config = DEFAULT_GAME_CONFIG
         self.game = Game()
@@ -30,15 +30,15 @@ class LimitholdemEnv(Env):
             self.card2index = json.load(file)
 
     def _get_legal_actions(self):
-        ''' Get all leagal actions
+        """Get all legal actions
 
         Returns:
             encoded_action_list (list): return encoded legal action list (from str to int)
-        '''
+        """
         return self.game.get_legal_actions()
 
     def _extract_state(self, state):
-        ''' Extract the state representation from state dictionary for agent
+        """Extract the state representation from state dictionary for agent
 
         Note: Currently the use the hand cards and the public cards. TODO: encode the states
 
@@ -47,7 +47,7 @@ class LimitholdemEnv(Env):
 
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
-        '''
+        """
         extracted_state = {}
 
         legal_actions = OrderedDict({self.actions.index(a): None for a in state['legal_actions']})
@@ -71,22 +71,22 @@ class LimitholdemEnv(Env):
         return extracted_state
 
     def get_payoffs(self):
-        ''' Get the payoff of a game
+        """Get the payoff of a game
 
         Returns:
            payoffs (list): list of payoffs
-        '''
+        """
         return self.game.get_payoffs()
 
     def _decode_action(self, action_id):
-        ''' Decode the action for applying to the game
+        """Decode the action for applying to the game
 
         Args:
             action id (int): action id
 
         Returns:
             action (str): action for the game
-        '''
+        """
         legal_actions = self.game.get_legal_actions()
         if self.actions[action_id] not in legal_actions:
             if 'check' in legal_actions:
@@ -96,11 +96,11 @@ class LimitholdemEnv(Env):
         return self.actions[action_id]
 
     def get_perfect_information(self):
-        ''' Get the perfect information of the current state
+        """Get the perfect information of the current state
 
         Returns:
             (dict): A dictionary of all the perfect information of the current state
-        '''
+        """
         state = {}
         state['chips'] = [self.game.players[i].in_chips for i in range(self.num_players)]
         state['public_card'] = [c.get_index() for c in self.game.public_cards] if self.game.public_cards else None

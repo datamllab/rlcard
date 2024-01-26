@@ -1,16 +1,16 @@
 import os
 import csv
 
+
 class Logger(object):
-    ''' Logger saves the running results and helps make plots from the results
-    '''
+    """Logger saves the running results and helps make plots from the results"""
 
     def __init__(self, log_dir):
-        ''' Initialize the labels, legend and paths of the plot and log file.
+        """Initialize the labels, legend and paths of the plot and log file.
 
         Args:
-            log_path (str): The path the log files
-        '''
+            log_dir (str): The log directory for the log files
+        """
         self.log_dir = log_dir
 
     def __enter__(self):
@@ -30,20 +30,20 @@ class Logger(object):
         return self
 
     def log(self, text):
-        ''' Write the text to log file then print it.
+        """Write the text to log file then print it.
         Args:
             text(string): text to log
-        '''
-        self.txt_file.write(text+'\n')
+        """
+        self.txt_file.write(text + '\n')
         self.txt_file.flush()
         print(text)
 
     def log_performance(self, episode, reward):
-        ''' Log a point in the curve
+        """Log a point in the curve
         Args:
             episode (int): the episode of the current point
             reward (float): the reward of the current point
-        '''
+        """
         self.writer.writerow({'episode': episode, 'reward': reward})
         print('')
         self.log('----------------------------------------')

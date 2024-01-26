@@ -1,6 +1,5 @@
 import json
 import os
-import numpy as np
 from collections import OrderedDict
 
 import rlcard
@@ -9,17 +8,17 @@ from rlcard.games.leducholdem import Game
 from rlcard.utils import *
 
 DEFAULT_GAME_CONFIG = {
-        'game_num_players': 2,
-        }
+    'game_num_players': 2,
+}
+
 
 class LeducholdemEnv(Env):
-    ''' Leduc Hold'em Environment
-    '''
+    """Leduc Hold'em Environment"""
 
     def __init__(self, config):
-        ''' Initialize the Limitholdem environment
-        '''
-        self.name = 'leduc-holdem' 
+        """Initialize the Limitholdem environment
+        """
+        self.name = 'leduc-holdem'
         self.default_game_config = DEFAULT_GAME_CONFIG
         self.game = Game()
         super().__init__(config)
@@ -31,15 +30,15 @@ class LeducholdemEnv(Env):
             self.card2index = json.load(file)
 
     def _get_legal_actions(self):
-        ''' Get all leagal actions
+        """Get all legal actions
 
         Returns:
             encoded_action_list (list): return encoded legal action list (from str to int)
-        '''
+        """
         return self.game.get_legal_actions()
 
     def _extract_state(self, state):
-        ''' Extract the state representation from state dictionary for agent
+        """Extract the state representation from state dictionary for agent
 
         Note: Currently the use the hand cards and the public cards. TODO: encode the states
 
@@ -48,7 +47,7 @@ class LeducholdemEnv(Env):
 
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
-        '''
+        """
         extracted_state = {}
 
         legal_actions = OrderedDict({self.actions.index(a): None for a in state['legal_actions']})
@@ -59,9 +58,9 @@ class LeducholdemEnv(Env):
         obs = np.zeros(36)
         obs[self.card2index[hand]] = 1
         if public_card:
-            obs[self.card2index[public_card]+3] = 1
-        obs[state['my_chips']+6] = 1
-        obs[sum(state['all_chips'])-state['my_chips']+21] = 1
+            obs[self.card2index[public_card] + 3] = 1
+        obs[state['my_chips'] + 6] = 1
+        obs[sum(state['all_chips']) - state['my_chips'] + 21] = 1
         extracted_state['obs'] = obs
 
         extracted_state['raw_obs'] = state
@@ -71,22 +70,22 @@ class LeducholdemEnv(Env):
         return extracted_state
 
     def get_payoffs(self):
-        ''' Get the payoff of a game
+        """Get the payoff of a game
 
         Returns:
            payoffs (list): list of payoffs
-        '''
+        """
         return self.game.get_payoffs()
 
     def _decode_action(self, action_id):
-        ''' Decode the action for applying to the game
+        """Decode the action for applying to the game
 
         Args:
             action id (int): action id
 
         Returns:
             action (str): action for the game
-        '''
+        """
         legal_actions = self.game.get_legal_actions()
         if self.actions[action_id] not in legal_actions:
             if 'check' in legal_actions:
@@ -96,11 +95,11 @@ class LeducholdemEnv(Env):
         return self.actions[action_id]
 
     def get_perfect_information(self):
-        ''' Get the perfect information of the current state
+        """Get the perfect information of the current state
 
         Returns:
             (dict): A dictionary of all the perfect information of the current state
-        '''
+        """
         state = {}
         state['chips'] = [self.game.players[i].in_chips for i in range(self.num_players)]
         state['public_card'] = self.game.public_card.get_index() if self.game.public_card else None

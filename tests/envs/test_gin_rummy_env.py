@@ -1,8 +1,8 @@
-'''
+"""
     File name: tests/envs/test_gin_rummy_env.py
     Author: William Hale
     Date created: 4/20/2020
-'''
+"""
 
 import unittest
 import numpy as np

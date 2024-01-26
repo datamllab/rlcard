@@ -1,9 +1,9 @@
-'''
+"""
     Project: Gui Gin Rummy
     File name: utils_extra.py
     Author: William Hale
     Date created: 3/14/2020
-'''
+"""
 
 from PIL import Image, ImageDraw, ImageFilter
 

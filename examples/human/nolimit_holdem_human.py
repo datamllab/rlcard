@@ -1,5 +1,4 @@
-''' A toy example of playing against pretrianed AI on Leduc Hold'em
-'''
+"""A toy example of playing against pretrained AI on Leduc Hold'em"""
 from rlcard.agents import RandomAgent
 
 import rlcard
@@ -17,7 +16,7 @@ human_agent2 = HumanAgent(env.num_actions)
 env.set_agents([human_agent, human_agent2])
 
 
-while (True):
+while True:
     print(">> Start a new game")
 
     trajectories, payoffs = env.run(is_training=False)

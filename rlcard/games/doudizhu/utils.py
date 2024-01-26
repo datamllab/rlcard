@@ -1,5 +1,4 @@
-''' Doudizhu utils
-'''
+"""Doudizhu utils"""
 import os
 import json
 from collections import OrderedDict
@@ -15,7 +14,8 @@ if not os.path.isfile(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/action_sp
         or not os.path.isfile(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/card_type.json')) \
         or not os.path.isfile(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata/type_card.json')):
     import zipfile
-    with zipfile.ZipFile(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata.zip'),"r") as zip_ref:
+
+    with zipfile.ZipFile(os.path.join(ROOT_PATH, 'games/doudizhu/jsondata.zip'), "r") as zip_ref:
         zip_ref.extractall(os.path.join(ROOT_PATH, 'games/doudizhu/'))
 
 # Action space
@@ -41,8 +41,8 @@ with open(type_card_path, 'r') as f:
 CARD_RANK_STR = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K',
                  'A', '2', 'B', 'R']
 CARD_RANK_STR_INDEX = {'3': 0, '4': 1, '5': 2, '6': 3, '7': 4,
-            '8': 5, '9': 6, 'T': 7, 'J': 8, 'Q': 9,
-            'K': 10, 'A': 11, '2': 12, 'B': 13, 'R': 14}
+                       '8': 5, '9': 6, 'T': 7, 'J': 8, 'Q': 9,
+                       'K': 10, 'A': 11, '2': 12, 'B': 13, 'R': 14}
 # rank list
 CARD_RANK = ['3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K',
              'A', '2', 'BJ', 'RJ']
@@ -54,7 +54,7 @@ INDEX = OrderedDict(sorted(INDEX.items(), key=lambda t: t[1]))
 
 
 def doudizhu_sort_str(card_1, card_2):
-    ''' Compare the rank of two cards of str representation
+    """Compare the rank of two cards of str representation
 
     Args:
         card_1 (str): str representation of solo card
@@ -62,7 +62,7 @@ def doudizhu_sort_str(card_1, card_2):
 
     Returns:
         int: 1(card_1 > card_2) / 0(card_1 = card2) / -1(card_1 < card_2)
-    '''
+    """
     key_1 = CARD_RANK_STR.index(card_1)
     key_2 = CARD_RANK_STR.index(card_2)
     if key_1 > key_2:
@@ -73,12 +73,12 @@ def doudizhu_sort_str(card_1, card_2):
 
 
 def doudizhu_sort_card(card_1, card_2):
-    ''' Compare the rank of two cards of Card object
+    """Compare the rank of two cards of Card object
 
     Args:
         card_1 (object): object of Card
         card_2 (object): object of card
-    '''
+    """
     key = []
     for card in [card_1, card_2]:
         if card.rank == '':
@@ -93,15 +93,14 @@ def doudizhu_sort_card(card_1, card_2):
 
 
 def get_landlord_score(current_hand):
-    ''' Roughly judge the quality of the hand, and provide a score as basis to
-    bid landlord.
+    """Roughly judge the quality of the hand, and provide a score as basis to bid landlord.
 
     Args:
         current_hand (str): string of cards. Eg: '56888TTQKKKAA222R'
 
     Returns:
         int: score
-    '''
+    """
     score_map = {'A': 1, '2': 2, 'B': 3, 'R': 4}
     score = 0
     # rocket
@@ -112,7 +111,7 @@ def get_landlord_score(current_hand):
     i = 0
     while i < length:
         # bomb
-        if i <= (length - 4) and current_hand[i] == current_hand[i+3]:
+        if i <= (length - 4) and current_hand[i] == current_hand[i + 3]:
             score += 6
             i += 4
             continue
@@ -122,26 +121,28 @@ def get_landlord_score(current_hand):
         i += 1
     return score
 
+
 def cards2str_with_suit(cards):
-    ''' Get the corresponding string representation of cards with suit
+    """Get the corresponding string representation of cards with suit
 
     Args:
         cards (list): list of Card objects
 
     Returns:
         string: string representation of cards
-    '''
-    return ' '.join([card.suit+card.rank for card in cards])
+    """
+    return ' '.join([card.suit + card.rank for card in cards])
+
 
 def cards2str(cards):
-    ''' Get the corresponding string representation of cards
+    """Get the corresponding string representation of cards
 
     Args:
         cards (list): list of Card objects
 
     Returns:
         string: string representation of cards
-    '''
+    """
     response = ''
     for card in cards:
         if card.rank == '':
@@ -150,13 +151,17 @@ def cards2str(cards):
             response += card.rank
     return response
 
+
 class LocalObjs(threading.local):
     def __init__(self):
         self.cached_candidate_cards = None
+
+
 _local_objs = LocalObjs()
 
+
 def contains_cards(candidate, target):
-    ''' Check if cards of candidate contains cards of target.
+    """Check if cards of candidate contains cards of target.
 
     Args:
         candidate (string): A string representing the cards of candidate
@@ -164,7 +169,7 @@ def contains_cards(candidate, target):
 
     Returns:
         boolean
-    '''
+    """
     # In normal cases, most continuous calls of this function
     #   will test different targets against the same candidate.
     # So the cached counts of each card in candidate can speed up
@@ -176,29 +181,30 @@ def contains_cards(candidate, target):
             cards_dict[card] += 1
         _local_objs.cached_candidate_cards_dict = cards_dict
     cards_dict = _local_objs.cached_candidate_cards_dict
-    if (target == ''):
+    if target == '':
         return True
     curr_card = target[0]
     curr_count = 1
     for card in target[1:]:
-        if (card != curr_card):
-            if (cards_dict[curr_card] < curr_count):
+        if card != curr_card:
+            if cards_dict[curr_card] < curr_count:
                 return False
             curr_card = card
             curr_count = 1
         else:
             curr_count += 1
-    if (cards_dict[curr_card] < curr_count):
+    if cards_dict[curr_card] < curr_count:
         return False
     return True
 
+
 def encode_cards(plane, cards):
-    ''' Encode cards and represerve it into plane.
+    """Encode cards and represerve it into plane.
 
     Args:
         cards (list or str): list or str of cards, every entry is a
     character of solo representation of card
-    '''
+    """
     if not cards:
         return None
     layer = 1
@@ -210,10 +216,10 @@ def encode_cards(plane, cards):
         for index, card in enumerate(cards):
             if index == 0:
                 continue
-            if card == cards[index-1]:
+            if card == cards[index - 1]:
                 layer += 1
             else:
-                rank = CARD_RANK_STR.index(cards[index-1])
+                rank = CARD_RANK_STR.index(cards[index - 1])
                 plane[layer][rank] = 1
                 layer = 1
                 plane[0][rank] = 0
@@ -223,7 +229,7 @@ def encode_cards(plane, cards):
 
 
 def get_gt_cards(player, greater_player):
-    ''' Provide player's cards which are greater than the ones played by
+    """Provide player's cards which are greater than the ones played by
     previous player in one round
 
     Args:
@@ -235,9 +241,8 @@ def get_gt_cards(player, greater_player):
 
     Note:
         1. return value contains 'pass'
-    '''
-    # add 'pass' to legal actions
-    gt_cards = ['pass']
+    """
+    gt_cards = ['pass']  # add 'pass' to legal actions
     current_hand = cards2str(player.current_hand)
     target_cards = greater_player.played_cards
     target_types = CARD_TYPE[0][target_cards]

@@ -1,4 +1,3 @@
-import numpy as np
 import collections
 
 import os
@@ -6,16 +5,16 @@ import pickle
 
 from rlcard.utils.utils import *
 
-class CFRAgent():
-    ''' Implement CFR (chance sampling) algorithm
-    '''
+
+class CFRAgent:
+    """Implement CFR (chance sampling) algorithm """
 
     def __init__(self, env, model_path='./cfr_model'):
-        ''' Initilize Agent
+        """Initialize Agent
 
         Args:
             env (Env): Env class
-        '''
+        """
         self.use_raw = False
         self.env = env
         self.model_path = model_path
@@ -30,8 +29,7 @@ class CFRAgent():
         self.iteration = 0
 
     def train(self):
-        ''' Do one iteration of CFR
-        '''
+        """Do one iteration of CFR """
         self.iteration += 1
         # Firstly, traverse tree to compute counterfactual regret for each player
         # The regrets are recorded in traversal
@@ -44,7 +42,7 @@ class CFRAgent():
         self.update_policy()
 
     def traverse_tree(self, probs, player_id):
-        ''' Traverse the game tree, update the regrets
+        """Traverse the game tree, update the regrets
 
         Args:
             probs: The reach probability of the current node
@@ -52,7 +50,7 @@ class CFRAgent():
 
         Returns:
             state_utilities (list): The expected utilities for all the players
-        '''
+        """
         if self.env.is_over():
             return self.env.get_payoffs()
 
@@ -82,7 +80,7 @@ class CFRAgent():
         # If it is current player, we record the policy and compute regret
         player_prob = probs[current_player]
         counterfactual_prob = (np.prod(probs[:current_player]) *
-                                np.prod(probs[current_player + 1:]))
+                               np.prod(probs[current_player + 1:]))
         player_state_utility = state_utility[current_player]
 
         if obs not in self.regrets:
@@ -92,23 +90,22 @@ class CFRAgent():
         for action in legal_actions:
             action_prob = action_probs[action]
             regret = counterfactual_prob * (action_utilities[action][current_player]
-                    - player_state_utility)
+                                            - player_state_utility)
             self.regrets[obs][action] += regret
             self.average_policy[obs][action] += self.iteration * player_prob * action_prob
         return state_utility
 
     def update_policy(self):
-        ''' Update policy based on the current regrets
-        '''
+        """Update policy based on the current regrets """
         for obs in self.regrets:
             self.policy[obs] = self.regret_matching(obs)
 
     def regret_matching(self, obs):
-        ''' Apply regret matching
+        """Apply regret matching
 
         Args:
             obs (string): The state_str
-        '''
+        """
         regret = self.regrets[obs]
         positive_regret_sum = sum([r for r in regret if r > 0])
 
@@ -122,11 +119,11 @@ class CFRAgent():
         return action_probs
 
     def action_probs(self, obs, legal_actions, policy):
-        ''' Obtain the action probabilities of the current state
+        """Obtain the action probabilities of the current state
 
         Args:
             obs (str): state_str
-            legal_actions (list): List of leagel actions
+            legal_actions (list): List of legal actions
             player_id (int): The current player
             policy (dict): The used policy
 
@@ -134,9 +131,9 @@ class CFRAgent():
             (tuple) that contains:
                 action_probs(numpy.array): The action probabilities
                 legal_actions (list): Indices of legal actions
-        '''
+        """
         if obs not in policy.keys():
-            action_probs = np.array([1.0/self.env.num_actions for _ in range(self.env.num_actions)])
+            action_probs = np.array([1.0 / self.env.num_actions for _ in range(self.env.num_actions)])
             self.policy[obs] = action_probs
         else:
             action_probs = policy[obs]
@@ -144,7 +141,7 @@ class CFRAgent():
         return action_probs
 
     def eval_step(self, state):
-        ''' Given a state, predict action based on average policy
+        """Given a state, predict action based on average policy
 
         Args:
             state (numpy.array): State representation
@@ -152,17 +149,17 @@ class CFRAgent():
         Returns:
             action (int): Predicted action
             info (dict): A dictionary containing information
-        '''
+        """
         probs = self.action_probs(state['obs'].tostring(), list(state['legal_actions'].keys()), self.average_policy)
         action = np.random.choice(len(probs), p=probs)
 
-        info = {}
-        info['probs'] = {state['raw_legal_actions'][i]: float(probs[list(state['legal_actions'].keys())[i]]) for i in range(len(state['legal_actions']))}
+        info = {'probs': {state['raw_legal_actions'][i]: float(probs[list(state['legal_actions'].keys())[i]]) for i in
+                          range(len(state['legal_actions']))}}
 
         return action, info
 
     def get_state(self, player_id):
-        ''' Get state_str of the player
+        """Get state_str of the player
 
         Args:
             player_id (int): The player id
@@ -171,51 +168,48 @@ class CFRAgent():
             (tuple) that contains:
                 state (str): The state str
                 legal_actions (list): Indices of legal actions
-        '''
+        """
         state = self.env.get_state(player_id)
         return state['obs'].tostring(), list(state['legal_actions'].keys())
 
     def save(self):
-        ''' Save model
-        '''
+        """Save model """
         if not os.path.exists(self.model_path):
             os.makedirs(self.model_path)
 
-        policy_file = open(os.path.join(self.model_path, 'policy.pkl'),'wb')
+        policy_file = open(os.path.join(self.model_path, 'policy.pkl'), 'wb')
         pickle.dump(self.policy, policy_file)
         policy_file.close()
 
-        average_policy_file = open(os.path.join(self.model_path, 'average_policy.pkl'),'wb')
+        average_policy_file = open(os.path.join(self.model_path, 'average_policy.pkl'), 'wb')
         pickle.dump(self.average_policy, average_policy_file)
         average_policy_file.close()
 
-        regrets_file = open(os.path.join(self.model_path, 'regrets.pkl'),'wb')
+        regrets_file = open(os.path.join(self.model_path, 'regrets.pkl'), 'wb')
         pickle.dump(self.regrets, regrets_file)
         regrets_file.close()
 
-        iteration_file = open(os.path.join(self.model_path, 'iteration.pkl'),'wb')
+        iteration_file = open(os.path.join(self.model_path, 'iteration.pkl'), 'wb')
         pickle.dump(self.iteration, iteration_file)
         iteration_file.close()
 
     def load(self):
-        ''' Load model
-        '''
+        """Load model """
         if not os.path.exists(self.model_path):
             return
 
-        policy_file = open(os.path.join(self.model_path, 'policy.pkl'),'rb')
+        policy_file = open(os.path.join(self.model_path, 'policy.pkl'), 'rb')
         self.policy = pickle.load(policy_file)
         policy_file.close()
 
-        average_policy_file = open(os.path.join(self.model_path, 'average_policy.pkl'),'rb')
+        average_policy_file = open(os.path.join(self.model_path, 'average_policy.pkl'), 'rb')
         self.average_policy = pickle.load(average_policy_file)
         average_policy_file.close()
 
-        regrets_file = open(os.path.join(self.model_path, 'regrets.pkl'),'rb')
+        regrets_file = open(os.path.join(self.model_path, 'regrets.pkl'), 'rb')
         self.regrets = pickle.load(regrets_file)
         regrets_file.close()
 
-        iteration_file = open(os.path.join(self.model_path, 'iteration.pkl'),'rb')
+        iteration_file = open(os.path.join(self.model_path, 'iteration.pkl'), 'rb')
         self.iteration = pickle.load(iteration_file)
         iteration_file.close()
-

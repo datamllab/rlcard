@@ -1,5 +1,4 @@
-''' An example of training a reinforcement learning agent on the environments in RLCard
-'''
+"""An example of training a reinforcement learning agent on the environments in RLCard"""
 import os
 import argparse
 
@@ -16,11 +15,11 @@ from rlcard.utils import (
     plot_curve,
 )
 
-def train(args):
 
+def train(args):
     # Check whether gpu is available
     device = get_device()
-        
+
     # Seed numpy, torch, random
     set_seed(args.seed)
 
@@ -41,7 +40,7 @@ def train(args):
             agent = DQNAgent(
                 num_actions=env.num_actions,
                 state_shape=env.state_shape[0],
-                mlp_layers=[64,64],
+                mlp_layers=[64, 64],
                 device=device,
                 save_path=args.log_dir,
                 save_every=args.save_every
@@ -55,8 +54,8 @@ def train(args):
             agent = NFSPAgent(
                 num_actions=env.num_actions,
                 state_shape=env.state_shape[0],
-                hidden_layers_sizes=[64,64],
-                q_mlp_layers=[64,64],
+                hidden_layers_sizes=[64, 64],
+                q_mlp_layers=[64, 64],
                 device=device,
                 save_path=args.log_dir,
                 save_every=args.save_every
@@ -105,6 +104,7 @@ def train(args):
     save_path = os.path.join(args.log_dir, 'model.pth')
     torch.save(agent, save_path)
     print('Model saved in', save_path)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("DQN/NFSP example in RLCard")
@@ -163,13 +163,13 @@ if __name__ == '__main__':
         type=str,
         default='experiments/leduc_holdem_dqn_result/',
     )
-    
+
     parser.add_argument(
         "--load_checkpoint_path",
         type=str,
         default="",
     )
-    
+
     parser.add_argument(
         "--save_every",
         type=int,
@@ -179,4 +179,3 @@ if __name__ == '__main__':
 
     os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda
     train(args)
-

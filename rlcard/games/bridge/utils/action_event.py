@@ -1,8 +1,8 @@
-'''
+"""
     File name: bridge/utils/action_event.py
     Author: William Hale
     Date created: 11/25/2021
-'''
+"""
 
 from .bridge_card import BridgeCard
 
@@ -57,8 +57,7 @@ class ActionEvent(object):  # Interface
 
     @staticmethod
     def get_num_actions():
-        ''' Return the number of possible actions in the game
-        '''
+        """Return the number of possible actions in the game """
         return 1 + 35 + 3 + 52  # no_bid, 35 bids, pass, dbl, rdl, 52 play_card
 
 

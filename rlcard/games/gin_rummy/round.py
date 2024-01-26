@@ -1,8 +1,8 @@
-'''
+"""
     File name: gin_rummy/round.py
     Author: William Hale
     Date created: 2/12/2020
-'''
+"""
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .utils.move import GinRummyMove
@@ -32,7 +32,7 @@ from rlcard.games.gin_rummy.utils import utils
 class GinRummyRound:
 
     def __init__(self, dealer_id: int, np_random):
-        ''' Initialize the round class
+        """Initialize the round class
 
             The round class maintains the following instances:
                 1) dealer: the dealer of the round; dealer has stock_pile and discard_pile
@@ -51,7 +51,7 @@ class GinRummyRound:
 
         Args:
             dealer_id: int
-        '''
+        """
         self.np_random = np_random
         self.dealer_id = dealer_id
         self.dealer = GinRummyDealer(self.np_random)

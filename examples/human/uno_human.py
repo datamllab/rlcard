@@ -1,5 +1,4 @@
-''' A toy example of playing against rule-based bot on UNO
-'''
+"""A toy example of playing against rule-based bot on UNO"""
 
 import rlcard
 from rlcard import models
@@ -16,7 +15,7 @@ env.set_agents([
 
 print(">> UNO rule model V1")
 
-while (True):
+while True:
     print(">> Start a new game")
 
     trajectories, payoffs = env.run(is_training=False)

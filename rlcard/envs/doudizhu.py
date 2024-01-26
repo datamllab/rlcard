@@ -5,8 +5,7 @@ from rlcard.envs import Env
 
 
 class DoudizhuEnv(Env):
-    ''' Doudizhu Environment
-    '''
+    """Doudizhu Environment """
 
     def __init__(self, config):
         from rlcard.games.doudizhu.utils import ACTION_2_ID, ID_2_ACTION
@@ -24,11 +23,11 @@ class DoudizhuEnv(Env):
         self.action_shape = [[54] for _ in range(self.num_players)]
 
     def _extract_state(self, state):
-        ''' Encode state
+        """Encode state
 
         Args:
             state (dict): dict of original state
-        '''
+        """
         current_hand = _cards2array(state['current_hand'])
         others_hand = _cards2array(state['others_hand'])
 
@@ -91,40 +90,40 @@ class DoudizhuEnv(Env):
         return extracted_state
             
     def get_payoffs(self):
-        ''' Get the payoffs of players. Must be implemented in the child class.
+        """Get the payoffs of players. Must be implemented in the child class.
 
         Returns:
             payoffs (list): a list of payoffs for each player
-        '''
+        """
         return self.game.judger.judge_payoffs(self.game.round.landlord_id, self.game.winner_id)
 
     def _decode_action(self, action_id):
-        ''' Action id -> the action in the game. Must be implemented in the child class.
+        """Action id -> the action in the game. Must be implemented in the child class.
 
         Args:
             action_id (int): the id of the action
 
         Returns:
             action (string): the action that will be passed to the game engine.
-        '''
+        """
         return self._ID_2_ACTION[action_id]
 
     def _get_legal_actions(self):
-        ''' Get all legal actions for current state
+        """Get all legal actions for current state
 
         Returns:
             legal_actions (list): a list of legal actions' id
-        '''
+        """
         legal_actions = self.game.state['actions']
         legal_actions = {self._ACTION_2_ID[action]: _cards2array(action) for action in legal_actions}
         return legal_actions
 
     def get_perfect_information(self):
-        ''' Get the perfect information of the current state
+        """Get the perfect information of the current state
 
         Returns:
             (dict): A dictionary of all the perfect information of the current state
-        '''
+        """
         state = {}
         state['hand_cards_with_suit'] = [self._cards2str_with_suit(player.current_hand) for player in self.game.players]
         state['hand_cards'] = [self._cards2str(player.current_hand) for player in self.game.players]
@@ -134,11 +133,11 @@ class DoudizhuEnv(Env):
         return state
 
     def get_action_feature(self, action):
-        ''' For some environments such as DouDizhu, we can have action features
+        """For some environments such as DouDizhu, we can have action features
 
         Returns:
             (numpy.array): The action features
-        '''
+        """
         return _cards2array(self._decode_action(action))
 
 Card2Column = {'3': 0, '4': 1, '5': 2, '6': 3, '7': 4, '8': 5, '9': 6, 'T': 7,

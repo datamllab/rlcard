@@ -5,12 +5,12 @@ from rlcard.games.uno.utils import cards2list, WILD, WILD_DRAW_4
 class UnoRound:
 
     def __init__(self, dealer, num_players, np_random):
-        ''' Initialize the round class
+        """Initialize the round class
 
         Args:
             dealer (object): the object of UnoDealer
             num_players (int): the number of players in game
-        '''
+        """
         self.np_random = np_random
         self.dealer = dealer
         self.target = None
@@ -22,12 +22,12 @@ class UnoRound:
         self.winner = None
 
     def flip_top_card(self):
-        ''' Flip the top card of the card pile
+        """Flip the top card of the card pile
 
         Returns:
             (object of UnoCard): the top card in game
 
-        '''
+        """
         top = self.dealer.flip_top_card()
         if top.trait == 'wild':
             top.color = self.np_random.choice(UnoCard.info['color'])
@@ -36,12 +36,12 @@ class UnoRound:
         return top
 
     def perform_top_card(self, players, top_card):
-        ''' Perform the top card
+        """Perform the top card
 
         Args:
             players (list): list of UnoPlayer objects
             top_card (object): object of UnoCard
-        '''
+        """
         if top_card.trait == 'skip':
             self.current_player = 1
         elif top_card.trait == 'reverse':
@@ -52,12 +52,12 @@ class UnoRound:
             self.dealer.deal_cards(player, 2)
 
     def proceed_round(self, players, action):
-        ''' Call other Classes' functions to keep one round running
+        """Call other Classes' functions to keep one round running
 
         Args:
             player (object): object of UnoPlayer
             action (str): string of legal action
-        '''
+        """
         if action == 'draw':
             self._perform_draw_action(players)
             return None
@@ -135,12 +135,12 @@ class UnoRound:
         return legal_actions
 
     def get_state(self, players, player_id):
-        ''' Get player's state
+        """Get player's state
 
         Args:
             players (list): The list of UnoPlayer
             player_id (int): The id of the player
-        '''
+        """
         state = {}
         player = players[player_id]
         state['hand'] = cards2list(player.hand)
@@ -153,8 +153,7 @@ class UnoRound:
         return state
 
     def replace_deck(self):
-        ''' Add cards have been played to deck
-        '''
+        """Add cards have been played to deck"""
         self.dealer.deck.extend(self.played_cards)
         self.dealer.shuffle()
         self.played_cards = []

@@ -1,5 +1,4 @@
-''' UNO rule models
-'''
+"""UNO rule models"""
 
 import numpy as np
 
@@ -7,14 +6,13 @@ import rlcard
 from rlcard.models.model import Model
 
 class UNORuleAgentV1(object):
-    ''' UNO Rule agent version 1
-    '''
+    """UNO Rule agent version 1"""
 
     def __init__(self):
         self.use_raw = True
 
     def step(self, state):
-        ''' Predict the action given raw state. A naive rule. Choose the color
+        """Predict the action given raw state. A naive rule. Choose the color
             that appears least in the hand from legal actions. Try to keep wild
             cards as long as it can.
 
@@ -23,7 +21,7 @@ class UNORuleAgentV1(object):
 
         Returns:
             action (str): Predicted action
-        '''
+        """
 
         legal_actions = state['raw_legal_actions']
         state = state['raw_obs']
@@ -44,20 +42,19 @@ class UNORuleAgentV1(object):
         return action
 
     def eval_step(self, state):
-        ''' Step for evaluation. The same to step
-        '''
+        """Step for evaluation. The same to step"""
         return self.step(state), []
 
     @staticmethod
     def filter_wild(hand):
-        ''' Filter the wild cards. If all are wild cards, we do not filter
+        """Filter the wild cards. If all are wild cards, we do not filter
 
         Args:
             hand (list): A list of UNO card string
 
         Returns:
             filtered_hand (list): A filtered list of UNO string
-        '''
+        """
         filtered_hand = []
         for card in hand:
             if not card[2:6] == 'wild':
@@ -70,14 +67,14 @@ class UNORuleAgentV1(object):
 
     @staticmethod
     def count_colors(hand):
-        ''' Count the number of cards in each color in hand
+        """Count the number of cards in each color in hand
 
         Args:
             hand (list): A list of UNO card string
 
         Returns:
             color_nums (dict): The number cards of each color
-        '''
+        """
         color_nums = {}
         for card in hand:
             color = card[0]
@@ -88,12 +85,10 @@ class UNORuleAgentV1(object):
         return color_nums
 
 class UNORuleModelV1(Model):
-    ''' UNO Rule Model version 1
-    '''
+    """UNO Rule Model version 1"""
 
     def __init__(self):
-        ''' Load pretrained model
-        '''
+        """Load pretrained model"""
         env = rlcard.make('uno')
 
         rule_agent = UNORuleAgentV1()
@@ -101,23 +96,23 @@ class UNORuleModelV1(Model):
 
     @property
     def agents(self):
-        ''' Get a list of agents for each position in a the game
+        """Get a list of agents for each position in a the game
 
         Returns:
             agents (list): A list of agents
 
         Note: Each agent should be just like RL agent with step and eval_step
               functioning well.
-        '''
+        """
         return self.rule_agents
 
     @property
     def use_raw(self):
-        ''' Indicate whether use raw state and action
+        """Indicate whether we use raw state and action
 
         Returns:
             use_raw (boolean): True if using raw state and action
-        '''
+        """
         return True
 
 

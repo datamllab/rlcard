@@ -1,5 +1,4 @@
-''' An example of training a Deep Monte-Carlo (DMC) Agent on the environments in RLCard
-'''
+"""An example of training a Deep Monte-Carlo (DMC) Agent on the environments in RLCard"""
 import os
 import argparse
 
@@ -8,8 +7,8 @@ import torch
 import rlcard
 from rlcard.agents.dmc_agent import DMCTrainer
 
-def train(args):
 
+def train(args):
     # Make the environment
     env = rlcard.make(args.env)
 
@@ -28,6 +27,7 @@ def train(args):
 
     # Train DMC Agents
     trainer.start()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("DMC example in RLCard")
@@ -95,4 +95,3 @@ if __name__ == '__main__':
 
     os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda
     train(args)
-

@@ -1,20 +1,22 @@
-'''
+"""
     Project: Gui Gin Rummy
     File name: card_image.py
     Author: William Hale
     Date created: 3/14/2020
-'''
+"""
 
 import os
 from PIL import Image, ImageTk, ImageDraw
 
 image_dir = os.path.abspath(os.path.dirname(__file__))
+
 if not os.path.isdir(os.path.join(image_dir, 'cards_png')):
     print('Downloading images...')
     import time
     import urllib.request
     import sys
     import zipfile
+
     def reporthook(count, block_size, total_size):
         global start_time
         if count == 0:
@@ -25,12 +27,12 @@ if not os.path.isdir(os.path.join(image_dir, 'cards_png')):
         speed = int(progress_size / (1024 * duration))
         percent = int(count * block_size * 100 / total_size)
         sys.stdout.write("\r...%d%%, %d KB, %d KB/s, %d seconds passed" %
-                        (percent, progress_size / (1024), speed, duration))
+                         (percent, progress_size / 1024, speed, duration))
         sys.stdout.flush()
     zipurl = 'https://dczha.com/files/rlcard/cards_png.zip'
     filehandle, _ = urllib.request.urlretrieve(zipurl, reporthook=reporthook)
 
-    with zipfile.ZipFile(filehandle,"r") as zip_ref:
+    with zipfile.ZipFile(filehandle, "r") as zip_ref:
         zip_ref.extractall(image_dir)
 
     print()

@@ -339,7 +339,7 @@ def train(args):
     # Seed numpy, torch, random
     set_seed(args.seed)
 
-    # Initilize CFR Agent
+    # Initialize CFR Agent
     agent = CFRAgent(
         env,
         os.path.join(

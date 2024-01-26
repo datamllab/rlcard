@@ -1,9 +1,9 @@
-'''
+"""
     Project: Gui Gin Rummy
     File name: env_thread.py
     Author: William Hale
     Date created: 3/14/2020
-'''
+"""
 
 # from __future__ import annotations
 from typing import TYPE_CHECKING

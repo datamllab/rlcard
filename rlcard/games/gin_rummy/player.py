@@ -1,8 +1,8 @@
-'''
+"""
     File name: gin_rummy/player.py
     Author: William Hale
     Date created: 2/12/2020
-'''
+"""
 
 from typing import List
 
@@ -16,11 +16,11 @@ from .utils import melding
 class GinRummyPlayer:
 
     def __init__(self, player_id: int, np_random):
-        ''' Initialize a GinRummy player class
+        """Initialize a GinRummy player class
 
         Args:
             player_id (int): id for the player
-        '''
+        """
         self.np_random = np_random
         self.player_id = player_id
         self.hand = []  # type: List[Card]
@@ -30,8 +30,7 @@ class GinRummyPlayer:
         self.meld_run_by_suit_id = [[] for _ in range(4)]  # type: List[List[List[Card]]]
 
     def get_player_id(self) -> int:
-        ''' Return player's id
-        '''
+        """Return player's id"""
         return self.player_id
 
     def get_meld_clusters(self) -> List[List[List[Card]]]:

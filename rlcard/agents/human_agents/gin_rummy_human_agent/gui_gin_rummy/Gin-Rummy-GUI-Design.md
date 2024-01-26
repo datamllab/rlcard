@@ -95,8 +95,8 @@ The GameCanvas creates the canvas card image items as follows:
     for card_id in range(52):
         card = gin_rummy_utils.card_from_card_id(card_id)
         card_image = card_images[card.rank, card.suit]
-        card_item_id = self.create_image((0, -9999), image=card_image, anchor="nw")
-        self.itemconfigure(card_item_id, state=tk.HIDDEN)
+        card_item_id = cls.create_image((0, -9999), image=card_image, anchor="nw")
+        cls.itemconfigure(card_item_id, state=tk.HIDDEN)
         card_item_ids.append(card_item_id)
 ```
 
@@ -114,7 +114,7 @@ The card_items array is a way to access the card_item by its card_id.
         card = gin_rummy_utils.card_from_card_id(card_id)
         card_item_id = card_item_ids[card_id]
         card_image = card_images[card.rank, card.suit]
-        card_item = CardItem(item_id=card_item_id, card_id=card_id, card_image=card_image, game_canvas=self)
+        card_item = CardItem(item_id=card_item_id, card_id=card_id, card_image=card_image, game_canvas=cls)
         card_items.append(card_item)
         canvas_items.append(card_item)
 ```
@@ -140,12 +140,12 @@ It creates this canvas item as follows:
     discard_pile_box_top = discard_pile_anchor[1]
     discard_pile_box_right = discard_pile_box_left + card_width
     discard_pile_box_bottom = discard_pile_box_top + card_height
-    discard_pile_box_item_id = self.create_rectangle(discard_pile_box_left,
+    discard_pile_box_item_id = cls.create_rectangle(discard_pile_box_left,
                                                      discard_pile_box_top,
                                                      discard_pile_box_right,
                                                      discard_pile_box_bottom,
                                                      fill="gray")
-    discard_pile_box_item = CanvasItem(item_id=discard_pile_box_item_id, game_canvas=self)
+    discard_pile_box_item = CanvasItem(item_id=discard_pile_box_item_id, game_canvas=cls)
     canvas_items.append(discard_pile_box_item)
 ```
 
@@ -164,9 +164,9 @@ I'm not sure if this is any better than handling it as a special case.
     for player_id in range(2):
         x, y = player_held_pile_anchors[player_id]
         x -= held_pile_tab
-        ghost_card_item_id = self.create_rectangle(x, y, x + card_width, y + card_height, width=0, fill='')
-        self.itemconfig(ghost_card_item_id, tag=held_pile_tags[player_id])
-        ghost_card_item = CanvasItem(item_id=ghost_card_item_id, game_canvas=self)
+        ghost_card_item_id = cls.create_rectangle(x, y, x + card_width, y + card_height, width=0, fill='')
+        cls.itemconfig(ghost_card_item_id, tag=held_pile_tags[player_id])
+        ghost_card_item = CanvasItem(item_id=ghost_card_item_id, game_canvas=cls)
         canvas_items.append(ghost_card_item)
         held_pile_ghost_card_items.append(ghost_card_item)
 ```
@@ -203,12 +203,12 @@ The code is:
 ```python
 class GameApp(object):
 
-    def __init__(self, make_gin_rummy_env: Callable[[], 'GinRummyEnv'] = None):
-        self.make_gin_rummy_env = make_gin_rummy_env if make_gin_rummy_env else GameApp._make_gin_rummy_env
+    def __init__(cls, make_gin_rummy_env: Callable[[], 'GinRummyEnv'] = None):
+        cls.make_gin_rummy_env = make_gin_rummy_env if make_gin_rummy_env else GameApp._make_gin_rummy_env
         root = tk.Tk()
         root.resizable(False, False)
-        self.game_frame = GameFrame(root=root, game_app=self)
-        self.menu_bar = MenuBar(root, game_frame=self.game_frame)
+        cls.game_frame = GameFrame(root=root, game_app=cls)
+        cls.menu_bar = MenuBar(root, game_frame=cls.game_frame)
         root.mainloop()
 ```
 
@@ -217,10 +217,10 @@ The EnvThread is a background daemon thread that runs gin_rummy_env.
 It also starts the GameCanvasUpdater loop on the main thread.
 It maintains the following variables:
 ```python
-    self.gin_rummy_env = gin_rummy_env
-    self.game_canvas = game_canvas
-    self.mark = 0
-    self.is_stopped = False
+    cls.gin_rummy_env = gin_rummy_env
+    cls.game_canvas = game_canvas
+    cls.mark = 0
+    cls.is_stopped = False
 ```
 The mark variable is the number of actions that the GameCanvas has processed.
 As the gin_rummy_env processes actions, the GameCanvasUpdater will be notified when a human action is needed.
@@ -237,9 +237,9 @@ The HumanAgent supplies the step action when the gin_rummy_env asks for it.
 It goes into a wait loop until the GameCanvasUpdater provides the step action taken by the human player.
 It maintains the following variables:
 ```python
-    self.is_choosing_action_id = False
-    self.chosen_action_id = None  # type: int or None
-    self.state = None
+    cls.is_choosing_action_id = False
+    cls.chosen_action_id = None  # type: int or None
+    cls.state = None
 ```
 The HumanAgent sets the state variable to the current state
 and sets the variable is_choosing_action_id to be True
@@ -254,11 +254,11 @@ The GameCanvasUpdater runs a loop on the main thread to keep the gui in sync wit
 It also returns the action taken by the human player to the gin_rummy_env via the human_agent.
 It maintains the following variables:
 ```python
-    self.game_canvas = game_canvas
-    self.env_thread = None
-    self.pending_human_action_ids = []  # type: List[int]
-    self.busy_body_id = None  # type: int or None
-    self.is_stopped = False
+    cls.game_canvas = game_canvas
+    cls.env_thread = None
+    cls.pending_human_action_ids = []  # type: List[int]
+    cls.busy_body_id = None  # type: int or None
+    cls.is_stopped = False
 ```
 The game_canvas is set on initialization and is never changed.
 When a new game starts, the env_thread is set to the new env_thread for the new game
@@ -270,13 +270,13 @@ then he can tap it a second time to cancel that action.
 
 The GameCanvasUpdater runs the following loop on the main thread:
 ```python
-    def apply_canvas_updates(self):
-        if not self.env_thread.is_stopped:
-            self._advance_mark()
+    def apply_canvas_updates(cls):
+        if not cls.env_thread.is_stopped:
+            cls._advance_mark()
             delay_ms = 1
-            self.game_canvas.after(delay_ms, func=self.apply_canvas_updates)
+            cls.game_canvas.after(delay_ms, func=cls.apply_canvas_updates)
         else:
-            self.is_stopped = True
+            cls.is_stopped = True
 ```
 It is always trying to advance the mark to keep up with the gin_rummy_env that is running in the env_thread.
 The busy_body_id is the player_id whose action is being processed.

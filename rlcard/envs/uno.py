@@ -50,11 +50,11 @@ class UnoEnv(Env):
         return OrderedDict(legal_ids)
 
     def get_perfect_information(self):
-        ''' Get the perfect information of the current state
+        """Get the perfect information of the current state
 
         Returns:
             (dict): A dictionary of all the perfect information of the current state
-        '''
+        """
         state = {}
         state['num_players'] = self.num_players
         state['hand_cards'] = [cards2list(player.hand)

@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from rlcard.utils.utils import init_54_deck, init_standard_deck, rank2int, print_card, elegent_form, reorganize, tournament
+from rlcard.utils.utils import init_54_deck, init_standard_deck, rank2int, print_card, elegant_form, reorganize, tournament
 import rlcard
 from rlcard.agents.random_agent import RandomAgent
 
@@ -24,8 +24,8 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(rank2int('K'), 13)
 
     def test_print_cards(self):
-        self.assertEqual(len(elegent_form('S9')), 2)
-        self.assertEqual(len(elegent_form('ST')), 3)
+        self.assertEqual(len(elegant_form('S9')), 2)
+        self.assertEqual(len(elegant_form('ST')), 3)
 
         print_card(None)
         print_card('S9')

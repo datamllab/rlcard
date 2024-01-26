@@ -1,9 +1,9 @@
-'''
+"""
     Project: Gui Gin Rummy
     File name: handling_tap_player_pane.py
     Author: William Hale
     Date created: 3/14/2020
-'''
+"""
 
 # from __future__ import annotations
 from typing import TYPE_CHECKING

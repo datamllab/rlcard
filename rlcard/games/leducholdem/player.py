@@ -1,11 +1,11 @@
 class LeducholdemPlayer:
 
     def __init__(self, player_id, np_random):
-        ''' Initilize a player.
+        """Initialize a player.
 
         Args:
             player_id (int): The id of the player
-        '''
+        """
         self.np_random = np_random
         self.player_id = player_id
         self.status = 'alive'
@@ -15,7 +15,7 @@ class LeducholdemPlayer:
         self.in_chips = 0
 
     def get_state(self, public_card, all_chips, legal_actions):
-        ''' Encode the state for the player
+        """Encode the state for the player
 
         Args:
             public_card (object): The public card that seen by all the players
@@ -23,7 +23,7 @@ class LeducholdemPlayer:
 
         Returns:
             (dict): The state of the player
-        '''
+        """
         state = {}
         state['hand'] = self.hand.get_index()
         state['public_card'] = public_card.get_index() if public_card else None
@@ -33,6 +33,5 @@ class LeducholdemPlayer:
         return state
 
     def get_player_id(self):
-        ''' Return the id of the player
-        '''
+        """Return the id of the player"""
         return self.player_id

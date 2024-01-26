@@ -1,8 +1,8 @@
-'''
+"""
     File name: bridge/round.py
     Author: William Hale
     Date created: 11/25/2021
-'''
+"""
 
 from typing import List
 
@@ -39,7 +39,7 @@ class BridgeRound:
         return result
 
     def __init__(self, num_players: int, board_id: int, np_random):
-        ''' Initialize the round class
+        """Initialize the round class
 
             The round class maintains the following instances:
                 1) dealer: the dealer of the round; dealer has trick_pile
@@ -59,7 +59,7 @@ class BridgeRound:
             num_players: int
             board_id: int
             np_random
-        '''
+        """
         tray = Tray(board_id=board_id)
         dealer_id = tray.dealer_id
         self.tray = tray
@@ -77,8 +77,7 @@ class BridgeRound:
         self.move_sheet.append(DealHandMove(dealer=self.players[dealer_id], shuffled_deck=self.dealer.shuffled_deck))
 
     def is_bidding_over(self) -> bool:
-        ''' Return whether the current bidding is over
-        '''
+        """Return whether the current bidding is over"""
         is_bidding_over = True
         if len(self.move_sheet) < 5:
             is_bidding_over = False
@@ -97,8 +96,7 @@ class BridgeRound:
         return is_bidding_over
 
     def is_over(self) -> bool:
-        ''' Return whether the current game is over
-        '''
+        """Return whether the current game is over"""
         is_over = True
         if not self.is_bidding_over():
             is_over = False

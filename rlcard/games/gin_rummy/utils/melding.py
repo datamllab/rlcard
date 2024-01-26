@@ -1,8 +1,8 @@
-'''
+"""
     File name: gin_rummy/melding.py
     Author: William Hale
     Date created: 2/12/2020
-'''
+"""
 
 from typing import List
 

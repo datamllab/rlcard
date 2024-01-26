@@ -27,10 +27,10 @@ class TestNolimitholdemGame(unittest.TestCase):
     
     def test_judge_with_4_players(self):
 
-        '''
+        """
         suit_list = ['S', 'H', 'D', 'C']
         rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
-        '''
+        """
         players = self.get_players(4)
         
         

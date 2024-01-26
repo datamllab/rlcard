@@ -1,8 +1,8 @@
-'''
+"""
     File name: bridge/utils/bridge_card.py
     Author: William Hale
     Date created: 11/25/2021
-'''
+"""
 
 from rlcard.games.base import Card
 

@@ -1,6 +1,4 @@
-''' An example of training a reinforcement learning agent on the PettingZoo 
-environments that wrap RLCard
-'''
+"""An example of training a reinforcement learning agent on the PettingZoo environments that wrap RLCard"""
 import os
 import argparse
 

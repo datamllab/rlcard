@@ -2,6 +2,7 @@ import numpy as np
 
 from rlcard.games.base import Card
 
+
 def set_seed(seed):
     if seed is not None:
         import subprocess
@@ -17,6 +18,7 @@ def set_seed(seed):
         import random
         random.seed(seed)
 
+
 def get_device():
     import torch
     if torch.backends.mps.is_available():
@@ -29,25 +31,27 @@ def get_device():
         device = torch.device("cpu")
         print("--> Running on the CPU")
 
-    return device    
+    return device
+
 
 def init_standard_deck():
-    ''' Initialize a standard deck of 52 cards
+    """Initialize a standard deck of 52 cards
 
     Returns:
         (list): A list of Card object
-    '''
+    """
     suit_list = ['S', 'H', 'D', 'C']
     rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
     return res
 
+
 def init_54_deck():
-    ''' Initialize a standard deck of 52 cards, BJ and RJ
+    """Initialize a standard deck of 52 cards, BJ and RJ
 
     Returns:
         (list): Alist of Card object
-    '''
+    """
     suit_list = ['S', 'H', 'D', 'C']
     rank_list = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
     res = [Card(suit, rank) for suit in suit_list for rank in rank_list]
@@ -55,8 +59,9 @@ def init_54_deck():
     res.append(Card('RJ', ''))
     return res
 
+
 def rank2int(rank):
-    ''' Get the coresponding number of a rank.
+    """Get the corresponding number of a rank.
 
     Args:
         rank(str): rank stored in Card object
@@ -67,11 +72,11 @@ def rank2int(rank):
     Note:
         1. If the input rank is an empty string, the function will return -1.
         2. If the input rank is not valid, the function will return None.
-    '''
+    """
     if rank == '':
         return -1
     elif rank.isdigit():
-        if int(rank) >= 2 and int(rank) <= 10:
+        if 2 <= int(rank) <= 10:
             return int(rank)
         else:
             return None
@@ -87,26 +92,28 @@ def rank2int(rank):
         return 13
     return None
 
-def elegent_form(card):
-    ''' Get a elegent form of a card string
+
+def elegant_form(card):
+    """Get an elegant form of a card string
 
     Args:
         card (string): A card string
 
     Returns:
-        elegent_card (string): A nice form of card
-    '''
-    suits = {'S': '♠', 'H': '♥', 'D': '♦', 'C': '♣','s': '♠', 'h': '♥', 'd': '♦', 'c': '♣' }
+        elegant_card (string): A nice form of card
+    """
+    suits = {'S': '♠', 'H': '♥', 'D': '♦', 'C': '♣', 's': '♠', 'h': '♥', 'd': '♦', 'c': '♣'}
     rank = '10' if card[1] == 'T' else card[1]
 
     return suits[card[0]] + rank
 
+
 def print_card(cards):
-    ''' Nicely print a card or list of cards
+    """Nicely print a card or list of cards
 
     Args:
-        card (string or list): The card(s) to be printed
-    '''
+        cards (string or list): The card(s) to be printed
+    """
     if cards is None:
         cards = [None]
     if isinstance(cards, str):
@@ -127,13 +134,13 @@ def print_card(cards):
             lines[8].append('└─────────┘')
         else:
             if isinstance(card, Card):
-                elegent_card = elegent_form(card.suit + card.rank)
+                elegant_card = elegant_form(card.suit + card.rank)
             else:
-                elegent_card = elegent_form(card)
-            suit = elegent_card[0]
-            rank = elegent_card[1]
-            if len(elegent_card) == 3:
-                space = elegent_card[2]
+                elegant_card = elegant_form(card)
+            suit = elegant_card[0]
+            rank = elegant_card[1]
+            if len(elegant_card) == 3:
+                space = elegant_card[2]
             else:
                 space = ' '
 
@@ -148,47 +155,49 @@ def print_card(cards):
             lines[8].append('└─────────┘')
 
     for line in lines:
-        print ('   '.join(line))
+        print('   '.join(line))
+
 
 def reorganize(trajectories, payoffs):
-    ''' Reorganize the trajectory to make it RL friendly
+    """Reorganize the trajectory to make it RL friendly
 
     Args:
-        trajectory (list): A list of trajectories
+        trajectories (list): A list of trajectories
         payoffs (list): A list of payoffs for the players. Each entry corresponds to one player
 
     Returns:
         (list): A new trajectories that can be fed into RL algorithms.
 
-    '''
+    """
     num_players = len(trajectories)
     new_trajectories = [[] for _ in range(num_players)]
 
     for player in range(num_players):
-        for i in range(0, len(trajectories[player])-2, 2):
-            if i ==len(trajectories[player])-3:
+        for i in range(0, len(trajectories[player]) - 2, 2):
+            if i == len(trajectories[player]) - 3:
                 reward = payoffs[player]
-                done =True
+                done = True
             else:
                 reward, done = 0, False
-            transition = trajectories[player][i:i+3].copy()
+            transition = trajectories[player][i:i + 3].copy()
             transition.insert(2, reward)
             transition.append(done)
 
             new_trajectories[player].append(transition)
     return new_trajectories
 
+
 def remove_illegal(action_probs, legal_actions):
-    ''' Remove illegal actions and normalize the
+    """Remove illegal actions and normalize the
         probability vector
 
     Args:
-        action_probs (numpy.array): A 1 dimention numpy array.
+        action_probs (numpy.array): A 1 dimensional numpy array.
         legal_actions (list): A list of indices of legal actions.
 
     Returns:
-        probd (numpy.array): A normalized vector without legal actions.
-    '''
+        probs (numpy.array): A normalized vector without legal actions.
+    """
     probs = np.zeros(action_probs.shape[0])
     probs[legal_actions] = action_probs[legal_actions]
     if np.sum(probs) == 0:
@@ -197,16 +206,17 @@ def remove_illegal(action_probs, legal_actions):
         probs /= sum(probs)
     return probs
 
+
 def tournament(env, num):
-    ''' Evaluate he performance of the agents in the environment
+    """Evaluate the performance of the agents in the environment
 
     Args:
         env (Env class): The environment to be evaluated.
         num (int): The number of games to play.
 
     Returns:
-        A list of avrage payoffs for each player
-    '''
+        A list of average payoffs for each player
+    """
     payoffs = [0 for _ in range(env.num_players)]
     counter = 0
     while counter < num:
@@ -224,9 +234,9 @@ def tournament(env, num):
         payoffs[i] /= counter
     return payoffs
 
+
 def plot_curve(csv_path, save_path, algorithm):
-    ''' Read data from csv file and plot the results
-    '''
+    """Read data from csv file and plot the results"""
     import os
     import csv
     import matplotlib.pyplot as plt
@@ -248,4 +258,3 @@ def plot_curve(csv_path, save_path, algorithm):
             os.makedirs(save_dir)
 
         fig.savefig(save_path)
-

@@ -1,8 +1,8 @@
-'''
+"""
     File name: gin_rummy/action_event.py
     Author: William Hale
     Date created: 2/12/2020
-'''
+"""
 
 from rlcard.games.base import Card
 
@@ -43,20 +43,19 @@ class ActionEvent(object):
 
     @staticmethod
     def get_num_actions():
-        ''' Return the number of possible actions in the game
-        '''
+        """Return the number of possible actions in the game """
         return knock_action_id + 52  # FIXME: sensitive to code changes 200213
 
     @staticmethod
     def decode_action(action_id) -> 'ActionEvent':
-        ''' Action id -> the action_event in the game.
+        """Action id -> the action_event in the game.
 
         Args:
             action_id (int): the id of the action
 
         Returns:
             action (ActionEvent): the action that will be passed to the game engine.
-        '''
+        """
         if action_id == score_player_0_action_id:
             action_event = ScoreNorthPlayerAction()
         elif action_id == score_player_1_action_id:
