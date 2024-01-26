@@ -1,8 +1,8 @@
-'''
+"""
     File name: bridge/judger.py
     Author: William Hale
     Date created: 11/25/2021
-'''
+"""
 
 from typing import List
 
@@ -17,15 +17,12 @@ from .utils.bridge_card import BridgeCard
 
 
 class BridgeJudger:
-
-    '''
-        Judger decides legal actions for current player
-    '''
+    """Judger decides legal actions for current player"""
 
     def __init__(self, game: 'BridgeGame'):
-        ''' Initialize the class BridgeJudger
+        """Initialize the class BridgeJudger
         :param game: BridgeGame
-        '''
+        """
         self.game: BridgeGame = game
 
     def get_legal_actions(self) -> List[ActionEvent]:

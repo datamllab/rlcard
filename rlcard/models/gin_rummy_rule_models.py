@@ -1,10 +1,10 @@
-'''
+"""
     File name: models/gin_rummy_rule_models.py
     Author: William Hale
     Date created: 2/12/2020
 
     Gin Rummy rule models
-'''
+"""
 
 from typing import TYPE_CHECKING
 from collections import OrderedDict
@@ -27,16 +27,14 @@ import rlcard.games.gin_rummy.utils.utils as utils
 
 
 class GinRummyNoviceRuleAgent(object):
-    '''
-        Agent always discards highest deadwood value card
-    '''
+    """Agent always discards highest deadwood value card"""
 
     def __init__(self):
         self.use_raw = False  # FIXME: should this be True ?
 
     @staticmethod
     def step(state):
-        ''' Predict the action given the current state.
+        """Predict the action given the current state.
             Novice strategy:
                 Case where can gin:
                     Choose one of the gin actions.
@@ -45,17 +43,17 @@ class GinRummyNoviceRuleAgent(object):
                 Case where can discard:
                     Gin if can. Knock if can.
                     Otherwise, put aside cards in some best meld cluster.
-                    Choose one of the remaining cards with highest deadwood value.
+                    Choose one of the remaining cards with the highest deadwood value.
                     Discard that card.
                 Case otherwise:
                     Choose a random action.
 
         Args:
-            state (numpy.array): an numpy array that represents the current state
+            state (numpy.array): a numpy array that represents the current state
 
         Returns:
             action (int): the action predicted
-        '''
+        """
         legal_actions = state['legal_actions']
         actions = legal_actions.copy()
         legal_action_events = [ActionEvent.decode_action(x) for x in legal_actions]
@@ -76,16 +74,16 @@ class GinRummyNoviceRuleAgent(object):
         return np.random.choice(actions)
 
     def eval_step(self, state):
-        ''' Predict the action given the current state for evaluation.
+        """Predict the action given the current state for evaluation.
             Since the agents is not trained, this function is equivalent to step function.
 
         Args:
-            state (numpy.array): an numpy array that represents the current state
+            state (numpy.array): a numpy array that represents the current state
 
         Returns:
             action (int): the action predicted by the agent
             probabilities (list): The list of action probabilities
-        '''
+        """
         probabilities = []
         return self.step(state), probabilities
 
@@ -114,12 +112,10 @@ class GinRummyNoviceRuleAgent(object):
 
 
 class GinRummyNoviceRuleModel(Model):
-    ''' Gin Rummy Rule Model
-    '''
+    """Gin Rummy Rule Model"""
 
     def __init__(self):
-        ''' Load pre-trained model
-        '''
+        """Load pre-trained model"""
         super().__init__()
         env = rlcard.make('gin-rummy')
         rule_agent = GinRummyNoviceRuleAgent()
@@ -127,12 +123,12 @@ class GinRummyNoviceRuleModel(Model):
 
     @property
     def agents(self):
-        ''' Get a list of agents for each position in a the game
+        """Get a list of agents for each position in the game
 
         Returns:
             agents (list): A list of agents
 
         Note: Each agent should be just like RL agent with step and eval_step
               functioning well.
-        '''
+        """
         return self.rule_agents

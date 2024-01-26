@@ -1,8 +1,8 @@
-'''
+"""
     File name: test_gin_rummy_game.py
     Author: William Hale
     Date created: 3/11/2020
-'''
+"""
 
 import unittest
 import numpy as np

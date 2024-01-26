@@ -245,7 +245,7 @@ You can use the the following interface to make an environment. You may optional
 	*   `allow_step_back`: Default `False`. `True` if allowing `step_back` function to traverse backward in the tree.
 	*   Game specific configurations: These fields start with `game_`. Currently, we only support `game_num_players` in Blackjack, .
 
-Once the environemnt is made, we can access some information of the game.
+Once the environment is made, we can access some information of the game.
 *   **env.num_actions**: The number of actions.
 *   **env.num_players**: The number of players.
 *   **env.state_shape**: The shape of the state space of the observations.

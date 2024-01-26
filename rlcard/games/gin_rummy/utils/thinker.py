@@ -1,8 +1,8 @@
-'''
+"""
     File name: gin_rummy/thinker.py
     Author: William Hale
     Date created: 3/28/2020
-'''
+"""
 
 from typing import List
 

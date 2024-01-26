@@ -1,8 +1,8 @@
-'''
+"""
     File name: envs/bridge.py
     Author: William Hale
     Date created: 11/26/2021
-'''
+"""
 
 import numpy as np
 from collections import OrderedDict
@@ -42,8 +42,7 @@ from rlcard.games.bridge.utils.move import CallMove, PlayCardMove
 
 
 class BridgeEnv(Env):
-    ''' Bridge Environment
-    '''
+    """Bridge Environment"""
     def __init__(self, config):
         self.name = 'bridge'
         self.game = Game()
@@ -55,62 +54,62 @@ class BridgeEnv(Env):
         self.action_shape = [None for _ in range(self.num_players)]
 
     def get_payoffs(self):
-        ''' Get the payoffs of players.
+        """Get the payoffs of players.
 
         Returns:
             (list): A list of payoffs for each player.
-        '''
+        """
         return self.bridgePayoffDelegate.get_payoffs(game=self.game)
 
     def get_perfect_information(self):
-        ''' Get the perfect information of the current state
+        """Get the perfect information of the current state
 
         Returns:
             (dict): A dictionary of all the perfect information of the current state
-        '''
+        """
         return self.game.round.get_perfect_information()
 
     def _extract_state(self, state):  # wch: don't use state 211126
-        ''' Extract useful information from state for RL.
+        """Extract useful information from state for RL.
 
         Args:
             state (dict): The raw state
 
         Returns:
             (numpy.array): The extracted state
-        '''
+        """
         return self.bridgeStateExtractor.extract_state(game=self.game)
 
     def _decode_action(self, action_id):
-        ''' Decode Action id to the action in the game.
+        """Decode Action id to the action in the game.
 
         Args:
             action_id (int): The id of the action
 
         Returns:
             (ActionEvent): The action that will be passed to the game engine.
-        '''
+        """
         return ActionEvent.from_action_id(action_id=action_id)
 
     def _get_legal_actions(self):
-        ''' Get all legal actions for current state.
+        """Get all legal actions for current state.
 
         Returns:
             (list): A list of legal actions' id.
-        '''
+        """
         raise NotImplementedError  # wch: not needed
 
 
 class BridgePayoffDelegate(object):
 
     def get_payoffs(self, game: BridgeGame):
-        ''' Get the payoffs of players. Must be implemented in the child class.
+        """Get the payoffs of players. Must be implemented in the child class.
 
         Returns:
             (list): A list of payoffs for each player.
 
         Note: Must be implemented in the child class.
-        '''
+        """
         raise NotImplementedError
 
 
@@ -120,11 +119,11 @@ class DefaultBridgePayoffDelegate(BridgePayoffDelegate):
         self.make_bid_bonus = 2
 
     def get_payoffs(self, game: BridgeGame):
-        ''' Get the payoffs of players.
+        """Get the payoffs of players.
 
         Returns:
             (list): A list of payoffs for each player.
-        '''
+        """
         contract_bid_move = game.round.contract_bid_move
         if contract_bid_move:
             declarer = contract_bid_move.player
@@ -149,23 +148,23 @@ class BridgeStateExtractor(object):  # interface
         raise NotImplementedError
 
     def extract_state(self, game: BridgeGame):
-        ''' Extract useful information from state for RL. Must be implemented in the child class.
+        """Extract useful information from state for RL. Must be implemented in the child class.
 
         Args:
             game (BridgeGame): The game
 
         Returns:
             (numpy.array): The extracted state
-        '''
+        """
         raise NotImplementedError
 
     @staticmethod
     def get_legal_actions(game: BridgeGame):
-        ''' Get all legal actions for current state.
+        """Get all legal actions for current state.
 
         Returns:
             (OrderedDict): A OrderedDict of legal actions' id.
-        '''
+        """
         legal_actions = game.judger.get_legal_actions()
         legal_actions_ids = {action_event.action_id: None for action_event in legal_actions}
         return OrderedDict(legal_actions_ids)
@@ -194,14 +193,14 @@ class DefaultBridgeStateExtractor(BridgeStateExtractor):
         return state_shape_size
 
     def extract_state(self, game: BridgeGame):
-        ''' Extract useful information from state for RL.
+        """Extract useful information from state for RL.
 
         Args:
             game (BridgeGame): The game
 
         Returns:
             (numpy.array): The extracted state
-        '''
+        """
         extracted_state = {}
         legal_actions: OrderedDict = self.get_legal_actions(game=game)
         raw_legal_actions = list(legal_actions.keys())

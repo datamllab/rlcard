@@ -1,9 +1,9 @@
 import rlcard
-from rlcard.agents.random_agent import RandomAgent
 import random
 import numpy as np
 
-def hash_obsevation(obs):
+
+def hash_observation(obs):
     try:
         val = hash(obs.tobytes())
         return val
@@ -11,13 +11,15 @@ def hash_obsevation(obs):
         try:
             return hash(obs)
         except TypeError:
-            warnings.warn("Observation not an int or an Numpy array")
+            warnings.warn("Observation not an int or a Numpy array")
             return 0
+
 
 def rand_iter(n):
     for x in range(n+1):
         random.randint(0, 1000)
         np.random.normal(size=100)
+
 
 def gather_observations(env, actions, num_rand_steps):
     rand_iter(num_rand_steps)
@@ -44,6 +46,7 @@ def gather_observations(env, actions, num_rand_steps):
 
     return observations
 
+
 def is_deterministic(env_name):
     env = rlcard.make(env_name)
 
@@ -55,6 +58,6 @@ def is_deterministic(env_name):
     for rand_iters in range(2):
         env = rlcard.make(env_name,config={'seed':base_seed})
 
-        hashes.append(hash(tuple([hash_obsevation(obs['obs']) for obs in gather_observations(env,actions,rand_iters)])))
+        hashes.append(hash(tuple([hash_observation(obs['obs']) for obs in gather_observations(env, actions, rand_iters)])))
 
     return hashes[0] == hashes[1]

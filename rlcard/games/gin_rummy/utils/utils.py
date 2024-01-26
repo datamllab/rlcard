@@ -1,8 +1,8 @@
-'''
+"""
     File name: gin_rummy/utils.py
     Author: William Hale
     Date created: 2/12/2020
-'''
+"""
 
 from typing import List, Iterable
 
@@ -20,11 +20,11 @@ rank_to_deadwood_value = {"A": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7
 
 
 def card_from_card_id(card_id: int) -> Card:
-    ''' Make card from its card_id
+    """Make card from its card_id
 
     Args:
         card_id: int in range(0, 52)
-     '''
+    """
     if not (0 <= card_id < 52):
         raise GinRummyProgramError("card_id is {}: should be 0 <= card_id < 52.".format(card_id))
     rank_id = card_id % 13

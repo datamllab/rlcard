@@ -1,8 +1,8 @@
-'''
+"""
     File name: gin_rummy/scorers.py
     Author: William Hale
     Date created: 2/15/2020
-'''
+"""
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -35,11 +35,11 @@ class GinRummyScorer:
 
 
 def get_payoff_gin_rummy_v0(player: GinRummyPlayer, game: 'GinRummyGame') -> int:
-    ''' Get the payoff of player: deadwood_count of player
+    """Get the payoff of player: deadwood_count of player
 
     Returns:
         payoff (int or float): payoff for player (lower is better)
-    '''
+    """
     moves = game.round.move_sheet
     if player.player_id == 0:
         score_player_move = moves[-2]
@@ -54,14 +54,14 @@ def get_payoff_gin_rummy_v0(player: GinRummyPlayer, game: 'GinRummyGame') -> int
 
 
 def get_payoff_gin_rummy_v1(player: GinRummyPlayer, game: 'GinRummyGame') -> float:
-    ''' Get the payoff of player:
+    """Get the payoff of player:
             a) 1.0 if player gins
             b) 0.2 if player knocks
             c) -deadwood_count / 100 otherwise
 
     Returns:
         payoff (int or float): payoff for player (higher is better)
-    '''
+    """
     # payoff is 1.0 if player gins
     # payoff is 0.2 if player knocks
     # payoff is -deadwood_count / 100 if otherwise

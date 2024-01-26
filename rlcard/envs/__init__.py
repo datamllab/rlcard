@@ -1,5 +1,4 @@
-''' Register new environments
-'''
+"""Register new environments"""
 from rlcard.envs.env import Env
 from rlcard.envs.registration import register, make
 

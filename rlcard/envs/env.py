@@ -1,13 +1,13 @@
 from rlcard.utils import *
 
 class Env(object):
-    '''
+    """
     The base Env class. For all the environments in RLCard,
     we should base on this class and implement as many functions
     as we can.
-    '''
+    """
     def __init__(self, config):
-        ''' Initialize the environment
+        """Initialize the environment
 
         Args:
             config (dict): A config dictionary. All the fields are
@@ -23,7 +23,7 @@ class Env(object):
                 the default game configurations for Blackjack should be in
                 'rlcard/envs/blackjack.py'
                 TODO: Support more game configurations in the future.
-        '''
+        """
         self.allow_step_back = self.game.allow_step_back = config['allow_step_back']
         self.action_recorder = []
 
@@ -50,20 +50,20 @@ class Env(object):
 
 
     def reset(self):
-        ''' Start a new game
+        """Start a new game
 
         Returns:
             (tuple): Tuple containing:
 
                 (numpy.array): The begining state of the game
                 (int): The begining player
-        '''
+        """
         state, player_id = self.game.init_game()
         self.action_recorder = []
         return self._extract_state(state), player_id
 
     def step(self, action, raw_action=False):
-        ''' Step forward
+        """Step forward
 
         Args:
             action (int): The action taken by the current player
@@ -74,7 +74,7 @@ class Env(object):
 
                 (dict): The next state
                 (int): The ID of the next player
-        '''
+        """
         if not raw_action:
             action = self._decode_action(action)
 
@@ -86,7 +86,7 @@ class Env(object):
         return self._extract_state(next_state), player_id
 
     def step_back(self):
-        ''' Take one step backward.
+        """Take one step backward.
 
         Returns:
             (tuple): Tuple containing:
@@ -95,7 +95,7 @@ class Env(object):
                 (int): The ID of the previous player
 
         Note: Error will be raised if step back from the root node.
-        '''
+        """
         if not self.allow_step_back:
             raise Exception('Step back is off. To use step_back, please set allow_step_back=True in rlcard.make')
 
@@ -108,17 +108,17 @@ class Env(object):
         return state, player_id
 
     def set_agents(self, agents):
-        '''
+        """
         Set the agents that will interact with the environment.
         This function must be called before `run`.
 
         Args:
             agents (list): List of Agent classes
-        '''
+        """
         self.agents = agents
 
     def run(self, is_training=False):
-        '''
+        """
         Run a complete game, either for evaluation or training RL agent.
 
         Args:
@@ -132,7 +132,7 @@ class Env(object):
 
         Note: The trajectories are 3-dimension list. The first dimension is for different players.
               The second dimension is for different transitions. The third dimension is for the contents of each transiton
-        '''
+        """
         trajectories = [[] for _ in range(self.num_players)]
         state, player_id = self.reset()
 
@@ -169,57 +169,57 @@ class Env(object):
         return trajectories, payoffs
 
     def is_over(self):
-        ''' Check whether the curent game is over
+        """Check whether the curent game is over
 
         Returns:
             (boolean): True if current game is over
-        '''
+        """
         return self.game.is_over()
 
     def get_player_id(self):
-        ''' Get the current player id
+        """Get the current player id
 
         Returns:
             (int): The id of the current player
-        '''
+        """
         return self.game.get_player_id()
 
 
     def get_state(self, player_id):
-        ''' Get the state given player id
+        """Get the state given player id
 
         Args:
             player_id (int): The player id
 
         Returns:
             (numpy.array): The observed state of the player
-        '''
+        """
         return self._extract_state(self.game.get_state(player_id))
 
     def get_payoffs(self):
-        ''' Get the payoffs of players. Must be implemented in the child class.
+        """Get the payoffs of players. Must be implemented in the child class.
 
         Returns:
             (list): A list of payoffs for each player.
 
         Note: Must be implemented in the child class.
-        '''
+        """
         raise NotImplementedError
 
     def get_perfect_information(self):
-        ''' Get the perfect information of the current state
+        """Get the perfect information of the current state
 
         Returns:
             (dict): A dictionary of all the perfect information of the current state
-        '''
+        """
         raise NotImplementedError
 
     def get_action_feature(self, action):
-        ''' For some environments such as DouDizhu, we can have action features
+        """For some environments such as DouDizhu, we can have action features
 
         Returns:
             (numpy.array): The action features
-        '''
+        """
         # By default we use one-hot encoding
         feature = np.zeros(self.num_actions, dtype=np.int8)
         feature[action] = 1
@@ -231,18 +231,18 @@ class Env(object):
         return seed
 
     def _extract_state(self, state):
-        ''' Extract useful information from state for RL. Must be implemented in the child class.
+        """Extract useful information from state for RL. Must be implemented in the child class.
 
         Args:
             state (dict): The raw state
 
         Returns:
             (numpy.array): The extracted state
-        '''
+        """
         raise NotImplementedError
 
     def _decode_action(self, action_id):
-        ''' Decode Action id to the action in the game.
+        """Decode Action id to the action in the game.
 
         Args:
             action_id (int): The id of the action
@@ -251,15 +251,15 @@ class Env(object):
             (string): The action that will be passed to the game engine.
 
         Note: Must be implemented in the child class.
-        '''
+        """
         raise NotImplementedError
 
     def _get_legal_actions(self):
-        ''' Get all legal actions for current state.
+        """Get all legal actions for current state.
 
         Returns:
             (list): A list of legal actions' id.
 
         Note: Must be implemented in the child class.
-        '''
+        """
         raise NotImplementedError

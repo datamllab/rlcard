@@ -29,8 +29,7 @@ WILD_DRAW_4 = ['r-wild_draw_4', 'g-wild_draw_4', 'b-wild_draw_4', 'y-wild_draw_4
 
 
 def init_deck():
-    ''' Generate uno deck of 108 cards
-    '''
+    """Generate uno deck of 108 cards"""
     deck = []
     card_info = Card.info
     for color in card_info['color']:
@@ -53,28 +52,28 @@ def init_deck():
 
 
 def cards2list(cards):
-    ''' Get the corresponding string representation of cards
+    """Get the corresponding string representation of cards
 
     Args:
         cards (list): list of UnoCards objects
 
     Returns:
         (string): string representation of cards
-    '''
+    """
     cards_list = []
     for card in cards:
         cards_list.append(card.get_str())
     return cards_list
 
 def hand2dict(hand):
-    ''' Get the corresponding dict representation of hand
+    """Get the corresponding dict representation of hand
 
     Args:
         hand (list): list of string of hand's card
 
     Returns:
         (dict): dict of hand
-    '''
+    """
     hand_dict = {}
     for card in hand:
         if card not in hand_dict:
@@ -84,7 +83,7 @@ def hand2dict(hand):
     return hand_dict
 
 def encode_hand(plane, hand):
-    ''' Encode hand and represerve it into plane
+    """Encode hand and represerve it into plane
 
     Args:
         plane (array): 3*4*15 numpy array
@@ -92,7 +91,7 @@ def encode_hand(plane, hand):
 
     Returns:
         (array): 3*4*15 numpy array
-    '''
+    """
     # plane = np.zeros((3, 4, 15), dtype=int)
     plane[0] = np.ones((4, 15), dtype=int)
     hand = hand2dict(hand)
@@ -111,7 +110,7 @@ def encode_hand(plane, hand):
     return plane
 
 def encode_target(plane, target):
-    ''' Encode target and represerve it into plane
+    """Encode target and represerve it into plane
 
     Args:
         plane (array): 1*4*15 numpy array
@@ -119,7 +118,7 @@ def encode_target(plane, target):
 
     Returns:
         (array): 1*4*15 numpy array
-    '''
+    """
     target_info = target.split('-')
     color = COLOR_MAP[target_info[0]]
     trait = TRAIT_MAP[target_info[1]]

@@ -1,8 +1,8 @@
-'''
+"""
     File name: test_bridge_game.py
     Author: William Hale
     Date created: 11/25/2021
-'''
+"""
 
 import unittest
 import numpy as np

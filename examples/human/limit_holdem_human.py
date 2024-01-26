@@ -1,5 +1,4 @@
-''' A toy example of playing against a random agent on Limit Hold'em
-'''
+"""A toy example of playing against a random agent on Limit Hold'em"""
 
 import rlcard
 from rlcard.agents import LimitholdemHumanAgent as HumanAgent
@@ -17,7 +16,7 @@ env.set_agents([
 
 print(">> Limit Hold'em random agent")
 
-while (True):
+while True:
     print(">> Start a new game")
 
     trajectories, payoffs = env.run(is_training=False)

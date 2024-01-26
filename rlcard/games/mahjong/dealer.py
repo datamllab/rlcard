@@ -2,8 +2,7 @@ from rlcard.games.mahjong.utils import init_deck
 
 
 class MahjongDealer:
-    ''' Initialize a mahjong dealer class
-    '''
+    """Initialize a mahjong dealer class """
     def __init__(self, np_random):
         self.np_random = np_random
         self.deck = init_deck()
@@ -11,17 +10,16 @@ class MahjongDealer:
         self.table = []
 
     def shuffle(self):
-        ''' Shuffle the deck
-        '''
+        """Shuffle the deck """
         self.np_random.shuffle(self.deck)
 
     def deal_cards(self, player, num):
-        ''' Deal some cards from deck to one player
+        """Deal some cards from deck to one player
 
         Args:
             player (object): The object of DoudizhuPlayer
             num (int): The number of cards to be dealed
-        '''
+        """
         for _ in range(num):
             player.hand.append(self.deck.pop())
 

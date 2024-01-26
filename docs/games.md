@@ -90,7 +90,7 @@ At each decision point of the game, the corresponding player will be able to obs
 | ------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
 | seen\_cards   | Three face-down cards distributed to the landlord after bidding. Then these cards will be made public to all players.                                | TQA                                                                                                 |
 | landlord      | An integer of landlord's id                                                                                                                          | 0                                                                                                   |
-| self          | An integer of current player's id                                                                                                                    | 2                                                                                                   |
+| cls          | An integer of current player's id                                                                                                                    | 2                                                                                                   |
 | trace         | A list of tuples which records every actions in one game. The first entry of  the tuple is player's id, the second is corresponding player's action. | \[(0, '8222'), (1, 'pass'), (2, 'pass'), (0 '6KKK'), (1, 'pass'), (2, 'pass'), (0, '8'), (1, 'Q')\] |
 | played\_cards | As the game progresses, the cards which have been played by the three players and sorted from low to high.                                           | \['6', '8', '8', 'Q', 'K', 'K', 'K', '2', '2', '2'\]                                                |
 | others\_hand  | The union of the other two player's current hand                                                                                                     | 333444555678899TTTJJJQQAA2R                                                                         |
@@ -134,7 +134,7 @@ If the landlord first get rid of all the cards in his hand, he will win and rece
 ## Mahjong
 Mahjong is a tile-based game developed in China, and has spread throughout the world since 20th century. It is commonly played
 by 4 players. The game is played with a set of 136 tiles. In turn players draw and discard tiles until  
-The goal of the game is to complete the leagal hand using the 14th drawn tile to form 4 sets and a pair. 
+The goal of the game is to complete the legal hand using the 14th drawn tile to form 4 sets and a pair. 
 We revised the game into a simple version that all of the winning set are equal, and player will win as long as she complete 
 forming 4 sets and a pair. Please refer the detail on [Wikipedia](https://en.wikipedia.org/wiki/Mahjong) or  [Baike](https://baike.baidu.com/item/麻将/215).
 

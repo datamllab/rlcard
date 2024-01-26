@@ -1,9 +1,9 @@
-'''
+"""
     Project: Gui Gin Rummy
     File name: configurations.py
     Author: William Hale
     Date created: 3/14/2020
-'''
+"""
 
 import os
 

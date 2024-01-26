@@ -38,15 +38,15 @@ def run_game_pettingzoo(env, agents, is_training=False):
 
 
 def reorganize_pettingzoo(trajectories):
-    ''' Reorganize the trajectory to make it RL friendly
+    """Reorganize the trajectory to make it RL friendly
 
     Args:
-        trajectory (list): A list of trajectories
+        trajectories (list): A list of trajectories
 
     Returns:
         (list): A new trajectories that can be fed into RL algorithms.
 
-    '''
+    """
     new_trajectories = defaultdict(list)
     for agent_name, trajectory in trajectories.items():
         for i in range(0, len(trajectory)-2, 2):

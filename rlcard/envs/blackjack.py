@@ -5,17 +5,16 @@ from rlcard.envs import Env
 from rlcard.games.blackjack import Game
 
 DEFAULT_GAME_CONFIG = {
-        'game_num_players': 1,
-        'game_num_decks': 1
-        }
+    'game_num_players': 1,
+    'game_num_decks': 1
+}
+
 
 class BlackjackEnv(Env):
-    ''' Blackjack Environment
-    '''
+    """Blackjack Environment """
 
     def __init__(self, config):
-        ''' Initialize the Blackjack environment
-        '''
+        """Initialize the Blackjack environment """
         self.name = 'blackjack'
         self.default_game_config = DEFAULT_GAME_CONFIG
         self.game = Game()
@@ -25,25 +24,25 @@ class BlackjackEnv(Env):
         self.action_shape = [None for _ in range(self.num_players)]
 
     def _get_legal_actions(self):
-        ''' Get all leagal actions
+        """Get all legal actions
 
         Returns:
             encoded_action_list (list): return encoded legal action list (from str to int)
-        '''
+        """
         encoded_action_list = []
         for i in range(len(self.actions)):
             encoded_action_list.append(i)
         return encoded_action_list
 
     def _extract_state(self, state):
-        ''' Extract the state representation from state dictionary for agent
+        """Extract the state representation from state dictionary for agent
 
         Args:
             state (dict): Original state from the game
 
         Returns:
             observation (list): combine the player's score and dealer's observable score for observation
-        '''
+        """
         cards = state['state']
         my_cards = cards[0]
         dealer_cards = cards[1]
@@ -60,11 +59,11 @@ class BlackjackEnv(Env):
         return extracted_state
 
     def get_payoffs(self):
-        ''' Get the payoff of a game
+        """Get the payoff of a game
 
         Returns:
            payoffs (list): list of payoffs
-        '''
+        """
         payoffs = []
 
         for i in range(self.num_players):
@@ -77,19 +76,22 @@ class BlackjackEnv(Env):
 
         return np.array(payoffs)
 
-
     def _decode_action(self, action_id):
-        ''' Decode the action for applying to the game
+        """Decode the action for applying to the game
 
         Args:
             action id (int): action id
 
         Returns:
             action (str): action for the game
-        '''
+        """
         return self.actions[action_id]
 
-rank2score = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "T":10, "J":10, "Q":10, "K":10}
+
+rank2score = {"A": 11, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "T": 10, "J": 10, "Q": 10,
+              "K": 10}
+
+
 def get_score(hand):
     score = 0
     count_a = 0

@@ -20,13 +20,10 @@ class DMCAgentPettingZoo(DMCAgent):
 
 
 class DMCModelPettingZoo:
-    def __init__(
-        self,
-        env,
-        mlp_layers=[512,512,512,512,512],
-        exp_epsilon=0.01,
-        device="0"
-    ):
+    def __init__(self, env, mlp_layers=None, exp_epsilon=0.01, device="0"):
+        if mlp_layers is None:
+            mlp_layers = [512, 512, 512, 512, 512]
+
         self.agents = OrderedDict()
         for agent_name in env.agents:
             agent = DMCAgentPettingZoo(

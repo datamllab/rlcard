@@ -1,8 +1,8 @@
-'''
+"""
     File name: bridge/utils/tray.py
     Author: William Hale
     Date created: 11/28/2021
-'''
+"""
 
 
 class Tray(object):

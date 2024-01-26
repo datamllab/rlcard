@@ -6,9 +6,9 @@ from rlcard.games.mahjong import Game
 from rlcard.games.mahjong import Card
 from rlcard.games.mahjong.utils import card_encoding_dict, encode_cards, pile2list
 
+
 class MahjongEnv(Env):
-    ''' Mahjong Environment
-    '''
+    """Mahjong Environment"""
 
     def __init__(self, config):
         self.name = 'mahjong'
@@ -20,7 +20,7 @@ class MahjongEnv(Env):
         self.action_shape = [None for _ in range(self.num_players)]
 
     def _extract_state(self, state):
-        ''' Encode state
+        """Encode state
 
         Args:
             state (dict): dict of original state
@@ -31,7 +31,7 @@ class MahjongEnv(Env):
                              the union of the other two players' hand
                              the recent three actions
                              the union of all played cards
-        '''
+        """
         players_pile = state['players_pile']
         hand_rep = encode_cards(state['current_hand'])
         piles_rep = []
@@ -43,19 +43,22 @@ class MahjongEnv(Env):
         rep.extend(piles_rep)
         obs = np.array(rep)
 
-        extracted_state = {'obs': obs, 'legal_actions': self._get_legal_actions()}
-        extracted_state['raw_obs'] = state
-        extracted_state['raw_legal_actions'] = [a for a in state['action_cards']]
-        extracted_state['action_record'] = self.action_recorder
+        extracted_state = {
+            'obs': obs,
+            'legal_actions': self._get_legal_actions(),
+            'raw_obs': state,
+            'raw_legal_actions': [a for a in state['action_cards']],
+            'action_record': self.action_recorder
+        }
 
         return extracted_state
 
     def get_payoffs(self):
-        ''' Get the payoffs of players. Must be implemented in the child class.
+        """Get the payoffs of players. Must be implemented in the child class.
 
         Returns:
             payoffs (list): a list of payoffs for each player
-        '''
+        """
         _, player, _ = self.game.judger.judge_game(self.game)
         if player == -1:
             payoffs = [0, 0, 0, 0]
@@ -65,14 +68,14 @@ class MahjongEnv(Env):
         return np.array(payoffs)
 
     def _decode_action(self, action_id):
-        ''' Action id -> the action in the game. Must be implemented in the child class.
+        """Action id -> the action in the game. Must be implemented in the child class.
 
         Args:
             action_id (int): the id of the action
 
         Returns:
             action (string): the action that will be passed to the game engine.
-        '''
+        """
         action = self.de_action_id[action_id]
         if action_id < 34:
             candidates = self.game.get_legal_actions(self.game.get_state(self.game.round.current_player))
@@ -83,7 +86,7 @@ class MahjongEnv(Env):
         return action
 
     def _get_legal_actions(self):
-        ''' Get all legal actions for current state
+        """Get all legal actions for current state
 
         Returns:
         if type(legal_actions[0]) == Card:
@@ -91,7 +94,7 @@ class MahjongEnv(Env):
         else:
             print(legal_actions)
             legal_actions (list): a list of legal actions' id
-        '''
+        """
         legal_action_id = {}
         legal_actions = self.game.get_legal_actions(self.game.get_state(self.game.round.current_player))
         if legal_actions:
@@ -106,6 +109,6 @@ class MahjongEnv(Env):
             print(self.game.judger.judge_game(self.game))
             print(self.game.is_over())
             print([len(p.pile) for p in self.game.players])
-            #print(self.game.get_state(self.game.round.current_player))
-            #exit()
+            # print(self.game.get_state(self.game.round.current_player))
+            # exit()
         return OrderedDict(legal_action_id)

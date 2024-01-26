@@ -1,23 +1,23 @@
-''' Leduc Hold 'em rule model
-'''
+"""Leduc Hold 'em rule model"""
 import rlcard
 from rlcard.models.model import Model
 
+
 class LeducHoldemRuleAgentV1(object):
-    ''' Leduc Hold 'em Rule agent version 1
-    '''
+    """Leduc Hold 'em Rule agent version 1"""
+
     def __init__(self):
         self.use_raw = True
 
     @staticmethod
     def step(state):
-        ''' Predict the action when given raw state. A simple rule-based AI.
+        """Predict the action when given raw state. A simple rule-based AI.
         Args:
             state (dict): Raw state from the game
 
         Returns:
             action (str): Predicted action
-        '''
+        """
         legal_actions = state['raw_legal_actions']
         # Aggressively play 'raise' and 'call'
         if 'raise' in legal_actions:
@@ -30,25 +30,25 @@ class LeducHoldemRuleAgentV1(object):
             return 'fold'
 
     def eval_step(self, state):
-        ''' Step for evaluation. The same to step
-        '''
+        """Step for evaluation. The same to step"""
         return self.step(state), []
 
+
 class LeducHoldemRuleAgentV2(object):
-    ''' Leduc Hold 'em Rule agent version 2
-    '''
+    """Leduc Hold 'em Rule agent version 2"""
+
     def __init__(self):
         self.use_raw = True
 
     @staticmethod
     def step(state):
-        ''' Predict the action when given raw state. A simple rule-based AI.
+        """Predict the action when given raw state. A simple rule-based AI.
         Args:
             state (dict): Raw state from the game
 
         Returns:
             action (str): Predicted action
-        '''
+        """
         legal_actions = state['raw_legal_actions']
         state = state['raw_obs']
         hand = state['hand']
@@ -74,7 +74,7 @@ class LeducHoldemRuleAgentV2(object):
             else:
                 action = 'fold'
 
-        #return action
+        # return action
         if action in legal_actions:
             return action
         else:
@@ -88,52 +88,50 @@ class LeducHoldemRuleAgentV2(object):
                 return action
 
     def eval_step(self, state):
-        ''' Step for evaluation. The same to step
-        '''
+        """Step for evaluation. The same to step"""
         return self.step(state), []
 
+
 class LeducHoldemRuleModelV1(Model):
-    ''' Leduc holdem Rule Model version 1
-    '''
+    """Leduc holdem Rule Model version 1"""
 
     def __init__(self):
-        ''' Load pretrained model
-        '''
+        """Load pretrained model
+        """
         env = rlcard.make('leduc-holdem')
         rule_agent = LeducHoldemRuleAgentV1()
         self.rule_agents = [rule_agent for _ in range(env.num_players)]
 
     @property
     def agents(self):
-        ''' Get a list of agents for each position in a the game
+        """Get a list of agents for each position in the game
 
         Returns:
             agents (list): A list of agents
 
         Note: Each agent should be just like RL agent with step and eval_step
               functioning well.
-        '''
+        """
         return self.rule_agents
 
+
 class LeducHoldemRuleModelV2(Model):
-    ''' Leduc holdem Rule Model version 2
-    '''
+    """Leduc holdem Rule Model version 2"""
 
     def __init__(self):
-        ''' Load pretrained model
-        '''
+        """Load pretrained model"""
         env = rlcard.make('leduc-holdem')
         rule_agent = LeducHoldemRuleAgentV2()
         self.rule_agents = [rule_agent for _ in range(env.num_players)]
 
     @property
     def agents(self):
-        ''' Get a list of agents for each position in a the game
+        """Get a list of agents for each position in the game
 
         Returns:
             agents (list): A list of agents
 
         Note: Each agent should be just like RL agent with step and eval_step
               functioning well.
-        '''
+        """
         return self.rule_agents

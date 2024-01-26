@@ -1,8 +1,8 @@
-'''
+"""
     File name: gin_rummy/game.py
     Author: William Hale
     Date created: 2/12/2020
-'''
+"""
 
 import numpy as np
 
@@ -15,12 +15,10 @@ from .utils.action_event import *
 
 
 class GinRummyGame:
-    ''' Game class. This class will interact with outer environment.
-    '''
+    """Game class. This class will interact with outer environment"""
 
     def __init__(self, allow_step_back=False):
-        '''Initialize the class GinRummyGame
-        '''
+        """Initialize the class GinRummyGame"""
         self.allow_step_back = allow_step_back
         self.np_random = np.random.RandomState()
         self.judge = GinRummyJudge(game=self)
@@ -30,8 +28,7 @@ class GinRummyGame:
         self.num_players = 2
 
     def init_game(self):
-        ''' Initialize all characters in the game and start round 1
-        '''
+        """Initialize all characters in the game and start round 1"""
         dealer_id = self.np_random.choice([0, 1])
         if self.settings.dealer_for_round == DealerForRound.North:
             dealer_id = 0
@@ -48,8 +45,7 @@ class GinRummyGame:
         return state, current_player_id
 
     def step(self, action: ActionEvent):
-        ''' Perform game action and return next player number, and the state for next player
-        '''
+        """Perform game action and return next player number, and the state for next player"""
         if isinstance(action, ScoreNorthPlayerAction):
             self.round.score_player_0(action)
         elif isinstance(action, ScoreSouthPlayerAction):
@@ -74,28 +70,23 @@ class GinRummyGame:
         return next_state, next_player_id
 
     def step_back(self):
-        ''' Takes one step backward and restore to the last state
-        '''
+        """Takes one step backward and restore to the last state"""
         raise NotImplementedError
 
     def get_num_players(self):
-        ''' Return the number of players in the game
-        '''
+        """Return the number of players in the game"""
         return 2
 
     def get_num_actions(self):
-        ''' Return the number of possible actions in the game
-        '''
+        """Return the number of possible actions in the game"""
         return ActionEvent.get_num_actions()
 
     def get_player_id(self):
-        ''' Return the current player that will take actions soon
-        '''
+        """Return the current player that will take actions soon"""
         return self.round.current_player_id
 
     def is_over(self):
-        ''' Return whether the current game is over
-        '''
+        """Return whether the current game is over"""
         return self.round.is_over
 
     def get_current_player(self) -> GinRummyPlayer or None:
@@ -105,11 +96,11 @@ class GinRummyGame:
         return self.actions[-1] if self.actions and len(self.actions) > 0 else None
 
     def get_state(self, player_id: int):
-        ''' Get player's state
+        """Get player's state
 
         Return:
             state (dict): The information of the state
-        '''
+        """
         state = {}
         if not self.is_over():
             discard_pile = self.round.dealer.discard_pile
@@ -132,12 +123,12 @@ class GinRummyGame:
 
     @staticmethod
     def decode_action(action_id) -> ActionEvent:  # FIXME 200213 should return str
-        ''' Action id -> the action_event in the game.
+        """Action id -> the action_event in the game.
 
         Args:
             action_id (int): the id of the action
 
         Returns:
             action (ActionEvent): the action that will be passed to the game engine.
-        '''
+        """
         return ActionEvent.decode_action(action_id=action_id)
