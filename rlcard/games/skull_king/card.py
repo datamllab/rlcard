@@ -57,14 +57,14 @@ class SkullKingCard:
 
             if trait == 'Escape' or trait == 'Pirate' or trait == 'Skull King' or trait == 'Tigress':
                 print(trait, end='')
-            elif color == 'r':
-                print(colored(trait, 'red'), end='')
-            elif color == 'g':
-                print(colored(trait, 'green'), end='')
-            elif color == 'b':
-                print(colored(trait, 'blue'), end='')
-            elif color == 'y':
+            elif color == 'yellow':
                 print(colored(trait, 'yellow'), end='')
+            elif color == 'green':
+                print(colored(trait, 'green'), end='')
+            elif color == 'purple':
+                print(colored(trait, 'purple'), end='')
+            elif color == 'black':
+                print(colored(trait, 'black'), end='')
 
             if i < len(cards) - 1:
                 print(', ', end='')

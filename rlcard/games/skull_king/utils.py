@@ -5,50 +5,71 @@ from collections import OrderedDict
 
 import rlcard
 
-from rlcard.games.uno.card import UnoCard as Card
+from rlcard.games.skull_king.card import SkullKingCard as Card
 
 # Read required docs
 ROOT_PATH = rlcard.__path__[0]
 
 # a map of abstract action to its index and a list of abstract action
-with open(os.path.join(ROOT_PATH, 'games/uno/jsondata/action_space.json'), 'r') as file:
+with open(os.path.join(ROOT_PATH, 'games/skull_king/jsondata/action_space.json'), 'r') as file:
     ACTION_SPACE = json.load(file, object_pairs_hook=OrderedDict)
     ACTION_LIST = list(ACTION_SPACE.keys())
 
 # a map of color to its index
-COLOR_MAP = {'r': 0, 'g': 1, 'b': 2, 'y': 3}
+COLOR_MAP = {'green': 0, 'yellow': 1, 'purple': 2, 'black': 3,'pirate': 4, 'escape': 5, 'special_pirate': 6}
 
 # a map of trait to its index
-TRAIT_MAP = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
-             '8': 8, '9': 9, 'skip': 10, 'reverse': 11, 'draw_2': 12,
-             'wild': 13, 'wild_draw_4': 14}
-
-WILD = ['r-wild', 'g-wild', 'b-wild', 'y-wild']
-
-WILD_DRAW_4 = ['r-wild_draw_4', 'g-wild_draw_4', 'b-wild_draw_4', 'y-wild_draw_4']
+TRAIT_MAP = {'1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7,
+             '8': 8, '9': 9, '10': 10, '11': 11, '12': 12, '13': 13, 'pirate': 14, 'tigress': 15, 'skull king': 16,
+             'escape': 17}
 
 
 def init_deck():
-    ''' Generate uno deck of 108 cards
+    ''' Generate A SkullKing deck of 66 Cards
     '''
     deck = []
-    card_info = Card.info
-    for color in card_info['color']:
+    card_info = SkullKingCard.info
 
-        # init number cards
-        for num in card_info['trait'][:10]:
-            deck.append(Card('number', color, num))
-            if num != '0':
-                deck.append(Card('number', color, num))
+    # init suit cards
+    for color in ['green','yellow','purple']:
 
-        # init action cards
-        for action in card_info['trait'][10:13]:
-            deck.append(Card('action', color, action))
-            deck.append(Card('action', color, action))
 
-        # init wild cards
-        for wild in card_info['trait'][-2:]:
-            deck.append(Card('wild', color, wild))
+        for num in ['1', '2', '3', '4', '5', '6', '7', '8', '9','10','11','12','13']:
+            deck.append(SkullKingCard('suit', color, num))
+
+
+    # init black trump cards
+    for trump in ['black']:
+
+        for num in ['1', '2', '3', '4', '5', '6', '7', '8', '9','10','11','12','13']:
+
+
+          deck.append(SkullKingCard('black', trump, num))
+
+    # init pirate cards
+
+    for pirate in ['pirate1','pirate2','pirate3','pirate4','pirate5']:
+
+      deck.append(SkullKingCard('pirate','pirate',pirate))
+
+    # init escape cards
+
+    for escape in ['escape1','escape2','escape3','escape4','escape5']:
+
+      deck.append(SkullKingCard('escape','escape',escape))
+
+    # init skull king
+
+    deck.append(SkullKingCard('pirate','special_pirate','skull_king'))
+
+
+    # init tigress
+
+    deck.append(SkullKingCard('pirate','special_pirate','tigress'))
+
+
+
+
     return deck
 
 
@@ -82,6 +103,8 @@ def hand2dict(hand):
         else:
             hand_dict[card] += 1
     return hand_dict
+
+
 
 def encode_hand(plane, hand):
     ''' Encode hand and represerve it into plane
