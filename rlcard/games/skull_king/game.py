@@ -1,12 +1,12 @@
 from copy import deepcopy
 import numpy as np
 
-from rlcard.games.uno import Dealer
-from rlcard.games.uno import Player
-from rlcard.games.uno import Round
+from rlcard.games.skull_king import Dealer
+from rlcard.games.skull_king import Player
+from rlcard.games.skull_king import Round
 
 
-class UnoGame:
+class SkullKingGame:
 
     def __init__(self, allow_step_back=False, num_players=2):
         self.allow_step_back = allow_step_back
