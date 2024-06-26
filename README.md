@@ -21,7 +21,9 @@ RLCard is a toolkit for Reinforcement Learning (RL) in card games. It supports m
 *   Resources: [Awesome-Game-AI](https://github.com/datamllab/awesome-game-ai)
 *   Related Project: [DouZero Project](https://github.com/kwai/DouZero)
 *   Zhihu: https://zhuanlan.zhihu.com/p/526723604
-*   Miscellaneous Resources: Have you heard of data-centric AI? Please check out our [data-centric AI survey](https://arxiv.org/abs/2303.10158) and [awesome data-centric AI resources](https://github.com/daochenzha/data-centric-AI)!
+*   Miscellaneous Resources:
+	*   Check out our open-sourced [Large Time Series Model (LTSM)](https://github.com/daochenzha/ltsm)!
+	*   Have you heard of data-centric AI? Please check out our [data-centric AI survey](https://arxiv.org/abs/2303.10158) and [awesome data-centric AI resources](https://github.com/daochenzha/data-centric-AI)!
 
 **Community:**
 *  **Slack**: Discuss in our [#rlcard-project](https://join.slack.com/t/rlcard/shared_invite/zt-rkvktsaq-xkMwz8BfKupCM6zGhO01xg) slack channel.
