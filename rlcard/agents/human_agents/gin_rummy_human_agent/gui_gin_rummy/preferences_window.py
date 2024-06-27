@@ -1,9 +1,9 @@
-'''
+"""
     Project: Gui Gin Rummy
     File name: preferences_window.py
     Author: William Hale
     Date created: 3/14/2020
-'''
+"""
 
 from tkinter import *
 import tkinter.colorchooser as colorchooser

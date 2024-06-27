@@ -1,5 +1,4 @@
-''' A toy example of self playing for Blackjack
-'''
+"""A toy example of self playing for Blackjack """
 
 import rlcard
 from rlcard.agents import RandomAgent as RandomAgent
@@ -23,7 +22,7 @@ env.set_agents([
 
 print(">> Blackjack human agent")
 
-while (True):
+while True:
     print(">> Start a new game")
 
     trajectories, payoffs = env.run(is_training=False)

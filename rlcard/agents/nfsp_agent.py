@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-''' Neural Fictitious Self-Play (NFSP) agent implemented in TensorFlow.
+"""Neural Fictitious Self-Play (NFSP) agent implemented in TensorFlow.
 
 See the paper https://arxiv.org/abs/1603.01121 for more details.
-'''
+"""
 
 import os
 import random
@@ -33,13 +33,14 @@ from rlcard.utils.utils import remove_illegal
 
 Transition = collections.namedtuple('Transition', 'info_state action_probs')
 
+
 class NFSPAgent(object):
-    ''' An approximate clone of rlcard.agents.nfsp_agent that uses
+    """An approximate clone of rlcard.agents.nfsp_agent that uses
     pytorch instead of tensorflow.  Note that this implementation
     differs from Henrich and Silver (2016) in that the supervised
     training minimizes cross-entropy with respect to the stored
     action probabilities rather than the realized actions.
-    '''
+    """
 
     def __init__(self,
                  num_actions=4,
@@ -66,7 +67,7 @@ class NFSPAgent(object):
                  device=None,
                  save_path=None,
                  save_every=float('inf')):
-        ''' Initialize the NFSP agent.
+        """Initialize the NFSP agent.
 
         Args:
             num_actions (int): The number of actions.
@@ -74,7 +75,7 @@ class NFSPAgent(object):
             hidden_layers_sizes (list): The hidden layers sizes for the layers of
               the average policy.
             reservoir_buffer_capacity (int): The size of the buffer for average policy.
-            anticipatory_param (float): The hyper-parameter that balances rl/avarage policy.
+            anticipatory_param (float): The hyper-parameter that balances rl/average policy.
             batch_size (int): The batch_size for training average policy.
             train_every (int): Train the SL policy every X steps.
             rl_learning_rate (float): The learning rate of the RL agent.
@@ -92,7 +93,7 @@ class NFSPAgent(object):
             q_train_step (int): Train the model every X steps.
             q_mlp_layers (list): The layer sizes of inner DQN agent.
             device (torch.device): Whether to use the cpu or gpu
-        '''
+        """
         self.use_raw = False
         self._num_actions = num_actions
         self._state_shape = state_shape
@@ -120,24 +121,23 @@ class NFSPAgent(object):
         self.train_t = 0
 
         # Build the action-value network
-        self._rl_agent = DQNAgent(q_replay_memory_size, q_replay_memory_init_size, \
-            q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end, \
-            q_epsilon_decay_steps, q_batch_size, num_actions, state_shape, q_train_every, q_mlp_layers, \
-            rl_learning_rate, device)
+        self._rl_agent = DQNAgent(q_replay_memory_size, q_replay_memory_init_size,
+                                  q_update_target_estimator_every, q_discount_factor, q_epsilon_start, q_epsilon_end,
+                                  q_epsilon_decay_steps, q_batch_size, num_actions, state_shape, q_train_every,
+                                  q_mlp_layers,
+                                  rl_learning_rate, device)
 
         # Build the average policy supervised model
         self._build_model()
 
         self.sample_episode_policy()
-        
+
         # Checkpoint saving parameters
         self.save_path = save_path
         self.save_every = save_every
 
     def _build_model(self):
-        ''' Build the average policy network
-        '''
-
+        """Build the average policy network"""
         # configure the average policy network
         policy_network = AveragePolicyNetwork(self._num_actions, self._state_shape, self._layer_sizes)
         policy_network = policy_network.to(self.device)
@@ -153,26 +153,27 @@ class NFSPAgent(object):
         self.policy_network_optimizer = torch.optim.Adam(self.policy_network.parameters(), lr=self._sl_learning_rate)
 
     def feed(self, ts):
-        ''' Feed data to inner RL agent
+        """Feed data to inner RL agent
 
         Args:
             ts (list): A list of 5 elements that represent the transition.
-        '''
+        """
         self._rl_agent.feed(ts)
         self.total_t += 1
-        if self.total_t>0 and len(self._reservoir_buffer) >= self._min_buffer_size_to_learn and self.total_t%self._train_every == 0:
-            sl_loss  = self.train_sl()
+        if self.total_t > 0 and len(
+                self._reservoir_buffer) >= self._min_buffer_size_to_learn and self.total_t % self._train_every == 0:
+            sl_loss = self.train_sl()
             print('\rINFO - Step {}, sl-loss: {}'.format(self.total_t, sl_loss), end='')
 
     def step(self, state):
-        ''' Returns the action to be taken.
+        """Returns the action to be taken.
 
         Args:
             state (dict): The current state
 
         Returns:
             action (int): An action id
-        '''
+        """
         obs = state['obs']
         legal_actions = list(state['legal_actions'].keys())
         if self._mode == 'best_response':
@@ -189,7 +190,7 @@ class NFSPAgent(object):
         return action
 
     def eval_step(self, state):
-        ''' Use the average policy for evaluation purpose
+        """Use the average policy for evaluation purpose
 
         Args:
             state (dict): The current state.
@@ -197,7 +198,7 @@ class NFSPAgent(object):
         Returns:
             action (int): An action id.
             info (dict): A dictionary containing information
-        '''
+        """
         if self.evaluate_with == 'best_response':
             action, info = self._rl_agent.eval_step(state)
         elif self.evaluate_with == 'average_policy':
@@ -207,28 +208,28 @@ class NFSPAgent(object):
             probs = remove_illegal(probs, legal_actions)
             action = np.random.choice(len(probs), p=probs)
             info = {}
-            info['probs'] = {state['raw_legal_actions'][i]: float(probs[list(state['legal_actions'].keys())[i]]) for i in range(len(state['legal_actions']))}
+            info['probs'] = {state['raw_legal_actions'][i]: float(probs[list(state['legal_actions'].keys())[i]]) for i
+                             in range(len(state['legal_actions']))}
         else:
             raise ValueError("'evaluate_with' should be either 'average_policy' or 'best_response'.")
         return action, info
 
     def sample_episode_policy(self):
-        ''' Sample average/best_response policy
-        '''
+        """Sample average/best_response policy"""
         if np.random.rand() < self._anticipatory_param:
             self._mode = 'best_response'
         else:
             self._mode = 'average_policy'
 
     def _act(self, info_state):
-        ''' Predict action probability givin the observation and legal actions
+        """Predict action probability givin the observation and legal actions
             Not connected to computation graph
         Args:
-            info_state (numpy.array): An obervation.
+            info_state (numpy.array): An observation.
 
         Returns:
             action_probs (numpy.array): The predicted action probability.
-        '''
+        """
         info_state = np.expand_dims(info_state, axis=0)
         info_state = torch.from_numpy(info_state).float().to(self.device)
 
@@ -240,28 +241,28 @@ class NFSPAgent(object):
         return action_probs
 
     def _add_transition(self, state, probs):
-        ''' Adds the new transition to the reservoir buffer.
+        """Adds the new transition to the reservoir buffer.
 
         Transitions are in the form (state, probs).
 
         Args:
             state (numpy.array): The state.
             probs (numpy.array): The probabilities of each action.
-        '''
+        """
         transition = Transition(
-                info_state=state,
-                action_probs=probs)
+            info_state=state,
+            action_probs=probs)
         self._reservoir_buffer.add(transition)
 
     def train_sl(self):
-        ''' Compute the loss on sampled transitions and perform a avg-network update.
+        """Compute the loss on sampled transitions and perform a avg-network update.
 
         If there are not enough elements in the buffer, no loss is computed and
         `None` is returned instead.
 
         Returns:
             loss (float): The average loss obtained on this batch of transitions or `None`.
-        '''
+        """
         if (len(self._reservoir_buffer) < self._batch_size or
                 len(self._reservoir_buffer) < self._min_buffer_size_to_learn):
             return None
@@ -302,14 +303,14 @@ class NFSPAgent(object):
     def set_device(self, device):
         self.device = device
         self._rl_agent.set_device(device)
-        
+
     def checkpoint_attributes(self):
-        '''
+        """
         Return the current checkpoint attributes (dict)
         Checkpoint attributes are used to save and restore the model in the middle of training
         Saves the model state dict, optimizer state dict, and all other instance variables
-        '''
-        
+        """
+
         return {
             'agent_type': 'NFSPAgent',
             'policy_network': self.policy_network.checkpoint_attributes(),
@@ -328,15 +329,14 @@ class NFSPAgent(object):
             'sl_learning_rate': self._sl_learning_rate,
             'train_every': self._train_every,
         }
-    
+
     @classmethod
     def from_checkpoint(cls, checkpoint):
-        '''
-        Restore the model from a checkpoint
-        
+        """Restore the model from a checkpoint
+
         Args:
             checkpoint (dict): the checkpoint attributes generated by checkpoint_attributes()
-        '''
+        """
         print("\nINFO - Restoring model from checkpoint...")
         agent = cls(
             anticipatory_param=checkpoint['anticipatory_param'],
@@ -351,7 +351,7 @@ class NFSPAgent(object):
             state_shape=checkpoint['rl_agent']['q_estimator']['state_shape'],
             hidden_layers_sizes=[],
         )
-        
+
         agent.policy_network = AveragePolicyNetwork.from_checkpoint(checkpoint['policy_network'])
         agent._reservoir_buffer = ReservoirBuffer.from_checkpoint(checkpoint['reservoir_buffer'])
         agent._mode = checkpoint['mode']
@@ -364,25 +364,25 @@ class NFSPAgent(object):
         agent._rl_agent.from_checkpoint(checkpoint['rl_agent'])
         agent._rl_agent.set_device(agent.device)
         return agent
-        
+
     def save_checkpoint(self, path, filename='checkpoint_nfsp.pt'):
-        ''' Save the model checkpoint (all attributes)
+        """Save the model checkpoint (all attributes)
 
         Args:
             path (str): the path to save the model
-        '''
+        """
         torch.save(self.checkpoint_attributes(), os.path.join(path, filename))
-        
+
 
 class AveragePolicyNetwork(nn.Module):
-    '''
+    """
     Approximates the history of action probabilities
     given state (average policy). Forward pass returns
     log probabilities of actions.
-    '''
+    """
 
     def __init__(self, num_actions=2, state_shape=None, mlp_layers=None):
-        ''' Initialize the policy network.  It's just a bunch of ReLU
+        """Initialize the policy network.  It's just a bunch of ReLU
         layers with no activation on the final one, initialized with
         Xavier (sonnet.nets.MLP and tensorflow defaults)
 
@@ -390,7 +390,7 @@ class AveragePolicyNetwork(nn.Module):
             num_actions (int): number of output actions
             state_shape (list): shape of state tensor for each sample
             mlp_laters (list): output size of each mlp layer including final
-        '''
+        """
         super(AveragePolicyNetwork, self).__init__()
 
         self.num_actions = num_actions
@@ -399,80 +399,80 @@ class AveragePolicyNetwork(nn.Module):
 
         # set up mlp w/ relu activations
         layer_dims = [np.prod(self.state_shape)] + self.mlp_layers
-        mlp = [nn.Flatten()]
-        mlp.append(nn.BatchNorm1d(layer_dims[0]))
-        for i in range(len(layer_dims)-1):
-            mlp.append(nn.Linear(layer_dims[i], layer_dims[i+1]))
-            if i != len(layer_dims) - 2: # all but final have relu
+        mlp = [nn.Flatten(), nn.BatchNorm1d(layer_dims[0])]
+        for i in range(len(layer_dims) - 1):
+            mlp.append(nn.Linear(layer_dims[i], layer_dims[i + 1]))
+            if i != len(layer_dims) - 2:  # all but final have relu
                 mlp.append(nn.ReLU())
         self.mlp = nn.Sequential(*mlp)
 
     def forward(self, s):
-        ''' Log action probabilities of each action from state
+        """Log action probabilities of each action from state
 
         Args:
             s (Tensor): (batch, state_shape) state tensor
 
         Returns:
             log_action_probs (Tensor): (batch, num_actions)
-        '''
+        """
         logits = self.mlp(s)
         log_action_probs = F.log_softmax(logits, dim=-1)
         return log_action_probs
-    
+
     def checkpoint_attributes(self):
-        '''
+        """
         Return the current checkpoint attributes (dict)
         Checkpoint attributes are used to save and restore the model in the middle of training
-        '''
-        
+        """
+
         return {
             'num_actions': self.num_actions,
             'state_shape': self.state_shape,
             'mlp_layers': self.mlp_layers,
             'mlp': self.mlp.state_dict(),
         }
-        
+
     @classmethod
     def from_checkpoint(cls, checkpoint):
-        '''
+        """
         Restore the model from a checkpoint
-        
+
         Args:
             checkpoint (dict): the checkpoint attributes generated by checkpoint_attributes()
-        '''
-        
+        """
+
         agent = cls(
             num_actions=checkpoint['num_actions'],
             state_shape=checkpoint['state_shape'],
             mlp_layers=checkpoint['mlp_layers'],
         )
-        
+
         agent.mlp.load_state_dict(checkpoint['mlp'])
         return agent
 
+
 class ReservoirBuffer(object):
-    ''' Allows uniform sampling over a stream of data.
+    """Allows uniform sampling over a stream of data.
 
     This class supports the storage of arbitrary elements, such as observation
     tensors, integer actions, etc.
 
     See https://en.wikipedia.org/wiki/Reservoir_sampling for more details.
-    '''
+    """
 
     def __init__(self, reservoir_buffer_capacity):
-        ''' Initialize the buffer.
-        '''
+        """Initialize the buffer.
+        """
         self._reservoir_buffer_capacity = reservoir_buffer_capacity
         self._data = []
         self._add_calls = 0
 
     def add(self, element):
-        ''' Potentially adds `element` to the reservoir buffer.
+        """Potentially adds `element` to the reservoir buffer.
 
         Args:
             element (object): data to be added to the reservoir buffer.
-        '''
+        """
         if len(self._data) < self._reservoir_buffer_capacity:
             self._data.append(element)
         else:
@@ -482,7 +482,7 @@ class ReservoirBuffer(object):
         self._add_calls += 1
 
     def sample(self, num_samples):
-        ''' Returns `num_samples` uniformly sampled from the buffer.
+        """Returns `num_samples` uniformly sampled from the buffer.
 
         Args:
             num_samples (int): The number of samples to draw.
@@ -492,25 +492,25 @@ class ReservoirBuffer(object):
 
         Raises:
             ValueError: If there are less than `num_samples` elements in the buffer
-        '''
+        """
         if len(self._data) < num_samples:
             raise ValueError("{} elements could not be sampled from size {}".format(
-                    num_samples, len(self._data)))
+                num_samples, len(self._data)))
         return random.sample(self._data, num_samples)
 
     def clear(self):
-        ''' Clear the buffer
-        '''
+        """Clear the buffer
+        """
         self._data = []
         self._add_calls = 0
-        
+
     def checkpoint_attributes(self):
         return {
             'data': self._data,
             'add_calls': self._add_calls,
             'reservoir_buffer_capacity': self._reservoir_buffer_capacity,
         }
-        
+
     @classmethod
     def from_checkpoint(cls, checkpoint):
         reservoir_buffer = cls(checkpoint['reservoir_buffer_capacity'])
@@ -523,4 +523,3 @@ class ReservoirBuffer(object):
 
     def __iter__(self):
         return iter(self._data)
-

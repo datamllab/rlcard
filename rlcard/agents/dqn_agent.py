@@ -1,4 +1,4 @@
-''' DQN agent
+"""DQN agent
 
 The code is derived from https://github.com/dennybritz/reinforcement-learning/blob/master/DQN/dqn.py
 
@@ -23,7 +23,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-'''
+"""
 
 import os
 import random
@@ -39,10 +39,10 @@ Transition = namedtuple('Transition', ['state', 'action', 'reward', 'next_state'
 
 
 class DQNAgent(object):
-    '''
+    """
     Approximate clone of rlcard.agents.dqn_agent.DQNAgent
     that depends on PyTorch instead of Tensorflow
-    '''
+    """
     def __init__(self,
                  replay_memory_size=20000,
                  replay_memory_init_size=100,
@@ -61,7 +61,7 @@ class DQNAgent(object):
                  save_path=None,
                  save_every=float('inf'),):
 
-        '''
+        """
         Q-Learning algorithm for off-policy TD control using Function Approximation.
         Finds the optimal greedy policy while following an epsilon-greedy policy.
 
@@ -86,7 +86,7 @@ class DQNAgent(object):
             device (torch.device): whether to use the cpu or gpu
             save_path (str): The path to save the model checkpoints
             save_every (int): Save the model every X training steps
-        '''
+        """
         self.use_raw = False
         self.replay_memory_init_size = replay_memory_init_size
         self.update_target_estimator_every = update_target_estimator_every
@@ -112,10 +112,10 @@ class DQNAgent(object):
         self.epsilons = np.linspace(epsilon_start, epsilon_end, epsilon_decay_steps)
 
         # Create estimators
-        self.q_estimator = Estimator(num_actions=num_actions, learning_rate=learning_rate, state_shape=state_shape, \
-            mlp_layers=mlp_layers, device=self.device)
-        self.target_estimator = Estimator(num_actions=num_actions, learning_rate=learning_rate, state_shape=state_shape, \
-            mlp_layers=mlp_layers, device=self.device)
+        self.q_estimator = Estimator(num_actions=num_actions, learning_rate=learning_rate, state_shape=state_shape,
+                                     mlp_layers=mlp_layers, device=self.device)
+        self.target_estimator = Estimator(num_actions=num_actions, learning_rate=learning_rate, state_shape=state_shape,
+                                          mlp_layers=mlp_layers, device=self.device)
 
         # Create replay memory
         self.memory = Memory(replay_memory_size, batch_size)
@@ -125,13 +125,13 @@ class DQNAgent(object):
         self.save_every = save_every
 
     def feed(self, ts):
-        ''' Store data in to replay buffer and train the agent. There are two stages.
+        """Store data in to replay buffer and train the agent. There are two stages.
             In stage 1, populate the memory without training
             In stage 2, train the agent every several timesteps
 
         Args:
             ts (list): a list of 5 elements that represent the transition
-        '''
+        """
         (state, action, reward, next_state, done) = tuple(ts)
         self.feed_memory(state['obs'], action, reward, next_state['obs'], list(next_state['legal_actions'].keys()), done)
         self.total_t += 1
@@ -140,7 +140,7 @@ class DQNAgent(object):
             self.train()
 
     def step(self, state):
-        ''' Predict the action for genrating training data but
+        """Predict the action for genrating training data but
             have the predictions disconnected from the computation graph
 
         Args:
@@ -148,7 +148,7 @@ class DQNAgent(object):
 
         Returns:
             action (int): an action id
-        '''
+        """
         q_values = self.predict(state)
         epsilon = self.epsilons[min(self.total_t, self.epsilon_decay_steps-1)]
         legal_actions = list(state['legal_actions'].keys())
@@ -160,7 +160,7 @@ class DQNAgent(object):
         return legal_actions[action_idx]
 
     def eval_step(self, state):
-        ''' Predict the action for evaluation purpose.
+        """Predict the action for evaluation purpose.
 
         Args:
             state (numpy.array): current state
@@ -168,7 +168,7 @@ class DQNAgent(object):
         Returns:
             action (int): an action id
             info (dict): A dictionary containing information
-        '''
+        """
         q_values = self.predict(state)
         best_action = np.argmax(q_values)
 
@@ -178,14 +178,14 @@ class DQNAgent(object):
         return best_action, info
 
     def predict(self, state):
-        ''' Predict the masked Q-values
+        """Predict the masked Q-values
 
         Args:
             state (numpy.array): current state
 
         Returns:
             q_values (numpy.array): a 1-d array where each entry represents a Q value
-        '''
+        """
         
         q_values = self.q_estimator.predict_nograd(np.expand_dims(state['obs'], 0))[0]
         masked_q_values = -np.inf * np.ones(self.num_actions, dtype=float)
@@ -195,11 +195,11 @@ class DQNAgent(object):
         return masked_q_values
 
     def train(self):
-        ''' Train the network
+        """Train the network
 
         Returns:
             loss (float): The loss of the current batch.
-        '''
+        """
         state_batch, action_batch, reward_batch, next_state_batch, done_batch, legal_actions_batch = self.memory.sample()
 
         # Calculate best next actions using Q-network (Double DQN)
@@ -238,7 +238,7 @@ class DQNAgent(object):
 
 
     def feed_memory(self, state, action, reward, next_state, legal_actions, done):
-        ''' Feed transition to memory
+        """Feed transition to memory
 
         Args:
             state (numpy.array): the current state
@@ -247,7 +247,7 @@ class DQNAgent(object):
             next_state (numpy.array): the next state after performing the action
             legal_actions (list): the legal actions of the next state
             done (boolean): whether the episode is finished
-        '''
+        """
         self.memory.save(state, action, reward, next_state, legal_actions, done)
 
     def set_device(self, device):
@@ -256,11 +256,11 @@ class DQNAgent(object):
         self.target_estimator.device = device
 
     def checkpoint_attributes(self):
-        '''
+        """
         Return the current checkpoint attributes (dict)
         Checkpoint attributes are used to save and restore the model in the middle of training
         Saves the model state dict, optimizer state dict, and all other instance variables
-        '''
+        """
         
         return {
             'agent_type': 'DQNAgent',
@@ -284,12 +284,12 @@ class DQNAgent(object):
 
     @classmethod
     def from_checkpoint(cls, checkpoint):
-        '''
+        """
         Restore the model from a checkpoint
-        
+
         Args:
             checkpoint (dict): the checkpoint attributes generated by checkpoint_attributes()
-        '''
+        """
         
         print("\nINFO - Restoring model from checkpoint...")
         agent_instance = cls(
@@ -321,33 +321,33 @@ class DQNAgent(object):
         return agent_instance
                      
     def save_checkpoint(self, path, filename='checkpoint_dqn.pt'):
-        ''' Save the model checkpoint (all attributes)
+        """Save the model checkpoint (all attributes)
 
         Args:
             path (str): the path to save the model
             filename(str): the file name of checkpoint
-        '''
+        """
         torch.save(self.checkpoint_attributes(), os.path.join(path, filename))
 
 
 class Estimator(object):
-    '''
+    """
     Approximate clone of rlcard.agents.dqn_agent.Estimator that
     uses PyTorch instead of Tensorflow.  All methods input/output np.ndarray.
 
     Q-Value Estimator neural network.
     This network is used for both the Q-Network and the Target Network.
-    '''
+    """
 
     def __init__(self, num_actions=2, learning_rate=0.001, state_shape=None, mlp_layers=None, device=None):
-        ''' Initilalize an Estimator object.
+        """Initialize an Estimator object.
 
         Args:
             num_actions (int): the number output actions
             state_shape (list): the shape of the state space
             mlp_layers (list): size of outputs of mlp layers
             device (torch.device): whether to use cpu or gpu
-        '''
+        """
         self.num_actions = num_actions
         self.learning_rate=learning_rate
         self.state_shape = state_shape
@@ -372,7 +372,7 @@ class Estimator(object):
         self.optimizer =  torch.optim.Adam(self.qnet.parameters(), lr=self.learning_rate)
 
     def predict_nograd(self, s):
-        ''' Predicts action values, but prediction is not included
+        """Predicts action values, but prediction is not included
             in the computation graph.  It is used to predict optimal next
             actions in the Double-DQN algorithm.
 
@@ -382,14 +382,14 @@ class Estimator(object):
         Returns:
           np.ndarray of shape (batch_size, NUM_VALID_ACTIONS) containing the estimated
           action values.
-        '''
+        """
         with torch.no_grad():
             s = torch.from_numpy(s).float().to(self.device)
             q_as = self.qnet(s).cpu().numpy()
         return q_as
 
     def update(self, s, a, y):
-        ''' Updates the estimator towards the given targets.
+        """Updates the estimator towards the given targets.
             In this case y is the target-network estimated
             value of the Q-network optimal actions, which
             is labeled y in Algorithm 1 of Minh et al. (2015)
@@ -401,7 +401,7 @@ class Estimator(object):
 
         Returns:
           The calculated loss on the batch.
-        '''
+        """
         self.optimizer.zero_grad()
 
         self.qnet.train()
@@ -427,8 +427,8 @@ class Estimator(object):
         return batch_loss
     
     def checkpoint_attributes(self):
-        ''' Return the attributes needed to restore the model from a checkpoint
-        '''
+        """Return the attributes needed to restore the model from a checkpoint
+        """
         return {
             'qnet': self.qnet.state_dict(),
             'optimizer': self.optimizer.state_dict(),
@@ -441,8 +441,8 @@ class Estimator(object):
         
     @classmethod
     def from_checkpoint(cls, checkpoint):
-        ''' Restore the model from a checkpoint
-        '''
+        """Restore the model from a checkpoint
+        """
         estimator = cls(
             num_actions=checkpoint['num_actions'],
             learning_rate=checkpoint['learning_rate'],
@@ -457,18 +457,18 @@ class Estimator(object):
 
 
 class EstimatorNetwork(nn.Module):
-    ''' The function approximation network for Estimator
+    """The function approximation network for Estimator
         It is just a series of tanh layers. All in/out are torch.tensor
-    '''
+    """
 
     def __init__(self, num_actions=2, state_shape=None, mlp_layers=None):
-        ''' Initialize the Q network
+        """Initialize the Q network
 
         Args:
             num_actions (int): number of legal actions
             state_shape (list): shape of state tensor
             mlp_layers (list): output size of each fc layer
-        '''
+        """
         super(EstimatorNetwork, self).__init__()
 
         self.num_actions = num_actions
@@ -477,8 +477,7 @@ class EstimatorNetwork(nn.Module):
 
         # build the Q network
         layer_dims = [np.prod(self.state_shape)] + self.mlp_layers
-        fc = [nn.Flatten()]
-        fc.append(nn.BatchNorm1d(layer_dims[0]))
+        fc = [nn.Flatten(), nn.BatchNorm1d(layer_dims[0])]
         for i in range(len(layer_dims)-1):
             fc.append(nn.Linear(layer_dims[i], layer_dims[i+1], bias=True))
             fc.append(nn.Tanh())
@@ -486,28 +485,28 @@ class EstimatorNetwork(nn.Module):
         self.fc_layers = nn.Sequential(*fc)
 
     def forward(self, s):
-        ''' Predict action values
+        """Predict action values
 
         Args:
             s  (Tensor): (batch, state_shape)
-        '''
+        """
         return self.fc_layers(s)
 
 class Memory(object):
-    ''' Memory for saving transitions
-    '''
+    """Memory for saving transitions
+    """
 
     def __init__(self, memory_size, batch_size):
-        ''' Initialize
+        """Initialize
         Args:
             memory_size (int): the size of the memroy buffer
-        '''
+        """
         self.memory_size = memory_size
         self.batch_size = batch_size
         self.memory = []
 
     def save(self, state, action, reward, next_state, legal_actions, done):
-        ''' Save transition into memory
+        """Save transition into memory
 
         Args:
             state (numpy.array): the current state
@@ -516,14 +515,14 @@ class Memory(object):
             next_state (numpy.array): the next state after performing the action
             legal_actions (list): the legal actions of the next state
             done (boolean): whether the episode is finished
-        '''
+        """
         if len(self.memory) == self.memory_size:
             self.memory.pop(0)
         transition = Transition(state, action, reward, next_state, done, legal_actions)
         self.memory.append(transition)
 
     def sample(self):
-        ''' Sample a minibatch from the replay memory
+        """Sample a minibatch from the replay memory
 
         Returns:
             state_batch (list): a batch of states
@@ -531,14 +530,14 @@ class Memory(object):
             reward_batch (list): a batch of rewards
             next_state_batch (list): a batch of states
             done_batch (list): a batch of dones
-        '''
+        """
         samples = random.sample(self.memory, self.batch_size)
         samples = tuple(zip(*samples))
         return tuple(map(np.array, samples[:-1])) + (samples[-1],)
 
     def checkpoint_attributes(self):
-        ''' Returns the attributes that need to be checkpointed
-        '''
+        """Returns the attributes that need to be checkpointed
+        """
         
         return {
             'memory_size': self.memory_size,
@@ -548,15 +547,15 @@ class Memory(object):
             
     @classmethod
     def from_checkpoint(cls, checkpoint):
-        ''' 
+        """
         Restores the attributes from the checkpoint
-        
+
         Args:
             checkpoint (dict): the checkpoint dictionary
-            
+
         Returns:
             instance (Memory): the restored instance
-        '''
+        """
         
         instance = cls(checkpoint['memory_size'], checkpoint['batch_size'])
         instance.memory = checkpoint['memory']

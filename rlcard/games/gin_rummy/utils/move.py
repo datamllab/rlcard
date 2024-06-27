@@ -1,8 +1,8 @@
-'''
+"""
     File name: gin_rummy/move.py
     Author: William Hale
     Date created: 2/16/2020
-'''
+"""
 
 from typing import List
 

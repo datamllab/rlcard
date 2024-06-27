@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Implement Doudizhu Player class
-'''
+"""Implement Doudizhu Player class"""
 import functools
 
 from rlcard.games.doudizhu.utils import get_gt_cards
@@ -8,12 +7,12 @@ from rlcard.games.doudizhu.utils import cards2str, doudizhu_sort_card
 
 
 class DoudizhuPlayer:
-    ''' Player can store cards in the player's hand and the role,
+    """Player can store cards in the player's hand and the role,
     determine the actions can be made according to the rules,
-    and can perfrom corresponding action
-    '''
+    and can perform corresponding action
+    """
     def __init__(self, player_id, np_random):
-        ''' Give the player an id in one game
+        """Give the player an id in one game
 
         Args:
             player_id (int): the player_id of a player
@@ -23,7 +22,7 @@ class DoudizhuPlayer:
             2. played_cards: The cards played in one round
             3. hand: Initial cards
             4. _current_hand: The rest of the cards after playing some of them
-        '''
+        """
         self.np_random = np_random
         self.player_id = player_id
         self.initial_hand = None
@@ -58,7 +57,7 @@ class DoudizhuPlayer:
         return state
 
     def available_actions(self, greater_player=None, judger=None):
-        ''' Get the actions can be made based on the rules
+        """Get the actions can be made based on the rules
 
         Args:
             greater_player (DoudizhuPlayer object): player who played
@@ -67,7 +66,7 @@ class DoudizhuPlayer:
 
         Returns:
             list: list of string of actions. Eg: ['pass', '8', '9', 'T', 'J']
-        '''
+        """
         actions = []
         if greater_player is None or greater_player.player_id == self.player_id:
             actions = judger.get_playable_cards(self)
@@ -76,7 +75,7 @@ class DoudizhuPlayer:
         return actions
 
     def play(self, action, greater_player=None):
-        ''' Perfrom action
+        """Perform action
 
         Args:
             action (string): specific action
@@ -84,7 +83,7 @@ class DoudizhuPlayer:
 
         Returns:
             object of DoudizhuPlayer: If there is a new greater_player, return it, if not, return None
-        '''
+        """
         trans = {'B': 'BJ', 'R': 'RJ'}
         if action == 'pass':
             self._recorded_played_cards.append([])
@@ -108,8 +107,7 @@ class DoudizhuPlayer:
             return self
 
     def play_back(self):
-        ''' Restore recorded cards back to self._current_hand
-        '''
+        """Restore recorded cards back to self._current_hand"""
         removed_cards = self._recorded_played_cards.pop()
         self._current_hand.extend(removed_cards)
         self._current_hand.sort(key=functools.cmp_to_key(doudizhu_sort_card))

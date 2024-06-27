@@ -1,5 +1,4 @@
-''' An example of playing randomly in RLCard
-'''
+"""An example of playing randomly in RLCard"""
 import argparse
 import pprint
 

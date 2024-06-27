@@ -1,9 +1,9 @@
-'''
+"""
     Project: Gui Gin Rummy
     File name: gin_rummy_human.py
     Author: William Hale
     Date created: 3/14/2020
-'''
+"""
 
 #   You need to install tkinter if it is not already installed.
 #   Tkinter is Python's defacto standard GUI (Graphical User Interface) package.

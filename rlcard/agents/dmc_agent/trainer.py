@@ -163,7 +163,7 @@ class DMCTrainer:
         if not self.is_pettingzoo_env:
             self.num_players = self.env.num_players
             self.action_shape = self.env.action_shape
-            if self.action_shape[0] == None:  # One-hot encoding
+            if self.action_shape[0] is None:  # One-hot encoding
                 self.action_shape = [[self.env.num_actions] for _ in range(self.num_players)]
 
             def model_func(device):

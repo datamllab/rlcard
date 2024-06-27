@@ -1,5 +1,4 @@
-''' An example of solve Leduc Hold'em with CFR (chance sampling)
-'''
+"""An example of solve Leduc Hold'em with CFR (chance sampling)"""
 import os
 import argparse
 
@@ -14,6 +13,7 @@ from rlcard.utils import (
     Logger,
     plot_curve,
 )
+
 
 def train(args):
     # Make environments, CFR only supports Leduc Holdem
@@ -34,7 +34,7 @@ def train(args):
     # Seed numpy, torch, random
     set_seed(args.seed)
 
-    # Initilize CFR Agent
+    # Initialize CFR Agent
     agent = CFRAgent(
         env,
         os.path.join(
@@ -70,6 +70,7 @@ def train(args):
         csv_path, fig_path = logger.csv_path, logger.fig_path
     # Plot the learning curve
     plot_curve(csv_path, fig_path, 'cfr')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("CFR example in RLCard")

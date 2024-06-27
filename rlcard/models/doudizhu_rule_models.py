@@ -1,5 +1,4 @@
-''' Dou Dizhu rule models
-'''
+"""Dou Dizhu rule models"""
 
 import numpy as np
 
@@ -8,20 +7,19 @@ from rlcard.games.doudizhu.utils import CARD_TYPE, INDEX
 from rlcard.models.model import Model
 
 class DouDizhuRuleAgentV1(object):
-    ''' Dou Dizhu Rule agent version 1
-    '''
+    """Dou Dizhu Rule agent version 1"""
 
     def __init__(self):
         self.use_raw = True
 
     def step(self, state):
-        ''' Predict the action given raw state. A naive rule.
+        """Predict the action given raw state. A naive rule.
         Args:
             state (dict): Raw state from the game
 
         Returns:
             action (str): Predicted action
-        '''
+        """
         state = state['raw_obs']
         trace = state['trace']
         # the rule of leading round
@@ -55,13 +53,11 @@ class DouDizhuRuleAgentV1(object):
             return np.random.choice(state['actions'])
 
     def eval_step(self, state):
-        ''' Step for evaluation. The same to step
-        '''
+        """Step for evaluation. The same to step"""
         return self.step(state), []
 
     def combine_cards(self, hand):
-        '''Get optimal combinations of cards in hand
-        '''
+        """Get optimal combinations of cards in hand"""
         comb = {'rocket': [], 'bomb': [], 'trio': [], 'trio_chain': [],
                 'solo_chain': [], 'pair_chain': [], 'pair': [], 'solo': []}
         # 1. pick rocket
@@ -152,16 +148,14 @@ class DouDizhuRuleAgentV1(object):
                             chains.append(str_chain)
                 add += len(chain)
         hand_list = [int(card) for card in hand_list]
-        return (chains, hand_list)
+        return chains, hand_list
 
 
 class DouDizhuRuleModelV1(Model):
-    ''' Dou Dizhu Rule Model version 1
-    '''
+    """Dou Dizhu Rule Model version 1"""
 
     def __init__(self):
-        ''' Load pretrained model
-        '''
+        """Load pretrained model"""
         env = rlcard.make('doudizhu')
 
         rule_agent = DouDizhuRuleAgentV1()
@@ -169,12 +163,12 @@ class DouDizhuRuleModelV1(Model):
 
     @property
     def agents(self):
-        ''' Get a list of agents for each position in a the game
+        """Get a list of agents for each position in a game
 
         Returns:
             agents (list): A list of agents
 
         Note: Each agent should be just like RL agent with step and eval_step
               functioning well.
-        '''
+        """
         return self.rule_agents

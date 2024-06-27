@@ -1,8 +1,8 @@
-'''
+"""
     File name: bridge/utils/utils.py
     Author: William Hale
     Date created: 11/26/2021
-'''
+"""
 
 from typing import List
 

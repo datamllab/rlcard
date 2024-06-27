@@ -1,9 +1,9 @@
-'''
+"""
     Project: Gui Gin Rummy
     File name: info_messaging.py
     Author: William Hale
     Date created: 3/28/2020
-'''
+"""
 
 # from __future__ import annotations
 from typing import TYPE_CHECKING
@@ -30,10 +30,8 @@ def show_activate_menus_message(game_canvas: 'GameCanvas'):
         return
     if game_canvas.query.is_going_out_button_visible():
         return
-    lines = []  # type: List[str]
-    lines.append("The menu items may not drop down.")
-    lines.append("On an Apple computer, this is a known problem.")
-    lines.append("A workaround is to hit cmd-tab twice to switch to another application and back to this application.")
+    lines = ["The menu items may not drop down.", "On an Apple computer, this is a known problem.",
+             "A workaround is to hit cmd-tab twice to switch to another application and back to this application."]  # type: List[str]
     info_message = " ".join(lines)
     game_canvas.info_message_label.configure(text=info_message)
 
@@ -81,10 +79,8 @@ def show_arrange_cards_message(player_id: int, game_canvas: 'GameCanvas'):
     if move_count <= 1 or move_count > 8:
         return
     if player_id == 1 and game_canvas.info_message_label['text'] == "":
-        lines = ["Tip:"]  # type: List[str]
-        lines.append("You can arrange cards in your hand.")
-        lines.append("Select the cards you want to move by tapping them.")
-        lines.append("Right click the card that you want to drop them on.")
+        lines = ["Tip:", "You can arrange cards in your hand.", "Select the cards you want to move by tapping them.",
+                 "Right click the card that you want to drop them on."]  # type: List[str]
         info_message = " ".join(lines)
         game_canvas.info_message_label.configure(text=info_message)
 
@@ -94,7 +90,6 @@ def show_hide_tips_message(game_canvas: 'GameCanvas'):
         return
     if not configurations.IS_SHOW_TIPS:
         return
-    lines = ["Tip:"]  # type: List[str]
-    lines.append("Uncheck 'show tips' in the preferences to hide tips.")
+    lines = ["Tip:", "Uncheck 'show tips' in the preferences to hide tips."]  # type: List[str]
     info_message = " ".join(lines)
     game_canvas.info_message_label.configure(text=info_message)

@@ -1,18 +1,15 @@
-''' An example of evluating the trained models in RLCard
-'''
+"""An example of evaluating the trained models in RLCard"""
 import os
 import argparse
 
 import rlcard
-from rlcard.agents import (
-    DQNAgent,
-    RandomAgent,
-)
+
 from rlcard.utils import (
     get_device,
     set_seed,
     tournament,
 )
+
 
 def load_model(model_path, env=None, position=None, device=None):
     if os.path.isfile(model_path):  # Torch model
@@ -29,14 +26,14 @@ def load_model(model_path, env=None, position=None, device=None):
     else:  # A model in the model zoo
         from rlcard import models
         agent = models.load(model_path).agents[position]
-    
+
     return agent
 
-def evaluate(args):
 
+def evaluate(args):
     # Check whether gpu is available
     device = get_device()
-        
+
     # Seed numpy, torch, random
     set_seed(args.seed)
 
@@ -53,6 +50,7 @@ def evaluate(args):
     rewards = tournament(env, args.num_games)
     for position, reward in enumerate(rewards):
         print(position, args.models[position], reward)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser("Evaluation example in RLCard")
@@ -99,4 +97,3 @@ if __name__ == '__main__':
 
     os.environ["CUDA_VISIBLE_DEVICES"] = args.cuda
     evaluate(args)
-

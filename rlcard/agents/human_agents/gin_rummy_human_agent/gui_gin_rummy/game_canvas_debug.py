@@ -1,9 +1,9 @@
-'''
+"""
     Project: Gui Gin Rummy
     File name: game_canvas_debug.py
     Author: William Hale
     Date created: 3/14/2020
-'''
+"""
 
 # from __future__ import annotations
 from typing import TYPE_CHECKING
@@ -36,11 +36,10 @@ class GameCanvasDebug(object):
         discard_pile_items = game_canvas.find_withtag(configurations.DISCARD_PILE_TAG)
         north_held_pile_item_ids = game_canvas.getter.get_held_pile_item_ids(player_id=0)
         south_held_pile_item_ids = game_canvas.getter.get_held_pile_item_ids(player_id=1)
-        lines = []
-        lines.append("dealer: {}".format(GinRummyPlayer.short_name_of(player_id=dealer_id)))
-        lines.append("current_player: {}".format(GinRummyPlayer.short_name_of(player_id=current_player_id)))
-        lines.append("north hand: {}".format([card_name(card_item_id) for card_item_id in north_held_pile_item_ids]))
-        lines.append("stockpile: {}".format([card_name(card_item_id) for card_item_id in stock_pile_item_ids]))
-        lines.append("discard pile: {}".format([card_name(card_item_id) for card_item_id in discard_pile_items]))
-        lines.append("south hand: {}".format([card_name(card_item_id) for card_item_id in south_held_pile_item_ids]))
+        lines = ["dealer: {}".format(GinRummyPlayer.short_name_of(player_id=dealer_id)),
+                 "current_player: {}".format(GinRummyPlayer.short_name_of(player_id=current_player_id)),
+                 "north hand: {}".format([card_name(card_item_id) for card_item_id in north_held_pile_item_ids]),
+                 "stockpile: {}".format([card_name(card_item_id) for card_item_id in stock_pile_item_ids]),
+                 "discard pile: {}".format([card_name(card_item_id) for card_item_id in discard_pile_items]),
+                 "south hand: {}".format([card_name(card_item_id) for card_item_id in south_held_pile_item_ids])]
         return "\n".join(lines)

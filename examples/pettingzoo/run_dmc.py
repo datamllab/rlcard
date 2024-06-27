@@ -1,6 +1,4 @@
-''' An example of training a Deep Monte-Carlo (DMC) Agent on PettingZoo environments
-wrapping RLCard
-'''
+"""An example of training a Deep Monte-Carlo (DMC) Agent on PettingZoo environments wrapping RLCard"""
 import os
 import argparse
 

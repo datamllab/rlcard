@@ -1,8 +1,8 @@
-'''
+"""
     File name: gin_rummy/judge.py
     Author: William Hale
     Date created: 2/12/2020
-'''
+"""
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -19,15 +19,12 @@ from rlcard.games.gin_rummy.utils import utils
 
 
 class GinRummyJudge:
-
-    '''
-        Judge decides legal actions for current player
-    '''
+    """Judge decides legal actions for current player"""
 
     def __init__(self, game: 'GinRummyGame'):
-        ''' Initialize the class GinRummyJudge
+        """Initialize the class GinRummyJudge
         :param game: GinRummyGame
-        '''
+        """
         self.game = game
         self.scorer = GinRummyScorer()
 
@@ -98,11 +95,11 @@ class GinRummyJudge:
 
 
 def get_going_out_cards(hand: List[Card], going_out_deadwood_count: int) -> Tuple[List[Card], List[Card]]:
-    '''
+    """
     :param hand: List[Card] -- must have 11 cards
     :param going_out_deadwood_count: int
     :return List[Card], List[Card: cards in hand that be knocked, cards in hand that can be ginned
-    '''
+    """
     if not len(hand) == 11:
         raise GinRummyProgramError("len(hand) is {}: should be 11.".format(len(hand)))
     meld_clusters = melding.get_meld_clusters(hand=hand)
@@ -112,19 +109,15 @@ def get_going_out_cards(hand: List[Card], going_out_deadwood_count: int) -> Tupl
     return list(knock_cards), list(gin_cards)
 
 
-#
-# private methods
-#
-
 def _get_going_out_cards(meld_clusters: List[List[List[Card]]],
                          hand: List[Card],
                          going_out_deadwood_count: int) -> Tuple[List[Card], List[Card]]:
-    '''
+    """
     :param meld_clusters
     :param hand: List[Card] -- must have 11 cards
     :param going_out_deadwood_count: int
     :return List[Card], List[Card: cards in hand that be knocked, cards in hand that can be ginned
-    '''
+    """
     if not len(hand) == 11:
         raise GinRummyProgramError("len(hand) is {}: should be 11.".format(len(hand)))
     knock_cards = set()
