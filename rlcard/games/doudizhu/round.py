@@ -60,7 +60,7 @@ class DoudizhuRound:
             for c in action:
                 self.played_cards[self.current_player][CARD_RANK_STR_INDEX[c]] += 1
                 if self.current_player == 0 and c in self.seen_cards:
-                    self.seen_cards = self.seen_cards.replace(c, '') 
+                    self.seen_cards = self.seen_cards.replace(c, '', 1) 
                     self.public['seen_cards'] = self.seen_cards
             self.public['played_cards'] = self.cards_ndarray_to_str(self.played_cards)
 
