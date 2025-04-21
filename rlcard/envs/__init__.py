@@ -24,6 +24,11 @@ register(
 )
 
 register(
+    env_id='fixed-no-limit-holdem',
+    entry_point='rlcard.envs.fixednolimitholdem:FixedNolimitholdemEnv',
+)
+
+register(
     env_id='leduc-holdem',
     entry_point='rlcard.envs.leducholdem:LeducholdemEnv'
 )
