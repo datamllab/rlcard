@@ -153,7 +153,7 @@ class CFRAgent():
             action (int): Predicted action
             info (dict): A dictionary containing information
         '''
-        probs = self.action_probs(state['obs'].tostring(), list(state['legal_actions'].keys()), self.average_policy)
+        probs = self.action_probs(state['obs'].tobytes(), list(state['legal_actions'].keys()), self.average_policy)
         action = np.random.choice(len(probs), p=probs)
 
         info = {}
@@ -173,7 +173,7 @@ class CFRAgent():
                 legal_actions (list): Indices of legal actions
         '''
         state = self.env.get_state(player_id)
-        return state['obs'].tostring(), list(state['legal_actions'].keys())
+        return state['obs'].tobytes(), list(state['legal_actions'].keys())
 
     def save(self):
         ''' Save model
@@ -218,4 +218,3 @@ class CFRAgent():
         iteration_file = open(os.path.join(self.model_path, 'iteration.pkl'),'rb')
         self.iteration = pickle.load(iteration_file)
         iteration_file.close()
-
