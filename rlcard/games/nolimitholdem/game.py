@@ -155,10 +155,13 @@ class NolimitholdemGame(Game):
         # If a round is over, we deal more public cards
         if self.round.is_over():
             # Game pointer goes to the first player not in bypass after the dealer, if there is one
-            self.game_pointer = (self.dealer_id + 1) % self.num_players
+            # Only reset if there are active players (not all in bypass)
             if sum(players_in_bypass) < self.num_players:
+                self.game_pointer = (self.dealer_id + 1) % self.num_players
                 while players_in_bypass[self.game_pointer]:
                     self.game_pointer = (self.game_pointer + 1) % self.num_players
+            # If all players are in bypass, keep the game_pointer from proceed_round
+            # (it will be handled by game ending logic elsewhere)
 
             # For the first round, we deal 3 cards
             if self.round_counter == 0:
