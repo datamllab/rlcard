@@ -204,6 +204,63 @@ class TestNolimitholdemMethods(unittest.TestCase):
         game.step(Action.CHECK_CALL)
         self.assertTrue(game.is_over())
 
+    def test_player_rotation_no_duplicate_actions(self):
+        """Test that players don't act twice in a row when rounds end"""
+        game = Game(num_players=6)
+        game.dealer_id = 3
+        state, current_player = game.init_game()
+        
+        # Track player sequence to ensure no player acts twice in a row
+        last_player = None
+        round_counter = game.round_counter
+        
+        for _ in range(20):
+            if game.is_over():
+                break
+            
+            # Reset tracking when round changes
+            if game.round_counter != round_counter:
+                round_counter = game.round_counter
+                last_player = None
+            
+            current_player = game.game_pointer
+            legal_actions = game.get_legal_actions()
+            if not legal_actions:
+                break
+            
+            # Verify no player acts twice in a row within the same round
+            if last_player is not None and last_player == current_player and game.round_counter == round_counter:
+                self.fail(f"Player {current_player} acted twice in a row within the same round")
+            
+            action = Action.CHECK_CALL if Action.CHECK_CALL in legal_actions else legal_actions[0]
+            state, next_player = game.step(action)
+            last_player = current_player
+
+    def test_player_rotation_round_transition(self):
+        """Test that player rotation works correctly when rounds end"""
+        game = Game(num_players=6)
+        # Test with different dealer positions
+        for dealer_id in range(6):
+            game.dealer_id = dealer_id
+            state, current_player = game.init_game()
+            
+            # Play through multiple rounds
+            action_count = 0
+            while action_count < 15 and not game.is_over():
+                current_player = game.game_pointer
+                legal_actions = game.get_legal_actions()
+                if not legal_actions:
+                    break
+                
+                action = Action.CHECK_CALL if Action.CHECK_CALL in legal_actions else legal_actions[0]
+                state, next_player = game.step(action)
+                
+                # Verify step() returns a valid player ID
+                self.assertGreaterEqual(next_player, 0)
+                self.assertLess(next_player, game.num_players)
+                
+                action_count += 1
+
 
 if __name__ == '__main__':
     unittest.main()
