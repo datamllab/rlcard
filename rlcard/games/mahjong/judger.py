@@ -133,8 +133,8 @@ class MahjongJudger:
                 continue
             tmp_set_count = 0
             tmp_hand = hand.copy()
-            if count_dict[each] == 2:
-                for _ in range(count_dict[each]):
+            if count_dict[each] >= 2:
+                for _ in range(2):
                     tmp_hand.pop(tmp_hand.index(each))
                 tmp_set_count, _set = self.cal_set(tmp_hand)
                 used.extend(_set)

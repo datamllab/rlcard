@@ -73,9 +73,16 @@ class MahjongRound:
                 self.last_player = self.current_player
                 self.current_player = player.player_id
             else:
-                self.last_player = self.current_player
-                self.current_player = (self.current_player + 1) % 4
-                self.dealer.deal_cards(players[self.current_player], 1)
+                (chow_act, chow_player, chow_cards) = self.judger.judge_chow(self.dealer, players, self.last_player)
+                if chow_act:
+                    self.valid_act = chow_act
+                    self.last_cards = chow_cards
+                    self.last_player = self.current_player
+                    self.current_player = chow_player.player_id
+                else:
+                    self.last_player = self.current_player
+                    self.current_player = (self.current_player + 1) % 4
+                    self.dealer.deal_cards(players[self.current_player], 1)
 
         #hand_len = [len(p.hand) for p in players]
         #pile_len = [sum([len([c for c in p]) for p in pp.pile]) for pp in players]
@@ -107,4 +114,3 @@ class MahjongRound:
             state['players_pile'] = {p.player_id: p.pile for p in players}
             state['action_cards'] = players[player_id].hand # For doing action (pong, chow, gong)
         return state
-
