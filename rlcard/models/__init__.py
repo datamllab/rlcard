@@ -29,3 +29,19 @@ register(
 register(
     model_id='gin-rummy-novice-rule',
     entry_point='rlcard.models.gin_rummy_rule_models:GinRummyNoviceRuleModel')
+
+register(
+    model_id='bauernskat-rule-random',
+    entry_point='rlcard.models.bauernskat_rule_models:BauernskatRandomRuleModelV1')
+
+register(
+    model_id='bauernskat-rule-frugal',
+    entry_point='rlcard.models.bauernskat_rule_models:BauernskatFrugalRuleModelV1')
+
+register(
+    model_id='bauernskat-rule-lookahead',
+    entry_point='rlcard.models.bauernskat_rule_models:BauernskatLookaheadRuleModelV1')
+
+register(
+    model_id='bauernskat-rule-shot-alphabeta',
+    entry_point='rlcard.models.bauernskat_rule_models:BauernskatSHOTAlphaBetaRuleModelV1')
