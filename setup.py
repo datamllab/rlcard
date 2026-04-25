@@ -42,7 +42,7 @@ setuptools.setup(
         'termcolor'
     ],
     extras_require=extras,
-    requires_python='>=3.7',
+    python_requires='>=3.7',
     classifiers=[
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.10",
