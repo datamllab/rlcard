@@ -124,10 +124,8 @@ class MahjongJudger:
         hand = [card.get_str() for card in player.hand]
         count_dict = {card: hand.count(card) for card in hand}
         set_count = len(player.pile)
-        if set_count >= 4:
-            return True, set_count
         used = []
-        maximum = 0
+        maximum = set_count
         for each in count_dict:
             if each in used:
                 continue
