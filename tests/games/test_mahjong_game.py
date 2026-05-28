@@ -2,7 +2,14 @@ import unittest
 import numpy as np
 
 from rlcard.games.mahjong.game import MahjongGame as Game
+from rlcard.games.mahjong.card import MahjongCard as Card
+from rlcard.games.mahjong.judger import MahjongJudger as Judger
 from rlcard.games.mahjong.player import MahjongPlayer as Player
+
+
+def _card(card_type, trait):
+    return Card(card_type, trait)
+
 
 class TestMahjongMethods(unittest.TestCase):
 
@@ -71,6 +78,38 @@ class TestMahjongMethods(unittest.TestCase):
     def test_player_get_player_id(self):
         player = Player(0, np.random.RandomState())
         self.assertEqual(0, player.get_player_id())
+
+    def test_judge_hu_requires_pair_with_four_exposed_sets(self):
+        judger = Judger(np.random.RandomState())
+        player = Player(0, np.random.RandomState())
+        player.pile = [
+            [_card('characters', '1')] * 3,
+            [_card('characters', '2')] * 3,
+            [_card('characters', '3')] * 3,
+            [_card('dots', '5')] * 3,
+        ]
+        player.hand = [_card('dots', '6'), _card('bamboo', '4')]
+
+        win, value = judger.judge_hu(player)
+
+        self.assertFalse(win)
+        self.assertEqual(value, 4)
+
+    def test_judge_hu_allows_four_exposed_sets_with_pair(self):
+        judger = Judger(np.random.RandomState())
+        player = Player(0, np.random.RandomState())
+        player.pile = [
+            [_card('characters', '1')] * 3,
+            [_card('characters', '2')] * 3,
+            [_card('characters', '3')] * 3,
+            [_card('dots', '5')] * 3,
+        ]
+        player.hand = [_card('bamboo', '4'), _card('bamboo', '4')]
+
+        win, value = judger.judge_hu(player)
+
+        self.assertTrue(win)
+        self.assertEqual(value, 4)
 
 if __name__ == '__main__':
     unittest.main()
