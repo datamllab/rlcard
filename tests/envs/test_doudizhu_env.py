@@ -28,7 +28,7 @@ class TestDoudizhuEnv(unittest.TestCase):
         _, player_id = env.reset()
         player = env.game.players[player_id]
         _, next_player_id = env.step(env.num_actions-2)
-        self.assertEqual(next_player_id, (player.player_id+1)%len(env.game.players))
+        self.assertEqual(next_player_id, (player.player_id+1)%len(env.game.player))
 
     def test_step_back(self):
         env = rlcard.make('doudizhu', config={'allow_step_back':True})
